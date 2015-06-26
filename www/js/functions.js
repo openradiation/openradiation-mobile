@@ -222,3 +222,33 @@ function test(callback,value){
 	console.log("fin?");
 	callback(null, 'test');
 }
+
+function refreshDevices() {
+	console.log("refreshDevices")
+    $("#deviceList").html('');
+	//if (typeof window.rfduino === 'object') ?
+    rfduino.discover(5, onDiscoverDevice, onRfError);
+}
+
+function onDiscoverDevice(device) {
+    var listItem = document.createElement('li');
+    var html =  '<a><b>' + device.name + '</b><br/>' +
+                'RSSI: ' + device.rssi + '&nbsp;|&nbsp;' +
+                'Advertising: ' + device.advertising + '<br/>' +
+                device.uuid+'</a>';
+
+    listItem.setAttribute('uuid', device.uuid);
+    listItem.setAttribute('deviceName', device.name);
+    listItem.setAttribute('tube', device.advertising);
+    listItem.innerHTML = html;
+    $("#deviceList").append(listItem);
+}
+
+function onRfError(error) {
+    if (error.toUpperCase() === "DISCONNECTED") {
+        alert("La connexion au compteur est perdue.");
+       // app.disconnect();
+    } else {
+        alert(error.toUpperCase());
+    }
+}

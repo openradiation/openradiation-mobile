@@ -7,8 +7,8 @@ if (window.chrome)
 }
 
 //global var settings
-MC_UseOk = true;
-MC_ProfileOk = true;
+MC_UseOk = false;
+MC_ProfileOk = false;
 
 window.onerror = function (errorMsg, url, lineNumber) {
 	console.log('Error: ' + errorMsg + ' Script: ' + url + ' Line: ' + lineNumber);

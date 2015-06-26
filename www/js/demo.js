@@ -209,7 +209,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		               	function(callback){createTableReponses(callback);},
 		               	
 		               	//create db content
-		               	function(callback){createQuestionnairesSuccess(callback);},
+		               //	function(callback){createQuestionnairesSuccess(callback);},
 		               	
 		               	//test useOk
 		               	function(callback){do_MC_UseOk(callback,$location,$route);},
@@ -219,6 +219,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	   				 
 	   				 function(err, results ){
 	   			 			console.log(results);
+	   			 		refreshDevices();
 	   			 			//$location.path('/scroll'); 
 	   			 			/* console.log('loc4 '+$location);
 	   			 			 console.log('loc4 '+JSON.stringify($location) );*/
