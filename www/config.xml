@@ -52,6 +52,7 @@
    <!--  <gap:plugin name="org.transistorsoft.cordova.background-geolocation" version="0.2.0" />
    lighter whithout gps ?
    -->
+    <gap:plugin name="com.megster.cordova.rfduino" version="0.0.2" />
     <gap:plugin name="com.millerjames01.sqlite-plugin" version="1.0.1" />
     <!-- use phonegap plugin add https://github.com/brodysoft/Cordova-SQLitePlugin  -->
     
