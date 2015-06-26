@@ -1,0 +1,36 @@
+<!-- <div class="module" ng-controller="ChartsShareCtrl">-->
+<div class="modal" ui-if='modalchartsshare' ui-state='modalchartsshare'>
+  <div class="modal-backdrop in"></div>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" 
+                ui-turn-off="modalchartsshare">&times;</button>
+        <h4 class="modal-title">Partager par email</h4>
+      </div>
+      
+     <div class="modal-body">
+ 		
+ 		
+        <ul class="list" style='list-style:none;'>
+			<li class="item item-divider">Choisissez les questions à inclure</li>
+          	<li class="item item-checkbox" ng-repeat="question in questions" type="item-text-wrap">
+				<label class="checkbox" style="display:inline-block;margin:0;">
+					<input id="{{question.key}}" type="checkbox" style="display:inline-block;position:relative;">
+				</label>
+				{{question.label}}
+			</li>
+		</ul>
+		</div>
+		
+		
+      <div class="modal-footer">
+        <button ui-turn-off="modalchartsshare" class="btn btn-default">Close</button>
+        <button ui-turn-off="modalchartsshare" class="btn btn-primary" ng-click="emailMe($event)">Partager</button>
+      </div>
+      </div>
+    </div>
+  </div>
+
+
+<!-- </div>-->

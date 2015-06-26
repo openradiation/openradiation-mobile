@@ -1,0 +1,30 @@
+<div class="module" ng-controller="ChartsCtrl">
+	<div ui-content-for="title">
+  		<span>Charts</span>
+	</div>
+	<div class="scrollable">
+ 		<div class="scrollable-content section">
+			<ui-state id='activeTab' default='1'></ui-state>
+			<div class="btn-group justified nav-tabs">
+			  <a ui-set="{'activeTab': 1}" 
+			      ui-class="{'active': activeTab == 1}" class="btn btn-default">1 mois</a>
+			  <a ui-set="{'activeTab': 2}" 
+			      ui-class="{'active': activeTab == 2}" class="btn btn-default">2 mois</a>
+			
+			  <a ui-set="{'activeTab': 3}" 
+			      ui-class="{'active': activeTab == 3}" class="btn btn-default">3 mois</a>
+			</div>  
+			<div class="padding" ng-repeat="question in questions" style="text-align:center">
+				<p class="text-center">{{question.label}}</p>
+				<canvas style="width:100% !important;height:auto !important;max-width:400px;" id="chart-{{question.key}}" height="200" width="400"></canvas>
+			</div>
+			<a href="" 
+	          ui-turn-on="modalchartsshare"
+	          class="btn btn-default">Show Modal</a>
+		</div>
+	</div>
+	<div ui-content-for="modals">
+	  <div ng-include="'templates/modalchartsshare.html'"></div>
+	</div>
+</div>
+

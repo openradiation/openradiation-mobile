@@ -1,0 +1,19 @@
+*/.DS_Store
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+node_modules/
+plugins/
+platforms/
+www/cordova_plugins.js
+.buildpath
+.project
+.settings/
+www2/
+www/templates_MAUI/
+www/js/Copy of functions.js
