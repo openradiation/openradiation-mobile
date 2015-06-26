@@ -245,10 +245,11 @@ function onDiscoverDevice(device) {
 }
 
 function onRfError(error) {
-    if (error.toUpperCase() === "DISCONNECTED") {
+   /* if (error.toUpperCase() === "DISCONNECTED") {
         alert("La connexion au compteur est perdue.");
        // app.disconnect();
     } else {
         alert(error.toUpperCase());
-    }
+    }*/
+	alert("Error device.");
 }
