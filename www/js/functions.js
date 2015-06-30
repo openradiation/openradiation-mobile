@@ -272,7 +272,7 @@ function onRfError(error) {
 function onData(data){
 	console.log('onData');
 	//alert('onData');
-	$('#paquetData').html(data);
+	$('#paquetData').html(data.toString());
 }
 
 function connect(e){
