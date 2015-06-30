@@ -257,15 +257,18 @@ function onRfError(error) {
 
 function onData(data){
 	console.log('onData');
+	alert('onData');
 	$('#paquetData').html(data);
 }
 
 function connect(e){
+	alert('connect');
     var target = e.target;
     var uuid = e.target.getAttribute('uuid');
     if (uuid==null)
         uuid = e.target.parentNode.getAttribute('uuid');
     var onConnect = function() {
+    	alert('onConnect');
         deviceName = target.getAttribute("deviceName");
         deviceUUID = uuid;
         tubeType = target.getAttribute("tube");
