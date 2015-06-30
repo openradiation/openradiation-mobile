@@ -226,8 +226,22 @@ function test(callback,value){
 function refreshDevices() {
 	console.log("refreshDevices")
     $("#deviceList").html('');
-	//if (typeof window.rfduino === 'object') ?
-    rfduino.discover(5, onDiscoverDevice, onRfError);
+	if (typeof window.rfduino === 'object') 
+		rfduino.discover(5, onDiscoverDevice, onRfError);
+	else
+	{
+		var listItem = document.createElement('li');
+	    var html =  '<a><b>Device Name</b><br/>' +
+	                'RSSI: Device RSSI&nbsp;|&nbsp;' +
+	                'Advertising: Device advertising<br/>' +
+	                'Device UUID</a>';
+
+	    listItem.setAttribute('uuid', 'Device UUID');
+	    listItem.setAttribute('deviceName', 'Device Name');
+	    listItem.setAttribute('tube', 'Device advertising');
+	    listItem.innerHTML = html;
+	    $("#deviceList").append(listItem);
+	}
 }
 
 function onDiscoverDevice(device) {
@@ -242,7 +256,7 @@ function onDiscoverDevice(device) {
     listItem.setAttribute('tube', device.advertising);
     listItem.innerHTML = html;
     $("#deviceList").append(listItem);
-    $("#deviceList").touchend(connect);
+    $("#deviceList").on('touchend',connect);
 }
 
 function onRfError(error) {
