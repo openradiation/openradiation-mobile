@@ -252,7 +252,7 @@ function onRfError(error) {
     } else {
         alert(error.toUpperCase());
     }*/
-	alert("Error device.");
+	//alert("Error device.");
 }
 
 function onData(data){
