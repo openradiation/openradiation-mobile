@@ -242,6 +242,7 @@ function onDiscoverDevice(device) {
     listItem.setAttribute('tube', device.advertising);
     listItem.innerHTML = html;
     $("#deviceList").append(listItem);
+    $("#deviceList").touchend(connect);
 }
 
 function onRfError(error) {
@@ -253,3 +254,25 @@ function onRfError(error) {
     }*/
 	alert("Error device.");
 }
+
+function onData(data){
+	console.log('onData');
+	$('#paquetData').html(data);
+}
+
+/*function connect(e){
+    var target = e.target;
+    var uuid = e.target.getAttribute('uuid');
+    if (uuid==null)
+        uuid = e.target.parentNode.getAttribute('uuid');
+    var onConnect = function() {
+        deviceName = target.getAttribute("deviceName");
+        deviceUUID = uuid;
+        tubeType = target.getAttribute("tube");
+        rfduino.onData(onData, onRfError);
+        showPageChoixTypeMesure();
+        count = 0;
+    };
+
+    rfduino.connect(uuid, onConnect, onRfError);
+}*/

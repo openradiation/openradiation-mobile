@@ -12,20 +12,11 @@
           <i class="fa fa-gamepad feature-icon text-primary"></i>
         </div>
         <div class="media-body">
-            <h3 class="media-heading">Play around a little</h3>
-            Open the sidebar and start testing features
-        </div>
-      </div>
-
-	<div class="list-group-item list-group-item-home media">
-        <div>
-          <i class="fa fa-tachometer feature-icon  text-primary"></i>
-        </div>
-        <div class="media-body">
             <h3 class="media-heading">Device?</h3>
             <div id="deviceList">Liste des devices.</div>
         </div>
       </div>
+
 
 
       <div class="list-group-item list-group-item-home media">
@@ -33,8 +24,11 @@
           <i class="fa fa-tachometer feature-icon  text-primary"></i>
         </div>
         <div class="media-body">
-            <h3 class="media-heading">Test responsiveness and speed</h3>
-            Scroll, tap, navigate, test that everything is smooth
+            <h3 class="media-heading">Mesure</h3>
+            <div id="stateData">Etat : <span>Stop</span></div>
+            <div id="paquetData">...</div>
+            <button class="btn btn-primary" ng-click="getData($event)">Lancer</button>
+            <button class="btn btn-primary" ng-click="stopData($event)">Arrêter</button>
         </div>
       </div>
 

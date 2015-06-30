@@ -361,6 +361,19 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
       $scope.notices.splice(index, 1);
     }
   };
+  
+  /// openradiation
+ // $("#deviceList").touchend(connect);
+  
+  $scope.getData = function(clickEvent){
+	  console.log("getData");
+	  $('#stateData span').html('En cours');
+	  rfduino.onData(onData, onRfError);
+	  }
+  
+  $scope.stopData = function(clickEvent){
+	  console.log("stopData");
+	  $('#stateData span').html('Stop');}
 });
 /*app.controller('FormCtrl', function($rootScope, $scope,$location){
 	console.log('form');
