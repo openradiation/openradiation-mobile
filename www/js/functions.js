@@ -287,7 +287,7 @@ function connect(e){
         deviceUUID = uuid;
         tubeType = target.getAttribute("tube");
         rfduino.onData(onData, onRfError);
-        showPageChoixTypeMesure();
+        //showPageChoixTypeMesure();
         count = 0;
     };
 
