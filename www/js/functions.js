@@ -260,7 +260,7 @@ function onData(data){
 	$('#paquetData').html(data);
 }
 
-/*function connect(e){
+function connect(e){
     var target = e.target;
     var uuid = e.target.getAttribute('uuid');
     if (uuid==null)
@@ -275,4 +275,4 @@ function onData(data){
     };
 
     rfduino.connect(uuid, onConnect, onRfError);
-}*/
+}
