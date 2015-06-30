@@ -271,7 +271,7 @@ function onRfError(error) {
 
 function onData(data){
 	console.log('onData');
-	alert('onData');
+	//alert('onData');
 	$('#paquetData').html(data);
 }
 
