@@ -368,7 +368,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
   $scope.getData = function(clickEvent){
 	  console.log("getData");
 	  $('#stateData span').html('En cours');
-	  rfduino.onData(onData, onRfError);
+	  //rfduino.onData(onData, onRfError);
 	  $("#deviceList").touchend(connect);
 	  }
   
