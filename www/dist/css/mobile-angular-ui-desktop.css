@@ -497,30 +497,34 @@
     -moz-transform: translate3d(0, 0, 0) !important;
     transform: translate3d(0, 0, 0) !important;
   }
-  .has-sidebar-left .app,
+  /*.has-sidebar-left .app,*/
   .sidebar-left-in .app {
     width: auto;
-    margin-left: 300px;
+  /* margin-left: 300px;*/
     left: 0;
-    -webkit-transform: translate3d(0, 0, 0) !important;
+    -webkit-transform: translate3d(300px, 0, 0);
+    transform: translate3d(300px, 0, 0);
+ /*   -webkit-transform: translate3d(0, 0, 0) !important;
     -moz-transform: translate3d(0, 0, 0) !important;
     transform: translate3d(0, 0, 0) !important;
     position: relative;
     -webkit-transition: -webkit-transform 0 ease;
     -moz-transition: -moz-transform 0 ease;
-    transition: transform 0 ease;
+    transition: transform 0 ease;*/
   }
   .sidebar-right-in .app {
     width: auto;
-    margin-right: 300px;
+   /* margin-right: 300px;*/
     right: 0;
-    -webkit-transform: translate3d(0, 0, 0) !important;
+    -webkit-transform: translate3d(-300px, 0, 0);
+    transform: translate3d(-300px, 0, 0);
+  /*  -webkit-transform: translate3d(0, 0, 0) !important;
     -moz-transform: translate3d(0, 0, 0) !important;
     transform: translate3d(0, 0, 0) !important;
     position: relative;
     -webkit-transition: -webkit-transform 0 ease;
     -moz-transition: -moz-transform 0 ease;
-    transition: transform 0 ease;
+    transition: transform 0 ease;*/
   }
 }
 @media (min-width: 1200px) {
@@ -530,11 +534,20 @@
   .sidebar-right {
     width: 320px;
   }
-  .has-sidebar-left .app,
+ /* .has-sidebar-left .app,
   .sidebar-left-in .app {
     margin-left: 320px;
   }
   .sidebar-right-in .app {
     margin-right: 320px;
+  }*/
+  
+  .sidebar-left-in .app {
+    -webkit-transform: translate3d(320px, 0, 0);
+    transform: translate3d(320px, 0, 0);
+  }
+  .sidebar-right-in .app {
+    -webkit-transform: translate3d(-320px, 0, 0);
+    transform: translate3d(-320px, 0, 0);
   }
 }

@@ -1,13 +1,35 @@
-<div class="scrollable">  
+<div class="scrollable home">  
   <div class="scrollable-content">
 
     <div class="list-group text-center">
-      <div class="list-group-item list-group-item-home">
-        <h1>Mobile Angular UI
-        Demo <small>1.2</small>
-        </h1>
+    	<div class="logo"></div>
+    	<div class="homesubtitle">mesurer la radioactivité</div>
+    	<div class="gps">GPS : good</div>
+    	<br/>
+    	<div class="capteur2">
+    		<div ng-if="state == '2' || state == '3'">
+	    		Capteur détecté :
+	    	</div>
+	    	<div ng-if="state == '4'">
+	    		Capteur AK3Zim34 : OK
+	    	</div>
+    	</div>
+    	<div class="capteur" ng-click="buttonSearchCapteur($event)" >
+	    	<div ng-if="state == '1'">
+	    	Pas de capteur<br/>CLIQUEZ ICI
+	    	</div>
+	    	<div ng-if="state == '2'">
+	    	Aucun capteur
+	    	</div>
+	    	<div ng-if="state == '3'">
+	    	AK3Zim34 : OK
+	    	</div>
+    	</div>
+    
+     <!-- <div class="list-group-item list-group-item-home">
+        <h1>{{appName}}</h1>
       </div>
-      <div class="list-group-item list-group-item-home media">
+       <div class="list-group-item list-group-item-home media">
         <div>
           <i class="fa fa-gamepad feature-icon text-primary"></i>
         </div>
@@ -56,6 +78,10 @@
               It would help a lot!
             </p>
         </div>
+      </div>
+      -->
+      <div class="button-home-bottom">
+      	<div ng-click="doMesure($event)" class="button-home" ng-class="{'off': state=='1' || state=='2','on': state=='3' || state=='4'}"></div>
       </div>
 
     </div>

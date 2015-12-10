@@ -37,6 +37,10 @@ app.config(function($routeProvider) {
   $routeProvider.when('/carousel',      {templateUrl: 'templates/carousel.html', reloadOnSearch: false});
   $routeProvider.when('/useok',      	{templateUrl: 'templates/useok.html', reloadOnSearch: false});
   $routeProvider.when('/tab-charts',    {templateUrl: 'templates/tab-charts.html', reloadOnSearch: false});
+  
+  $routeProvider.when('/mesurePrise',    {templateUrl: 'templates/mesure-prise.html', reloadOnSearch: false});
+  
+  $routeProvider.when('/param',    {templateUrl: 'templates/or-param.html', reloadOnSearch: false});
 });
 
 
@@ -196,78 +200,57 @@ function alertDismissed() {
 }
 
 app.controller('MainController', function(cordovaReady,$rootScope, $scope,$location,$route){
-	//$location.path('/scroll'); 
-	console.log('loc1 '+$location);
-	 console.log('loc1 '+JSON.stringify($location) );
+	
+	
+	
+	$scope.appName = "Openradiation";
+	
+	
+	$scope.buttonHome = "off";
+	$scope.state = "1";
+	$scope.top="0";
+	
+	
+	
+	
+
 	 async.series([	
-	               		function(callback){ cordovaReady(callback);},
-	               		function(callback){init_DB(callback);},
+	               	function(callback){ cordovaReady(callback);},
+	               //	function(callback){init_DB(callback);},
 	               		
 	               	//creta table
-		               	function(callback){createTableQuestionnaires(callback);},
-		               	function(callback){createTableHoraires(callback);},
-		               	function(callback){createTableReponses(callback);},
+		          /*  function(callback){createTableQuestionnaires(callback);},
+		            function(callback){createTableHoraires(callback);},
+		            function(callback){createTableReponses(callback);},*/
 		               	
-		               	//create db content
-		               //	function(callback){createQuestionnairesSuccess(callback);},
+		             //create db content
+		             //function(callback){createQuestionnairesSuccess(callback);},
 		               	
-		               	//test useOk
-		               	function(callback){do_MC_UseOk(callback,$location,$route);},
-		               	/*function(callback){console.log('loc5 '+$location);
-  			 			 console.log('loc5 '+JSON.stringify($location));console.log('toto');alert('toto');$location.path('/scroll');$route.reload();}*/
-	               		],
+		             //test useOk
+		            // function(callback){do_MC_UseOk(callback,$location,$route);},
+	               	],
 	   				 
-	   				 function(err, results ){
-	   			 			console.log(results);
-	   			 		refreshDevices();
-	   			 			//$location.path('/scroll'); 
-	   			 			/* console.log('loc4 '+$location);
-	   			 			 console.log('loc4 '+JSON.stringify($location) );*/
+	   				function(err, results ){
+	   			 		console.log(results);
+	   			 		//refreshDevices();
+	   			 	//init state
+	   			 	var locationPath = $location.path();
+	   			 	if (locationPath != "/")
+	   			 		$scope.top="1";
 	   		         }
 	   		 );//fin  async.series*/
 	 
-	 
-	 //.then(function(){conole.log('oj')})
-	 /*cordovaReady(function () {
-		 //$location.path('/scroll'); 
-		 console.log('loc2 '+$location);
-		 console.log('loc2 '+JSON.stringify($location) );*/
-         // Device ready event has fired when this function fires
-		 
-	/*	 if(isMobile)
-		navigator.notification.alert(
-		    'You are the winner!',  // message
-		    alertDismissed,         // callback
-		    'Game Over',            // title
-		    'Done'                  // buttonName
-		);*/
-		 
-	/*	 async.series([	function(callback){init_DB(callback);},
-		               	//creta table
-		               	function(callback){createTableQuestionnaires(callback);},
-		               	function(callback){createTableHoraires(callback);},
-		               	function(callback){createTableReponses(callback);},
-		               	
-		               	//create db content
-		               	function(callback){createQuestionnairesSuccess(callback);},
-		               	
-		               	//test useOk
-		               	function(callback){do_MC_UseOk(callback,$location);}
-		         ],
-				 
-				 function(err, results,$location ){
-			 			console.log(results);
-			 			//$location.path('/scroll'); 
-			 			 console.log('loc4 '+$location);
-			 			 console.log('loc4 '+JSON.stringify($location) );
-		         }
-		 );//fin  async.series*/
-		 
-
-		 
-		// if MC_UseOk
-//	});//cordovaReady
-	// $location.path('/scroll'); 
+	$scope.buttonSearchCapteur = function(clickEvent){
+	console.log('test');
+		 fakeSearch($scope);
+	}
+	
+	$scope.doMesure = function(clickEvent){
+		console.log('doMesure');
+		$location.path('/mesurePrise');
+		$scope.top = "1";
+		 fakeMesure($scope);
+	}
 
   // User agent displayed in home page
   $scope.userAgent = navigator.userAgent;
@@ -392,193 +375,6 @@ $location.path('/scroll');
 //console.log($location.path());
 });*/
 
-//CHARTS
-app.controller('ChartsCtrl', function($scope, $filter, Questions, Charts) {
-
-	//current date
-	var MyDate = new Date();
-	var MyDateString;
-	MyDate.setDate(MyDate.getDate() + 20);
-	MyDateString =  MyDate.getFullYear() + '-'
-    + ('0' + (MyDate.getMonth()+1)).slice(-2) + '-'
-    + ('0' + MyDate.getDate()).slice(-2);
-	
-	
-	var sid = 236551;
-	moment.locale('fr');
-	var curs = moment(MyDateString);
-	var curs = moment('2015-01-01');
-     period = "1-month";
-	
-	  $scope.$on('mobile-angular-ui.state.changed.activeTab', function(e, newVal, oldVal) {
-		  
-		  if (newVal == 1) {
-			   period = "1-month";
-		  } 
-		  else  if (newVal == 2) {
-			   period = "2-month";
-		  }
-		  else  if (newVal == 3) {
-			   period = "3-month";
-		  }
-
-	var grid = [],
-		labels = [];
-	if (period == 'weeks') {
-		var _in = moment(curs).startOf('isoWeek');
-		var _out = moment(curs).endOf('isoWeek');
-		var d = moment(_in);
-		labels = ['L','M','Me','J','V','S','D'];
-		while(d.unix() < _out.unix()) {
-			grid.push(d.format('YYYY-MM-DD'));
-			d = d.add(1, 'days');
-		}
-	} else if (period == '1-month') {
-		var _in = moment(curs).startOf('month');
-		var _out = moment(curs).endOf('month');
-		var d = moment(_in);
-		while(d.unix() < _out.unix()) {
-			grid.push(d.format('YYYY-MM-DD'));
-			labels.push((d.format('e')=='0')?d.format('dd D MMM'):'');
-			d = d.add(1, 'days');
-		}
-	} else if (period == '2-month') {
-		var _in = moment(curs).startOf('month').subtract('months',1);
-		var _out = moment(curs).endOf('month');
-		var d = moment(_in);
-		while(d.unix() < _out.unix()) {
-			grid.push(d.format('YYYY-MM-DD'));
-			labels.push((d.format('e')=='0')?d.format('dd D MMM'):'');
-			d = d.add(1, 'days');
-		}
-	} else if (period == '3-month') {
-		var _in = moment(curs).startOf('month').subtract('months',2);
-		var _out = moment(curs).endOf('month');
-		var d = moment(_in);
-		while(d.unix() < _out.unix()) {
-			grid.push(d.format('YYYY-MM-DD'));
-			labels.push((d.format('e')=='0')?d.format('dd D MMM'):'');
-			d = d.add(1, 'days');
-		}
-	}
-	
-	
-	Questions.all({sid:sid}).then(function(response) {
-		var q = [];
-		angular.forEach(response.data, function(row) {
-			if (row.question != "systemuid") {
-				q.push({
-					label: row.question.replace(/(<([^>]+)>)/ig,"").replace(/\&nbsp;/ig," ").trim(),
-					key: sid+'X'+row.gid+'X'+row.qid
-				});
-			}
-		});
-		q.push(q.shift()); // first and second at the end (demo)
-		q.push(q.shift());
-		$scope.questions = q;
-		/*Chart.defaults.global = {
-		responsive: false,
-	    maintainAspectRatio: true
-}*/
-		
-		Charts.all({sid:sid,in:_in.format('YYYY-MM-DD'),out:_out.format('YYYY-MM-DD')}).then(function(response) {
-			q.forEach(function(question,i) {
-				var el = document.getElementById('chart-'+question.key);
-				if (el) {
-					var data = {};
-					grid.forEach(function(date) {
-						data[date] = null;
-					});
-					angular.forEach(response.data, function(row) {
-					//response.data.forEach(function(row) {
-						if (row[question.key]) {
-							data[row['submitdate'].substr(0,10)] = row[question.key];
-						}
-					});;
-					var strokeColor = "#FFFFFF";
-					if (period == '1-month')
-						strokeColor = "#157EFB";
-					new Chart(el.getContext("2d")).Bar({
-						labels: labels,
-						datasets: [
-							{
-								fillColor: "#157EFB",
-								strokeColor: strokeColor,
-								barStrokeWidth: 1,
-								barShowStroke : false,
-								barValueSpacing : 1,
-								data:data
-							}
-						]
-					}, {
-						animation:(i<3)
-					});
-				}
-			});
-			
-			//$scope.charts = response.data;
-		});
-		
-		$scope.emailMe = function(clickEvent){
-		var questionList = "";
-		$( "input:checked").each(function( index ) {
-			  console.log( index + ": " + $( this ).attr('id') );
-			 // console.log($("input:checked"));
-			  var str = $( this ).attr('id');
-			  var res = str.split("X");
-			  console.log(res);
-			  var res2 = res[2];
-			  console.log(res2);
-			  questionList += res[2]+",";
-			});
-		console.log(questionList);
-			if(isMobile)
-			{
-			var fileTransfer = new FileTransfer();
-			var fileURL = cordova.file.dataDirectory+"montest.pdf";
-			//test android seulement :
-			var fileURL = "cdvfile://localhost/persistent/"+"mesdonnees.pdf"; 
-			var uri = "http://restitution.altotoc.fr/pdf?curs=2015-01-01&sid=236551&qid="+questionList; //modif php pour repondre qqchose par defaut si pas de param
-			fileTransfer.download(
-				    uri,
-				    fileURL,
-				    function(entry) {
-				        console.log("download complete: " + entry.toURL());
-				        //envoi mail
-				       alert("download complete: " + entry.toURL());
-				        cordova.plugins.email.isAvailable(function(result){ 
-				        	if (result) //mail dispo
-				        	{
-				        		cordova.plugins.email.open({
-				        			subject: 'rapport données',
-				        		    attachments: entry.toURL() //=> res/drawable/icon (Android)
-				        		});
-				        	}
-				        });
-				    },
-				    function(error) {
-				    	//alert("download error source " + error.source);
-				    	//alert("download error target " + error.target);
-				    	//alert("upload error code" + error.code);
-				        //console.log("download error source " + error.source);
-				        //console.log("download error target " + error.target);
-				        //console.log("upload error code" + error.code);
-				    },
-				    false,
-				    {
-				        headers: {
-				            "Authorization": "Basic dGVzdHVzZXJuYW1lOnRlc3RwYXNzd29yZA=="
-				        }
-				    }
-				);
-		}
-			else
-				console.log("emailMe");
-		}
-	});
-	
-	  });// $scope.$on
-});
 
 
 //CORDOVA

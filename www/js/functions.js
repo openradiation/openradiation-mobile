@@ -223,7 +223,7 @@ function test(callback,value){
 	callback(null, 'test');
 }
 
-function refreshDevices() {
+/*function refreshDevices() {
 	console.log("refreshDevices")
     $("#deviceList").html('');
 	if (typeof window.rfduino === 'object') 
@@ -267,7 +267,7 @@ function onRfError(error) {
         alert(error.toUpperCase());
     }*/
 	//alert("Error device.");
-}
+/*}
 
 function onData(data){
 	console.log('onData');
@@ -292,4 +292,35 @@ function connect(e){
     };
 
     rfduino.connect(uuid, onConnect, onRfError);
+}*/
+
+///FAKE
+function fakeSearch($scope){
+	$scope.state = "2";
+	setTimeout(function (){$scope.state = "3";console.log("state3");$scope.$apply();}, 5000);
+	setTimeout(function (){$scope.state = "4";console.log("state4");$scope.$apply();}, 6000);
 }
+function fakeMesure($scope){
+	var max = 30;
+	for (i=1;i<(max+1);i++)
+	{
+		(function (value) {
+			setTimeout(function (){doProgressBar(value)}, value*(60/max)*1000);
+		})(i);
+	}
+	
+	
+}
+
+function doProgressBar(mycount){
+	var max = 30;
+	var percent = mycount*100/max;
+	$('.mesure .blocMesure1 .fiability .progressbar2').width( percent+'%');
+	if (percent>33)
+		$('.mesure .blocMesure1 .fiability .progressbar2').css("background-color","#dfe700");
+	if (percent>66)
+		$('.mesure .blocMesure1 .fiability .progressbar2').css("background-color","#aee700");
+		
+
+}
+
