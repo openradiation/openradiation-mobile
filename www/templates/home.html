@@ -6,7 +6,7 @@
     	<div class="homesubtitle">mesurer la radioactivité</div>
     	<div class="gps">GPS : good</div>
     	<br/>
-    	<div class="capteur2">
+    	<div class="capteur2" ng-class="{'on': state=='2' || state=='3','off': state=='1'}">
     		<div ng-if="state == '2' || state == '3'">
 	    		Capteur détecté :
 	    	</div>
@@ -14,12 +14,12 @@
 	    		Capteur AK3Zim34 : OK
 	    	</div>
     	</div>
-    	<div class="capteur" ng-click="buttonSearchCapteur($event)" >
+    	<div class="capteur" ng-click="buttonSearchCapteur($event)" ng-class="{'on': state=='2' || state=='3','off': state=='4'}">
 	    	<div ng-if="state == '1'">
 	    	Pas de capteur<br/>CLIQUEZ ICI
 	    	</div>
 	    	<div ng-if="state == '2'">
-	    	Aucun capteur
+	    	Aucun capteur <span class="icon-progress"></span>
 	    	</div>
 	    	<div ng-if="state == '3'">
 	    	AK3Zim34 : OK
