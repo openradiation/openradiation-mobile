@@ -52,17 +52,40 @@
     	<div class="blocMesure2">
 			<div class="bloc">
 	    			<div class="desc">Environnement de la mesure : </div>
-	    			<div class="value">48</div>
+	    			<div class="radios">
+		    			<input type="radio" name="radioEnv" value="1" id="env1" ng-model="modelEnv">
+						<label for="env1" ng-class="{'on':modelEnv==1}"></label>
+						<input type="radio" name="radioEnv" value="2" id="env2" ng-model="modelEnv">
+						<label for="env2" ng-class="{'on':modelEnv==2}"></label>
+						<input type="radio" name="radioEnv" value="3" id="env3" ng-model="modelEnv">
+						<label for="env3" ng-class="{'on':modelEnv==3}"></label>
+						<input type="radio" name="radioEnv" value="4" id="env4" ng-model="modelEnv">
+						<label for="env4" ng-class="{'on':modelEnv==4}"></label>
+						<input type="radio" name="radioEnv" value="5" id="env5" ng-model="modelEnv">
+						<label for="env5" ng-class="{'on':modelEnv==5}"></label>
+					</div>
     		</div>
     		<div class="bloc">
 	    		<div class="ligne">
 	    			<div class="desc">Position des capteurs: </div>
-	    			<div class="value">48</div>
+	    			<div class="radios2">
+		    			<input type="radio" name="radioPos" value="1" id="pos1" ng-model="modelPos">
+						<label for="pos1" ng-class="{'on':modelPos==1}"><span>1</span>Au sol</label>
+						<input type="radio" name="radioPos" value="2" id="pos2" ng-model="modelPos">
+						<label for="pos2" ng-class="{'on':modelPos==2}"><span>2</span>A 1 mètre du sol</label>
+	
+					</div>
+					<div class="textes">
+						<input type="text" name="tags" placeholder="Tags : #"/>
+						<input type="text" name="notes" placeholder="Notes"/>
+					</div>
 	    		</div>
     		</div>
     	</div>
     	<div class="blocMesure3">
    			<div ng-click="validMesure($event)" class="button-mesure">OK</div>
+   			<div class="annul"><div ng-click="validMesure($event)" class="button-more">Annuler</div></div>
+   			<div class="expert"><div ng-click="validMesure($event)" class="button-more">Expert</div></div>
     	</div>
     	
     

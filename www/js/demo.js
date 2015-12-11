@@ -210,12 +210,16 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	$scope.buttonHome = "off";
 	$scope.state = "1";
 	$scope.top="0";
+	$scope.menu="1";
 	
 	if (!isMobile)
 	{
 		var locationPath = $location.path();
 	 	if (locationPath != "/")
+	 	{
 	 		$scope.top="1";
+	 		$scope.menu="0";
+	 	}
 	}
 	
 
@@ -238,10 +242,13 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	   				function(err, results ){
 	   			 		console.log(results);
 	   			 		//refreshDevices();
-	   			 	//init state
-	   			 	var locationPath = $location.path();
-	   			 	if (locationPath != "/")
-	   			 		$scope.top="1";
+		   			 	//init state
+		   			 	var locationPath = $location.path();
+		   			 	if (locationPath != "/")
+		   			 	{
+		   			 		$scope.top="1";
+		   			 		$scope.menu="0";
+		   			 	}
 	   		         }
 	   		 );//fin  async.series*/
 	 
@@ -254,6 +261,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		console.log('doMesure');
 		$location.path('/mesurePrise');
 		$scope.top = "1";
+		$scope.menu="0";
 		 fakeMesure($scope);
 	}
 	
@@ -261,11 +269,16 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		console.log('endMesure');
 		$location.path('/mesureRecap');
 		$scope.top = "1";
+		$scope.menu="0";
 		// fakeMesure($scope);
 	}
 	
 	$scope.validMesure = function(clickEvent){
 		console.log('validMesure');
+		$scope.top = "0";
+		$scope.menu="1";
+		//$scope.state="1";
+		$location.path('/');
 		//$location.path('/mesureRecap');
 		//$scope.top = "1";
 		// fakeMesure($scope);
