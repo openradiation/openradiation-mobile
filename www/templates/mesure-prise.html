@@ -28,11 +28,11 @@
     		<div class="flex-container1">
     			<div class="nbCoups1">
 	    			<div class="desc">Nb coups</div>
-	    			<div class="value">14h23'34''</div>
+	    			<div class="value">21</div>
 	    		</div>
 	    		<div class="border"></div>
 	    		<div class="nbCoups2">
-	    			<div class="desc">Nb de coups par min</div>
+	    			<div class="desc">Nb de coups <br/>par min</div>
 	    			<div class="value">27</div>
 	    		</div>
 	    		<div class="duree">
@@ -44,19 +44,14 @@
     		<div class="clear"></div>
     	</div>
     	<div class="blocMesure2">
-			bloc 2
+			<div class="desc">Radiation estimée :</div>
+			<div class="value"><span>0,062</span>mSv/h</div>
     	</div>
     	<div class="blocMesure3">
-   			bloc 3
+   			<div ng-click="endMesure($event)" class="button-mesure">FIN</div>
     	</div>
     	
-    	
-
-
-      <div class="button-home-bottom">
-      	<div ng-click="doMesure($event)" class="button-home" ng-class="{'off': state=='1' || state=='2','on': state=='3' || state=='4'}"></div>
-      </div>
-
+    
   
 
   </div>

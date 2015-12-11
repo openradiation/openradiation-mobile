@@ -244,6 +244,7 @@ input.scrollable-header {
     width: 100%;
 }
 .mesure .mesureDeb, .mesure .mesureTemp{width:49.75%;float:left;margin-top:10px;margin-bottom:5px}
+.mesure .mesureTemp{background:url('../img/icon-temp.png') 90% 50% no-repeat transparent;min-height:42px;}
 .mesure .border{width:0.5%;background-color:#66ceff;margin-top:10px;margin-bottom:5px}
 .mesure .blocMesure1 .desc{font-size:12px;color:#002c9e;font-family:'INTERSTATE',Arial,Helvetica,sans-serif; }
 .mesure .blocMesure1 .value{font-size:23px;color:white;font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif; }
@@ -251,28 +252,6 @@ input.scrollable-header {
 /*.mesure .blocMesure1 .fiability .desc{float:left;background-color:#66ceff;padding:2px 5px;}*/
 .mesure .blocMesure1 .fiability .desc{display:table-cell;float:left;background-color:#66ceff;padding:2px 5px;vertical-align:bottom;}
 .mesure .blocMesure1 .fiability .progressbar{display:table-cell;height:10px;vertical-align:bottom;width:100%;position:relative;}
-/*.mesure .blocMesure1 .fiability .progressbar:before {
-    content:'\A';
-    position:absolute;
-    background:#3fb9ee;
-    top:50%; bottom:0;
-    left:0; 
-    width:100%;
-    -webkit-animation: filler 2s ease-in-out;
-    -moz-animation: filler 2s ease-in-out;
-    animation: filler 2s ease-in-out;
-}
-.mesure .blocMesure1 .fiability .progressbar:after {
-    content:'\A';
-    position:absolute;
-    background:red;
-    top:50%; bottom:0;
-    left:0; 
-    width:50%;
-    -webkit-animation: filler 2s ease-in-out;
-    -moz-animation: filler 2s ease-in-out;
-    animation: filler 2s ease-in-out;
-}*/
 
 .mesure .blocMesure1 .fiability .progressbar1 {
     content:'\A';
@@ -296,8 +275,45 @@ input.scrollable-header {
     -webkit-transition:all 1s;
 }
 
-.mesure .nbCoups1, .mesure .nbCoups2, .mesure .duree{width:33%;float:left;margin-top:10px;margin-bottom:5px}
+.mesure .nbCoups1, .mesure .nbCoups2, .mesure .duree{width:33%;float:left;margin-top:10px;margin-bottom:5px;}
+.mesure .duree {background:url('../img/icon-duree.png') center center no-repeat transparent;background-size:contain;min-height:84px;margin-bottom:0;}
+
+.mesure .nbCoups1 .desc, .mesure .nbCoups2 .desc, .mesure .duree .desc{min-height:35px}
+.mesure .nbCoups1 .desc, .mesure .duree .desc {padding-top:10px}
+.mesure .nbCoups1 .value, .mesure .nbCoups2 .value {font-size:35px}
+.mesure .duree .value {font-size:26px}
 
 
-.mesure .blocMesure2{background-color:#3c1d7c;padding-bottom:47%}
-.mesure .blocMesure3{padding-bottom:46.5%}
+.mesure .blocMesure2{background-color:#3c1d7c;padding-top:3%;position:relative;z-index:10;}
+.mesure .blocMesure2 .desc{color:#d4aeff;font-size:12px;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;text-transform:uppercase;margin:0 3%;}
+.mesure .blocMesure2 .value{background:url('../img/bg-radiation.png') center top repeat-x transparent;
+	color:white;font-size:10px;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;margin:3% 3% 0;padding-top:10px;padding-bottom:3%;}
+.mesure .blocMesure2 .value span{font-size:50px;display:block;font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;}
+.mesure .blocMesure3{}
+.button-mesure{height:168px;width:168px;background-color:transparent;background-position:center center;background-size:contain;background-repeat:no-repeat;
+	margin:0 auto;transition: all 2s;z-index:1;background-image:url('../img/button-mesure.png');margin-top:-3%;position:relative;
+		font-size:24px;color:white;font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;padding-top:67px;}
+		
+/*mesure2*/
+.mesure2 {background-color:#00a0dd}
+.mesure2 .blocMesure1{padding-top:1.5%}
+.mesure2 .blocMesure1 .blocGps {position:absolute;top:10px;right:0}
+.mesure2 .blocMesure1 .bloc{padding:1.5% 0;margin:0 6%;border-top:#66ceff 1px solid;position:relative;text-align:left}
+.mesure2 .bloc:first-child{border:none;}
+.mesure2 .blocMesure1 .bloc .desc{display:inline-block;color:#090085;font-size:12px;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;}
+.mesure2 .blocMesure1 .bloc .value{display:inline-block;color:white;font-size:12px;font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;}
+
+.mesure2 .blocMesure2{background-color:#5adaff;padding-top:3%;position:relative;z-index:10;}
+.mesure2 .blocMesure2 .bloc{padding:1.5% 0;margin:0 6%;border-top:#9cf5ff1px solid;position:relative;}
+.mesure2 .blocMesure2 .bloc .desc{color:#090085;font-size:12px;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;}
+
+
+
+.mesure .blocMesure2 .desc{color:#d4aeff;font-size:12px;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;text-transform:uppercase;margin:0 3%;}
+.mesure .blocMesure2 .value{background:url('../img/bg-radiation.png') center top repeat-x transparent;
+	color:white;font-size:10px;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;margin:3% 3% 0;padding-top:10px;padding-bottom:3%;}
+.mesure .blocMesure2 .value span{font-size:50px;display:block;font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;}
+.mesure .blocMesure3{}
+.button-mesure{height:168px;width:168px;background-color:transparent;background-position:center center;background-size:contain;background-repeat:no-repeat;
+	margin:0 auto;transition: all 2s;z-index:1;background-image:url('../img/button-mesure.png');margin-top:-3%;position:relative;
+		font-size:24px;color:white;font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;padding-top:67px;}

@@ -39,6 +39,7 @@ app.config(function($routeProvider) {
   $routeProvider.when('/tab-charts',    {templateUrl: 'templates/tab-charts.html', reloadOnSearch: false});
   
   $routeProvider.when('/mesurePrise',    {templateUrl: 'templates/mesure-prise.html', reloadOnSearch: false});
+  $routeProvider.when('/mesureRecap',    {templateUrl: 'templates/mesure-recap.html', reloadOnSearch: false});
   
   $routeProvider.when('/param',    {templateUrl: 'templates/or-param.html', reloadOnSearch: false});
 });
@@ -210,8 +211,12 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	$scope.state = "1";
 	$scope.top="0";
 	
-	
-	
+	if (!isMobile)
+	{
+		var locationPath = $location.path();
+	 	if (locationPath != "/")
+	 		$scope.top="1";
+	}
 	
 
 	 async.series([	
@@ -251,6 +256,23 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		$scope.top = "1";
 		 fakeMesure($scope);
 	}
+	
+	$scope.endMesure = function(clickEvent){
+		console.log('endMesure');
+		$location.path('/mesureRecap');
+		$scope.top = "1";
+		// fakeMesure($scope);
+	}
+	
+	$scope.validMesure = function(clickEvent){
+		console.log('validMesure');
+		//$location.path('/mesureRecap');
+		//$scope.top = "1";
+		// fakeMesure($scope);
+	}
+	
+	
+
 
   // User agent displayed in home page
   $scope.userAgent = navigator.userAgent;
