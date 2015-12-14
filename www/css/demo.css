@@ -375,7 +375,9 @@ input.scrollable-header {
 .histo {
 	background: -webkit-linear-gradient(#045cb8, #00a0dd); /* For Safari 5.1 to 6.0 */
 	background: linear-gradient(to bottom, #045cb8, #00a0dd);}
-.title{font-size:30px;font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;color:white;background-color:#00a0dd;position:fixed;width:100%;}
+/*.title{font-size:30px;font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;color:white;background-color:#00a0dd;position:fixed;width:100%;}*/
+.title{font-size:30px;font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;color:white;background-color:#00a0dd;position:absolute;top:0;width:100%;text-align:center;
+	z-index:10}
 .page-content{padding:3%;padding-top:50px;}
 .histo .ligne{padding: 1% 0;border-top:1px solid #66ceff;}
 .histo .ligne:first-child{border:none;}
@@ -391,6 +393,29 @@ input.scrollable-header {
 .param {
 	background: -webkit-linear-gradient(#045cb8, #00a0dd); /* For Safari 5.1 to 6.0 */
 	background: linear-gradient(to bottom, #045cb8, #00a0dd);}
+.param .page-content{padding:50px 0 0 0;}
+.param .blocParam1,.param .blocParam2,.param .blocParam3{padding:3%;}
+.param .blocParam2{background-color:#3c1d7c;}
+.param .bloctitle{font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;font-size:20px;color:white;}
+.param .ligne{padding: 1% 0;border-bottom:1px solid #66ceff;}
+.param .ligne:last-child{border:none;}
+.param .ligne .desc{font-family:'INTERSTATE',Arial,Helvetica,sans-serif;font-size:12px;color:white; width:32%;text-align:left;line-height:30px;
+	background:url('../img/icon-next.png') 97% 50% no-repeat transparent;width:100%;padding:0 3%;}
+.param .blocParam2 .ligne .desc{line-height:inherit;}
+.param .blocParam2 .ligne .desc span{font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;}
+.param .ligne2{padding: 1% 0;border-bottom:1px solid #66ceff;}
+.param .ligne2:last-child{border:none;}
+.param .ligne2 .desc{font-family:'INTERSTATE',Arial,Helvetica,sans-serif;font-size:12px;color:white; text-align:left;line-height:40px;
+	width:100%;padding:0 3%; width:75%;display:inline-block;}
+.param .ligne2 .button{width:23%;display:inline-block;vertical-align:middle}
+
+.switch{border:none;}
+.switch .switch-handle{border-color:#66ceff;top:0;left:0;background-color: #9cf5ff;}
+.switch.active {
+    background-color: #090085;
+    border: 1px solid #090085;border:none;
+}
+.switch.active .switch-handle{border:none;}
 
 /*more*/
 .more {

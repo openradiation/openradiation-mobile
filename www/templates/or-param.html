@@ -1,28 +1,37 @@
 
 
 	<div class="scrollable param">
- 		  <div class="scrollable-content text-center">
- 		
- 		<div class="title">
+	<div class="title">
 		Paramètres
 	</div>
-    	
+ 		  <div class="scrollable-content text-center">
 	<div class="page-content">
 	<div class="blocParam1">
 		<div class="bloctitle">Capteurs</div>
-		<div class="ligne">Capteurs bluetooth</div>
-		<div class="ligne">Capteurs wifi</div>
-		<div class="ligne">Capteurs non connecté habituel</div>
+		<div class="ligne"><div class="desc">Capteurs bluetooth</div></div>
+		
+		<div class="ligne"><div class="desc">Capteurs wifi</div></div>
+		<div class="ligne"><div class="desc">Capteurs non connecté habituel</div></div>
 	</div>
 	<div class="blocParam2">
 		<div class="bloctitle">Compte utilisateur</div>
-		<div class="ligne">Authentifié comme<br/><span>philippe.laroche@agoralogie.fr</span></div>
+		<div class="ligne"><div class="desc">Authentifié comme<br/><span>philippe.laroche@agoralogie.fr</span></div></div>
 	</div>
 	<div class="blocParam3">
 		<div class="bloctitle">Mesures</div>
-		<div class="ligne">Publication automatique des mesures</div>
-		<div class="ligne2">Signal auto pour les coups <ui-switch 
-            ng-model='rememberMe'></ui-switch></div>
+		<div class="ligne"><div class="desc">Publication automatique des mesures</div></div>
+		<div class="ligne2">
+			<div class="desc">Signal auto pour les coups </div>
+			<div class="button"><ui-switch ng-model='rememberMe'></ui-switch></div>
+		</div>
+		<div class="ligne2">
+			<div class="desc">Signal audio de fi de mesure </div>
+			<div class="button"><ui-switch ng-model='rememberMe2'></ui-switch></div>
+		</div>
+		<div class="ligne2">
+			<div class="desc">Mode expert </div>
+			<div class="button"><ui-switch ng-model='rememberMe3'></ui-switch></div>
+		</div>
 	</div>
 			</div>
 		</div>
