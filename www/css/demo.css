@@ -387,6 +387,11 @@ input.scrollable-header {
 .histo .button .delete{display:inline-block;width:24px;height:24px;background:url('../img/icon-delete.png') center center no-repeat transparent;margin:0 10px}
 .histo .published{display:inline-block;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;font-size:12px;color:white; width:32%}
 
+/*param*/
+.param {
+	background: -webkit-linear-gradient(#045cb8, #00a0dd); /* For Safari 5.1 to 6.0 */
+	background: linear-gradient(to bottom, #045cb8, #00a0dd);}
+
 /*more*/
 .more {
 	background: -webkit-linear-gradient(#045cb8, #00a0dd); /* For Safari 5.1 to 6.0 */

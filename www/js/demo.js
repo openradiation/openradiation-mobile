@@ -267,6 +267,13 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		 fakeSearch($scope);
 	}
 	
+	$scope.goHome = function(clickEvent){
+		console.log('goHome');
+		$location.path('/');
+		$scope.top = "0";
+		$scope.menu="1";
+	}
+	
 	$scope.doMesure = function(clickEvent){
 		console.log('doMesure');
 		$location.path('/mesurePrise');
@@ -297,6 +304,22 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	$scope.doHisto = function(clickEvent){
 		console.log('doHisto');
 		$location.path('/histo');
+		$scope.top = "1";
+		//$scope.menu="0";
+		 //fakeMesure($scope);
+	}
+	
+	$scope.doParam = function(clickEvent){
+		console.log('doParam');
+		$location.path('/param');
+		$scope.top = "1";
+		//$scope.menu="0";
+		 //fakeMesure($scope);
+	}
+	
+	$scope.doMore= function(clickEvent){
+		console.log('doMore');
+		$location.path('/more');
 		$scope.top = "1";
 		//$scope.menu="0";
 		 //fakeMesure($scope);
