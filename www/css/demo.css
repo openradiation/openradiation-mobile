@@ -367,3 +367,18 @@ input.scrollable-header {
 .mesure2 .blocMesure3 .annul {position:absolute;top:40%;left:3%;width:30%;z-index:10}
 .mesure2 .blocMesure3 .expert {position:absolute;top:40%;right:3%;width:30%;z-index:10}
 .mesure2 .blocMesure3 .button-more{color:white;background:#090085;font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;font-size:16px;border-radius: 5px;}
+
+/*histo*/
+.histo {
+	background: -webkit-linear-gradient(#045cb8, #00a0dd); /* For Safari 5.1 to 6.0 */
+	background: linear-gradient(to bottom, #045cb8, #00a0dd);}
+.title{font-size:30px;font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;color:white;background-color:#00a0dd;position:fixed;width:100%;}
+.page-content{padding:3%;padding-top:50px;}
+.histo .ligne{padding: 1% 0;border-top:1px solid #66ceff;}
+.histo .ligne:first-child{border:none;}
+.histo .date{display:inline-block;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;font-size:12px;color:white; width:32%;text-align:left;line-height:30px;font-weight:bold;}
+.histo .value{display:inline-block;font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;font-size:12px;color:white; width:32%;text-align:left;}
+.histo .button{display:inline-block;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;font-size:12px;color:white; width:32%;vertical-align: middle;}
+.histo .button .send{display:inline-block;width:24px;height:24px;background:url('../img/icon-send.png') center center no-repeat transparent;margin:0 10px}
+.histo .button .delete{display:inline-block;width:24px;height:24px;background:url('../img/icon-delete.png') center center no-repeat transparent;margin:0 10px}
+.histo .published{display:inline-block;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;font-size:12px;color:white; width:32%}

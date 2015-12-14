@@ -41,6 +41,8 @@ app.config(function($routeProvider) {
   $routeProvider.when('/mesurePrise',    {templateUrl: 'templates/mesure-prise.html', reloadOnSearch: false});
   $routeProvider.when('/mesureRecap',    {templateUrl: 'templates/mesure-recap.html', reloadOnSearch: false});
   
+  $routeProvider.when('/histo',    {templateUrl: 'templates/histo.html', reloadOnSearch: false});
+  
   $routeProvider.when('/param',    {templateUrl: 'templates/or-param.html', reloadOnSearch: false});
 });
 
@@ -218,6 +220,9 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	 	if (locationPath != "/")
 	 	{
 	 		$scope.top="1";
+	 	}
+	 	if (locationPath == "/mesurePrise" || locationPath == "/mesureRecap")
+	 	{
 	 		$scope.menu="0";
 	 	}
 	}
@@ -245,10 +250,13 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		   			 	//init state
 		   			 	var locationPath = $location.path();
 		   			 	if (locationPath != "/")
-		   			 	{
-		   			 		$scope.top="1";
-		   			 		$scope.menu="0";
-		   			 	}
+			   		 	{
+			   		 		$scope.top="1";
+			   		 	}
+		   			 	if (locationPath == "/mesurePrise" || locationPath == "/mesureRecap")
+			   		 	{
+			   		 		$scope.menu="0";
+			   		 	}
 	   		         }
 	   		 );//fin  async.series*/
 	 
@@ -282,6 +290,14 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		//$location.path('/mesureRecap');
 		//$scope.top = "1";
 		// fakeMesure($scope);
+	}
+	
+	$scope.doHisto = function(clickEvent){
+		console.log('doHisto');
+		$location.path('/histo');
+		$scope.top = "1";
+		//$scope.menu="0";
+		 //fakeMesure($scope);
 	}
 	
 	
