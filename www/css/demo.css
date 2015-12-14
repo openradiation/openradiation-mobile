@@ -4,7 +4,8 @@
 @font-face {
     font-family: "INTERSTATE";
     src: url('../fonts/Interstate_Regular.eot');
-	src: local('☺'), url('../fonts/Interstate_Regular.woff') format('woff'), url('../fonts/Interstate_Regular.ttf') format('truetype'), url('../fonts/Interstate_Regular.svg') format('svg');
+	src: local('☺'), url('../fonts/Interstate_Regular.woff') format('woff'), url('../fonts/Interstate_Regular.ttf') format('truetype'), 
+		url('../fonts/Interstate_Regular.svg') format('svg');
 	font-weight: normal;
 	font-style: normal;
     font-smooth:always;
@@ -13,7 +14,8 @@
 @font-face {
     font-family: "INTERSTATE";
     src: url('../fonts/Interstate_Light.eot');
-	src: local('☺'), url('../fonts/Interstate_Light.woff') format('woff'), url('../fonts/Interstate_Light.ttf') format('truetype'), url('../fonts/Interstate_Light.svg') format('svg');
+	src: local('☺'), url('../fonts/Interstate_Light.woff') format('woff'), url('../fonts/Interstate_Light.ttf') format('truetype'), 
+		url('../fonts/Interstate_Light.svg') format('svg');
 	font-weight: lighter;
 	font-style: normal;
     font-smooth:always;
@@ -22,7 +24,8 @@
 @font-face {
     font-family: "ARIALROUNDED";
     src: url('../fonts/ArialRoundedMTBold.eot');
-	src: local('☺'), url('../fonts/ArialRoundedMTBold.woff') format('woff'), url('../fonts/ArialRoundedMTBold.ttf') format('truetype'), url('../fonts/ArialRoundedMTBold.svg') format('svg');
+	src: local('☺'), url('../fonts/ArialRoundedMTBold.woff') format('woff'), url('../fonts/ArialRoundedMTBold.ttf') format('truetype'), 
+		url('../fonts/ArialRoundedMTBold.svg') format('svg');
 	font-weight: normal;
 	font-style: normal;
     font-smooth:always;
@@ -376,9 +379,20 @@ input.scrollable-header {
 .page-content{padding:3%;padding-top:50px;}
 .histo .ligne{padding: 1% 0;border-top:1px solid #66ceff;}
 .histo .ligne:first-child{border:none;}
-.histo .date{display:inline-block;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;font-size:12px;color:white; width:32%;text-align:left;line-height:30px;font-weight:bold;}
+.histo .date{display:inline-block;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;font-size:12px;color:white; width:32%;text-align:left;line-height:30px;
+	font-weight:bold;}
 .histo .value{display:inline-block;font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;font-size:12px;color:white; width:32%;text-align:left;}
 .histo .button{display:inline-block;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;font-size:12px;color:white; width:32%;vertical-align: middle;}
 .histo .button .send{display:inline-block;width:24px;height:24px;background:url('../img/icon-send.png') center center no-repeat transparent;margin:0 10px}
 .histo .button .delete{display:inline-block;width:24px;height:24px;background:url('../img/icon-delete.png') center center no-repeat transparent;margin:0 10px}
 .histo .published{display:inline-block;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;font-size:12px;color:white; width:32%}
+
+/*more*/
+.more {
+	background: -webkit-linear-gradient(#045cb8, #00a0dd); /* For Safari 5.1 to 6.0 */
+	background: linear-gradient(to bottom, #045cb8, #00a0dd);}
+.or-panel{border:1px solid white;    background-color:transparent;color:white;text-align:left;transition:all 1s;
+    -webkit-transition:all 1s;}
+.or-panel h4 {font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;font-size:20px;}
+.or-panel .panel-body{font-family:'INTERSTATE',Arial,Helvetica,sans-serif;font-size:12px;text-align:justify;border-top:1px solid #66ceff;padding:15px 0;margin:0 15px;transition:all 1s;
+    -webkit-transition:all 1s;}

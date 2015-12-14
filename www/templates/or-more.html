@@ -1,0 +1,50 @@
+
+<div class="scrollable more">  
+  <div class="scrollable-content text-center">
+
+	<div class="title">
+		À propos
+	</div>
+    	
+	<div class="page-content">
+   		<div class="bloc">
+    		<div class="panel-group" 
+        
+        ui-state='myAccordion' 
+        ui-default='1'>
+
+        <div class="panel or-panel" ng-repeat="i in [1,2,3]">
+          <div class="panel-heading" ui-set="{'myAccordion': i}">
+        
+            <h4 class="panel-title">
+                Titre #{{i}}
+            </h4>
+          </div>
+          <!-- 
+            use uiScopeContext to use scope vars in ui-if/ui-hide/ui-show/ui-class expression 
+            ie.
+            <div ui-hide="sharedState1 == myVar1 && sharedState2 == myVar2"
+              ui-scope-context="myVar1, myVar2"
+            >
+            </div>
+
+            Be aware that scope vars will take precedence over sharedStates so,
+            in order to avoid name clashes you can use 'as' to refer to scope vars
+            with a different name in conditions:
+
+            <div ui-hide="x == myVar1 && y == myVar2"
+              ui-scope-context="x as myVar1, y as myVar2"
+            >
+            </div>
+          -->
+          <div ui-if="myAccordion == i" ui-scope-context='i'>
+            <div class="panel-body">
+              #{{i}} Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed pretium sagittis est, ut dignissim orci vestibulum et. Aliquam imperdiet suscipit ex. Etiam tempor purus est, sit amet porta dui iaculis quis. Sed vitae convallis velit. Donec sed varius augue. Donec sed mauris mollis, accumsan elit nec, auctor ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            </div>
+          </div>
+        </div>
+      </div>
+   		</div>
+   	</div>
+  </div>
+</div>

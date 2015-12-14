@@ -25,7 +25,7 @@ var app = angular.module('MobileAngularUiExamples', [
 // in order to avoid unwanted routing.
 // 
 app.config(function($routeProvider) {
-  $routeProvider.when('/',              {templateUrl: 'templates/home.html', reloadOnSearch: false});
+  $routeProvider.when('/',              {templateUrl: 'templates/or-home.html', reloadOnSearch: false});
   $routeProvider.when('/scroll',        {templateUrl: 'templates/scroll.html', reloadOnSearch: false}); 
   $routeProvider.when('/toggle',        {templateUrl: 'templates/toggle.html', reloadOnSearch: false}); 
   $routeProvider.when('/tabs',          {templateUrl: 'templates/tabs.html', reloadOnSearch: false}); 
@@ -38,10 +38,12 @@ app.config(function($routeProvider) {
   $routeProvider.when('/useok',      	{templateUrl: 'templates/useok.html', reloadOnSearch: false});
   $routeProvider.when('/tab-charts',    {templateUrl: 'templates/tab-charts.html', reloadOnSearch: false});
   
-  $routeProvider.when('/mesurePrise',    {templateUrl: 'templates/mesure-prise.html', reloadOnSearch: false});
-  $routeProvider.when('/mesureRecap',    {templateUrl: 'templates/mesure-recap.html', reloadOnSearch: false});
+  $routeProvider.when('/mesurePrise',    {templateUrl: 'templates/or-mesure-prise.html', reloadOnSearch: false});
+  $routeProvider.when('/mesureRecap',    {templateUrl: 'templates/or-mesure-recap.html', reloadOnSearch: false});
   
-  $routeProvider.when('/histo',    {templateUrl: 'templates/histo.html', reloadOnSearch: false});
+  $routeProvider.when('/histo',    {templateUrl: 'templates/or-histo.html', reloadOnSearch: false});
+  
+  $routeProvider.when('/more',    {templateUrl: 'templates/or-more.html', reloadOnSearch: false});
   
   $routeProvider.when('/param',    {templateUrl: 'templates/or-param.html', reloadOnSearch: false});
 });
