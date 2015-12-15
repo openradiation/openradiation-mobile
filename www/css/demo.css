@@ -418,6 +418,8 @@ input.scrollable-header {
 .param .ligne2 .button{width:23%;display:inline-block;vertical-align:middle}
 
 .param .back{background:url('../img/icon-next.png') center center no-repeat transparent;width:24px;height:24px;position:absolute;top:20%;left:3%;
+	-ms-transform: rotate(180deg); /* IE 9 */
+    -webkit-transform: rotate(180deg); /* Chrome, Safari, Opera */
 	transform: rotate(180deg);}
 .param .lignecapt{padding: 1% 0;border-bottom:1px solid #66ceff;}
 .param .lignecapt:last-child{border:none;}
