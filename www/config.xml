@@ -24,6 +24,9 @@
     <preference name="android-minSdkVersion" value="7" />
     <preference name="android-installLocation" value="auto" />
     <preference name="BackupWebStorage" value="local" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="StatusBarBackgroundColor" value="#045cb8" />
+	<preference name="StatusBarStyle" value="lightcontent" />
    <!--  <gap:plugin name="com.megster.cordova.rfduino" version="0.0.2" />
     <gap:plugin name="com.millerjames01.sqlite-plugin" version="1.0.1" />
     <gap:plugin name="de.appplant.cordova.plugin.email-composer" version="0.8.2" />
@@ -34,6 +37,7 @@
     <gap:plugin name="org.apache.cordova.camera" />-->
     <gap:plugin name="org.apache.cordova.dialogs" />
     <gap:plugin name="org.apache.cordova.device" source="npm" />
+    <gap:plugin name="org.apache.cordova.statusbar" source="npm" />
     <icon src="icon.png" />
     <icon gap:density="ldpi" gap:platform="android" src="res/icon/android/icon-36-ldpi.png" />
     <icon gap:density="mdpi" gap:platform="android" src="res/icon/android/icon-48-mdpi.png" />

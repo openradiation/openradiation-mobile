@@ -46,6 +46,7 @@ app.config(function($routeProvider) {
   $routeProvider.when('/more',    {templateUrl: 'templates/or-more.html', reloadOnSearch: false});
   
   $routeProvider.when('/param',    {templateUrl: 'templates/or-param.html', reloadOnSearch: false});
+  $routeProvider.when('/param2',    {templateUrl: 'templates/or-param2.html', reloadOnSearch: false});
 });
 
 
@@ -312,6 +313,14 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	$scope.doParam = function(clickEvent){
 		console.log('doParam');
 		$location.path('/param');
+		$scope.top = "1";
+		//$scope.menu="0";
+		 //fakeMesure($scope);
+	}
+	
+	$scope.doParam2 = function(clickEvent){
+		console.log('doParam2');
+		$location.path('/param2');
 		$scope.top = "1";
 		//$scope.menu="0";
 		 //fakeMesure($scope);
