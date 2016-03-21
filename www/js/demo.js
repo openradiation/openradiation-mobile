@@ -266,6 +266,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	$scope.buttonSearchCapteur = function(clickEvent){
 		
 	console.log('test');
+	alert('test');
 	ble.scan([], 5, function(device) {
 	    //console.log(JSON.stringify(device));
 		alert(JSON.stringify(device));
