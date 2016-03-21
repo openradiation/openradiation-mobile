@@ -265,8 +265,23 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	 
 	$scope.buttonSearchCapteur = function(clickEvent){
 		
-	console.log('test');
-	alert('test');
+	console.log('test');//console.log(ble);
+	alert('test');//alert(ble);
+	
+	if (typeof ble == 'undefined')
+		alert('test2');
+	
+	ble.isEnabled(
+		    function() {
+		        console.log("Bluetooth is enabled");
+		        alert("Bluetooth is enabled");
+		    },
+		    function() {
+		        console.log("Bluetooth is *not* enabled");
+		        alert("Bluetooth is *not* enabled");
+		    }
+		);
+	
 	ble.scan([], 5, function(device) {
 	    //console.log(JSON.stringify(device));
 		alert(JSON.stringify(device));
