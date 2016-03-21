@@ -1,3 +1,6 @@
+//debug 
+debug = true;
+
 //test si chrome
 var isMobile = true;
 if (window.chrome)

@@ -294,7 +294,45 @@ function connect(e){
     rfduino.connect(uuid, onConnect, onRfError);
 }*/
 
-///FAKE
+
+/////////////////////////////////////////////////////////////////////
+//Functions Alerte/Notif
+/////////////////////////////////////////////////////////////////////
+
+//Function affichage debug
+function alertNotif(message,titre,buttonText)
+{
+		if (isMobile)
+		navigator.notification.alert(
+				message,  // message
+			    function(){},         // callback
+			    titre,            // title
+			    buttonText                  // buttonName
+			);
+		else
+			alert(titre+"\n\n"+message);
+}
+
+
+//Function affichage debug
+function alertDebug(message)
+{
+	if (debug)
+		if (isMobile)
+		navigator.notification.alert(
+				message,  // message
+			    function(){},         // callback
+			    'Debug',            // title
+			    'Ok'                  // buttonName
+			);
+		else
+			alert(message);
+}
+
+
+/////////////////////////////////////////////////////////////////////
+//Functions Fake
+/////////////////////////////////////////////////////////////////////
 function fakeSearch($scope){
 	$scope.state = "2";
 	setTimeout(function (){$scope.state = "3";console.log("state3");$scope.$apply();}, 5000);
@@ -320,7 +358,6 @@ function doProgressBar(mycount){
 		$('.mesure .blocMesure1 .fiability .progressbar2').css("background-color","#dfe700");
 	if (percent>66)
 		$('.mesure .blocMesure1 .fiability .progressbar2').css("background-color","#aee700");
-		
-
 }
+
 
