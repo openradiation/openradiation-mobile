@@ -285,7 +285,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	ble.scan([], 25, function(device) {
 	    //console.log(JSON.stringify(device));
 		alert(JSON.stringify(device));
-	}, failure);
+	}, function(){alert('pb');});
 		 fakeSearch($scope);
 	}
 	
