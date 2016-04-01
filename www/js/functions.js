@@ -296,43 +296,34 @@ function connect(e){
 
 
 /////////////////////////////////////////////////////////////////////
-//Functions Alerte/Notif
+//Functions BLE
 /////////////////////////////////////////////////////////////////////
-
-//Function affichage debug
-function alertNotif(message,titre,buttonText)
+function doBluetoothDeviceSearch($scope)
 {
-		if (isMobile)
-		navigator.notification.alert(
-				message,  // message
-			    function(){},         // callback
-			    titre,            // title
-			    buttonText                  // buttonName
-			);
-		else
-			alert(titre+"\n\n"+message);
+	console.log("Bluetooth is enabled");
+    alert("Bluetooth is enabled");
+    $scope.devices = {};
+    i=0;
+    //TODO : do scan until find a known one
+    ble.scan([], 25, function(device) {
+	    //console.log(JSON.stringify(device));
+		//alert(JSON.stringify(device));
+    	$scope.devices[i] = device;
+    	i++;
+	}, function(){alert('pb');} );
 }
-
-
-//Function affichage debug
-function alertDebug(message)
-{
-	if (debug)
-		if (isMobile)
-		navigator.notification.alert(
-				message,  // message
-			    function(){},         // callback
-			    'Debug',            // title
-			    'Ok'                  // buttonName
-			);
-		else
-			alert(message);
-}
-
 
 /////////////////////////////////////////////////////////////////////
 //Functions Fake
 /////////////////////////////////////////////////////////////////////
+function fakeBluetoothDeviceSearch($scope)
+{
+	$scope.devices = {};
+	$scope.devices['0'] = {'name':'device 0','id':'deviceid0'};
+	$scope.devices['1'] = {'name':'device 1','id':'deviceid1'};
+	
+}
+
 function fakeSearch($scope){
 	$scope.state = "2";
 	setTimeout(function (){$scope.state = "3";console.log("state3");$scope.$apply();}, 5000);
@@ -360,4 +351,36 @@ function doProgressBar(mycount){
 		$('.mesure .blocMesure1 .fiability .progressbar2').css("background-color","#aee700");
 }
 
+/////////////////////////////////////////////////////////////////////
+//Functions Alerte/Notif
+/////////////////////////////////////////////////////////////////////
 
+//Function affichage debug
+function alertNotif(message,titre,buttonText)
+{
+		if (isMobile)
+		navigator.notification.alert(
+				message,  			// message
+			    function(){},       // callback
+			    titre,            	// title
+			    buttonText          // buttonName
+			);
+		else
+			alert(titre+"\n\n"+message);
+}
+
+
+//Function affichage debug
+function alertDebug(message)
+{
+	if (debug)
+		if (isMobile)
+		navigator.notification.alert(
+				message,  			// message
+			    function(){},       // callback
+			    'Debug',            // title
+			    'Ok'                // buttonName
+			);
+		else
+			alert(message);
+}

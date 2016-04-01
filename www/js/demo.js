@@ -47,6 +47,8 @@ app.config(function($routeProvider) {
   
   $routeProvider.when('/param',    {templateUrl: 'templates/or-param.html', reloadOnSearch: false});
   $routeProvider.when('/param2',    {templateUrl: 'templates/or-param2.html', reloadOnSearch: false});
+  
+  $routeProvider.when('/test',    {templateUrl: 'templates/or-test.html', reloadOnSearch: false});
 });
 
 
@@ -277,7 +279,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 				    function() {
 				        console.log("Bluetooth is enabled");
 				        alert("Bluetooth is enabled");
-				        //do scan
+				        //TODO : do scan until find a known one
 				        ble.scan([], 25, function(device) {
 				    	    //console.log(JSON.stringify(device));
 				    		alert(JSON.stringify(device));
@@ -350,6 +352,21 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		console.log('doParam2');
 		$location.path('/param2');
 		$scope.top = "1";
+		
+		if (typeof ble == 'undefined')
+			//cas emulation chrome
+			{
+				 fakeBluetoothDeviceSearch($scope);
+			}
+			else
+			{
+				ble.isEnabled(
+						function() {doBluetoothDeviceSearch($scope);},
+					    function() {alertNotif("Bluetooth is *not* enabled","Attention","Ok")}
+					);
+			}
+		
+		
 		//$scope.menu="0";
 		 //fakeMesure($scope);
 	}
@@ -362,6 +379,29 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		 //fakeMesure($scope);
 	}
 	
+	
+	$scope.doTest = function(clickEvent){
+		console.log('doTest');
+		$location.path('/test');
+		$scope.top = "1";
+		
+		if (typeof ble == 'undefined')
+			//cas emulation chrome
+			{
+				 fakeBluetoothDeviceSearch($scope);
+			}
+			else
+			{
+				ble.isEnabled(
+						function() {doBluetoothDeviceSearch($scope);},
+					    function() {alertNotif("Bluetooth is *not* enabled","Attention","Ok")}
+					);
+			}
+		
+		
+		//$scope.menu="0";
+		 //fakeMesure($scope);
+	}
 	
 
 
