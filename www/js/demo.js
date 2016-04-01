@@ -403,6 +403,21 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		 //fakeMesure($scope);
 	}
 	
+	$scope.doConnect = function(deviceId){
+		if (typeof ble == 'undefined')
+			//cas emulation chrome
+			{
+				 //fakeBluetoothDeviceSearch($scope);
+					alertNotif(deviceId+" connecté","Success","Ok")
+			}
+			else
+			{
+				ble.connect(deviceId,
+						function() {alertNotif(deviceId+" connecté","Success","Ok")},
+					    function() {alertNotif(deviceId+" non connecté","Failure","Ok")}
+					);
+			}
+	}
 
 
   // User agent displayed in home page
