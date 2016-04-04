@@ -457,6 +457,30 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 					alertNotif(JSON.stringify(failure),"Failure read "+charId+" "+serviceId,"Ok");
 				});
 	}
+	
+	$scope.doNotif = function(deviceId,charId,serviceId){
+		ble.startNotification(deviceId,'2a01','1800',
+				function(success){
+					//alert(JSON.stringify(success));
+					alertNotif(JSON.stringify(success),"Success read "+charId+" "+serviceId,"Ok");
+				},
+				function(failure){
+					//alert(JSON.stringify(failure));
+					alertNotif(JSON.stringify(failure),"Failure read "+charId+" "+serviceId,"Ok");
+				});
+	}
+	
+	$scope.stopNotif = function(deviceId,charId,serviceId){
+		ble.stopNotification(deviceId,'2a01','1800',
+				function(success){
+					//alert(JSON.stringify(success));
+					alertNotif(JSON.stringify(success),"Success read "+charId+" "+serviceId,"Ok");
+				},
+				function(failure){
+					//alert(JSON.stringify(failure));
+					alertNotif(JSON.stringify(failure),"Failure read "+charId+" "+serviceId,"Ok");
+				});
+	}
 
 
   // User agent displayed in home page
