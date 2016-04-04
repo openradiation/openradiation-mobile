@@ -417,7 +417,8 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 							//success
 							alertNotif(deviceId+" connecté","Success","Ok");
 							alert(JSON.stringify(service));
-							ble.startNotification(deviceId,'0x05','count',
+							//ble.startNotification(deviceId,'0x05','count',
+							ble.startNotification(deviceId,'count','0x05',
 									function(success){
 										alert(JSON.stringify(service));
 									},
