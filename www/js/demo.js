@@ -380,6 +380,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	}
 	
 	$scope.devices = {};
+	$scope.connectedDeviceId = 0;
 	
 	$scope.doTest = function(clickEvent){
 		console.log('doTest');
@@ -418,7 +419,8 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 							//success
 							alertNotif(deviceId+" connecté","Success","Ok");
 							alert(JSON.stringify(service));
-							ble.read(deviceId,'2a01','1800',
+							$scope.connectedDeviceId = deviceId;
+							/*ble.read(deviceId,'2a01','1800',
 									function(success){
 										//alert(JSON.stringify(success));
 										alertNotif(JSON.stringify(success),"Success read","Ok");
@@ -436,11 +438,23 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 									function(failure){
 										//alert(JSON.stringify(failure));
 										alertNotif(JSON.stringify(failure),"Failure Notif","Ok");
-									});
+									});*/
 						},
 					    function() {alertNotif(deviceId+" non connecté","Failure","Ok")}
 					);
 			}
+	}
+	
+	$scope.doRead = function(deviceId,charId,serviceId){
+		ble.read(deviceId,'2a01','1800',
+				function(success){
+					//alert(JSON.stringify(success));
+					alertNotif(JSON.stringify(success),"Success read "+charId+" "+serviceId,"Ok");
+				},
+				function(failure){
+					//alert(JSON.stringify(failure));
+					alertNotif(JSON.stringify(failure),"Failure read "+charId+" "+serviceId,"Ok");
+				});
 	}
 
 

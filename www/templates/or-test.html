@@ -15,6 +15,10 @@
 		<div ng-repeat="(key, device) in devices">
 			<div class="lignecapt"><div class="desc">{{device.name}}</div><div class="connect"><div class="button" ng-click="doConnect(device.id)">Se connecter</div></div></div>
 		</div>
+		
+		<div ng-if="connectedDeviceId!=0">
+			<div class="button" ng-click="doRead(connectedDeviceId,'2a00','1800')">Read 2a00</div>
+		</div>
 
 	</div>
 	
