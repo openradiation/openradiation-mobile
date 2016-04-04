@@ -308,6 +308,7 @@ function doBluetoothDeviceSearch($scope)
 	    //console.log(JSON.stringify(device));
 		//alert(JSON.stringify(device));
     	$scope.devices[device.id] = device;
+    	$scope.$apply();
 	}, function(){alert('pb');} );
 }
 
