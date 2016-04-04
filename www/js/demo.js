@@ -420,6 +420,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 							alertNotif(deviceId+" connecté","Success","Ok");
 							alert(JSON.stringify(service));
 							$scope.connectedDeviceId = deviceId;
+							$scope.$apply();
 							/*ble.read(deviceId,'2a01','1800',
 									function(success){
 										//alert(JSON.stringify(success));
