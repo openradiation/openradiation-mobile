@@ -462,11 +462,11 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		ble.startNotification(deviceId,'2a01','1800',
 				function(success){
 					//alert(JSON.stringify(success));
-					alertNotif(JSON.stringify(success),"Success read "+charId+" "+serviceId,"Ok");
+					alertNotif(JSON.stringify(success),"Success startNotif "+charId+" "+serviceId,"Ok");
 				},
 				function(failure){
 					//alert(JSON.stringify(failure));
-					alertNotif(JSON.stringify(failure),"Failure read "+charId+" "+serviceId,"Ok");
+					alertNotif(JSON.stringify(failure),"Failure startNotif "+charId+" "+serviceId,"Ok");
 				});
 	}
 	
@@ -474,11 +474,11 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		ble.stopNotification(deviceId,'2a01','1800',
 				function(success){
 					//alert(JSON.stringify(success));
-					alertNotif(JSON.stringify(success),"Success read "+charId+" "+serviceId,"Ok");
+					alertNotif(JSON.stringify(success),"Success stopNotif "+charId+" "+serviceId,"Ok");
 				},
 				function(failure){
 					//alert(JSON.stringify(failure));
-					alertNotif(JSON.stringify(failure),"Failure read "+charId+" "+serviceId,"Ok");
+					alertNotif(JSON.stringify(failure),"Failure stopNotif "+charId+" "+serviceId,"Ok");
 				});
 	}
 
