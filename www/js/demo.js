@@ -413,7 +413,18 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			else
 			{
 				ble.connect(deviceId,
-						function(service) {alertNotif(deviceId+" connecté","Success","Ok");alert(JSON.stringify(service));},
+						function(service) {
+							//success
+							alertNotif(deviceId+" connecté","Success","Ok");
+							//alert(JSON.stringify(service));
+							ble.startNotification(deviceId,'0x05','count',
+									function(success){
+										alert(JSON.stringify(service));
+									},
+									function(failure){
+										alert(JSON.stringify(failure));
+									});
+						},
 					    function() {alertNotif(deviceId+" non connecté","Failure","Ok")}
 					);
 			}
