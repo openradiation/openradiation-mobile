@@ -302,8 +302,9 @@ function doBluetoothDeviceSearch($scope)
 {
 	console.log("Bluetooth is enabled");
     alert("Bluetooth is enabled");
-    $scope.devices = {};
-    i=0;
+   // $scope.devices = {};
+   // i=0;
+    i=parseInt(Object.keys($scope.devices).length)+1;
     //TODO : do scan until find a known one
     ble.scan([], 25, function(device) {
 	    //console.log(JSON.stringify(device));

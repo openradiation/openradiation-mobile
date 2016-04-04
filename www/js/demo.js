@@ -379,6 +379,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		 //fakeMesure($scope);
 	}
 	
+	$scope.devices = {};
 	
 	$scope.doTest = function(clickEvent){
 		console.log('doTest');
