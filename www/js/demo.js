@@ -447,7 +447,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	}
 	
 	$scope.doRead = function(deviceId,charId,serviceId){
-		ble.read(deviceId,'2a01','1800',
+		ble.read(deviceId,serviceId,charId,
 				function(success){
 					//alert(JSON.stringify(success));
 					alertNotif(JSON.stringify(success),"Success read "+charId+" "+serviceId,"Ok");
@@ -459,7 +459,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	}
 	
 	$scope.doNotif = function(deviceId,charId,serviceId){
-		ble.startNotification(deviceId,'2a01','1800',
+		ble.startNotification(deviceId,serviceId,charId,
 				function(success){
 					//alert(JSON.stringify(success));
 					alertNotif(JSON.stringify(success),"Success startNotif "+charId+" "+serviceId,"Ok");
@@ -471,7 +471,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	}
 	
 	$scope.stopNotif = function(deviceId,charId,serviceId){
-		ble.stopNotification(deviceId,'2a01','1800',
+		ble.stopNotification(deviceId,serviceId,charId,
 				function(success){
 					//alert(JSON.stringify(success));
 					alertNotif(JSON.stringify(success),"Success stopNotif "+charId+" "+serviceId,"Ok");
