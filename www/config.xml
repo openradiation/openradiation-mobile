@@ -38,7 +38,8 @@
     <gap:plugin name="org.apache.cordova.dialogs" />
     <gap:plugin name="org.apache.cordova.device" source="npm" />
     <gap:plugin name="org.apache.cordova.statusbar" source="npm" />
-    <gap:plugin name="cordova-plugin-ble-central" source="npm" />
+    <!--<gap:plugin name="cordova-plugin-ble-central" source="npm" />-->
+    <gap:plugin name="cordova-plugin-rfduino" source="npm" />
     <icon src="icon.png" />
     <icon gap:density="ldpi" gap:platform="android" src="res/icon/android/icon-36-ldpi.png" />
     <icon gap:density="mdpi" gap:platform="android" src="res/icon/android/icon-48-mdpi.png" />
