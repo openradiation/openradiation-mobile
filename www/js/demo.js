@@ -425,8 +425,8 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 										//alert(JSON.stringify(data));
 										//$scope.data =  JSON.stringify(data);
 										$scope.length = data.byteLength;
-										/*var buffer1 =  new Int8Array(data);
-										 var str = "";
+										var buffer1 =  new Int8Array(data);
+										/* var str = "";
 									        for (var i=0 ; i<buffer1.length ; i++) {
 									            str += buffer1[i].toString(16)+" ";
 									        }
