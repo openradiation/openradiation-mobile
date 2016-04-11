@@ -424,12 +424,12 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 							rfduino.onData(function(data){
 										//alert(JSON.stringify(data));
 										//$scope.data =  JSON.stringify(data);
-										/*var buffer1 =  new Int8Array(data);
-										$scope.data8 =  JSON.stringify(buffer1);*/
+										var buffer1 =  new Int8Array(data);
+										$scope.data8 =  JSON.stringify(buffer1);
 										var buffer =  new Int16Array(data);
 										$scope.data16 =  JSON.stringify(buffer);
-										var buffer2 =  new Int32Array(data);
-										$scope.data32 =  JSON.stringify(buffer2);
+										/*var buffer2 =  new Int32Array(data);
+										$scope.data32 =  JSON.stringify(buffer2);*/
 										$scope.$apply();
 									},
 									function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
