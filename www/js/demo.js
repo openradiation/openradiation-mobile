@@ -435,6 +435,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 										$scope.datau8 =  String.fromCharCode.apply(null, new Uint8Array(data))
 										/*var buffer2 =  new Int32Array(data);
 										$scope.data32 =  JSON.stringify(buffer2);*/
+										$scope.dataview = new DataView(data, 0);
 										$scope.$apply();
 									},
 									function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
