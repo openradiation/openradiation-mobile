@@ -426,6 +426,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 										//$scope.data =  JSON.stringify(data);
 										$scope.length = data.byteLength;
 										var buffer1 =  new Int8Array(data);
+										alert(buffer1.toString());
 										$scope.data8 =  JSON.stringify(buffer1);
 										var buffer =  new Int16Array(data);
 										$scope.data16 =  JSON.stringify(buffer);
