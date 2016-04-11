@@ -318,8 +318,8 @@ function doBluetoothDeviceSearch($scope)
 function fakeBluetoothDeviceSearch($scope)
 {
 	$scope.devices = {};
-	$scope.devices['0'] = {'name':'device 0','id':'deviceid0'};
-	$scope.devices['1'] = {'name':'device 1','id':'deviceid1'};
+	$scope.devices['0'] = {'name':'device 0','uuid':'deviceid0'};
+	$scope.devices['1'] = {'name':'device 1','uuid':'deviceid1'};
 	
 }
 
