@@ -430,9 +430,14 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 									        for (var i=0 ; i<buffer1.length ; i++) {
 									            str += buffer1[i].toString(16)+" ";
 									        }
-									        alert(str);
+									        $scope.str = str;
 										$scope.data8 =  JSON.stringify(buffer1);
 										var buffer =  new Int16Array(data);
+										var str2 = "";
+								        for (var i=0 ; i<buffer.length ; i++) {
+								            str2 += buffer[i].toString(16)+" ";
+								        }
+								        $scope.str2 = str2;
 										$scope.data16 =  JSON.stringify(buffer);
 										//var buffer3 =  new Uint16Array(data);
 									//	$scope.datau16 =  JSON.stringify(buffer3);
