@@ -424,6 +424,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 							rfduino.onData(function(data){
 										//alert(JSON.stringify(data));
 										//$scope.data =  JSON.stringify(data);
+										$scope.length = data.byteLength;
 										var buffer1 =  new Int8Array(data);
 										$scope.data8 =  JSON.stringify(buffer1);
 										var buffer =  new Int16Array(data);
