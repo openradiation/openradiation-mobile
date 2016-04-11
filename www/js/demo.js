@@ -422,7 +422,9 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 							$scope.connectedDeviceId = deviceId;
 							$scope.$apply();
 							rfduino.onData(function(data){
-										alert(JSON.stringify(data));
+										//alert(JSON.stringify(data));
+										$scope.data =  JSON.stringify(data);
+										$scope.$apply();
 									},
 									function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
 						},
