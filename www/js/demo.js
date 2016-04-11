@@ -416,10 +416,10 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			else
 			{
 				rfduino.connect(deviceId,
-						function(service) {
+						function() {
 							//success
 							alertNotif(deviceId+" connecté","Success","Ok");
-							alert(JSON.stringify(service));
+							//alert(JSON.stringify(service));
 							$scope.connectedDeviceId = deviceId;
 							$scope.$apply();
 							/*ble.read(deviceId,'2a01','1800',
@@ -447,7 +447,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			}
 	}
 	
-	$scope.doDisconnect= function(deviceId){
+	$scope.doDisconnect= function(){
 		if (typeof ble == 'undefined')
 			//cas emulation chrome
 			{
@@ -456,10 +456,10 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			}
 			else
 			{
-				rfduino.disconnect(deviceId,function(service) {
+				rfduino.disconnect(deviceId,function() {
 					//success
 					alertNotif(deviceId+" déconnecté","Success","Ok");
-					alert(JSON.stringify(service));
+					//alert(JSON.stringify(service));
 					$scope.connectedDeviceId = 0;
 					$scope.$apply();
 
