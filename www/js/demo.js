@@ -439,7 +439,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 								        }
 								        $scope.str2 = str2;*/
 										
-										$scope.str = $scopeArrayBufferToString(data)
+										$scope.str = ArrayBufferToString(data);
 										$scope.data16 =  JSON.stringify(buffer);
 										//var buffer3 =  new Uint16Array(data);
 									//	$scope.datau16 =  JSON.stringify(buffer3);
