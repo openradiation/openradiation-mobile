@@ -431,11 +431,11 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 										$scope.data16 =  JSON.stringify(buffer);
 										//var buffer3 =  new Uint16Array(data);
 									//	$scope.datau16 =  JSON.stringify(buffer3);
-										$scope.datau16 =  String.fromCharCode.apply(null, new Uint16Array(data))
-										$scope.datau8 =  String.fromCharCode.apply(null, new Uint8Array(data))
+										$scope.datau16 =  String.fromCharCode.apply(null, new Int16Array(data))
+										$scope.datau8 =  String.fromCharCode.apply(null, new Int8Array(data))
 										/*var buffer2 =  new Int32Array(data);
 										$scope.data32 =  JSON.stringify(buffer2);*/
-										$scope.dataview = new DataView(data, 0);
+										$scope.dataview = new DataView(data);
 										$scope.$apply();
 									},
 									function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
