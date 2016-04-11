@@ -415,7 +415,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			}
 			else
 			{
-				ble.connect(deviceId,
+				rfduino.connect(deviceId,
 						function(service) {
 							//success
 							alertNotif(deviceId+" connecté","Success","Ok");
@@ -444,6 +444,28 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 						},
 					    function() {alertNotif(deviceId+" non connecté","Failure","Ok")}
 					);
+			}
+	}
+	
+	$scope.doDisconnect= function(deviceId){
+		if (typeof ble == 'undefined')
+			//cas emulation chrome
+			{
+				 //fakeBluetoothDeviceSearch($scope);
+					alertNotif(deviceId+" connecté","Success","Ok")
+			}
+			else
+			{
+				rfduino.disconnect(deviceId,function(service) {
+					//success
+					alertNotif(deviceId+" déconnecté","Success","Ok");
+					alert(JSON.stringify(service));
+					$scope.connectedDeviceId = 0;
+					$scope.$apply();
+
+				},
+			    function() {alertNotif(deviceId+" non déconnecté","Failure","Ok")}
+			);
 			}
 	}
 	
