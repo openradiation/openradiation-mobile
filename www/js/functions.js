@@ -304,7 +304,7 @@ function doBluetoothDeviceSearch($scope)
     alert("Bluetooth is enabled");
    // $scope.devices = {};
     //TODO : do scan until find a known one
-    ble.scan([], 25, function(device) {
+    rfduino.discover(5, function(device) {
 	    //console.log(JSON.stringify(device));
 		//alert(JSON.stringify(device));
     	$scope.devices[device.id] = device;

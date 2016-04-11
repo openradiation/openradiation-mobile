@@ -387,14 +387,15 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		$location.path('/test');
 		$scope.top = "1";
 		
-		if (typeof ble == 'undefined')
+		if (typeof rfduino == 'undefined')
 			//cas emulation chrome
 			{
 				 fakeBluetoothDeviceSearch($scope);
 			}
 			else
 			{
-				ble.isEnabled(
+				//ble.isEnabled(
+				rfduino.isEnabled(
 						function() {doBluetoothDeviceSearch($scope);},
 					    function() {alertNotif("Bluetooth is *not* enabled","Attention","Ok")}
 					);
