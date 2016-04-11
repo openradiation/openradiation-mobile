@@ -427,7 +427,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			}
 	}
 	
-	$scope.doDisconnect= function(){
+	$scope.doDisconnect= function(deviceId){
 		if (typeof rfduino == 'undefined')
 			//cas emulation chrome
 			{
