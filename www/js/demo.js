@@ -407,7 +407,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	}
 	
 	$scope.doConnect = function(deviceId){
-		if (typeof ble == 'undefined')
+		if (typeof rfduino == 'undefined')
 			//cas emulation chrome
 			{
 				 //fakeBluetoothDeviceSearch($scope);
@@ -419,28 +419,8 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 						function() {
 							//success
 							alertNotif(deviceId+" connecté","Success","Ok");
-							//alert(JSON.stringify(service));
 							$scope.connectedDeviceId = deviceId;
 							$scope.$apply();
-							/*ble.read(deviceId,'2a01','1800',
-									function(success){
-										//alert(JSON.stringify(success));
-										alertNotif(JSON.stringify(success),"Success read","Ok");
-									},
-									function(failure){
-										//alert(JSON.stringify(failure));
-										alertNotif(JSON.stringify(failure),"Failure read","Ok");
-									});
-							ble.startNotification(deviceId,'2a05','1801',
-							//ble.startNotification(deviceId,'count','0x05',
-									function(success){
-										//alert(JSON.stringify(success));
-										alertNotif(JSON.stringify(success),"Success Notif","Ok");
-									},
-									function(failure){
-										//alert(JSON.stringify(failure));
-										alertNotif(JSON.stringify(failure),"Failure Notif","Ok");
-									});*/
 						},
 					    function() {alertNotif(deviceId+" non connecté","Failure","Ok")}
 					);
@@ -448,7 +428,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	}
 	
 	$scope.doDisconnect= function(){
-		if (typeof ble == 'undefined')
+		if (typeof rfduino == 'undefined')
 			//cas emulation chrome
 			{
 				 //fakeBluetoothDeviceSearch($scope);
@@ -459,7 +439,6 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 				rfduino.disconnect(deviceId,function() {
 					//success
 					alertNotif(deviceId+" déconnecté","Success","Ok");
-					//alert(JSON.stringify(service));
 					$scope.connectedDeviceId = 0;
 					$scope.$apply();
 
