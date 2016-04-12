@@ -379,7 +379,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			uri = "http://restitution.altotoc.fr/?sid="+quiz_quotidien+","+quiz_hebdo+"&curs="+currentDate.getFullYear()+"-"+('0' + (parseInt(currentDate.getMonth())+1)).slice(-2)+"-"+('0' + currentDate.getDate()).slice(-2)+"&period=m&uid="+$scope.quiz.deviceID;
 		}*/
 			
-		window.open(uri, '_blank', 'location=no,closebuttoncaption=Fermer');
+		window.open(uri, '_self', 'location=no,closebuttoncaption=Fermer');
 		//$location.path('/more');
 		//$scope.top = "1";
 		//$scope.menu="0";
