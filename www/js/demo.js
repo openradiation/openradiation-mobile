@@ -371,7 +371,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		 //fakeMesure($scope);
 	}
 	
-	$scope.doCarto= function(clickEvent){
+	$scope.doCarto = function(clickEvent){
 		console.log('doCarto');
 		uri = "https://request.open-radiation.net/openradiation";
 		
