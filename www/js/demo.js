@@ -436,40 +436,44 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 							alertNotif(deviceId+" connecté","Success","Ok");
 							$scope.connectedDeviceId = deviceId;
 							$scope.$apply();
-							rfduino.onData(function(data){
-										//alert(JSON.stringify(data));
-										//$scope.data =  JSON.stringify(data);
-										$scope.length = data.byteLength;
-										var buffer1 =  new Int8Array(data);
-										/* var str = "";
-									        for (var i=0 ; i<buffer1.length ; i++) {
-									            str += buffer1[i].toString(16)+" ";
-									        }
-									        $scope.str = str;*/
-										$scope.data8 =  JSON.stringify(buffer1);
-										var buffer =  new Int16Array(data);
-										/*var str2 = "";
-								        for (var i=0 ; i<buffer.length ; i++) {
-								            str2 += buffer[i].toString(16)+" ";
-								        }
-								        $scope.str2 = str2;*/
-										
-										$scope.str = data.slice(1);
-										$scope.data16 =  JSON.stringify(buffer);
-										//var buffer3 =  new Uint16Array(data);
-									//	$scope.datau16 =  JSON.stringify(buffer3);
-										$scope.datau16 =  String.fromCharCode.apply(null, new Int16Array(data))
-										$scope.datau8 =  String.fromCharCode.apply(null, new Int8Array(data))
-										/*var buffer2 =  new Int32Array(data);
-										$scope.data32 =  JSON.stringify(buffer2);*/
-										$scope.dataview = new DataView(data);
-										$scope.$apply();
-									},
-									function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
+
 						},
 					    function() {alertNotif(deviceId+" non connecté","Failure","Ok")}
 					);
 			}
+	}
+	
+	$scope.doData = function(deviceId){
+		rfduino.onData(function(data){
+			//alert(JSON.stringify(data));
+			//$scope.data =  JSON.stringify(data);
+			$scope.length = data.byteLength;
+			var buffer1 =  new Int8Array(data);
+			/* var str = "";
+		        for (var i=0 ; i<buffer1.length ; i++) {
+		            str += buffer1[i].toString(16)+" ";
+		        }
+		        $scope.str = str;*/
+			$scope.data8 =  JSON.stringify(buffer1);
+			var buffer =  new Int16Array(data);
+			/*var str2 = "";
+	        for (var i=0 ; i<buffer.length ; i++) {
+	            str2 += buffer[i].toString(16)+" ";
+	        }
+	        $scope.str2 = str2;*/
+			
+			$scope.str = data.slice(1);
+			$scope.data16 =  JSON.stringify(buffer);
+			//var buffer3 =  new Uint16Array(data);
+		//	$scope.datau16 =  JSON.stringify(buffer3);
+			$scope.datau16 =  String.fromCharCode.apply(null, new Int16Array(data))
+			$scope.datau8 =  String.fromCharCode.apply(null, new Int8Array(data))
+			/*var buffer2 =  new Int32Array(data);
+			$scope.data32 =  JSON.stringify(buffer2);*/
+			$scope.dataview = new DataView(data);
+			$scope.$apply();
+		},
+		function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
 	}
 	
 	$scope.doDisconnect= function(deviceId){
