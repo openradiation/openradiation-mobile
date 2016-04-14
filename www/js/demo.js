@@ -235,18 +235,12 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 
 	 async.series([	
 	               	function(callback){ cordovaReady(callback);},
-	               //	function(callback){init_DB(callback);},
+	               	function(callback){init_DB(callback);},
 	               		
-	               	//creta table
-		          /*  function(callback){createTableQuestionnaires(callback);},
-		            function(callback){createTableHoraires(callback);},
-		            function(callback){createTableReponses(callback);},*/
-		               	
-		             //create db content
-		             //function(callback){createQuestionnairesSuccess(callback);},
-		               	
-		             //test useOk
-		            // function(callback){do_MC_UseOk(callback,$location,$route);},
+	               	//create tables
+	               	function(callback){createTableDevices(callback);},
+	               	function(callback){createTableMeasures(callback);},
+	               	function(callback){createTableParams(callback);},
 	               	],
 	   				 
 	   				function(err, results ){

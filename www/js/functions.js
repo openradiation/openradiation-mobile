@@ -16,44 +16,104 @@ function init_DB(callback)
 {
 	//init base
 	if(isMobile)
-    	db = window.sqlitePlugin.openDatabase("Database", "1.0", "Demo", -1);
+    	db = window.sqlitePlugin.openDatabase("Database", "1.0", "OpenRadiation", -1);
     else
-    	db = openDatabase("Database", "1.0", "Demo", -1);
+    	db = openDatabase("Database", "1.0", "OpenRadiation", -1);
 	callback(null,'initDb');
 }
 
+//CREATE TABLES
 
+//error
+function createTableError(tx, error, tableName) {
+    console.log("Table "+tableName+" error : " + error.message);
+}
 
-function createTableQuestionnaires(callback)
+function transactionError(tx, error) {
+    console.log("transactionError: " + error.message);
+}
+
+//devices
+function createTableDevices(callback)
 {
-	db.transaction(function(tx) 
-			{  
-				
-				// id                 
-				// sid : Survey ID
-				// sdescription-survey_config : configuration (ex: #scheduling:D#duration:2400#startHour:10/18#maxOccurences:42#dayOff:0#test:1#)
-				// gid : group ID?
-				// qid : question ID
-				// question
-				// qtype -> template question
-				// qhelp-question_config -> Configuration : template question complément, fréquence (ex: #tpl:sl7#frq:b#)
-				// answers : jsontab? ex : radio buttons
+	db.transaction(
+			function(tx) 
+			{
+				tx.executeSql('CREATE TABLE IF NOT EXISTS "devices" ' +
+						' ("id" INTEGER PRIMARY KEY AUTOINCREMENT , ' +
+						'  "deviceId" VARCHAR,' +
+						'  "deviceName" VARCHAR,' +
+						'  "deviceType" VARCHAR);',[],
+						function(tx){},
+						function(tx,error){createTableError(tx, error,"devices");});
+			},
+			function(tx,error){
+				transactionError(tx, error);
+				callback(true,'transaction createTableDevices Error')
+			},
+			function(tx){
+				callback(null,'transaction createTableDevices Success')
+			}
+	);
+}
 
-				//tx.executeSql('DROP TABLE IF EXISTS "questionnaires"');
-				tx.executeSql('CREATE TABLE IF NOT EXISTS "questionnaires" ' +
-								' ("id" INTEGER PRIMARY KEY AUTOINCREMENT , ' +
-								'  "sid" VARCHAR,' +
-								'  "sdescription-survey_config" VARCHAR,' +
-								'  "gid" VARCHAR,' +
-								'  "qid" VARCHAR,' +
-								'  "question" VARCHAR,' +
-								'  "qtype" VARCHAR,' +
-								'  "qhelp-question_config" VARCHAR,' +
-								'  "answers" VARCHAR );');
-								//'  "answers" VARCHAR );',[],callback(null,'createQuestionnairesSuccess'),callback(true,'createQuestionnairesError'));
-								//'  "answers" VARCHAR );',[],createQuestionnairesSuccess,createQuestionnairesError);
-			//});
-			},function(tx){callback(true,'createQuestionnairesError')},function(tx){callback(null,'createQuestionnairesSuccess')});
+//measures
+function createTableMeasures(callback)
+{
+	db.transaction(
+			function(tx) 
+			{
+				tx.executeSql('CREATE TABLE IF NOT EXISTS "measures" ' +
+						' ("id" INTEGER PRIMARY KEY AUTOINCREMENT , ' +
+						'  "deviceId" VARCHAR,' +
+						'  "tsStart" TIMESTAMP,' +
+						'  "tsEnd" TIMESTAMP,' +
+						'  "duration" VARCHAR,' +
+						'  "temperature" FLOAT,' +
+						'  "nbHits" INTEGER,' +
+						'  "radiation" FLOAT,' +
+						'  "gpsStatus" VARCHAR,' +
+						'  "longitude" VARCHAR,' +
+						'  "latitude" VARCHAR,' +
+						'  "environment" INTEGER,' +
+						'  "position" INTEGER,' +
+						'  "tags" TEXT,' +
+						'  "notes" TEXT);',[],
+						function(tx){},
+						function(tx,error){createTableError(tx, error,"measures");});
+			},
+			function(tx,error){
+				transactionError(tx, error);
+				callback(true,'transaction createTableMeasures Error')
+			},
+			function(tx){
+				callback(null,'transaction createTableMeasures Success')
+			}
+	);
+}
+
+//params
+function createTableParams(callback)
+{
+	db.transaction(
+			function(tx) 
+			{
+				tx.executeSql('CREATE TABLE IF NOT EXISTS "params" ' +
+						' ("id" INTEGER PRIMARY KEY AUTOINCREMENT , ' +
+						'  "paramName" VARCHAR,' +
+						'  "active" BOOLEAN not null default 0,' +
+						'  "libre" TEXT);',[],
+						function(tx){},
+						function(tx,error){createTableError(tx, error,"params");});
+			},
+			function(tx,error){
+				transactionError(tx, error);
+				callback(true,'transaction createTableParams Error')
+			},
+			function(tx){
+				callback(null,'transaction createTableParams Success')
+			}
+	);
 }
 
 
