@@ -502,3 +502,198 @@ function StringToUint8Array(string) {
     }
     return chars;
 }
+
+function getData(data) {
+    var offset = 0;
+    var buff = new Uint8Array(data);
+    var dataView = new DataView(data);
+    
+    while (offset < buff.length) {
+        var logMsg = "> ";
+        var hex = [];
+        
+        var type = dataView.getUint8(offset);
+        hex.push((buff[offset]>>>4).toString(16)+(buff[offset]&0xF).toString(16));
+        offset++;
+        
+        switch (type) {
+            case 0x01: // Yaw
+                compass.value = dataView.getFloat32(offset, true);
+                for (var i=offset ; i<offset+4 ; i++) {
+                    hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
+                }
+                offset += 4;
+                break;
+            case 0x02: // Pitch
+                horizon.pitch = dataView.getFloat32(offset, true);
+                for (var i=offset ; i<offset+4 ; i++) {
+                    hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
+                }
+                offset += 4;
+                break;
+            case 0x03: // Roll
+                horizon.roll = dataView.getFloat32(offset, true);
+                for (var i=offset ; i<offset+4 ; i++) {
+                    hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
+                }
+                offset += 4;
+                break;
+            case 0x04: // Trust
+                powerGauge.value = Math.round(dataView.getFloat32(offset, true));
+                for (var i=offset ; i<offset+4 ; i++) {
+                    hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
+                }
+                offset += 4;
+                break;
+            case 0x05: // M1
+                m1Gauge.value = dataView.getFloat32(offset, true);
+                for (var i=offset ; i<offset+4 ; i++) {
+                    hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
+                }
+                offset += 4;
+                break;
+            case 0x06: // M2
+                m2Gauge.value = dataView.getFloat32(offset, true);
+                for (var i=offset ; i<offset+4 ; i++) {
+                    hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
+                }
+                offset += 4;
+                break;
+            case 0x07: // M3
+                m3Gauge.value = dataView.getFloat32(offset, true);
+                for (var i=offset ; i<offset+4 ; i++) {
+                    hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
+                }
+                offset += 4;
+                break;
+            case 0x08: // M4
+                m4Gauge.value = dataView.getFloat32(offset, true);
+                for (var i=offset ; i<offset+4 ; i++) {
+                    hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
+                }
+                offset += 4;
+                break;
+            case 0x09: // Battery Voltage
+                batteryVoltageValue = dataView.getFloat32(offset, true);
+                for (var i=offset ; i<offset+4 ; i++) {
+                    hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
+                }
+                offset += 4;
+                break;
+            case 0x0A: // Temperature
+                temperatureValue = dataView.getFloat32(offset, true);
+                for (var i=offset ; i<offset+4 ; i++) {
+                    hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
+                }
+                offset += 4;
+                break;
+            case 0x0B: // Altitude
+                altitudeValue = dataView.getFloat32(offset, true);
+                for (var i=offset ; i<offset+4 ; i++) {
+                    hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
+                }
+                offset += 4;
+                break;
+            case 0x0C: // Mode
+                modeMenu.setMode(dataView.getUint8(offset));
+                hex.push((buff[offset]>>>4).toString(16)+(buff[offset]&0xF).toString(16));
+                offset++;
+                break;
+            
+            /*******************/
+            /* Paquets mémoire */
+            /*******************/
+            
+            case 0xFF: // Yaw kP
+                kPYawSlider.value = dataView.getFloat32(offset, true);
+                for (var i=offset ; i<offset+4 ; i++) {
+                    hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
+                }
+                offset += 4;
+                break;
+            case 0xFE: // Yaw kI
+                kIYawSlider.value = dataView.getFloat32(offset, true);
+                for (var i=offset ; i<offset+4 ; i++) {
+                    hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
+                }
+                offset += 4;
+                break;
+            case 0xFD: // Yaw kD
+                kDYawSlider.value = dataView.getFloat32(offset, true);
+                for (var i=offset ; i<offset+4 ; i++) {
+                    hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
+                }
+                offset += 4;
+                break;
+            case 0xFC: // Pitch kP
+                kPPitchSlider.value = dataView.getFloat32(offset, true);
+                for (var i=offset ; i<offset+4 ; i++) {
+                    hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
+                }
+                offset += 4;
+                break;
+            case 0xFB: // Pitch kI
+                kIPitchSlider.value = dataView.getFloat32(offset, true);
+                for (var i=offset ; i<offset+4 ; i++) {
+                    hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
+                }
+                offset += 4;
+                break;
+            case 0xFA: // Pitch kD
+                kDPitchSlider.value = dataView.getFloat32(offset, true);
+                for (var i=offset ; i<offset+4 ; i++) {
+                    hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
+                }
+                offset += 4;
+                break;
+            case 0xF9: // Roll kP
+                kPRollSlider.value = dataView.getFloat32(offset, true);
+                for (var i=offset ; i<offset+4 ; i++) {
+                    hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
+                }
+                offset += 4;
+                break;
+            case 0xF8: // Roll kI
+                kIRollSlider.value = dataView.getFloat32(offset, true);
+                for (var i=offset ; i<offset+4 ; i++) {
+                    hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
+                }
+                offset += 4;
+                break;
+            case 0xF7: // Roll kD
+                kDRollSlider.value = dataView.getFloat32(offset, true);
+                for (var i=offset ; i<offset+4 ; i++) {
+                    hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
+                }
+                offset += 4;
+                break;
+            case 0xF6: // Trust kP
+                kPTrustSlider.value = dataView.getFloat32(offset, true);
+                for (var i=offset ; i<offset+4 ; i++) {
+                    hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
+                }
+                offset += 4;
+                break;
+            case 0xF5: // Trust kI
+                kITrustSlider.value = dataView.getFloat32(offset, true);
+                for (var i=offset ; i<offset+4 ; i++) {
+                    hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
+                }
+                offset += 4;
+                break;
+            case 0xF4: // Trust kD
+                kDTrustSlider.value = dataView.getFloat32(offset, true);
+                for (var i=offset ; i<offset+4 ; i++) {
+                    hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
+                }
+                offset += 4;
+                break;
+            default: break;
+        }
+        
+        // Log data
+        logMsg += hex.join(" ").toUpperCase();
+        //logger.log(logMsg);
+        return logMsg;
+    }
+}
