@@ -442,6 +442,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		rfduino.onData(function(data){
 			$scope.length = data.byteLength;
 			var dataView = new DataView(data);
+			offset =0
 			$scope.type = dataView.getUint8(offset);
 			$scope.$apply();
 		},
