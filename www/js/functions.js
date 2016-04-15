@@ -702,6 +702,7 @@ function getData(data) {
         // Log data
         logMsg += hex.join(" ").toUpperCase();
         //logger.log(logMsg);
-        return myData;
+       // return myData;
+        return hex;
     }
 }
