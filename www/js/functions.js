@@ -519,7 +519,7 @@ function getData(data) {
         
         myData[type] = dataView.getFloat32(offset, true);
         
-        switch (type) {
+      /*  switch (type) {
             case 0x01: // Yaw
                 compass.value = dataView.getFloat32(offset, true);
                 for (var i=offset ; i<offset+4 ; i++) {
@@ -601,13 +601,13 @@ function getData(data) {
                 modeMenu.setMode(dataView.getUint8(offset));
                 hex.push((buff[offset]>>>4).toString(16)+(buff[offset]&0xF).toString(16));
                 offset++;
-                break;
+                break;*/
             
             /*******************/
             /* Paquets mémoire */
             /*******************/
             
-            case 0xFF: // Yaw kP
+          /*  case 0xFF: // Yaw kP
                 kPYawSlider.value = dataView.getFloat32(offset, true);
                 for (var i=offset ; i<offset+4 ; i++) {
                     hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
@@ -692,7 +692,7 @@ function getData(data) {
                 offset += 4;
                 break;
             default: break;
-        }
+        }*/
         
         // Log data
         logMsg += hex.join(" ").toUpperCase();
