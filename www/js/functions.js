@@ -518,6 +518,7 @@ function getData(data) {
         offset++;
         
         myData[type] = dataView.getFloat32(offset, true);
+        offset += 4;
         
       /*  switch (type) {
             case 0x01: // Yaw
