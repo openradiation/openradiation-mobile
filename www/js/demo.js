@@ -443,7 +443,8 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			$scope.length = data.byteLength;
 			var dataView = new DataView(data);
 			offset =0
-			$scope.type = dataView.getUint8(offset);
+			var myData = getData(data)
+			$scope.data = JSON.stringify(myData);
 			$scope.$apply();
 		},
 		function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});

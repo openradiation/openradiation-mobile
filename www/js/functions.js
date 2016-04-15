@@ -507,14 +507,17 @@ function getData(data) {
     var offset = 0;
     var buff = new Uint8Array(data);
     var dataView = new DataView(data);
+    myData = {}
     
     while (offset < buff.length) {
         var logMsg = "> ";
         var hex = [];
         
-        var type = dataView.getUint8(offset);
+        var type = dataView.getUint8(offset); 
         hex.push((buff[offset]>>>4).toString(16)+(buff[offset]&0xF).toString(16));
         offset++;
+        
+        myData[type] = dataView.getFloat32(offset, true);
         
         switch (type) {
             case 0x01: // Yaw
@@ -694,6 +697,6 @@ function getData(data) {
         // Log data
         logMsg += hex.join(" ").toUpperCase();
         //logger.log(logMsg);
-        return logMsg;
+        return myData;
     }
 }
