@@ -519,6 +519,7 @@ function getData(data) {
         hex.push((buff[offset]>>>4).toString(16)+(buff[offset]&0xF).toString(16));
         offset++;
         
+        myData[type] ={};
         myData[type]['type'] = dataView.getFloat32(offset, true);
         myData[type]['data'] = dataView2.getUint8(offset); 
         
