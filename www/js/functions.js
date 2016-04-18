@@ -503,6 +503,11 @@ function StringToUint8Array(string) {
     return chars;
 }
 
+var arrayBufferToFloat = function (ab) {
+    var a = new Float32Array(ab);
+    return a[0];
+};
+
 function getData(data) {
     var offset = 0;
     var buff = new Uint8Array(data);
