@@ -507,6 +507,8 @@ function getData(data) {
     var offset = 0;
     var buff = new Uint8Array(data);
     var dataView = new DataView(data);
+    var data2 = data.slice(4);
+    var dataView2 = new DataView(data2);
     myData = {}
     
     while (offset < buff.length) {
@@ -517,7 +519,8 @@ function getData(data) {
         hex.push((buff[offset]>>>4).toString(16)+(buff[offset]&0xF).toString(16));
         offset++;
         
-        myData[type] = dataView.getFloat32(offset, true);
+        myData[type]['type'] = dataView.getFloat32(offset, true);
+        myData[type]['data'] = dataView2.getUint8(offset); 
         
         for (var i=offset ; i<offset+4 ; i++) {
             hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
