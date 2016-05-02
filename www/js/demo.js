@@ -309,7 +309,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			$scope.mesure.total = 0 ;
 			$scope.mesure.log = {}
 			$scope.mesure.encours = true;
-			var i = 0;
+			//var i = 0;
 			rfduino.onData(function(data){
 				if ($scope.mesure.encours)
 					var myData = getData(data)
@@ -317,10 +317,11 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 						if (myData.hasOwnProperty(key)) {
 							if (key == "5")
 							{
+								var mytimestamp = parseInt(new Date().getTime()/1000);
 								$scope.mesure.total += myData[key].data;
-								$scope.mesure.log[i] = {}
-								$scope.mesure.log[i].timestamp = parseInt(new Date().getTime()/1000);
-								$scope.mesure.log[i].coup = myData[key].data;
+								$scope.mesure.log[mytimestamp] = {}
+								$scope.mesure.log[mytimestamp].timestamp = mytimestamp;
+								$scope.mesure.log[mytimestamp].coup = myData[key].data;
 								$scope.$apply();
 								i++;
 							}
