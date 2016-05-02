@@ -308,37 +308,24 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			$scope.mesure = {};
 			$scope.mesure.total = 0 ;
 			$scope.mesure.log = {}
+			$scope.mesure.encours = true;
 			var i = 0;
 			rfduino.onData(function(data){
-				var myData = getData(data)
-				for (var key in myData) {
-					if (myData.hasOwnProperty(key)) {
-						if (key == "5")
-						{
-							$scope.mesure.total += myData[key].data;
-							$scope.mesure.log[i] = {}
-							$scope.mesure.log[i].timestamp = new Date().getTime()/1000;
-							$scope.mesure.log[i].coup = myData[key].data;
-							$scope.$apply();
-							i++;
+				if ($scope.mesure.encours)
+					var myData = getData(data)
+					for (var key in myData) {
+						if (myData.hasOwnProperty(key)) {
+							if (key == "5")
+							{
+								$scope.mesure.total += myData[key].data;
+								$scope.mesure.log[i] = {}
+								$scope.mesure.log[i].timestamp = parseInt(new Date().getTime()/1000);
+								$scope.mesure.log[i].coup = myData[key].data;
+								$scope.$apply();
+								i++;
+							}
 						}
-						//alert(key);
-						//alert(myData[key].data);
-						//alert(json[key].msg);
 					}
-				}
-				
-				/*for (var key in json) {
-if (json.hasOwnProperty(key)) {
-  alert(json[key].id);
-  alert(json[key].msg);
-}
-}*/
-				
-				$scope.data = JSON.stringify(myData);
-				$scope.data2 = myData;
-				//$scope.data2 = arrayBufferToFloat(data);
-				$scope.$apply();
 			},
 			function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
 			
@@ -350,6 +337,7 @@ if (json.hasOwnProperty(key)) {
 		$location.path('/mesureRecap');
 		$scope.top = "1";
 		$scope.menu="0";
+		$scope.mesure.encours = false;
 		// fakeMesure($scope);
 	}
 	
