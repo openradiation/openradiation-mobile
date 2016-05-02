@@ -22,7 +22,10 @@
 	    	Aucun capteur <span class="icon-progress"></span>
 	    	</div>
 	    	<div ng-if="state == '3'">
-	    	AK3Zim34 : OK
+	    		<div class="desc">
+					{{connectedDevice.name}}
+					<div>{{connectedDevice.uuid}}</div>
+				</div> : OK
 	    	</div>
     	</div>
     	<div style="position:relative;z-index:1000" class="gps" ng-click="doTest($event)">&nbsp;<br/>Test connexion capteur<br/>&nbsp;</div>
