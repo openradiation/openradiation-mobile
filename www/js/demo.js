@@ -308,6 +308,20 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			$scope.total = 0 ;
 			rfduino.onData(function(data){
 				var myData = getData(data)
+				for (var key in myData) {
+					if (json.hasOwnProperty(key)) {
+						alert(key);
+						alert(json[key].data);
+						//alert(json[key].msg);
+					}
+				}
+				
+				/*for (var key in json) {
+if (json.hasOwnProperty(key)) {
+  alert(json[key].id);
+  alert(json[key].msg);
+}
+}*/
 				
 				$scope.data = JSON.stringify(myData);
 				$scope.data2 = myData;
