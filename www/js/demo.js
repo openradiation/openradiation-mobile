@@ -309,7 +309,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			rfduino.onData(function(data){
 				var myData = getData(data)
 				for (var key in myData) {
-					if (json.hasOwnProperty(key)) {
+					if (myData.hasOwnProperty(key)) {
 						alert(key);
 						alert(myData[key].data);
 						//alert(json[key].msg);
