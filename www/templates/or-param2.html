@@ -16,8 +16,8 @@
 					<div>{{device.uuid}}</div>
 				</div>
 				<div class="connect">
-					<div ng-if="connectedDeviceId==device.uuid">Connecté</div>
-					<div ng-if="connectedDeviceId!=device.uuid" class="button" ng-click="doConnect(device.uuid)">Se connecter</div>
+					<div ng-if="connectedDevice.uuid==device.uuid">Connecté</div>
+					<div ng-if="connectedDevice.uuid!=device.uuid" class="button" ng-click="doConnect(device)">Se connecter</div>
 				</div>
 			</div>
 		</div>

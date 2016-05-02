@@ -19,17 +19,17 @@
 					<div>{{device.uuid}}</div>
 				</div>
 				<div class="connect">
-					<div ng-if="connectedDeviceId==device.uuid">Connecté</div>
-					<div ng-if="connectedDeviceId!=device.uuid" class="button" ng-click="doConnect(device.uuid)">Se connecter</div>
+					<div ng-if="connectedDevice.uuid==device.uuid">Connecté</div>
+					<div ng-if="connectedDevice.uuid!=device.uuid" class="button" ng-click="doConnect(device)">Se connecter</div>
 				</div>
 			</div>
 		</div>
 		
-		<div ng-if="connectedDeviceId!=0">
-			<div class="gps" ng-click="doData(connectedDeviceId)">Data</div>
-			<div class="gps" ng-click="doWrite1(connectedDeviceId)">Write1 (off)</div>
-			<div class="gps" ng-click="doWrite2(connectedDeviceId)">Write2 (on)</div>
-			<div class="gps" ng-click="doDisconnect(connectedDeviceId)">Disconnect</div>
+		<div ng-if="connectedDevice.uuid!=0">
+			<div class="gps" ng-click="doData(connectedDevice.uuid)">Data</div>
+			<div class="gps" ng-click="doWrite1(connectedDevice.uuid)">Write1 (off)</div>
+			<div class="gps" ng-click="doWrite2(connectedDevice.uuid)">Write2 (on)</div>
+			<div class="gps" ng-click="doDisconnect(connectedDevice.uuid)">Disconnect</div>
 			<br/><br/>
 			Type : {{type}}
 			<br/>

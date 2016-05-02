@@ -262,26 +262,17 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	$scope.buttonSearchCapteur = function(clickEvent){
 		
 	
-		if (typeof ble == 'undefined')
+		if (typeof rfduino == 'undefined')
 		//cas emulation chrome
 		{
-			 fakeSearch($scope);
+			fakeBluetoothDeviceSearch($scope);
+			//fakeSearch($scope);
 		}
 		else
 		{
-			ble.isEnabled(
-				    function() {
-				        console.log("Bluetooth is enabled");
-				        alert("Bluetooth is enabled");
-				        //TODO : do scan until find a known one
-				        ble.scan([], 25, function(device) {
-				    	    //console.log(JSON.stringify(device));
-				    		alert(JSON.stringify(device));
-				    	}, function(){alert('pb');} );
-				    },
-				    function() {
-				        alertNotif("Bluetooth is *not* enabled","Attention","Ok")
-				    }
+			rfduino.isEnabled(
+					function() {doBluetoothDeviceSearch($scope);},
+				    function() {alertNotif("Bluetooth is *not* enabled","Attention","Ok")}
 				);
 		}
 			
@@ -294,6 +285,8 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	
 	$scope.goHome = function(clickEvent){
 		console.log('goHome');
+		if ($scope.connectedDevice)
+			$scope.state = 3;
 		$location.path('/');
 		$scope.top = "0";
 		$scope.menu="1";
@@ -390,7 +383,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	}
 	
 	$scope.devices = {};
-	$scope.connectedDeviceId = 0;
+	$scope.connectedDevice = 0;
 	
 	$scope.doTest = function(clickEvent){
 		console.log('doTest');
@@ -416,20 +409,21 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		 //fakeMesure($scope);
 	}
 	
-	$scope.doConnect = function(deviceId){
+	$scope.doConnect = function(device){
 		if (typeof rfduino == 'undefined')
 			//cas emulation chrome
 			{
 				 //fakeBluetoothDeviceSearch($scope);
-					alertNotif(deviceId+" connecté","Success","Ok")
+					alertNotif(device.uuid+" connecté","Success","Ok")
 			}
 			else
 			{
-				rfduino.connect(deviceId,
+				rfduino.connect(device.uuid,
 						function() {
 							//success
-							alertNotif(deviceId+" connecté","Success","Ok");
-							$scope.connectedDeviceId = deviceId;
+							alertNotif(device.uuid+" connecté","Success","Ok");
+							//$scope.connectedDeviceId = device.uuid;
+							$scope.connectedDevice = device;
 							$scope.$apply();
 
 						},
@@ -459,8 +453,6 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		rfduino.write(data.buffer,function() {
 							//success
 							alertNotif(deviceId+" succes Write1 off","Success","Ok");
-							$scope.connectedDeviceId = deviceId;
-							$scope.$apply();
 
 						},
 					    function() {alertNotif(deviceId+" failure Write1 off","Failure","Ok")}
@@ -473,8 +465,6 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		rfduino.write(data.buffer,function() {
 			//success
 			alertNotif(deviceId+" succes Write1 on","Success","Ok");
-			$scope.connectedDeviceId = deviceId;
-			$scope.$apply();
 
 		},
 	    function() {alertNotif(deviceId+" failure Write1 on","Failure","Ok")}
@@ -493,7 +483,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 				rfduino.disconnect(deviceId,function() {
 					//success
 					alertNotif(deviceId+" déconnecté","Success","Ok");
-					$scope.connectedDeviceId = 0;
+					$scope.connectedDevice = 0;
 					$scope.$apply();
 
 				},
