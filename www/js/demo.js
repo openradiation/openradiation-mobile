@@ -40,6 +40,7 @@ app.config(function($routeProvider) {
   
   $routeProvider.when('/mesurePrise',    {templateUrl: 'templates/or-mesure-prise.html', reloadOnSearch: false});
   $routeProvider.when('/mesureRecap',    {templateUrl: 'templates/or-mesure-recap.html', reloadOnSearch: false});
+  $routeProvider.when('/mesureExpert',    {templateUrl: 'templates/or-mesure-expert.html', reloadOnSearch: false});
   
   $routeProvider.when('/histo',    {templateUrl: 'templates/or-histo.html', reloadOnSearch: false});
   
@@ -226,7 +227,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	 	{
 	 		$scope.top="1";
 	 	}
-	 	if (locationPath == "/mesurePrise" || locationPath == "/mesureRecap")
+	 	if (locationPath == "/mesurePrise" || locationPath == "/mesureRecap" || locationPath == "/mesureExpert")
 	 	{
 	 		$scope.menu="0";
 	 	}
@@ -350,6 +351,16 @@ if (json.hasOwnProperty(key)) {
 		$scope.menu="0";
 		// fakeMesure($scope);
 	}
+	
+	$scope.doExpert = function(clickEvent){
+		console.log('doExpert');
+		$location.path('/mesureExpert');
+		$scope.top = "1";
+		$scope.menu="0";
+		// fakeMesure($scope);
+	}
+	
+	
 	
 	$scope.validMesure = function(clickEvent){
 		console.log('validMesure');

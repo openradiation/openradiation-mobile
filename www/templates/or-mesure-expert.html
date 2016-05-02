@@ -1,0 +1,52 @@
+<div class="scrollable param">  
+ 
+
+		<div class="title">
+			<div class="back" ng-click="endMesure($event)" ></div>Mesure - Mode Expert
+		</div>
+    	 <div class="scrollable-content text-center">
+    	 <div class="page-content">
+		<div class="blocParam1">
+		<div class="bloctitle">Données brutes (à copier-coller)</div>
+		
+		<div class="lignetitlelog">
+				<div class="time">
+					Timestamp
+				</div>
+				<div class="coup">
+					Nb Coups	
+				</div>
+				<div class="tension">
+					Tension	
+				</div>
+				<div class="temperature">
+					°C
+				</div>
+			</div>
+		<div ng-repeat="(key, line) in mesure.log">
+			<div class="lignelog">
+				<div class="time">
+					{{line.timestamp}}		
+				</div>
+				<div class="coup">
+					{{line.coup}}	
+				</div>
+				<div class="tension">
+					{{line.tension}}	
+				</div>
+				<div class="temperature">
+					{{line.temperature}}	
+				</div>
+			</div>
+		</div>
+
+	</div>
+	
+			</div>
+    	
+    	
+    
+  
+
+  </div>
+</div>
