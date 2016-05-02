@@ -531,13 +531,11 @@ function getData(data) {
         offset++;
         
         myData[type] ={};
-        myData[type]['type'] = dataView.getFloat32(offset, true);
-        myData[type]['data'] = dataView2.getUint8(offset); 
         
-        myData[type]['data2'] = dataView.getUint8(offset); 
-        myData[type]['data3'] = dataView.getUint8(offset+1); 
-        myData[type]['data4'] = dataView.getUint8(offset+2); 
-        myData[type]['data5'] = dataView.getUint8(offset+3); 
+        myData[type]['data'] = dataView.getUint8(offset); 
+        myData[type]['data2'] = dataView.getUint8(offset+1); 
+        myData[type]['data3'] = dataView.getUint8(offset+2); 
+        myData[type]['data4'] = dataView.getUint8(offset+3); 
         
         for (var i=offset ; i<offset+4 ; i++) {
             hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));

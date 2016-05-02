@@ -297,7 +297,26 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		$location.path('/mesurePrise');
 		$scope.top = "1";
 		$scope.menu="0";
-		 fakeMesure($scope);
+		if (typeof rfduino == 'undefined')
+		//cas emulation chrome
+		{
+			fakeMesure($scope);
+		}
+		else
+		{
+			$scope.mesure = {};
+			$scope.total = 0 ;
+			rfduino.onData(function(data){
+				var myData = getData(data)
+				
+				$scope.data = JSON.stringify(myData);
+				$scope.data2 = myData;
+				//$scope.data2 = arrayBufferToFloat(data);
+				$scope.$apply();
+			},
+			function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
+			
+		}
 	}
 	
 	$scope.endMesure = function(clickEvent){
