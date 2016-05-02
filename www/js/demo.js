@@ -452,6 +452,35 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
 	}
 	
+	$scope.doWrite1 = function(deviceId){
+		var data = new ArrayBuffer(2);
+		data[0]=0x01;
+		data[1]=0x00;
+		rfduino.write(data.buffer,function() {
+							//success
+							alertNotif(deviceId+" succes Write1 off","Success","Ok");
+							$scope.connectedDeviceId = deviceId;
+							$scope.$apply();
+
+						},
+					    function() {alertNotif(deviceId+" failure Write1 off","Failure","Ok")}
+		);
+	}
+	$scope.doWrite2 = function(deviceId){
+		var data = new ArrayBuffer(2);
+		data[0]=0x01;
+		data[1]=0x01;
+		rfduino.write(data.buffer,function() {
+			//success
+			alertNotif(deviceId+" succes Write1 on","Success","Ok");
+			$scope.connectedDeviceId = deviceId;
+			$scope.$apply();
+
+		},
+	    function() {alertNotif(deviceId+" failure Write1 on","Failure","Ok")}
+);
+	}
+	
 	$scope.doDisconnect= function(deviceId){
 		if (typeof rfduino == 'undefined')
 			//cas emulation chrome

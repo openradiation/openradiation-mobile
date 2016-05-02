@@ -27,17 +27,21 @@
 		
 		<div ng-if="connectedDeviceId!=0">
 			<div class="gps" ng-click="doData(connectedDeviceId)">Data</div>
+			<div class="gps" ng-click="doWrite1(connectedDeviceId)">Write1 (off)</div>
+			<div class="gps" ng-click="doWrite2(connectedDeviceId)">Write2 (on)</div>
 			<div class="gps" ng-click="doDisconnect(connectedDeviceId)">Disconnect</div>
 			<br/><br/>
 			Type : {{type}}
 			<br/>
 			Valeur : {{value}}
 			<br/><br/>
-			<pre>
+			
 			{{data}}
-			</pre>
+			
 			<br/><br/>
+			<pre>
 			{{data2}}
+			</pre>
 		</div>
 
 	</div>
