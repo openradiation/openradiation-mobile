@@ -311,7 +311,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 				for (var key in myData) {
 					if (json.hasOwnProperty(key)) {
 						alert(key);
-						alert(json[key].data);
+						alert(myData[key].data);
 						//alert(json[key].msg);
 					}
 				}
