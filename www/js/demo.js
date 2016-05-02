@@ -320,6 +320,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 							$scope.mesure.log[i].timestamp = new Date().getTime()/1000;
 							$scope.mesure.log[i].coup = myData[key].data;
 							$scope.$apply();
+							i++;
 						}
 						//alert(key);
 						//alert(myData[key].data);
