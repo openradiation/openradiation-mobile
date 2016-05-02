@@ -503,6 +503,12 @@ function StringToUint8Array(string) {
     return chars;
 }
 
+/*var onData = function(arrayBuffer) {
+    var a = new Float32Array(arrayBuffer);
+    celsius = a[0];
+    fahrenheit = celsius * 1.8 + 32;
+  }*/
+
 var arrayBufferToFloat = function (ab) {
     var a = new Float32Array(ab);
     return a[0];

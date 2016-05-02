@@ -445,7 +445,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			offset =0
 			var myData = getData(data)
 			$scope.data = JSON.stringify(myData);
-			$scope.data2 = arrayBufferToFloat(data);
+			//$scope.data2 = arrayBufferToFloat(data);
 			$scope.$apply();
 		},
 		function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
