@@ -78,7 +78,8 @@ function createTableMeasures(callback)
 						'  "environment" INTEGER,' +
 						'  "position" INTEGER,' +
 						'  "tags" TEXT,' +
-						'  "notes" TEXT);',[],
+						'  "notes" TEXT,' +
+						'  "sent" BOOLEAN DEFAULT FALSE);',[],
 						function(tx){},
 						function(tx,error){createTableError(tx, error,"measures");});
 			},
@@ -117,100 +118,119 @@ function createTableParams(callback)
 }
 
 
-function createTableHoraires(callback)
-{
-	db.transaction(function(tx) 
-	{  		
-		//tx.executeSql('DROP TABLE IF EXISTS "horaires"');
-		tx.executeSql('CREATE TABLE IF NOT EXISTS "horaires" ("id" INTEGER PRIMARY KEY AUTOINCREMENT , "uidquestionnaire" VARCHAR, "tsdebut" INTEGER, "dureevalidite" INTEGER, "notification" INTEGER, "fait" INTEGER);');                                          
-	},function(tx){callback(true,'createHorairesError')},function(tx){callback(null,'createHorairesSuccess')});
-}
+//REQUEST
 
-function createTableReponses(callback)
-{
-	db.transaction(function(tx) 
-	{  		
-		//tx.executeSql('DROP TABLE IF EXISTS "reponses"');
-		tx.executeSql('CREATE TABLE IF NOT EXISTS "reponses" ("id" INTEGER PRIMARY KEY AUTOINCREMENT , "idhoraire" INTEGER DEFAULT (0), "sid" VARCHAR, "gid" VARCHAR, "qid" VARCHAR, "reponse" VARCHAR, "tsreponse" INTEGER, "envoi" BOOLEAN not null default 0);');
-	},function(tx){callback(true,'createReponsesError')},function(tx){callback(null,'createReponsesSuccess')});
+//error
+function requestTableError(tx, error, tableName) {
+  console.log("Table "+tableName+" error : " + error.message);
 }
 
 
-//function createQuestionnairesSuccess(tx, result){
-function createQuestionnairesSuccess(callback){
-	if(isMobile)
-	{
-		store = cordova.file.applicationDirectory;
-		fileName = "www/db/questionnaires.txt";
-		//window.resolveLocalFileSystemURL(store + fileName, readQuestionnairesSuccess, readQuestionnairesFail);
-		window.resolveLocalFileSystemURL(store + fileName, function(fileEntry){readQuestionnairesSuccess(fileEntry,callback) }, readQuestionnairesFail);
-		//callback(null,'ok');
-	}
-	else
-	{    
-		    var req = new XMLHttpRequest();
-		    req.open('GET', '../www/db/questionnaires.txt', true);
-		    req.onreadystatechange = function (aEvt) {
-		      if (req.readyState == 4) {
-		         if(req.status == 200)
-		        	 {console.log("200000!!!!");
-		        	 res = req.responseText;
-		        	 insertQuestionnaire(res,callback);
-		        	 }
-		         else
-		        	 console.log("Erreur pendant le chargement de la page.\n");
-		      }
-		    };
-		    req.send(null);
-	}
-		
-	
-	console.log("dbquest");
-	//callback();
-};
-function createQuestionnairesError(tx, error) {
-    console.log("createQuestionnairesError: " + error.message);
-}
-function readQuestionnairesSuccess(fileEntry,callback) {
-	fileEntry.file(function(file) {
-		var reader = new FileReader();
-		reader.onloadend = function(e) {
-			console.log(' reader');
-			res = this.result;
-			insertQuestionnaire(res,callback);
-		}
-		reader.readAsText(file);
-	});
-}
-function readQuestionnairesFail(e) {
-	console.log("FileSystem Error");
-	console.dir(e);
-}
-function insertQuestionnaire(res,callback){
+function insertMeasures(res,device){
 	db.transaction(function(tx) {
-		var line = res.split("\n");
-		for (var linekey in line)
-		{
-			var line2 = line[linekey].split("';'");
-			(function (value) { 
-				tx.executeSql('SELECT COUNT("id") as cnt FROM "questionnaires" WHERE sid = "'+line2[0].substring(1,line2[0].length)+'";', [], function(tx, res) {
-					if (res.rows.item(0).cnt < 1)
-					{
-						tx.executeSql('INSERT INTO "questionnaires" (sid, "sdescription-survey_config", gid,qid, question, qtype,"qhelp-question_config", answers) VALUES("'+
-								value[0].substring(1,value[0].length)+'","'+
-								value[1]+'","'+
-								value[2]+'","'+
-								value[3]+'","'+
-								value[4]+'","'+
-								value[5]+'","'+
-								value[6]+'","'+
-								escape(JSON.stringify(line2[7].substring(0,value[7].length-1)))+'");',[], successHandler, errorHandler);
-						//line2[7].substring(0,line2[7].length-1).replace(/"/g,'\\"')+'");',[], successHandler, errorHandler);
-					}//fin if
-				},errorHandler);//fin select
-			})(line2);
+		tx.executeSql('INSERT INTO "measures" '+
+				'(deviceId, tsStart, tsEnd,duration, temperature, nbHits,radiation, gpsStatus,longitude,latitude,environment,position,tags,notes,sent) VALUES("'+
+				device.uuid+'","'+
+				res.timedeb+'","'+
+				(res.timedeb + res.duration) +'","'+
+				res.duration+'",'+
+				res.temperature+','+
+				res.total+','+
+				res.valeurnsv+',"'+
+				res.gps+'","'+
+				res.longitude+'","'+
+				res.latitude+'",'+
+				res.env+','+
+				res.position+',"'+
+				res.tags+'","'+
+				res.notes+'",'+
+				'0);',[], 
+				function(tx){},
+				function(tx,error){requestTableError(tx, error,"insert measures");});
+		},
+		function(tx,error){
+			transactionError(tx, error);
+		},
+		function(tx){
 		}
-	},function(tx){callback(true,'err')},function(tx){callback(null,'ok')});
+	);
+}
+
+
+function getMeasures($scope){
+	$scope.measures = [],
+	db.transaction(function(tx) {
+		tx.executeSql('SELECT * FROM "measures";',[], 
+				function(tx,res){
+			console.log(res);
+					if (res.rows.length > 0)
+					{				
+						for (var i = 0; i < res.rows.length; i++) {
+							$scope.measures[i]=res.rows.item(i);
+						}
+					}
+					console.log($scope.measures);
+					$scope.$apply();
+					
+				},
+				function(tx,error){requestTableError(tx, error,"insert measures");});
+		},
+		function(tx,error){
+			transactionError(tx, error);
+		},
+		function(tx){
+		}
+	);
+}
+
+function sendMeasures(id){
+	
+	args ={};
+	args.apiKey = "50adef3bdec466edc25f40c8fedccbce";
+	args.data = {};
+	args.data.reportContext = "routine";
+	db.transaction(function(tx) {
+		tx.executeSql('SELECT * FROM "measures" WHERE id='+id+';',[], 
+				function(tx,res){
+					console.log(res);
+					if (res.rows.length > 0)
+					{	
+						mesure = res.rows.item(0);
+						args.data.reportUuid = generateUUID(); //TODO: enregistrer dans table
+						args.data.longitude = mesure.longitude;
+						args.data.latitude = mesure.latitude;
+						args.data.value = mesure.radiation;
+						args.data.startTime = mesure.tsStart;
+						
+						xhr_object = new XMLHttpRequest(); 
+						uri="https://submit.open-radiation.net/measurements"; 
+						xhr_object.open("POST", uri, true);
+						
+						xhr_object.onreadystatechange = function() { 
+						  	 if(xhr_object.readyState == 4) {
+								//alert(xhr_object.responseText); // DEBUG MODE
+								//document.write(xhr_object.responseText);
+								//eval(xhr_object.responseText);
+								console.log(xhr_object.responseText);
+							 }
+							return xhr_object.readyState;
+						} 
+						//xhr_object.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+						
+						//  Envoi de la requête
+						console.log(JSON.stringify(args));
+						//xhr_object.send(args);
+						xhr_object.send(JSON.stringify(args));
+					}					
+				},
+				function(tx,error){requestTableError(tx, error,"insert measures");});
+		},
+		function(tx,error){
+			transactionError(tx, error);
+		},
+		function(tx){
+		}
+	);
 }
 
 
@@ -443,6 +463,17 @@ function alertDebug(message)
 		else
 			alert(message);
 }
+
+//UUID
+function generateUUID() {
+    var d = new Date().getTime();
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (d + Math.random()*16)%16 | 0;
+        d = Math.floor(d/16);
+        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+    });
+    return uuid;
+};
 
 ///
 function ArrayBufferToString(buffer) {

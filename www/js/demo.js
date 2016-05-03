@@ -243,6 +243,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	               	function(callback){createTableMeasures(callback);},
 	               	function(callback){createTableParams(callback);},
 	               	],
+	               	
 	   				 
 	   				function(err, results ){
 	   			 		console.log(results);
@@ -307,6 +308,14 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		
 		$scope.mesure.latitude = 0;
 		$scope.mesure.longitude = 0;
+		$scope.mesure.gps = 1;
+		$scope.mesure.temperature = 0;
+		$scope.mesure.env = 0;
+		$scope.mesure.position = 0;
+		$scope.mesure.tags = "tags";
+		$scope.mesure.notes = "notes";
+		$scope.mesure.valeurnsv = 0;
+		$scope.mesure.duration = 0;
 		if (typeof navigator.geolocation != 'undefined')
 			navigator.geolocation.getCurrentPosition(function (position){
 				$scope.mesure.latitude = position.coords.latitude;
@@ -375,6 +384,9 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	
 	
 	$scope.validMesure = function(clickEvent){
+		
+		insertMeasures($scope.mesure,$scope.connectedDevice);
+		
 		console.log('validMesure');
 		$scope.top = "0";
 		$scope.menu="1";
@@ -386,11 +398,18 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	}
 	
 	$scope.doHisto = function(clickEvent){
+		
+		getMeasures($scope);
+		console.log($scope.measures);
 		console.log('doHisto');
 		$location.path('/histo');
 		$scope.top = "1";
 		//$scope.menu="0";
 		 //fakeMesure($scope);
+	}
+	
+	$scope.doSend  = function(id){
+		sendMeasures(id);
 	}
 	
 	$scope.doParam = function(clickEvent){
