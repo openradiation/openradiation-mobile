@@ -727,6 +727,6 @@ function getData(data) {
 
 function convertNanosievert(nbCoup,duration)
 {
-	valueNSV = nbCoup * 0.9 / (duration * 60) ;
+	valueNSV = (parseInt(nbCoup) * 0.9) / (parseInt(duration) * 60) ;
 	return valueNSV;
 }
