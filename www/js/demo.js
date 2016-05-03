@@ -298,6 +298,13 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		$location.path('/mesurePrise');
 		$scope.top = "1";
 		$scope.menu="0";
+		
+		$scope.mesure = {};
+		$scope.mesure.total = 0 ;
+		$scope.mesure.log = {}
+		$scope.mesure.encours = true;
+		$scope.mesure.timedeb = parseInt(new Date().getTime()/1000);
+		
 		if (typeof rfduino == 'undefined')
 		//cas emulation chrome
 		{
@@ -305,11 +312,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		}
 		else
 		{
-			$scope.mesure = {};
-			$scope.mesure.total = 0 ;
-			$scope.mesure.log = {}
-			$scope.mesure.encours = true;
-			$scope.mesure.timedeb = parseInt(new Date().getTime()/1000);
+			
 			//var i = 0;
 			rfduino.onData(function(data){
 				if ($scope.mesure.encours)
@@ -339,6 +342,15 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	}
 	
 	$scope.endMesure = function(clickEvent){
+		
+		$scope.mesure.latitude = 0;
+		$scope.mesure.longitude = 0;
+		if (typeof navigator.geolocation == 'undefined')
+			navigator.geolocation.getCurrentPosition(function(position){
+				$scope.mesure.latitude = position.coords.latitude;
+				$scope.mesure.longitude = position.coords.longitude;
+			});
+		
 		console.log('endMesure');
 		$location.path('/mesureRecap');
 		$scope.top = "1";
