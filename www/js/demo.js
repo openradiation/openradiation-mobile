@@ -322,7 +322,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 								var duration = mytimestamp - $scope.mesure.timedeb
 								$scope.mesure.duration = duration;
 								$scope.mesure.total += myData[key].data;
-								$scope.mesure.moymin = parseInt($scope.mesure.total / duration * 60);
+								$scope.mesure.moymin = ($scope.mesure.total / duration * 60).toFixed(2);
 								$scope.mesure.valeurnsv = convertNanosievert($scope.mesure.total,duration);
 								$scope.mesure.log[mytimestamp] = {}
 								$scope.mesure.log[mytimestamp].timestamp = mytimestamp;
