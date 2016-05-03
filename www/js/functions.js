@@ -724,3 +724,9 @@ function getData(data) {
        // return hex;
     }
 }
+
+function convertNanosievert(nbCoup,duration)
+{
+	valueNSV = nbCoup *.9 / (duration * 60) ;
+	return valueNSV;
+}
