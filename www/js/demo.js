@@ -347,6 +347,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		$scope.mesure.longitude = 0;
 		//if (typeof navigator.geolocation != 'undefined')
 			navigator.geolocation.getCurrentPosition(function (position){
+				alert(JSON.stringify(position));
 				$scope.mesure.latitude = position.coords.latitude;
 				$scope.mesure.longitude = position.coords.longitude;
 			},function (error) {
