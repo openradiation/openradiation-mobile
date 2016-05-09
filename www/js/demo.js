@@ -446,17 +446,20 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	
 	$scope.doCarto = function(clickEvent){
 		console.log('doCarto');
-		uri = "https://request.open-radiation.net/openradiation";
 		
-		/*if (window.device!=undefined && window.device.platform=="Android") {
-			uri = "http://restitution.altotoc.fr/?sid="+quiz_quotidien+","+quiz_hebdo+"&curs="+currentDate.getFullYear()+"-"+('0' + (parseInt(currentDate.getMonth())+1)).slice(-2)+"-"+('0' + currentDate.getDate()).slice(-2)+"&period=m&uid="+$scope.quiz.deviceID;
-		}*/
-			
-		window.open(uri, '_self', 'location=no,closebuttoncaption=Fermer');
-		//$location.path('/more');
-		//$scope.top = "1";
-		//$scope.menu="0";
-		 //fakeMesure($scope);
+		
+		if (typeof navigator.geolocation != 'undefined')
+			navigator.geolocation.getCurrentPosition(function (position){
+				var latitude = position.coords.latitude;
+				var longitude = position.coords.longitude;
+				var zoom = 12;
+				uri = "https://request.open-radiation.net/openradiation/"+zoom+"/"+latitude+"/"+longitude;
+				window.open(uri, '_blank', 'location=no,closebuttoncaption=Fermer');
+				
+			},function (error) {
+				uri = "https://request.open-radiation.net/openradiation";
+				window.open(uri, '_blank', 'location=no,closebuttoncaption=Fermer');
+		      });
 	}
 	
 	$scope.doMore= function(clickEvent){
