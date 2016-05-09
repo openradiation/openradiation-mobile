@@ -551,10 +551,59 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			//success
 			alertNotif(deviceId+" succes Write1 on","Success","Ok");
 
-		},
-	    function() {alertNotif(deviceId+" failure Write1 on","Failure","Ok")}
-);
+			},
+		    function() {alertNotif(deviceId+" failure Write1 on","Failure","Ok")}
+		);
 	}
+	//set_tension
+	$scope.doWrite3 = function(deviceId){
+		var data = new ArrayBuffer(3);
+		data[0]=0x10;
+		var tension = 380;
+		data[1]="0x"+tension.toString(16);
+
+		rfduino.write(data.buffer,function() {
+			//success
+			alertNotif(deviceId+" succes Write1 on","Success","Ok");
+
+			},
+		    function() {alertNotif(deviceId+" failure Write1 on","Failure","Ok")}
+		);
+	}
+	
+	$scope.doWrite4 = function(deviceId){
+		var data = new ArrayBuffer(3);
+		data[0]=0x10;
+		var tension = 380;
+		data[1]="0x0"+tension.toString(16);
+
+		
+		rfduino.write(data.buffer,function() {
+			//success
+			alertNotif(deviceId+" succes Write1 on","Success","Ok");
+
+			},
+		    function() {alertNotif(deviceId+" failure Write1 on","Failure","Ok")}
+		);
+	}
+	
+	$scope.doWrite5 = function(deviceId){
+		var data = new ArrayBuffer(3);
+		data[0]=0x10;
+		var tension = 380;
+		
+		data[2]="0x"+tension.toString(16);
+
+		rfduino.write(data.buffer,function() {
+			//success
+			alertNotif(deviceId+" succes Write1 on","Success","Ok");
+
+			},
+		    function() {alertNotif(deviceId+" failure Write1 on","Failure","Ok")}
+		);
+	}
+	
+	
 	
 	$scope.doDisconnect= function(deviceId){
 		if (typeof rfduino == 'undefined')
