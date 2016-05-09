@@ -351,7 +351,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 								$scope.mesure.log[mytimestamp].timestamp = mytimestamp;
 								$scope.mesure.log[mytimestamp].coup = myData[key].data;
 								$scope.$apply();
-								i++;
+								//i++;
 							}
 						}
 					}
@@ -629,41 +629,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			}
 	}
 	
-	$scope.doRead = function(deviceId,charId,serviceId){
-		ble.read(deviceId,serviceId,charId,
-				function(success){
-					//alert(JSON.stringify(success));
-					alertNotif(JSON.stringify(success),"Success read "+charId+" "+serviceId,"Ok");
-				},
-				function(failure){
-					//alert(JSON.stringify(failure));
-					alertNotif(JSON.stringify(failure),"Failure read "+charId+" "+serviceId,"Ok");
-				});
-	}
-	
-	$scope.doNotif = function(deviceId,charId,serviceId){
-		ble.startNotification(deviceId,serviceId,charId,
-				function(success){
-					//alert(JSON.stringify(success));
-					alertNotif(JSON.stringify(success),"Success startNotif "+charId+" "+serviceId,"Ok");
-				},
-				function(failure){
-					//alert(JSON.stringify(failure));
-					alertNotif(JSON.stringify(failure),"Failure startNotif "+charId+" "+serviceId,"Ok");
-				});
-	}
-	
-	$scope.stopNotif = function(deviceId,charId,serviceId){
-		ble.stopNotification(deviceId,serviceId,charId,
-				function(success){
-					//alert(JSON.stringify(success));
-					alertNotif(JSON.stringify(success),"Success stopNotif "+charId+" "+serviceId,"Ok");
-				},
-				function(failure){
-					//alert(JSON.stringify(failure));
-					alertNotif(JSON.stringify(failure),"Failure stopNotif "+charId+" "+serviceId,"Ok");
-				});
-	}
+
 
 
   // User agent displayed in home page

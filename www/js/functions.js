@@ -195,16 +195,23 @@ function sendMeasures(id){
 					console.log(res);
 					if (res.rows.length > 0)
 					{	
+						
+						
 						mesure = res.rows.item(0);
+						console.log(mesure)
 						args.data.reportUuid = generateUUID(); //TODO: enregistrer dans table
-						args.data.longitude = mesure.longitude;
-						args.data.latitude = mesure.latitude;
+						args.data.longitude = parseInt(mesure.longitude);
+						args.data.latitude = parseInt(mesure.latitude);
 						args.data.value = mesure.radiation;
-						args.data.startTime = mesure.tsStart;
+						args.data.startTime = convertTimestampToTimezone(mesure.tsStart);
+						args.data.endTime = convertTimestampToTimezone(parseInt(mesure.tsStart)+parseInt(mesure.duration));
+						
+						args.data.temperature = mesure.temperature;
 						
 						xhr_object = new XMLHttpRequest(); 
 						uri="https://submit.open-radiation.net/measurements"; 
 						xhr_object.open("POST", uri, true);
+						xhr_object.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 						
 						xhr_object.onreadystatechange = function() { 
 						  	 if(xhr_object.readyState == 4) {
@@ -376,7 +383,7 @@ function connect(e){
 
 
 /////////////////////////////////////////////////////////////////////
-//Functions BLE
+//Functions RFDUINO
 /////////////////////////////////////////////////////////////////////
 function doBluetoothDeviceSearch($scope)
 {
@@ -409,13 +416,37 @@ function fakeSearch($scope){
 	setTimeout(function (){$scope.state = "4";console.log("state4");$scope.$apply();}, 6000);
 }
 function fakeMesure($scope){
-	var max = 30;
+	/*var max = 30;
+	for (i=1;i<(max+1);i++)
+	{*/
+		if ($scope.mesure.encours)
+		{
+			var mytimestamp = parseInt(new Date().getTime()/1000);
+			var duration = mytimestamp - $scope.mesure.timedeb
+			var nbcoup = Math.floor(Math.random()*2);
+			$scope.mesure.duration = duration;
+			$scope.mesure.total += nbcoup;
+			$scope.mesure.moymin = ($scope.mesure.total / duration * 60).toFixed(2);
+			$scope.mesure.valeurnsv = convertNanosievert($scope.mesure.total,duration);
+			$scope.mesure.log[mytimestamp] = {}
+			$scope.mesure.log[mytimestamp].timestamp = mytimestamp;
+			$scope.mesure.log[mytimestamp].coup = nbcoup;
+			$scope.$apply();
+			
+			//(function (value) {
+				//setTimeout(function (){doProgressBar($scope.mesure.total)}, $scope.mesure.total*(60/max)*1000);
+			//})(i);
+			setTimeout(function (){fakeMesure($scope)},1000);
+		}
+	//}
+
+	/*var max = 30;
 	for (i=1;i<(max+1);i++)
 	{
 		(function (value) {
 			setTimeout(function (){doProgressBar(value)}, value*(60/max)*1000);
 		})(i);
-	}
+	}*/
 	
 	
 }
@@ -760,4 +791,15 @@ function convertNanosievert(nbCoup,duration)
 {
 	valueNSV = (nbCoup * 0.9) / (duration * 60) ;
 	return valueNSV.toFixed(3);
+}
+
+function convertTimestampToTimezone(ts)
+{
+	date = new Date(ts*1000);	
+	return date.getUTCFullYear()+"-"+convertWithZero(date.getUTCMonth())+"-"+convertWithZero(date.getUTCDate())+"T"+date.getUTCHours()+":"+date.getUTCMinutes()+":"+date.getUTCSeconds()+"Z";
+}
+
+function convertWithZero(m)
+{
+ return ('0' + (parseInt(m)+1)).slice(-2);
 }
