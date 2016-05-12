@@ -316,6 +316,9 @@ function getParam($scope,paramName)
 								    case 'expert_mode':
 								        $scope.expert_mode = (res.rows.item(i).active?true:false);
 								        break;
+								    case 'publi_auto':
+								        $scope.publi_auto = (res.rows.item(i).active?true:false);
+								        break;   
 								   /* case n:
 								        code block
 								        break;*/

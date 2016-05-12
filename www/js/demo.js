@@ -48,7 +48,8 @@ app.config(function($routeProvider) {
   $routeProvider.when('/more',    {templateUrl: 'templates/or-more.html', reloadOnSearch: false});
   
   $routeProvider.when('/param',    {templateUrl: 'templates/or-param.html', reloadOnSearch: false});
-  $routeProvider.when('/param2',    {templateUrl: 'templates/or-param2.html', reloadOnSearch: false});
+  $routeProvider.when('/param2',    {templateUrl: 'templates/or-param2.html', reloadOnSearch: false})
+  $routeProvider.when('/paramPubli',    {templateUrl: 'templates/or-param-publi.html', reloadOnSearch: false});;
   
   $routeProvider.when('/test',    {templateUrl: 'templates/or-test.html', reloadOnSearch: false});
 });
@@ -468,6 +469,14 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		 //fakeMesure($scope);
 	}
 	
+	$scope.doParamPubli = function(clickEvent){
+		console.log('doParam');
+		$location.path('/paramPubli');
+		$scope.top = "1";
+		//$scope.menu="0";
+		 //fakeMesure($scope);
+	}
+	
 	$scope.doCarto = function(clickEvent){
 		console.log('doCarto');
 		
@@ -728,6 +737,11 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	$scope.saveExpert = function () {
 		value = ($scope.expert_mode?1:0);
 		saveParam('expert_mode',value,'');
+	}
+	
+	$scope.savePubliAuto = function () {
+		value = ($scope.publi_auto?1:0);
+		saveParam('publi_auto',value,'');
 	}
 
 

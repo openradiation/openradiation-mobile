@@ -408,6 +408,7 @@ input.scrollable-header {
 .param .blocParam1,.param .blocParam2,.param .blocParam3{padding:3%;}
 .param .blocParam2{background-color:#3c1d7c;}
 .param .bloctitle{font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;font-size:20px;color:white;}
+.param .bloctext{font-family: 'INTERSTATE',Arial,Helvetica,sans-serif;font-size:15px;color:white;}
 .param .ligne{padding: 1% 0;border-bottom:1px solid #66ceff;}
 .param .ligne:last-child{border:none;}
 .param .ligne .desc{font-family:'INTERSTATE',Arial,Helvetica,sans-serif;font-size:12px;color:white; width:32%;text-align:left;line-height:30px;
