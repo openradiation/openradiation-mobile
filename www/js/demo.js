@@ -225,6 +225,10 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	$scope.modelTags = "";
 	$scope.modelDesc = "";
 	
+	//param
+	$scope.expert_mode = 0;
+	
+	
 	if (!isMobile)
 	{
 		var locationPath = $location.path();
@@ -263,6 +267,8 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			   		 	{
 			   		 		$scope.menu="0";
 			   		 	}
+		   			 	//recup param si existe
+		   				getParam($scope);
 	   		         }
 	   		 );//fin  async.series*/
 	 
@@ -658,6 +664,11 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		return convertDurationForDisplay(duration);
 	}
 	
+	//function param
+	$scope.saveExpert = function () {
+		value = ($scope.expert_mode?1:0);
+		saveParam('expert_mode',value,'');
+	}
 
 
   // User agent displayed in home page

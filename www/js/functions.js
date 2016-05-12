@@ -240,6 +240,80 @@ function sendMeasures(id){
 	);
 }
 
+function saveParam(paramName,active,text)
+{
+	db.transaction(function(tx) {
+		tx.executeSql('SELECT * FROM "params" WHERE paramName="'+paramName+'";',[], 
+			function(tx,res){
+					if (res.rows.length > 0)
+					//UPDATE
+					{				
+						tx.executeSql('UPDATE "params" '+
+								'SET active = '+active+', libre = "'+text+'"'+
+								'WHERE paramName="'+paramName+'";',[], 
+								function(tx){},
+								function(tx,error){requestTableError(tx, error,"update params");});
+					}
+					else
+					//INSERT
+					{
+						tx.executeSql('INSERT INTO "params" '+
+								'(paramName, active, libre) VALUES("'+
+								paramName+'",'+
+								active+',"'+
+								text+'");',[], 
+								function(tx){},
+								function(tx,error){requestTableError(tx, error,"insert params");});
+						
+					}
+					
+				},
+				function(tx,error){requestTableError(tx, error,"select params");});
+		},
+		function(tx,error){
+			transactionError(tx, error);
+		},
+		function(tx){
+		}
+	);
+	
+}
+
+function getParam($scope,paramName)
+{
+	if (typeof paramName == 'undefined')
+		where = ";";
+	else
+		where = 'WHERE paramName="'+paramName+'";'
+		db.transaction(function(tx) {
+			tx.executeSql('SELECT * FROM "params" '+where,[], 
+				function(tx,res){
+						if (res.rows.length > 0)
+							for (var i = 0; i < res.rows.length; i++) {
+								switch(res.rows.item(i).paramName) {
+								    case 'expert_mode':
+								        $scope.expert_mode = (res.rows.item(i).active?true:false);
+								        break;
+								   /* case n:
+								        code block
+								        break;*/
+								    default:
+								        break;
+								}
+							}
+							$scope.$apply();
+					},
+					function(tx,error){requestTableError(tx, error,"select params");});
+			},
+			function(tx,error){
+				transactionError(tx, error);
+			},
+			function(tx){
+			}
+		);
+		
+}
+
 
 
 ////////////////////
