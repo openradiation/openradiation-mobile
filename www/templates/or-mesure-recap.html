@@ -21,19 +21,19 @@
     		<div class="bloc">
 	    		<div class="ligne">
 	    			<div class="desc">Date : </div>
-	    			<div class="value">02/01/2015</div>
+	    			<div class="value">{{getDate(mesure.timedeb)}}</div>
 	    		</div>
 	    		<div class="ligne">
 	    			<div class="desc">Début de la mesure : </div>
-	    			<div class="value">14h23’34”</div>
+	    			<div class="value">{{getTime(mesure.timedeb)}}</div>
 	    		</div>
 	    		<div class="ligne">
 	    			<div class="desc">Durée :</div>
-	    			<div class="value">6’23”</div>
+	    			<div class="value">{{getDuration(mesure.duration)}}</div>
 	    		</div>
 	    		<div class="ligne">
 	    			<div class="desc">Température moyenne du capteur : </div>
-	    			<div class="value">17°C</div>
+	    			<div class="value">{{mesure.temperature}}°C</div>
 	    		</div>
     		</div>
     		<div class="bloc">

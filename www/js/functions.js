@@ -796,10 +796,46 @@ function convertNanosievert(nbCoup,duration)
 function convertTimestampToTimezone(ts)
 {
 	date = new Date(ts*1000);	
-	return date.getUTCFullYear()+"-"+convertWithZero(date.getUTCMonth())+"-"+convertWithZero(date.getUTCDate())+"T"+date.getUTCHours()+":"+date.getUTCMinutes()+":"+date.getUTCSeconds()+"Z";
+	return date.getUTCFullYear()+"-"+convertWithZero(date.getUTCMonth()+1)+"-"+convertWithZero(date.getUTCDate())+"T"+date.getUTCHours()+":"+date.getUTCMinutes()+":"+date.getUTCSeconds()+"Z";
 }
+
+function convertTimestampToDate(ts)
+{
+	date = new Date(ts*1000);	
+	return convertWithZero(date.getUTCDate())+"/"+convertWithZero(date.getUTCMonth()+1)+"/"+date.getUTCFullYear();
+	//return convertWithZero(date.getDate())+"/"+convertWithZero(date.getMonth()+1)+"/"+date.getFullYear();
+}
+
+function convertTimestampToTime(ts)
+{
+	date = new Date(ts*1000);	
+	return date.getUTCHours()+":"+date.getUTCMinutes()+":"+date.getUTCSeconds();
+}
+
+
+function convertDurationForDisplay(duration)
+{
+	var timeToDisplay = "";
+	seconde= duration%60;
+	timeToDisplay = seconde+'"';
+	if ((duration-seconde) > 0)
+	{
+		minute = (duration-seconde)%3600;
+		timeToDisplay = minute+"'"+timeToDisplay;
+		if ((duration-seconde-minute) > 0)
+		{
+			hour = duration-seconde-minute;
+			timeToDisplay = hour+"h"+timeToDisplay;
+		}
+	}
+	
+	
+	return timeToDisplay;
+}
+
 
 function convertWithZero(m)
 {
- return ('0' + (parseInt(m)+1)).slice(-2);
+ return ('0' + (parseInt(m))).slice(-2);
 }
+

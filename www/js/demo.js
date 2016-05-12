@@ -629,7 +629,20 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			}
 	}
 	
-
+	
+	//funcion convert affichage
+	$scope.getDate = function (ts) {
+		return convertTimestampToDate(ts);
+	}
+	
+	$scope.getTime = function (ts) {
+		return convertTimestampToTime(ts);
+	}
+	
+	$scope.getDuration = function (duration) {
+		return convertDurationForDisplay(duration);
+	}
+	
 
 
   // User agent displayed in home page

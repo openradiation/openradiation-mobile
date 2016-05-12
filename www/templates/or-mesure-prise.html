@@ -9,12 +9,12 @@
     		<div class="flex-container1">
 	    		<div class="mesureDeb">
 	    			<div class="desc">Début de la mesure</div>
-	    			<div class="value">14h23'34''</div>
+	    			<div class="value">{{getTime(mesure.timedeb)}}</div>
 	    		</div>
 	    		<div class="border"></div>
 	    		<div class="mesureTemp">
 	    			<div class="desc">Temp' capteur</div>
-	    			<div class="value">17°C</div>
+	    			<div class="value">{{mesure.temperature}}°C</div>
 	    		</div>
     		</div>
     		<div class="fiability">
@@ -37,7 +37,7 @@
 	    		</div>
 	    		<div class="duree">
 	    			<div class="desc">Durée</div>
-	    			<div class="value">{{mesure.duration}}''</div>
+	    			<div class="value">{{getDuration(mesure.duration)}}</div>
 	    		</div>
     		</div>
     		
