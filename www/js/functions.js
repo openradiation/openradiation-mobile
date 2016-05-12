@@ -935,3 +935,14 @@ function convertWithZero(m)
  return ('0' + (parseInt(m))).slice(-2);
 }
 
+function resetMesureForm($scope){
+	$scope.modelDuration = "";
+	$scope.modelRadiation = "";
+	$scope.modelTotal = "";
+	$scope.modelTemperature = "";
+	$scope.modelEnv = 0;
+	$scope.modelPos = 0;
+	$scope.modelTags = "";
+	$scope.modelDesc = "";
+}
+

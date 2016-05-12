@@ -41,6 +41,7 @@ app.config(function($routeProvider) {
   $routeProvider.when('/mesurePrise',    {templateUrl: 'templates/or-mesure-prise.html', reloadOnSearch: false});
   $routeProvider.when('/mesureRecap',    {templateUrl: 'templates/or-mesure-recap.html', reloadOnSearch: false});
   $routeProvider.when('/mesureExpert',    {templateUrl: 'templates/or-mesure-expert.html', reloadOnSearch: false});
+  $routeProvider.when('/mesureMano',    {templateUrl: 'templates/or-mesure-mano.html', reloadOnSearch: false});
   
   $routeProvider.when('/histo',    {templateUrl: 'templates/or-histo.html', reloadOnSearch: false});
   
@@ -406,6 +407,8 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		$scope.mesure.tags = "tags";
 		$scope.mesure.notes = "notes";*/
 		
+		resetMesureForm($scope);
+		
 		insertMeasures($scope.mesure,$scope.connectedDevice);
 		
 		console.log('validMesure');
@@ -484,11 +487,68 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	}
 	
 	$scope.doMore= function(clickEvent){
+		clickEvent.preventDefault();
 		console.log('doMore');
 		$location.path('/more');
 		$scope.top = "1";
-		//$scope.menu="0";
+		$scope.menu="1";
 		 //fakeMesure($scope);
+	}
+	
+	$scope.doMesureMano= function(clickEvent){
+		clickEvent.preventDefault();
+		console.log('doMesureMano');
+		
+		$scope.mesure = {};
+		$scope.mesure.total = 0 ;
+		$scope.mesure.log = {}
+		$scope.mesure.encours = true;
+		$scope.mesure.timedeb = parseInt(new Date().getTime()/1000);
+		
+		$scope.mesure.latitude = 0;
+		$scope.mesure.longitude = 0;
+		$scope.mesure.gps = 1;
+		$scope.mesure.temperature = 0;
+		$scope.mesure.env = 0;
+		$scope.mesure.position = 0;
+		$scope.mesure.tags = "tags";
+		$scope.mesure.notes = "notes";
+		$scope.mesure.valeurnsv = 0;
+		$scope.mesure.duration = 0;
+		if (typeof navigator.geolocation != 'undefined')
+			navigator.geolocation.getCurrentPosition(function (position){
+				$scope.mesure.latitude = position.coords.latitude;
+				$scope.mesure.longitude = position.coords.longitude;});
+		
+		$location.path('/mesureMano');
+		$scope.top = "1";
+		$scope.menu="0";
+		 //fakeMesure($scope);
+	}
+	
+	$scope.validMesureMano = function(clickEvent){
+
+		$scope.mesure.duration = $scope.modelDuration;
+		$scope.mesure.valeurnsv = $scope.modelRadiation;
+		$scope.mesure.total = $scope.modelTotal;
+		$scope.mesure.temperature = $scope.modelTemperature;
+		$scope.mesure.env = $scope.modelEnv;
+		$scope.mesure.position = $scope.modelPos;
+		$scope.mesure.tags = $scope.modelTags;
+		$scope.mesure.notes = $scope.modelDesc;
+
+		resetMesureForm($scope);
+		
+		insertMeasures($scope.mesure,$scope.connectedDevice);
+		
+		console.log('validMesureMano');
+		$scope.top = "0";
+		$scope.menu="1";
+		//$scope.state="1";
+		$location.path('/');
+		//$location.path('/mesureRecap');
+		//$scope.top = "1";
+		// fakeMesure($scope);
 	}
 	
 	$scope.devices = {};

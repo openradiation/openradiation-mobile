@@ -1,0 +1,94 @@
+<div class="scrollable mesure2">  
+  <div class="scrollable-content text-center">
+
+
+    	
+    	<div class="blocMesure1">
+	    	
+    		<div class="bloc">
+    		<div class="blocGps">
+	    		<div class="gps">GPS : good</div>
+	    	</div>
+	    		<div class="ligne">
+	    			<div class="desc">Latitude : </div>
+	    			<div class="value">{{mesure.latitude}} N</div>
+	    		</div>
+	    		<div class="ligne">
+	    			<div class="desc">Longitude : </div>
+	    			<div class="value">{{mesure.longitude}} O</div>
+	    		</div>
+    		</div>
+    		<div class="bloc">
+	    		<div class="ligne">
+	    			<div class="desc">Date : </div>
+	    			<div class="value">{{getDate(mesure.timedeb)}}</div>
+	    		</div>
+	    		<div class="ligne">
+	    			<div class="desc">Début de la mesure : </div>
+	    			<div class="value">{{getTime(mesure.timedeb)}}</div>
+	    		</div>
+	    		<div class="ligne">
+	    			<div class="desc">Durée :</div>
+	    			<div class="value"><input type="text" name="duration" ng-model="$parent.modelDuration"/> (en secondes)</div>
+	    		</div>
+	    		<div class="ligne">
+	    			<div class="desc">Température moyenne du capteur : </div>
+	    			<div class="value"><input type="text" name="temperature" ng-model="$parent.modelTemperature"/> °C</div>
+	    		</div>
+    		</div>
+    		<div class="bloc">
+	    		<div class="ligne">
+	    			<div class="desc">Nombre de coups : </div>
+	    			<div class="value"><input type="text" name="total" ng-model="$parent.modelTotal"/></div>
+	    		</div>
+	    		<div class="ligne">
+	    			<div class="desc">Mesure : </div>
+	    			<div class="value"><input type="text" name="radiation" ng-model="$parent.modelRadiation"/> nSv/h</div>
+	    		</div>
+    		</div>
+    		
+    		<div class="clear"></div>
+    	</div>
+    	<div class="blocMesure2">
+			<div class="bloc">
+	    			<div class="desc">Environnement de la mesure : </div>
+	    			<div class="radios">
+		    			<input type="radio" name="radioEnv" value="1" id="env1" ng-model="$parent.modelEnv">
+						<label for="env1" ng-class="{'on':$parent.modelEnv==1}"></label>
+						<input type="radio" name="radioEnv" value="2" id="env2" ng-model="$parent.modelEnv">
+						<label for="env2" ng-class="{'on':$parent.modelEnv==2}"></label>
+						<input type="radio" name="radioEnv" value="3" id="env3" ng-model="$parent.modelEnv">
+						<label for="env3" ng-class="{'on':$parent.modelEnv==3}"></label>
+						<input type="radio" name="radioEnv" value="4" id="env4" ng-model="$parent.modelEnv">
+						<label for="env4" ng-class="{'on':$parent.modelEnv==4}"></label>
+						<input type="radio" name="radioEnv" value="5" id="env5" ng-model="$parent.modelEnv">
+						<label for="env5" ng-class="{'on':$parent.modelEnv==5}"></label>
+					</div>
+    		</div>
+    		<div class="bloc">
+	    		<div class="ligne">
+	    			<div class="desc">Position des capteurs: </div>
+	    			<div class="radios2">
+		    			<input type="radio" name="radioPos" value="1" id="pos1" ng-model="$parent.modelPos">
+						<label for="pos1" ng-class="{'on':$parent.modelPos==1}"><span>1</span>Au sol</label>
+						<input type="radio" name="radioPos" value="2" id="pos2" ng-model="$parent.modelPos">
+						<label for="pos2" ng-class="{'on':$parent.modelPos==2}"><span>2</span>A 1 mètre du sol</label>
+	
+					</div>
+					<div class="textes">
+						<input type="text" name="tags" placeholder="Tags : #" ng-model="$parent.modelTags"/>
+						<input type="text" name="notes" placeholder="Notes" ng-model="$parent.modelDesc"/>
+					</div>
+	    		</div>
+    		</div>
+    	</div>
+    	<div class="blocMesure3">
+   			<div ng-click="validMesureMano($event)" class="button-mesure">OK</div>
+   			<div class="annul"><div ng-click="goHome($event)" class="button-more">Annuler</div></div>
+    	</div>
+    	
+    
+  
+
+  </div>
+</div>
