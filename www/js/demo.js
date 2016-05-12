@@ -430,7 +430,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	}
 	
 	$scope.doSend  = function(id){
-		sendMeasures(id);
+		sendMeasures($scope,id);
 	}
 	
 	$scope.doParam = function(clickEvent){

@@ -183,7 +183,7 @@ function getMeasures($scope){
 	);
 }
 
-function sendMeasures(id){
+function sendMeasures($scope,id){
 	
 	args ={};
 	args.apiKey = "50adef3bdec466edc25f40c8fedccbce";
@@ -215,16 +215,38 @@ function sendMeasures(id){
 						
 						xhr_object.onreadystatechange = function() { 
 						  	 if(xhr_object.readyState == 4) {
-								//alert(xhr_object.responseText); // DEBUG MODE
-								//document.write(xhr_object.responseText);
-								//eval(xhr_object.responseText);
 								console.log(xhr_object.responseText);
+								if (xhr_object.responseText == "")
+								{
+									db.transaction(function(tx) {
+										tx.executeSql('UPDATE "measures" SET sent = 1 WHERE id='+id+';',[], function(tx,res){
+											console.log('rrr');
+											alertNotif('Données envoyées','Historique','Ok');
+											getMeasures($scope);
+											$scope.$apply();
+											
+										},
+										function(tx,error){requestTableError(tx, error,"update measures");});
+									},
+									function(tx,error){
+										transactionError(tx, error);
+									},
+									function(tx){
+									});
+								}
+								else
+								//error	
+								{
+									alertNotif("Erreur d'envoi =\n"+xhr_object.responseText,'Historique','Ok');
+								}
+									
 							 }
 							return xhr_object.readyState;
-						} 
+						}
 						//xhr_object.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 						
 						//  Envoi de la requête
+						console.log("ARGS");
 						console.log(JSON.stringify(args));
 						//xhr_object.send(args);
 						xhr_object.send(JSON.stringify(args));
@@ -870,7 +892,7 @@ function convertNanosievert(nbCoup,duration)
 function convertTimestampToTimezone(ts)
 {
 	date = new Date(ts*1000);	
-	return date.getUTCFullYear()+"-"+convertWithZero(date.getUTCMonth()+1)+"-"+convertWithZero(date.getUTCDate())+"T"+date.getUTCHours()+":"+date.getUTCMinutes()+":"+date.getUTCSeconds()+"Z";
+	return date.getUTCFullYear()+"-"+convertWithZero(date.getUTCMonth()+1)+"-"+convertWithZero(date.getUTCDate())+"T"+convertWithZero(date.getUTCHours())+":"+convertWithZero(date.getUTCMinutes())+":"+convertWithZero(date.getUTCSeconds())+"Z";
 }
 
 function convertTimestampToDate(ts)
