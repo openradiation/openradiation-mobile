@@ -220,6 +220,11 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	$scope.top="0";
 	$scope.menu="1";
 	
+	$scope.modelEnv = 0;
+	$scope.modelPos = 0;
+	$scope.modelTags = "";
+	$scope.modelDesc = "";
+	
 	if (!isMobile)
 	{
 		var locationPath = $location.path();
@@ -384,6 +389,16 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	
 	
 	$scope.validMesure = function(clickEvent){
+		
+		console.log($scope.modelEnv);
+		
+		$scope.mesure.env = $scope.modelEnv;
+		$scope.mesure.position = $scope.modelPos;
+		$scope.mesure.tags = $scope.modelTags;
+		$scope.mesure.notes = $scope.modelDesc;
+	/*	$scope.mesure.position = 0;
+		$scope.mesure.tags = "tags";
+		$scope.mesure.notes = "notes";*/
 		
 		insertMeasures($scope.mesure,$scope.connectedDevice);
 		
