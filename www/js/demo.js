@@ -410,7 +410,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		
 		resetMesureForm($scope);
 		
-		insertMeasures($scope.mesure,$scope.connectedDevice);
+		insertMeasures($scope,$scope.mesure,$scope.connectedDevice);
 		
 		console.log('validMesure');
 		$scope.top = "0";
@@ -548,7 +548,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 
 		resetMesureForm($scope);
 		
-		insertMeasures($scope.mesure,$scope.connectedDevice);
+		insertMeasures($scope,$scope.mesure,$scope.connectedDevice);
 		
 		console.log('validMesureMano');
 		$scope.top = "0";

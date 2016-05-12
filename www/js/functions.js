@@ -126,7 +126,7 @@ function requestTableError(tx, error, tableName) {
 }
 
 
-function insertMeasures(res,device){
+function insertMeasures($scope,res,device){
 	db.transaction(function(tx) {
 		tx.executeSql('INSERT INTO "measures" '+
 				'(deviceId, tsStart, tsEnd,duration, temperature, nbHits,radiation, gpsStatus,longitude,latitude,environment,position,tags,notes,sent) VALUES("'+
@@ -145,7 +145,13 @@ function insertMeasures(res,device){
 				res.tags+'","'+
 				res.notes+'",'+
 				'0);',[], 
-				function(tx){},
+				function(tx,results){
+					var lastInsertId = results.insertId; 
+					if ($scope.publi_auto)
+						sendMeasures($scope,lastInsertId)
+			
+			
+		},
 				function(tx,error){requestTableError(tx, error,"insert measures");});
 		},
 		function(tx,error){
@@ -220,7 +226,6 @@ function sendMeasures($scope,id){
 								{
 									db.transaction(function(tx) {
 										tx.executeSql('UPDATE "measures" SET sent = 1 WHERE id='+id+';',[], function(tx,res){
-											console.log('rrr');
 											alertNotif('Données envoyées','Historique','Ok');
 											getMeasures($scope);
 											$scope.$apply();
