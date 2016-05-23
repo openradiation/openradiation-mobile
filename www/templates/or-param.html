@@ -15,7 +15,12 @@
 	</div>
 	<div class="blocParam2">
 		<div class="bloctitle">Compte utilisateur</div>
-		<div class="ligne"><div class="desc">Authentifié comme<br/><span>philippe.laroche@agoralogie.fr</span></div></div>
+		<div class="ligne connecte" ng-if="connexion.connexion"><div class="desc">Authentifié comme<br/><span>{{connexion.login}}</span></div>
+			<div class="button"><div ng-click="doDeconnex($event)" class="button-more">Déconnexion</div></div>
+		</div>
+		<div class="ligne deconnecte"  ng-if="!connexion.connexion"><div class="desc">Non connecté</div>
+			<div class="button"><div ng-click="doParamConnex()" class="button-more">Se connecter</div></div>
+		</div>
 	</div>
 	<div class="blocParam3">
 		<div class="bloctitle">Mesures</div>

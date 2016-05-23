@@ -48,8 +48,9 @@ app.config(function($routeProvider) {
   $routeProvider.when('/more',    {templateUrl: 'templates/or-more.html', reloadOnSearch: false});
   
   $routeProvider.when('/param',    {templateUrl: 'templates/or-param.html', reloadOnSearch: false});
-  $routeProvider.when('/param2',    {templateUrl: 'templates/or-param2.html', reloadOnSearch: false})
-  $routeProvider.when('/paramPubli',    {templateUrl: 'templates/or-param-publi.html', reloadOnSearch: false});;
+  $routeProvider.when('/param2',    {templateUrl: 'templates/or-param2.html', reloadOnSearch: false});
+  $routeProvider.when('/paramPubli',    {templateUrl: 'templates/or-param-publi.html', reloadOnSearch: false});
+  $routeProvider.when('/paramConnex',    {templateUrl: 'templates/or-param-connexion.html', reloadOnSearch: false});
   
   $routeProvider.when('/test',    {templateUrl: 'templates/or-test.html', reloadOnSearch: false});
 });
@@ -229,6 +230,8 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	
 	//param
 	$scope.expert_mode = 0;
+	$scope.login = '';
+	$scope.mdp='';
 	
 	
 	if (!isMobile)
@@ -271,6 +274,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			   		 	}
 		   			 	//recup param si existe
 		   				getParam($scope);
+		   				console.log($scope);
 	   		         }
 	   		 );//fin  async.series*/
 	 
@@ -475,6 +479,31 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		$scope.top = "1";
 		//$scope.menu="0";
 		 //fakeMesure($scope);
+	}
+	
+	$scope.doParamConnex = function(clickEvent){
+		console.log('doParamConnex');
+		$location.path('/paramConnex');
+		$scope.top = "1";
+		//$scope.menu="0";
+		 //fakeMesure($scope);
+	}
+	$scope.doConnex= function(clickEvent){
+		console.log('doConnex');
+		console.log($scope.login);
+		console.log($scope.mdp);
+		testUser($scope,$location);
+//		$location.path('/paramConnex');
+
+		//$scope.menu="0";
+		 //fakeMesure($scope);
+	}
+	
+	$scope.doDeconnex = function(clickEvent){
+		console.log('doDeconnex');
+		$scope.connexion.connexion = false;
+		saveParam('connexion',0,'');
+		$scope.$apply();
 	}
 	
 	$scope.doCarto = function(clickEvent){
@@ -818,9 +847,9 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
   $scope.rememberMe = true;
   $scope.email = 'me@example.com';
   
-  $scope.login = function() {
+/*  $scope.login = function() {
     alert('You submitted the login form');
-  };
+  };*/
 
   // 
   // 'Drag' screen

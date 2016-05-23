@@ -413,8 +413,10 @@ input.scrollable-header {
 .param .ligne:last-child{border:none;}
 .param .ligne .desc{font-family:'INTERSTATE',Arial,Helvetica,sans-serif;font-size:12px;color:white; width:32%;text-align:left;line-height:30px;
 	background:url('../img/icon-next.png') 97% 50% no-repeat transparent;width:100%;padding:0 3%;}
-.param .blocParam2 .ligne .desc{line-height:inherit;}
+.param .blocParam2 .ligne .desc{line-height:inherit;background:none;width:70%;display:inline-block;vertical-align:middle;}
 .param .blocParam2 .ligne .desc span{font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;}
+.param .blocParam2 .ligne .button{display:inline-block;width:29%;text-align:right;vertical-align:middle;}
+.param .blocParam2 .ligne .button-more{background:#00a0dd;display:inline-block;color:white;cursor:pointer;padding:2px 7px;border-radius:5px;}
 .param .ligne2{padding: 1% 0;border-bottom:1px solid #66ceff;}
 .param .ligne2:last-child{border:none;}
 .param .ligne2 .desc{font-family:'INTERSTATE',Arial,Helvetica,sans-serif;font-size:12px;color:white; text-align:left;line-height:40px;
@@ -443,6 +445,15 @@ input.scrollable-header {
 .lignetitlelog .coup, .lignelog .coup{width:18%;border-right:white dotted 1px;;padding-left:10px;text-align:left;}
 .lignetitlelog .tension, .lignelog .tension{width:18%;border-right:white dotted 1px;;padding-left:10px;text-align:left;}
 .lignetitlelog .temperature, .lignelog .temperature{width:18%;padding-left:10px;text-align:left;}
+
+.param .ligne2.formconnect .desc{width:30%;display:inline-block;}
+.formconnect .input{width:68%;display:inline-block;}
+.param input{background:#9cf5ff;border:none;border-radius: 5px;padding:0 5px;color:#090085;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;
+	font-size:12px;width:100%;margin-left:1%;display: inline-block;box-sizing: border-box;}
+.param input::-webkit-input-placeholder
+	{color:#090085;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;font-size:12px;}
+.param .button-submit{background:#090085;display:inline-block;color:white;cursor:pointer;padding:2px 7px;border-radius:5px;}
+
 
 /*switch*/
 .switch{border:none;}

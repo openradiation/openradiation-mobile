@@ -324,6 +324,21 @@ function getParam($scope,paramName)
 								    case 'publi_auto':
 								        $scope.publi_auto = (res.rows.item(i).active?true:false);
 								        break;   
+								    case 'connexion':
+								    	if (typeof $scope.connexion  === 'undefined')
+								    		$scope.connexion = {};
+								        $scope.connexion.connexion = (res.rows.item(i).active?true:false);
+								        break;
+								    case 'login':
+								    	if (typeof $scope.connexion  === 'undefined')
+								    		$scope.connexion = {};
+								        $scope.connexion.login = res.rows.item(i).libre;
+								        break;
+								    case 'mdp':
+								    	if (typeof $scope.connexion  === 'undefined')
+								    		$scope.connexion = {};
+								        $scope.connexion.mdp = res.rows.item(i).libre;
+								        break;
 								   /* case n:
 								        code block
 								        break;*/
@@ -342,6 +357,63 @@ function getParam($scope,paramName)
 			}
 		);
 		
+}
+
+function testUser($scope,$location){
+	
+	args ={};
+	args.apiKey = "50adef3bdec466edc25f40c8fedccbce";
+	args.data = {};
+	args.data.latitude = 48.23456;
+	args.data.longitude = 2.657723;
+	args.data.value = 0.065;
+	args.data.reportUuid = "110e8422-e29b-11d4-a716-446655440001";
+	args.data.startTime = "2016-05-23T08:49:59.000Z";
+	args.data.userId = $scope.login;
+	args.data.userPwd = $scope.mdp;
+	args.data.reportContext = "test";
+
+	
+	xhr_object = new XMLHttpRequest(); 
+	uri="https://submit.open-radiation.net/measurements"; 
+	xhr_object.open("POST", uri, true);
+	xhr_object.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	
+	xhr_object.onreadystatechange = function() { 
+	  	 if(xhr_object.readyState == 4) {
+			console.log(xhr_object.responseText);
+			rep = JSON.parse(xhr_object.responseText);
+			console.log(rep);
+			if (rep.test)
+			{
+				saveParam('connexion',1,'');
+				saveParam('login',1,$scope.login);
+				saveParam('mdp',1,$scope.mdp);
+				$scope.connexion = {};
+				$scope.connexion.connexion = true;
+				$scope.connexion.login = $scope.login;
+				$scope.connexion.mdp = $scope.mdp;
+				$scope.login = '';
+				$scope.mdp = '';
+				$location.path('/param');
+				$scope.$apply();
+			}
+			else
+			//error	
+			{
+				alertNotif("Erreur =\n"+xhr_object.responseText,'Authentification','Ok');
+			}
+				
+		 }
+		return xhr_object.readyState;
+	}
+	//xhr_object.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	
+	//  Envoi de la requête
+	console.log("ARGS");
+	console.log(JSON.stringify(args));
+	//xhr_object.send(args);
+	xhr_object.send(JSON.stringify(args));
 }
 
 
