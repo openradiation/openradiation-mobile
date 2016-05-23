@@ -368,6 +368,7 @@ input.scrollable-header {
 
 .mesure2 .blocMesure2 .textes input{background:#9cf5ff;border:none;border-radius: 5px;padding:0 5px;color:#090085;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;
 	font-size:12px;width:48%;margin-left:1%;display: inline-block;box-sizing: border-box;}
+.mesure2 .blocMesure2 .textes input:disabled{opacity:0.5}
 .mesure2 .blocMesure2 .textes input:first-child{margin-left:0;}
 .mesure2 .blocMesure2 .textes input::-webkit-input-placeholder
 	{color:#090085;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;font-size:12px;}
