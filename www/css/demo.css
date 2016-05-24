@@ -436,10 +436,11 @@ input.scrollable-header {
 .param .lignecapt{padding: 1% 0;border-bottom:1px solid #66ceff;}
 .param .lignecapt:last-child{border:none;}
 .param .lignecapt .desc{font-family:'INTERSTATE',Arial,Helvetica,sans-serif;font-size:12px;color:white; text-align:left;line-height:30px;
-	background:url('../img/icon-config.png') 97% 50% no-repeat transparent;width:60%;padding:0 3%;display:inline-block;}
+	background:url('../img/icon-config.png') 97% 50% no-repeat transparent;width:60%;padding:0 3%;display:inline-block; vertical-align: middle;}
 .param .lignecapt .desc div{font-size:10px;line-height: 1vw;}
-.param .lignecapt .connect {font-family:'INTERSTATE',Arial,Helvetica,sans-serif;font-size:12px;color:white; width:32%;line-height:30px;padding:0 3%;display:inline-block;}
-.param .lignecapt .connect .button{color:white;background:#090085;font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;font-size:12px;border-radius: 5px;}
+.param .lignecapt .connect {font-family:'INTERSTATE',Arial,Helvetica,sans-serif;font-size:12px;color:white; width:32%;line-height:30px;padding:0 3%;display:inline-block;
+	vertical-align: middle;}
+.param .lignecapt .connect .button{color:white;background:#090085;font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;font-size:10px;border-radius: 5px;}
 
 .param .lignetitlelog {font-weight:bold;color:white;margin-top:10px;}
 .param .lignelog {color:white;}
