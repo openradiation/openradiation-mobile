@@ -275,8 +275,18 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		   			 	//recup param si existe
 		   				getParam($scope);
 		   				console.log($scope);
+		   				
+		 
 	   		         }
 	   		 );//fin  async.series*/
+	 
+	 $scope.stylemobile = function(){
+	 
+		 if (typeof rfduino == 'undefined')
+				return true;
+		 else
+			 return false;
+	 }
 	 
 	$scope.buttonSearchCapteur = function(clickEvent){
 		

@@ -35,7 +35,11 @@ body {
 	background: -webkit-linear-gradient(#045cb8, #00a0dd); /* For Safari 5.1 to 6.0 */
 	background: linear-gradient(to bottom, #045cb8, #00a0dd);}
 
+.cadreiphone {display:none;border:lightgreen solid 2px;width:320px;height:480px;color:lightgreen;position:absolute;top:0;left:0;z-index:100;}
+.cadreipad {display:none;border:pink solid 2px;width:768px;height:1024px;color:pink;position:absolute;top:0;left:0;z-index:100;}
+.cadreipad2 {display:none;border:lightblue solid 2px;width:1536px;height:2048px;color:lightblue;position:absolute;top:0;left:0;z-index:100;}
 
+.cadremobile{display:block}
 
 #lightbulb {
   font-size: 100px;
@@ -231,10 +235,10 @@ input.scrollable-header {
 	background: linear-gradient(to bottom, #045cb8, #00a0dd);}
 .home .logo {background:url('../img/logo-big.png') center center no-repeat transparent;
 	background-size:contain;
-	width:60%;padding-bottom:23%;margin:18% auto 0;}
+	width:60%;padding-bottom:23%;margin:10% auto 0;}
 .home .homesubtitle{color:#00a0dd;font-size:20px;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;
 	margin : 10px}
-.home .gps {margin : 10px}
+.home .gps {margin : 10px;margin-top: 0;}
 .home .capteur {font-family:'INTERSTATE',Arial,Helvetica,sans-serif; font-size:18px;font-weight:lighter;
 	color:white;background-color:#090085;border-radius :5px;border:none;position:relative;z-index:10;display:inline-block;transition: all linear 0.5s;display:block;
 	width:70%;margin: 0 auto;padding:2%;}
@@ -271,14 +275,14 @@ input.scrollable-header {
 
 /*mesure*/
 .mesure {background-color:#00a0dd}
-.mesure .blocGps {background-color:#045cb8;padding: 0 2% 2%}
+.mesure .blocGps {background-color:#045cb8;padding: 0 2% 2%; font-size: 10px;}
 .mesure .blocMesure1{/*padding-bottom:52.5%*/}
 .mesure .blocMesure1 .flex-container1 {
     display: -webkit-flex;
     display: flex;
     width: 100%;
 }
-.mesure .mesureDeb, .mesure .mesureTemp{width:49.75%;float:left;margin-top:10px;margin-bottom:5px}
+.mesure .mesureDeb, .mesure .mesureTemp{width:49.75%;float:left;margin-top:5px;margin-bottom:0px}
 .mesure .mesureTemp{background:url('../img/icon-temp.png') 90% 50% no-repeat transparent;min-height:42px;}
 .mesure .border{width:0.5%;background-color:#66ceff;margin-top:10px;margin-bottom:5px}
 .mesure .blocMesure1 .desc{font-size:12px;color:#002c9e;font-family:'INTERSTATE',Arial,Helvetica,sans-serif; }
@@ -310,7 +314,7 @@ input.scrollable-header {
     -webkit-transition:all 1s;
 }
 
-.mesure .nbCoups1, .mesure .nbCoups2, .mesure .duree{width:33%;float:left;margin-top:10px;margin-bottom:5px;}
+.mesure .nbCoups1, .mesure .nbCoups2, .mesure .duree{width:33%;float:left;margin-top:5px;margin-bottom:0px;}
 .mesure .duree {background:url('../img/icon-duree.png') center center no-repeat transparent;background-size:contain;min-height:84px;margin-bottom:0;}
 
 .mesure .nbCoups1 .desc, .mesure .nbCoups2 .desc, .mesure .duree .desc{min-height:35px}
@@ -322,15 +326,15 @@ input.scrollable-header {
 .mesure .blocMesure2{background-color:#3c1d7c;padding-top:3%;position:relative;z-index:10;}
 .mesure .blocMesure2 .desc{color:#d4aeff;font-size:12px;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;text-transform:uppercase;margin:0 3%;}
 .mesure .blocMesure2 .value{background:url('../img/bg-radiation.png') center top repeat-x transparent;
-	color:white;font-size:10px;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;margin:3% 3% 0;padding-top:10px;padding-bottom:3%;}
-.mesure .blocMesure2 .value span{font-size:50px;display:block;font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;}
+	color:white;font-size:10px;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;/*margin:3% 3% 0;*/padding-top:10px;padding-bottom:1%;}
+.mesure .blocMesure2 .value span{font-size:50px;display:block;font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;line-height: 50px;}
 .mesure .blocMesure3{}
 .button-mesure{height:168px;width:168px;background-color:transparent;background-position:center center;background-size:contain;background-repeat:no-repeat;
 	margin:0 auto;transition: all 2s;z-index:1;background-image:url('../img/button-mesure.png');margin-top:-3%;position:relative;
 		font-size:24px;color:white;font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;padding-top:67px;}
 		
 /*mesure2*/
-.mesure2 {background-color:#00a0dd}
+.mesure2 {background-color:#00a0dd;    }
 .mesure2 .blocMesure1{padding-top:1.5%}
 .mesure2 .blocMesure1 .blocGps {position:absolute;top:10px;right:0}
 .mesure2 .blocMesure1 .bloc{padding:1.5% 0;margin:0 6%;border-top:#66ceff 1px solid;position:relative;text-align:left}
@@ -416,8 +420,9 @@ input.scrollable-header {
 	background:url('../img/icon-next.png') 97% 50% no-repeat transparent;width:100%;padding:0 3%;}
 .param .blocParam2 .ligne .desc{line-height:inherit;background:none;width:70%;display:inline-block;vertical-align:middle;}
 .param .blocParam2 .ligne .desc span{font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;}
-.param .blocParam2 .ligne .button{display:inline-block;width:29%;text-align:right;vertical-align:middle;}
-.param .blocParam2 .ligne .button-more{background:#00a0dd;display:inline-block;color:white;cursor:pointer;padding:2px 7px;border-radius:5px;}
+.param .blocParam2 .ligne .button{display:inline-block;width:28%;text-align:right;vertical-align:middle;}
+.param .blocParam2 .ligne .button-more{background:#00a0dd;display:inline-block;color:white;cursor:pointer;padding:2px 7px;border-radius:5px;font-size: 10px;
+    vertical-align: top;}
 .param .ligne2{padding: 1% 0;border-bottom:1px solid #66ceff;}
 .param .ligne2:last-child{border:none;}
 .param .ligne2 .desc{font-family:'INTERSTATE',Arial,Helvetica,sans-serif;font-size:12px;color:white; text-align:left;line-height:40px;
@@ -447,8 +452,8 @@ input.scrollable-header {
 .lignetitlelog .tension, .lignelog .tension{width:18%;border-right:white dotted 1px;;padding-left:10px;text-align:left;}
 .lignetitlelog .temperature, .lignelog .temperature{width:18%;padding-left:10px;text-align:left;}
 
-.param .ligne2.formconnect .desc{width:30%;display:inline-block;}
-.formconnect .input{width:68%;display:inline-block;}
+.param .ligne2.formconnect .desc{width:35%;display:inline-block;}
+.formconnect .input{width:63%;display:inline-block;}
 .param input{background:#9cf5ff;border:none;border-radius: 5px;padding:0 5px;color:#090085;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;
 	font-size:12px;width:100%;margin-left:1%;display: inline-block;box-sizing: border-box;}
 .param input::-webkit-input-placeholder

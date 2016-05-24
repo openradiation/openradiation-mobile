@@ -48,7 +48,10 @@
     ng-controller="MainController"
     >
     
-
+	<div class="cadreiphone" ng-class="{*'cadremobile':stylemobile()*}">iPhone</div>
+	<div class="cadreipad" ng-class="{*'cadremobile':stylemobile()*}">iPad</div>
+	<div class="cadreipad2" ng-class="{*'cadremobile':stylemobile()*}">iPad retina</div>
+    {{stylemobile}}
     <!-- Sidebars -->
     <div ng-include="'templates/sidebar.html'" 
             class="sidebar sidebar-left"></div>
