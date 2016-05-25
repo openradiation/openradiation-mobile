@@ -391,6 +391,7 @@ function testUser($scope,$location){
 			console.log(xhr_object.responseText);
 			alert(xhr_object.responseText);
 			rep = JSON.parse(xhr_object.responseText);
+			alert(rep);
 			console.log(rep);
 			if (rep.test)
 			{
