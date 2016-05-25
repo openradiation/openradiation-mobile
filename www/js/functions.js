@@ -426,6 +426,11 @@ function testUser($scope,$location){
 			}
 				
 		 }
+	  		else
+	  			 //error
+	  			 {
+	  			 	alertNotif("Erreur d'envoi =\n"+xhr_object.status,'Historique','Ok');
+	  			 }
 	  	 }
 	  	 return xhr_object.readyState;
 	}
