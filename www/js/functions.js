@@ -388,6 +388,7 @@ function testUser($scope,$location){
 	xhr_object.onreadystatechange = function() { 
 	  	 if(xhr_object.readyState == 4) {
 	  		alert('testUser5');
+	  		alert(JSON.stringify(args));
 			console.log(xhr_object.responseText);
 			alert(xhr_object.responseText);
 			rep = JSON.parse(xhr_object.responseText);
