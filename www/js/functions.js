@@ -228,6 +228,8 @@ function sendMeasures($scope,id){
 						
 						xhr_object.onreadystatechange = function() { 
 						  	 if(xhr_object.readyState == 4) {
+						  		 if (xhr_object.status == '200')
+						  		 {
 								console.log(xhr_object.responseText);
 								if (xhr_object.responseText == "")
 								{
@@ -251,6 +253,12 @@ function sendMeasures($scope,id){
 								{
 									alertNotif("Erreur d'envoi =\n"+xhr_object.responseText,'Historique','Ok');
 								}
+						  		}
+						  		 else
+						  			 //error
+						  			 {
+						  			 	alertNotif("Erreur d'envoi =\n"+xhr_object.status,'Historique','Ok');
+						  			 }
 									
 							 }
 							return xhr_object.readyState;
