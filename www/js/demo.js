@@ -503,6 +503,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		alert('doConnex');
 		console.log($scope.login);
 		console.log($scope.mdp);
+		alert('doConnex2');
 		testUser($scope,$location);
 //		$location.path('/paramConnex');
 
