@@ -500,6 +500,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	}
 	$scope.doConnex= function(clickEvent){
 		console.log('doConnex');
+		alert('doConnex');
 		console.log($scope.login);
 		console.log($scope.mdp);
 		testUser($scope,$location);
