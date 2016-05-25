@@ -231,9 +231,10 @@ function sendMeasures($scope,id){
 								console.log(xhr_object.responseText);
 								if (xhr_object.responseText == "")
 								{
+									alertNotif('Données envoyées','Historique','Ok');
 									db.transaction(function(tx) {
 										tx.executeSql('UPDATE "measures" SET sent = 1 WHERE id='+id+';',[], function(tx,res){
-											alertNotif('Données envoyées','Historique','Ok');
+											alertNotif('MAJ Données envoyées','Historique','Ok');
 											getMeasures($scope);
 											$scope.$apply();
 											
