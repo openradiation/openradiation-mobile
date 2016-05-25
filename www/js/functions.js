@@ -215,7 +215,8 @@ function sendMeasures($scope,id){
 						args.data.temperature = mesure.temperature;
 						
 						alertNotif('args 1','Historique','Ok');
-						if ($scope.connexion.connexion)
+						if ((typeof $scope.connexion.connexion !== 'undefined') && ($scope.connexion.connexion))
+							
 						{
 							args.data.userId = $scope.connexion.login;
 							args.data.userPwd = $scope.connexion.mdp;
