@@ -367,7 +367,6 @@ function getParam($scope,paramName)
 }
 
 function testUser($scope,$location){
-	alert('testUser');
 	args ={};
 	args.apiKey = "50adef3bdec466edc25f40c8fedccbce";
 	args.data = {};
@@ -379,7 +378,7 @@ function testUser($scope,$location){
 	args.data.userId = $scope.login;
 	args.data.userPwd = $scope.mdp;
 	args.data.reportContext = "test";
-	alert('testUser2');
+	
 	
 	xhr_object = new XMLHttpRequest(); 
 	uri="https://submit.open-radiation.net/measurements"; 
@@ -400,8 +399,10 @@ function testUser($scope,$location){
 				$scope.connexion.connexion = true;
 				$scope.connexion.login = $scope.login;
 				$scope.connexion.mdp = $scope.mdp;
+				alert('testUser3');
 				$scope.login = '';
 				$scope.mdp = '';
+				alert('testUser4');
 				$location.path('/param');
 				$scope.$apply();
 			}
