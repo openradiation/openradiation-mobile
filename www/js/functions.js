@@ -227,42 +227,41 @@ function sendMeasures($scope,id){
 						xhr_object.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 						
 						xhr_object.onreadystatechange = function() { 
-						  	 if(xhr_object.readyState == 4) {
-						  		 //if (xhr_object.status == '200')
-						  		 status = parseInt(xhr_object.status);
-						  		 if ((status>=200) && (status < 300))
-						  		 {
-								console.log(xhr_object.responseText);
-								if (xhr_object.responseText == "")
+							if(xhr_object.readyState == 4) {
+								status = parseInt(xhr_object.status);
+								if ((status>=200) && (status < 300))
 								{
-									db.transaction(function(tx) {
-										tx.executeSql('UPDATE "measures" SET sent = 1 WHERE id='+id+';',[], function(tx,res){
-											alertNotif('Données envoyées','Historique','Ok');
-											getMeasures($scope);
-											$scope.$apply();
-											
+									console.log(xhr_object.responseText);
+									if (xhr_object.responseText == "")
+									{
+										db.transaction(function(tx) {
+											tx.executeSql('UPDATE "measures" SET sent = 1 WHERE id='+id+';',[], function(tx,res){
+												alertNotif('Données envoyées','Historique','Ok');
+												getMeasures($scope);
+												$scope.$apply();
+												
+											},
+											function(tx,error){requestTableError(tx, error,"update measures");});
 										},
-										function(tx,error){requestTableError(tx, error,"update measures");});
-									},
-									function(tx,error){
-										transactionError(tx, error);
-									},
-									function(tx){
-									});
+										function(tx,error){
+											transactionError(tx, error);
+										},
+										function(tx){
+										});
+									}
+									else
+									//error	
+									{
+										alertNotif("Erreur d'envoi =\n"+xhr_object.responseText,'Historique','Ok');
+									}
 								}
 								else
-								//error	
+								//error
 								{
-									alertNotif("Erreur d'envoi =\n"+xhr_object.responseText,'Historique','Ok');
+									alertNotif("Erreur d'envoi =\n"+xhr_object.status,'Historique','Ok');
 								}
-						  		}
-						  		 else
-						  			 //error
-						  			 {
-						  			 	alertNotif("Erreur d'envoi =\n"+xhr_object.status,'Historique','Ok');
-						  			 }
-									
-							 }
+								
+							}
 							return xhr_object.readyState;
 						}
 						//xhr_object.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -393,44 +392,40 @@ function testUser($scope,$location){
 	uri="https://submit.open-radiation.net/measurements";
 	xhr_object.open("POST",uri, true);
 	xhr_object.setRequestHeader("Content-Type","application/json;charset=UTF-8");
-	alert(uri);
 	
 	xhr_object.onreadystatechange = function() { 
-	  	 if(xhr_object.readyState == 4) {
-	  		status = parseInt(xhr_object.status);
-	  		 if ((status>=200) && (status < 300))
-	  		 {
-			rep = JSON.parse(xhr_object.responseText);
-			alert(rep);
-			console.log(rep);
-			if (rep.test)
+		if(xhr_object.readyState == 4) {
+			status = parseInt(xhr_object.status);
+			if ((status>=200) && (status < 300))
 			{
-				saveParam('connexion',1,'');
-				saveParam('login',1,$scope.login);
-				saveParam('mdp',1,$scope.mdp);
-				$scope.connexion = {};
-				$scope.connexion.connexion = true;
-				$scope.connexion.login = $scope.login;
-				$scope.connexion.mdp = $scope.mdp;
-				alert('testUser3');
-				$scope.login = '';
-				$scope.mdp = '';
-				alert('testUser4');
-				$location.path('/param');
-				$scope.$apply();
+				rep = JSON.parse(xhr_object.responseText);
+				console.log(rep);
+				if (rep.test)
+				{
+					saveParam('connexion',1,'');
+					saveParam('login',1,$scope.login);
+					saveParam('mdp',1,$scope.mdp);
+					$scope.connexion = {};
+					$scope.connexion.connexion = true;
+					$scope.connexion.login = $scope.login;
+					$scope.connexion.mdp = $scope.mdp;
+					$scope.login = '';
+					$scope.mdp = '';
+					$location.path('/param');
+					$scope.$apply();
+				}
+				else
+				//error	
+				{
+					alertNotif("Erreur =\n"+xhr_object.responseText,'Authentification','Ok');
+				}
+			
 			}
-			else
-			//error	
-			{
-				alertNotif("Erreur =\n"+xhr_object.responseText,'Authentification','Ok');
-			}
-				
-		 }
 	  		else
-	  			 //error
-	  			 {
-	  			 	alertNotif("Erreur d'envoi =\n"+xhr_object.status,'Historique','Ok');
-	  			 }
+  			 //error
+  			 {
+  			 	alertNotif("Erreur d'envoi =\n"+xhr_object.status,'Historique','Ok');
+  			 }
 	  	 }
 	  	 return xhr_object.readyState;
 	}
