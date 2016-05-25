@@ -389,7 +389,7 @@ function testUser($scope,$location){
 	  	 if(xhr_object.readyState == 4) {
 	  		alert('testUser5');
 			console.log(xhr_object.responseText);
-			alert(rep);
+			alert(xhr_object.responseText);
 			rep = JSON.parse(xhr_object.responseText);
 			console.log(rep);
 			if (rep.test)
