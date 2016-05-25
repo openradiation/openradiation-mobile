@@ -228,7 +228,9 @@ function sendMeasures($scope,id){
 						
 						xhr_object.onreadystatechange = function() { 
 						  	 if(xhr_object.readyState == 4) {
-						  		 if (xhr_object.status == '200')
+						  		 //if (xhr_object.status == '200')
+						  		 status = parseInt(xhr_object.status);
+						  		 if ((status>=200) && (status < 300)
 						  		 {
 								console.log(xhr_object.responseText);
 								if (xhr_object.responseText == "")
