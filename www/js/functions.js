@@ -368,7 +368,7 @@ function getParam($scope,paramName)
 
 function testUser($scope,$location){
 	args ={};
-/*	args.apiKey = "50adef3bdec466edc25f40c8fedccbce";
+	/*args.apiKey = "50adef3bdec466edc25f40c8fedccbce";
 	args.data = {};
 	args.data.latitude = 48.23456;
 	args.data.longitude = 2.657723;
@@ -378,15 +378,18 @@ function testUser($scope,$location){
 	args.data.userId = $scope.login;
 	args.data.userPwd = $scope.mdp;
 	args.data.reportContext = "test";*/
-	
-	
+
 	xhr_object = new XMLHttpRequest();
 	uri="https://submit.open-radiation.net/measurements";
-	xhr_object.open("POST", uri, true);
-	//xhr_object.setRequestHeader("Content-Type","application/json;charset=UTF-8");
+	xhr_object.open("POST",uri, true);
+	xhr_object.setRequestHeader("Content-Type","application/json;charset=UTF-8");
 	
 	xhr_object.onreadystatechange = function() { 
 	  	 if(xhr_object.readyState == 4) {
+	  		 alert('rr');
+	  		 alert(xhr_object.responseURL);
+	  		 console.log(xhr_object);
+	  		 alert(JSON.stringify(xhr_object));
 	  		 alert(xhr_object.status);
 	  		alert('testUser5');
 	  		alert(JSON.stringify(args));
@@ -418,7 +421,7 @@ function testUser($scope,$location){
 			}
 				
 		 }
-		return xhr_object.readyState;
+	  	 return xhr_object.readyState;
 	}
 	//xhr_object.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	
@@ -426,7 +429,7 @@ function testUser($scope,$location){
 	console.log("ARGS");
 	console.log(JSON.stringify(args));
 	//xhr_object.send(args);
-	xhr_object.send(args);
+	xhr_object.send(JSON.stringify(args));
 }
 
 
