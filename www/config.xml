@@ -47,6 +47,8 @@
     <gap:plugin name="cordova-plugin-rfduino" source="npm" />
     <gap:plugin name="cordova-plugin-inappbrowser" source="npm" />
     <gap:plugin name="org.apache.cordova.geolocation" />
+    <gap:plugin name="cordova-plugin-whitelist" source="npm" />
+    
     <icon src="icon.png" />
     <icon gap:density="ldpi" gap:platform="android" src="res/icon/android/icon-36-ldpi.png" />
     <icon gap:density="mdpi" gap:platform="android" src="res/icon/android/icon-48-mdpi.png" />
