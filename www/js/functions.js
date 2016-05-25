@@ -214,14 +214,13 @@ function sendMeasures($scope,id){
 						
 						args.data.temperature = mesure.temperature;
 						
-						alertNotif('args 1','Historique','Ok');
 						if ((typeof $scope.connexion !== 'undefined') && (typeof $scope.connexion.connexion !== 'undefined') && ($scope.connexion.connexion))	
 						{
 							args.data.userId = $scope.connexion.login;
 							args.data.userPwd = $scope.connexion.mdp;
 							args.data.description = mesure.notes;
 						}
-						alertNotif('args 2','Historique','Ok');
+
 						xhr_object = new XMLHttpRequest(); 
 						uri="https://submit.open-radiation.net/measurements"; 
 						xhr_object.open("POST", uri, true);
@@ -232,10 +231,9 @@ function sendMeasures($scope,id){
 								console.log(xhr_object.responseText);
 								if (xhr_object.responseText == "")
 								{
-									alertNotif('Données envoyées','Historique','Ok');
 									db.transaction(function(tx) {
 										tx.executeSql('UPDATE "measures" SET sent = 1 WHERE id='+id+';',[], function(tx,res){
-											alertNotif('MAJ Données envoyées','Historique','Ok');
+											alertNotif('Données envoyées','Historique','Ok');
 											getMeasures($scope);
 											$scope.$apply();
 											
