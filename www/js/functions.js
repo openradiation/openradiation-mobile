@@ -380,10 +380,10 @@ function testUser($scope,$location){
 	args.data.reportContext = "test";*/
 	
 	
-	xhr_object = new XMLHttpRequest(); 
-	uri="https://submit.open-radiation.net/measurements"; 
+	xhr_object = new XMLHttpRequest();
+	uri="https://submit.open-radiation.net/measurements";
 	xhr_object.open("POST", uri, true);
-	xhr_object.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	xhr_object.setRequestHeader("Content-Type","application/json;charset=UTF-8");
 	
 	xhr_object.onreadystatechange = function() { 
 	  	 if(xhr_object.readyState == 4) {
