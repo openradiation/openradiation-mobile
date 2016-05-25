@@ -383,7 +383,7 @@ function testUser($scope,$location){
 	xhr_object = new XMLHttpRequest();
 	uri="https://submit.open-radiation.net/measurements";
 	xhr_object.open("POST", uri, true);
-	xhr_object.setRequestHeader("Content-Type","application/json;charset=UTF-8");
+	//xhr_object.setRequestHeader("Content-Type","application/json;charset=UTF-8");
 	
 	xhr_object.onreadystatechange = function() { 
 	  	 if(xhr_object.readyState == 4) {
@@ -426,7 +426,7 @@ function testUser($scope,$location){
 	console.log("ARGS");
 	console.log(JSON.stringify(args));
 	//xhr_object.send(args);
-	xhr_object.send(JSON.stringify(args));
+	xhr_object.send(args);
 }
 
 
