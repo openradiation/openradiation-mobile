@@ -214,13 +214,14 @@ function sendMeasures($scope,id){
 						
 						args.data.temperature = mesure.temperature;
 						
+						alertNotif('args 1','Historique','Ok');
 						if ($scope.connexion.connexion)
 						{
 							args.data.userId = $scope.connexion.login;
 							args.data.userPwd = $scope.connexion.mdp;
 							args.data.description = mesure.notes;
 						}
-						
+						alertNotif('args 2','Historique','Ok');
 						xhr_object = new XMLHttpRequest(); 
 						uri="https://submit.open-radiation.net/measurements"; 
 						xhr_object.open("POST", uri, true);
