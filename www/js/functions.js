@@ -397,15 +397,9 @@ function testUser($scope,$location){
 	
 	xhr_object.onreadystatechange = function() { 
 	  	 if(xhr_object.readyState == 4) {
-	  		 alert('rr');
-	  		 alert(xhr_object.responseURL);
-	  		 console.log(xhr_object);
-	  		 alert(JSON.stringify(xhr_object));
-	  		 alert(xhr_object.status);
-	  		alert('testUser5');
-	  		alert(JSON.stringify(args));
-			console.log(xhr_object.responseText);
-			alert(xhr_object.responseText);
+	  		status = parseInt(xhr_object.status);
+	  		 if ((status>=200) && (status < 300))
+	  		 {
 			rep = JSON.parse(xhr_object.responseText);
 			alert(rep);
 			console.log(rep);
@@ -432,6 +426,7 @@ function testUser($scope,$location){
 			}
 				
 		 }
+	  	 }
 	  	 return xhr_object.readyState;
 	}
 	//xhr_object.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
