@@ -368,16 +368,16 @@ function getParam($scope,paramName)
 
 function testUser($scope,$location){
 	args ={};
-	args.apiKey = "50adef3bdec466edc25f40c8fedccbce";
+/*	args.apiKey = "50adef3bdec466edc25f40c8fedccbce";
 	args.data = {};
-	args.data.latitude = "48.23456";
-	args.data.longitude = "2.657723";
-	args.data.value = "0.065";
+	args.data.latitude = 48.23456;
+	args.data.longitude = 2.657723;
+	args.data.value = 0.065;
 	args.data.reportUuid = "110e8422-e29b-11d4-a716-446655440001";
 	args.data.startTime = "2016-05-23T08:49:59.000Z";
 	args.data.userId = $scope.login;
 	args.data.userPwd = $scope.mdp;
-	args.data.reportContext = "test";
+	args.data.reportContext = "test";*/
 	
 	
 	xhr_object = new XMLHttpRequest(); 
