@@ -700,26 +700,29 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		
 		rfduino.write(data.buffer,function() {
 			//success
-			alertNotif(deviceId+" succes Write1 on","Success","Ok");
+			alertNotif(deviceId+" succes tension on","Success","Ok");
 
 			},
-		    function() {alertNotif(deviceId+" failure Write1 on","Failure","Ok")}
+		    function() {alertNotif(deviceId+" failure tension on","Failure","Ok")}
 		);
 	}
 	
 	$scope.doWrite4 = function(deviceId){
 		var data = new ArrayBuffer(3);
-		data[0]=0x10;
+		data[0]=0x11;
 		var tension = 380;
-		data[1]="0x0"+tension.toString(16);
-
+		//data[1]="0x"+tension.toString(16);
+		data[1]="0x00";
+		data[2]="0x00";
+		data[3]="0x00";
+		data[4]="0x00";
 		
 		rfduino.write(data.buffer,function() {
 			//success
-			alertNotif(deviceId+" succes Write1 on","Success","Ok");
+			alertNotif(deviceId+" succes tension off","Success","Ok");
 
 			},
-		    function() {alertNotif(deviceId+" failure Write1 on","Failure","Ok")}
+		    function() {alertNotif(deviceId+" failure tension off","Failure","Ok")}
 		);
 	}
 	
