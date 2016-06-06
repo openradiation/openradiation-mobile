@@ -712,8 +712,8 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		data[0]=0x11;
 		var tension = 380;
 		//data[1]="0x"+tension.toString(16);
-		data[1]="0x00";
-		data[2]="0x00";
+		data[1]="0x3F";
+		data[2]="0x80";
 		data[3]="0x00";
 		data[4]="0x00";
 		
