@@ -823,7 +823,7 @@ function getData(data) {
                 offset += 4;
                 break;
            
-                break;*/
+                break;
             
             
             default: break;
