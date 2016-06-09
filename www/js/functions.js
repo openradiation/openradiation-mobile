@@ -778,16 +778,23 @@ function getData(data) {
     var offset = 0;
     var buff = new Uint8Array(data);
     var dataView = new DataView(data);
-    var data2 = data.slice(4);
-    var dataView2 = new DataView(data2);
+    var hex = [];
+    
+    for (var i=offset ; i<offset+buff.length ; i++) {
+            hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
+        }
+	
     myData = {}
     
-     var type = dataView.getUint8(offset); 
-     offset++;
-	 myData[type] ={};
+    var type = dataView.getUint8(offset); 
+    offset++;
+    myData[type] ={};
+    
+     
+	
     while (offset < buff.length) {
         var logMsg = "> ";
-        var hex = [];
+        
         
         //var type = dataView.getUint8(offset); 
         //hex.push((buff[offset]>>>4).toString(16)+(buff[offset]&0xF).toString(16));
@@ -801,9 +808,7 @@ function getData(data) {
 //        myData[type]['data4'] = dataView.getUint8(offset+3); 
 //        myData[type]['data5'] = dataView.getUint8(offset+4); 
 
-       for (var i=offset ; i<offset+4 ; i++) {
-            hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
-        }
+      
         //offset += 4;
         offset++;
 	
@@ -832,11 +837,12 @@ function getData(data) {
         // Log data
         //logMsg += hex.join(" ").toUpperCase();
         //logger.log(logMsg);
-	myData[type]['lng'] = buff.length;
-	myData[type]['hex'] =hex.join(" ").toUpperCase();
-        return myData;
+	
+        //return myData;
        // return hex;
     }
+    myData[type]['lng'] = buff.length;
+    myData[type]['hex'] =hex.join(" ").toUpperCase();
     return myData;
 }
 
