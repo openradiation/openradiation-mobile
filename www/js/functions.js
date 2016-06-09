@@ -802,7 +802,7 @@ function getData(data) {
         
         //myData[type] ={};
         
-        myData[type][offset] = dataView.getUint8(offset); 
+      //  myData[type][offset] = dataView.getUint8(offset); 
 //        myData[type]['data2'] = dataView.getUint8(offset+1); 
 //        myData[type]['data3'] = dataView.getUint8(offset+2); 
 //        myData[type]['data4'] = dataView.getUint8(offset+3); 
@@ -841,7 +841,7 @@ function getData(data) {
         //return myData;
        // return hex;
     }
-    myData[type]['lng'] = buff.length;
+    //myData[type]['lng'] = buff.length;
     myData[type]['hex'] =hex.join(" ").toUpperCase();
     return myData;
 }
