@@ -787,9 +787,9 @@ function getData(data) {
     myData = {}
     
     var type = dataView.getUint8(offset);
-    var unix = Math.round(+new Date()/1000);
+    //var unix = Math.round(+new Date()/1000);
     offset++;
-    myData[unix] ={};
+    myData[type] ={};
     
      
 	
