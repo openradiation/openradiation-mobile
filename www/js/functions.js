@@ -789,6 +789,41 @@ function getData(data) {
     var type = dataView.getUint8(offset);
     //var unix = Math.round(+new Date()/1000);
     offset++;
+   // myData[type] ={};
+    
+     
+	
+    while (offset < buff.length) {
+        
+        switch (type) {
+        	case 0x05: // Yaw
+        		myData[type]['data'] = dataView.getUint8(offset);
+        		break;
+        	default: break;
+        }
+        
+        offset++;
+    }
+    //myData[type]['lng'] = buff.length;
+   // myData[type]['hex'] =hex.join(" ").toUpperCase();
+    return myData;
+}
+
+function getDataTest(data) {
+    var offset = 0;
+    var buff = new Uint8Array(data);
+    var dataView = new DataView(data);
+    var hex = [];
+    
+    for (var i=offset ; i<offset+buff.length ; i++) {
+            hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
+        }
+	
+    myData = {}
+    
+    var type = dataView.getUint8(offset);
+    //var unix = Math.round(+new Date()/1000);
+    offset++;
     myData[type] ={};
     
      

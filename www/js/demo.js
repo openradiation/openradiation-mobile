@@ -654,7 +654,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			$scope.length = data.byteLength;
 			var dataView = new DataView(data);
 			offset =0
-			var myData = getData(data)
+			var myData = getDataTest(data)
 			$scope.data = JSON.stringify(myData);
 			$scope.data2 = myData;
 			//$scope.data2 = arrayBufferToFloat(data);
