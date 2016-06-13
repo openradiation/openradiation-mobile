@@ -212,7 +212,8 @@ function sendMeasures($scope,id){
 						args.data.startTime = convertTimestampToTimezone(mesure.tsStart);
 						args.data.endTime = convertTimestampToTimezone(parseInt(mesure.tsStart)+parseInt(mesure.duration));
 						
-						args.data.temperature = mesure.temperature;
+						if (mesure.temperature != -1000)
+							args.data.temperature = mesure.temperature;
 						
 						if ((typeof $scope.connexion !== 'undefined') && (typeof $scope.connexion.connexion !== 'undefined') && ($scope.connexion.connexion))	
 						{

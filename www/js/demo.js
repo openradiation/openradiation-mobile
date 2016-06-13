@@ -336,7 +336,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		$scope.mesure.latitude = 0;
 		$scope.mesure.longitude = 0;
 		$scope.mesure.gps = 1;
-		$scope.mesure.temperature = 0;
+		$scope.mesure.temperature = -1000;
 		$scope.mesure.env = 0;
 		$scope.mesure.position = 0;
 		$scope.mesure.tags = "tags";
@@ -377,9 +377,16 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 								$scope.mesure.log[mytimestamp] = {}
 								$scope.mesure.log[mytimestamp].timestamp = mytimestamp;
 								$scope.mesure.log[mytimestamp].coup = myData[key].data;
+								
 								$scope.$apply();
 								doProgressBar($scope.mesure.total);
 								//i++;
+							}
+							if (key == "6")
+							{
+								$scope.mesure.temperature = myData[key].data;
+								
+								$scope.$apply();
 							}
 						}
 					}
@@ -642,7 +649,9 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 							alertNotif(device.uuid+" connecté","Success","Ok");
 							//$scope.connectedDeviceId = device.uuid;
 							$scope.connectedDevice = device;
+							$scope.setTension($scope.connectedDevice.uuid);
 							$scope.$apply();
+							
 
 						},
 					    function() {alertNotif(deviceId+" non connecté","Failure","Ok")}
@@ -690,6 +699,27 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	}
 	//set_tension
 	$scope.doWrite3 = function(deviceId){
+		/*var data = new ArrayBuffer(3);
+		data[0]=0x11;
+		var tension = 380;
+		//data[1]="0x"+tension.toString(16);
+		data[1]="0x43";
+		data[2]="0xBE";
+		data[3]="0x00";
+		data[4]="0x00";
+		
+		rfduino.write(data.buffer,function() {
+			//success
+			alertNotif(deviceId+" succes tension on","Success","Ok");
+
+			},
+		    function() {alertNotif(deviceId+" failure tension on","Failure","Ok")}
+		);*/
+		$scope.setTension(deviceId);
+	}
+	
+	//set_tension
+	$scope.setTension = function(deviceId){
 		var data = new ArrayBuffer(3);
 		data[0]=0x11;
 		var tension = 380;
