@@ -797,6 +797,7 @@ function getData(data) {
         
         switch (type) {
         	case 0x05: // Yaw
+        		myData[type] ={};
         		myData[type]['data'] = dataView.getUint8(offset);
         		break;
         	default: break;
