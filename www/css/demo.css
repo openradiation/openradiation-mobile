@@ -331,7 +331,8 @@ input.scrollable-header {
 .mesure .blocMesure3{}
 .button-mesure{height:168px;width:168px;background-color:transparent;background-position:center center;background-size:contain;background-repeat:no-repeat;
 	margin:0 auto;transition: all 2s;z-index:1;background-image:url('../img/button-mesure.png');margin-top:-3%;position:relative;
-		font-size:24px;color:white;font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;padding-top:67px;}
+		font-size:24px;color:white;font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;border:0;}
+.button-mesure[disabled]{opacity:0.5}
 		
 /*mesure2*/
 .mesure2 {background-color:#00a0dd;    }

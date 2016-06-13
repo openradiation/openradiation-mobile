@@ -49,7 +49,7 @@
 			<div class="value"><span ng-if="mesure.total>10">{{mesure.valeurnsv}}</span><span ng-if="mesure.total<=10">NaN</span> nSv/h</div>
     	</div>
     	<div class="blocMesure3">
-   			<div ng-click="endMesure($event)" class="button-mesure">FIN</div>
+   			<button ng-click="endMesure($event)" class="button-mesure" ng-disabled="mesure.total<30">FIN</button>
     	</div>
     	
     
