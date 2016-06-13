@@ -631,6 +631,8 @@ function fakeMesure($scope){
 			$scope.mesure.log[mytimestamp].coup = nbcoup;
 			$scope.$apply();
 			
+			doProgressBar($scope.mesure.total);
+			
 			//(function (value) {
 				//setTimeout(function (){doProgressBar($scope.mesure.total)}, $scope.mesure.total*(60/max)*1000);
 			//})(i);
@@ -652,10 +654,13 @@ function fakeMesure($scope){
 function doProgressBar(mycount){
 	var max = 30;
 	var percent = mycount*100/max;
-	$('.mesure .blocMesure1 .fiability .progressbar2').width( percent+'%');
-	if (percent>33)
+	if (percent<100)
+		$('.mesure .blocMesure1 .fiability .progressbar2').width( percent+'%');
+	else 
+		$('.mesure .blocMesure1 .fiability .progressbar2').width('100%');
+	if (percent>50)
 		$('.mesure .blocMesure1 .fiability .progressbar2').css("background-color","#dfe700");
-	if (percent>66)
+	if (percent>100)
 		$('.mesure .blocMesure1 .fiability .progressbar2').css("background-color","#aee700");
 }
 

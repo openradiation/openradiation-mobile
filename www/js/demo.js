@@ -378,6 +378,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 								$scope.mesure.log[mytimestamp].timestamp = mytimestamp;
 								$scope.mesure.log[mytimestamp].coup = myData[key].data;
 								$scope.$apply();
+								doProgressBar($scope.mesure.total);
 								//i++;
 							}
 						}
@@ -800,9 +801,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
   });
 
   $rootScope.$on('$routeChangeSuccess', function(){
-	  console.log('$routeChangeSuccess');
 	  var locationPath = $location.path();
-	  console.log(locationPath);
 	 	if (locationPath != "/")
 	 	{
 	 		$scope.top="1";
