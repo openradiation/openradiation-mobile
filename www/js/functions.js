@@ -786,17 +786,18 @@ function getData(data) {
 	
     myData = {}
     
-    var type = dataView.getUint8(offset);
+    //var type = dataView.getUint8(offset);
     //var unix = Math.round(+new Date()/1000);
-    offset++;
+   // offset++;
    // myData[type] ={};
     
      
 	
     while (offset < buff.length) {
-        
+    	var type = dataView.getUint8(offset);
         switch (type) {
         	case 0x05: // Yaw
+        		offset++;
         		myData[type] ={};
         		myData[type]['data'] = dataView.getUint8(offset);
         		break;
