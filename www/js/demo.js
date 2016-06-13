@@ -268,7 +268,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			   		 	{
 			   		 		$scope.top="1";
 			   		 	}
-		   			 	if (locationPath == "/mesurePrise" || locationPath == "/mesureRecap")
+		   			 	if (locationPath == "/mesurePrise" || locationPath == "/mesureRecap" || locationPath == "/mesureExpert")
 			   		 	{
 			   		 		$scope.menu="0";
 			   		 	}
@@ -800,6 +800,21 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
   });
 
   $rootScope.$on('$routeChangeSuccess', function(){
+	  console.log('$routeChangeSuccess');
+	  var locationPath = $location.path();
+	  console.log(locationPath);
+	 	if (locationPath != "/")
+	 	{
+	 		$scope.top="1";
+	 	}
+	 	else
+	 		$scope.top="0";
+	 	if (locationPath == "/mesurePrise" || locationPath == "/mesureRecap" || locationPath == "/mesureExpert")
+	 	{
+	 		$scope.menu="0";
+	 	}
+	 	else
+	 		$scope.menu="1";
     $rootScope.loading = false;
   });
   
