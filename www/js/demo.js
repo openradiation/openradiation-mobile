@@ -359,7 +359,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		}
 		else
 		{
-			
+			$scope.setTension($scope.connectedDevice.uuid);
 			//var i = 0;
 			rfduino.onData(function(data){
 				if ($scope.mesure.encours)
