@@ -649,7 +649,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 							alertNotif(device.uuid+" connecté","Success","Ok");
 							//$scope.connectedDeviceId = device.uuid;
 							$scope.connectedDevice = device;
-							$scope.setTension($scope.connectedDevice.uuid);
+							//$scope.setTension($scope.connectedDevice.uuid);
 							$scope.$apply();
 							
 
