@@ -673,6 +673,85 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
 	}
 	
+	$scope.doDataTension1 = function(deviceId){
+		$scope.setTension(deviceId);
+		rfduino.onData(function(data){
+			$scope.length = data.byteLength;
+			var dataView = new DataView(data);
+			offset =0
+			var myData = getDataTest(data)
+			$scope.data = JSON.stringify(myData);
+			$scope.data2 = myData;
+			//$scope.data2 = arrayBufferToFloat(data);
+			$scope.$apply();
+		},
+		function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
+	}
+	$scope.doDataTension2 = function(deviceId){
+		$scope.setTension(deviceId);
+		setTimeout(function(){
+			rfduino.onData(function(data){
+				$scope.length = data.byteLength;
+				var dataView = new DataView(data);
+				offset =0
+				var myData = getDataTest(data)
+				$scope.data = JSON.stringify(myData);
+				$scope.data2 = myData;
+				//$scope.data2 = arrayBufferToFloat(data);
+				$scope.$apply();
+			},
+			function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
+		},500);
+	}
+	$scope.doDataTension3 = function(deviceId){
+		$scope.setTension(deviceId);
+		setTimeout(function(){
+			rfduino.onData(function(data){
+				$scope.length = data.byteLength;
+				var dataView = new DataView(data);
+				offset =0
+				var myData = getDataTest(data)
+				$scope.data = JSON.stringify(myData);
+				$scope.data2 = myData;
+				//$scope.data2 = arrayBufferToFloat(data);
+				$scope.$apply();
+			},
+			function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
+		},1000);
+	}
+	$scope.doDataTension4 = function(deviceId){
+		$scope.setTension(deviceId);
+		setTimeout(function(){
+			rfduino.onData(function(data){
+				$scope.length = data.byteLength;
+				var dataView = new DataView(data);
+				offset =0
+				var myData = getDataTest(data)
+				$scope.data = JSON.stringify(myData);
+				$scope.data2 = myData;
+				//$scope.data2 = arrayBufferToFloat(data);
+				$scope.$apply();
+			},
+			function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
+		},2000);
+	}
+	$scope.doDataTension5 = function(deviceId){
+		$scope.setTension(deviceId);
+		setTimeout(function(){
+			rfduino.onData(function(data){
+				$scope.length = data.byteLength;
+				var dataView = new DataView(data);
+				offset =0
+				var myData = getDataTest(data)
+				$scope.data = JSON.stringify(myData);
+				$scope.data2 = myData;
+				//$scope.data2 = arrayBufferToFloat(data);
+				$scope.$apply();
+			},
+			function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
+		},5000);
+	}
+	
 	$scope.doWrite1 = function(deviceId){
 		var data = new ArrayBuffer(2);
 		data[0]=0x01;

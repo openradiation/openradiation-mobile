@@ -31,7 +31,12 @@
 			<div class="gps" ng-click="doWrite2(connectedDevice.uuid)" style="margin-top:10px">Write del (on)</div>
 			<div class="gps" ng-click="doDisconnect(connectedDevice.uuid)" style="margin-top:10px">Disconnect</div>
 			<div class="gps" ng-click="doWrite3(connectedDevice.uuid)" style="margin-top:10px">Write set_tension (on)</div>
-			<div class="gps" ng-click="doWrite4(connectedDevice.uuid)" style="margin-top:10px">Write set_tension (off)</div>
+			<div class="gps" ng-click="doWrite4(connectedDevice.uuid)" style="margin-top:10px">Write set_tension (off)</div><br/>
+			<div class="gps" ng-click="doDataTension1(connectedDevice.uuid)" style="margin-top:10px">SetTension + Data (0s)</div>
+			<div class="gps" ng-click="doDataTension2(connectedDevice.uuid)" style="margin-top:10px">SetTension + Data (0.5s)</div>
+			<div class="gps" ng-click="doDataTension3(connectedDevice.uuid)" style="margin-top:10px">SetTension + Data (1s)</div>
+			<div class="gps" ng-click="doDataTension4(connectedDevice.uuid)" style="margin-top:10px">SetTension + Data (2s)</div>
+			<div class="gps" ng-click="doDataTension5(connectedDevice.uuid)" style="margin-top:10px">SetTension + Data (5s)</div>
 			<!-- <div class="gps" ng-click="doWrite5(connectedDevice.uuid)" style="margin-top:10px">Write set_tension (on test 3)</div> -->
 			<br/><br/>
 			Type : {{type}}
