@@ -782,10 +782,10 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		data[0]=0x11;
 		var tension = 380;
 		//data[1]="0x"+tension.toString(16);
-		data[1]="0x43";
-		data[2]="0xBE";
-		data[3]="0x00";
-		data[4]="0x00";
+		data[1]=0x43;
+		data[2]=0xBE;
+		data[3]=0x00;
+		data[4]=0x00;
 		
 		rfduino.write(data.buffer,function() {
 			//success
