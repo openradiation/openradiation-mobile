@@ -799,7 +799,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	
 	//set_tension
 	$scope.setTension = function(deviceId){
-		var data = new ArrayBuffer(3);
+		var data = new ArrayBuffer(5);
 		data[0]=0x11;
 		var tension = 380;
 		//data[1]="0x"+tension.toString(16);
