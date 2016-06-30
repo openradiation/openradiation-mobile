@@ -780,6 +780,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	$scope.doWrite3 = function(deviceId){
 		var data = new ArrayBuffer(5);
 		data[0]=0x11;
+		data[0]=0x88;
 		var tension = 380;
 		//data[1]="0x"+tension.toString(16);
 		data[1]=0x43;
