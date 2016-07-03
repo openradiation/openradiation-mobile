@@ -857,7 +857,7 @@ function getDataTest(data) {
         //offset += 4;
         offset++;
 	
-       switch (type) {
+       switch (datatype) {
             case OUT_PACKET_COUNT: 
                 offset++;
         	myData[datatype] ={};
