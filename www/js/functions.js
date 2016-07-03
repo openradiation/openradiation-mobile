@@ -830,33 +830,8 @@ function getDataTest(data) {
     myData = {}
     
     var datatype = dataView.getUint8(offset);
-    //var unix = Math.round(+new Date()/1000);
-    offset++;
-    
-    myData[datatype] ={};
-    
-     
 	
     while (offset < buff.length) {
-        var logMsg = "> ";
-        
-        
-        //var type = dataView.getUint8(offset); 
-        //hex.push((buff[offset]>>>4).toString(16)+(buff[offset]&0xF).toString(16));
-        //offset++;
-        
-        //myData[type] ={};
-        
-      //  myData[type][offset] = dataView.getUint8(offset); 
-//        myData[type]['data2'] = dataView.getUint8(offset+1); 
-//        myData[type]['data3'] = dataView.getUint8(offset+2); 
-//        myData[type]['data4'] = dataView.getUint8(offset+3); 
-//        myData[type]['data5'] = dataView.getUint8(offset+4); 
-
-      
-        //offset += 4;
-        offset++;
-	
        switch (datatype) {
             case OUT_PACKET_COUNT: 
                 offset++;
