@@ -877,7 +877,7 @@ function getDataTest(data) {
             default:
 		offset++;
 	    break;
-        }*/
+        }
         
         // Log data
         //logMsg += hex.join(" ").toUpperCase();
