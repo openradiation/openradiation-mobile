@@ -819,6 +819,7 @@ function getData(data) {
 
 function getDataTest(data) {
     var offset = 0;
+    var datatype = 0;
     var buff = new Uint8Array(data);
     var dataView = new DataView(data);
     var hex = [];
@@ -829,10 +830,10 @@ function getDataTest(data) {
     myData = {}
 	
     while (offset < buff.length) {
-	var datatype = dataView.getUint8(offset);
+	datatype = dataView.getUint8(offset);
 	offset++;
 	switch (datatype) {
-            case OUT_PACKET_COUNT: 
+            case OUT_PACKET_COUNT,OUT_PACKET_DEBUG_BYTE1,OUT_PACKET_DEBUG_BYTE2: 
         	myData[datatype] ={};
         	myData[datatype]['data'] = dataView.getUint8(offset);
 		offset++;
@@ -859,7 +860,7 @@ function getDataTest(data) {
        // return hex;
     }
     //myData[type]['lng'] = buff.length;
-    myData[datatype]['hex'] =hex.join(" ").toUpperCase();
+    myData['hex']['hex'] =hex.join(" ").toUpperCase();
     return myData;
 }
 
