@@ -860,6 +860,7 @@ function getDataTest(data) {
        // return hex;
     }
     //myData[type]['lng'] = buff.length;
+    myData['hex']={};
     myData['hex']['hex'] =hex.join(" ").toUpperCase();
     return myData;
 }
