@@ -829,10 +829,11 @@ function getDataTest(data) {
 	
     myData = {}
     
-    var type = dataView.getUint8(offset);
+    var datatype = dataView.getUint8(offset);
     //var unix = Math.round(+new Date()/1000);
     offset++;
-    myData[type] ={};
+    
+    myData[datatype] ={};
     
      
 	
@@ -856,14 +857,12 @@ function getDataTest(data) {
         //offset += 4;
         offset++;
 	
-      /*  switch (type) {
-            case 0x01: // Yaw
-                compass.value = dataView.getFloat32(offset, true);
-                for (var i=offset ; i<offset+4 ; i++) {
-                    hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
-                }
-                offset += 4;
-                break;
+       switch (type) {
+            case OUT_PACKET_COUNT: 
+                offset++;
+        	myData[datatype] ={};
+        	myData[datatype]['data'] = dataView.getUint8(offset);
+        	break;
             case 0x02: // Pitch
                 horizon.pitch = dataView.getFloat32(offset, true);
                 for (var i=offset ; i<offset+4 ; i++) {
@@ -875,7 +874,9 @@ function getDataTest(data) {
                 break;
             
             
-            default: break;
+            default:
+		offset++;
+	    break;
         }*/
         
         // Log data
@@ -886,7 +887,7 @@ function getDataTest(data) {
        // return hex;
     }
     //myData[type]['lng'] = buff.length;
-    myData[type]['hex'] =hex.join(" ").toUpperCase();
+    myData[datatype]['hex'] =hex.join(" ").toUpperCase();
     return myData;
 }
 

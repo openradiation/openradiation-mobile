@@ -649,7 +649,8 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 							alertNotif(device.uuid+" connecté","Success","Ok");
 							//$scope.connectedDeviceId = device.uuid;
 							$scope.connectedDevice = device;
-							//$scope.setTension($scope.connectedDevice.uuid);
+							$scope.doData;
+							$scope.setTension($scope.connectedDevice.uuid);
 							$scope.$apply();
 							
 
@@ -800,7 +801,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	
 	//set_tension
 	$scope.setTension = function(deviceId){
-		var data = new ArrayBuffer(5);
+		var data = new Uint8Array(5);
 		data[0]=0x11;
 		var tension = 380;
 		//data[1]="0x"+tension.toString(16);
@@ -811,7 +812,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		
 		rfduino.write(data.buffer,function() {
 			//success
-			alertNotif(deviceId+" succes tension on","Success","Ok");
+			//alertNotif(deviceId+" succes tension on","Success","Ok");
 
 			},
 		    function() {alertNotif(deviceId+" failure tension on","Failure","Ok")}
