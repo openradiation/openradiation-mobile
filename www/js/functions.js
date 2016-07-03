@@ -833,11 +833,13 @@ function getDataTest(data) {
 	datatype = dataView.getUint8(offset);
 	offset++;
 	switch (datatype) {
-            case OUT_PACKET_COUNT,OUT_PACKET_DEBUG_BYTE1,OUT_PACKET_DEBUG_BYTE2: 
+            case OUT_PACKET_COUNT:
+	    case OUT_PACKET_DEBUG_BYTE1:
+	    case OUT_PACKET_DEBUG_BYTE2: 
         	myData[datatype] ={};
         	myData[datatype]['data'] = dataView.getUint8(offset);
 		offset++;
-		alertNotif("cas paquet","Success","Ok");
+		//alertNotif("cas paquet","Success","Ok");
         	break;
             case 0x02: // Pitch
                 horizon.pitch = dataView.getFloat32(offset, true);
