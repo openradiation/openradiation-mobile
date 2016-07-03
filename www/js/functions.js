@@ -826,17 +826,17 @@ function getDataTest(data) {
     for (var i=offset ; i<offset+buff.length ; i++) {
             hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
         }
-	
     myData = {}
-    
-    var datatype = dataView.getUint8(offset);
 	
     while (offset < buff.length) {
-       switch (datatype) {
+	var datatype = dataView.getUint8(offset);
+	offset++;
+	switch (datatype) {
             case OUT_PACKET_COUNT: 
-                offset++;
         	myData[datatype] ={};
         	myData[datatype]['data'] = dataView.getUint8(offset);
+		offset++;
+		alertNotif("cas paquet","Success","Ok");
         	break;
             case 0x02: // Pitch
                 horizon.pitch = dataView.getFloat32(offset, true);
@@ -845,9 +845,6 @@ function getDataTest(data) {
                 }
                 offset += 4;
                 break;
-           
-                break;
-            
             
             default:
 		offset++;
