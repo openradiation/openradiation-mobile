@@ -772,7 +772,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		//data[1]="0x"+tension.toString(16);
 		data[4]=0x43;
 		//data[3]=0xBE;
-		data[3]=0xBF;
+		data[3]=0xBE;
 		data[2]=0x80;
 		data[1]=0x00;
 		
@@ -814,7 +814,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		var tension = 380;
 		//data[1]="0x"+tension.toString(16);
 		data[4]="0x43";
-		data[3]="0xBF";//data[3]="0xBE";
+		data[3]="0xBE";//data[3]="0xBE";
 		data[2]="0x80";
 		data[1]="0x00";
 		
