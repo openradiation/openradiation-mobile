@@ -714,7 +714,6 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 				var myData = getDataTest(data)
 				$scope.data = JSON.stringify(myData);
 				$scope.data2 = myData;
-				//$scope.data2 = arrayBufferToFloat(data);
 				$scope.$apply();
 			},
 			function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
@@ -771,10 +770,11 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		//data[0]=0x88;
 		var tension = 380;
 		//data[1]="0x"+tension.toString(16);
-		data[1]="0x43";
-		data[2]="0xBE";
-		data[3]=0x00;
-		data[4]=0x00;
+		data[4]=0x43;
+		//data[3]=0xBE;
+		data[3]=0xBF;
+		data[2]=0x80;
+		data[1]=0x00;
 		
 		rfduino.write(data.buffer,function() {
 			//success
@@ -814,8 +814,8 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		var tension = 380;
 		//data[1]="0x"+tension.toString(16);
 		data[4]="0x43";
-		data[3]="0xBE";
-		data[2]="0x00";
+		data[3]="0xBF";//data[3]="0xBE";
+		data[2]="0x80";
 		data[1]="0x00";
 		
 		rfduino.write(data.buffer,function() {

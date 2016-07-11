@@ -860,7 +860,7 @@ function getDataTest(data) {
                 tension_courante = dataView.getFloat32(offset, true);
                 myData[datatype] ={};
         	myData[datatype]['data'] = tension_courante;
-		 myData['b1'] ={};
+		/* myData['b1'] ={};
         	myData['b1']['data'] = dataView.getUint8(offset);
                  myData['b2'] ={};
         	myData['b2']['data'] = dataView.getUint8(offset+1);
@@ -868,7 +868,7 @@ function getDataTest(data) {
         	myData['b3']['data'] = dataView.getUint8(offset+2);
 		 myData['b4'] ={};
         	myData['b4']['data'] = dataView.getUint8(offset+3);
-		
+		*/
 		offset += 4;
                 break;
             
