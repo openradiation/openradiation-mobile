@@ -779,7 +779,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	}
 	//set_tension
 	$scope.doWrite3 = function(deviceId){
-		var data = new Uint8Array(3);
+		/*var data = new Uint8Array(3);
 		data[0]=0x5;
 		//data[0]=0x88;
 		var tension = 380;
@@ -795,8 +795,9 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 
 			},
 		    function() {alertNotif(deviceId+" failure tension on","Failure","Ok")}
-		);
-	//	$scope.setTension(deviceId);
+		);*/
+		$scope.setTension(deviceId);
+		
 	}
 	
 	//set_tension
@@ -816,41 +817,6 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 
 			},
 		    function() {alertNotif(deviceId+" failure tension on","Failure","Ok")}
-		);
-	}
-	
-	$scope.doWrite4 = function(deviceId){
-		var data = new ArrayBuffer(5);
-		data[0]=0x11;
-		var tension = 380;
-		//data[1]="0x"+tension.toString(16);
-		data[1]="0x3F";
-		data[2]="0x80";
-		data[3]="0x00";
-		data[4]="0x00";
-		
-		rfduino.write(data.buffer,function() {
-			//success
-			alertNotif(deviceId+" succes tension off","Success","Ok");
-
-			},
-		    function() {alertNotif(deviceId+" failure tension off","Failure","Ok")}
-		);
-	}
-	
-	$scope.doWrite5 = function(deviceId){
-		var data = new ArrayBuffer(3);
-		data[0]=0x10;
-		var tension = 380;
-		
-		data[2]="0x"+tension.toString(16);
-
-		rfduino.write(data.buffer,function() {
-			//success
-			alertNotif(deviceId+" succes Write1 on","Success","Ok");
-
-			},
-		    function() {alertNotif(deviceId+" failure Write1 on","Failure","Ok")}
 		);
 	}
 	

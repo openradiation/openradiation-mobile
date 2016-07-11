@@ -782,6 +782,7 @@ var arrayBufferToFloat = function (ab) {
 
 function getData(data) {
     var offset = 0;
+    var datatype = 0;
     var buff = new Uint8Array(data);
     var dataView = new DataView(data);
     var hex = [];
@@ -789,31 +790,37 @@ function getData(data) {
     for (var i=offset ; i<offset+buff.length ; i++) {
             hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
         }
-	
     myData = {}
-    
-    //var type = dataView.getUint8(offset);
-    //var unix = Math.round(+new Date()/1000);
-   // offset++;
-   // myData[type] ={};
-    
-     
 	
     while (offset < buff.length) {
-    	var type = dataView.getUint8(offset);
-        switch (type) {
-        	case 0x05: // Yaw
-        		offset++;
-        		myData[type] ={};
-        		myData[type]['data'] = dataView.getUint8(offset);
-        		break;
-        	default: break;
+	datatype = dataView.getUint8(offset);
+	offset++;
+	switch (datatype) {
+            case OUT_PACKET_COUNT:
+	    case OUT_PACKET_DEBUG_BYTE1:
+	    case OUT_PACKET_DEBUG_BYTE2: 
+        	myData[datatype] ={};
+        	myData[datatype]['data'] = dataView.getUint8(offset);
+		offset++;
+		//alertNotif("cas paquet","Success","Ok");
+        	break;
+            case 0x02: // Pitch
+                horizon.pitch = dataView.getFloat32(offset, true);
+                for (var i=offset ; i<offset+4 ; i++) {
+                    hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
+                }
+                offset += 4;
+                break;
+            
+            default:
+		offset++;
+	    break;
         }
         
-        offset++;
     }
     //myData[type]['lng'] = buff.length;
-   // myData[type]['hex'] =hex.join(" ").toUpperCase();
+    myData['hex']={};
+    myData['hex']['hex'] =hex.join(" ").toUpperCase();
     return myData;
 }
 

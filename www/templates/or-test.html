@@ -1,5 +1,4 @@
 
-
 	<div class="scrollable param">
 	<div class="title">
 		<div class="back" ng-click="goHome($event)" ></div>Test
@@ -17,7 +16,7 @@
 				<div class="desc">
 					{{device.name}}
 					<div>{{device.uuid}}</div>
-				</div>
+				</div>	
 				<div class="connect">
 					<div ng-if="connectedDevice.uuid==device.uuid">Connecté</div>
 					<div ng-if="connectedDevice.uuid!=device.uuid" class="button" ng-click="doConnect(device)">Se connecter</div>
@@ -31,8 +30,6 @@
 			<div class="gps" ng-click="doWrite2(connectedDevice.uuid)" style="margin-top:10px">Write del (on)</div>
 			<div class="gps" ng-click="doDisconnect(connectedDevice.uuid)" style="margin-top:10px">Disconnect</div>
 			<div class="gps" ng-click="doWrite3(connectedDevice.uuid)" style="margin-top:10px">Write set_tension (on)</div>
-			<div class="gps" ng-click="doWrite4(connectedDevice.uuid)" style="margin-top:10px">Write set_tension (off)</div><br/>
-			<div class="gps" ng-click="doDataTension1(connectedDevice.uuid)" style="margin-top:10px">SetTension + Data (0s)</div>
 
 			<!-- <div class="gps" ng-click="doWrite5(connectedDevice.uuid)" style="margin-top:10px">Write set_tension (on test 3)</div> -->
 			<br/>
