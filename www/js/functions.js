@@ -848,11 +848,18 @@ function getDataTest(data) {
 		offset++;
 		//alertNotif("cas paquet","Success","Ok");
         	break;
-            case 0x02: // Pitch
+            case 0xA2: // Pitch 
                 horizon.pitch = dataView.getFloat32(offset, true);
                 for (var i=offset ; i<offset+4 ; i++) {
                     hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
                 }
+                offset += 4;
+                break;
+            
+	    case OUT_PACKET_ACTUAL_TENSION : // Pitch 
+                tension_courante = dataView.getFloat32(offset, true);
+                myData[datatype] ={};
+        	myData[datatype]['data'] = tension_courante;
                 offset += 4;
                 break;
             
