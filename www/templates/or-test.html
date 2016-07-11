@@ -25,13 +25,11 @@
 		</div>
 		
 		<div ng-if="connectedDevice.uuid!=0">
-			<div class="gps" ng-click="doData(connectedDevice.uuid)" style="margin-top:10px">Data</div>
-			<div class="gps" ng-click="doWrite1(connectedDevice.uuid)" style="margin-top:10px">Write del (off)</div>
-			<div class="gps" ng-click="doWrite2(connectedDevice.uuid)" style="margin-top:10px">tension 380</div><br>
+			
 			<div class="gps" ng-click="doDisconnect(connectedDevice.uuid)" style="margin-top:10px">Disconnect</div>
-			<div class="gps" ng-click="doDataTension3(connectedDevice.uuid)" style="margin-top:10px">Write set_tension (on)+get datta</div>
+			<br><br>
+			<div class="gps" ng-click="doDataTension3(connectedDevice.uuid)" style="margin-top:10px">Write set_tension 381 + get data</div>
 
-			<!-- <div class="gps" ng-click="doWrite5(connectedDevice.uuid)" style="margin-top:10px">Write set_tension (on test 3)</div> -->
 			<br/>
 			<pre>
 			{{data2}}
