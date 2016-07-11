@@ -802,9 +802,8 @@ function getData(data) {
         	myData[datatype] ={};
         	myData[datatype]['data'] = dataView.getUint8(offset);
 		offset++;
-		//alertNotif("cas paquet","Success","Ok");
         	break;
-            case 0x02: // Pitch
+            case 0xA2: // Pitch 
                 horizon.pitch = dataView.getFloat32(offset, true);
                 for (var i=offset ; i<offset+4 ; i++) {
                     hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
@@ -812,11 +811,17 @@ function getData(data) {
                 offset += 4;
                 break;
             
+	    case OUT_PACKET_ACTUAL_TENSION : // Pitch 
+                tension_courante = dataView.getFloat32(offset, true);
+                myData[datatype] ={};
+        	myData[datatype]['data'] = tension_courante;
+		offset += 4;
+                break;
+            
             default:
 		offset++;
 	    break;
         }
-        
     }
     //myData[type]['lng'] = buff.length;
     myData['hex']={};
@@ -846,7 +851,6 @@ function getDataTest(data) {
         	myData[datatype] ={};
         	myData[datatype]['data'] = dataView.getUint8(offset);
 		offset++;
-		//alertNotif("cas paquet","Success","Ok");
         	break;
             case 0xA2: // Pitch 
                 horizon.pitch = dataView.getFloat32(offset, true);
@@ -860,15 +864,6 @@ function getDataTest(data) {
                 tension_courante = dataView.getFloat32(offset, true);
                 myData[datatype] ={};
         	myData[datatype]['data'] = tension_courante;
-		/* myData['b1'] ={};
-        	myData['b1']['data'] = dataView.getUint8(offset);
-                 myData['b2'] ={};
-        	myData['b2']['data'] = dataView.getUint8(offset+1);
-		 myData['b3'] ={};
-        	myData['b3']['data'] = dataView.getUint8(offset+2);
-		 myData['b4'] ={};
-        	myData['b4']['data'] = dataView.getUint8(offset+3);
-		*/
 		offset += 4;
                 break;
             
@@ -876,13 +871,6 @@ function getDataTest(data) {
 		offset++;
 	    break;
         }
-        
-        // Log data
-        //logMsg += hex.join(" ").toUpperCase();
-        //logger.log(logMsg);
-	
-        //return myData;
-       // return hex;
     }
     //myData[type]['lng'] = buff.length;
     myData['hex']={};
