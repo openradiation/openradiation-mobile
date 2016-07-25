@@ -792,7 +792,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		
 		rfduino.write(data.buffer,function() {
 			//success
-			alertNotif(deviceId+" succes send info","Success","Ok");
+			//alertNotif(deviceId+" succes send info","Success","Ok");
 
 			},
 		    function() {alertNotif(deviceId+" failure send info","Failure","Ok")}

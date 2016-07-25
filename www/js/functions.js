@@ -872,11 +872,13 @@ function getDataTest(data) {
 	    case OUT_PACKET_SENSOR_TYPE : 
                 stringlen = dataView.getUint8(offset);
 		offset++;
-		for (var i=offset ; i<offset+buff.length ; i++) {
-			hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
+		myData[datatype] ={};
+        	myData[datatype]['data'] = '';
+		
+		for (var i=offset ; i<offset+stringlen ; i++) {
+			myData[datatype]['data'] .=  buff[i];
 			 }
-                myData[datatype] ={};
-        	myData[datatype]['data'] = tension_courante;
+
 		offset += stringlen;
                 break;
             
