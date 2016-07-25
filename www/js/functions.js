@@ -832,6 +832,7 @@ function getData(data) {
 function getDataTest(data) {
     var offset = 0;
     var datatype = 0;
+    var stringlen = 0;
     var buff = new Uint8Array(data);
     var dataView = new DataView(data);
     var hex = [];
@@ -852,7 +853,7 @@ function getDataTest(data) {
         	myData[datatype]['data'] = dataView.getUint8(offset);
 		offset++;
         	break;
-            case 0xA2: // Pitch 
+            case 0xA2: 
                 horizon.pitch = dataView.getFloat32(offset, true);
                 for (var i=offset ; i<offset+4 ; i++) {
                     hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
@@ -860,13 +861,26 @@ function getDataTest(data) {
                 offset += 4;
                 break;
             
-	    case OUT_PACKET_ACTUAL_TENSION : // Pitch 
+	    case OUT_PACKET_ACTUAL_TENSION :
+	    case OUT_PACKET_PWM_DUTY_CYCLE : 
                 tension_courante = dataView.getFloat32(offset, true);
                 myData[datatype] ={};
         	myData[datatype]['data'] = tension_courante;
 		offset += 4;
                 break;
             
+	    case OUT_PACKET_SENSOR_TYPE : 
+                stringlen = dataView.getUint8(offset);
+		offset++;
+		for (var i=offset ; i<offset+buff.length ; i++) {
+			hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
+			 }
+                myData[datatype] ={};
+        	myData[datatype]['data'] = tension_courante;
+		offset += stringlen;
+                break;
+            
+	    
             default:
 		offset++;
 	    break;

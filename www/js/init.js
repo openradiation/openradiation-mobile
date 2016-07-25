@@ -24,6 +24,13 @@ var OUT_PACKET_DEBUG_FLOAT2             = 0xF2;
 var OUT_PACKET_DEBUG_STRING1            = 0xE1;
 var OUT_PACKET_DEBUG_STRING2            = 0xE2;
 
+
+var IN_PACKET_STEALTH                   = 0x01;
+var IN_PACKET_SILENT                    = 0x02;
+var IN_PACKET_SET_TENSION               = 0x11;
+var IN_PACKET_SEND_INFO                 = 0x12;
+
+
 //test si chrome
 var isMobile = true;
 if (window.chrome)
