@@ -869,7 +869,9 @@ function getDataTest(data) {
 		offset += 4;
                 break;
             
-	    case OUT_PACKET_SENSOR_TYPE : 
+	    case OUT_PACKET_SENSOR_TYPE :
+	    case OUT_PACKET_TUBE_TYPE :
+	    case OUT_PACKET_VERSION : 
                 stringlen = dataView.getUint8(offset);
 		offset++;
 		myData[datatype] ={};
