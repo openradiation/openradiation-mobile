@@ -876,7 +876,7 @@ function getDataTest(data) {
         	myData[datatype]['data'] = '';
 		
 		for (var i=offset ; i<offset+stringlen ; i++) {
-			myData[datatype]['data'] .=  buff[i];
+			myData[datatype]['data'] +=  buff[i];
 			 }
 
 		offset += stringlen;
