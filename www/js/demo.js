@@ -798,7 +798,19 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		    function() {alertNotif(deviceId+" failure send info","Failure","Ok")}
 		);
 	}
-	
+	$scope.doWriteChangeSilence = function(deviceId){
+		var data = new Uint8Array(2);
+		data[0]=IN_PACKET_SILENT;
+		data[1]=0x01;
+		
+		rfduino.write(data.buffer,function() {
+			//success
+			//alertNotif(deviceId+" succes send info","Success","Ok");
+
+			},
+		    function() {alertNotif(deviceId+" failure send silence","Failure","Ok")}
+		);
+	}
 	//set_tension
 	$scope.doWrite3 = function(deviceId){
 		/*var data = new Uint8Array(3);
