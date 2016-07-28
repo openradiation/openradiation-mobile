@@ -574,7 +574,9 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 				offset =0
 				var myData = getDataTest(data)
 				$scope.data = JSON.stringify(myData);
-				$scope.data2 = myData;
+				$scope.dataDebug[$scope.iData] = myData;
+				$scope.iData++;
+				//$scope.data2 = myData;
 				//$scope.data2 = arrayBufferToFloat(data);
 				$scope.$apply();
 			},
@@ -591,7 +593,9 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 				offset =0
 				var myData = getDataTest(data)
 				$scope.data = JSON.stringify(myData);
-				$scope.data2 = myData;
+				$scope.dataDebug[$scope.iData] = myData;
+				$scope.iData++;
+				//$scope.data2 = myData;
 				$scope.$apply();
 			},
 			function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
@@ -606,7 +610,9 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 				offset =0
 				var myData = getDataTest(data)
 				$scope.data = JSON.stringify(myData);
-				$scope.data2 = myData;
+				$scope.dataDebug[$scope.iData] = myData;
+				$scope.iData++;
+				//$scope.data2 = myData;
 				//$scope.data2 = arrayBufferToFloat(data);
 				$scope.$apply();
 			},
@@ -622,7 +628,9 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 				offset =0
 				var myData = getDataTest(data)
 				$scope.data = JSON.stringify(myData);
-				$scope.data2 = myData;
+				$scope.dataDebug[$scope.iData] = myData;
+				$scope.iData++;
+				//$scope.data2 = myData;
 				//$scope.data2 = arrayBufferToFloat(data);
 				$scope.$apply();
 			},
