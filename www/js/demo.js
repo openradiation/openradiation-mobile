@@ -341,6 +341,14 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			else
 			{
 				doOnData(rfduino,$scope);
+				//TODO : test
+				rfduino.write(data.buffer,function() {
+					//success
+					//alertNotif(deviceId+" succes send info","Success","Ok");
+
+					},
+				    function() {alertNotif(deviceId+" failure send info","Failure","Ok")}
+				);
 				//ble.isEnabled(
 				/*rfduino.isEnabled(
 						function() {doBluetoothDeviceSearch($scope);},
