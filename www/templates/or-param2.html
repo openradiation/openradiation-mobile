@@ -14,9 +14,10 @@
 				<div class="desc">
 					{{device.name}}
 					<div>{{device.uuid}}</div>
+					<div class="paramcapt" ><div ng-if="connectedDevice.uuid==device.uuid" ng-click="doParam3($event)"></div></div>
 				</div>
 				<div class="connect">
-					<div ng-if="connectedDevice.uuid==device.uuid">Connecté</div>
+					<div ng-if="connectedDevice.uuid==device.uuid" class="button" ng-click="doDisconnect(connectedDevice.uuid)">Se déconnecter</div>
 					<div ng-if="connectedDevice.uuid!=device.uuid" class="button" ng-click="doConnect(device)">Se connecter</div>
 				</div>
 			</div>
