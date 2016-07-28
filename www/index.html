@@ -25,20 +25,14 @@
       this.require = function () { return _async; };
       //this.exports = {};
     </script>
-    
-
-
-  	
 
     <script src="cordova.js"></script>
-    
     <script src='dist/js/jquery-2.1.1.min.js'></script>
     
     <script src="js/init.js"></script>
     <script src="js/demo.js"></script> 
     <script src="js/functions.js"></script> 
-    
-    
+
   </head>
 
   <body 
@@ -46,21 +40,13 @@
     ng-controller="MainController"
     >
     
-	<!--<div class="cadreiphone" ng-class="{*'cadremobile':stylemobile()*}">iPhone</div>
-	<div class="cadreipad" ng-class="{*'cadremobile':stylemobile()*}">iPad</div>
-	<div class="cadreipad2" ng-class="{*'cadremobile':stylemobile()*}">iPad retina</div>
-    {{stylemobile}}-->
     <!-- Sidebars -->
     <div ng-include="'templates/sidebar.html'" 
             class="sidebar sidebar-left"></div>
-   <!--    <div ng-include="'templates/sidebar.html'" 
-            ui-track-as-search-param='true'
-            class="sidebar sidebar-left"></div>-->
 
-     <div ng-include="'templates/sidebarRight.html'" 
+     <div ng-include="'templates/or-sidebar-right.html'" 
             class="sidebar sidebar-right"></div>
 
-   <!-- <div class="app" ng-swipe-right='Ui.turnOn("uiSidebarLeft")' ng-swipe-left='Ui.turnOff("uiSidebarLeft")'>-->
 	<div class="app">
       <!-- Navbars -->
 
@@ -74,15 +60,13 @@
       </div>
       </div>
 
-<div ng-if="menu==1">
+	<div ng-if="menu==1">
       <div class="navbar navbar-app navbar-absolute-bottom">
         <div class="btn-group justified">
           <a ng-click="goHome($event)" class="btn btn-navbar mesure"></a>
           <a ng-click="doHisto($event)"  class="btn btn-navbar histo"></a>
           <a ng-click="doParam($event)" class="btn btn-navbar param"></a>
           <a ng-click="doCarto($event)" class="btn btn-navbar carto"></a>
-           <!--<a ui-toggle="uiSidebarLeft" class="btn btn-navbar carto"></a>-->
-         <!-- <a ng-click="doMore($event)"  class="btn btn-navbar more"></a>-->
          <a ui-toggle="uiSidebarRight" class="btn btn-navbar more"></a>
         </div>
       </div>
