@@ -541,7 +541,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			offset =0
 			var myData = getDataTest(data)
 			$scope.data = JSON.stringify(myData);
-			$scope.dataDebug[String($scope.iData)] = myData;
+			$scope.dataDebug[convertIdDebug($scope.iData)] = myData;
 			$scope.iData++;
 			//$scope.data2 = arrayBufferToFloat(data);
 			$scope.$apply();
@@ -557,7 +557,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			offset =0
 			var myData = getDataTest(data)
 			$scope.data = JSON.stringify(myData);
-			$scope.dataDebug[String($scope.iData)] = myData;
+			$scope.dataDebug[convertIdDebug($scope.iData)] = myData;
 			$scope.iData++;
 			//$scope.data2 = myData;
 			//$scope.data2 = arrayBufferToFloat(data);
@@ -574,7 +574,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 				offset =0
 				var myData = getDataTest(data)
 				$scope.data = JSON.stringify(myData);
-				$scope.dataDebug[String($scope.iData)] = myData;
+				$scope.dataDebug[convertIdDebug($scope.iData)] = myData;
 				$scope.iData++;
 				//$scope.data2 = myData;
 				//$scope.data2 = arrayBufferToFloat(data);
@@ -593,7 +593,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 				offset =0
 				var myData = getDataTest(data)
 				$scope.data = JSON.stringify(myData);
-				$scope.dataDebug[String($scope.iData)] = myData;
+				$scope.dataDebug[convertIdDebug($scope.iData)] = myData;
 				$scope.iData++;
 				//$scope.data2 = myData;
 				$scope.$apply();
@@ -610,7 +610,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 				offset =0
 				var myData = getDataTest(data)
 				$scope.data = JSON.stringify(myData);
-				$scope.dataDebug[String($scope.iData)] = myData;
+				$scope.dataDebug[convertIdDebug($scope.iData)] = myData;
 				$scope.iData++;
 				//$scope.data2 = myData;
 				//$scope.data2 = arrayBufferToFloat(data);
@@ -628,7 +628,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 				offset =0
 				var myData = getDataTest(data)
 				$scope.data = JSON.stringify(myData);
-				$scope.dataDebug[String($scope.iData)] = myData;
+				$scope.dataDebug[convertIdDebug($scope.iData)] = myData;
 				$scope.iData++;
 				//$scope.data2 = myData;
 				//$scope.data2 = arrayBufferToFloat(data);

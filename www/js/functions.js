@@ -800,6 +800,11 @@ function convertWithZero(m)
  return ('0' + (parseInt(m))).slice(-2);
 }
 
+function convertIdDebug(m)
+{
+ return ('0' + (parseInt(m))).slice(-9);
+}
+
 function resetMesureForm($scope){
 	$scope.modelDuration = "";
 	$scope.modelRadiation = "";
