@@ -752,12 +752,21 @@ function doOnData(rfduino,$scope)
 {
 	rfduino.onData(function(data){
 		
-		//mesure
-		if ($scope.mesure.encours)
+		
 			var myData = getData(data)
 			for (var key in myData) {
 				if (myData.hasOwnProperty(key)) {
-					if (key == "5")
+					
+					//version
+					if (key == "2")
+						$scope.version = myData[key].data;
+					
+					//sensor_type
+					if (key == "3")
+						$scope.sensorType = myData[key].data;
+					
+					//count
+					if (key == "5" && $scope.mesure.encours)
 					{
 						var mytimestamp = parseInt(new Date().getTime()/1000);
 						var duration = mytimestamp - $scope.mesure.timedeb
@@ -773,12 +782,17 @@ function doOnData(rfduino,$scope)
 						doProgressBar($scope.mesure.total);
 						//i++;
 					}
-					if (key == "6")
+					
+					//temperature
+					if (key == "6" && $scope.mesure.encours)
 					{
 						$scope.mesure.temperature = myData[key].data;
-						
 						$scope.$apply();
 					}
+					
+					//tube_type
+					if (key == "16")
+						$scope.tubeType = myData[key].data;
 				}
 			}
 	},
