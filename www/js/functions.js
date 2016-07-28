@@ -802,7 +802,7 @@ function convertWithZero(m)
 
 function convertIdDebug(m)
 {
- return ('0' + (parseInt(m))).slice(-9);
+ return ('000000000' + (parseInt(m))).slice(-9);
 }
 
 function resetMesureForm($scope){
