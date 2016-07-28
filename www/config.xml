@@ -48,6 +48,7 @@
     <gap:plugin name="cordova-plugin-rfduino" source="npm" />
     <gap:plugin name="cordova-plugin-inappbrowser" source="npm" />
    <!-- <gap:plugin name="org.apache.cordova.geolocation" />-->
+   	<gap:plugin name="cordova-plugin-geolocation" source="npm" />
     <gap:plugin name="cordova-plugin-whitelist" source="npm" />
     
     <icon src="icon.png" />
