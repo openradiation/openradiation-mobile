@@ -25,7 +25,7 @@ var app = angular.module('MobileAngularUiExamples', [
 // 
 app.config(function($routeProvider) {
   $routeProvider.when('/',              {templateUrl: 'templates/or-home.html', reloadOnSearch: false});
-  $routeProvider.when('/scroll',        {templateUrl: 'templates/scroll.html', reloadOnSearch: false}); 
+  /*$routeProvider.when('/scroll',        {templateUrl: 'templates/scroll.html', reloadOnSearch: false}); 
   $routeProvider.when('/toggle',        {templateUrl: 'templates/toggle.html', reloadOnSearch: false}); 
   $routeProvider.when('/tabs',          {templateUrl: 'templates/tabs.html', reloadOnSearch: false}); 
   $routeProvider.when('/accordion',     {templateUrl: 'templates/accordion.html', reloadOnSearch: false}); 
@@ -35,7 +35,7 @@ app.config(function($routeProvider) {
   $routeProvider.when('/drag',          {templateUrl: 'templates/drag.html', reloadOnSearch: false});
   $routeProvider.when('/carousel',      {templateUrl: 'templates/carousel.html', reloadOnSearch: false});
   $routeProvider.when('/useok',      	{templateUrl: 'templates/useok.html', reloadOnSearch: false});
-  $routeProvider.when('/tab-charts',    {templateUrl: 'templates/tab-charts.html', reloadOnSearch: false});
+  $routeProvider.when('/tab-charts',    {templateUrl: 'templates/tab-charts.html', reloadOnSearch: false});*/
   
   $routeProvider.when('/mesurePrise',    {templateUrl: 'templates/or-mesure-prise.html', reloadOnSearch: false});
   $routeProvider.when('/mesureRecap',    {templateUrl: 'templates/or-mesure-recap.html', reloadOnSearch: false});
@@ -60,7 +60,7 @@ app.config(function($routeProvider) {
 //
 // `$drag` example: drag to dismiss
 //
-app.directive('dragToDismiss', function($drag, $parse, $timeout){
+/*app.directive('dragToDismiss', function($drag, $parse, $timeout){
   return {
     restrict: 'A',
     compile: function(elem, attrs) {
@@ -102,13 +102,13 @@ app.directive('dragToDismiss', function($drag, $parse, $timeout){
       };
     }
   };
-});
+});*/
 
 //
 // Another `$drag` usage example: this is how you could create 
 // a touch enabled "deck of cards" carousel. See `carousel.html` for markup.
 //
-app.directive('carousel', function(){
+/*app.directive('carousel', function(){
   return {
     restrict: 'C',
     scope: {},
@@ -133,9 +133,9 @@ app.directive('carousel', function(){
       };
     }
   };
-});
+});*/
 
-app.directive('carouselItem', function($drag) {
+/*app.directive('carouselItem', function($drag) {
   return {
     restrict: 'C',
     require: '^carousel',
@@ -203,12 +203,12 @@ app.directive('carouselItem', function($drag) {
       });
     }
   };
-});
+});*/
 
-function alertDismissed() {
+/*function alertDismissed() {
     // do something
 	//alert('rr');
-}
+}*/
 
 app.controller('MainController', function(cordovaReady,$rootScope, $scope,$location,$route){
 	
@@ -303,11 +303,6 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 				    function() {alertNotif("Bluetooth is *not* enabled","Attention","Ok")}
 				);
 		}
-			
-	
-	
-	
-	
 		
 	}
 	
@@ -935,12 +930,12 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
   
  
   // Fake text i used here and there.
-  $scope.lorem = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel explicabo, aliquid eaque soluta nihil eligendi adipisci error, illum corrupti nam fuga omnis quod quaerat mollitia expedita impedit dolores ipsam. Obcaecati.';
+  //$scope.lorem = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel explicabo, aliquid eaque soluta nihil eligendi adipisci error, illum corrupti nam fuga omnis quod quaerat mollitia expedita impedit dolores ipsam. Obcaecati.';
 
   // 
   // 'Scroll' screen
   // 
-  var scrollItems = [];
+ /* var scrollItems = [];
 
   for (var i=1; i<=100; i++) {
     scrollItems.push('Item ' + i);
@@ -950,12 +945,12 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 
   $scope.bottomReached = function() {
     alert('Congrats you scrolled to the end of the list!');
-  }
+  }*/
 
   // 
   // Right Sidebar
   // 
-  $scope.chatUsers = [
+ /* $scope.chatUsers = [
     { name: 'Carlos  Flowers', online: true },
     { name: 'Byron Taylor', online: true },
     { name: 'Jana  Terry', online: true },
@@ -981,13 +976,13 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
     { name: 'Joe Barker', online: false },
     { name: 'Lee Norman', online: false },
     { name: 'Ebony Rice', online: false }
-  ];
+  ];*/
 
   //
   // 'Forms' screen
   //  
-  $scope.rememberMe = true;
-  $scope.email = 'me@example.com';
+/*  $scope.rememberMe = true;
+  $scope.email = 'me@example.com';*/
   
 /*  $scope.login = function() {
     alert('You submitted the login form');
@@ -996,7 +991,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
   // 
   // 'Drag' screen
   // 
-  $scope.notices = [];
+ /* $scope.notices = [];
   
   for (var j = 0; j < 10; j++) {
     $scope.notices.push({icon: 'envelope', message: 'Notice ' + (j + 1) });
@@ -1007,7 +1002,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
     if (index > -1) {
       $scope.notices.splice(index, 1);
     }
-  };
+  };*/
   
   /// openradiation
  // $("#deviceList").touchend(connect);

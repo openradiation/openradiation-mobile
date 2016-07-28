@@ -265,12 +265,10 @@ function sendMeasures($scope,id){
 							}
 							return xhr_object.readyState;
 						}
-						//xhr_object.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 						
 						//  Envoi de la requête
 						console.log("ARGS");
 						console.log(JSON.stringify(args));
-						//xhr_object.send(args);
 						xhr_object.send(JSON.stringify(args));
 					}					
 				},
@@ -430,74 +428,15 @@ function testUser($scope,$location){
 	  	 }
 	  	 return xhr_object.readyState;
 	}
-	//xhr_object.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	
 	//  Envoi de la requête
 	console.log("ARGS");
 	console.log(JSON.stringify(args));
-	//xhr_object.send(args);
 	xhr_object.send(JSON.stringify(args));
 }
 
 
 
-////////////////////
-//Functions after_init
-function after_init(){
-	console.log('after_init');
-	if (MC_UseOk)
-	{
-		console.log('MC_UseOk');
-		do_MC_UseOk();
-	}
-}
-
-////////////////////
-//Functions MC_UseOk
-
-function do_MC_UseOk(callback,$location,$route){
-	/*$location.path('/scroll'); 
-	 console.log('loc3 '+$location);
-	 console.log('loc3 '+JSON.stringify($location) );*/
-	 
-	
-	//callback(null,"MC_UseOk_false");
-	
-	if (MC_UseOk)
-	{
-		console.log('MC_UseOk');
-		db.transaction(function(tx) 
-		{
-			(function ($location) { 
-				//tx.executeSql('INSERT INTO "reponses" (sid, reponse) VALUES ("useOK","'+resultForm+'");
-				tx.executeSql('SELECT * FROM "reponses" where sid = "useOK" AND reponse = "ok";', [], function(tx, res) {
-					console.log(res);
-					var dataset = res.rows.length;
-		            if(dataset<1)
-					//if (res.rows.item(0).cnt < 1)
-					{
-						console.log('MC_UseOk:false');
-						//Change path
-						$location.path('/scroll'); 
-						$route.reload();
-						//callback(true,"MC_UseOk_false");
-						//return false;
-					}
-					else
-					{
-						console.log('MC_UseOk:true');
-						callback(null,"MC_UseOk_true");
-						return true;
-					}
-						
-				});//fin select
-			})($location);
-		}); //fin db.transaction
-	}
-	else
-		//ok
-		callback(null,"no_MC_UseOk");
-}
 
 testi = 0;
 function test(callback,value){
@@ -509,76 +448,7 @@ function test(callback,value){
 	callback(null, 'test');
 }
 
-/*function refreshDevices() {
-	console.log("refreshDevices")
-    $("#deviceList").html('');
-	if (typeof window.rfduino === 'object') 
-		rfduino.discover(5, onDiscoverDevice, onRfError);
-	else
-	{
-		var listItem = document.createElement('li');
-	    var html =  '<a><b>Device Name</b><br/>' +
-	                'RSSI: Device RSSI&nbsp;|&nbsp;' +
-	                'Advertising: Device advertising<br/>' +
-	                'Device UUID</a>';
 
-	    listItem.setAttribute('uuid', 'Device UUID');
-	    listItem.setAttribute('deviceName', 'Device Name');
-	    listItem.setAttribute('tube', 'Device advertising');
-	    listItem.innerHTML = html;
-	    $("#deviceList").append(listItem);
-	}
-}
-
-function onDiscoverDevice(device) {
-    var listItem = document.createElement('li');
-    var html =  '<a><b>' + device.name + '</b><br/>' +
-                'RSSI: ' + device.rssi + '&nbsp;|&nbsp;' +
-                'Advertising: ' + device.advertising + '<br/>' +
-                device.uuid+'</a>';
-
-    listItem.setAttribute('uuid', device.uuid);
-    listItem.setAttribute('deviceName', device.name);
-    listItem.setAttribute('tube', device.advertising);
-    listItem.innerHTML = html;
-    $("#deviceList").append(listItem);
-    $("#deviceList").on('touchend',connect);
-}
-
-function onRfError(error) {
-   /* if (error.toUpperCase() === "DISCONNECTED") {
-        alert("La connexion au compteur est perdue.");
-       // app.disconnect();
-    } else {
-        alert(error.toUpperCase());
-    }*/
-	//alert("Error device.");
-/*}
-
-function onData(data){
-	console.log('onData');
-	//alert('onData');
-	$('#paquetData').html(data.toString());
-}
-
-function connect(e){
-	alert('connect');
-    var target = e.target;
-    var uuid = e.target.getAttribute('uuid');
-    if (uuid==null)
-        uuid = e.target.parentNode.getAttribute('uuid');
-    var onConnect = function() {
-    	alert('onConnect');
-        deviceName = target.getAttribute("deviceName");
-        deviceUUID = uuid;
-        tubeType = target.getAttribute("tube");
-        rfduino.onData(onData, onRfError);
-        //showPageChoixTypeMesure();
-        count = 0;
-    };
-
-    rfduino.connect(uuid, onConnect, onRfError);
-}*/
 
 
 /////////////////////////////////////////////////////////////////////
@@ -615,41 +485,23 @@ function fakeSearch($scope){
 	setTimeout(function (){$scope.state = "4";console.log("state4");$scope.$apply();}, 6000);
 }
 function fakeMesure($scope){
-	/*var max = 30;
-	for (i=1;i<(max+1);i++)
-	{*/
-		if ($scope.mesure.encours)
-		{
-			var mytimestamp = parseInt(new Date().getTime()/1000);
-			var duration = mytimestamp - $scope.mesure.timedeb
-			var nbcoup = Math.floor(Math.random()*2);
-			$scope.mesure.duration = duration;
-			$scope.mesure.total += nbcoup;
-			$scope.mesure.moymin = ($scope.mesure.total / duration * 60).toFixed(2);
-			$scope.mesure.valeurnsv = convertNanosievert($scope.mesure.total,duration);
-			$scope.mesure.log[mytimestamp] = {}
-			$scope.mesure.log[mytimestamp].timestamp = mytimestamp;
-			$scope.mesure.log[mytimestamp].coup = nbcoup;
-			$scope.$apply();
-			
-			doProgressBar($scope.mesure.total);
-			
-			//(function (value) {
-				//setTimeout(function (){doProgressBar($scope.mesure.total)}, $scope.mesure.total*(60/max)*1000);
-			//})(i);
-			setTimeout(function (){fakeMesure($scope)},1000);
-		}
-	//}
-
-	/*var max = 30;
-	for (i=1;i<(max+1);i++)
+	if ($scope.mesure.encours)
 	{
-		(function (value) {
-			setTimeout(function (){doProgressBar(value)}, value*(60/max)*1000);
-		})(i);
-	}*/
-	
-	
+		var mytimestamp = parseInt(new Date().getTime()/1000);
+		var duration = mytimestamp - $scope.mesure.timedeb
+		var nbcoup = Math.floor(Math.random()*2);
+		$scope.mesure.duration = duration;
+		$scope.mesure.total += nbcoup;
+		$scope.mesure.moymin = ($scope.mesure.total / duration * 60).toFixed(2);
+		$scope.mesure.valeurnsv = convertNanosievert($scope.mesure.total,duration);
+		$scope.mesure.log[mytimestamp] = {}
+		$scope.mesure.log[mytimestamp].timestamp = mytimestamp;
+		$scope.mesure.log[mytimestamp].coup = nbcoup;
+		$scope.$apply();
+		
+		doProgressBar($scope.mesure.total);
+		setTimeout(function (){fakeMesure($scope)},1000);
+	}
 }
 
 function doProgressBar(mycount){
