@@ -194,7 +194,8 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		{
 			$scope.setTension($scope.connectedDevice.uuid);
 			//var i = 0;
-			rfduino.onData(function(data){
+			doOnData(rfduino,$scope);
+			/*rfduino.onData(function(data){
 				if ($scope.mesure.encours)
 					var myData = getData(data)
 					for (var key in myData) {
@@ -224,7 +225,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 						}
 					}
 			},
-			function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
+			function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});*/
 			
 		}
 	}

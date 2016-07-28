@@ -748,6 +748,43 @@ function getDataTest(data) {
     return myData;
 }
 
+function doOnData(rfduino,$scope)
+{
+	rfduino.onData(function(data){
+		
+		//mesure
+		if ($scope.mesure.encours)
+			var myData = getData(data)
+			for (var key in myData) {
+				if (myData.hasOwnProperty(key)) {
+					if (key == "5")
+					{
+						var mytimestamp = parseInt(new Date().getTime()/1000);
+						var duration = mytimestamp - $scope.mesure.timedeb
+						$scope.mesure.duration = duration;
+						$scope.mesure.total += myData[key].data;
+						$scope.mesure.moymin = ($scope.mesure.total / duration * 60).toFixed(2);
+						$scope.mesure.valeurnsv = convertNanosievert($scope.mesure.total,duration);
+						$scope.mesure.log[mytimestamp] = {}
+						$scope.mesure.log[mytimestamp].timestamp = mytimestamp;
+						$scope.mesure.log[mytimestamp].coup = myData[key].data;
+						
+						$scope.$apply();
+						doProgressBar($scope.mesure.total);
+						//i++;
+					}
+					if (key == "6")
+					{
+						$scope.mesure.temperature = myData[key].data;
+						
+						$scope.$apply();
+					}
+				}
+			}
+	},
+	function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
+}
+
 function convertNanosievert(nbCoup,duration)
 {
 	valueNSV = (nbCoup * 0.9) / (duration * 60) ;
