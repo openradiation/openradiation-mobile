@@ -68,6 +68,9 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	$scope.login = '';
 	$scope.mdp='';
 	
+	$scope.mesure={};
+	$scope.mesure.encours = false;
+	
 	$scope.iData = 0;
 	$scope.dataDebug = {};
 	
