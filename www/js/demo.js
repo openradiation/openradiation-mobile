@@ -344,9 +344,11 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 				//TODO : test
 				var data = new Uint8Array(1);
 				data[0]=IN_PACKET_SEND_INFO;
+				alertNotif("send info","np","Ok");
 				rfduino.write(data.buffer,function() {
 					//success
 					//alertNotif(deviceId+" succes send info","Success","Ok");
+					alertNotif("pk succes send info","Success","Ok");
 
 					},
 				    function() {alertNotif(deviceId+" failure send info","Failure","Ok")}
