@@ -632,7 +632,7 @@ var arrayBufferToFloat = function (ab) {
     return a[0];
 };
 
-function getData(data) {
+/*function getData(data) {
     var offset = 0;
     var datatype = 0;
     var buff = new Uint8Array(data);
@@ -679,9 +679,13 @@ function getData(data) {
     myData['hex']={};
     myData['hex']['hex'] =hex.join(" ").toUpperCase();
     return myData;
-}
+}*/
 
 function getDataTest(data) {
+	getData(data);
+}
+
+function getData(data) {
     var offset = 0;
     var datatype = 0;
     var stringlen = 0;
