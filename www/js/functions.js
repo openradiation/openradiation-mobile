@@ -416,14 +416,14 @@ function testUser($scope,$location){
 				else
 				//error	
 				{
-					alertNotif("Erreur =\n"+xhr_object.responseText,'Authentification','Ok');
+					alertNotif("Erreur =\n"+xhr_object.status+" : "+xhr_object.responseText,'Authentification','Ok');
 				}
 			
 			}
 	  		else
   			 //error
   			 {
-  			 	alertNotif("Erreur d'envoi =\n"+xhr_object.status,'Historique','Ok');
+  			 	alertNotif("Erreur d'envoi =\n"+xhr_object.status+" : " +xhr_object.responseText,'Historique','Ok');
   			 }
 	  	 }
 	  	 return xhr_object.readyState;
