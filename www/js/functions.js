@@ -253,13 +253,13 @@ function sendMeasures($scope,id){
 									else
 									//error	
 									{
-										alertNotif("Erreur d'envoi =\n"+xhr_object.responseText,'Historique','Ok');
+										alertNotif("Erreur d'envoi =\n"+xhr_object.status+' : '+xhr_object.responseText,'Envoi Mesure','Ok');
 									}
 								}
 								else
 								//error
 								{
-									alertNotif("Erreur d'envoi =\n"+xhr_object.status,'Historique','Ok');
+									alertNotif("Erreur d'envoi =\n"+xhr_object.status+' : '+xhr_object.responseText,'Envoi Mesure','Ok');
 								}
 								
 							}
@@ -423,7 +423,7 @@ function testUser($scope,$location){
 	  		else
   			 //error
   			 {
-  			 	alertNotif("Erreur d'envoi =\n"+xhr_object.status+" : " +xhr_object.responseText,'Historique','Ok');
+  			 	alertNotif("Erreur d'envoi =\n"+xhr_object.status+" : " +xhr_object.responseText,'Authentification','Ok');
   			 }
 	  	 }
 	  	 return xhr_object.readyState;
@@ -751,8 +751,6 @@ function getDataTest(data) {
 function doOnData(rfduino,$scope)
 {
 	rfduino.onData(function(data){
-		
-		
 			var myData = getData(data)
 			for (var key in myData) {
 				if (myData.hasOwnProperty(key)) {
@@ -760,6 +758,7 @@ function doOnData(rfduino,$scope)
 					//version
 					if (key == "2")
 					{
+						alert(myData[key].data);
 						$scope.version = myData[key].data;
 						$scope.$apply();
 					}
