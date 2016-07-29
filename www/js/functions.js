@@ -754,7 +754,7 @@ function doOnData(rfduino,$scope)
 			var myData = getData(data)
 			for (var key in myData) {
 				if (myData.hasOwnProperty(key)) {
-					
+					alert(myData[key].data);
 					//version
 					if (key == "2")
 					{
