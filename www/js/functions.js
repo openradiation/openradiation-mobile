@@ -759,11 +759,17 @@ function doOnData(rfduino,$scope)
 					
 					//version
 					if (key == "2")
+					{
 						$scope.version = myData[key].data;
+						$scope.$apply();
+					}
 					
 					//sensor_type
 					if (key == "3")
+					{
 						$scope.sensorType = myData[key].data;
+						$scope.$apply();
+					}
 					
 					//count
 					if (key == "5" && $scope.mesure.encours)
@@ -792,7 +798,10 @@ function doOnData(rfduino,$scope)
 					
 					//tube_type
 					if (key == "16")
+					{
 						$scope.tubeType = myData[key].data;
+						$scope.$apply();
+					}
 				}
 			}
 	},
