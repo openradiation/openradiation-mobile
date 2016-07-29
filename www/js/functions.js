@@ -65,7 +65,11 @@ function createTableMeasures(callback)
 			{
 				tx.executeSql('CREATE TABLE IF NOT EXISTS "measures" ' +
 						' ("id" INTEGER PRIMARY KEY AUTOINCREMENT , ' +
-						'  "deviceId" VARCHAR,' +
+						'  "sensorVersion" VARCHAR,' +
+						'  "sensorType" VARCHAR,' +
+						'  "sensorTubeType" VARCHAR,' +
+						'  "reportUUID" VARCHAR,' +
+						'  "deviceUUID" VARCHAR,' +
 						'  "tsStart" TIMESTAMP,' +
 						'  "tsEnd" TIMESTAMP,' +
 						'  "duration" VARCHAR,' +
@@ -129,7 +133,16 @@ function requestTableError(tx, error, tableName) {
 function insertMeasures($scope,res,device){
 	db.transaction(function(tx) {
 		tx.executeSql('INSERT INTO "measures" '+
-				'(deviceId, tsStart, tsEnd,duration, temperature, nbHits,radiation, gpsStatus,longitude,latitude,environment,position,tags,notes,sent) VALUES("'+
+				'(sensorVersion,sensorType,sensorTubeType,'+
+				'reportUUID,'+
+				'deviceUUID, tsStart, tsEnd,duration, temperature, nbHits,radiation, gpsStatus,longitude,latitude,environment,position,tags,notes,sent) VALUES("'+
+				
+				$scope.connectedDevice.version+'","'+
+				$scope.connectedDevice.sensorType+'","'+
+				$scope.connectedDevice.tubeType+'","'+
+				
+				generateUUID()+'","'+  //reportUUID
+				
 				device.uuid+'","'+
 				res.timedeb+'","'+
 				(res.timedeb + res.duration) +'","'+
@@ -192,7 +205,7 @@ function getMeasures($scope){
 function sendMeasures($scope,id){
 	
 	args ={};
-	args.apiKey = "50adef3bdec466edc25f40c8fedccbce";
+	args.apiKey = API_KEY;
 	args.data = {};
 	args.data.reportContext = "routine";
 	db.transaction(function(tx) {
@@ -206,24 +219,40 @@ function sendMeasures($scope,id){
 						mesure = res.rows.item(0);
 						console.log(mesure)
 						args.data.reportUuid = generateUUID(); //TODO: enregistrer dans table
+						//infos capteur
+						if (mesure.sensorVersion != '')
+							args.data.apparatusVersion = mesure.sensorVersion;
+						if (mesure.sensorType != '')
+							args.data.apparatusSensorType = mesure.sensorType;
+						if (mesure.sensorTubeType != '')
+							args.data.apparatusTubeType = mesure.sensorTubeType;
+						
+						
+						//GPS
 						args.data.longitude = parseInt(mesure.longitude);
 						args.data.latitude = parseInt(mesure.latitude);
+						
+						//mesure
 						args.data.value = mesure.radiation;
 						args.data.startTime = convertTimestampToTimezone(mesure.tsStart);
 						args.data.endTime = convertTimestampToTimezone(parseInt(mesure.tsStart)+parseInt(mesure.duration));
 						
+						//temperature
 						if (mesure.temperature != -1000)
 							args.data.temperature = mesure.temperature;
 						
 						if ((typeof $scope.connexion !== 'undefined') && (typeof $scope.connexion.connexion !== 'undefined') && ($scope.connexion.connexion))	
 						{
+							//User
 							args.data.userId = $scope.connexion.login;
 							args.data.userPwd = $scope.connexion.mdp;
+							
+							//compléments mesure
 							args.data.description = mesure.notes;
 						}
 
 						xhr_object = new XMLHttpRequest(); 
-						uri="https://submit.open-radiation.net/measurements"; 
+						uri= API_URI; 
 						xhr_object.open("POST", uri, true);
 						xhr_object.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 						
@@ -376,7 +405,7 @@ function getParam($scope,paramName)
 
 function testUser($scope,$location){
 	args ={};
-	args.apiKey = "50adef3bdec466edc25f40c8fedccbce";
+	args.apiKey = API_KEY;
 	args.data = {};
 	args.data.latitude = 48.23456;
 	args.data.longitude = 2.657723;
@@ -388,7 +417,7 @@ function testUser($scope,$location){
 	args.data.reportContext = "test";
 
 	xhr_object = new XMLHttpRequest();
-	uri="https://submit.open-radiation.net/measurements";
+	uri= API_URI;
 	xhr_object.open("POST",uri, true);
 	xhr_object.setRequestHeader("Content-Type","application/json;charset=UTF-8");
 	
@@ -468,6 +497,20 @@ function doBluetoothDeviceSearch($scope)
 	}, function(){alert('pb');} );
 }
 
+function doAskBluetoothDeviceInfos(rfduino)
+{
+	var data = new Uint8Array(1);
+	data[0]=IN_PACKET_SEND_INFO;
+	
+	rfduino.write(data.buffer,function() {
+		//success
+		//alertNotif(deviceId+" succes send info","Success","Ok");
+
+		},
+	    function() {alertNotif(deviceId+" failure send info","Failure","Ok")}
+	);
+}
+
 /////////////////////////////////////////////////////////////////////
 //Functions Fake
 /////////////////////////////////////////////////////////////////////
@@ -477,6 +520,13 @@ function fakeBluetoothDeviceSearch($scope)
 	$scope.devices['0'] = {'name':'device 0','uuid':'deviceid0deviceid0deviceid0deviceid0deviceid0deviceid0deviceid0deviceid0deviceid0deviceid0deviceid0deviceid0deviceid0deviceid0deviceid0deviceid0deviceid0'};
 	$scope.devices['1'] = {'name':'device 1','uuid':'deviceid1'};
 	
+}
+
+function fakeBluetoothDeviceInfos($scope)
+{
+	$scope.connectedDevice.version =  "Test Sensor Version";
+	$scope.connectedDevice.sensorType  =  "Test Sensor Type";
+	$scope.connectedDevice.tubeType  =  "Test Sensor Tube Type";
 }
 
 function fakeSearch($scope){
@@ -761,14 +811,16 @@ function doOnData(rfduino,$scope)
 					//version
 					if (key == "2")
 					{
-						$scope.version = myData[key].data;
+						$scope.connectedDevice.version = myData[key].data;
+						//TODO : test si different, update en base
 						$scope.$apply();
 					}
 					
 					//sensor_type
 					if (key == "3")
 					{
-						$scope.sensorType = myData[key].data;
+						$scope.connectedDevice.sensorType = myData[key].data;
+						//TODO : test si different, update en base
 						$scope.$apply();
 					}
 					
@@ -800,7 +852,8 @@ function doOnData(rfduino,$scope)
 					//tube_type
 					if (key == "16")
 					{
-						$scope.tubeType = myData[key].data;
+						$scope.connectedDevice.tubeType = myData[key].data;
+						//TODO : test si different, update en base
 						$scope.$apply();
 					}
 				}

@@ -191,6 +191,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		if (typeof rfduino == 'undefined')
 		//cas emulation chrome
 		{
+			fakeBluetoothDeviceInfos($scope);
 			fakeMesure($scope);
 		}
 		else
@@ -198,6 +199,8 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			$scope.setTension($scope.connectedDevice.uuid);
 			//var i = 0;
 			doOnData(rfduino,$scope);
+			doAskBluetoothDeviceInfos(rfduino);
+			
 			/*rfduino.onData(function(data){
 				if ($scope.mesure.encours)
 					var myData = getData(data)
@@ -336,26 +339,12 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		if (typeof rfduino == 'undefined')
 			//cas emulation chrome
 			{
-				 //fakeBluetoothDeviceSearch($scope);
+				fakeBluetoothDeviceInfos($scope);
 			}
 			else
 			{
 				doOnData(rfduino,$scope);
-				//TODO : test
-				var data = new Uint8Array(1);
-				data[0]=IN_PACKET_SEND_INFO;
-				rfduino.write(data.buffer,function() {
-					//success
-					//alertNotif(deviceId+" succes send info","Success","Ok");
-
-					},
-				    function() {alertNotif(deviceId+" failure send info","Failure","Ok")}
-				);
-				//ble.isEnabled(
-				/*rfduino.isEnabled(
-						function() {doBluetoothDeviceSearch($scope);},
-					    function() {alertNotif("Bluetooth is *not* enabled","Attention","Ok")}
-					);*/
+				doAskBluetoothDeviceInfos(rfduino);
 			}
 	}
 	

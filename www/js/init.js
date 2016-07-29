@@ -30,6 +30,8 @@ var IN_PACKET_SILENT                    = 0x02;
 var IN_PACKET_SET_TENSION               = 0x11;
 var IN_PACKET_SEND_INFO                 = 0x12;
 
+var API_KEY								= "50adef3bdec466edc25f40c8fedccbce";
+var API_URI								= "https://submit.open-radiation.net/measurements";
 
 //test si chrome
 var isMobile = true;
