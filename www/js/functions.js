@@ -223,7 +223,8 @@ function sendMeasures($scope,id){
 						if (mesure.sensorVersion != '')
 							args.data.apparatusVersion = mesure.sensorVersion;
 						if (mesure.sensorType != '')
-							args.data.apparatusSensorType = mesure.sensorType;
+							//args.data.apparatusSensorType = mesure.sensorType;
+							args.data.apparatusSensorType = "geiger";
 						if (mesure.sensorTubeType != '')
 							args.data.apparatusTubeType = mesure.sensorTubeType;
 						
@@ -525,7 +526,7 @@ function fakeBluetoothDeviceSearch($scope)
 function fakeBluetoothDeviceInfos($scope)
 {
 	$scope.connectedDevice.version =  "Test Sensor Version";
-	$scope.connectedDevice.sensorType  =  "Test Sensor Type";
+	$scope.connectedDevice.sensorType  =  "geiger";
 	$scope.connectedDevice.tubeType  =  "Test Sensor Tube Type";
 }
 
