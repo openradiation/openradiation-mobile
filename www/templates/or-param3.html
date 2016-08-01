@@ -20,11 +20,11 @@
 		<div class="bloctitle">Mesures</div>
 		<div class="ligne2">
 			<div class="desc">Signal audio pour les coups </div>
-			<div class="button"><ui-switch ng-model='rememberMe'></ui-switch></div>
+			<div class="button"><ui-switch ng-change="saveAudioHits()" ng-model='$parent.connectedDevice.audioHits'></ui-switch></div>
 		</div>
 		<div class="ligne2">
 			<div class="desc">Signal visuel pour les coups </div>
-			<div class="button"><ui-switch ng-model='rememberMe'></ui-switch></div>
+			<div class="button"><ui-switch ng-change="saveVisualHits()" ng-model='$parent.connectedDevice.visualHits'></ui-switch></div>
 		</div>
 		 
 	</div>

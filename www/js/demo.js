@@ -101,6 +101,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	               	
 	   				 
 	   				function(err, results ){
+		 				console.log(err);
 	   			 		console.log(results);
 	   			 		//refreshDevices();
 		   			 	//init state
@@ -496,6 +497,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			//cas emulation chrome
 			{
 				$scope.connectedDevice = device;
+				setConnectedDevice($scope);
 				$scope.$apply();
 			}
 			else
@@ -506,7 +508,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 							alertNotif(device.uuid+" connecté","Success","Ok");
 							//$scope.connectedDeviceId = device.uuid;
 							$scope.connectedDevice = device;
-							
+							setConnectedDevice($scope);
 							$scope.$apply();
 							
 
@@ -773,6 +775,19 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		value = ($scope.publi_auto?1:0);
 		saveParam('publi_auto',value,'');
 	}
+	
+	//function param pour device
+	$scope.saveAudioHits = function () {
+		//value = ($scope.connectedDevice.audioHits?1:0);
+		setConnectedDeviceInfos($scope,"audioHits");
+	}
+	
+	$scope.saveVisualHits = function () {
+		//value = ($scope.connectedDevice.visualHits?1:0);
+		setConnectedDeviceInfos($scope,"visualHits");
+	}
+	
+	
 
 
   // User agent displayed in home page
