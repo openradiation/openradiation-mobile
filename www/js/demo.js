@@ -731,11 +731,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		);
 	}
 	
-	
-	
-	
-	
-	
+
 	//funcion convert affichage
 	$scope.getDate = function (ts) {
 		return convertTimestampToDate(ts);
