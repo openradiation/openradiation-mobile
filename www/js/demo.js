@@ -199,8 +199,8 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		{
 			$scope.setTension($scope.connectedDevice.uuid);
 			doOnData(rfduino,$scope);
-			setBluetoothDeviceParams(rfduino,$scope,'audioHits');
-			setBluetoothDeviceParams(rfduino,$scope,'visualHits');
+			//setBluetoothDeviceParams(rfduino,$scope,'audioHits');
+			//setBluetoothDeviceParams(rfduino,$scope,'visualHits');
 			doAskBluetoothDeviceInfos(rfduino);
 		}
 	}
@@ -295,8 +295,8 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		else
 		{
 			doOnData(rfduino,$scope);
-			setBluetoothDeviceParams(rfduino,$scope,'audioHits');
-			setBluetoothDeviceParams(rfduino,$scope,'visualHits');
+			//setBluetoothDeviceParams(rfduino,$scope,'audioHits');
+			//setBluetoothDeviceParams(rfduino,$scope,'visualHits');
 			doAskBluetoothDeviceInfos(rfduino);
 		}
 	}
@@ -601,14 +601,6 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	
 	$scope.doWriteAskInfo = function(deviceId){
 		doAskBluetoothDeviceInfos(rfduino);
-		/*var data = new Uint8Array(1);
-		data[0]=IN_PACKET_SEND_INFO;
-
-		rfduino.write(data.buffer,function() {
-			//success
-			},
-		    function() {alertNotif(deviceId+" failure send info","Failure","Ok")}
-		);*/
 	}
 	$scope.doWriteChangeSilence = function(deviceId,silencieux){
 		var data = new Uint8Array(2);
@@ -618,17 +610,13 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		
 		rfduino.write(data.buffer,function() {
 			//success
-			//alertNotif(deviceId+" succes send info","Success","Ok");
-
 			},
 		    function() {alertNotif(deviceId+" failure send silence","Failure","Ok")}
 		);
 	}
 	//set_tension
 	$scope.doWrite3 = function(deviceId){
-
 		$scope.setTension(deviceId);
-		
 	}
 	//fin test
 	
@@ -679,16 +667,16 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	$scope.saveAudioHits = function () {
 		//value = ($scope.connectedDevice.audioHits?1:0);
 		setConnectedDeviceInfos($scope,"audioHits");
-		if (typeof rfduino != 'undefined')
-			setBluetoothDeviceParams(rfduino,$scope,'audioHits');
+		/*if (typeof rfduino != 'undefined')
+			setBluetoothDeviceParams(rfduino,$scope,'audioHits');*/
 	}
 	
 	$scope.saveVisualHits = function () {
 		//value = ($scope.connectedDevice.visualHits?1:0);
 
 		setConnectedDeviceInfos($scope,"visualHits");
-		if (typeof rfduino != 'undefined')
-			setBluetoothDeviceParams(rfduino,$scope,'visualHits');
+		/*if (typeof rfduino != 'undefined')
+			setBluetoothDeviceParams(rfduino,$scope,'visualHits');*/
 	}
 	
 	
