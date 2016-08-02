@@ -508,7 +508,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 							alertNotif(device.uuid+" connecté","Success","Ok");
 							//$scope.connectedDeviceId = device.uuid;
 							$scope.connectedDevice = device;
-							setConnectedDevice($scope);
+							setConnectedDevice($scope,rfduino);
 							$scope.$apply();
 							
 
@@ -759,12 +759,18 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	//function param pour device
 	$scope.saveAudioHits = function () {
 		//value = ($scope.connectedDevice.audioHits?1:0);
-		setConnectedDeviceInfos($scope,"audioHits");
+		if (typeof rfduino == 'undefined')
+			setConnectedDeviceInfos($scope,"audioHits");
+		else
+			setConnectedDeviceInfos($scope,"audioHits",rfduino);
 	}
 	
 	$scope.saveVisualHits = function () {
 		//value = ($scope.connectedDevice.visualHits?1:0);
-		setConnectedDeviceInfos($scope,"visualHits");
+		if (typeof rfduino == 'undefined')
+			setConnectedDeviceInfos($scope,"visualHits");
+		else
+			setConnectedDeviceInfos($scope,"visualHits",rfduino);
 	}
 	
 	

@@ -135,7 +135,7 @@ function requestTableError(tx, error, tableName) {
 }
 
 //devices requests
-function setConnectedDevice($scope)
+function setConnectedDevice($scope,rfduino)
 {
 	console.log('setConnectedDevice');
 	db.transaction(
@@ -200,7 +200,7 @@ function setConnectedDevice($scope)
 	);
 }
 
-function setConnectedDeviceInfos($scope,type){
+function setConnectedDeviceInfos($scope,type,rfduino){
 	db.transaction(
 		function(tx) 
 		{
@@ -650,7 +650,7 @@ function setBluetoothDeviceParams(rfduino,$scope,type)
 		alert($scope.connectedDevice.audioHits);
 		if($scope.connectedDevice.audioHits==false)
 			{data[1]=0x01;
-			alert("falseeeee");
+			alert("falseeee");
 			}
 		rfduino.write(data.buffer,function() {
 			//success
