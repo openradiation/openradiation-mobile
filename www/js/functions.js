@@ -182,6 +182,11 @@ function setConnectedDevice($scope)
 											$scope.connectedDevice.tubeType = "";
 											$scope.connectedDevice.audioHits = true;
 											$scope.connectedDevice.visualHits = true;
+											if (typeof rfduino != 'undefined')
+											{
+												setBluetoothDeviceParams(rfduino,$scope,'audioHits');
+												setBluetoothDeviceParams(rfduino,$scope,'visualHits');
+											}
 										},
 										function(tx,error){requestTableError(tx, error,"insert devices");});
 								
@@ -625,20 +630,15 @@ function doAskBluetoothDeviceInfos(rfduino)
 
 function setBluetoothDeviceParams(rfduino,$scope,type)
 {
-	alert('setBluetoothDeviceParams');
 	var data = new Uint8Array(2);
 	if (type == "audioHits")
 	{
 		data[0]=IN_PACKET_SILENT;
 		data[1]=0x00;
-		alert($scope.connectedDevice.audioHits);
 		if($scope.connectedDevice.audioHits==false)
-			{data[1]=0x01;
-			alert("falseeee");
-			}
+			data[1]=0x01;
 		rfduino.write(data.buffer,function() {
 			//success
-			alert('succes audio');
 			},
 		    function() {alertNotif(deviceId+" failure send param silent","Failure","Ok")}
 		);
@@ -650,7 +650,6 @@ function setBluetoothDeviceParams(rfduino,$scope,type)
 		if($scope.connectedDevice.visualHits==false)data[1]=0x01;
 		rfduino.write(data.buffer,function() {
 			//success
-			alert('succes visual');
 			},
 		    function() {alertNotif(deviceId+" failure send param silent","Failure","Ok")}
 		);
@@ -716,10 +715,6 @@ function doOnData(rfduino,$scope)
 	},
 	function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
 }
-
-/*function getDataTest(data) {
-	getData(data);
-}*/
 
 function getData(data) {
     var offset = 0;
@@ -895,125 +890,8 @@ function generateUUID() {
     return uuid;
 };
 
-//Conversion
-/*function ArrayBufferToString(buffer) {
-    return BinaryToString(String.fromCharCode.apply(null, Array.prototype.slice.apply(new Uint8Array(buffer))));
-}*/
-
-/*function StringToArrayBuffer(string) {
-    return StringToUint8Array(string).buffer;
-}*/
-
-/*function BinaryToString(binary) {
-    var error;
-
-    try {
-        return decodeURIComponent(escape(binary));
-    } catch (_error) {
-        error = _error;
-        if (error instanceof URIError) {
-            return binary;
-        } else {
-            throw error;
-        }
-    }
-}*/
-
-/*function StringToBinary(string) {
-    var chars, code, i, isUCS2, len, _i;
-
-    len = string.length;
-    chars = [];
-    isUCS2 = false;
-    for (i = _i = 0; 0 <= len ? _i < len : _i > len; i = 0 <= len ? ++_i : --_i) {
-        code = String.prototype.charCodeAt.call(string, i);
-        if (code > 255) {
-            isUCS2 = true;
-            chars = null;
-            break;
-        } else {
-            chars.push(code);
-        }
-    }
-    if (isUCS2 === true) {
-        return unescape(encodeURIComponent(string));
-    } else {
-        return String.fromCharCode.apply(null, Array.prototype.slice.apply(chars));
-    }
-}*/
-
-/*function StringToUint8Array(string) {
-    var binary, binLen, buffer, chars, i, _i;
-    binary = StringToBinary(string);
-    binLen = binary.length;
-    buffer = new ArrayBuffer(binLen);
-    chars  = new Uint8Array(buffer);
-    for (i = _i = 0; 0 <= binLen ? _i < binLen : _i > binLen; i = 0 <= binLen ? ++_i : --_i) {
-        chars[i] = String.prototype.charCodeAt.call(binary, i);
-    }
-    return chars;
-}*/
-
-
-
-/*var arrayBufferToFloat = function (ab) {
-    var a = new Float32Array(ab);
-    return a[0];
-};*/
-
-/*function getData(data) {
-    var offset = 0;
-    var datatype = 0;
-    var buff = new Uint8Array(data);
-    var dataView = new DataView(data);
-    var hex = [];
-    
-    for (var i=offset ; i<offset+buff.length ; i++) {
-            hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
-        }
-    myData = {}
-	
-    while (offset < buff.length) {
-	datatype = dataView.getUint8(offset);
-	offset++;
-	switch (datatype) {
-            case OUT_PACKET_COUNT:
-	    case OUT_PACKET_DEBUG_BYTE1:
-	    case OUT_PACKET_DEBUG_BYTE2: 
-        	myData[datatype] ={};
-        	myData[datatype]['data'] = dataView.getUint8(offset);
-		offset++;
-        	break;
-            case 0xA2: // Pitch 
-                horizon.pitch = dataView.getFloat32(offset, true);
-                for (var i=offset ; i<offset+4 ; i++) {
-                    hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
-                }
-                offset += 4;
-                break;
-            
-	    case OUT_PACKET_ACTUAL_TENSION : // Pitch 
-                tension_courante = dataView.getFloat32(offset, true);
-                myData[datatype] ={};
-        	myData[datatype]['data'] = tension_courante;
-		offset += 4;
-                break;
-            
-            default:
-		offset++;
-	    break;
-        }
-    }
-    //myData[type]['lng'] = buff.length;
-    myData['hex']={};
-    myData['hex']['hex'] =hex.join(" ").toUpperCase();
-    return myData;
-}*/
-
-
 
 //Conversions
-
 function convertNanosievert(nbCoup,duration)
 {
 	valueNSV = (nbCoup * 0.9) / (duration * 60) ;

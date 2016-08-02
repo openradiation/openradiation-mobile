@@ -199,8 +199,6 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		{
 			$scope.setTension($scope.connectedDevice.uuid);
 			doOnData(rfduino,$scope);
-			//setBluetoothDeviceParams(rfduino,$scope,'audioHits');
-			//setBluetoothDeviceParams(rfduino,$scope,'visualHits');
 			doAskBluetoothDeviceInfos(rfduino);
 		}
 	}
@@ -295,8 +293,6 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		else
 		{
 			doOnData(rfduino,$scope);
-			//setBluetoothDeviceParams(rfduino,$scope,'audioHits');
-			//setBluetoothDeviceParams(rfduino,$scope,'visualHits');
 			doAskBluetoothDeviceInfos(rfduino);
 		}
 	}
@@ -665,18 +661,11 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	
 	//function param pour device
 	$scope.saveAudioHits = function () {
-		//value = ($scope.connectedDevice.audioHits?1:0);
 		setConnectedDeviceInfos($scope,"audioHits");
-		/*if (typeof rfduino != 'undefined')
-			setBluetoothDeviceParams(rfduino,$scope,'audioHits');*/
 	}
 	
 	$scope.saveVisualHits = function () {
-		//value = ($scope.connectedDevice.visualHits?1:0);
-
 		setConnectedDeviceInfos($scope,"visualHits");
-		/*if (typeof rfduino != 'undefined')
-			setBluetoothDeviceParams(rfduino,$scope,'visualHits');*/
 	}
 	
 	
