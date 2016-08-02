@@ -190,65 +190,27 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		      });
 		
 		if (typeof rfduino == 'undefined')
-		//cas emulation chrome
 		{
+			//cas emulation chrome
 			fakeBluetoothDeviceInfos($scope);
 			fakeMesure($scope);
 		}
 		else
 		{
 			$scope.setTension($scope.connectedDevice.uuid);
-			//var i = 0;
 			doOnData(rfduino,$scope);
 			setBluetoothDeviceParams(rfduino,$scope,'audioHits');
 			setBluetoothDeviceParams(rfduino,$scope,'visualHits');
 			doAskBluetoothDeviceInfos(rfduino);
-			
-			/*rfduino.onData(function(data){
-				if ($scope.mesure.encours)
-					var myData = getData(data)
-					for (var key in myData) {
-						if (myData.hasOwnProperty(key)) {
-							if (key == "5")
-							{
-								var mytimestamp = parseInt(new Date().getTime()/1000);
-								var duration = mytimestamp - $scope.mesure.timedeb
-								$scope.mesure.duration = duration;
-								$scope.mesure.total += myData[key].data;
-								$scope.mesure.moymin = ($scope.mesure.total / duration * 60).toFixed(2);
-								$scope.mesure.valeurnsv = convertNanosievert($scope.mesure.total,duration);
-								$scope.mesure.log[mytimestamp] = {}
-								$scope.mesure.log[mytimestamp].timestamp = mytimestamp;
-								$scope.mesure.log[mytimestamp].coup = myData[key].data;
-								
-								$scope.$apply();
-								doProgressBar($scope.mesure.total);
-								//i++;
-							}
-							if (key == "6")
-							{
-								$scope.mesure.temperature = myData[key].data;
-								
-								$scope.$apply();
-							}
-						}
-					}
-			},
-			function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});*/
-			
 		}
 	}
 	
 	$scope.endMesure = function(clickEvent){
-		
-		
-		
 		console.log('endMesure');
 		$location.path('/mesureRecap');
 		$scope.top = "1";
 		$scope.menu="0";
 		$scope.mesure.encours = false;
-		// fakeMesure($scope);
 	}
 	
 	$scope.doExpert = function(clickEvent){
@@ -256,7 +218,6 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		$location.path('/mesureExpert');
 		$scope.top = "1";
 		$scope.menu="0";
-		// fakeMesure($scope);
 	}
 	
 	
@@ -280,11 +241,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		console.log('validMesure');
 		$scope.top = "0";
 		$scope.menu="1";
-		//$scope.state="1";
 		$location.path('/');
-		//$location.path('/mesureRecap');
-		//$scope.top = "1";
-		// fakeMesure($scope);
 	}
 	
 	$scope.doHisto = function(clickEvent){
@@ -294,8 +251,6 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		console.log('doHisto');
 		$location.path('/histo');
 		$scope.top = "1";
-		//$scope.menu="0";
-		 //fakeMesure($scope);
 	}
 	
 	$scope.doSend  = function(id){
@@ -306,8 +261,6 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		console.log('doParam');
 		$location.path('/param');
 		$scope.top = "1";
-		//$scope.menu="0";
-		 //fakeMesure($scope);
 	}
 	
 	$scope.doParam2 = function(clickEvent){
@@ -315,23 +268,18 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		$location.path('/param2');
 		$scope.top = "1";
 		
-		if (typeof rfduino == 'undefined')
+		if (typeof rfduino == 'undefined')	
+		{
 			//cas emulation chrome
-			{
-				 fakeBluetoothDeviceSearch($scope);
-			}
-			else
-			{
-				//ble.isEnabled(
-				rfduino.isEnabled(
-						function() {doBluetoothDeviceSearch($scope);},
-					    function() {alertNotif("Bluetooth is *not* enabled","Attention","Ok")}
-					);
-			}
-		
-		
-		//$scope.menu="0";
-		 //fakeMesure($scope);
+			fakeBluetoothDeviceSearch($scope);
+		}
+		else
+		{
+			rfduino.isEnabled(
+					function() {doBluetoothDeviceSearch($scope);},
+				    function() {alertNotif("Bluetooth is *not* enabled","Attention","Ok")}
+				);
+		}
 	}
 	
 	$scope.doParam3 = function(clickEvent){
@@ -340,43 +288,36 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		$scope.top = "1";
 		
 		if (typeof rfduino == 'undefined')
+		{
 			//cas emulation chrome
-			{
-				fakeBluetoothDeviceInfos($scope);
-			}
-			else
-			{
-				doOnData(rfduino,$scope);
-				setBluetoothDeviceParams(rfduino,$scope,'audioHits');
-				setBluetoothDeviceParams(rfduino,$scope,'visualHits');
-				doAskBluetoothDeviceInfos(rfduino);
-			}
+			fakeBluetoothDeviceInfos($scope);
+		}
+		else
+		{
+			doOnData(rfduino,$scope);
+			setBluetoothDeviceParams(rfduino,$scope,'audioHits');
+			setBluetoothDeviceParams(rfduino,$scope,'visualHits');
+			doAskBluetoothDeviceInfos(rfduino);
+		}
 	}
 	
 	$scope.doParamPubli = function(clickEvent){
 		console.log('doParam');
 		$location.path('/paramPubli');
 		$scope.top = "1";
-		//$scope.menu="0";
-		 //fakeMesure($scope);
 	}
 	
 	$scope.doParamConnex = function(clickEvent){
 		console.log('doParamConnex');
 		$location.path('/paramConnex');
 		$scope.top = "1";
-		//$scope.menu="0";
-		 //fakeMesure($scope);
 	}
+	
 	$scope.doConnex= function(clickEvent){
 		console.log('doConnex');
 		console.log($scope.login);
 		console.log($scope.mdp);
 		testUser($scope,$location);
-//		$location.path('/paramConnex');
-
-		//$scope.menu="0";
-		 //fakeMesure($scope);
 	}
 	
 	$scope.doDeconnex = function(clickEvent){
@@ -410,7 +351,6 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		$location.path('/more');
 		$scope.top = "1";
 		$scope.menu="1";
-		 //fakeMesure($scope);
 	}
 	
 	$scope.doMesureMano= function(clickEvent){
@@ -441,7 +381,6 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		$location.path('/mesureMano');
 		$scope.top = "1";
 		$scope.menu="0";
-		 //fakeMesure($scope);
 	}
 	
 	$scope.validMesureMano = function(clickEvent){
@@ -462,11 +401,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		console.log('validMesureMano');
 		$scope.top = "0";
 		$scope.menu="1";
-		//$scope.state="1";
 		$location.path('/');
-		//$location.path('/mesureRecap');
-		//$scope.top = "1";
-		// fakeMesure($scope);
 	}
 	
 	$scope.devices = {};
@@ -478,22 +413,17 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		$scope.top = "1";
 		
 		if (typeof rfduino == 'undefined')
+		{
 			//cas emulation chrome
-			{
-				 fakeBluetoothDeviceSearch($scope);
-			}
-			else
-			{
-				//ble.isEnabled(
-				rfduino.isEnabled(
-						function() {doBluetoothDeviceSearch($scope);},
-					    function() {alertNotif("Bluetooth is *not* enabled","Attention","Ok")}
-					);
-			}
-		
-		
-			//$scope.menu="0";
-		 //fakeMesure($scope);
+			 fakeBluetoothDeviceSearch($scope);
+		}
+		else
+		{
+			rfduino.isEnabled(
+					function() {doBluetoothDeviceSearch($scope);},
+				    function() {alertNotif("Bluetooth is *not* enabled","Attention","Ok")}
+				);
+		}
 	}
 	
 	$scope.doConnect = function(device){
@@ -509,8 +439,6 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 				rfduino.connect(device.uuid,
 						function() {
 							//success
-							alertNotif(device.uuid+" connecté","Success","Ok");
-							//$scope.connectedDeviceId = device.uuid;
 							$scope.connectedDevice = device;
 							setConnectedDevice($scope);
 							$scope.$apply();
@@ -524,26 +452,26 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	
 	$scope.doDisconnect= function(deviceId){
 		if (typeof rfduino == 'undefined')
+		{
 			//cas emulation chrome
-			{
-				$scope.connectedDevice = 0;
-				$scope.$apply();
-			}
-			else
-			{
-				rfduino.disconnect(deviceId,
-					function() {
-						//success
-						alertNotif(deviceId+" déconnecté","Success","Ok");
-						$scope.connectedDevice = 0;
-						$scope.$apply();
+			$scope.connectedDevice = 0;
+			$scope.$apply();
+		}
+		else
+		{
+			rfduino.disconnect(deviceId,
+				function() {
+					//success
+					$scope.connectedDevice = 0;
+					$scope.$apply();
 
-					},
-					function() {alertNotif(deviceId+" non déconnecté","Failure","Ok")}
-				);
-			}
+				},
+				function() {alertNotif(deviceId+" non déconnecté","Failure","Ok")}
+			);
+		}
 	}
 	
+	// test
 	$scope.doData = function(deviceId){
 		rfduino.onData(function(data){
 			$scope.length = data.byteLength;
@@ -553,7 +481,6 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			$scope.data = JSON.stringify(myData);
 			$scope.dataDebug[convertIdDebug($scope.iData)] = myData;
 			$scope.iData++;
-			//$scope.data2 = arrayBufferToFloat(data);
 			$scope.$apply();
 		},
 		function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
@@ -569,8 +496,6 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			$scope.data = JSON.stringify(myData);
 			$scope.dataDebug[convertIdDebug($scope.iData)] = myData;
 			$scope.iData++;
-			//$scope.data2 = myData;
-			//$scope.data2 = arrayBufferToFloat(data);
 			$scope.$apply();
 		},
 		function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
@@ -586,8 +511,6 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 				$scope.data = JSON.stringify(myData);
 				$scope.dataDebug[convertIdDebug($scope.iData)] = myData;
 				$scope.iData++;
-				//$scope.data2 = myData;
-				//$scope.data2 = arrayBufferToFloat(data);
 				$scope.$apply();
 			},
 			function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
@@ -605,7 +528,6 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 				$scope.data = JSON.stringify(myData);
 				$scope.dataDebug[convertIdDebug($scope.iData)] = myData;
 				$scope.iData++;
-				//$scope.data2 = myData;
 				$scope.$apply();
 			},
 			function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
@@ -622,8 +544,6 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 				$scope.data = JSON.stringify(myData);
 				$scope.dataDebug[convertIdDebug($scope.iData)] = myData;
 				$scope.iData++;
-				//$scope.data2 = myData;
-				//$scope.data2 = arrayBufferToFloat(data);
 				$scope.$apply();
 			},
 			function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
@@ -640,8 +560,6 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 				$scope.data = JSON.stringify(myData);
 				$scope.dataDebug[convertIdDebug($scope.iData)] = myData;
 				$scope.iData++;
-				//$scope.data2 = myData;
-				//$scope.data2 = arrayBufferToFloat(data);
 				$scope.$apply();
 			},
 			function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
@@ -714,22 +632,21 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		$scope.setTension(deviceId);
 		
 	}
+	//fin test
 	
 	//set_tension
 	$scope.setTension = function(deviceId){
 		var data = new Uint8Array(5);
 		data[0]=0x11;
 		var tension = 380;
-		//data[1]="0x"+tension.toString(16);
+
 		data[4]="0x43";
-		data[3]="0xBE";//data[3]="0xBE";
+		data[3]="0xBE";
 		data[2]="0x80";
 		data[1]="0x00";
 		
 		rfduino.write(data.buffer,function() {
 			//success
-			//alertNotif(deviceId+" succes tension on","Success","Ok");
-
 			},
 		    function() {alertNotif(deviceId+" failure tension on","Failure","Ok")}
 		);
@@ -802,26 +719,8 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	 	else
 	 		$scope.menu="1";
     $rootScope.loading = false;
-  });
-  
-  
-  /// openradiation
- // $("#deviceList").touchend(connect);
-  
-  $scope.getData = function(clickEvent){
-	  console.log("getData");
-	  alert('getData');
-	  $('#stateData span').html('En cours');
-	  //rfduino.onData(onData, onRfError);
-	  
-	  $("#deviceList").on('touchend',connect);
-	  //$("#deviceList").on('click',connect);
-	  //$("#deviceList").touchend(connect);
-	  }
-  
-  $scope.stopData = function(clickEvent){
-	  console.log("stopData");
-	  $('#stateData span').html('Stop');}
+  });  
+
 });
 
 //CORDOVA

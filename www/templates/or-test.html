@@ -25,13 +25,14 @@
 		</div>
 		
 		<div ng-if="connectedDevice.uuid!=0">
-			<div class="gps" ng-click="doData(connectedDevice.uuid)" style="margin-top:10px">Data</div>
+			<div class="gps" ng-click="doData(connectedDevice.uuid)" style="margin-top:10px">onData</div>
+			Audio : <div class="button"><ui-switch ng-change="saveAudioHits()" ng-model='$parent.connectedDevice.audioHits'></ui-switch></div>
 			<div class="gps" ng-click="doWriteChangeSilence(connectedDevice.uuid,1)" style="margin-top:10px">silence</div>
 			<div class="gps" ng-click="doWriteChangeSilence(connectedDevice.uuid,0)" style="margin-top:10px">bruyant</div>
 			<div class="gps" ng-click="doWriteAskInfo(connectedDevice.uuid)" style="margin-top:10px">Demande info</div>
 			<div class="gps" ng-click="doWrite2(connectedDevice.uuid)" style="margin-top:10px">tension 380</div><br>
 			<div class="gps" ng-click="doDisconnect(connectedDevice.uuid)" style="margin-top:10px">Disconnect</div>
-			<div class="gps" ng-click="doDataTension3(connectedDevice.uuid)" style="margin-top:10px">Write set_tension (on)+get datta</div>
+			<!--<div class="gps" ng-click="doDataTension3(connectedDevice.uuid)" style="margin-top:10px">Write set_tension (on)+get datta</div>-->
 
 			<!-- <div class="gps" ng-click="doWrite5(connectedDevice.uuid)" style="margin-top:10px">Write set_tension (on test 3)</div> -->
 			<br/>

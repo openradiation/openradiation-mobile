@@ -592,29 +592,11 @@ function testUser($scope,$location){
 	xhr_object.send(JSON.stringify(args));
 }
 
-
-
-
-/*testi = 0;
-function test(callback,value){
-//var test = function(tx,value){
-	testi = testi + 1;
-	console.log(testi);
-	console.log(value);
-	console.log("fin?");
-	callback(null, 'test');
-}*/
-
-
-
-
 /////////////////////////////////////////////////////////////////////
 //Functions RFDUINO
 /////////////////////////////////////////////////////////////////////
 function doBluetoothDeviceSearch($scope)
 {
-	/*console.log("Bluetooth is enabled");
-    alert("Bluetooth is enabled");*/
     //TODO : do scan until find a known one
     rfduino.discover(5, function(device) {
     	$scope.devices[device.id] = device;
