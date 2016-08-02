@@ -641,6 +641,7 @@ function doAskBluetoothDeviceInfos(rfduino)
 
 function setBluetoothDeviceParams(rfduino,$scope,type)
 {
+	alert('setBluetoothDeviceParams');
 	var data = new Uint8Array(1);
 	if (type == "audioHits")
 	{
@@ -649,7 +650,7 @@ function setBluetoothDeviceParams(rfduino,$scope,type)
 		if($scope.connectedDevice.audioHits==false)data[1]=0x01;
 		rfduino.write(data.buffer,function() {
 			//success
-			//alert('succes audio');
+			alert('succes audio');
 			},
 		    function() {alertNotif(deviceId+" failure send param silent","Failure","Ok")}
 		);
@@ -661,7 +662,7 @@ function setBluetoothDeviceParams(rfduino,$scope,type)
 		if($scope.connectedDevice.visualHits==false)data[1]=0x01;
 		rfduino.write(data.buffer,function() {
 			//success
-			//alert('succes visual');
+			alert('succes visual');
 			},
 		    function() {alertNotif(deviceId+" failure send param silent","Failure","Ok")}
 		);
