@@ -160,9 +160,9 @@ function setConnectedDevice($scope)
 								$scope.connectedDevice.tubeType = res.rows.item(0).sensorTubeType;
 								$scope.connectedDevice.audioHits = (res.rows.item(0).paramAudioHits?true:false);
 								$scope.connectedDevice.visualHits = (res.rows.item(0).paramVisualHits?true:false);
-								
-								if (typeof rfduino == 'undefined')
+								if (typeof rfduino != 'undefined')
 								{
+									
 									setBluetoothDeviceParams(rfduino,$scope,'audioHits');
 									setBluetoothDeviceParams(rfduino,$scope,'visualHits');
 								}
@@ -238,7 +238,7 @@ function setConnectedDeviceInfos($scope,type){
 						'WHERE sensorUUID="'+$scope.connectedDevice.uuid+'";',[],
 						function(tx){},
 						function(tx,error){requestTableError(tx, error,"update version infos devices");});
-				if (typeof rfduino == 'undefined')
+				if (typeof rfduino != 'undefined')
 					setBluetoothDeviceParams(rfduino,$scope,'audioHits');
 			}
 			
@@ -249,7 +249,7 @@ function setConnectedDeviceInfos($scope,type){
 						'WHERE sensorUUID="'+$scope.connectedDevice.uuid+'";',[],
 						function(tx){},
 						function(tx,error){requestTableError(tx, error,"update version infos devices");});
-				if (typeof rfduino == 'undefined')
+				if (typeof rfduino != 'undefined')
 					setBluetoothDeviceParams(rfduino,$scope,'visualHits');
 					
 			}
@@ -641,7 +641,6 @@ function doAskBluetoothDeviceInfos(rfduino)
 
 function setBluetoothDeviceParams(rfduino,$scope,type)
 {
-	alert('setBluetoothDeviceParams');
 	var data = new Uint8Array(1);
 	if (type == "audioHits")
 	{
@@ -650,7 +649,7 @@ function setBluetoothDeviceParams(rfduino,$scope,type)
 		if($scope.connectedDevice.audioHits==false)data[1]=0x01;
 		rfduino.write(data.buffer,function() {
 			//success
-			alert('succes audio');
+			//alert('succes audio');
 			},
 		    function() {alertNotif(deviceId+" failure send param silent","Failure","Ok")}
 		);
@@ -662,7 +661,7 @@ function setBluetoothDeviceParams(rfduino,$scope,type)
 		if($scope.connectedDevice.visualHits==false)data[1]=0x01;
 		rfduino.write(data.buffer,function() {
 			//success
-			alert('succes visual');
+			//alert('succes visual');
 			},
 		    function() {alertNotif(deviceId+" failure send param silent","Failure","Ok")}
 		);
