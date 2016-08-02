@@ -620,7 +620,7 @@ function doAskBluetoothDeviceInfos(rfduino)
 function setBluetoothDeviceParams(rfduino,$scope,type)
 {
 	alert('setBluetoothDeviceParams');
-	var data = new Uint8Array(1);
+	var data = new Uint8Array(2);
 	if (type == "audioHits")
 	{
 		data[0]=IN_PACKET_SILENT;

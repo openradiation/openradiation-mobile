@@ -18,20 +18,21 @@
 					<div>{{device.uuid}}</div>
 				</div>	
 				<div class="connect">
-					<div ng-if="connectedDevice.uuid==device.uuid">Connecté</div>
+					<div ng-if="connectedDevice.uuid==device.uuid" class="button" ng-click="doDisconnect(connectedDevice.uuid)">Se déconnecter</div>
 					<div ng-if="connectedDevice.uuid!=device.uuid" class="button" ng-click="doConnect(device)">Se connecter</div>
 				</div>
 			</div>
 		</div>
 		
-		<div ng-if="connectedDevice.uuid!=0">
-			<div class="gps" ng-click="doData(connectedDevice.uuid)" style="margin-top:10px">onData</div>
-			Audio : <div class="button"><ui-switch ng-change="saveAudioHits()" ng-model='$parent.connectedDevice.audioHits'></ui-switch></div>
+		<div ng-if="connectedDevice.uuid!=0" style="color:white">
+			<div class="gps" ng-click="doData(connectedDevice.uuid)" style="margin-top:10px;width:100%">onData</div>
+			Audio : <div class="button" style="display:inline-block;vertical-align:middle"><ui-switch ng-change="saveAudioHits()" ng-model='$parent.connectedDevice.audioHits'></ui-switch></div>
+			| Visuel :<div class="button" style="display:inline-block;vertical-align:middle"><ui-switch ng-change="saveVisualHits()" ng-model='$parent.connectedDevice.visualHits'></ui-switch></div>
 			<div class="gps" ng-click="doWriteChangeSilence(connectedDevice.uuid,1)" style="margin-top:10px">silence</div>
 			<div class="gps" ng-click="doWriteChangeSilence(connectedDevice.uuid,0)" style="margin-top:10px">bruyant</div>
 			<div class="gps" ng-click="doWriteAskInfo(connectedDevice.uuid)" style="margin-top:10px">Demande info</div>
 			<div class="gps" ng-click="doWrite2(connectedDevice.uuid)" style="margin-top:10px">tension 380</div><br>
-			<div class="gps" ng-click="doDisconnect(connectedDevice.uuid)" style="margin-top:10px">Disconnect</div>
+			<!--<div class="gps" ng-click="doDisconnect(connectedDevice.uuid)" style="margin-top:10px">Disconnect</div>
 			<!--<div class="gps" ng-click="doDataTension3(connectedDevice.uuid)" style="margin-top:10px">Write set_tension (on)+get datta</div>-->
 
 			<!-- <div class="gps" ng-click="doWrite5(connectedDevice.uuid)" style="margin-top:10px">Write set_tension (on test 3)</div> -->
