@@ -477,7 +477,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			$scope.length = data.byteLength;
 			var dataView = new DataView(data);
 			offset =0
-			var myData = getDataTest(data)
+			var myData = getData(data);
 			$scope.data = JSON.stringify(myData);
 			$scope.dataDebug[convertIdDebug($scope.iData)] = myData;
 			$scope.iData++;
@@ -492,7 +492,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			$scope.length = data.byteLength;
 			var dataView = new DataView(data);
 			offset =0
-			var myData = getDataTest(data)
+			var myData = getData(data);
 			$scope.data = JSON.stringify(myData);
 			$scope.dataDebug[convertIdDebug($scope.iData)] = myData;
 			$scope.iData++;
@@ -507,7 +507,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 				$scope.length = data.byteLength;
 				var dataView = new DataView(data);
 				offset =0
-				var myData = getDataTest(data)
+				var myData = getData(data);
 				$scope.data = JSON.stringify(myData);
 				$scope.dataDebug[convertIdDebug($scope.iData)] = myData;
 				$scope.iData++;

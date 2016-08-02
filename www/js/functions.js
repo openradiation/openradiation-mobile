@@ -711,9 +711,9 @@ function doOnData(rfduino,$scope)
 	function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
 }
 
-function getDataTest(data) {
+/*function getDataTest(data) {
 	getData(data);
-}
+}*/
 
 function getData(data) {
     var offset = 0;
