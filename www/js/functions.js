@@ -251,6 +251,8 @@ function setConnectedDeviceInfos($scope,type){
 						function(tx,error){requestTableError(tx, error,"update version infos devices");});
 				if (typeof rfduino == 'undefined')
 					setBluetoothDeviceParams(rfduino,$scope,'visualHits');
+				if (typeof rfduino == 'undefined')
+					alert('undefined');
 			}
 		}
 	);
