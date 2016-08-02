@@ -135,7 +135,7 @@ function requestTableError(tx, error, tableName) {
 }
 
 //devices requests
-function setConnectedDevice($scope,rfduino)
+function setConnectedDevice($scope)
 {
 	console.log('setConnectedDevice');
 	db.transaction(
@@ -160,12 +160,12 @@ function setConnectedDevice($scope,rfduino)
 								$scope.connectedDevice.tubeType = res.rows.item(0).sensorTubeType;
 								$scope.connectedDevice.audioHits = (res.rows.item(0).paramAudioHits?true:false);
 								$scope.connectedDevice.visualHits = (res.rows.item(0).paramVisualHits?true:false);
-								if (typeof rfduino != 'undefined')
+								/*if (typeof rfduino != 'undefined')
 								{
 									
 									setBluetoothDeviceParams(rfduino,$scope,'audioHits');
 									setBluetoothDeviceParams(rfduino,$scope,'visualHits');
-								}
+								}*/
 							}
 							else
 							{
@@ -200,7 +200,7 @@ function setConnectedDevice($scope,rfduino)
 	);
 }
 
-function setConnectedDeviceInfos($scope,type,rfduino){
+function setConnectedDeviceInfos($scope,type){
 	db.transaction(
 		function(tx) 
 		{
@@ -238,8 +238,6 @@ function setConnectedDeviceInfos($scope,type,rfduino){
 						'WHERE sensorUUID="'+$scope.connectedDevice.uuid+'";',[],
 						function(tx){},
 						function(tx,error){requestTableError(tx, error,"update version infos devices");});
-				if (typeof rfduino != 'undefined')
-					setBluetoothDeviceParams(rfduino,$scope,'audioHits');
 			}
 			
 			if (type == "visualHits")
@@ -249,8 +247,6 @@ function setConnectedDeviceInfos($scope,type,rfduino){
 						'WHERE sensorUUID="'+$scope.connectedDevice.uuid+'";',[],
 						function(tx){},
 						function(tx,error){requestTableError(tx, error,"update version infos devices");});
-				if (typeof rfduino != 'undefined')
-					setBluetoothDeviceParams(rfduino,$scope,'visualHits');
 					
 			}
 		}
