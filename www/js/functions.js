@@ -134,6 +134,7 @@ function requestTableError(tx, error, tableName) {
   console.log("Table "+tableName+" error : " + error.message);
 }
 
+//devices requests
 function setConnectedDevice($scope)
 {
 	console.log('setConnectedDevice');
@@ -159,6 +160,12 @@ function setConnectedDevice($scope)
 								$scope.connectedDevice.tubeType = res.rows.item(0).sensorTubeType;
 								$scope.connectedDevice.audioHits = (res.rows.item(0).paramAudioHits?true:false);
 								$scope.connectedDevice.visualHits = (res.rows.item(0).paramVisualHits?true:false);
+								
+								if (typeof rfduino == 'undefined')
+								{
+									setBluetoothDeviceParams(rfduino,$scope,'audioHits');
+									setBluetoothDeviceParams(rfduino,$scope,'visualHits');
+								}
 							}
 							else
 							{
@@ -191,30 +198,6 @@ function setConnectedDevice($scope)
 			function(tx){
 			}
 	);
-	/*db.transaction(
-			function(tx) 
-			{
-				tx.executeSql('CREATE TABLE IF NOT EXISTS "devices" ' +
-						' ("id" INTEGER PRIMARY KEY AUTOINCREMENT , ' +
-						'  "sensorUUID" VARCHAR,' +
-						'  "sensorName" VARCHAR,' +
-						'  "sensorVersion" VARCHAR,' +
-						'  "sensorType" VARCHAR,' +
-						'  "sensorTubeType" VARCHAR,' +
-						'  "paramAudioHits" BOOLEAN not null default 1,' +
-						'  "paramVisualHits" BOOLEAN not null default 1' +
-						');',[],
-						function(tx){},
-						function(tx,error){createTableError(tx, error,"devices");});
-			},
-			function(tx,error){
-				transactionError(tx, error);
-				callback(true,'transaction createTableDevices Error')
-			},
-			function(tx){
-				callback(null,'transaction createTableDevices Success')
-			}
-	);*/
 }
 
 function setConnectedDeviceInfos($scope,type){
@@ -255,6 +238,8 @@ function setConnectedDeviceInfos($scope,type){
 						'WHERE sensorUUID="'+$scope.connectedDevice.uuid+'";',[],
 						function(tx){},
 						function(tx,error){requestTableError(tx, error,"update version infos devices");});
+				if (typeof rfduino == 'undefined')
+					setBluetoothDeviceParams(rfduino,$scope,'audioHits');
 			}
 			
 			if (type == "visualHits")
@@ -264,12 +249,15 @@ function setConnectedDeviceInfos($scope,type){
 						'WHERE sensorUUID="'+$scope.connectedDevice.uuid+'";',[],
 						function(tx){},
 						function(tx,error){requestTableError(tx, error,"update version infos devices");});
+				if (typeof rfduino == 'undefined')
+					setBluetoothDeviceParams(rfduino,$scope,'visualHits');
 			}
 		}
 	);
 		
 }
 
+//measures requests
 function insertMeasures($scope,res,device){
 	db.transaction(function(tx) {
 		tx.executeSql('INSERT INTO "measures" '+
@@ -452,6 +440,7 @@ function sendMeasures($scope,id){
 	);
 }
 
+//params requests
 function saveParam(paramName,active,text)
 {
 	db.transaction(function(tx) {
@@ -544,6 +533,7 @@ function getParam($scope,paramName)
 		
 }
 
+//user function
 function testUser($scope,$location){
 	args ={};
 	args.apiKey = API_KEY;
@@ -608,7 +598,7 @@ function testUser($scope,$location){
 
 
 
-testi = 0;
+/*testi = 0;
 function test(callback,value){
 //var test = function(tx,value){
 	testi = testi + 1;
@@ -616,7 +606,7 @@ function test(callback,value){
 	console.log(value);
 	console.log("fin?");
 	callback(null, 'test');
-}
+}*/
 
 
 
@@ -626,13 +616,10 @@ function test(callback,value){
 /////////////////////////////////////////////////////////////////////
 function doBluetoothDeviceSearch($scope)
 {
-	console.log("Bluetooth is enabled");
-    alert("Bluetooth is enabled");
-   // $scope.devices = {};
+	/*console.log("Bluetooth is enabled");
+    alert("Bluetooth is enabled");*/
     //TODO : do scan until find a known one
     rfduino.discover(5, function(device) {
-	    //console.log(JSON.stringify(device));
-		//alert(JSON.stringify(device));
     	$scope.devices[device.id] = device;
     	$scope.$apply();
 	}, function(){alert('pb');} );
@@ -645,15 +632,172 @@ function doAskBluetoothDeviceInfos(rfduino)
 	
 	rfduino.write(data.buffer,function() {
 		//success
-		//alertNotif(deviceId+" succes send info","Success","Ok");
 
 		},
 	    function() {alertNotif(deviceId+" failure send info","Failure","Ok")}
 	);
 }
 
+function setBluetoothDeviceParams(rfduino,$scope,type)
+{
+	var data = new Uint8Array(1);
+	if (type == "audioHits")
+	{
+		data[0]=IN_PACKET_SILENT;
+		data[1]=0x00;
+		if($scope.connectedDevice.audioHits==false)data[1]=0x01;
+		rfduino.write(data.buffer,function() {
+			//success
+			},
+		    function() {alertNotif(deviceId+" failure send param silent","Failure","Ok")}
+		);
+	}
+	if (type == "visualHits")
+	{
+		data[0]=IN_PACKET_STEALTH;
+		data[1]=0x00;
+		if($scope.connectedDevice.visualHits==false)data[1]=0x01;
+		rfduino.write(data.buffer,function() {
+			//success
+			},
+		    function() {alertNotif(deviceId+" failure send param silent","Failure","Ok")}
+		);
+	}
+}
+
+function doOnData(rfduino,$scope)
+{
+	rfduino.onData(function(data){
+			var myData = getData(data)
+			for (var key in myData) {
+				if (myData.hasOwnProperty(key)) {
+					//version
+					if (key == "2")
+					{
+						$scope.connectedDevice.version = myData[key].data;
+						setConnectedDeviceInfos($scope,'version');
+						$scope.$apply();
+					}
+					
+					//sensor_type
+					if (key == "3")
+					{
+						$scope.connectedDevice.sensorType = myData[key].data;
+						setConnectedDeviceInfos($scope,'sensorType');
+						$scope.$apply();
+					}
+					
+					//count
+					if (key == "5" && $scope.mesure.encours)
+					{
+						var mytimestamp = parseInt(new Date().getTime()/1000);
+						var duration = mytimestamp - $scope.mesure.timedeb
+						$scope.mesure.duration = duration;
+						$scope.mesure.total += myData[key].data;
+						$scope.mesure.moymin = ($scope.mesure.total / duration * 60).toFixed(2);
+						$scope.mesure.valeurnsv = convertNanosievert($scope.mesure.total,duration);
+						$scope.mesure.log[mytimestamp] = {}
+						$scope.mesure.log[mytimestamp].timestamp = mytimestamp;
+						$scope.mesure.log[mytimestamp].coup = myData[key].data;
+						
+						$scope.$apply();
+						doProgressBar($scope.mesure.total);
+						//i++;
+					}
+					
+					//temperature
+					if (key == "6" && $scope.mesure.encours)
+					{
+						$scope.mesure.temperature = myData[key].data;
+						$scope.$apply();
+					}
+					
+					//tube_type
+					if (key == "16")
+					{
+						$scope.connectedDevice.tubeType = myData[key].data;
+						setConnectedDeviceInfos($scope,'tubeType');
+						$scope.$apply();
+					}
+				}
+			}
+	},
+	function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
+}
+
+function getDataTest(data) {
+	getData(data);
+}
+
+function getData(data) {
+    var offset = 0;
+    var datatype = 0;
+    var stringlen = 0;
+    var buff = new Uint8Array(data);
+    var dataView = new DataView(data);
+    var hex = [];
+    
+    for (var i=offset ; i<offset+buff.length ; i++) {
+            hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
+        }
+    myData = {}
+	
+    while (offset < buff.length) {
+	datatype = dataView.getUint8(offset);
+	offset++;
+	switch (datatype) {
+            case OUT_PACKET_COUNT:
+	    case OUT_PACKET_DEBUG_BYTE1:
+	    case OUT_PACKET_DEBUG_BYTE2: 
+        	myData[datatype] ={};
+        	myData[datatype]['data'] = dataView.getUint8(offset);
+		offset++;
+        	break;
+            case 0xA2: 
+                horizon.pitch = dataView.getFloat32(offset, true);
+                for (var i=offset ; i<offset+4 ; i++) {
+                    hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
+                }
+                offset += 4;
+                break;
+            
+	    case OUT_PACKET_ACTUAL_TENSION :
+	    case OUT_PACKET_PWM_DUTY_CYCLE : 
+                tension_courante = dataView.getFloat32(offset, true);
+                myData[datatype] ={};
+        	myData[datatype]['data'] = tension_courante;
+		offset += 4;
+                break;
+            
+	    case OUT_PACKET_SENSOR_TYPE :
+	    case OUT_PACKET_TUBE_TYPE :
+	    case OUT_PACKET_VERSION : 
+                stringlen = dataView.getUint8(offset);
+		offset++;
+		myData[datatype] ={};
+        	myData[datatype]['data'] = '';
+		
+		for (var i=offset ; i<offset+stringlen ; i++) {
+			myData[datatype]['data'] +=  String.fromCharCode(buff[i]);
+			 }
+
+		offset += stringlen;
+                break;
+            
+	    
+            default:
+		offset++;
+	    break;
+        }
+    }
+    //myData[type]['lng'] = buff.length;
+    myData['hex']={};
+    myData['hex']['hex'] =hex.join(" ").toUpperCase();
+    return myData;
+}
+
 /////////////////////////////////////////////////////////////////////
-//Functions Fake
+//Functions FAKE
 /////////////////////////////////////////////////////////////////////
 function fakeBluetoothDeviceSearch($scope)
 {
@@ -729,7 +873,6 @@ function alertNotif(message,titre,buttonText)
 			alert(titre+"\n\n"+message);
 }
 
-
 //Function affichage debug
 function alertDebug(message)
 {
@@ -745,6 +888,10 @@ function alertDebug(message)
 			alert(message);
 }
 
+/////////////////////////////////////////////////////////////////////
+//Functions UTILS
+/////////////////////////////////////////////////////////////////////
+
 //UUID
 function generateUUID() {
     var d = new Date().getTime();
@@ -756,16 +903,16 @@ function generateUUID() {
     return uuid;
 };
 
-///
-function ArrayBufferToString(buffer) {
+//Conversion
+/*function ArrayBufferToString(buffer) {
     return BinaryToString(String.fromCharCode.apply(null, Array.prototype.slice.apply(new Uint8Array(buffer))));
-}
+}*/
 
-function StringToArrayBuffer(string) {
+/*function StringToArrayBuffer(string) {
     return StringToUint8Array(string).buffer;
-}
+}*/
 
-function BinaryToString(binary) {
+/*function BinaryToString(binary) {
     var error;
 
     try {
@@ -778,9 +925,9 @@ function BinaryToString(binary) {
             throw error;
         }
     }
-}
+}*/
 
-function StringToBinary(string) {
+/*function StringToBinary(string) {
     var chars, code, i, isUCS2, len, _i;
 
     len = string.length;
@@ -801,9 +948,9 @@ function StringToBinary(string) {
     } else {
         return String.fromCharCode.apply(null, Array.prototype.slice.apply(chars));
     }
-}
+}*/
 
-function StringToUint8Array(string) {
+/*function StringToUint8Array(string) {
     var binary, binLen, buffer, chars, i, _i;
     binary = StringToBinary(string);
     binLen = binary.length;
@@ -813,18 +960,14 @@ function StringToUint8Array(string) {
         chars[i] = String.prototype.charCodeAt.call(binary, i);
     }
     return chars;
-}
+}*/
 
-/*var onData = function(arrayBuffer) {
-    var a = new Float32Array(arrayBuffer);
-    celsius = a[0];
-    fahrenheit = celsius * 1.8 + 32;
-  }*/
 
-var arrayBufferToFloat = function (ab) {
+
+/*var arrayBufferToFloat = function (ab) {
     var a = new Float32Array(ab);
     return a[0];
-};
+};*/
 
 /*function getData(data) {
     var offset = 0;
@@ -875,139 +1018,9 @@ var arrayBufferToFloat = function (ab) {
     return myData;
 }*/
 
-function getDataTest(data) {
-	getData(data);
-}
 
-function getData(data) {
-    var offset = 0;
-    var datatype = 0;
-    var stringlen = 0;
-    var buff = new Uint8Array(data);
-    var dataView = new DataView(data);
-    var hex = [];
-    
-    for (var i=offset ; i<offset+buff.length ; i++) {
-            hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
-        }
-    myData = {}
-	
-    while (offset < buff.length) {
-	datatype = dataView.getUint8(offset);
-	offset++;
-	switch (datatype) {
-            case OUT_PACKET_COUNT:
-	    case OUT_PACKET_DEBUG_BYTE1:
-	    case OUT_PACKET_DEBUG_BYTE2: 
-        	myData[datatype] ={};
-        	myData[datatype]['data'] = dataView.getUint8(offset);
-		offset++;
-        	break;
-            case 0xA2: 
-                horizon.pitch = dataView.getFloat32(offset, true);
-                for (var i=offset ; i<offset+4 ; i++) {
-                    hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
-                }
-                offset += 4;
-                break;
-            
-	    case OUT_PACKET_ACTUAL_TENSION :
-	    case OUT_PACKET_PWM_DUTY_CYCLE : 
-                tension_courante = dataView.getFloat32(offset, true);
-                myData[datatype] ={};
-        	myData[datatype]['data'] = tension_courante;
-		offset += 4;
-                break;
-            
-	    case OUT_PACKET_SENSOR_TYPE :
-	    case OUT_PACKET_TUBE_TYPE :
-	    case OUT_PACKET_VERSION : 
-                stringlen = dataView.getUint8(offset);
-		offset++;
-		myData[datatype] ={};
-        	myData[datatype]['data'] = '';
-		
-		for (var i=offset ; i<offset+stringlen ; i++) {
-			myData[datatype]['data'] +=  String.fromCharCode(buff[i]);
-			 }
 
-		offset += stringlen;
-                break;
-            
-	    
-            default:
-		offset++;
-	    break;
-        }
-    }
-    //myData[type]['lng'] = buff.length;
-    myData['hex']={};
-    myData['hex']['hex'] =hex.join(" ").toUpperCase();
-    return myData;
-}
-
-function doOnData(rfduino,$scope)
-{
-	rfduino.onData(function(data){
-			var myData = getData(data)
-			for (var key in myData) {
-				if (myData.hasOwnProperty(key)) {
-					//version
-					if (key == "2")
-					{
-						$scope.connectedDevice.version = myData[key].data;
-						setConnectedDeviceInfos($scope,'version');
-						//TODO : test si different, update en base
-						$scope.$apply();
-					}
-					
-					//sensor_type
-					if (key == "3")
-					{
-						$scope.connectedDevice.sensorType = myData[key].data;
-						setConnectedDeviceInfos($scope,'sensorType');
-						//TODO : test si different, update en base
-						$scope.$apply();
-					}
-					
-					//count
-					if (key == "5" && $scope.mesure.encours)
-					{
-						var mytimestamp = parseInt(new Date().getTime()/1000);
-						var duration = mytimestamp - $scope.mesure.timedeb
-						$scope.mesure.duration = duration;
-						$scope.mesure.total += myData[key].data;
-						$scope.mesure.moymin = ($scope.mesure.total / duration * 60).toFixed(2);
-						$scope.mesure.valeurnsv = convertNanosievert($scope.mesure.total,duration);
-						$scope.mesure.log[mytimestamp] = {}
-						$scope.mesure.log[mytimestamp].timestamp = mytimestamp;
-						$scope.mesure.log[mytimestamp].coup = myData[key].data;
-						
-						$scope.$apply();
-						doProgressBar($scope.mesure.total);
-						//i++;
-					}
-					
-					//temperature
-					if (key == "6" && $scope.mesure.encours)
-					{
-						$scope.mesure.temperature = myData[key].data;
-						$scope.$apply();
-					}
-					
-					//tube_type
-					if (key == "16")
-					{
-						$scope.connectedDevice.tubeType = myData[key].data;
-						setConnectedDeviceInfos($scope,'tubeType');
-						//TODO : test si different, update en base
-						$scope.$apply();
-					}
-				}
-			}
-	},
-	function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
-}
+//Conversions
 
 function convertNanosievert(nbCoup,duration)
 {
@@ -1066,6 +1079,7 @@ function convertIdDebug(m)
  return ('000000000' + (parseInt(m))).slice(-9);
 }
 
+//raz
 function resetMesureForm($scope){
 	$scope.modelDuration = "";
 	$scope.modelRadiation = "";
