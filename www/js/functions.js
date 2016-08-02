@@ -648,8 +648,10 @@ function setBluetoothDeviceParams(rfduino,$scope,type)
 		data[0]=IN_PACKET_SILENT;
 		data[1]=0x00;
 		alert($scope.connectedDevice.audioHits);
-		if($scope.connectedDevice.audioHits==false)data[1]=0x01;
-		alert(data[1]);
+		if($scope.connectedDevice.audioHits==false)
+			{data[1]=0x01;
+			alert("falseeeee");
+			}
 		rfduino.write(data.buffer,function() {
 			//success
 			alert('succes audio');
