@@ -251,8 +251,7 @@ function setConnectedDeviceInfos($scope,type){
 						function(tx,error){requestTableError(tx, error,"update version infos devices");});
 				if (typeof rfduino == 'undefined')
 					setBluetoothDeviceParams(rfduino,$scope,'visualHits');
-				if (typeof rfduino == 'undefined')
-					alert('undefined');
+					
 			}
 		}
 	);
@@ -650,6 +649,7 @@ function setBluetoothDeviceParams(rfduino,$scope,type)
 		if($scope.connectedDevice.audioHits==false)data[1]=0x01;
 		rfduino.write(data.buffer,function() {
 			//success
+			alert('succes audio');
 			},
 		    function() {alertNotif(deviceId+" failure send param silent","Failure","Ok")}
 		);
@@ -661,6 +661,7 @@ function setBluetoothDeviceParams(rfduino,$scope,type)
 		if($scope.connectedDevice.visualHits==false)data[1]=0x01;
 		rfduino.write(data.buffer,function() {
 			//success
+			alert('succes visual');
 			},
 		    function() {alertNotif(deviceId+" failure send param silent","Failure","Ok")}
 		);
