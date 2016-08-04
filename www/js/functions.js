@@ -369,8 +369,9 @@ function sendMeasures($scope,id){
 						
 						
 						//GPS
-						args.data.longitude = parseInt(mesure.longitude);
-						args.data.latitude = parseInt(mesure.latitude);
+						args.data.longitude = mesure.longitude;
+						args.data.latitude = mesure.latitude;
+						alert(args.data.longitude);
 						
 						//mesure
 						args.data.value = mesure.radiation;
