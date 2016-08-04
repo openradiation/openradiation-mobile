@@ -264,7 +264,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		if (isMobile)
 			navigator.notification.confirm(
 					message,  			
-				    function(buttonIndex){alert ("Vous bouton sélectionné " + buttonIndex);/*deleteMeasures($scope,id);*/},      
+				    function(buttonIndex){/*alert ("Vous bouton sélectionné " + buttonIndex);*/if (buttonIndex==1)deleteMeasures($scope,id);},      
 				    titre,
 				    [ 'Oui','Non' ]
 				);
