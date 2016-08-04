@@ -463,6 +463,25 @@ function sendMeasures($scope,id){
 	);
 }
 
+function deleteMeasures($scope,id){
+	db.transaction(function(tx) {
+		tx.executeSql('DELETE FROM "measures" WHERE id='+id+';',[], 
+				function(tx,res){
+					getMeasures($scope);
+					$scope.$apply();
+				},
+				function(tx,error){requestTableError(tx, error,"delete measures");});
+		},
+		function(tx,error){
+			transactionError(tx, error);
+		},
+		function(tx){
+		}
+		);
+		
+
+}
+
 //params requests
 function saveParam(paramName,active,text)
 {
@@ -884,6 +903,19 @@ function alertNotif(message,titre,buttonText)
 			);
 		else
 			alert(titre+"\n\n"+message);
+}
+
+function alertConfirm(message,titre,buttonText)
+{
+		if (isMobile)
+		navigator.notification.alert(
+				message,  			// message
+			    function(){},       // callback
+			    titre,            	// title
+			    buttonText          // buttonName
+			);
+		else
+			return confirm(titre+"\n\n"+message);
 }
 
 //Function affichage debug

@@ -258,6 +258,20 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		sendMeasures($scope,id);
 	}
 	
+	$scope.doDelete  = function(id){
+		titre = "Historique";
+		message = "Êtes-vous sûr(e) de vouloir supprimer cette mesure";
+		if (isMobile)
+			navigator.notification.confirm(
+					message,  			
+				    function(){deleteMeasures($scope,id);},      
+				    titre        
+				);
+			else
+				if (confirm(titre+"\n\n"+message))
+					deleteMeasures($scope,id);
+	}
+	
 	$scope.doParam = function(clickEvent){
 		console.log('doParam');
 		$location.path('/param');
