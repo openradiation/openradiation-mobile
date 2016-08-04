@@ -905,18 +905,6 @@ function alertNotif(message,titre,buttonText)
 			alert(titre+"\n\n"+message);
 }
 
-function alertConfirm(message,titre,buttonText)
-{
-		if (isMobile)
-		navigator.notification.alert(
-				message,  			// message
-			    function(){},       // callback
-			    titre,            	// title
-			    buttonText          // buttonName
-			);
-		else
-			return confirm(titre+"\n\n"+message);
-}
 
 //Function affichage debug
 function alertDebug(message)
