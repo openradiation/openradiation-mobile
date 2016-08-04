@@ -335,11 +335,11 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 				var latitude = position.coords.latitude;
 				var longitude = position.coords.longitude;
 				var zoom = 12;
-				uri = "https://request.open-radiation.net/openradiation/"+zoom+"/"+latitude+"/"+longitude;
+				uri = INAPPBROWSER_URI + "/"+zoom+"/"+latitude+"/"+longitude;
 				window.open(uri, '_blank', 'location=no,closebuttoncaption=Fermer');
 				
 			},function (error) {
-				uri = "https://request.open-radiation.net/openradiation";
+				uri = INAPPBROWSER_URI;
 				window.open(uri, '_blank', 'location=no,closebuttoncaption=Fermer');
 		      });
 	}
