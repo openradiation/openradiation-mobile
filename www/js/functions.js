@@ -922,14 +922,15 @@ function convertDurationForDisplay(duration)
 {
 	var timeToDisplay = "";
 	seconde= duration%60;
-	timeToDisplay = seconde+'"';
+	timeToDisplay = convertWithZero(seconde)+'"';
 	if ((duration-seconde) > 0)
 	{
-		minute = (duration-seconde)%3600;
-		timeToDisplay = minute+"'"+timeToDisplay;
-		if ((duration-seconde-minute) > 0)
+		//minute = (duration-seconde)%3600;
+		minute = ((duration-seconde)/60)%60;
+		timeToDisplay = convertWithZero(minute)+"'"+timeToDisplay;
+		if ((duration-seconde-(minute*60)) > 0)
 		{
-			hour = duration-seconde-minute;
+			hour = (duration-seconde-(minute*60))/3600;
 			timeToDisplay = hour+"h"+timeToDisplay;
 		}
 	}
