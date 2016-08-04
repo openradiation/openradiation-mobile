@@ -421,14 +421,26 @@ function sendMeasures($scope,id){
 									}
 									else
 									//error	
-									{
-										alertNotif("Erreur d'envoi =\n"+xhr_object.status+' : '+xhr_object.responseText,'Envoi Mesure','Ok');
+									{ 
+										if (xhr_object.responseText != "")
+										{
+											aError = JSON.parse(xhr_object.responseText);
+											alertNotif("Erreur d'envoi =\n"+aError.error.code+' : '+aError.error.message,'Envoi Mesure','Ok');
+										}
+										else
+											alertNotif("Erreur d'envoi =\n"+xhr_object.status,'Envoi Mesure','Ok');
 									}
 								}
 								else
 								//error
 								{
-									alertNotif("Erreur d'envoi =\n"+xhr_object.status+' : '+xhr_object.responseText,'Envoi Mesure','Ok');
+									if (xhr_object.responseText != "")
+									{
+										aError = JSON.parse(xhr_object.responseText);
+										alertNotif("Erreur d'envoi =\n"+aError.error.code+' : '+aError.error.message,'Envoi Mesure','Ok');
+									}
+									else
+										alertNotif("Erreur d'envoi =\n"+xhr_object.status,'Envoi Mesure','Ok');
 								}
 								
 							}
@@ -587,14 +599,26 @@ function testUser($scope,$location){
 				else
 				//error	
 				{
-					alertNotif("Erreur =\n"+xhr_object.status+" : "+xhr_object.responseText,'Authentification','Ok');
+					if (xhr_object.responseText != "")
+					{
+						aError = JSON.parse(xhr_object.responseText);
+						alertNotif("Erreur d'envoi =\n"+aError.error.code+' : '+aError.error.message,'Authentification','Ok');
+					}
+					else
+						alertNotif("Erreur d'envoi =\n"+xhr_object.status,'Authentification','Ok');
 				}
 			
 			}
 	  		else
   			 //error
   			 {
-  			 	alertNotif("Erreur d'envoi =\n"+xhr_object.status+" : " +xhr_object.responseText,'Authentification','Ok');
+	  			if (xhr_object.responseText != "")
+				{
+					aError = JSON.parse(xhr_object.responseText);
+					alertNotif("Erreur d'envoi =\n"+aError.error.code+' : '+aError.error.message,'Authentification','Ok');
+				}
+				else
+					alertNotif("Erreur d'envoi =\n"+xhr_object.status,'Authentification','Ok');
   			 }
 	  	 }
 	  	 return xhr_object.readyState;
