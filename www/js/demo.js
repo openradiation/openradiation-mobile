@@ -159,47 +159,50 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	}
 	
 	$scope.doMesure = function(clickEvent){
-		console.log('doMesure');
-		$location.path('/mesurePrise');
-		$scope.top = "1";
-		$scope.menu="0";
-		
-		$scope.mesure = {};
-		$scope.mesure.total = 0 ;
-		$scope.mesure.log = {}
-		$scope.mesure.encours = true;
-		$scope.mesure.timedeb = parseInt(new Date().getTime()/1000);
-		
-		$scope.mesure.latitude = 0;
-		$scope.mesure.longitude = 0;
-		$scope.mesure.gps = 1;
-		$scope.mesure.temperature = -1000;
-		$scope.mesure.env = 0;
-		$scope.mesure.position = 0;
-		$scope.mesure.tags = "tags";
-		$scope.mesure.notes = "notes";
-		$scope.mesure.valeurnsv = 0;
-		$scope.mesure.duration = 0;
-		if (typeof navigator.geolocation != 'undefined')
-			navigator.geolocation.getCurrentPosition(function (position){
-				$scope.mesure.latitude = position.coords.latitude;
-				$scope.mesure.longitude = position.coords.longitude;
-			},function (error) {
-		        alert('code: '    + error.code    + '\n' +
-		                'message: ' + error.message + '\n');
-		      });
-		
-		if (typeof rfduino == 'undefined')
+		if ($scope.connectedDevice!=0)
 		{
-			//cas emulation chrome
-			fakeBluetoothDeviceInfos($scope);
-			fakeMesure($scope);
-		}
-		else
-		{
-			$scope.setTension($scope.connectedDevice.uuid);
-			doOnData(rfduino,$scope);
-			doAskBluetoothDeviceInfos(rfduino);
+			console.log('doMesure');
+			$location.path('/mesurePrise');
+			$scope.top = "1";
+			$scope.menu="0";
+			
+			$scope.mesure = {};
+			$scope.mesure.total = 0 ;
+			$scope.mesure.log = {}
+			$scope.mesure.encours = true;
+			$scope.mesure.timedeb = parseInt(new Date().getTime()/1000);
+			
+			$scope.mesure.latitude = 0;
+			$scope.mesure.longitude = 0;
+			$scope.mesure.gps = 1;
+			$scope.mesure.temperature = -1000;
+			$scope.mesure.env = 0;
+			$scope.mesure.position = 0;
+			$scope.mesure.tags = "tags";
+			$scope.mesure.notes = "notes";
+			$scope.mesure.valeurnsv = 0;
+			$scope.mesure.duration = 0;
+			if (typeof navigator.geolocation != 'undefined')
+				navigator.geolocation.getCurrentPosition(function (position){
+					$scope.mesure.latitude = position.coords.latitude;
+					$scope.mesure.longitude = position.coords.longitude;
+				},function (error) {
+			        alert('code: '    + error.code    + '\n' +
+			                'message: ' + error.message + '\n');
+			      });
+			
+			if (typeof rfduino == 'undefined')
+			{
+				//cas emulation chrome
+				fakeBluetoothDeviceInfos($scope);
+				fakeMesure($scope);
+			}
+			else
+			{
+				$scope.setTension($scope.connectedDevice.uuid);
+				doOnData(rfduino,$scope);
+				doAskBluetoothDeviceInfos(rfduino);
+			}
 		}
 	}
 	
@@ -428,7 +431,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			{
 				$scope.connectedDevice = device;
 				setConnectedDevice($scope);
-				$scope.$apply();
+				//$scope.$apply();
 			}
 			else
 			{
@@ -437,7 +440,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 							//success
 							$scope.connectedDevice = device;
 							setConnectedDevice($scope);
-							$scope.$apply();
+							//$scope.$apply();
 							
 
 						},

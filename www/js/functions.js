@@ -165,6 +165,7 @@ function setConnectedDevice($scope)
 									setBluetoothDeviceParams(rfduino,$scope,'audioHits');
 									setBluetoothDeviceParams(rfduino,$scope,'visualHits');
 								}
+								$scope.$apply();
 							}
 							else
 							{
@@ -187,6 +188,7 @@ function setConnectedDevice($scope)
 												setBluetoothDeviceParams(rfduino,$scope,'audioHits');
 												setBluetoothDeviceParams(rfduino,$scope,'visualHits');
 											}
+											$scope.$apply();
 										},
 										function(tx,error){requestTableError(tx, error,"insert devices");});
 								
