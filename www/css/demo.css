@@ -326,7 +326,7 @@ input.scrollable-header {
 .mesure .blocMesure2{background-color:#3c1d7c;padding-top:3%;position:relative;z-index:10;}
 .mesure .blocMesure2 .desc{color:#d4aeff;font-size:12px;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;text-transform:uppercase;margin:0 3%;}
 .mesure .blocMesure2 .value{background:url('../img/bg-radiation.png') center top repeat-x transparent;
-	color:white;font-size:10px;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;/*margin:3% 3% 0;*/padding-top:10px;padding-bottom:1%;}
+	color:white;font-size:10px;font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;/*margin:3% 3% 0;*/padding-top:10px;padding-bottom:1%;}
 .mesure .blocMesure2 .value span{font-size:50px;display:block;font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;line-height: 50px;}
 .mesure .blocMesure3{}
 .button-mesure{height:168px;width:168px;background-color:transparent;background-position:center center;background-size:contain;background-repeat:no-repeat;
