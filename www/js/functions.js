@@ -318,7 +318,7 @@ function insertMeasures($scope,res,device){
 function getMeasures($scope){
 	$scope.measures = [],
 	db.transaction(function(tx) {
-		tx.executeSql('SELECT * FROM "measures";',[], 
+		tx.executeSql('SELECT * FROM "measures" ORDER BY tsStart DESC;',[], 
 				function(tx,res){
 			console.log(res);
 					if (res.rows.length > 0)
@@ -953,14 +953,14 @@ function convertTimestampToTimezone(ts)
 function convertTimestampToDate(ts)
 {
 	date = new Date(ts*1000);	
-	return convertWithZero(date.getUTCDate())+"/"+convertWithZero(date.getUTCMonth()+1)+"/"+date.getUTCFullYear();
+	return convertWithZero(date.getDate())+"/"+convertWithZero(date.getMonth()+1)+"/"+date.getFullYear();
 	//return convertWithZero(date.getDate())+"/"+convertWithZero(date.getMonth()+1)+"/"+date.getFullYear();
 }
 
 function convertTimestampToTime(ts)
 {
 	date = new Date(ts*1000);	
-	return date.getUTCHours()+":"+date.getUTCMinutes()+":"+date.getUTCSeconds();
+	return date.getHours()+":"+convertWithZero(date.getMinutes())+":"+convertWithZero(date.getSeconds());
 }
 
 
