@@ -516,7 +516,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		else
 		{
 			alert('defined');
-			rfduino.disconnect(deviceId,
+			rfduino.disconnect(
 				function() {
 					//success
 				alert('success');
