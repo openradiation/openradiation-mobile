@@ -415,7 +415,7 @@ function sendMeasures($scope,id){
 						args.data.latitude = parseFloat(mesure.latitude);
 						args.data.accuracy = parseFloat(mesure.accuracy);
 						if (mesure.altitude != '')
-							args.data.altitude = parseFloat(mesure.altitude);
+							args.data.altitude = parseInt(mesure.altitude);
 						if (mesure.altitudeAccuracy != '')
 							args.data.altitudeAccuracy = parseFloat(mesure.altitudeAccuracy);
 						
