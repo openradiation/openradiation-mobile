@@ -228,6 +228,8 @@ input.scrollable-header {
 
 /*common*/
 .gps {color:white;background-color:#14c921;display:inline-block;border-radius :5px;padding:2px 10px}
+.gps.error{background-color:#e70000;}
+.gps.bad{background-color:#ff7f00;}
 
 /*home*/
 .home {

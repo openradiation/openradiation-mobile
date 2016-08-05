@@ -74,6 +74,9 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	$scope.iData = 0;
 	$scope.dataDebug = {};
 	
+	$scope.gps ="error";
+	
+	
 	
 	if (!isMobile)
 	{
@@ -116,6 +119,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			   		 	}
 		   			 	//recup param si existe
 		   				getParam($scope);
+		   				testGPS($scope,true);
 		   				console.log($scope);
 		   				
 		 
@@ -159,51 +163,64 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	}
 	
 	$scope.doMesure = function(clickEvent){
-		if ($scope.connectedDevice!=0)
-		{
-			console.log('doMesure');
-			$location.path('/mesurePrise');
-			$scope.top = "1";
-			$scope.menu="0";
-			
-			$scope.mesure = {};
-			$scope.mesure.total = 0 ;
-			$scope.mesure.log = {}
-			$scope.mesure.encours = true;
-			$scope.mesure.timedeb = parseInt(new Date().getTime()/1000);
-			
-			$scope.mesure.latitude = 0;
-			$scope.mesure.longitude = 0;
-			$scope.mesure.gps = 1;
-			$scope.mesure.temperature = -1000;
-			$scope.mesure.env = 0;
-			$scope.mesure.position = 0;
-			$scope.mesure.tags = "tags";
-			$scope.mesure.notes = "notes";
-			$scope.mesure.valeurnsv = 0;
-			$scope.mesure.duration = 0;
-			if (typeof navigator.geolocation != 'undefined')
-				navigator.geolocation.getCurrentPosition(function (position){
-					$scope.mesure.latitude = position.coords.latitude;
-					$scope.mesure.longitude = position.coords.longitude;
-				},function (error) {
-			        alert('code: '    + error.code    + '\n' +
-			                'message: ' + error.message + '\n');
+		if (typeof navigator.geolocation != 'undefined')
+			navigator.geolocation.getCurrentPosition(
+				function (position){
+					//gps activé et ok
+					if ($scope.connectedDevice!=0)
+					{
+						console.log('doMesure');
+						$location.path('/mesurePrise');
+						$scope.top = "1";
+						$scope.menu="0";
+						
+						$scope.mesure = {};
+						$scope.mesure.total = 0 ;
+						$scope.mesure.log = {}
+						$scope.mesure.encours = true;
+						$scope.mesure.timedeb = parseInt(new Date().getTime()/1000);
+						
+						$scope.mesure.latitude = 0;
+						$scope.mesure.longitude = 0;
+						$scope.mesure.gps = 1;
+						$scope.mesure.temperature = -1000;
+						$scope.mesure.env = 0;
+						$scope.mesure.position = 0;
+						$scope.mesure.tags = "tags";
+						$scope.mesure.notes = "notes";
+						$scope.mesure.valeurnsv = 0;
+						$scope.mesure.duration = 0;
+						
+						getGPS($scope); 
+						
+						if (typeof rfduino == 'undefined')
+						{
+							//cas emulation chrome
+							fakeBluetoothDeviceInfos($scope);
+							fakeMesure($scope);
+						}
+						else
+						{
+							$scope.setTension($scope.connectedDevice.uuid);
+							doOnData(rfduino,$scope);
+							doAskBluetoothDeviceInfos(rfduino);
+						}
+					}
+				},//fin gps activé et ok
+				function (error) {
+					
+					/*PositionError.PERMISSION_DENIED = 1;
+					PositionError.POSITION_UNAVAILABLE = 2;
+					PositionError.TIMEOUT = 3;*/
+					$scope.gps = 'error';
+					$scope.$apply();
+					if (error.code == 1)
+						alertNotif("L'application ne peut accéder à la localisation. Veuillez lui en donner l'autorisation","Erreur localisation",'Ok');
+					if (error.code == 2)
+						alertNotif("La localisation ne semble pas activée. Veuillez l'activer.","Erreur localisation",'Ok');
+					if (error.code == 2)
+						alertNotif("La localisation n'est pas disponible.","Erreur localisation",'Ok');
 			      });
-			
-			if (typeof rfduino == 'undefined')
-			{
-				//cas emulation chrome
-				fakeBluetoothDeviceInfos($scope);
-				fakeMesure($scope);
-			}
-			else
-			{
-				$scope.setTension($scope.connectedDevice.uuid);
-				doOnData(rfduino,$scope);
-				doAskBluetoothDeviceInfos(rfduino);
-			}
-		}
 	}
 	
 	$scope.endMesure = function(clickEvent){
@@ -387,14 +404,22 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		$scope.mesure.notes = "notes";
 		$scope.mesure.valeurnsv = 0;
 		$scope.mesure.duration = 0;
-		if (typeof navigator.geolocation != 'undefined')
-			navigator.geolocation.getCurrentPosition(function (position){
-				$scope.mesure.latitude = position.coords.latitude;
-				$scope.mesure.longitude = position.coords.longitude;});
+		getGPS($scope);
+		/*if (typeof navigator.geolocation != 'undefined')
+			navigator.geolocation.getCurrentPosition(
+				function (position){
+					$scope.mesure.latitude = position.coords.latitude;
+					$scope.mesure.longitude = position.coords.longitude;
+					if (position.coords.accuracy > 5)
+						$scope.gps = "bad";
+					else
+						$scope.gps = "good";
+				});*/
 		
 		$location.path('/mesureMano');
 		$scope.top = "1";
 		$scope.menu="0";
+		$scope.$apply();
 	}
 	
 	$scope.validMesureMano = function(clickEvent){
@@ -425,6 +450,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		console.log('doTest');
 		$location.path('/test');
 		$scope.top = "1";
+		testGPS($scope,true);
 		
 		if (typeof rfduino == 'undefined')
 		{

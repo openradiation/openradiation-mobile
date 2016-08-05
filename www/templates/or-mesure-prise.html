@@ -3,7 +3,12 @@
 
 
     	<div class="blocGps">
-    		<div class="gps">GPS : good</div>
+    		<div class="gps" ng-class="{error:gps=='error',bad:gps=='bad'}">
+		    		GPS : 
+		    		<span ng-if="gps=='error'">erreur</span>
+		    		<span ng-if="gps=='bad'">moyen</span>
+		    		<span ng-if="gps=='good'">bon</span>
+		    </div>
     	</div>
     	<div class="blocMesure1">
     		<div class="flex-container1">

@@ -4,7 +4,12 @@
     <div class="list-group text-center">
     	<div class="logo"></div>
     	<div class="homesubtitle">mesurer la radioactivité</div>
-    	<div class="gps">GPS : good</div>
+    	<div class="gps" ng-class="{error:gps=='error',bad:gps=='bad'}">
+    		GPS : 
+    		<span ng-if="gps=='error'">erreur</span>
+    		<span ng-if="gps=='bad'">moyen</span>
+    		<span ng-if="gps=='good'">bon</span>
+    	</div>
     	<br/>
     	<div class="capteur2" ng-class="{'on': state=='2' || state=='3','off': state=='1'}">
     		<div ng-if="state == '2' || state == '3'">

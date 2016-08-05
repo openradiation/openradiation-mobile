@@ -8,7 +8,12 @@
 	<div class="blocParam1">
 		<div class="bloctitle">Device:</div>
 		<div>
-		Gps:
+		<div class="gps" ng-class="{error:gps=='error',bad:gps=='bad'}">
+    		GPS : 
+    		<span ng-if="gps=='error'">erreur</span>
+    		<span ng-if="gps=='bad'">moyen</span>
+    		<span ng-if="gps=='good'">bon</span>
+		 </div>
 		Longitude Latitude
 		</div>
 		<div class="bloctitle">Liste des capteurs bluetooth</div>

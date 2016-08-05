@@ -936,6 +936,60 @@ function generateUUID() {
     return uuid;
 };
 
+function getGPS($scope) {
+	if (typeof navigator.geolocation != 'undefined')
+		navigator.geolocation.getCurrentPosition(
+			function (position){
+				$scope.mesure.latitude = position.coords.latitude;
+				$scope.mesure.longitude = position.coords.longitude;
+				if (position.coords.accuracy > 5)
+					$scope.gps = "bad";
+				else
+					$scope.gps = "good";
+			$scope.$apply();
+		},function (error) {
+			$scope.gps = 'error';
+			$scope.$apply();
+			/*PositionError.PERMISSION_DENIED = 1;
+			PositionError.POSITION_UNAVAILABLE = 2;
+			PositionError.TIMEOUT = 3;*/
+			if (error.code == 1)
+				alertNotif("L'application ne peut accéder à la localisation. Veuillez lui en donner l'autorisation","Erreur localisation",'Ok');
+			if (error.code == 2)
+				alertNotif("La localisation ne semble pas activée. Veuillez l'activer.","Erreur localisation",'Ok');
+			if (error.code == 2)
+				alertNotif("La localisation n'est pas disponible.","Erreur localisation",'Ok');
+	      });
+}
+
+function testGPS($scope,alert) {
+	console.log('gps');
+	if (typeof navigator.geolocation != 'undefined')
+		navigator.geolocation.getCurrentPosition(function (position){
+			/*$scope.gps = {};
+			$scope.gps.latitude = position.coords.latitude;
+			$scope.gps.longitude = position.coords.longitude;*/
+			if (position.coords.accuracy > 5)
+				$scope.gps = "bad";
+			else
+				$scope.gps = "good";
+			$scope.$apply();
+		},function (error) {
+			$scope.gps = 'error';
+			$scope.$apply();
+			/*PositionError.PERMISSION_DENIED = 1;
+			PositionError.POSITION_UNAVAILABLE = 2;
+			PositionError.TIMEOUT = 3;*/
+			if (alert)
+				if (error.code == 1)
+					alertNotif("L'application ne peut accéder à la localisation. Veuillez lui en donner l'autorisation","Erreur localisation",'Ok');
+				if (error.code == 2)
+					alertNotif("La localisation ne semble pas activée. Veuillez l'activer.","Erreur localisation",'Ok');
+				if (error.code == 2)
+					alertNotif("La localisation n'est pas disponible.","Erreur localisation",'Ok');
+	      });
+}
+
 
 //Conversions
 function convertNanosievert(nbCoup,duration)
