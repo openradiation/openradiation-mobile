@@ -397,6 +397,10 @@ function sendMeasures($scope,id){
 						console.log(mesure)
 						args.data.reportUuid = generateUUID(); //TODO: enregistrer dans table
 						//infos capteur
+						if (mesure.sensorUUID != '')
+							args.data.apparatusId = mesure.sensorUUID;
+						/*if (mesure.sensorName != '')
+							args.data.apparatusVersion = mesure.sensorName;*/
 						if (mesure.sensorVersion != '')
 							args.data.apparatusVersion = mesure.sensorVersion;
 						if (mesure.sensorType != '')
@@ -409,11 +413,24 @@ function sendMeasures($scope,id){
 						//GPS
 						args.data.longitude = parseFloat(mesure.longitude);
 						args.data.latitude = parseFloat(mesure.latitude);
+						args.data.accuracy = parseFloat(mesure.accuracy);
+						if (mesure.altitude != '')
+							args.data.altitude = parseFloat(mesure.altitude);
+						if (mesure.altitudeAccuracy != '')
+							args.data.altitudeAccuracy = parseFloat(mesure.altitudeAccuracy);
 						
 						//mesure
+						args.data.hitsNumber = parseInt(mesure.nbHits);
 						args.data.value = mesure.radiation;
 						args.data.startTime = convertTimestampToTimezone(mesure.tsStart);
 						args.data.endTime = convertTimestampToTimezone(parseInt(mesure.tsStart)+parseInt(mesure.duration));
+						args.data.manualReporting = (mesure.manualReporting?true:false);
+						
+						//device
+						args.data.deviceUuid = mesure.deviceUUID;
+						args.data.devicePlatform = mesure.devicePlatform;
+						args.data.deviceVersion = mesure.deviceVersion;
+						args.data.deviceModel = mesure.deviceModel;
 						
 						//temperature
 						if (mesure.temperature != -1000)
