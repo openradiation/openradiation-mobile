@@ -18,15 +18,15 @@
 		</div>
 		<div class="bloctitle">Liste des capteurs bluetooth</div>
 		
-		<div ng-repeat="(key, device) in devices" >
+		<div ng-repeat="(key, deviceSensor) in devices" >
 			<div class="lignecapt">
 				<div class="desc">
-					{{device.name}}
-					<div>{{device.uuid}}</div>
+					{{deviceSensor.name}}
+					<div>{{deviceSensor.uuid}}</div>
 				</div>	
 				<div class="connect">
-					<div ng-if="connectedDevice.uuid==device.uuid" class="button" ng-click="doDisconnect(connectedDevice.uuid)">Se déconnecter</div>
-					<div ng-if="connectedDevice.uuid!=device.uuid" class="button" ng-click="doConnect(device)">Se connecter</div>
+					<div ng-if="connectedDevice.uuid==deviceSensor.uuid" class="button" ng-click="doDisconnect(connectedDevice.uuid)">Se déconnecter</div>
+					<div ng-if="connectedDevice.uuid!=deviceSensor.uuid" class="button" ng-click="doConnect(deviceSensor)">Se connecter</div>
 				</div>
 			</div>
 		</div>

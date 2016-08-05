@@ -294,46 +294,6 @@ function insertMeasures($scope){
 		device.version = "mydeviceVersion";
 		device.model = "mydeviceModel";
 	}
-	alert('INSERT INTO "measures" '+
-			'(sensorUUID,sensorName,sensorVersion,sensorType,sensorTubeType,'+
-			'reportUUID,'+
-			'deviceUUID,devicePlatform,deviceVersion,deviceModel,' +
-			'tsStart, tsEnd,duration, temperature, nbHits,radiation,manualReporting,' +
-			'longitude,latitude,accuracy,altitude,altitudeAccuracy,' +
-			'environment,position,tags,notes,sent) VALUES("'+
-			
-			$scope.connectedDevice.uuid+'","'+
-			$scope.connectedDevice.name+'","'+
-			$scope.connectedDevice.version+'","'+
-			$scope.connectedDevice.sensorType+'","'+
-			$scope.connectedDevice.tubeType+'","'+
-			
-			generateUUID()+'","'+  //reportUUID
-				
-			device.uuid+'","'+
-			device.platform+'","'+ 
-			device.version+'","'+ 
-			device.model+'","'+ 
-			
-			$scope.mesure.timedeb+'","'+
-			($scope.mesure.timedeb + $scope.mesure.duration) +'","'+
-			$scope.mesure.duration+'",'+
-			$scope.mesure.temperature+','+
-			$scope.mesure.total+','+
-			$scope.mesure.valeurnsv+','+
-			$scope.mesure.manualreport+',"'+
-			
-			$scope.mesure.longitude+'","'+
-			$scope.mesure.latitude+'","'+
-			$scope.mesure.accuracy+'","'+
-			$scope.mesure.altitude+'","'+
-			$scope.mesure.altitudeaccuracy+'",'+
-			
-			$scope.mesure.env+','+
-			$scope.mesure.position+',"'+
-			$scope.mesure.tags+'","'+
-			$scope.mesure.notes+'",'+
-			'0);');
 	db.transaction(function(tx) {
 		tx.executeSql('INSERT INTO "measures" '+
 				'(sensorUUID,sensorName,sensorVersion,sensorType,sensorTubeType,'+
