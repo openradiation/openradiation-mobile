@@ -70,20 +70,28 @@ function createTableMeasures(callback)
 			{
 				tx.executeSql('CREATE TABLE IF NOT EXISTS "measures" ' +
 						' ("id" INTEGER PRIMARY KEY AUTOINCREMENT , ' +
+						'  "sensorUUID" VARCHAR,' +
+						'  "sensorName" VARCHAR,' +
 						'  "sensorVersion" VARCHAR,' +
 						'  "sensorType" VARCHAR,' +
 						'  "sensorTubeType" VARCHAR,' +
 						'  "reportUUID" VARCHAR,' +
 						'  "deviceUUID" VARCHAR,' +
+						'  "devicePlatform" VARCHAR,' +
+						'  "deviceVersion" VARCHAR,' +
+						'  "deviceModel" VARCHAR,' +
 						'  "tsStart" TIMESTAMP,' +
 						'  "tsEnd" TIMESTAMP,' +
 						'  "duration" VARCHAR,' +
 						'  "temperature" FLOAT,' +
 						'  "nbHits" INTEGER,' +
 						'  "radiation" FLOAT,' +
-						'  "gpsStatus" VARCHAR,' +
+						'  "manualReporting" BOOLEAN DEFAULT FALSE,' +
 						'  "longitude" VARCHAR,' +
 						'  "latitude" VARCHAR,' +
+						'  "accuracy" VARCHAR,' +
+						'  "altitude" VARCHAR,' +
+						'  "altitudeAccuracy" VARCHAR,' +
 						'  "environment" INTEGER,' +
 						'  "position" INTEGER,' +
 						'  "tags" TEXT,' +
@@ -269,33 +277,103 @@ function setConnectedDeviceInfos($scope,type){
 }
 
 //measures requests
-function insertMeasures($scope,res,device){
+function insertMeasures($scope){
+	
+	console.log($scope);
+	
+	if (typeof device != "undefined")
+	{
+		//do nothing;
+	}
+	else
+	{
+		//emulation
+		device = {};
+		device.uuid = "mydeviceUUID";
+		device.platform = "mydevicePlatform";
+		device.version = "mydeviceVersion";
+		device.model = "mydeviceModel";
+	}
+	alert('INSERT INTO "measures" '+
+			'(sensorUUID,sensorName,sensorVersion,sensorType,sensorTubeType,'+
+			'reportUUID,'+
+			'deviceUUID,devicePlatform,deviceVersion,deviceModel,' +
+			'tsStart, tsEnd,duration, temperature, nbHits,radiation,manualReporting,' +
+			'longitude,latitude,accuracy,altitude,altitudeAccuracy,' +
+			'environment,position,tags,notes,sent) VALUES("'+
+			
+			$scope.connectedDevice.uuid+'","'+
+			$scope.connectedDevice.name+'","'+
+			$scope.connectedDevice.version+'","'+
+			$scope.connectedDevice.sensorType+'","'+
+			$scope.connectedDevice.tubeType+'","'+
+			
+			generateUUID()+'","'+  //reportUUID
+				
+			device.uuid+'","'+
+			device.platform+'","'+ 
+			device.version+'","'+ 
+			device.model+'","'+ 
+			
+			$scope.mesure.timedeb+'","'+
+			($scope.mesure.timedeb + $scope.mesure.duration) +'","'+
+			$scope.mesure.duration+'",'+
+			$scope.mesure.temperature+','+
+			$scope.mesure.total+','+
+			$scope.mesure.valeurnsv+','+
+			$scope.mesure.manualreport+',"'+
+			
+			$scope.mesure.longitude+'","'+
+			$scope.mesure.latitude+'","'+
+			$scope.mesure.accuracy+'","'+
+			$scope.mesure.altitude+'","'+
+			$scope.mesure.altitudeaccuracy+'",'+
+			
+			$scope.mesure.env+','+
+			$scope.mesure.position+',"'+
+			$scope.mesure.tags+'","'+
+			$scope.mesure.notes+'",'+
+			'0);');
 	db.transaction(function(tx) {
 		tx.executeSql('INSERT INTO "measures" '+
-				'(sensorVersion,sensorType,sensorTubeType,'+
+				'(sensorUUID,sensorName,sensorVersion,sensorType,sensorTubeType,'+
 				'reportUUID,'+
-				'deviceUUID, tsStart, tsEnd,duration, temperature, nbHits,radiation, gpsStatus,longitude,latitude,environment,position,tags,notes,sent) VALUES("'+
+				'deviceUUID,devicePlatform,deviceVersion,deviceModel,' +
+				'tsStart, tsEnd,duration, temperature, nbHits,radiation,manualReporting,' +
+				'longitude,latitude,accuracy,altitude,altitudeAccuracy,' +
+				'environment,position,tags,notes,sent) VALUES("'+
 				
+				$scope.connectedDevice.uuid+'","'+
+				$scope.connectedDevice.name+'","'+
 				$scope.connectedDevice.version+'","'+
 				$scope.connectedDevice.sensorType+'","'+
 				$scope.connectedDevice.tubeType+'","'+
 				
 				generateUUID()+'","'+  //reportUUID
-				
+					
 				device.uuid+'","'+
-				res.timedeb+'","'+
-				(res.timedeb + res.duration) +'","'+
-				res.duration+'",'+
-				res.temperature+','+
-				res.total+','+
-				res.valeurnsv+',"'+
-				res.gps+'","'+
-				res.longitude+'","'+
-				res.latitude+'",'+
-				res.env+','+
-				res.position+',"'+
-				res.tags+'","'+
-				res.notes+'",'+
+				device.platform+'","'+ 
+				device.version+'","'+ 
+				device.model+'","'+ 
+				
+				$scope.mesure.timedeb+'","'+
+				($scope.mesure.timedeb + $scope.mesure.duration) +'","'+
+				$scope.mesure.duration+'",'+
+				$scope.mesure.temperature+','+
+				$scope.mesure.total+','+
+				$scope.mesure.valeurnsv+','+
+				$scope.mesure.manualreport+',"'+
+				
+				$scope.mesure.longitude+'","'+
+				$scope.mesure.latitude+'","'+
+				$scope.mesure.accuracy+'","'+
+				$scope.mesure.altitude+'","'+
+				$scope.mesure.altitudeaccuracy+'",'+
+				
+				$scope.mesure.env+','+
+				$scope.mesure.position+',"'+
+				$scope.mesure.tags+'","'+
+				$scope.mesure.notes+'",'+
 				'0);',[], 
 				function(tx,results){
 					var lastInsertId = results.insertId; 
@@ -655,8 +733,8 @@ function testUser($scope,$location){
 function doBluetoothDeviceSearch($scope)
 {
     //TODO : do scan until find a known one
-    rfduino.discover(5, function(device) {
-    	$scope.devices[device.id] = device;
+    rfduino.discover(5, function(deviceSensor) {
+    	$scope.devices[deviceSensor.id] = deviceSensor;
     	$scope.$apply();
 	}, function(){alert('pb');} );
 }
@@ -942,6 +1020,9 @@ function getGPS($scope) {
 			function (position){
 				$scope.mesure.latitude = position.coords.latitude;
 				$scope.mesure.longitude = position.coords.longitude;
+				$scope.mesure.accuracy = position.coords.accuracy;
+				$scope.mesure.altitude = position.coords.altitude;
+				$scope.mesure.altitudeaccuracy = position.coords.altitudeAccuracy;
 				if (position.coords.accuracy > 5)
 					$scope.gps = "bad";
 				else

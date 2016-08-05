@@ -182,7 +182,6 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 						
 						$scope.mesure.latitude = 0;
 						$scope.mesure.longitude = 0;
-						$scope.mesure.gps = 1;
 						$scope.mesure.temperature = -1000;
 						$scope.mesure.env = 0;
 						$scope.mesure.position = 0;
@@ -190,6 +189,12 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 						$scope.mesure.notes = "notes";
 						$scope.mesure.valeurnsv = 0;
 						$scope.mesure.duration = 0;
+						
+						$scope.mesure.accuracy = null;
+						$scope.mesure.altitude = null;
+						$scope.mesure.altitudeaccuracy = null;
+						
+						$scope.mesure.manualreport = 0;
 						
 						getGPS($scope); 
 						
@@ -254,7 +259,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		
 		resetMesureForm($scope);
 		
-		insertMeasures($scope,$scope.mesure,$scope.connectedDevice);
+		insertMeasures($scope);
 		
 		console.log('validMesure');
 		$scope.top = "0";
@@ -404,6 +409,13 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		$scope.mesure.notes = "notes";
 		$scope.mesure.valeurnsv = 0;
 		$scope.mesure.duration = 0;
+		
+		$scope.mesure.accuracy = null;
+		$scope.mesure.altitude = null;
+		$scope.mesure.altitudeaccuracy = null;
+		
+		$scope.mesure.manualreport = 1;
+		
 		getGPS($scope);
 		/*if (typeof navigator.geolocation != 'undefined')
 			navigator.geolocation.getCurrentPosition(
@@ -435,7 +447,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 
 		resetMesureForm($scope);
 		
-		insertMeasures($scope,$scope.mesure,$scope.connectedDevice);
+		insertMeasures($scope);
 		
 		console.log('validMesureMano');
 		$scope.top = "0";
@@ -466,20 +478,20 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		}
 	}
 	
-	$scope.doConnect = function(device){
+	$scope.doConnect = function(deviceSensor){
 		if (typeof rfduino == 'undefined')
 			//cas emulation chrome
 			{
-				$scope.connectedDevice = device;
+				$scope.connectedDevice = deviceSensor;
 				setConnectedDevice($scope);
 				//$scope.$apply();
 			}
 			else
 			{
-				rfduino.connect(device.uuid,
+				rfduino.connect(deviceSensor.uuid,
 						function() {
 							//success
-							$scope.connectedDevice = device;
+							$scope.connectedDevice = deviceSensor;
 							setConnectedDevice($scope);
 							//$scope.$apply();
 							
