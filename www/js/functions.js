@@ -92,7 +92,7 @@ function createTableMeasures(callback)
 						'  "accuracy" VARCHAR,' +
 						'  "altitude" VARCHAR,' +
 						'  "altitudeAccuracy" VARCHAR,' +
-						'  "environment" INTEGER,' +
+						'  "environment" VARCHAR,' +
 						'  "position" INTEGER,' +
 						'  "tags" TEXT,' +
 						'  "notes" TEXT,' +
@@ -328,9 +328,9 @@ function insertMeasures($scope){
 				$scope.mesure.latitude+'","'+
 				$scope.mesure.accuracy+'","'+
 				$scope.mesure.altitude+'","'+
-				$scope.mesure.altitudeaccuracy+'",'+
+				$scope.mesure.altitudeaccuracy+'","'+
 				
-				$scope.mesure.env+','+
+				$scope.mesure.env+'",'+
 				$scope.mesure.position+',"'+
 				$scope.mesure.tags+'","'+
 				$scope.mesure.notes+'",'+
@@ -435,6 +435,12 @@ function sendMeasures($scope,id){
 						//temperature
 						if (mesure.temperature != -1000)
 							args.data.temperature = mesure.temperature;
+						
+						//compléments mesure
+						if (mesure.environment != '')
+							args.data.measurementEnvironment = mesure.environment;
+						if (mesure.position != -1)
+							args.data.measurementHeight = mesure.position;
 						
 						if ((typeof $scope.connexion !== 'undefined') && (typeof $scope.connexion.connexion !== 'undefined') && ($scope.connexion.connexion))	
 						{
@@ -1124,8 +1130,8 @@ function resetMesureForm($scope){
 	$scope.modelRadiation = "";
 	$scope.modelTotal = "";
 	$scope.modelTemperature = "";
-	$scope.modelEnv = 0;
-	$scope.modelPos = 0;
+	$scope.modelEnv = "";
+	$scope.modelPos = -1;
 	$scope.modelTags = "";
 	$scope.modelDesc = "";
 }

@@ -58,8 +58,8 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	$scope.top="0";
 	$scope.menu="1";
 	
-	$scope.modelEnv = 0;
-	$scope.modelPos = 0;
+	$scope.modelEnv = "";
+	$scope.modelPos = -1;
 	$scope.modelTags = "";
 	$scope.modelDesc = "";
 	
