@@ -119,7 +119,8 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			   		 	}
 		   			 	//recup param si existe
 		   				getParam($scope);
-		   				testGPS($scope,true);
+		   				//testGPS($scope,true);
+		   				refreshGPS($scope,true)
 		   				console.log($scope);
 		   				
 		 

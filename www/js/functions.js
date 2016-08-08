@@ -321,7 +321,7 @@ function insertMeasures($scope){
 				$scope.mesure.duration+'",'+
 				$scope.mesure.temperature+','+
 				$scope.mesure.total+','+
-				$scope.mesure.valeurnsv+','+
+				parseFloat(String($scope.mesure.valeurnsv).replace(',', '.'))+','+
 				$scope.mesure.manualreport+',"'+
 				
 				$scope.mesure.longitude+'","'+
@@ -443,7 +443,10 @@ function sendMeasures($scope,id){
 							args.data.userPwd = $scope.connexion.mdp;
 							
 							//compléments mesure
-							args.data.description = mesure.notes;
+							if (mesure.notes != '')
+								args.data.description = mesure.notes;
+							if (mesure.tags != '')
+								args.data.tags = mesure.tags.split(/[\s,]+/).slice(0,10);
 						}
 
 						xhr_object = new XMLHttpRequest(); 
@@ -1047,6 +1050,13 @@ function testGPS($scope,alert) {
 					alertNotif("La localisation n'est pas disponible.","Erreur localisation",'Ok');
 	      });
 }
+
+function refreshGPS($scope,alert){
+	testGPS($scope,alert);
+	setTimeout(function(){refreshGPS($scope,false); }, 120000); //2min
+}
+
+
 
 
 //Conversions

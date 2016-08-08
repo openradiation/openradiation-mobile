@@ -81,8 +81,9 @@
 	
 					</div>
 					<div class="textes">
-						<input type="text" name="tags" placeholder="Tags : #" ng-model="$parent.modelTags"/>
-						<input type="text" name="notes" placeholder="Notes" ng-model="$parent.modelDesc"/>
+						<input type="text" name="tags" placeholder="Tags : #" ng-model="$parent.modelTags" ng-disabled="!connexion.connexion"/>
+						<input type="text" name="notes" placeholder="Notes" ng-model="$parent.modelDesc" ng-disabled="!connexion.connexion"/>
+						<div class="desc" ng-if="!connexion.connexion">Vous devez être connecté pour pouvoir renseigner ces champs</div>
 					</div>
 	    		</div>
     		</div>
