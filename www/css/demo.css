@@ -466,8 +466,8 @@ input.scrollable-header {
 	font-size:12px;width:100%;margin-left:1%;display: inline-block;box-sizing: border-box;}
 .param input::-webkit-input-placeholder
 	{color:#090085;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;font-size:12px;}
-.param .button-submit{background:#090085;display:inline-block;color:white;cursor:pointer;padding:2px 7px;border-radius:5px;}
-
+.param .button-submit{background:#090085;display:inline-block;color:white;cursor:pointer;padding:2px 7px;border-radius:5px;border:none;}
+.param .button-submit[disabled='disabled']{opacity:0.5}
 
 /*switch*/
 .switch{border:none;}

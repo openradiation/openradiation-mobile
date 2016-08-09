@@ -7,18 +7,19 @@
 	<div class="page-content">
 	<div class="blocParam1">
 		<div class="bloctitle">Se connecter:</div>
-		
 		<div class="bloctext"><br/>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed pretium sagittis est, ut dignissim orci vestibulum et. Aliquam imperdiet suscipit ex. Etiam tempor purus est, sit amet porta dui iaculis quis. Sed vitae convallis velit. Donec sed varius augue. Donec sed mauris mollis, accumsan elit nec, auctor ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
        <br/>
         </div>
            
 		<div class="ligne2 formconnect">
+			
 			<div class="desc">Login:</div>
 			<div class="input"><input type="text" name="login" ng-model="$parent.login" /></div>
 			<div class="desc">Mot de passe:</div>
 			<div class="input"><input type="text" name="mdp" ng-model="$parent.mdp" /></div>
-			<div ng-click="doConnex($event)" class="button-more button-submit">Connexion</div>
+			<button ng-click="doConnex($event)" class="button-more button-submit" ng-disabled="$parent.mdp=='' || $parent.login==''">Connexion</button>
+			
 		</div>
 
 	</div>
