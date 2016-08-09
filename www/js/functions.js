@@ -640,7 +640,7 @@ function getParam($scope,paramName)
 }
 
 //user function
-function testUser($scope,$location){
+function testUser($scope,$location,$rootScope){
 	args ={};
 	args.apiKey = API_KEY;
 	args.data = {};
@@ -677,11 +677,14 @@ function testUser($scope,$location){
 					$scope.login = '';
 					$scope.mdp = '';
 					$location.path('/param');
+					$rootScope.loading = false;
 					$scope.$apply();
 				}
 				else
 				//error	
 				{
+					$rootScope.loading = false;
+					$scope.$apply();
 					if (xhr_object.responseText != "")
 					{
 						aError = JSON.parse(xhr_object.responseText);
@@ -689,12 +692,15 @@ function testUser($scope,$location){
 					}
 					else
 						alertNotif("Erreur d'envoi =\n"+xhr_object.status,'Authentification','Ok');
+					
 				}
 			
 			}
 	  		else
   			 //error
   			 {
+	  			$rootScope.loading = false;
+	  			$scope.$apply();
 	  			if (xhr_object.responseText != "")
 				{
 					aError = JSON.parse(xhr_object.responseText);
