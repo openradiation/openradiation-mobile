@@ -9,59 +9,64 @@
     	
 	<div class="page-content">
            <div class="bloc">
-    		<div class="panel-group" 
-		ui-state='myAccordion' 
-		ui-default='1'>
+    		<div class="panel-group" ui-state='myAccordion' ui-default='1'>
 				
-				<div class="panel-heading" ui-set="{'myAccordion': 1}">
-				
-				    <h4 class="panel-title">
-					Précaution concernant les mesures
-				    </h4>
-				  </div>
-			
-				  <div ui-if="myAccordion == 1" ui-scope-context='1'>
-				    <div class="panel-body">
-				     Les mesures que vous prenez avec l’application OpenRadiation correspondent à des mesures faites à un moment donné et dans des conditions particulières, non nécessairement représentatives de votre exposition aux rayonnements ionisants sur le long terme.
-				    </div>
+				<div class="panel or-panel">
+					<div class="panel-heading" ui-set="{'myAccordion': 1}">
+				    	<h4 class="panel-title">
+							Précaution concernant les mesures
+				    	</h4>
+					</div>
+				  	<div ui-if="myAccordion == 1" ui-scope-context='1'>
+				    	<div class="panel-body">
+				     		Les mesures que vous prenez avec l’application OpenRadiation correspondent à des mesures faites 
+				     		à un moment donné et dans des conditions particulières, non nécessairement représentatives 
+				     		de votre exposition aux rayonnements ionisants sur le long terme.
+				    	</div>
+					</div>
 				</div>
 				
-				<div class="panel-heading" ui-set="{'myAccordion': 2}">
-				
-				    <h4 class="panel-title">
-					Conditions d'utilisation
-				    </h4>
-				  </div>
-			
-				  <div ui-if="myAccordion == 2" ui-scope-context='2'>
-				    <div class="panel-body">
-				     
-				    
-						Vous participez à la base de données collaborative OpenRadiation dès lors que vous publiez des mesures par l’application smartphone, que la publication soit automatique ou déclenchée par une action manuelle.
-						<br>
-						- La base de données OpenRadiation est publiée en intégralité sous la license opensource ODC-ODBL. La plupart des données et métadonnées que vous soumettez sont des données primaires et secondaires, et vous ne pouvez prétendre au droit d'auteur sur ces données, ni en réclamer la paternité, une fois qu'elles ont été soumises à la base de données OpenRadiation. Les photographies que vous soumettez dans la base de données OpenRadiation sont également publiées sous licence ODC-ODBL, lorsque la base est utilisée en tant que collection (pour une étude scientifique, ...). 
-						<br>
-						- Vous engagez à respecter la législation en cours : respect du droit d'auteur, droit à l'image, respect de la vie privée, respect d'une certaine éthique (propos insultants, images dégradantes...) ... Vous vous engagez notamment à ne publier que des photos libres de droits.
-						<br>
-						- OpenRadiation se réserve le droit de supprimer le contenu qui lui serait signalé et qui ne respecterait pas consignes ci-dessus, sans avertissement.
-
-				    </div>
+				<div class="panel or-panel">
+					<div class="panel-heading" ui-set="{'myAccordion': 2}">
+				    	<h4 class="panel-title">
+							Conditions d'utilisation
+				    	</h4>
+					</div>
+					<div ui-if="myAccordion == 2" ui-scope-context='2'>
+						<div class="panel-body">
+							Vous participez à la base de données collaborative OpenRadiation dès lors que vous publiez 
+							des mesures par l’application smartphone, que la publication soit automatique ou déclenchée par une action manuelle.
+							<br>
+							- La base de données OpenRadiation est publiée en intégralité sous la license opensource ODC-ODBL. 
+							La plupart des données et métadonnées que vous soumettez sont des données primaires et secondaires, 
+							et vous ne pouvez prétendre au droit d'auteur sur ces données, ni en réclamer la paternité, 
+							une fois qu'elles ont été soumises à la base de données OpenRadiation. Les photographies que vous soumettez dans 
+							la base de données OpenRadiation sont également publiées sous licence ODC-ODBL, lorsque la base est utilisée en tant que collection 
+							(pour une étude scientifique, ...). 
+							<br>
+							- Vous engagez à respecter la législation en cours : respect du droit d'auteur, droit à l'image, respect de la vie privée, 
+							respect d'une certaine éthique (propos insultants, images dégradantes...) ... Vous vous engagez notamment à ne publier que des photos libres de droits.
+							<br>
+							- OpenRadiation se réserve le droit de supprimer le contenu qui lui serait signalé et qui ne respecterait pas consignes ci-dessus, sans avertissement.
+				   		</div>
+					</div>
 				</div>
 				
-				<div class="panel-heading" ui-set="{'myAccordion': 3}">
-				
-				    <h4 class="panel-title">
-					Editeur
-				    </h4>
-				  </div>
-			
-				  <div ui-if="myAccordion == 3" ui-scope-context='3'>
-				    <div class="panel-body">
-				     L’application OpenRadiation est réalisée par Agoralogie, avec le soutien de l’UPMC et de l’IRSN. Elle est disponible sur Google Play Store (Android) et Apple App Store (iOS). N’hésitez pas à nous faire parvenir vos commentaires.
-				    </div>
+				<div class="panel or-panel">
+					<div class="panel-heading" ui-set="{'myAccordion': 3}">		
+				    	<h4 class="panel-title">
+							Editeur
+				    	</h4>
+				  	</div>
+				  	<div ui-if="myAccordion == 3" ui-scope-context='3'>
+				    	<div class="panel-body">
+				     		L’application OpenRadiation est réalisée par Agoralogie, avec le soutien de l’UPMC et de l’IRSN. 
+				     		Elle est disponible sur Google Play Store (Android) et Apple App Store (iOS). N’hésitez pas à nous faire parvenir vos commentaires.
+				    	</div>
+					</div>
 				</div>
 				
-				
+				<!-- 
 				<div class="panel or-panel" ng-repeat="i in [4,5,6]">
 				  <div class="panel-heading" ui-set="{'myAccordion': i}">
 				
@@ -78,7 +83,7 @@
 				  
 				  
 				</div>
-	
+	 			-->
 	
                </div>
           </div>

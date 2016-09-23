@@ -9,59 +9,71 @@
     	
 	<div class="page-content">
    		<div class="bloc">
-    		<div class="panel-group" 
-        
-        ui-state='myAccordion' 
-        ui-default='1'>
-
-	<div class="panel-heading" ui-set="{'myAccordion': 1}">
+    		
+    		<div class="panel-group" ui-state='myAccordion' ui-default='1'>
 				
-				    <h4 class="panel-title">
-					Mesurez la radioactivité
-				    </h4>
-				  </div>
-			
-				  <div ui-if="myAccordion == 1" ui-scope-context='1'>
-				    <div class="panel-body">
-				    Cette application, connectée en bluetooth avec le capteur OpenRadiation (voir les capteurs compatibles sur www.openradiation.org), vous permet de mesurer la radioactivité, mais aussi de participer à la base collaborative OpenRadiation, pour une meilleure connaissance de la radioactivité dans l’environnement. Nous vous invitons ainsi à créer un compte utilisateur sur www.openradiation.org, puis à paramétrer ce compte et à activer la publication automatique des mesures (menu paramètres).
-                                  </div>
-        </div>
+				<div class="panel or-panel">
+					<div class="panel-heading" ui-set="{'myAccordion': 1}">
+						<h4 class="panel-title">
+							Mesurez la radioactivité
+				    	</h4>
+				  	</div>
+				  	<div ui-if="myAccordion == 1" ui-scope-context='1'>
+				    	<div class="panel-body">
+				    			Cette application, connectée en bluetooth avec le capteur OpenRadiation 
+				    			(voir les capteurs compatibles sur <a target="_blank" href="http://www.openradiation.org">www.openradiation.org</a>), 
+				    			vous permet de mesurer la radioactivité, mais aussi de participer à la base collaborative OpenRadiation, 
+				    			pour une meilleure connaissance de la radioactivité dans l’environnement. 
+				    			Nous vous invitons ainsi à créer un compte utilisateur sur <a target="_blank" href="http://www.openradiation.org">www.openradiation.org</a>, 
+				    			puis à paramétrer ce compte et à activer la publication automatique des mesures (menu paramètres).
+                        </div>
+        			</div>
+        		</div>
+				
+				<div class="panel or-panel">
+					<div class="panel-heading" ui-set="{'myAccordion': 2}">
+						<h4 class="panel-title">
+							Comment prendre des mesures ?
+				    	</h4>
+					</div>
+				  	<div ui-if="myAccordion == 2" ui-scope-context='2'>
+				    	<div class="panel-body">
+				    		Allumez votre capteur, démarrez l’application, puis connectez-la en bluetooth au capteur. 
+				    		OpenRadiation est une base de données dont l’objectif est de cartographier finement la radioactivité dans l’environnement. 
+				    		C’est pourquoi, pour que les données soient homogènes et comparables, les mesures que vous publier sur OpenRadiation 
+				    		devraient être prises en extérieur, si possible éloignées d’une habitation, et en tenant le capteur étant à 1 mètre du sol environ. 
+				    		Plus la durée de la mesure est longue, et plus la mesure est précise. Un indicateur vous permet d’apprécier la fiabilité de la mesure 
+				    		durant la prise de mesure. Une fois la mesure accomplie, vous pouvez qualifier l’environnement 
+				    		(à l’intérieur, dans un avion, sur une route, à la campagne, en ville) et donner des indications supplémentaires sur la mesure avant de la publier. 
+				    		Ces indications permettront d’apprécier plus finement la fiabilité de la mesure.
+						</div>
+        			</div>
+        		</div>
 		
-		<div class="panel-heading" ui-set="{'myAccordion': 2}">
+				<div class="panel or-panel">
+					<div class="panel-heading" ui-set="{'myAccordion': 3}">
+						<h4 class="panel-title">
+							Le projet OpenRadiation
+						</h4>
+					</div>
+					<div ui-if="myAccordion == 3" ui-scope-context='3'>
+				    	<div class="panel-body">
+				    		Openradiation est un collectif soutenu par l’IFFO-RME - réseau de formateurs Risques Majeurs éducation -,   
+				    		l’IRSN - expert public en matière de recherche et d’expertise sur les risques nucléaires et radiologiques -, 
+				    		l’UPMC -  Université Pierre et Marie Curie avec en particulier le fablab PMClab -, et Planète Sciences – 
+				    		association acteur de la culture scientifique et technique vers les jeunes.
+							<br/>En savoir plus sur <a target="_blank" href="http://www.openradiation.org">www.openradiation.org</a>
+				  		</div>
+					</div>
+				</div>
 				
-				    <h4 class="panel-title">
-					Comment prendre des mesures ?
-				    </h4>
-				  </div>
-			
-				  <div ui-if="myAccordion == 2" ui-scope-context='2'>
-				    <div class="panel-body">
-				    Allumez votre capteur, démarrez l’application, puis connectez-la en bluetooth au capteur. OpenRadiation est une base de données dont l’objectif est de cartographier finement la radioactivité dans l’environnement. C’est pourquoi, pour que les données soient homogènes et comparables, les mesures que vous publier sur OpenRadiation devraient être prises en extérieur, si possible éloignées d’une habitation, et en tenant le capteur étant à 1 mètre du sol environ. Plus la durée de la mesure est longue, et plus la mesure est précise. Un indicateur vous permet d’apprécier la fiabilité de la mesure durant la prise de mesure. Une fois la mesure accomplie, vous pouvez qualifier l’environnement (à l’intérieur, dans un avion, sur une route, à la campagne, en ville) et donner des indications supplémentaires sur la mesure avant de la publier. Ces indications permettront d’apprécier plus finement la fiabilité de la mesure.
-
-				    </div>
-        </div>
-		
-		<div class="panel-heading" ui-set="{'myAccordion': 3}">
-				
-				    <h4 class="panel-title">
-					Le projet OpenRadiation
-				    </h4>
-				  </div>
-			
-				  <div ui-if="myAccordion == 3" ui-scope-context='3'>
-				    <div class="panel-body">
-				    Openradiation est un collectif soutenu par l’IFFO-RME - réseau de formateurs Risques Majeurs éducation -,   l’IRSN - expert public en matière de recherche et d’expertise sur les risques nucléaires et radiologiques -, l’UPMC -  Université Pierre et Marie Curie avec en particulier le fablab PMClab -, et Planète Sciences – association acteur de la culture scientifique et technique vers les jeunes.
-<br>En savoir plus sur www.openradiation.org
-				  </div>
-        </div>
-				  
-        <div class="panel or-panel" ng-repeat="i in [1,2,3]">
+      <!-- <div class="panel or-panel" ng-repeat="i in [1,2,3]">
           <div class="panel-heading" ui-set="{'myAccordion': i}">
         
             <h4 class="panel-title">
                 Titre #{{i}}
             </h4>
-          </div>
+          </div>-->
           <!-- 
             use uiScopeContext to use scope vars in ui-if/ui-hide/ui-show/ui-class expression 
             ie.
@@ -79,12 +91,12 @@
             >
             </div>
           -->
-          <div ui-if="myAccordion == i" ui-scope-context='i'>
+            <!--<div ui-if="myAccordion == i" ui-scope-context='i'>
             <div class="panel-body">
               #{{i}} Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed pretium sagittis est, ut dignissim orci vestibulum et. Aliquam imperdiet suscipit ex. Etiam tempor purus est, sit amet porta dui iaculis quis. Sed vitae convallis velit. Donec sed varius augue. Donec sed mauris mollis, accumsan elit nec, auctor ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
             </div>
           </div>
-        </div>
+        </div>-->
       </div>
    		</div>
    	</div>

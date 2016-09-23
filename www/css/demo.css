@@ -52,6 +52,9 @@ h1 {
   margin: 10px 0;
 }
 
+a,a:visited,a:hover,a:active{color:white;}
+.panel-group a{text-decoration:underline;}
+
 .chat-user-avatar {
   font-size: 40px;
   background: #ccc;
