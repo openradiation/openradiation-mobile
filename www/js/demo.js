@@ -244,7 +244,23 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		$scope.menu="0";
 	}
 	
-	
+	$scope.doCopy = function(clickEvent){
+		console.log('doCopy');
+		var text = "";
+		console.log($scope.mesure.log);
+		for (var key in $scope.mesure.log) 
+		{
+			console.log(key);
+			text = text + $scope.mesure.log[key].timestamp+"\t";
+			text = text + $scope.mesure.log[key].coup+"\t";
+			text = text + $scope.mesure.log[key].tension+"\t";
+			text = text + $scope.mesure.log[key].temperature+"\n";
+		}
+		
+		console.log(text);
+
+		cordova.plugins.clipboard.copy(text);
+	}
 	
 	$scope.validMesure = function(clickEvent){
 		

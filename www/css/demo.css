@@ -454,6 +454,10 @@ input.scrollable-header {
 
 .param .lignetitlelog {font-weight:bold;color:white;margin-top:10px;}
 .param .lignelog {color:white;}
+.button-more.expert{background:#00a0dd;display:inline-block;color:white;cursor:pointer;padding:2px 7px;border-radius:5px;    font-size: 15px;
+    width: 50%;
+    font-weight: bold;
+    margin: 10px;}
 .lignetitlelog , .lignelog {text-align:center;}
 .lignetitlelog .time,.lignetitlelog .coup,.lignetitlelog .tension,.lignetitlelog .temperature,
 .lignelog .time,.lignelog .coup,.lignelog  .tension,.lignelog .temperature

@@ -50,6 +50,7 @@
    <!-- <gap:plugin name="org.apache.cordova.geolocation" />-->
    	<gap:plugin name="cordova-plugin-geolocation" source="npm" />
     <gap:plugin name="cordova-plugin-whitelist" source="npm" />
+    <gap:plugin name="com.verso.cordova.clipboard" spec="0.1.0" source="pgb" />
     
     <icon src="res/icon/icon.png" />
     <icon gap:density="ldpi" gap:platform="android" src="res/icon/android/icon-36-ldpi.png" />
