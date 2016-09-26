@@ -77,7 +77,6 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	$scope.gps ="error";
 	
 	
-	
 	if (!isMobile)
 	{
 		var locationPath = $location.path();
@@ -226,7 +225,8 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 						alertNotif("La localisation ne semble pas activée. Veuillez l'activer.","Erreur localisation",'Ok');
 					if (error.code == 2)
 						alertNotif("La localisation n'est pas disponible.","Erreur localisation",'Ok');
-			      });
+			      },
+			      { enableHighAccuracy: true });
 	}
 	
 	$scope.endMesure = function(clickEvent){
@@ -394,7 +394,8 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			},function (error) {
 				uri = INAPPBROWSER_URI;
 				window.open(uri, '_blank', 'location=no,closebuttoncaption=Fermer');
-		      });
+		      },
+		      { enableHighAccuracy: true });
 	}
 	
 	$scope.doMore= function(clickEvent){
@@ -479,7 +480,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		$location.path('/test');
 		$scope.top = "1";
 		testGPS($scope,true);
-		
+
 		if (typeof rfduino == 'undefined')
 		{
 			//cas emulation chrome

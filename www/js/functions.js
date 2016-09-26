@@ -1007,7 +1007,13 @@ function generateUUID() {
 };
 
 function getGPS($scope) {
+	console.log('getGPS');
 	if (typeof navigator.geolocation != 'undefined')
+	{
+		if (typeof $scope.gpslatitude !== 'undefined' && $scope.gpslatitude != 0) {
+				$scope.mesure.latitude = $scope.gpslatitude;
+				$scope.mesure.longitude = $scope.gpslongitude;
+			}
 		navigator.geolocation.getCurrentPosition(
 			function (position){
 				$scope.mesure.latitude = position.coords.latitude;
@@ -1032,21 +1038,24 @@ function getGPS($scope) {
 				alertNotif("La localisation ne semble pas activée. Veuillez l'activer.","Erreur localisation",'Ok');
 			if (error.code == 2)
 				alertNotif("La localisation n'est pas disponible.","Erreur localisation",'Ok');
-	      });
+	      },
+	      { enableHighAccuracy: true });
+	}
 }
 
 function testGPS($scope,alert) {
 	console.log('gps');
 	if (typeof navigator.geolocation != 'undefined')
 		navigator.geolocation.getCurrentPosition(function (position){
-			/*$scope.gps = {};
-			$scope.gps.latitude = position.coords.latitude;
-			$scope.gps.longitude = position.coords.longitude;*/
+			/*$scope.gps = {};*/
+			$scope.gpslatitude = position.coords.latitude;
+			$scope.gpslongitude = position.coords.longitude;
 			if (position.coords.accuracy > 5)
 				$scope.gps = "bad";
 			else
 				$scope.gps = "good";
 			$scope.$apply();
+
 		},function (error) {
 			$scope.gps = 'error';
 			$scope.$apply();
@@ -1060,7 +1069,8 @@ function testGPS($scope,alert) {
 					alertNotif("La localisation ne semble pas activée. Veuillez l'activer.","Erreur localisation",'Ok');
 				if (error.code == 2)
 					alertNotif("La localisation n'est pas disponible.","Erreur localisation",'Ok');
-	      });
+	      },
+	      { enableHighAccuracy: true });
 }
 
 function refreshGPS($scope,alert){
