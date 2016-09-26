@@ -776,6 +776,20 @@ angular.module('Cordova', [])
   return function(done) {
     if (typeof window.cordova === 'object') {
       document.addEventListener('deviceready', function () {
+    	  
+    	  //test ios7+
+    	  var iOS7 = window.device 
+          && window.device.platform 
+          && window.device.platform.toLowerCase() == "ios"
+          && parseFloat(window.device.version) >= 7.0;
+
+			if (iOS7) {
+				//alert('ios7');
+				document.body.style.paddingTop = "20px";
+			// do the trick here
+			// ### I used padding-top: 20px on the body element ###
+			}
+
     	  console.log('cordovaready');
        // done();
     	  done(null,'cordoveaok');

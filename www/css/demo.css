@@ -81,6 +81,7 @@ a,a:visited,a:hover,a:active{color:white;}
 .feature-icon.fa-tachometer {
   line-height: 60px;
 }
+.app{box-shadow:none;}
 
 .app-content-loading {
   text-align: center;
