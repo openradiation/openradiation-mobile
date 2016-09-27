@@ -38,7 +38,8 @@
 	    		</div>
 	    		<div class="ligne">
 	    			<div class="desc">Température moyenne du capteur : </div>
-	    			<div class="value">{{mesure.temperature}}°C</div>
+	    			<div class="value" ng-if="mesure.temperature!=-1000">{{mesure.temperature}}°C</div>
+	    			<div class="value" ng-if="mesure.temperature==-1000">-°C</div>
 	    		</div>
     		</div>
     		<div class="bloc">
