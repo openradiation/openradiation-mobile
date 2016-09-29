@@ -731,7 +731,7 @@ function doBluetoothDeviceSearch($scope)
 	}, function(){alert('pb');} );
 }
 
-function doAskBluetoothDeviceInfos(rfduino)
+function doAskBluetoothDeviceInfos(rfduino,$scope)
 {
 	var data = new Uint8Array(1);
 	data[0]=IN_PACKET_SEND_INFO;
@@ -739,7 +739,7 @@ function doAskBluetoothDeviceInfos(rfduino)
 	rfduino.write(data.buffer,function() {
 		//success
 		},
-	    function() {alertNotif(deviceId+" failure send info","Failure","Ok")}
+	    function() {alertNotif($scope.connectedDevice.uuid+" failure send info","Failure","Ok")}
 	);
 }
 
@@ -755,7 +755,7 @@ function setBluetoothDeviceParams(rfduino,$scope,type)
 		rfduino.write(data.buffer,function() {
 			//success
 			},
-		    function() {alertNotif(deviceId+" failure send param silent","Failure","Ok")}
+		    function() {alertNotif($scope.connectedDevice.uuid+" failure send param silent","Failure","Ok")}
 		);
 	}
 	if (type == "visualHits")
@@ -766,7 +766,7 @@ function setBluetoothDeviceParams(rfduino,$scope,type)
 		rfduino.write(data.buffer,function() {
 			//success
 			},
-		    function() {alertNotif(deviceId+" failure send param silent","Failure","Ok")}
+		    function() {alertNotif($scope.connectedDevice.uuid+" failure send param silent","Failure","Ok")}
 		);
 	}
 }
@@ -828,7 +828,7 @@ function doOnData(rfduino,$scope)
 				}
 			}
 	},
-	function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
+	function(error){alertNotif($scope.connectedDevice.uuid+" onData error : "+error,"Failure","Ok")});
 }
 
 function getData(data) {

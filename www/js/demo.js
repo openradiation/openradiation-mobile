@@ -208,7 +208,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 						{
 							$scope.setTension($scope.connectedDevice.uuid);
 							doOnData(rfduino,$scope);
-							doAskBluetoothDeviceInfos(rfduino);
+							doAskBluetoothDeviceInfos(rfduino,$scope);
 						}
 					}
 				},//fin gps activé et ok
@@ -350,7 +350,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		else
 		{
 			doOnData(rfduino,$scope);
-			doAskBluetoothDeviceInfos(rfduino);
+			doAskBluetoothDeviceInfos(rfduino,$scope);
 		}
 	}
 	
@@ -514,7 +514,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 							
 
 						},
-					    function() {alertNotif(deviceId+" non connecté","Failure","Ok")}
+					    function() {alertNotif(deviceSensor.uuid+" non connecté","Failure","Ok")}
 					);
 			}
 	}
@@ -669,7 +669,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	}
 	
 	$scope.doWriteAskInfo = function(deviceId){
-		doAskBluetoothDeviceInfos(rfduino);
+		doAskBluetoothDeviceInfos(rfduino,$scope);
 	}
 	$scope.doWriteChangeSilence = function(deviceId,silencieux){
 		var data = new Uint8Array(2);
