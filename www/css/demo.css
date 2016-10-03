@@ -405,9 +405,9 @@ input.scrollable-header {
 .page-content{padding:3%;padding-top:50px;}
 .histo .ligne{padding: 1% 0;border-top:1px solid #66ceff;}
 .histo .ligne:first-child{border:none;}
-.histo .date{display:inline-block;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;font-size:12px;color:white; width:32%;text-align:left;line-height:30px;
+.histo .date{display:inline-block;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;font-size:12px;color:white; width:39%;text-align:left;line-height:30px;
 	font-weight:bold;}
-.histo .value{display:inline-block;font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;font-size:12px;color:white; width:32%;text-align:left;}
+.histo .value{display:inline-block;font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;font-size:12px;color:white; width:25%;text-align:left;}
 .histo .button{display:inline-block;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;font-size:12px;color:white; width:32%;vertical-align: middle;}
 .histo .button .send{display:inline-block;width:24px;height:24px;background:url('../img/icon-send.png') center center no-repeat transparent;margin:0 10px}
 .histo .button .delete{display:inline-block;width:24px;height:24px;background:url('../img/icon-delete.png') center center no-repeat transparent;margin:0 10px}
