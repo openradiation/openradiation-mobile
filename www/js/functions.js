@@ -280,6 +280,10 @@ function setConnectedDeviceInfos($scope,type){
 function insertMeasures($scope){
 	
 	console.log($scope);
+	if (typeof $scope.mesure.total=="undefined" || $scope.mesure.total=="undefined" || $scope.mesure.total=="")
+		$scope.mesure.total =-1000;
+	if (typeof $scope.mesure.temperature=="undefined" || $scope.mesure.temperature=="undefined" || $scope.mesure.temperature=="")
+		$scope.mesure.temperature =-1000;
 	
 	if (typeof device != "undefined")
 	{
@@ -420,10 +424,12 @@ function sendMeasures($scope,id){
 							args.data.altitudeAccuracy = parseFloat(mesure.altitudeAccuracy);
 						
 						//mesure
-						args.data.hitsNumber = parseInt(mesure.nbHits);
+						if (mesure.nbHits != -1000)
+							args.data.hitsNumber = parseInt(mesure.nbHits);
 						args.data.value = mesure.radiation;
 						args.data.startTime = convertTimestampToTimezone(mesure.tsStart);
-						args.data.endTime = convertTimestampToTimezone(parseInt(mesure.tsStart)+parseInt(mesure.duration));
+						if (mesure.duration != "undefined")
+							args.data.endTime = convertTimestampToTimezone(parseInt(mesure.tsStart)+parseInt(mesure.duration));
 						args.data.manualReporting = (mesure.manualReporting?true:false);
 						
 						//device

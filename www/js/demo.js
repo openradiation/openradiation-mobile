@@ -467,11 +467,12 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		insertMeasures($scope);
 		
 		console.log('validMesureMano');
-		//$scope.top = "0";
+		/*//$scope.top = "0";
 		$scope.top = "1";
 		$scope.menu="1";
 		//$location.path('/');
-		$location.path('/histo');
+		$location.path('/histo');*/
+		$scope.doHisto();
 	}
 	
 	$scope.devices = {};
