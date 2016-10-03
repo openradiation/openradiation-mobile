@@ -9,6 +9,8 @@
 	<div class="blocParam1">
 		<div class="bloctitle">Liste des capteurs bluetooth</div>
 		
+		<div class="nocapt" ng-hide="{{sizeOfObject(devices)}}">Aucun capteur détecté</div>
+		
 		<div ng-repeat="(key, deviceSensor) in devices" >
 			<div class="lignecapt">
 				<div class="desc">

@@ -741,6 +741,10 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		setConnectedDeviceInfos($scope,"visualHits");
 	}
 	
+	//taille objet
+	$scope.sizeOfObject = function(obj) {
+	    return Object.keys(obj).length;
+	};
 	
 
 
