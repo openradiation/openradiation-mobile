@@ -47,7 +47,7 @@
 	    			<div class="value"><input type="text" name="total" ng-model="$parent.modelTotal"/></div>
 	    		</div>
 	    		<div class="ligne">
-	    			<div class="desc">Mesure : </div>
+	    			<div class="desc">Mesure * : </div>
 	    			<div class="value"><input type="text" name="radiation" ng-model="$parent.modelRadiation"/> &#181;Sv/h</div>
 	    		</div>
     		</div>
@@ -89,7 +89,7 @@
     		</div>
     	</div>
     	<div class="blocMesure3">
-   			<button ng-click="validMesureMano($event)" class="button-mesure">OK</button>
+   			<button ng-click="validMesureMano($event)" class="button-mesure" ng-disabled="$parent.modelRadiation==''">OK</button>
    			<div class="annul"><div ng-click="goHome($event)" class="button-more">Annuler</div></div>
     	</div>
     	
