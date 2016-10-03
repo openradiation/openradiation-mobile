@@ -147,7 +147,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		{
 			rfduino.isEnabled(
 					function() {doBluetoothDeviceSearch($scope);},
-				    function() {alertNotif("Bluetooth is *not* enabled","Attention","Ok")}
+				    function() {alertNotif("le Bluetooth n’est pas activé","Attention","Ok")}
 				);
 		}
 		
@@ -332,7 +332,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		{
 			rfduino.isEnabled(
 					function() {doBluetoothDeviceSearch($scope);},
-				    function() {alertNotif("Bluetooth is *not* enabled","Attention","Ok")}
+				    function() {alertNotif("le Bluetooth n’est pas activé","Attention","Ok")}
 				);
 		}
 	}
@@ -490,7 +490,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		{
 			rfduino.isEnabled(
 					function() {doBluetoothDeviceSearch($scope);},
-				    function() {alertNotif("Bluetooth is *not* enabled","Attention","Ok")}
+				    function() {alertNotif("le Bluetooth n’est pas activé","Attention","Ok")}
 				);
 		}
 	}
