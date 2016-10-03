@@ -163,6 +163,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	}
 	
 	$scope.doMesure = function(clickEvent){
+		 $rootScope.loading = true;
 		if (typeof navigator.geolocation != 'undefined')
 			navigator.geolocation.getCurrentPosition(
 				function (position){
@@ -170,11 +171,8 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 					if ($scope.connectedDevice!=0)
 					{
 						console.log('doMesure');
-						//$location.path('/mesurePrise');
-						 $rootScope.$apply(function() {
-							 	$location.path('/mesurePrise');
-						        console.log($location.path());
-						      });
+						$location.path('/mesurePrise');
+						
 						$scope.top = "1";
 						$scope.menu="0";
 						
@@ -221,6 +219,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 					/*PositionError.PERMISSION_DENIED = 1;
 					PositionError.POSITION_UNAVAILABLE = 2;
 					PositionError.TIMEOUT = 3;*/
+					$rootScope.loading = false;
 					$scope.gps = 'error';
 					$scope.$apply();
 					if (error.code == 1)
