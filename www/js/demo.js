@@ -264,7 +264,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 
 		//cordova.plugins.clipboard.copy(text);
 		window.plugins.clipboard.copy(text);
-		alert('copie');
+		alertNotif('Données copiées','Mode Expert','Ok');
 	}
 	
 	$scope.validMesure = function(clickEvent){
