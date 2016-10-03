@@ -262,7 +262,9 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		
 		console.log(text);
 
-		cordova.plugins.clipboard.copy(text);
+		//cordova.plugins.clipboard.copy(text);
+		window.plugins.clipboard.copy(text);
+		alert('copie');
 	}
 	
 	$scope.validMesure = function(clickEvent){
