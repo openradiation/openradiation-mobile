@@ -385,8 +385,8 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		
 		if (typeof navigator.geolocation != 'undefined')
 			navigator.geolocation.getCurrentPosition(function (position){
-				var latitude = position.coords.latitude;
-				var longitude = position.coords.longitude;
+				var latitude = (position.coords.latitude).toFixed(7);
+				var longitude = (position.coords.longitude).toFixed(7);
 				var zoom = 12;
 				uri = INAPPBROWSER_URI + "/"+zoom+"/"+latitude+"/"+longitude;
 				window.open(uri, '_blank', 'location=no,closebuttoncaption=Fermer');
