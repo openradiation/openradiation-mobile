@@ -1085,7 +1085,7 @@ function refreshGPS($scope,alert){
 function convertNanosievert(nbCoup,duration)
 {
 	//valueNSV = (nbCoup * 0.9) / (duration * 60) ;
-	valueNSV = (nbCoup /duration) * 60 * 3 ;
+	valueNSV = (nbCoup /duration) * 60 * 3 /1000;
 	return valueNSV.toFixed(3);
 }
 
