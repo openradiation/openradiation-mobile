@@ -799,9 +799,15 @@ angular.module('Cordova', [])
        // done();
     	  done(null,'cordoveaok');
       }, false);
+      document.addEventListener("backbutton", onBackKeyDown, false);
+
+      
     } else {
       done();
       done(null,'cordoveako');
     }
   };
 });
+function onBackKeyDown() {
+    // Handle the back button
+}
