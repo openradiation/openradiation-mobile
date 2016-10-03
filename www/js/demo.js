@@ -170,7 +170,11 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 					if ($scope.connectedDevice!=0)
 					{
 						console.log('doMesure');
-						$location.path('/mesurePrise');
+						//$location.path('/mesurePrise');
+						 $rootScope.$apply(function() {
+							 	$location.path('/mesurePrise');
+						        console.log($location.path());
+						      });
 						$scope.top = "1";
 						$scope.menu="0";
 						
