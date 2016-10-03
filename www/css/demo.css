@@ -356,19 +356,20 @@ input.scrollable-header {
 .mesure2 .blocMesure2 .bloc{padding:1.5% 0;margin:0 6%;border-top:#9cf5ff 1px solid;position:relative;}
 .mesure2 .bloc:first-child{border:none;}
 .mesure2 .blocMesure2 .bloc .desc{color:#090085;font-size:12px;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;padding-bottom:3%}
-.mesure2 .blocMesure2 .radios label{width:18%;height:48px;display:inline-block;transition:all 1s;
-    -webkit-transition:all 1s;}
+.mesure2 .blocMesure2 .radios label{width:18%;padding-top:50px;display:inline-block;transition:all 1s;
+    -webkit-transition:all 1s;color:#1b5eb9;font-weight:normal;vertical-align: top;font-size: 2.34vw;}
+.mesure2 .blocMesure2 label.on{color:#090085;}
 .mesure2 .blocMesure2 .radios input{display:none;}
-.mesure2 .blocMesure2 label[for=env1]{background:url('../img/icon-env1-off.png') center center no-repeat transparent;}
-.mesure2 .blocMesure2 label[for=env1].on {background:url('../img/icon-env1-on.png') center center no-repeat transparent;}
-.mesure2 .blocMesure2 label[for=env2]{background:url('../img/icon-env2-off.png') center center no-repeat transparent;}
-.mesure2 .blocMesure2 label[for=env2].on {background:url('../img/icon-env2-on.png') center center no-repeat transparent;}
-.mesure2 .blocMesure2 label[for=env3]{background:url('../img/icon-env3-off.png') center center no-repeat transparent;}
-.mesure2 .blocMesure2 label[for=env3].on {background:url('../img/icon-env3-on.png') center center no-repeat transparent;}
-.mesure2 .blocMesure2 label[for=env4]{background:url('../img/icon-env4-off.png') center center no-repeat transparent;}
-.mesure2 .blocMesure2 label[for=env4].on {background:url('../img/icon-env4-on.png') center center no-repeat transparent;}
-.mesure2 .blocMesure2 label[for=env5]{background:url('../img/icon-env5-off.png') center center no-repeat transparent;}
-.mesure2 .blocMesure2 label[for=env5].on {background:url('../img/icon-env5-on.png') center center no-repeat transparent;}
+.mesure2 .blocMesure2 label[for=env1]{background:url('../img/icon-env1-off.png') top center no-repeat transparent;}
+.mesure2 .blocMesure2 label[for=env1].on {background:url('../img/icon-env1-on.png') top center no-repeat transparent;}
+.mesure2 .blocMesure2 label[for=env2]{background:url('../img/icon-env2-off.png') top center no-repeat transparent;}
+.mesure2 .blocMesure2 label[for=env2].on {background:url('../img/icon-env2-on.png') top center no-repeat transparent;}
+.mesure2 .blocMesure2 label[for=env3]{background:url('../img/icon-env3-off.png') top center no-repeat transparent;}
+.mesure2 .blocMesure2 label[for=env3].on {background:url('../img/icon-env3-on.png') top center no-repeat transparent;}
+.mesure2 .blocMesure2 label[for=env4]{background:url('../img/icon-env4-off.png') top center no-repeat transparent;}
+.mesure2 .blocMesure2 label[for=env4].on {background:url('../img/icon-env4-on.png') top center no-repeat transparent;}
+.mesure2 .blocMesure2 label[for=env5]{background:url('../img/icon-env5-off.png') top center no-repeat transparent;}
+.mesure2 .blocMesure2 label[for=env5].on {background:url('../img/icon-env5-on.png') top center no-repeat transparent;}
 
 .mesure2 .blocMesure2 .radios2 input{display:none;}
 .mesure2 .blocMesure2 .radios2 label{font-size:12px;font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;color:#1b5eb9;transition:all 1s;}
