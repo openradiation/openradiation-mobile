@@ -1016,8 +1016,8 @@ function getGPS($scope) {
 			}
 		navigator.geolocation.getCurrentPosition(
 			function (position){
-				$scope.mesure.latitude = position.coords.latitude;
-				$scope.mesure.longitude = position.coords.longitude;
+				$scope.mesure.latitude = (position.coords.latitude).toFixed(7);;
+				$scope.mesure.longitude = (position.coords.longitude).toFixed(7);;
 				$scope.mesure.accuracy = position.coords.accuracy;
 				$scope.mesure.altitude = position.coords.altitude;
 				$scope.mesure.altitudeaccuracy = position.coords.altitudeAccuracy;
@@ -1048,8 +1048,8 @@ function testGPS($scope,alert) {
 	if (typeof navigator.geolocation != 'undefined')
 		navigator.geolocation.getCurrentPosition(function (position){
 			/*$scope.gps = {};*/
-			$scope.gpslatitude = position.coords.latitude;
-			$scope.gpslongitude = position.coords.longitude;
+			$scope.gpslatitude = (position.coords.latitude).toFixed(7);;
+			$scope.gpslongitude = (position.coords.longitude).toFixed(7);;
 			if (position.coords.accuracy > 5)
 				$scope.gps = "bad";
 			else
