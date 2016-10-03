@@ -374,7 +374,7 @@ input.scrollable-header {
 .mesure2 .blocMesure2 .radios2 label{font-size:12px;font-family:'ARIALROUNDED',Arial,Helvetica,sans-serif;color:#1b5eb9;transition:all 1s;}
 .mesure2 .blocMesure2 .radios2 label span{color:white;background:#1b5eb9;transition:all 1s;display:inline-block;height:18px;width:18px;margin-right:7px;
 	border-radius:9px;padding:1px;margin-left:20px;}
-.mesure2 .blocMesure2 .radios2 label.on{color:#090085}
+.mesure2 .blocMesure2 .radios2 label.on{color:#090085;text-decoration: underline;}
 .mesure2 .blocMesure2 .radios2 label.on span{background:#090085}
 
 .mesure2 .blocMesure2 .textes input{background:#9cf5ff;border:none;border-radius: 5px;padding:0 5px;color:#090085;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;
