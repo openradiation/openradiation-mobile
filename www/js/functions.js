@@ -854,14 +854,14 @@ function getData(data) {
 	datatype = dataView.getUint8(offset);
 	offset++;
 	switch (datatype) {
-            case OUT_PACKET_COUNT:
+        case OUT_PACKET_COUNT:
 	    case OUT_PACKET_DEBUG_BYTE1:
 	    case OUT_PACKET_DEBUG_BYTE2: 
-        	myData[datatype] ={};
-        	myData[datatype]['data'] = dataView.getUint8(offset);
-		offset++;
-        	break;
-            case 0xA2: 
+	        	myData[datatype] ={};
+	        	myData[datatype]['data'] = dataView.getUint8(offset);
+	        	offset++;
+	        	break;
+        case 0xA2: 
                 horizon.pitch = dataView.getFloat32(offset, true);
                 for (var i=offset ; i<offset+4 ; i++) {
                     hex.push((buff[i]>>>4).toString(16)+(buff[i]&0xF).toString(16));
@@ -871,25 +871,26 @@ function getData(data) {
             
 	    case OUT_PACKET_ACTUAL_TENSION :
 	    case OUT_PACKET_PWM_DUTY_CYCLE : 
+	    case OUT_PACKET_TEMPERATURE :
                 tension_courante = dataView.getFloat32(offset, true);
                 myData[datatype] ={};
-        	myData[datatype]['data'] = tension_courante;
-		offset += 4;
+                myData[datatype]['data'] = tension_courante;
+                offset += 4;
                 break;
             
 	    case OUT_PACKET_SENSOR_TYPE :
 	    case OUT_PACKET_TUBE_TYPE :
 	    case OUT_PACKET_VERSION : 
                 stringlen = dataView.getUint8(offset);
-		offset++;
-		myData[datatype] ={};
-        	myData[datatype]['data'] = '';
+				offset++;
+				myData[datatype] ={};
+		        	myData[datatype]['data'] = '';
+				
+				for (var i=offset ; i<offset+stringlen ; i++) {
+					myData[datatype]['data'] +=  String.fromCharCode(buff[i]);
+					 }
 		
-		for (var i=offset ; i<offset+stringlen ; i++) {
-			myData[datatype]['data'] +=  String.fromCharCode(buff[i]);
-			 }
-
-		offset += stringlen;
+				offset += stringlen;
                 break;
             
 	    
