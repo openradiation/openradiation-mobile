@@ -821,6 +821,7 @@ function doOnData(rfduino,$scope)
 					if (key == "6" && $scope.mesure.encours)
 					{
 						$scope.mesure.temperature = myData[key].data;
+						$scope.mesure.log[mytimestamp].temperature = myData[key].data;
 						$scope.$apply();
 					}
 					
