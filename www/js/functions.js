@@ -824,7 +824,10 @@ function doOnData(rfduino,$scope)
 					{
 						$scope.mesure.temperature = myData[key].data;
 						if (typeof $scope.mesure.log[mytimestampmill] === 'undefined')
+						{
 							$scope.mesure.log[mytimestampmill] = {};
+							$scope.mesure.log[mytimestampmill].timestamp = mytimestampmill;
+						}
 						$scope.mesure.log[mytimestampmill].temperature = myData[key].data;
 						$scope.$apply();
 					}
@@ -843,7 +846,10 @@ function doOnData(rfduino,$scope)
 						if ($scope.mesure.encours)
 						{
 							if (typeof $scope.mesure.log[mytimestampmill] === 'undefined')
+							{
 								$scope.mesure.log[mytimestampmill] = {};
+								$scope.mesure.log[mytimestampmill].timestamp = mytimestampmill;
+							}
 							$scope.mesure.log[mytimestampmill].tension = (myData[key].data).toFixed(2);
 						}
 					}
