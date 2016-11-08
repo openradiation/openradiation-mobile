@@ -783,6 +783,9 @@ function doOnData(rfduino,$scope)
 			var myData = getData(data)
 			for (var key in myData) {
 				if (myData.hasOwnProperty(key)) {
+					
+					var mytimestampmill = new Date().getTime();
+					
 					//version
 					if (key == "2")
 					{
@@ -808,9 +811,9 @@ function doOnData(rfduino,$scope)
 						$scope.mesure.total += myData[key].data;
 						$scope.mesure.moymin = ($scope.mesure.total / duration * 60).toFixed(2);
 						$scope.mesure.valeurnsv = convertNanosievert($scope.mesure.total,duration);
-						$scope.mesure.log[mytimestamp] = {}
-						$scope.mesure.log[mytimestamp].timestamp = mytimestamp;
-						$scope.mesure.log[mytimestamp].coup = myData[key].data;
+						$scope.mesure.log[mytimestampmill] = {}
+						$scope.mesure.log[mytimestampmill].timestamp = mytimestampmill;
+						$scope.mesure.log[mytimestampmill].coup = myData[key].data;
 						
 						$scope.$apply();
 						doProgressBar($scope.mesure.total);
@@ -821,7 +824,7 @@ function doOnData(rfduino,$scope)
 					if (key == "6" && $scope.mesure.encours)
 					{
 						$scope.mesure.temperature = myData[key].data;
-						$scope.mesure.log[mytimestamp].temperature = myData[key].data;
+						$scope.mesure.log[mytimestampmill].temperature = myData[key].data;
 						$scope.$apply();
 					}
 					
@@ -836,8 +839,8 @@ function doOnData(rfduino,$scope)
 					//tension
 					if (key == "18")
 					{
-						if ($scope.mesure.encours && (typeof $scope.mesure.log[mytimestamp] !== 'undefined'))
-							$scope.mesure.log[mytimestamp].tension = (myData[key].data).toFixed(2);
+						if ($scope.mesure.encours && (typeof $scope.mesure.log[mytimestampmill] !== 'undefined'))
+							$scope.mesure.log[mytimestampmill].tension = (myData[key].data).toFixed(2);
 					}
 				}
 			}
@@ -942,6 +945,7 @@ function fakeSearch($scope){
 function fakeMesure($scope){
 	if ($scope.mesure.encours)
 	{
+		var mytimestampmill = new Date().getTime();
 		var mytimestamp = parseInt(new Date().getTime()/1000);
 		var duration = mytimestamp - $scope.mesure.timedeb
 		var nbcoup = Math.floor(Math.random()*2);
@@ -949,11 +953,11 @@ function fakeMesure($scope){
 		$scope.mesure.total += nbcoup;
 		$scope.mesure.moymin = ($scope.mesure.total / duration * 60).toFixed(2);
 		$scope.mesure.valeurnsv = convertNanosievert($scope.mesure.total,duration);
-		$scope.mesure.log[mytimestamp] = {}
-		$scope.mesure.log[mytimestamp].timestamp = mytimestamp;
-		$scope.mesure.log[mytimestamp].coup = nbcoup;
-		$scope.mesure.log[mytimestamp].temperature = parseInt((Math.random() *10) +50);
-		$scope.mesure.log[mytimestamp].tension =parseInt((Math.random() *10) +300);
+		$scope.mesure.log[mytimestampmill] = {}
+		$scope.mesure.log[mytimestampmill].timestamp = mytimestampmill;
+		$scope.mesure.log[mytimestampmill].coup = nbcoup;
+		$scope.mesure.log[mytimestampmill].temperature = parseInt((Math.random() *10) +50);
+		$scope.mesure.log[mytimestampmill].tension =parseInt((Math.random() *10) +300);
 		$scope.$apply();
 		
 		doProgressBar($scope.mesure.total);
