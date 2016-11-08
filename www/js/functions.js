@@ -836,8 +836,8 @@ function doOnData(rfduino,$scope)
 					//tension
 					if (key == "18")
 					{
-						if ($scope.mesure.encours)
-							$scope.mesure.log[mytimestamp].tension = myData[key].data;
+						if ($scope.mesure.encours && (typeof $scope.mesure.log[mytimestamp] !== 'undefined'))
+							$scope.mesure.log[mytimestamp].tension = (myData[key].data).toFixed(2);
 					}
 				}
 			}
