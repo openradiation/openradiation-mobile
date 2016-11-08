@@ -444,7 +444,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 				function (position){
 					$scope.mesure.latitude = position.coords.latitude;
 					$scope.mesure.longitude = position.coords.longitude;
-					if (position.coords.accuracy > 5)
+					if (position.coords.accuracy > ACCURACY_GPS)
 						$scope.gps = "bad";
 					else
 						$scope.gps = "good";

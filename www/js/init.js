@@ -34,6 +34,8 @@ var API_KEY								= "50adef3bdec466edc25f40c8fedccbce";
 var API_URI								= "https://submit.open-radiation.net/measurements";
 var INAPPBROWSER_URI					= "https://request.open-radiation.net/openradiation";
 
+var ACCURACY_GPS = 7;
+
 //test si chrome
 var isMobile = true;
 if (window.chrome)

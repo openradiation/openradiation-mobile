@@ -832,6 +832,13 @@ function doOnData(rfduino,$scope)
 						setConnectedDeviceInfos($scope,'tubeType');
 						$scope.$apply();
 					}
+					
+					//tension
+					if (key == "18")
+					{
+						if ($scope.mesure.encours)
+							$scope.mesure.log[mytimestamp].tension = myData[key].data;
+					}
 				}
 			}
 	},
@@ -945,6 +952,8 @@ function fakeMesure($scope){
 		$scope.mesure.log[mytimestamp] = {}
 		$scope.mesure.log[mytimestamp].timestamp = mytimestamp;
 		$scope.mesure.log[mytimestamp].coup = nbcoup;
+		$scope.mesure.log[mytimestamp].temperature = parseInt((Math.random() *10) +50);
+		$scope.mesure.log[mytimestamp].tension =parseInt((Math.random() *10) +300);
 		$scope.$apply();
 		
 		doProgressBar($scope.mesure.total);
@@ -1029,10 +1038,11 @@ function getGPS($scope) {
 				$scope.mesure.accuracy = position.coords.accuracy;
 				$scope.mesure.altitude = position.coords.altitude;
 				$scope.mesure.altitudeaccuracy = position.coords.altitudeAccuracy;
-				if (position.coords.accuracy > 5)
+				if (position.coords.accuracy > ACCURACY_GPS)
 					$scope.gps = "bad";
 				else
 					$scope.gps = "good";
+				console.log("accuracy "+position.coords.accuracy);
 			$scope.$apply();
 		},function (error) {
 			$scope.gps = 'error';
@@ -1058,10 +1068,11 @@ function testGPS($scope,alert) {
 			/*$scope.gps = {};*/
 			$scope.gpslatitude = (position.coords.latitude).toFixed(7);;
 			$scope.gpslongitude = (position.coords.longitude).toFixed(7);;
-			if (position.coords.accuracy > 5)
+			if (position.coords.accuracy > ACCURACY_GPS)
 				$scope.gps = "bad";
 			else
 				$scope.gps = "good";
+			console.log("accuracy "+position.coords.accuracy);
 			$scope.$apply();
 
 		},function (error) {
