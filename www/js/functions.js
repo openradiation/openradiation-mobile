@@ -810,7 +810,7 @@ function doOnData(rfduino,$scope)
 						$scope.mesure.total += myData[key].data;
 						$scope.mesure.moymin = ($scope.mesure.total / duration * 60).toFixed(2);
 						$scope.mesure.valeurnsv = convertNanosievert($scope.mesure.total,duration);
-						$scope.mesure.log[mytimestampmill] = {}
+						$scope.mesure.log[mytimestampmill] = {};
 						$scope.mesure.log[mytimestampmill].timestamp = mytimestampmill;
 						$scope.mesure.log[mytimestampmill].coup = myData[key].data;
 						
@@ -823,6 +823,8 @@ function doOnData(rfduino,$scope)
 					if (key == "6" && $scope.mesure.encours)
 					{
 						$scope.mesure.temperature = myData[key].data;
+						if (typeof $scope.mesure.log[mytimestampmill] === 'undefined')
+							$scope.mesure.log[mytimestampmill] = {};
 						$scope.mesure.log[mytimestampmill].temperature = myData[key].data;
 						$scope.$apply();
 					}
@@ -838,8 +840,12 @@ function doOnData(rfduino,$scope)
 					//tension
 					if (key == "18")
 					{
-						if ($scope.mesure.encours && (typeof $scope.mesure.log[mytimestampmill] !== 'undefined'))
+						if ($scope.mesure.encours)
+						{
+							if (typeof $scope.mesure.log[mytimestampmill] === 'undefined')
+								$scope.mesure.log[mytimestampmill] = {};
 							$scope.mesure.log[mytimestampmill].tension = (myData[key].data).toFixed(2);
+						}
 					}
 				}
 			}
