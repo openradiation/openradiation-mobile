@@ -163,7 +163,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	}
 	
 	$scope.doMesure = function(clickEvent){
-		 $rootScope.loading = true;
+		$rootScope.loading = true;
 		if (typeof navigator.geolocation != 'undefined')
 			navigator.geolocation.getCurrentPosition(
 				function (position){
@@ -212,6 +212,11 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 							doOnData(rfduino,$scope);
 							doAskBluetoothDeviceInfos(rfduino,$scope);
 						}
+					}
+					else
+					{
+						$rootScope.loading = false;
+						$scope.$apply();
 					}
 				},//fin gps activé et ok
 				function (error) {
