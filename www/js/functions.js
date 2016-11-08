@@ -781,10 +781,9 @@ function doOnData(rfduino,$scope)
 {
 	rfduino.onData(function(data){
 			var myData = getData(data)
+			var mytimestampmill = new Date().getTime();
 			for (var key in myData) {
 				if (myData.hasOwnProperty(key)) {
-					
-					var mytimestampmill = new Date().getTime();
 					
 					//version
 					if (key == "2")
