@@ -725,6 +725,8 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		dataTemp['2']=	"0x"+ tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(4) + tensions_tube["SBM-20"]["tension_hexa"].charAt(5);
 		dataTemp['1']=	"0x"+ tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(6) + tensions_tube["SBM-20"]["tension_hexa"].charAt(7);
 
+		alertNotif(JSON.stringify(dataTemp),"Failure","Ok");
+		
 		data[4]="0x43";
 		data[3]="0xBE";
 		data[2]="0x80";
