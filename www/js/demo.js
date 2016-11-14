@@ -732,7 +732,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		data[2]="0x00";
 		data[1]="0x00";
 		
-		{alertNotif(deviceId+" tension off","info","Ok");
+		alertNotif(deviceId+" tension off","info","Ok");
 		
 		rfduino.write(data.buffer,function() {
 			//success
