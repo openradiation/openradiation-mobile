@@ -313,8 +313,10 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		$scope.top = "1";
 	}
 	
-	$scope.doSend  = function(id){
-		sendMeasures($scope,id);
+	$scope.doSend  = function(measure){
+		measure.encours = true;
+		//$scope.apply();
+		sendMeasures($scope,measure);
 	}
 	
 	$scope.doDelete  = function(id){

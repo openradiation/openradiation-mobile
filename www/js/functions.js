@@ -383,8 +383,9 @@ function getMeasures($scope){
 	);
 }
 
-function sendMeasures($scope,id){
+function sendMeasures($scope,measure){
 	
+	id = measure.id;
 	args ={};
 	args.apiKey = API_KEY;
 	args.data = {};
@@ -478,7 +479,7 @@ function sendMeasures($scope,id){
 											tx.executeSql('UPDATE "measures" SET sent = 1 WHERE id='+id+';',[], function(tx,res){
 												alertNotif('Données envoyées','Historique','Ok');
 												getMeasures($scope);
-												$scope.$apply();
+												
 												
 											},
 											function(tx,error){requestTableError(tx, error,"update measures");});
@@ -488,6 +489,8 @@ function sendMeasures($scope,id){
 										},
 										function(tx){
 										});
+										measure.encours = false;
+										$scope.$apply();
 									}
 									else
 									//error	
@@ -499,6 +502,8 @@ function sendMeasures($scope,id){
 										}
 										else
 											alertNotif("Erreur d'envoi =\n"+xhr_object.status,'Envoi Mesure','Ok');
+										measure.encours = false;
+										$scope.$apply();
 									}
 								}
 								else
@@ -511,6 +516,8 @@ function sendMeasures($scope,id){
 									}
 									else
 										alertNotif("Erreur d'envoi =\n"+xhr_object.status,'Envoi Mesure','Ok');
+									measure.encours = false;
+									$scope.$apply();
 								}
 								
 							}
@@ -975,6 +982,7 @@ function fakeMesure($scope,i){
 		var mytimestamp = parseInt(new Date().getTime()/1000);
 		var duration = mytimestamp - $scope.mesure.timedeb
 		var nbcoup = Math.floor(Math.random()*2);
+		console.log('coups'+nbcoup);
 		$scope.mesure.duration = duration;
 		$scope.mesure.total += nbcoup;
 		$scope.mesure.moymin = ($scope.mesure.total / duration * 60).toFixed(2);
@@ -989,7 +997,7 @@ function fakeMesure($scope,i){
 		doProgressBar($scope.mesure.total);
 		setTimeout(function (){fakeMesure($scope,i)},1000);
 	}
-	else if ($scope.mesure.encours == false)
+	else if ($scope.mesure.encours == false && $scope.mesure.init == true)
 	{
 		if (i==10)
 		{
