@@ -802,16 +802,22 @@ function doOnData(rfduino,$scope)
 					}
 					
 					//count
-					if (key == "5" && $scope.mesure.encours)
+					if (key == "5" && ($scope.mesure.encours || $scope.mesure.init))
 					{
-						var mytimestamp = parseInt(new Date().getTime()/1000);
-						var duration = mytimestamp - $scope.mesure.timedeb
-						$scope.mesure.duration = duration;
-						$scope.mesure.total += myData[key].data;
-						$scope.mesure.moymin = ($scope.mesure.total / duration * 60).toFixed(2);
-						$scope.mesure.valeurnsv = convertNanosievert($scope.mesure.total,duration);
-						$scope.mesure.log[mytimestampmill] = {};
-						$scope.mesure.log[mytimestampmill].timestamp = mytimestampmill;
+						if ($scope.mesure.encours)
+						{
+							var mytimestamp = parseInt(new Date().getTime()/1000);
+							var duration = mytimestamp - $scope.mesure.timedeb
+							$scope.mesure.duration = duration;
+							$scope.mesure.total += myData[key].data;
+							$scope.mesure.moymin = ($scope.mesure.total / duration * 60).toFixed(2);
+							$scope.mesure.valeurnsv = convertNanosievert($scope.mesure.total,duration);
+						}
+						if (typeof $scope.mesure.log[mytimestampmill] === 'undefined')
+						{
+							$scope.mesure.log[mytimestampmill] = {};
+							$scope.mesure.log[mytimestampmill].timestamp = mytimestampmill;
+						}
 						$scope.mesure.log[mytimestampmill].coup = myData[key].data;
 						
 						$scope.$apply();
@@ -820,9 +826,10 @@ function doOnData(rfduino,$scope)
 					}
 					
 					//temperature
-					if (key == "6" && $scope.mesure.encours)
+					if (key == "6" && ($scope.mesure.encours || $scope.mesure.init))
 					{
-						$scope.mesure.temperature = myData[key].data;
+						if ($scope.mesure.encours)
+							$scope.mesure.temperature = myData[key].data;
 						if (typeof $scope.mesure.log[mytimestampmill] === 'undefined')
 						{
 							$scope.mesure.log[mytimestampmill] = {};
@@ -843,7 +850,8 @@ function doOnData(rfduino,$scope)
 					//tension
 					if (key == "18")
 					{
-						if ($scope.mesure.encours)
+						//$scope.mesure.tension = (myData[key].data).toFixed(2);
+						if ($scope.mesure.encours || $scope.mesure.init)
 						{
 							if (typeof $scope.mesure.log[mytimestampmill] === 'undefined')
 							{
@@ -851,6 +859,12 @@ function doOnData(rfduino,$scope)
 								$scope.mesure.log[mytimestampmill].timestamp = mytimestampmill;
 							}
 							$scope.mesure.log[mytimestampmill].tension = (myData[key].data).toFixed(2);
+						}
+						
+						if (!$scope.mesure.encours && myData[key].data > 340)
+						{
+							$scope.mesure.init =false;
+							$scope.mesure.encours = true;
 						}
 					}
 				}
@@ -953,7 +967,7 @@ function fakeSearch($scope){
 	setTimeout(function (){$scope.state = "3";console.log("state3");$scope.$apply();}, 5000);
 	setTimeout(function (){$scope.state = "4";console.log("state4");$scope.$apply();}, 6000);
 }
-function fakeMesure($scope){
+function fakeMesure($scope,i){
 	if ($scope.mesure.encours)
 	{
 		var mytimestampmill = new Date().getTime();
@@ -972,7 +986,20 @@ function fakeMesure($scope){
 		$scope.$apply();
 		
 		doProgressBar($scope.mesure.total);
-		setTimeout(function (){fakeMesure($scope)},1000);
+		setTimeout(function (){fakeMesure($scope,i)},1000);
+	}
+	else if ($scope.mesure.encours == false)
+	{
+		if (i==10)
+		{
+			$scope.mesure.timedeb = parseInt(new Date().getTime()/1000);
+			$scope.mesure.encours = true;
+			$scope.mesure.init =false;
+		}	
+		else
+			i++;
+		$scope.$apply();
+		setTimeout(function (){fakeMesure($scope,i)},1000);
 	}
 }
 
@@ -1185,5 +1212,10 @@ function resetMesureForm($scope){
 	$scope.modelPos = -1;
 	$scope.modelTags = "";
 	$scope.modelDesc = "";
+}
+
+function sleep(seconds){
+    var waitUntil = new Date().getTime() + seconds*1000;
+    while(new Date().getTime() < waitUntil) true;
 }
 

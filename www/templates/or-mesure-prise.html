@@ -14,7 +14,7 @@
     		<div class="flex-container1">
 	    		<div class="mesureDeb">
 	    			<div class="desc">Début de la mesure</div>
-	    			<div class="value">{{getTime(mesure.timedeb)}}</div>
+	    			<div class="value"><span ng-if="mesure.encours==true">{{getTime(mesure.timedeb)}}</span></div>
 	    		</div>
 	    		<div class="border"></div>
 	    		<div class="mesureTemp">
@@ -51,7 +51,7 @@
     	</div>
     	<div class="blocMesure2">
 			<div class="desc">Radiation estimée :</div>
-			<div class="value"><span ng-if="mesure.total>10">{{mesure.valeurnsv}}</span><span ng-if="mesure.total<=10">Mesure en cours</span> &#181;Sv/h</div>
+			<div class="value"><span ng-if="mesure.total>10">{{mesure.valeurnsv}}</span><span ng-if="mesure.encours!=true">Initialisation</span><span ng-if="mesure.encours==true && mesure.total<=10">Mesure en cours</span> &#181;Sv/h</div>
     	</div>
     	<div class="blocMesure3">
    			<button ng-click="endMesure($event)" class="button-mesure" ng-disabled="mesure.total<30">FIN</button>

@@ -179,8 +179,9 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 						$scope.mesure = {};
 						$scope.mesure.total = 0 ;
 						$scope.mesure.log = {}
-						$scope.mesure.encours = true;
-						$scope.mesure.timedeb = parseInt(new Date().getTime()/1000);
+						$scope.mesure.encours = false;
+						//$scope.mesure.timedeb = parseInt(new Date().getTime()/1000);
+						$scope.mesure.timedeb =0;
 						
 						$scope.mesure.latitude = 0;
 						$scope.mesure.longitude = 0;
@@ -198,19 +199,24 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 						
 						$scope.mesure.manualreport = 0;
 						
+						$scope.mesure.init = true;
+						
 						getGPS($scope); 
 						
 						if (typeof rfduino == 'undefined')
 						{
 							//cas emulation chrome
 							fakeBluetoothDeviceInfos($scope);
-							fakeMesure($scope);
+		
+							var i = 0;
+							fakeMesure($scope,i);
 						}
 						else
 						{
 							$scope.setTension($scope.connectedDevice.uuid);
+							
 							doOnData(rfduino,$scope);
-							doAskBluetoothDeviceInfos(rfduino,$scope);
+							doAskBluetoothDeviceInfos(rfduino,$scope);			
 						}
 					}
 					else
@@ -236,6 +242,8 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			      },
 			      { enableHighAccuracy: true });
 	}
+	
+
 	
 	$scope.endMesure = function(clickEvent){
 		console.log('endMesure');
@@ -805,6 +813,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	 	else
 	 		$scope.menu="1";
     $rootScope.loading = false;
+    console.log(locationPath + ' success')
   });  
 
 });
