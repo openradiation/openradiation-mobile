@@ -863,6 +863,7 @@ function doOnData(rfduino,$scope)
 						
 						if (!$scope.mesure.encours && myData[key].data > 340)
 						{
+							$scope.mesure.timedeb = parseInt(new Date().getTime()/1000);
 							$scope.mesure.init =false;
 							$scope.mesure.encours = true;
 						}
