@@ -251,6 +251,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		$scope.top = "1";
 		$scope.menu="0";
 		$scope.mesure.encours = false;
+		$scope.mesure.init = false;
 		$scope.setTensionOff($scope.connectedDevice.uuid);
 	}
 	
