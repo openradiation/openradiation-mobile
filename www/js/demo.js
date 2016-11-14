@@ -243,6 +243,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		$scope.top = "1";
 		$scope.menu="0";
 		$scope.mesure.encours = false;
+		$scope.setTensionOff(deviceId);
 	}
 	
 	$scope.doExpert = function(clickEvent){
@@ -717,6 +718,24 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			//success
 			},
 		    function() {alertNotif(deviceId+" failure tension on","Failure","Ok")}
+		);
+	}
+	
+	
+	$scope.setTensionOff = function(deviceId){
+		var data = new Uint8Array(5);
+		data[0]=0x11;
+		var tension = 0;
+
+		data[4]="0x00";
+		data[3]="0x00";
+		data[2]="0x00";
+		data[1]="0x00";
+		
+		rfduino.write(data.buffer,function() {
+			//success
+			},
+		    function() {alertNotif(deviceId+" failure tension off","Failure","Ok")}
 		);
 	}
 	
