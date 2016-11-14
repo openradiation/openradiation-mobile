@@ -714,7 +714,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	$scope.setTension = function(deviceId){
 		var data = new Uint8Array(5);
 		data[0]=0x11;
-		var tension = 380;
+		/*var tension = 380;
 		
 		//$scope.connectedDevice.sensorType
 		alertNotif($scope.connectedDevice.tubeType+" tets","Failure","Ok");
@@ -730,7 +730,12 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		data[4]="0x43";
 		data[3]="0xBE";
 		data[2]="0x80";
-		data[1]="0x00";
+		data[1]="0x00";*/
+		
+		data[4]="0x"+ tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(0) + tensions_tube["SBM-20"]["tension_hexa"].charAt(1);
+		data[3]="0x"+ tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(2) + tensions_tube["SBM-20"]["tension_hexa"].charAt(3);
+		data[2]="0x"+ tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(4) + tensions_tube["SBM-20"]["tension_hexa"].charAt(5);
+		data[1]="0x"+ tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(6) + tensions_tube["SBM-20"]["tension_hexa"].charAt(7);
 		
 		rfduino.write(data.buffer,function() {
 			//success
