@@ -534,8 +534,9 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 							$scope.connectedDevice = deviceSensor;
 							setConnectedDevice($scope);
 							//$scope.$apply();
+							doOnData(rfduino,$scope);
+							doAskBluetoothDeviceInfos(rfduino,$scope);
 							
-
 						},
 					    function() {alertNotif(deviceSensor.uuid+" non connecté","Failure","Ok")}
 					);
@@ -578,7 +579,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
 	}
 	
-	$scope.doDataTension1 = function(deviceId){
+	/*$scope.doDataTension1 = function(deviceId){
 		$scope.setTension(deviceId);
 		rfduino.onData(function(data){
 			$scope.length = data.byteLength;
@@ -656,7 +657,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 			},
 			function(error){alertNotif(deviceId+" onData error : "+error,"Failure","Ok")});
 		},5000);
-	}
+	}*/
 	
 	$scope.doWrite1 = function(deviceId){
 		var data = new ArrayBuffer(2);
@@ -673,18 +674,15 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	$scope.doWrite2 = function(deviceId){
 		var data = new Uint8Array(5);
 		data[0]=0x11;
-		//data[0]=0x88;
-		var tension = 380;
-		//data[1]="0x"+tension.toString(16);
+		
 		data[4]=0x43;
-		//data[3]=0xBE;
 		data[3]=0xBE;
 		data[2]=0x80;
 		data[1]=0x00;
 		
 		rfduino.write(data.buffer,function() {
 			//success
-			alertNotif(deviceId+" succes 43 BE tension on","Success","Ok");
+			alertNotif(deviceId+" success tension on","Success","Ok");
 
 			},
 		    function() {alertNotif(deviceId+" failure tension on","Failure","Ok")}
@@ -706,9 +704,9 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		    function() {alertNotif(deviceId+" failure send silence","Failure","Ok")}
 		);
 	}
-	//set_tension
+	//set_tension off
 	$scope.doWrite3 = function(deviceId){
-		$scope.setTension(deviceId);
+		$scope.setTensionOff(deviceId);
 	}
 	//fin test
 	
@@ -717,6 +715,9 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		var data = new Uint8Array(5);
 		data[0]=0x11;
 		var tension = 380;
+		
+		//$scope.connectedDevice.sensorType
+		alertNotif($scope.connectedDevice.sensorType+" tets","Failure","Ok")
 
 		data[4]="0x43";
 		data[3]="0xBE";
