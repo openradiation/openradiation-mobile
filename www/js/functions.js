@@ -443,7 +443,7 @@ function sendMeasures($scope,measure){
 						if (mesure.temperature != -1000)
 						{
 							args.data.temperature = parseInt(mesure.temperature);
-							alert(args.data.temperature);
+							//alert(args.data.temperature);
 						}
 						
 						//compléments mesure
