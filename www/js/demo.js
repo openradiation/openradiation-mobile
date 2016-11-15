@@ -314,9 +314,13 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	}
 	
 	$scope.doSend  = function(measure){
-		measure.encours = true;
+		//measure.encours = true;
 		//$scope.apply();
-		sendMeasures($scope,measure);
+		if (measure.encours != true)
+		{
+			measure.encours = true;
+			sendMeasures($scope,measure);
+		}
 	}
 	
 	$scope.doDelete  = function(id){
