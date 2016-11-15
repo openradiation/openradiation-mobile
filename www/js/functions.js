@@ -402,16 +402,16 @@ function sendMeasures($scope,measure){
 						console.log(mesure)
 						args.data.reportUuid = generateUUID(); //TODO: enregistrer dans table
 						//infos capteur
-						if (mesure.sensorUUID != '')
+						if (mesure.sensorUUID != '' && mesure.sensorUUID != 'undefined')
 							args.data.apparatusId = mesure.sensorUUID;
 						/*if (mesure.sensorName != '')
 							args.data.apparatusVersion = mesure.sensorName;*/
-						if (mesure.sensorVersion != '')
+						if (mesure.sensorVersion != '' && mesure.sensorVersion != 'undefined')
 							args.data.apparatusVersion = mesure.sensorVersion;
-						if (mesure.sensorType != '')
+						if (mesure.sensorType != '' && mesure.sensorType != 'undefined')
 							//args.data.apparatusSensorType = mesure.sensorType;
 							args.data.apparatusSensorType = "geiger";
-						if (mesure.sensorTubeType != '')
+						if (mesure.sensorTubeType != '' && mesure.sensorTubeType != 'undefined')
 							args.data.apparatusTubeType = mesure.sensorTubeType;
 						
 						
