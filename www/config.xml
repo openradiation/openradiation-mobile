@@ -38,6 +38,7 @@
     <gap:plugin name="org.apache.cordova.file" />
     <gap:plugin name="org.apache.cordova.file-transfer" />
     <gap:plugin name="org.apache.cordova.geolocation" version="0.3.10" />
+     <gap:plugin name="com.verso.cordova.clipboard" spec="0.1.0" source="pgb" />
     <gap:plugin name="org.apache.cordova.camera" />-->
    <!--	<gap:plugin name="io.litehelpers.cordova.sqlite" />-->
    	<gap:plugin name="cordova-plugin-sqlite" source="npm" />
@@ -48,9 +49,9 @@
     <gap:plugin name="cordova-plugin-rfduino" source="npm" />
     <gap:plugin name="cordova-plugin-inappbrowser" source="npm" />
    <!-- <gap:plugin name="org.apache.cordova.geolocation" />-->
-   	<gap:plugin name="cordova-plugin-geolocation" source="npm" />
+    <gap:plugin name="cordova-plugin-geolocation" source="npm" />
     <gap:plugin name="cordova-plugin-whitelist" source="npm" />
-    <gap:plugin name="com.verso.cordova.clipboard" spec="0.1.0" source="pgb" />
+   
     
     <icon src="res/icon/icon.png" />
     <icon gap:density="ldpi" gap:platform="android" src="res/icon/android/icon-36-ldpi.png" />
