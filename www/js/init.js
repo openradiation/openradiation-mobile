@@ -2,10 +2,10 @@
 debug = true;
 
 //tension adatpee a chaque tube
-var tension_tube = {"SBM-20": 380, "M4011": 400};
+var tension_tube = {"SBM-20": 380, "M4011": 385,  "STS-5": 380};
 var tensions_tube =  {};
 tensions_tube["SBM-20"] 	= 	{"tension_hexa": '43be0000', "tension_min": 340, "tension_max": 400};
-tensions_tube["M4011"] 		=	{"tension_hexa": '43c80000', "tension_min": 340, "tension_max": 400};
+tensions_tube["M4011"] 		=	{"tension_hexa": '43c80000', "tension_min": 340, "tension_max": 420};
 tensions_tube["STS-5"] 		=	{"tension_hexa": '43c80000', "tension_min": 340, "tension_max": 400};
 
 var OUT_PACKET_SERIAL_NB   		= 0x01;
