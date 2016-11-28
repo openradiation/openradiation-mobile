@@ -807,6 +807,7 @@ function doOnData(rfduino,$scope)
 					if (key == "1")
 					{
 						$scope.connectedDevice.serial = myData[key].data;
+						alert("serial "+$scope.connectedDevice.serial);
 						//setConnectedDeviceInfos($scope,'serial');
 						$scope.$apply();
 					}
