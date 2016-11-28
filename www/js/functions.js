@@ -792,8 +792,8 @@ function doOnData(rfduino,$scope)
 	rfduino.onData(function(data){
 			var myData = getData(data);
 			
-			$scope.dataDebug[convertIdDebug($scope.iData)] = myData;
-			$scope.iData++;
+			/*$scope.dataDebug[convertIdDebug($scope.iData)] = myData;
+			$scope.iData++;*/
 			
 			var mytimestampmill = new Date().getTime();
 			for (var key in myData) {
