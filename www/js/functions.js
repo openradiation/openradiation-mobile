@@ -742,7 +742,7 @@ function doBluetoothDeviceSearch($scope)
 {
     //TODO : do scan until find a known one
     rfduino.discover(5, function(deviceSensor) {
-    	$scope.devices[deviceSensor.id] = deviceSensor;
+    	$scope.devices[deviceSensor.uuid] = deviceSensor;
     	$scope.$apply();
 	}, function(){alert('pb');} );
 }
