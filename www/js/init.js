@@ -7,7 +7,7 @@ tensions_tube["SBM-20"] 	= 	{"tension_hexa": '43be0000', "tension_min": 340, "te
 tensions_tube["M4011"] 		=	{"tension_hexa": '43c80000', "tension_min": 340, "tension_max": 420};
 tensions_tube["STS-5"] 		=	{"tension_hexa": '43c80000', "tension_min": 340, "tension_max": 400};
 
-var OUT_PACKET_SERIAL_NB   		= 0x01;
+var OUT_PACKET_SERIAL_NB   				= 0x01;
 var OUT_PACKET_VERSION                  = 0x02;
 var OUT_PACKET_SENSOR_TYPE              = 0x03;
 var OUT_PACKET_ALIM_TENSION             = 0x04;

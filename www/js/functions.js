@@ -285,6 +285,9 @@ function insertMeasures($scope){
 	if (typeof $scope.mesure.temperature=="undefined" || $scope.mesure.temperature=="undefined" || $scope.mesure.temperature=="")
 		$scope.mesure.temperature =-1000;
 	
+	//new champ version
+	var newversion = $scope.connectedDevice.name + $scope.connectedDevice.version + $scope.connectedDevice.serial;
+	
 	if (typeof device != "undefined")
 	{
 		//do nothing;
@@ -309,7 +312,8 @@ function insertMeasures($scope){
 				
 				$scope.connectedDevice.uuid+'","'+
 				$scope.connectedDevice.name+'","'+
-				$scope.connectedDevice.version+'","'+
+				//$scope.connectedDevice.version+'","'+
+				newversion+'","'+
 				$scope.connectedDevice.sensorType+'","'+
 				$scope.connectedDevice.tubeType+'","'+
 				
@@ -799,6 +803,14 @@ function doOnData(rfduino,$scope)
 			for (var key in myData) {
 				if (myData.hasOwnProperty(key)) {
 					
+					//serial number
+					if (key == "1")
+					{
+						$scope.connectedDevice.serial = myData[key].data;
+						//setConnectedDeviceInfos($scope,'serial');
+						$scope.$apply();
+					}
+					
 					//version
 					if (key == "2")
 					{
@@ -933,6 +945,7 @@ function getData(data) {
 	    case OUT_PACKET_SENSOR_TYPE :
 	    case OUT_PACKET_TUBE_TYPE :
 	    case OUT_PACKET_VERSION : 
+	    case OUT_PACKET_SERIAL_NB : 
                 stringlen = dataView.getUint8(offset);
 				offset++;
 				myData[datatype] ={};
@@ -976,6 +989,7 @@ function fakeBluetoothDeviceInfos($scope)
 	setConnectedDeviceInfos($scope,'sensorType');
 	$scope.connectedDevice.tubeType  =  "Test Sensor Tube Type";
 	setConnectedDeviceInfos($scope,'tubeType');
+	$scope.connectedDevice.serial  =  "Test Sensor Serial";
 }
 
 function fakeSearch($scope){
