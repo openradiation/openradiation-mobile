@@ -870,7 +870,7 @@ function doOnData(rfduino,$scope)
 							}
 							$scope.mesure.log[mytimestampmill].tension = (myData[key].data).toFixed(2);
 						}
-						
+						alert('key 18');
 						if (!$scope.mesure.encours && (myData[key].data > tensions_tube[$scope.connectedDevice.tubeType]["tension_min"]) && $scope.mesure.init)
 						{
 							$scope.mesure.timedeb = parseInt(new Date().getTime()/1000);
