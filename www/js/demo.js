@@ -681,10 +681,10 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		var data = new Uint8Array(5);
 		data[0]=0x11;
 		
-		data[4]="0x"+ tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(0) + tensions_tube["SBM-20"]["tension_hexa"].charAt(1);
-		data[3]="0x"+ tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(2) + tensions_tube["SBM-20"]["tension_hexa"].charAt(3);
-		data[2]="0x"+ tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(4) + tensions_tube["SBM-20"]["tension_hexa"].charAt(5);
-		data[1]="0x"+ tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(6) + tensions_tube["SBM-20"]["tension_hexa"].charAt(7);
+		data[4]="0x"+ tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(0) + tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(1);
+		data[3]="0x"+ tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(2) + tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(3);
+		data[2]="0x"+ tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(4) + tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(5);
+		data[1]="0x"+ tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(6) + tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(7);
 		
 		rfduino.write(data.buffer,function() {
 			//success
@@ -721,10 +721,10 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		var data = new Uint8Array(5);
 		data[0]=0x11;
 		
-		data[4]="0x"+ tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(0) + tensions_tube["SBM-20"]["tension_hexa"].charAt(1);
-		data[3]="0x"+ tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(2) + tensions_tube["SBM-20"]["tension_hexa"].charAt(3);
-		data[2]="0x"+ tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(4) + tensions_tube["SBM-20"]["tension_hexa"].charAt(5);
-		data[1]="0x"+ tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(6) + tensions_tube["SBM-20"]["tension_hexa"].charAt(7);
+		data[4]="0x"+ tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(0) + tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(1);
+		data[3]="0x"+ tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(2) + tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(3);
+		data[2]="0x"+ tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(4) + tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(5);
+		data[1]="0x"+ tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(6) + tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(7);
 		
 		rfduino.write(data.buffer,function() {
 			//success
