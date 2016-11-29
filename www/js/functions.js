@@ -286,7 +286,7 @@ function insertMeasures($scope){
 		$scope.mesure.temperature =-1000;
 	
 	//new champ version
-	var newversion = $scope.connectedDevice.name + $scope.connectedDevice.version + $scope.connectedDevice.serial;
+	var newversion = $scope.connectedDevice.name + ";" + $scope.connectedDevice.version + ";" + $scope.connectedDevice.serial;
 	
 	if (typeof device != "undefined")
 	{
