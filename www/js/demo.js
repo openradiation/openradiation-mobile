@@ -538,6 +538,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 						function() {
 							//success
 							$scope.connectedDevice = deviceSensor;
+							alert(JSON.stringify(deviceSensor));
 							setConnectedDevice($scope);
 							//$scope.$apply();
 							doOnData(rfduino,$scope);

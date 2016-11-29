@@ -786,7 +786,7 @@ function setBluetoothDeviceParams(rfduino,$scope,type)
 		rfduino.write(data.buffer,function() {
 			//success
 			},
-		    function() {alertNotif($scope.connectedDevice.uuid+" failure send param silent","Failure","Ok")}
+		    function() {alertNotif($scope.connectedDevice.uuid+" failure send param visual","Failure","Ok")}
 		);
 	}
 }
@@ -804,13 +804,13 @@ function doOnData(rfduino,$scope)
 				if (myData.hasOwnProperty(key)) {
 					
 					//serial number
-					if (key == "1")
+					/*if (key == "1")
 					{
 						$scope.connectedDevice.serial = myData[key].data;
-						alert("serial "+$scope.connectedDevice.serial);
+						//alert("serial "+$scope.connectedDevice.serial);
 						//setConnectedDeviceInfos($scope,'serial');
 						$scope.$apply();
-					}
+					}*/
 					
 					//version
 					if (key == "2")
