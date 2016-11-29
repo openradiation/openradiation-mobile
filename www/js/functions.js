@@ -287,6 +287,7 @@ function insertMeasures($scope){
 	
 	//new champ version
 	var newversion = $scope.connectedDevice.name + $scope.connectedDevice.version + $scope.connectedDevice.serial;
+	alert(newversion);
 	
 	if (typeof device != "undefined")
 	{

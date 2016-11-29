@@ -538,8 +538,8 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 						function() {
 							//success
 							$scope.connectedDevice = deviceSensor;
-							alert(JSON.stringify(deviceSensor));
 							setConnectedDevice($scope);
+							$scope.connectedDevice.serial = deviceSensor.advertising;
 							//$scope.$apply();
 							doOnData(rfduino,$scope);
 							doAskBluetoothDeviceInfos(rfduino,$scope);
