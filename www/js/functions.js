@@ -433,7 +433,8 @@ function sendMeasures($scope,measure){
 						//GPS
 						args.data.longitude = parseFloat(mesure.longitude);
 						args.data.latitude = parseFloat(mesure.latitude);
-						args.data.accuracy = parseFloat(mesure.accuracy);
+						if (mesure.accuracy != '' && mesure.accuracy != 'null')
+							args.data.accuracy = parseFloat(mesure.accuracy);
 						if (mesure.altitude != '' && mesure.altitude != 'null')
 							args.data.altitude = parseInt(mesure.altitude);
 						if (mesure.altitudeAccuracy != '' && mesure.altitudeAccuracy != 'null')
