@@ -445,7 +445,7 @@ function sendMeasures($scope,measure){
 							args.data.hitsNumber = parseInt(mesure.nbHits);
 						args.data.value = mesure.radiation;
 						args.data.startTime = convertTimestampToTimezone(mesure.tsStart);
-						if (mesure.duration != "undefined")
+						if (mesure.duration != "undefined" && mesure.duration != 0 && mesure.duration != '')
 							args.data.endTime = convertTimestampToTimezone(parseInt(mesure.tsStart)+parseInt(mesure.duration));
 						args.data.manualReporting = (mesure.manualReporting?true:false);
 						
