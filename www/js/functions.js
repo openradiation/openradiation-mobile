@@ -301,6 +301,17 @@ function insertMeasures($scope){
 		device.version = "mydeviceVersion";
 		device.model = "mydeviceModel";
 	}
+	
+	if ($scope.mesure.manualreport == 1)
+	{
+		//manuel
+		$scope.connectedDevice.uuid = "undefined";
+		$scope.connectedDevice.name = "undefined";
+		newversion = "undefined";
+		$scope.connectedDevice.sensorType = "undefined";
+		$scope.connectedDevice.tubeType = "undefined";
+	}
+	
 	db.transaction(function(tx) {
 		tx.executeSql('INSERT INTO "measures" '+
 				'(sensorUUID,sensorName,sensorVersion,sensorType,sensorTubeType,'+
