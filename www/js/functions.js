@@ -1055,10 +1055,12 @@ function doProgressBar(mycount){
 		$('.mesure .blocMesure1 .fiability .progressbar2').width( percent+'%');
 	else 
 		$('.mesure .blocMesure1 .fiability .progressbar2').width('100%');
-	if (percent>50)
+	if (percent>7)
+		$('.mesure .blocMesure1 .fiability .progressbar2').css("background-color","#e70000");
+	if (percent>34)
 		$('.mesure .blocMesure1 .fiability .progressbar2').css("background-color","#dfe700");
-	if (percent>100)
-		$('.mesure .blocMesure1 .fiability .progressbar2').css("background-color","#aee700");
+	if (percent>=100)
+		$('.mesure .blocMesure1 .fiability .progressbar2').css("background-color","#14c921");
 }
 
 /////////////////////////////////////////////////////////////////////
