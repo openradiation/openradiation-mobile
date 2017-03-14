@@ -1,6 +1,9 @@
 //debug 
 debug = true;
 
+//pour envoi avec mesure;
+var appliNameVersion = "openradiation app v0.1";
+
 //tension adatpee a chaque tube
 var tensions_tube =  {};
 tensions_tube["SBM-20"] 	= 	{"tension_hexa": '43be0000', "tension_min": 340, "tension_max": 400};

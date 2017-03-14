@@ -405,6 +405,7 @@ function sendMeasures($scope,measure){
 	args.apiKey = API_KEY;
 	args.data = {};
 	args.data.reportContext = "routine";
+	args.data.organisationReporting = appliNameVersion;
 	db.transaction(function(tx) {
 		tx.executeSql('SELECT * FROM "measures" WHERE id='+id+';',[], 
 				function(tx,res){
