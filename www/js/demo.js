@@ -213,7 +213,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 						}
 						else
 						{
-							$scope.setTension($scope.connectedDevice.uuid);
+							$scope.setTension($scope.connectedDevice.sensorUUID);
 							
 							doOnData(rfduino,$scope);
 							doAskBluetoothDeviceInfos(rfduino,$scope);			
@@ -252,7 +252,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		$scope.menu="0";
 		$scope.mesure.encours = false;
 		$scope.mesure.init = false;
-		$scope.setTensionOff($scope.connectedDevice.uuid);
+		$scope.setTensionOff($scope.connectedDevice.sensorUUID);
 	}
 	
 	$scope.doExpert = function(clickEvent){
@@ -318,14 +318,31 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		//$scope.apply();
 		if (measure.encours != true)
 		{
-			measure.encours = true;
-			sendMeasures($scope,measure);
+            titre = "Confirmation de l'envoi";
+            message = "Êtes-vous sûr(e) de vouloir envoyer cette mesure ? En envoyant cette mesure, vous acceptez que l'ensemble des données correspondant à cette mesure (dont votre position GPS, votre pseudo, ...) soit publié dans la base openradiation";
+            if (isMobile) {
+                navigator.notification.confirm(
+                        message,  			
+                        function(buttonIndex){ if (buttonIndex==1) { 
+                            measure.encours = true;
+                            sendMeasures($scope,measure);
+                        }},      
+                        titre,
+                        [ 'Oui','Non' ]
+                    );
+			} else {
+				if (confirm(titre+"\n\n"+message))
+                {
+					measure.encours = true;
+                    sendMeasures($scope,measure);
+                }
+            }  
 		}
 	}
 	
 	$scope.doDelete  = function(id){
 		titre = "Historique";
-		message = "Êtes-vous sûr(e) de vouloir supprimer cette mesure";
+		message = "Êtes-vous sûr(e) de vouloir supprimer cette mesure ?";
 		if (isMobile)
 			navigator.notification.confirm(
 					message,  			
@@ -537,12 +554,19 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 				rfduino.connect(deviceSensor.uuid,
 						function() {
 							//success
-							$scope.connectedDevice = deviceSensor;
+                            $scope.connectedDevice = {};
+							$scope.connectedDevice.sensorUUID = deviceSensor.uuid; 
+                            $scope.connectedDevice.apparatusId = deviceSensor.advertising;
+                            $scope.connectedDevice.apparatusVersion = deviceSensor.name;
 							setConnectedDevice($scope);
-							$scope.connectedDevice.serial = deviceSensor.advertising;
+							
+                            
+                            
 							//$scope.$apply();
-							doOnData(rfduino,$scope);
-							doAskBluetoothDeviceInfos(rfduino,$scope);
+                            setTimeout(function(){
+                                doOnData(rfduino,$scope);
+                                doAskBluetoothDeviceInfos(rfduino,$scope);}, 500);
+
 							
 						},
 					    function() {alertNotif(deviceSensor.uuid+" non connecté","Failure","Ok")}
@@ -682,10 +706,10 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		var data = new Uint8Array(5);
 		data[0]=0x11;
 		
-		data[4]="0x"+ tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(0) + tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(1);
-		data[3]="0x"+ tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(2) + tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(3);
-		data[2]="0x"+ tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(4) + tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(5);
-		data[1]="0x"+ tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(6) + tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(7);
+		data[4]="0x"+ tensions_tube[$scope.connectedDevice.apparatusTubeType]["tension_hexa"].charAt(0) + tensions_tube[$scope.connectedDevice.apparatusTubeType]["tension_hexa"].charAt(1);
+		data[3]="0x"+ tensions_tube[$scope.connectedDevice.apparatusTubeType]["tension_hexa"].charAt(2) + tensions_tube[$scope.connectedDevice.apparatusTubeType]["tension_hexa"].charAt(3);
+		data[2]="0x"+ tensions_tube[$scope.connectedDevice.apparatusTubeType]["tension_hexa"].charAt(4) + tensions_tube[$scope.connectedDevice.apparatusTubeType]["tension_hexa"].charAt(5);
+		data[1]="0x"+ tensions_tube[$scope.connectedDevice.apparatusTubeType]["tension_hexa"].charAt(6) + tensions_tube[$scope.connectedDevice.apparatusTubeType]["tension_hexa"].charAt(7);
 		
 		rfduino.write(data.buffer,function() {
 			//success
@@ -722,10 +746,10 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 		var data = new Uint8Array(5);
 		data[0]=0x11;
 		
-		data[4]="0x"+ tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(0) + tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(1);
-		data[3]="0x"+ tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(2) + tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(3);
-		data[2]="0x"+ tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(4) + tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(5);
-		data[1]="0x"+ tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(6) + tensions_tube[$scope.connectedDevice.tubeType]["tension_hexa"].charAt(7);
+		data[4]="0x"+ tensions_tube[$scope.connectedDevice.apparatusTubeType]["tension_hexa"].charAt(0) + tensions_tube[$scope.connectedDevice.apparatusTubeType]["tension_hexa"].charAt(1);
+		data[3]="0x"+ tensions_tube[$scope.connectedDevice.apparatusTubeType]["tension_hexa"].charAt(2) + tensions_tube[$scope.connectedDevice.apparatusTubeType]["tension_hexa"].charAt(3);
+		data[2]="0x"+ tensions_tube[$scope.connectedDevice.apparatusTubeType]["tension_hexa"].charAt(4) + tensions_tube[$scope.connectedDevice.apparatusTubeType]["tension_hexa"].charAt(5);
+		data[1]="0x"+ tensions_tube[$scope.connectedDevice.apparatusTubeType]["tension_hexa"].charAt(6) + tensions_tube[$scope.connectedDevice.apparatusTubeType]["tension_hexa"].charAt(7);
 		
 		rfduino.write(data.buffer,function() {
 			//success
@@ -777,7 +801,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	$scope.savePubliAuto = function () {
 		value = ($scope.publi_auto?1:0);
 		saveParam('publi_auto',value,'');
-	}
+    }
 	
 	//function param pour device
 	$scope.saveAudioHits = function () {

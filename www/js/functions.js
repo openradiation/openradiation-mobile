@@ -42,10 +42,10 @@ function createTableDevices(callback)
 				tx.executeSql('CREATE TABLE IF NOT EXISTS "devices" ' +
 						' ("id" INTEGER PRIMARY KEY AUTOINCREMENT , ' +
 						'  "sensorUUID" VARCHAR,' +
-						'  "sensorName" VARCHAR,' +
-						'  "sensorVersion" VARCHAR,' +
-						'  "sensorType" VARCHAR,' +
-						'  "sensorTubeType" VARCHAR,' +
+						'  "apparatusId" VARCHAR,' +
+						'  "apparatusVersion" VARCHAR,' +
+						'  "apparatusSensorType" VARCHAR,' +
+						'  "apparatusTubeType" VARCHAR,' +
 						'  "paramAudioHits" BOOLEAN not null default 1,' +
 						'  "paramVisualHits" BOOLEAN not null default 1' +
 						');',[],
@@ -71,10 +71,10 @@ function createTableMeasures(callback)
 				tx.executeSql('CREATE TABLE IF NOT EXISTS "measures" ' +
 						' ("id" INTEGER PRIMARY KEY AUTOINCREMENT , ' +
 						'  "sensorUUID" VARCHAR,' +
-						'  "sensorName" VARCHAR,' +
-						'  "sensorVersion" VARCHAR,' +
-						'  "sensorType" VARCHAR,' +
-						'  "sensorTubeType" VARCHAR,' +
+						'  "apparatusId" VARCHAR,' +
+						'  "apparatusVersion" VARCHAR,' +
+						'  "apparatusSensorType" VARCHAR,' +
+						'  "apparatusTubeType" VARCHAR,' +
 						'  "reportUUID" VARCHAR,' +
 						'  "deviceUUID" VARCHAR,' +
 						'  "devicePlatform" VARCHAR,' +
@@ -149,23 +149,23 @@ function setConnectedDevice($scope)
 	db.transaction(
 			function(tx) 
 			{
-				tx.executeSql('SELECT * FROM "devices" WHERE sensorUUID="'+ $scope.connectedDevice.uuid +'";',[],
+				tx.executeSql('SELECT * FROM "devices" WHERE sensorUUID="'+ $scope.connectedDevice.sensorUUID +'";',[],
 						function(tx,res){
 							if (res.rows.length > 0)
 							{	
 								//on récupère les infos				
-								if ($scope.connectedDevice.name != res.rows.item(0).name)
+								if ($scope.connectedDevice.apparatusId != res.rows.item(0).apparatusId)
 								{
-									//mise à jour du name si besoin
+									//mise à jour du apparatusId si besoin
 									tx.executeSql('UPDATE "devices" '+
-											'SET sensorName = "'+ $scope.connectedDevice.name +'"'+
-											'WHERE sensorUUID="'+$scope.connectedDevice.uuid+'";',[],
+											'SET apparatusId = "'+ $scope.connectedDevice.apparatusId +'"'+
+											'WHERE sensorUUID="'+$scope.connectedDevice.sensorUUID+'";',[],
 											function(tx){},
 											function(tx,error){requestTableError(tx, error,"update devices");});
 								}
-								$scope.connectedDevice.version = res.rows.item(0).sensorVersion;
-								$scope.connectedDevice.sensorType = res.rows.item(0).sensorType;
-								$scope.connectedDevice.tubeType = res.rows.item(0).sensorTubeType;
+								$scope.connectedDevice.apparatusVersion = res.rows.item(0).apparatusVersion;
+								$scope.connectedDevice.apparatusSensorType = res.rows.item(0).apparatusSensorType;
+								$scope.connectedDevice.apparatusTubeType = res.rows.item(0).apparatusTubeType;
 								$scope.connectedDevice.audioHits = (res.rows.item(0).paramAudioHits?true:false);
 								$scope.connectedDevice.visualHits = (res.rows.item(0).paramVisualHits?true:false);
 								if (typeof rfduino != 'undefined')
@@ -179,16 +179,17 @@ function setConnectedDevice($scope)
 							{
 								//on enregistre
 								tx.executeSql('INSERT INTO "devices" '+
-										'(sensorUUID,sensorName) VALUES("'+
+										'(sensorUUID,apparatusId, apparatusVersion) VALUES("'+
 										
-										$scope.connectedDevice.uuid+'","'+
-										$scope.connectedDevice.name+'"' +
+										$scope.connectedDevice.sensorUUID+'","'+
+                                        $scope.connectedDevice.apparatusId+'","'+
+										$scope.connectedDevice.apparatusVersion+'"' +
 
 										');',[], 
 										function(tx,results){
-											$scope.connectedDevice.version = "";
-											$scope.connectedDevice.sensorType = "";
-											$scope.connectedDevice.tubeType = "";
+											//$scope.connectedDevice.apparatusVersion = "";
+											$scope.connectedDevice.apparatusSensorType = "";
+											$scope.connectedDevice.apparatusTubeType = "";
 											$scope.connectedDevice.audioHits = true;
 											$scope.connectedDevice.visualHits = true;
 											if (typeof rfduino != 'undefined')
@@ -218,40 +219,49 @@ function setConnectedDeviceInfos($scope,type){
 	db.transaction(
 		function(tx) 
 		{
-			if (type == "version")
+            if (type == "apparatusId")
 			{
 				tx.executeSql('UPDATE "devices" '+
-						'SET sensorVersion = "'+ $scope.connectedDevice.version +'"'+
-						'WHERE sensorUUID="'+$scope.connectedDevice.uuid+'";',[],
+						'SET apparatusId = "'+ $scope.connectedDevice.apparatusId +'"'+
+						'WHERE sensorUUID="'+$scope.connectedDevice.sensorUUID+'";',[],
 						function(tx){},
-						function(tx,error){requestTableError(tx, error,"update version infos devices");});
+						function(tx,error){requestTableError(tx, error,"update apparatusId infos devices");});
+			}
+            
+			if (type == "apparatusVersion")
+			{
+				tx.executeSql('UPDATE "devices" '+
+						'SET apparatusVersion = "'+ $scope.connectedDevice.apparatusVersion +'"'+
+						'WHERE sensorUUID="'+$scope.connectedDevice.sensorUUID+'";',[],
+						function(tx){},
+						function(tx,error){requestTableError(tx, error,"update apparatusVersion infos devices");});
 			}
 			
-			if (type == "sensorType")
+			if (type == "apparatusSensorType")
 			{
 				tx.executeSql('UPDATE "devices" '+
-						'SET sensorType = "'+ $scope.connectedDevice.sensorType +'"'+
-						'WHERE sensorUUID="'+$scope.connectedDevice.uuid+'";',[],
+						'SET apparatusSensorType = "'+ $scope.connectedDevice.apparatusSensorType +'"'+
+						'WHERE sensorUUID="'+$scope.connectedDevice.sensorUUID+'";',[],
 						function(tx){},
-						function(tx,error){requestTableError(tx, error,"update version infos devices");});
+						function(tx,error){requestTableError(tx, error,"update apparatusSensorType infos devices");});
 			}
 			
-			if (type == "tubeType")
+			if (type == "apparatusTubeType")
 			{
 				tx.executeSql('UPDATE "devices" '+
-						'SET sensorTubeType = "'+ $scope.connectedDevice.tubeType +'"'+
-						'WHERE sensorUUID="'+$scope.connectedDevice.uuid+'";',[],
+						'SET apparatusTubeType = "'+ $scope.connectedDevice.apparatusTubeType +'"'+
+						'WHERE sensorUUID="'+$scope.connectedDevice.sensorUUID+'";',[],
 						function(tx){},
-						function(tx,error){requestTableError(tx, error,"update version infos devices");});
+						function(tx,error){requestTableError(tx, error,"update apparatusTubeType infos devices");});
 			}
 			
 			if (type == "audioHits")
 			{
 				tx.executeSql('UPDATE "devices" '+
 						'SET paramAudioHits = "'+  ($scope.connectedDevice.audioHits?1:0) +'"'+
-						'WHERE sensorUUID="'+$scope.connectedDevice.uuid+'";',[],
+						'WHERE sensorUUID="'+$scope.connectedDevice.sensorUUID+'";',[],
 						function(tx){},
-						function(tx,error){requestTableError(tx, error,"update version infos devices");});
+						function(tx,error){requestTableError(tx, error,"update audioHits infos devices");});
 				if (typeof rfduino != 'undefined')
 				{
 					setBluetoothDeviceParams(rfduino,$scope,'audioHits');
@@ -262,9 +272,9 @@ function setConnectedDeviceInfos($scope,type){
 			{
 				tx.executeSql('UPDATE "devices" '+
 						'SET paramVisualHits = "'+  ($scope.connectedDevice.visualHits?1:0) +'"'+
-						'WHERE sensorUUID="'+$scope.connectedDevice.uuid+'";',[],
+						'WHERE sensorUUID="'+$scope.connectedDevice.sensorUUID+'";',[],
 						function(tx){},
-						function(tx,error){requestTableError(tx, error,"update version infos devices");});
+						function(tx,error){requestTableError(tx, error,"update visualHits infos devices");});
 				if (typeof rfduino != 'undefined')
 				{
 					setBluetoothDeviceParams(rfduino,$scope,'visualHits');
@@ -286,7 +296,7 @@ function insertMeasures($scope){
 		$scope.mesure.temperature =-1000;
 	
 	//new champ version
-	var newversion = $scope.connectedDevice.name + ";" + $scope.connectedDevice.version + ";" + $scope.connectedDevice.serial;
+	//var newversion = $scope.connectedDevice.name + ";" + $scope.connectedDevice.version + ";" + $scope.connectedDevice.serial;
 	
 	if (typeof device != "undefined")
 	{
@@ -302,31 +312,30 @@ function insertMeasures($scope){
 		device.model = "mydeviceModel";
 	}
 	
+    var apparatusInfos;
 	if ($scope.mesure.manualreport == 1)
 	{
-		//manuel
-		$scope.connectedDevice.uuid = "undefined";
-		$scope.connectedDevice.name = "undefined";
-		newversion = "undefined";
-		$scope.connectedDevice.sensorType = "undefined";
-		$scope.connectedDevice.tubeType = "undefined";
-	}
+		apparatusInfos = 'undefined","undefined","undefined","undefined","undefined","';       
+	} else {
+        apparatusInfos = $scope.connectedDevice.sensorUUID+'","'+
+                      $scope.connectedDevice.apparatusId+'","'+
+                      $scope.connectedDevice.apparatusVersion+'","'+
+                      $scope.connectedDevice.apparatusSensorType+'","'+
+                      $scope.connectedDevice.apparatusTubeType +'","'
+    }
 	
 	db.transaction(function(tx) {
 		tx.executeSql('INSERT INTO "measures" '+
-				'(sensorUUID,sensorName,sensorVersion,sensorType,sensorTubeType,'+
+				'(sensorUUID,apparatusId,apparatusVersion,apparatusSensorType,apparatusTubeType,'+
 				'reportUUID,'+
 				'deviceUUID,devicePlatform,deviceVersion,deviceModel,' +
 				'tsStart, tsEnd,duration, temperature, nbHits,radiation,manualReporting,' +
 				'longitude,latitude,accuracy,altitude,altitudeAccuracy,' +
 				'environment,position,tags,notes,sent) VALUES("'+
 				
-				$scope.connectedDevice.uuid+'","'+
-				$scope.connectedDevice.name+'","'+
-				//$scope.connectedDevice.version+'","'+
-				newversion+'","'+
-				$scope.connectedDevice.sensorType+'","'+
-				$scope.connectedDevice.tubeType+'","'+
+                apparatusInfos
+    
+				+
 				
 				generateUUID()+'","'+  //reportUUID
 					
@@ -355,10 +364,13 @@ function insertMeasures($scope){
 				$scope.mesure.notes+'",'+
 				'0);',[], 
 				function(tx,results){
-					var lastInsertId = results.insertId; 
+					var lastInsertId = {};
+                    lastInsertId.id = results.insertId; 
+                    
 					if ($scope.publi_auto)
-						sendMeasures($scope,lastInsertId)
-			
+                    {
+                        sendMeasures($scope,lastInsertId)
+                    }
 			
 		},
 				function(tx,error){requestTableError(tx, error,"insert measures");});
@@ -418,17 +430,14 @@ function sendMeasures($scope,measure){
 						console.log(mesure)
 						args.data.reportUuid = generateUUID(); //TODO: enregistrer dans table
 						//infos capteur
-						if (mesure.sensorUUID != '' && mesure.sensorUUID != 'undefined')
-							args.data.apparatusId = mesure.sensorUUID;
-						/*if (mesure.sensorName != '')
-							args.data.apparatusVersion = mesure.sensorName;*/
-						if (mesure.sensorVersion != '' && mesure.sensorVersion != 'undefined')
-							args.data.apparatusVersion = mesure.sensorVersion;
-						if (mesure.sensorType != '' && mesure.sensorType != 'undefined')
-							//args.data.apparatusSensorType = mesure.sensorType;
+						if (mesure.apparatusId != '' && mesure.apparatusId != 'undefined')
+							args.data.apparatusId = mesure.apparatusId;
+						if (mesure.apparatusVersion != '' && mesure.apparatusVersion != 'undefined')
+							args.data.apparatusVersion = mesure.apparatusVersion;
+						if (mesure.apparatusSensorType != '' && mesure.apparatusSensorType != 'undefined')
 							args.data.apparatusSensorType = "geiger";
-						if (mesure.sensorTubeType != '' && mesure.sensorTubeType != 'undefined')
-							args.data.apparatusTubeType = mesure.sensorTubeType;
+						if (mesure.apparatusTubeType != '' && mesure.apparatusTubeType != 'undefined')
+							args.data.apparatusTubeType = mesure.apparatusTubeType;
 						
 						
 						//GPS
@@ -457,11 +466,11 @@ function sendMeasures($scope,measure){
 						args.data.deviceModel = mesure.deviceModel;
 						
 						//temperature
-						if (mesure.temperature != -1000)
-						{
-							args.data.temperature = parseInt(mesure.temperature);
-							//alert(args.data.temperature);
-						}
+                        //temperature n'est pas envoyée car elle correspond à la temperature du capteur et non la temperature externe
+						//if (mesure.temperature != -1000)
+						//{
+						//	args.data.temperature = parseInt(mesure.temperature);
+						//}
 						
 						//compléments mesure
 						if (mesure.environment != '')
@@ -756,7 +765,7 @@ function testUser($scope,$location,$rootScope){
 //Functions RFDUINO
 /////////////////////////////////////////////////////////////////////
 function doBluetoothDeviceSearch($scope)
-{
+{  
     //TODO : do scan until find a known one
     rfduino.discover(5, function(deviceSensor) {
     	$scope.devices[deviceSensor.uuid] = deviceSensor;
@@ -772,12 +781,14 @@ function doAskBluetoothDeviceInfos(rfduino,$scope)
 	rfduino.write(data.buffer,function() {
 		//success
 		},
-	    function() {alertNotif($scope.connectedDevice.uuid+" failure send info","Failure","Ok")}
+	    function() {alertNotif($scope.connectedDevice.sensorUUID+" failure send info","Failure","Ok")}
 	);
 }
 
 function setBluetoothDeviceParams(rfduino,$scope,type)
 {
+setTimeout(function(){
+
 	var data = new Uint8Array(2);
 	if (type == "audioHits")
 	{
@@ -788,7 +799,7 @@ function setBluetoothDeviceParams(rfduino,$scope,type)
 		rfduino.write(data.buffer,function() {
 			//success
 			},
-		    function() {alertNotif($scope.connectedDevice.uuid+" failure send param silent","Failure","Ok")}
+		    function() {alertNotif($scope.connectedDevice.sensorUUID+" failure send param silent","Failure","Ok")}
 		);
 	}
 	if (type == "visualHits")
@@ -799,9 +810,10 @@ function setBluetoothDeviceParams(rfduino,$scope,type)
 		rfduino.write(data.buffer,function() {
 			//success
 			},
-		    function() {alertNotif($scope.connectedDevice.uuid+" failure send param visual","Failure","Ok")}
+		    function() {alertNotif($scope.connectedDevice.sensorUUID+" failure send param visual","Failure","Ok")}
 		);
 	}
+}, Math.floor(Math.random() * 1000 + 500));
 }
 
 function doOnData(rfduino,$scope)
@@ -825,19 +837,23 @@ function doOnData(rfduino,$scope)
 						$scope.$apply();
 					}*/
 					
-					//version
-					if (key == "2")
-					{
-						$scope.connectedDevice.version = myData[key].data;
-						setConnectedDeviceInfos($scope,'version');
-						$scope.$apply();
-					}
+					//apparatusVersion n'est plus récupéré de cette manière
+                    //    apparatusVersion = "name" (deviceName) 
+                    //    sensorUUID = "uuid" 
+                    //    apparatusId = "advertising" (advertismentData)
+    
+					//if (key == "2")
+					//{
+					//	$scope.connectedDevice.apparatusVersion = myData[key].data;
+					//	setConnectedDeviceInfos($scope,'apparatusVersion');
+					//	$scope.$apply();
+					//}
 					
-					//sensor_type
+					//apparatusSensorType
 					if (key == "3")
 					{
-						$scope.connectedDevice.sensorType = myData[key].data;
-						setConnectedDeviceInfos($scope,'sensorType');
+						$scope.connectedDevice.apparatusSensorType = myData[key].data;
+						setConnectedDeviceInfos($scope,'apparatusSensorType');
 						$scope.$apply();
 					}
 					
@@ -882,8 +898,8 @@ function doOnData(rfduino,$scope)
 					//tube_type
 					if (key == "16")
 					{
-						$scope.connectedDevice.tubeType = myData[key].data;
-						setConnectedDeviceInfos($scope,'tubeType');
+						$scope.connectedDevice.apparatusTubeType = myData[key].data;
+						setConnectedDeviceInfos($scope,'apparatusTubeType');
 						$scope.$apply();
 					}
 					
@@ -902,7 +918,7 @@ function doOnData(rfduino,$scope)
 						}
 						
 						
-						if (!$scope.mesure.encours && $scope.mesure.init == true && (myData[key].data > tensions_tube[$scope.connectedDevice.tubeType]["tension_min"]))
+						if (!$scope.mesure.encours && $scope.mesure.init == true && (myData[key].data > tensions_tube[$scope.connectedDevice.apparatusTubeType]["tension_min"]))
 						{
 							$scope.mesure.timedeb = parseInt(new Date().getTime()/1000);
 							$scope.mesure.init =false;
@@ -912,7 +928,7 @@ function doOnData(rfduino,$scope)
 				}
 			}
 	},
-	function(error){alertNotif($scope.connectedDevice.uuid+" onData error : "+error,"Failure","Ok")});
+	function(error){alertNotif($scope.connectedDevice.sensorUUID+" onData error : "+error,"Failure","Ok")});
 }
 
 function getData(data) {
@@ -997,13 +1013,14 @@ function fakeBluetoothDeviceSearch($scope)
 
 function fakeBluetoothDeviceInfos($scope)
 {
-	$scope.connectedDevice.version =  "Test Sensor Version";
-	setConnectedDeviceInfos($scope,'version');
-	$scope.connectedDevice.sensorType  =  "geiger";
-	setConnectedDeviceInfos($scope,'sensorType');
-	$scope.connectedDevice.tubeType  =  "Test Sensor Tube Type";
-	setConnectedDeviceInfos($scope,'tubeType');
-	$scope.connectedDevice.serial  =  "Test Sensor Serial";
+	$scope.connectedDevice.apparatusVersion =  "Test Sensor Version";
+	setConnectedDeviceInfos($scope,'apparatusVersion');
+	$scope.connectedDevice.apparatusSensorType  =  "geiger";
+	setConnectedDeviceInfos($scope,'apparatusSensorType');
+	$scope.connectedDevice.apparatusTubeType  =  "Test Sensor Tube Type";
+	setConnectedDeviceInfos($scope,'apparatusTubeType');
+	$scope.connectedDevice.apparatusId  =  "Test Sensor Serial";
+    setConnectedDeviceInfos($scope,'apparatusId');
 }
 
 function fakeSearch($scope){

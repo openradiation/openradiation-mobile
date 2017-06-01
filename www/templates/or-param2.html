@@ -15,12 +15,12 @@
 			<div class="lignecapt">
 				<div class="desc">
 					{{deviceSensor.name}}
-					<div>{{deviceSensor.uuid}}</div>
-					<div class="paramcapt" ><div ng-if="connectedDevice.uuid==deviceSensor.uuid" ng-click="doParam3($event)"></div></div>
+					<div>{{deviceSensor.advertising}}</div>
+					<div class="paramcapt" ><div ng-if="connectedDevice.sensorUUID==deviceSensor.uuid" ng-click="doParam3($event)"></div></div>
 				</div>
 				<div class="connect">
-					<div ng-if="connectedDevice.uuid==deviceSensor.uuid" class="button" ng-click="doDisconnect(connectedDevice.uuid)">Se déconnecter</div>
-					<div ng-if="connectedDevice.uuid!=deviceSensor.uuid" class="button" ng-click="doConnect(deviceSensor)">Se connecter</div>
+					<div ng-if="connectedDevice.sensorUUID==deviceSensor.uuid" class="button" ng-click="doDisconnect(connectedDevice.sensorUUID)">Se déconnecter</div>
+					<div ng-if="connectedDevice.sensorUUID!=deviceSensor.uuid" class="button" ng-click="doConnect(deviceSensor)">Se connecter</div>
 				</div>
 			</div>
 		</div>
