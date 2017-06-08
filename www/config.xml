@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="org.openradiation" version="0.9.5" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
-    <name>Openradiation</name>
+    <name>OpenRadiation</name>
     <description>
-        OpenRadiation : outil mobile pour recueillir des mesures
+        Mesurez la radioactivité. Participez à la base citoyenne OpenRadiation.
     </description>
     <author email="philippe.laroche@agoralogie.fr" href="http://www.agoralogie.fr">
         Agoralogie
