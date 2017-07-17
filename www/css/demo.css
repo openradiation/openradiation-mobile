@@ -53,7 +53,7 @@ h1 {
 }
 
 a,a:visited,a:hover,a:active{color:white;}
-.panel-group a,.param .bloctext.connexion a{text-decoration:underline;}
+.panel-group a,.param .bloctext a, .param .bloctext.connexion a{text-decoration:underline;}
 
 .chat-user-avatar {
   font-size: 40px;
@@ -473,8 +473,8 @@ input.scrollable-header {
 .lignetitlelog .tension, .lignelog .tension{width:18%;border-right:white dotted 1px;;padding-left:10px;text-align:left;}
 .lignetitlelog .temperature, .lignelog .temperature{width:18%;padding-left:10px;text-align:left;}
 
-.param .ligne2.formconnect .desc{width:35%;display:inline-block;}
-.formconnect .input{width:63%;display:inline-block;}
+.param .ligne2.formconnect .desc{width:48%;display:inline-block;}
+.formconnect .input{width:50%;display:inline-block;}
 .param input{background:#9cf5ff;border:none;border-radius: 5px;padding:0 5px;color:#090085;font-family:'INTERSTATE',Arial,Helvetica,sans-serif;
 	font-size:12px;width:100%;margin-left:1%;display: inline-block;box-sizing: border-box;}
 .param input::-webkit-input-placeholder
