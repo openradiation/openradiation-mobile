@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="org.openradiation" version="0.9.55" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+<widget id="org.openradiation" version="0.9.6" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <name>OpenRadiation</name>
     <description>
-        Mesurez la radioactivité. Participez à la base citoyenne OpenRadiation.
+        Les citoyens mesurent la radioactivité.
     </description>
     <author email="philippe.laroche@agoralogie.fr" href="http://www.agoralogie.fr">
         Agoralogie
@@ -27,34 +27,15 @@
     <preference name="StatusBarOverlaysWebView" value="true" />
     <preference name="StatusBarBackgroundColor" value="#045cb8" />
 	<preference name="StatusBarStyle" value="lightcontent" />
-	
 	<preference name="HideKeyboardFormAccessoryBar" value="true" />
     <preference name="KeyboardShrinksView" value="false" />
-	
-   <!--  <gap:plugin name="com.megster.cordova.rfduino" version="0.0.2" />
-    <gap:plugin name="com.millerjames01.sqlite-plugin" version="1.0.1" />
-    <gap:plugin name="de.appplant.cordova.plugin.email-composer" version="0.8.2" />
-    <gap:plugin name="de.appplant.cordova.plugin.local-notification" />
-    <gap:plugin name="org.apache.cordova.file" />
-    <gap:plugin name="org.apache.cordova.file-transfer" />
-    <gap:plugin name="org.apache.cordova.geolocation" version="0.3.10" />
-     <gap:plugin name="com.verso.cordova.clipboard" spec="0.1.0" source="pgb" />
-    <gap:plugin name="org.apache.cordova.camera" />-->
-   <!--	<gap:plugin name="io.litehelpers.cordova.sqlite" />
-   
-   gap:plugin name="cordova-sqlite-storage" source="npm" />
-   -->
    <gap:plugin name="cordova-plugin-sqlite-2" source="npm" />
 
- 
- 	
     <gap:plugin name="org.apache.cordova.dialogs" source="npm" />
     <gap:plugin name="org.apache.cordova.device" source="npm" />
     <gap:plugin name="org.apache.cordova.statusbar" source="npm" />
-    <!--<gap:plugin name="cordova-plugin-ble-central" source="npm" />-->
     <gap:plugin name="cordova-plugin-rfduino" source="npm" />
     <gap:plugin name="cordova-plugin-inappbrowser" source="npm" />
-   <!-- <gap:plugin name="org.apache.cordova.geolocation" />-->
     <gap:plugin name="cordova-plugin-geolocation" source="npm" />
     <gap:plugin name="cordova-plugin-whitelist" source="npm" />
    
@@ -71,38 +52,35 @@
     <icon gap:density="xxhdpi" gap:platform="android" src="res/icon/android/icon-144-xxhdpi.png" />
     <icon gap:density="xxxhdpi" gap:platform="android" src="res/icon/android/icon-192-xxxhdpi.png" />
     
-    <icon gap:platform="blackberry" src="res/icon/blackberry/icon-80.png" />
-    <icon gap:platform="blackberry" gap:state="hover" src="res/icon/blackberry/icon-80.png" />
     
    	<!-- iOS 8.0+ -->
     <!-- iPhone 6 Plus  -->
-   	<icon gap:platform="ios" src="res/ios/icon-60-3x.png" width="180" height="180" />
+   	<icon gap:platform="ios" src="res/icon/ios/icon-60-3x.png" width="180" height="180" />
 	<!-- iOS 7.0+ -->
 	<!-- iPhone / iPod Touch  -->
-	<icon gap:platform="ios" src="res/ios/icon-60.png" width="60" height="60" />
-	<icon gap:platform="ios" src="res/ios/icon-60-2x.png" width="120" height="120" />
+	<icon gap:platform="ios" src="res/icon/ios/icon-60.png" width="60" height="60" />
+	<icon gap:platform="ios" src="res/icon/ios/icon-60-2x.png" width="120" height="120" />
 	<!-- iPad -->
-	<icon gap:platform="ios" src="res/ios/icon-76.png" width="76" height="76" />
-	<icon gap:platform="ios" src="res/ios/icon-76-2x.png" width="152" height="152" />
+	<icon gap:platform="ios" src="res/icon/ios/icon-76.png" width="76" height="76" />
+	<icon gap:platform="ios" src="res/icon/ios/icon-76-2x.png" width="152" height="152" />
 	<!-- iOS 6.1 -->
 	<!-- Spotlight Icon -->
-	<icon gap:platform="ios" src="res/ios/icon-40.png" width="40" height="40" />
-	<icon gap:platform="ios" src="res/ios/icon-40-2x.png" width="80" height="80" />
+	<icon gap:platform="ios" src="res/icon/ios/icon-40.png" width="40" height="40" />
+	<icon gap:platform="ios" src="res/icon/ios/icon-40-2x.png" width="80" height="80" />
 	<!-- iPhone / iPod Touch -->
-	<icon gap:platform="ios" src="res/ios/icon.png" width="57" height="57" />
-	<icon gap:platform="ios" src="res/ios/icon-2x.png" width="114" height="114" />
+	<icon gap:platform="ios" src="res/icon/ios/icon.png" width="57" height="57" />
+	<icon gap:platform="ios" src="res/icon/ios/icon-2x.png" width="114" height="114" />
 	<!-- iPad -->
-	<icon gap:platform="ios" src="res/ios/icon-72.png" width="72" height="72" />
-	<icon gap:platform="ios" src="res/ios/icon-72-2x.png" width="144" height="144" />
+	<icon gap:platform="ios" src="res/icon/ios/icon-72.png" width="72" height="72" />
+	<icon gap:platform="ios" src="res/icon/ios/icon-72-2x.png" width="144" height="144" />
 	<!-- iPhone Spotlight and Settings Icon -->
-	<icon gap:platform="ios" src="res/ios/icon-small.png" width="29" height="29" />
-	<icon gap:platform="ios" src="res/ios/icon-small-2x.png" width="58" height="58" />
+	<icon gap:platform="ios" src="res/icon/ios/icon-small.png" width="29" height="29" />
+	<icon gap:platform="ios" src="res/icon/ios/icon-small-2x.png" width="58" height="58" />
 	<!-- iPad Spotlight and Settings Icon -->
-	<icon gap:platform="ios" src="res/ios/icon-50.png" width="50" height="50" />
-	<icon gap:platform="ios" src="res/ios/icon-50-2x.png" width="100" height="100" />
+	<icon gap:platform="ios" src="res/icon/ios/icon-50.png" width="50" height="50" />
+	<icon gap:platform="ios" src="res/icon/ios/icon-50-2x.png" width="100" height="100" />
     
-    <icon gap:platform="webos" src="res/icon/webos/icon-64.png" />
-    
+  
     <icon gap:platform="winphone" src="res/icon/windows-phone/icon-48.png" />
     <icon gap:platform="winphone" gap:role="background" src="res/icon/windows-phone/icon-173.png" />
     
