@@ -41,8 +41,11 @@
      <gap:plugin name="com.verso.cordova.clipboard" spec="0.1.0" source="pgb" />
     <gap:plugin name="org.apache.cordova.camera" />-->
    <!--	<gap:plugin name="io.litehelpers.cordova.sqlite" />
-   <gap:plugin name="cordova-sqlite-storage" source="npm" />
+   
+   gap:plugin name="cordova-sqlite-storage" source="npm" />
    -->
+   <gap:plugin name="cordova-plugin-sqlite-2" source="npm" />
+
  
  	
     <gap:plugin name="org.apache.cordova.dialogs" source="npm" />
