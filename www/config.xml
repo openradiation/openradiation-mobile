@@ -43,8 +43,7 @@
    <!--	<gap:plugin name="io.litehelpers.cordova.sqlite" />
    <gap:plugin name="cordova-sqlite-storage" source="npm" />
    -->
-    <plugin name="cordova-plugin-dialogs" spec="~1.3.1" />
-    <plugin name="cordova-sqlite-storage" spec="~1.5.1" />
+ 
  	
     <gap:plugin name="org.apache.cordova.dialogs" source="npm" />
     <gap:plugin name="org.apache.cordova.device" source="npm" />
