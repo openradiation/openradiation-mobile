@@ -58,6 +58,10 @@
     <gap:plugin name="cordova-plugin-geolocation" source="npm" />
     <gap:plugin name="cordova-plugin-whitelist" source="npm" />
    
+<gap:config-file platform="ios" parent="NSBluetoothPeripheralUsageDescription" overwrite="true">
+   <string>L'application a besoin de Bluetooth pour la connexion au capteur</string>
+</gap:config-file>
+   
     
     <icon src="res/icon/icon.png" />
     <icon gap:density="ldpi" gap:platform="android" src="res/icon/android/icon-36-ldpi.png" />
