@@ -32,8 +32,8 @@
    <gap:plugin name="cordova-plugin-sqlite-2" source="npm" />
 
     <gap:plugin name="cordova-plugin-dialogs" source="npm" />
-    <gap:plugin name="org.apache.cordova.device" source="npm" />
-    <gap:plugin name="org.apache.cordova.statusbar" source="npm" />
+    <gap:plugin name="cordova-plugin-device" source="npm" />
+    <gap:plugin name="cordova-plugin-statusbar" source="npm" />
     <gap:plugin name="cordova-plugin-rfduino" source="npm" />
     <gap:plugin name="cordova-plugin-inappbrowser" source="npm" />
     <gap:plugin name="cordova-plugin-geolocation" source="npm" />
