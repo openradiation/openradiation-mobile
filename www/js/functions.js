@@ -863,8 +863,10 @@ function doOnData(rfduino,$scope)
 						if ($scope.mesure.encours)
 						{
 							var mytimestamp = parseInt(new Date().getTime()/1000);
-							var duration = mytimestamp - $scope.mesure.timedeb
-							$scope.mesure.duration = duration;
+							//var duration = mytimestamp - $scope.mesure.timedeb
+							//$scope.mesure.duration = duration;
+                            $scope.mesure.duration += 1;
+                            var duration = $scope.mesure.duration;
 							$scope.mesure.total += myData[key].data;
 							$scope.mesure.moymin = ($scope.mesure.total / duration * 60).toFixed(2);
 							$scope.mesure.valeurnsv = convertNanosievert($scope.mesure.total,duration);
