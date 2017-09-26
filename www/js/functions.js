@@ -1203,16 +1203,13 @@ function refreshGPS($scope,alert){
 	setTimeout(function(){refreshGPS($scope,false); }, 120000); //2min
 }
 
-
-
-
 //Conversions
 function convertNanosievert(nbCoup,duration)
 {
 	//todo Nanosievert : should be renamed uSvPerHour
 	//valueNSV = (nbCoup /duration) * 60 * 35 /10000;
 	var TcNet = (nbCoup /duration) - 0.14; 
-    valueNSV =  0,000001 * Math.pow(TcNet, 3) + 0.0025 * Math.pow(TcNet, 2) + 0.39 * TcNet;
+    valueNSV =  0,000001 * TcNet * TcNet *TcNet + 0.0025 * TcNet * TcNet + 0.39 * TcNet;
     return valueNSV.toFixed(3);    
 }
 
