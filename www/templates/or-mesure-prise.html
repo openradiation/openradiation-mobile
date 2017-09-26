@@ -56,7 +56,7 @@
                                 <span ng-if="mesure.encours==true && (mesure.total<=15 || mesure.valeurnsv <= 0)">Mesure en cours</span> &#181;Sv/h</div>
     	</div>
     	<div class="blocMesure3">
-   			<button ng-click="endMesure($event)" class="button-mesure" ng-disabled="mesure.total<50 && mesure.valeurnsv > 0">FIN</button>
+   			<button ng-click="endMesure($event)" class="button-mesure" ng-disabled="mesure.total<50 || mesure.valeurnsv <= 0">FIN</button>
     	</div>
     	
     
