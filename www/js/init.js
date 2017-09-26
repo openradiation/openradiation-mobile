@@ -2,7 +2,7 @@
 debug = true;
 
 //pour envoi avec mesure;
-var appliNameVersion = "OpenRadiation app 1.0.0b";
+var appliNameVersion = "OpenRadiation app 1.0.0";
 
 //tension adatpee a chaque tube
 var tensions_tube =  {};
