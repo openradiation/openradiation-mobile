@@ -2,7 +2,7 @@
 debug = true;
 
 //pour envoi avec mesure;
-var appliNameVersion = "openradiation app v0.1";
+var appliNameVersion = "OpenRadiation app 1.0.0b";
 
 //tension adatpee a chaque tube
 var tensions_tube =  {};
@@ -36,9 +36,10 @@ var IN_PACKET_SILENT                    = 0x02;
 var IN_PACKET_SET_TENSION               = 0x11;
 var IN_PACKET_SEND_INFO                 = 0x12;
 
-var API_KEY								= "50adef3bdec466edc25f40c8fedccbce";
-var API_URI								= "https://submit.open-radiation.net/measurements";
-var INAPPBROWSER_URI					= "https://request.open-radiation.net/openradiation";
+//var API_KEY								= "50adef3bdec466edc25f40c8fedccbce";
+var API_KEY								= "a60ca70bdec466edc25f40c8fedccbce";
+var API_URI								= "https://submit.openradiation.net/measurements";
+var INAPPBROWSER_URI					= "https://request.openradiation.net/openradiation";
 
 var ACCURACY_GPS = 30;
 

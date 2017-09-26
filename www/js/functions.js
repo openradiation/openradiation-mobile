@@ -1066,15 +1066,15 @@ function fakeMesure($scope,i){
 }
 
 function doProgressBar(mycount){
-	var max = 30;
+	var max = 50;
 	var percent = mycount*100/max;
 	if (percent<100)
 		$('.mesure .blocMesure1 .fiability .progressbar2').width( percent+'%');
 	else 
 		$('.mesure .blocMesure1 .fiability .progressbar2').width('100%');
-	if (percent>7)
+	if (percent>7) // 4 coups et plus
 		$('.mesure .blocMesure1 .fiability .progressbar2').css("background-color","#e70000");
-	if (percent>34)
+	if (percent>31) // 16 coups et plus
 		$('.mesure .blocMesure1 .fiability .progressbar2').css("background-color","#dfe700");
 	if (percent>=100)
 		$('.mesure .blocMesure1 .fiability .progressbar2').css("background-color","#14c921");
@@ -1209,9 +1209,11 @@ function refreshGPS($scope,alert){
 //Conversions
 function convertNanosievert(nbCoup,duration)
 {
-	//valueNSV = (nbCoup * 0.9) / (duration * 60) ;
-	valueNSV = (nbCoup /duration) * 60 * 35 /10000;
-	return valueNSV.toFixed(3);
+	//todo Nanosievert : should be renamed uSvPerHour
+	//valueNSV = (nbCoup /duration) * 60 * 35 /10000;
+	var TcNet = (nbCoup /duration) - 0.14; 
+    valueNSV =  0,000001 * Math.pow(TcNet, 3) + 0.0025 * Math.pow(TcNet, 2) + 0.39 * TcNet;
+    return valueNSV.toFixed(3);    
 }
 
 function convertTimestampToTimezone(ts)

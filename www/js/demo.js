@@ -51,7 +51,7 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	
 	
 	$scope.appName = "Openradiation";
-	
+	$scope.appliNameVersion = appliNameVersion;
 	
 	$scope.buttonHome = "off";
 	$scope.state = "1";
@@ -75,6 +75,8 @@ app.controller('MainController', function(cordovaReady,$rootScope, $scope,$locat
 	$scope.dataDebug = {};
 	
 	$scope.gps ="error";
+    
+    
 	
 	
 	if (!isMobile)
