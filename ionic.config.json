@@ -1,0 +1,7 @@
+{
+  "name": "OpenRadiation",
+  "type": "angular",
+  "integrations": {
+    "cordova": {}
+  }
+}
