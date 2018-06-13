@@ -343,6 +343,42 @@
     tree-kill "^1.0.0"
     webpack-sources "^1.1.0"
 
+"@ngxs/devtools-plugin@^3.1.3":
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/@ngxs/devtools-plugin/-/devtools-plugin-3.1.3.tgz#9fed0244e0a355e4a61723f90a24616d3c2326f2"
+  dependencies:
+    tslib "^1.9.0"
+
+"@ngxs/form-plugin@^3.1.3":
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/@ngxs/form-plugin/-/form-plugin-3.1.3.tgz#a1bb9516b79cbb5ab0877b833e1b65fa28cf7fff"
+  dependencies:
+    tslib "^1.9.0"
+
+"@ngxs/logger-plugin@^3.1.3":
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/@ngxs/logger-plugin/-/logger-plugin-3.1.3.tgz#6ffcfa7de65df0509647ae2684041383736ae7f0"
+  dependencies:
+    tslib "^1.9.0"
+
+"@ngxs/router-plugin@^3.1.3":
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/@ngxs/router-plugin/-/router-plugin-3.1.3.tgz#552c649e7334b7d163e685bae927c9bdbecdea60"
+  dependencies:
+    tslib "^1.9.0"
+
+"@ngxs/storage-plugin@^3.1.3":
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/@ngxs/storage-plugin/-/storage-plugin-3.1.3.tgz#179a695fd7d75ef63fe9b902cb789597ca6df456"
+  dependencies:
+    tslib "^1.9.0"
+
+"@ngxs/store@^3.1.3":
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/@ngxs/store/-/store-3.1.3.tgz#a55b809cba711d6b998b4b95677de7327b67b8e1"
+  dependencies:
+    tslib "^1.9.0"
+
 "@schematics/angular@0.6.0":
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/@schematics/angular/-/angular-0.6.0.tgz#d7589c50f80ef089f7fba526ed9becefb187b6a2"
