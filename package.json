@@ -58,6 +58,7 @@
     "karma-coverage-istanbul-reporter": "~1.4.2",
     "karma-jasmine": "~1.1.1",
     "karma-jasmine-html-reporter": "^0.2.2",
+    "prettier": "^1.13.5",
     "protractor": "~5.3.0",
     "ts-node": "~6.0.2",
     "tslint": "~5.10.0",
@@ -75,5 +76,9 @@
       "android",
       "ios"
     ]
+  },
+  "prettier": {
+    "singleQuote": true,
+    "printWidth": 120
   }
 }
