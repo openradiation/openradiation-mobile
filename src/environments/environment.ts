@@ -3,13 +3,9 @@
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 export const environment = {
-  production: false
+  production: false,
+  appliNameVersion: 'OpenRadiation app 1.0.0 test',
+  API_KEY: '50adef3bdec466edc25f40c8fedccbce',
+  API_URI: 'https://submit.openradiation.net/measurements',
+  INAPPBROWSER_URI: 'https://request.openradiation.net/openradiation'
 };
-
-/*
- * In development mode, to ignore zone related error stack frames such as
- * `zone.run`, `zoneDelegate.invokeTask` for easier debugging, you can
- * import the following file, but please comment it out in production mode
- * because it will have performance impact when throw error
- */
-// import 'zone.js/dist/zone-error';  // Included with Angular CLI.
