@@ -1,10 +1,11 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Home</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content padding>
-  The world is your oyster.
-  <p>If you get lost, the <a target="_blank" href="https://ionicframework.com/docs">docs</a> will be your guide.</p>
+    <ion-button href="/tabs/(settings:settings)">
+        <ng-container *ngIf="connectedDevice$ | async as connectedDevice; else noConnectedDevice">
+            {{connectedDevice.apparatusVersion}} / {{connectedDevice.apparatusId}}
+        </ng-container>
+        <ng-template #noConnectedDevice>
+            Pas de capteurs<br>CLIQUEZ ICI
+        </ng-template>
+    </ion-button>
+    <ion-button [disabled]="!(connectedDevice$ | async)" (click)="startMeasure()">Start measure</ion-button>
 </ion-content>
