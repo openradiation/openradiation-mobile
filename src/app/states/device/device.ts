@@ -1,5 +1,6 @@
 export class Device {
   public id: number;
+  public connected = false;
 
   constructor(
     public sensorUUID: string,
