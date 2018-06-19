@@ -4,5 +4,6 @@
   "integrations": {
     "cordova": {}
   },
+  "app_id": "",
   "hooks": {}
 }
