@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { DevicesState } from '../../states/device/devices.state';
-import { Observable } from 'rxjs/internal/Observable';
-import { Device } from '../../states/device/device';
+import { Observable } from 'rxjs';
+import { Device, DeviceStatus } from '../../states/device/device';
 import { AddDevice, ConnectDevice, DisconnectDevice } from '../../states/device/device.action';
 
 @Component({
@@ -11,7 +11,7 @@ import { AddDevice, ConnectDevice, DisconnectDevice } from '../../states/device/
   styleUrls: ['./devices.page.scss']
 })
 export class DevicesPage {
-  @Select(DevicesState.devices) devices$: Observable<Device[]>;
+  @Select(DevicesState.deviceStatus) deviceStatus$: Observable<DeviceStatus[]>;
 
   constructor(private store: Store) {}
 
@@ -19,11 +19,11 @@ export class DevicesPage {
     this.store.dispatch(new AddDevice(new Device('', '', '', '', '')));
   }
 
-  toggleDeviceConnection(device: Device) {
-    if (device.connected) {
-      this.store.dispatch(new DisconnectDevice(device));
+  toggleDeviceStatus(deviceState: DeviceStatus) {
+    if (deviceState.isConnected) {
+      this.store.dispatch(new DisconnectDevice(deviceState.device));
     } else {
-      this.store.dispatch(new ConnectDevice(device));
+      this.store.dispatch(new ConnectDevice(deviceState.device));
     }
   }
 }

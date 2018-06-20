@@ -21,7 +21,9 @@ import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
     IonicModule.forRoot(),
     AppRoutingModule,
     NgxsModule.forRoot([DevicesState]),
-    NgxsStoragePluginModule.forRoot(),
+    NgxsStoragePluginModule.forRoot({
+      key: ['devices.devices']
+    }),
     NgxsReduxDevtoolsPluginModule.forRoot()
   ],
   providers: [StatusBar, SplashScreen, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],

@@ -1,12 +1,12 @@
 <ion-content padding>
     <ion-button (click)="addDevice()">Ajouter un device</ion-button>
     <ion-list>
-        <ion-item *ngFor="let device of devices$ | async">
+        <ion-item *ngFor="let deviceStatus of deviceStatus$ | async">
             <ion-label>
-                {{device.id}}{{device.apparatusVersion}}<br>{{device.apparatusId}}
+                {{deviceStatus.device.id}}{{deviceStatus.device.apparatusVersion}}<br>{{deviceStatus.device.apparatusId}}
             </ion-label>
-            <ion-button (click)="toggleDeviceConnection(device)">
-                <ng-container *ngIf="device.connected; else notConnectedDevice">
+            <ion-button (click)="toggleDeviceStatus(deviceStatus)">
+                <ng-container *ngIf="deviceStatus.isConnected; else notConnectedDevice">
                         Se déconnecter
                 </ng-container>
                 <ng-template #notConnectedDevice>
