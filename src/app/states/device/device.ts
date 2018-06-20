@@ -1,6 +1,5 @@
 export class Device {
   public id: number;
-  public connected = false;
 
   constructor(
     public sensorUUID: string,
@@ -11,4 +10,9 @@ export class Device {
     public paramAudioHits = true,
     public paramVisualHits = true
   ) {}
+}
+
+export interface DeviceStatus {
+  device: Device;
+  isConnected: boolean;
 }

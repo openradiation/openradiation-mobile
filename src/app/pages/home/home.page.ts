@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Select } from '@ngxs/store';
 import { DevicesState } from '../../states/device/devices.state';
-import { Observable } from 'rxjs/internal/Observable';
+import { Observable } from 'rxjs';
 import { Device } from '../../states/device/device';
 
 @Component({
