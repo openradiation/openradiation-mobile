@@ -1,9 +1,12 @@
 <ion-content padding>
-    <ion-button (click)="addDevice()">Ajouter un device</ion-button>
+    <ion-button (click)="discoverDevices()">Discover devices</ion-button>
     <ion-list>
+        <ion-list-header>
+            <ion-label>Available devices</ion-label>
+        </ion-list-header>
         <ion-item *ngFor="let deviceStatus of deviceStatus$ | async">
             <ion-label>
-                {{deviceStatus.device.id}}{{deviceStatus.device.apparatusVersion}}<br>{{deviceStatus.device.apparatusId}}
+                {{deviceStatus.device.apparatusVersion}}<br>{{deviceStatus.device.apparatusId}}
             </ion-label>
             <ion-button (click)="toggleDeviceStatus(deviceStatus)">
                 <ng-container *ngIf="deviceStatus.isConnected; else notConnectedDevice">
@@ -13,6 +16,16 @@
                         Se connecter
                 </ng-template>
             </ion-button>
+        </ion-item>
+    </ion-list>
+    <ion-list>
+        <ion-list-header>
+            <ion-label>Known devices</ion-label>
+        </ion-list-header>
+        <ion-item *ngFor="let device of knownDevices$ | async">
+            <ion-label>
+                {{device.apparatusVersion}}<br>{{device.apparatusId}}
+            </ion-label>
         </ion-item>
     </ion-list>
 </ion-content>

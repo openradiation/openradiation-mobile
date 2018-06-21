@@ -11,6 +11,7 @@
     "build:android": "ionic cordova build android",
     "build:ios": "ionic cordova build ios",
     "run:android": "ionic cordova run android",
+    "run:ios": "ionic cordova run ios",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",

@@ -1,6 +1,4 @@
 export class Device {
-  public id: number;
-
   constructor(
     public sensorUUID: string,
     public apparatusId: string,

@@ -9,9 +9,12 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgxsModule } from '@ngxs/store';
-import { DevicesState } from './states/device/devices.state';
+import { DevicesState } from './states/devices/devices.state';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
+import { HttpClientModule } from '@angular/common/http';
+import { BLE } from '@ionic-native/ble/ngx';
+import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,11 +25,13 @@ import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
     AppRoutingModule,
     NgxsModule.forRoot([DevicesState]),
     NgxsStoragePluginModule.forRoot({
-      key: ['devices.devices']
+      key: ['devices.knownDevices']
     }),
-    NgxsReduxDevtoolsPluginModule.forRoot()
+    NgxsLoggerPluginModule.forRoot(),
+    NgxsReduxDevtoolsPluginModule.forRoot(),
+    HttpClientModule
   ],
-  providers: [StatusBar, SplashScreen, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [StatusBar, SplashScreen, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, BLE],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

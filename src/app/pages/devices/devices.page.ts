@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
-import { DevicesState } from '../../states/device/devices.state';
+import { DevicesState } from '../../states/devices/devices.state';
 import { Observable } from 'rxjs';
-import { Device, DeviceStatus } from '../../states/device/device';
-import { AddDevice, ConnectDevice, DisconnectDevice } from '../../states/device/device.action';
+import { Device, DeviceStatus } from '../../states/devices/device';
+import { ConnectDevice, DisconnectDevice, DiscoverDevices } from '../../states/devices/devices.action';
 
 @Component({
   selector: 'devices',
@@ -12,11 +12,12 @@ import { AddDevice, ConnectDevice, DisconnectDevice } from '../../states/device/
 })
 export class DevicesPage {
   @Select(DevicesState.deviceStatus) deviceStatus$: Observable<DeviceStatus[]>;
+  @Select(DevicesState.knownDevices) knownDevices$: Observable<Device[]>;
 
   constructor(private store: Store) {}
 
-  addDevice() {
-    this.store.dispatch(new AddDevice(new Device('', '', '', '', '')));
+  discoverDevices() {
+    this.store.dispatch(new DiscoverDevices()).subscribe(data => console.log(data));
   }
 
   toggleDeviceStatus(deviceState: DeviceStatus) {
