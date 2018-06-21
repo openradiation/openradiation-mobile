@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Select } from '@ngxs/store';
-import { DevicesState } from '../../states/device/devices.state';
+import { DevicesState } from '../../states/devices/devices.state';
 import { Observable } from 'rxjs';
-import { Device } from '../../states/device/device';
+import { Device } from '../../states/devices/device';
 
 @Component({
   selector: 'app-page-home',
