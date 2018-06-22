@@ -1,10 +1,17 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { Device, DeviceStatus } from './device';
-import { ConnectDevice, DisconnectDevice, DiscoverDevices } from './devices.action';
+import {
+  ConnectDevice,
+  DevicesDiscovered,
+  DisconnectDevice,
+  StartDiscoverDevices,
+  StopDiscoverDevices
+} from './devices.action';
 import { DevicesService } from './devices.service';
 import { tap } from 'rxjs/operators';
 
 export interface DevicesStateModel {
+  isScanning: boolean;
   availableDevices: Device[];
   knownDevices: Device[];
   connectedDevice?: Device;
@@ -13,6 +20,7 @@ export interface DevicesStateModel {
 @State<DevicesStateModel>({
   name: 'devices',
   defaults: {
+    isScanning: false,
     availableDevices: [],
     knownDevices: []
   }
@@ -45,20 +53,40 @@ export class DevicesState {
     }));
   }
 
-  @Action(DiscoverDevices, { cancelUncompleted: true })
-  discoverDevices({ getState, patchState }: StateContext<DevicesStateModel>) {
-    const state = getState();
-    return this.devicesService.discoverDevices().pipe(
-      tap(devices => {
+  @Selector()
+  static isScanning(state: DevicesStateModel): boolean {
+    return state.isScanning;
+  }
+
+  @Action(StartDiscoverDevices, { cancelUncompleted: true })
+  startDiscoverDevices({ patchState }: StateContext<DevicesStateModel>) {
+    return this.devicesService.startDiscoverDevices().pipe(
+      tap(() =>
         patchState({
-          availableDevices: [
-            ...devices.map(
-              device => state.knownDevices.find(knownDevice => knownDevice.sensorUUID === device.sensorUUID) || device
-            )
-          ]
-        });
-      })
+          isScanning: true
+        })
+      )
     );
+  }
+
+  @Action(StopDiscoverDevices, { cancelUncompleted: true })
+  stopDiscoverDevices({ patchState }: StateContext<DevicesStateModel>) {
+    patchState({
+      isScanning: false,
+      availableDevices: []
+    });
+  }
+
+  @Action(DevicesDiscovered)
+  devicesDiscovered({ getState, patchState }: StateContext<DevicesStateModel>, action: DevicesDiscovered) {
+    const state = getState();
+    patchState({
+      availableDevices: [
+        ...action.devices.map(
+          device => state.knownDevices.find(knownDevice => knownDevice.sensorUUID === device.sensorUUID) || device
+        )
+      ]
+    });
   }
 
   @Action(ConnectDevice)
