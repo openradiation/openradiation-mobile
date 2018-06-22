@@ -1,10 +1,15 @@
 <ion-content padding>
-    <ion-button (click)="discoverDevices()">Discover devices</ion-button>
+    <ng-container *ngIf="isScanning$ | async; else isNotScanning">
+        <ion-button (click)="stopDiscoverDevices()">Stop discover devices</ion-button>
+    </ng-container>
+    <ng-template #isNotScanning>
+        <ion-button (click)="startDiscoverDevices()">Start discover devices</ion-button>
+    </ng-template>
     <ion-list>
         <ion-list-header>
             <ion-label>Available devices</ion-label>
         </ion-list-header>
-        <ion-item *ngFor="let deviceStatus of deviceStatus$ | async">
+        <ion-item *ngFor="let deviceStatus of deviceStatus$ | async; trackBy: deviceStatusTrackBy">
             <ion-label>
                 {{deviceStatus.device.apparatusVersion}}<br>{{deviceStatus.device.apparatusId}}
             </ion-label>

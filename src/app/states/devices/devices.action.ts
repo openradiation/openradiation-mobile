@@ -1,8 +1,16 @@
 import { Device } from './device';
 
-export class DiscoverDevices {
-  static readonly type = '[Devices] Discover devices';
-  constructor() {}
+export class StartDiscoverDevices {
+  static readonly type = '[Devices] Start discover devices';
+}
+
+export class StopDiscoverDevices {
+  static readonly type = '[Devices] Stop discover devices';
+}
+
+export class DevicesDiscovered {
+  static readonly type = '[Devices] Devices discovered';
+  constructor(public devices: Device[]) {}
 }
 
 export class ConnectDevice {
