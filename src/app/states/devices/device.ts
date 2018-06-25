@@ -10,11 +10,6 @@ export class Device {
   ) {}
 }
 
-export interface DeviceStatus {
-  device: Device;
-  isConnected: boolean;
-}
-
 export interface RawDevice {
   name: string;
   id: string;

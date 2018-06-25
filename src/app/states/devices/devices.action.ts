@@ -22,3 +22,7 @@ export class DisconnectDevice {
   static readonly type = '[Devices] Disconnect device';
   constructor(public device: Device) {}
 }
+
+export class ConnectionLost {
+  static readonly type = '[Devices] Connection lost';
+}

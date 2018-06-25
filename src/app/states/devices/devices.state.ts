@@ -1,7 +1,8 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { Device, DeviceStatus } from './device';
+import { Device } from './device';
 import {
   ConnectDevice,
+  ConnectionLost,
   DevicesDiscovered,
   DisconnectDevice,
   StartDiscoverDevices,
@@ -30,27 +31,25 @@ export class DevicesState {
 
   @Selector()
   static availableDevices(state: DevicesStateModel): Device[] {
-    return state.availableDevices;
+    return state.availableDevices.filter(
+      availableDevice =>
+        state.connectedDevice === undefined || state.connectedDevice.sensorUUID !== availableDevice.sensorUUID
+    );
   }
 
   @Selector()
   static knownDevices(state: DevicesStateModel): Device[] {
     return state.knownDevices.filter(knownDevice => {
-      return state.availableDevices.every(device => device.sensorUUID !== knownDevice.sensorUUID);
+      return (
+        state.availableDevices.every(availableDevice => availableDevice.sensorUUID !== knownDevice.sensorUUID) &&
+        (state.connectedDevice === undefined || state.connectedDevice.sensorUUID !== knownDevice.sensorUUID)
+      );
     });
   }
 
   @Selector()
   static connectedDevice(state: DevicesStateModel): Device | undefined {
     return state.connectedDevice;
-  }
-
-  @Selector()
-  static deviceStatus(state: DevicesStateModel): DeviceStatus[] {
-    return state.availableDevices.map(device => ({
-      device,
-      isConnected: state.connectedDevice !== undefined && device.sensorUUID === state.connectedDevice.sensorUUID
-    }));
   }
 
   @Selector()
@@ -91,23 +90,38 @@ export class DevicesState {
 
   @Action(ConnectDevice)
   connectDevice({ getState, patchState }: StateContext<DevicesStateModel>, action: ConnectDevice) {
-    const state = getState();
-    if (state.knownDevices.find(device => device.sensorUUID === action.device.sensorUUID)) {
-      patchState({
-        connectedDevice: action.device
-      });
-    } else {
-      patchState({
-        connectedDevice: action.device,
-        knownDevices: [...state.knownDevices, action.device]
-      });
-    }
+    return this.devicesService.connectDevice(action.device).pipe(
+      tap(() => {
+        const state = getState();
+        if (state.knownDevices.find(device => device.sensorUUID === action.device.sensorUUID)) {
+          patchState({
+            connectedDevice: action.device
+          });
+        } else {
+          patchState({
+            connectedDevice: action.device,
+            knownDevices: [...state.knownDevices, action.device]
+          });
+        }
+      })
+    );
+  }
+
+  @Action(ConnectionLost)
+  connectionLost({ patchState }: StateContext<DevicesStateModel>) {
+    patchState({
+      connectedDevice: undefined
+    });
   }
 
   @Action(DisconnectDevice)
   disconnectDevice({ patchState }: StateContext<DevicesStateModel>, action: DisconnectDevice) {
-    patchState({
-      connectedDevice: undefined
-    });
+    return this.devicesService.disconnectDevice(action.device).pipe(
+      tap(() => {
+        patchState({
+          connectedDevice: undefined
+        });
+      })
+    );
   }
 }

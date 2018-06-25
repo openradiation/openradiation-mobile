@@ -14,7 +14,12 @@ export class AppComponent {
   }
 
   initializeApp() {
-    this.platform.ready().then(() => {
+    // TODO use platform.ready() again when it's fixed
+    /*this.platform.ready().then(() => {
+      this.statusBar.styleDefault();
+      this.splashScreen.hide();
+    });*/
+    document.addEventListener('deviceready', () => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });

@@ -1,11 +1,23 @@
 import { Injectable } from '@angular/core';
 import { merge, Observable } from 'rxjs';
 import { BLE } from '@ionic-native/ble/ngx';
-import { bufferTime, map, scan, switchMap, takeWhile, tap, throttleTime } from 'rxjs/operators';
+import {
+  buffer,
+  catchError,
+  map,
+  scan,
+  shareReplay,
+  skip,
+  switchMap,
+  take,
+  takeWhile,
+  tap,
+  throttleTime
+} from 'rxjs/operators';
 import { Platform } from '@ionic/angular';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
-import { DevicesDiscovered, StopDiscoverDevices } from './devices.action';
+import { ConnectionLost, DevicesDiscovered, StopDiscoverDevices } from './devices.action';
 import { Device, RawDevice } from './device';
 import { timer } from 'rxjs/internal/observable/timer';
 
@@ -38,12 +50,17 @@ export class DevicesService {
   }
 
   discoverDevices() {
+    const time = timer(5000, 5000).pipe(takeWhile(() => this.isScanning));
     merge(
-      this.ble.scan(this.serviceUUIDs, 2).pipe(
+      this.ble.scan(this.serviceUUIDs, 3).pipe(
         scan<RawDevice>((devices, newDevice) => [...devices, newDevice], []),
         throttleTime(100)
       ),
-      timer(3000, 3000).pipe(switchMap(() => this.ble.scan(this.serviceUUIDs, 2).pipe(bufferTime(2500))))
+      time.pipe(
+        switchMap(() => this.ble.scan(this.serviceUUIDs, 3)),
+        buffer(time),
+        skip(1)
+      )
     )
       .pipe(
         map((rawDevices: RawDevice[]) =>
@@ -53,8 +70,7 @@ export class DevicesService {
             .map(rawDevice => {
               return new Device(rawDevice.id, this.parseAdvertising(rawDevice.advertising), rawDevice.name);
             })
-        ),
-        takeWhile(() => this.isScanning)
+        )
       )
       .subscribe((devices: Device[]) => this.store.dispatch(new DevicesDiscovered(devices)));
   }
@@ -66,5 +82,15 @@ export class DevicesService {
     } else {
       return advertising;
     }
+  }
+
+  connectDevice(device: Device): Observable<any> {
+    const connection = this.ble.connect(device.sensorUUID).pipe(shareReplay());
+    connection.pipe(catchError(() => this.store.dispatch(new ConnectionLost()))).subscribe();
+    return connection.pipe(take(1));
+  }
+
+  disconnectDevice(device: Device): Observable<any> {
+    return fromPromise(this.ble.disconnect(device.sensorUUID));
   }
 }

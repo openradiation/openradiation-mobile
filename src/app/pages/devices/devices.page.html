@@ -5,21 +5,29 @@
     <ng-template #isNotScanning>
         <ion-button (click)="startDiscoverDevices()">Start discover devices</ion-button>
     </ng-template>
-    <ion-list>
+    <ion-list *ngIf="connectedDevice$ | async as connectedDevice">
+        <ion-list-header>
+            <ion-label>Connected device</ion-label>
+        </ion-list-header>
+        <ion-item>
+            <ion-label>
+                {{connectedDevice.apparatusVersion}}<br>{{connectedDevice.apparatusId}}
+            </ion-label>
+            <ion-button (click)="disconnectDevice(connectedDevice)">
+                Se déconnecter
+            </ion-button>
+        </ion-item>
+    </ion-list>
+    <ion-list *ngIf="isScanning$ | async">
         <ion-list-header>
             <ion-label>Available devices</ion-label>
         </ion-list-header>
-        <ion-item *ngFor="let deviceStatus of deviceStatus$ | async; trackBy: deviceStatusTrackBy">
+        <ion-item *ngFor="let availableDevice of availableDevices$ | async">
             <ion-label>
-                {{deviceStatus.device.apparatusVersion}}<br>{{deviceStatus.device.apparatusId}}
+                {{availableDevice.apparatusVersion}}<br>{{availableDevice.apparatusId}}
             </ion-label>
-            <ion-button (click)="toggleDeviceStatus(deviceStatus)">
-                <ng-container *ngIf="deviceStatus.isConnected; else notConnectedDevice">
-                        Se déconnecter
-                </ng-container>
-                <ng-template #notConnectedDevice>
-                        Se connecter
-                </ng-template>
+            <ion-button (click)="connectDevice(availableDevice)">
+                Se connecter
             </ion-button>
         </ion-item>
     </ion-list>
@@ -27,9 +35,9 @@
         <ion-list-header>
             <ion-label>Known devices</ion-label>
         </ion-list-header>
-        <ion-item *ngFor="let device of knownDevices$ | async">
+        <ion-item *ngFor="let knownDevice of knownDevices$ | async">
             <ion-label>
-                {{device.apparatusVersion}}<br>{{device.apparatusId}}
+                {{knownDevice.apparatusVersion}}<br>{{knownDevice.apparatusId}}
             </ion-label>
         </ion-item>
     </ion-list>
