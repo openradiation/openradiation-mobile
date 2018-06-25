@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { DevicesState } from '../../states/devices/devices.state';
 import { Observable } from 'rxjs';
-import { Device, DeviceStatus } from '../../states/devices/device';
+import { Device } from '../../states/devices/device';
 import {
   ConnectDevice,
   DisconnectDevice,
@@ -18,9 +18,10 @@ import { ToastController } from '@ionic/angular';
   styleUrls: ['./devices.page.scss']
 })
 export class DevicesPage {
-  @Select(DevicesState.deviceStatus) deviceStatus$: Observable<DeviceStatus[]>;
+  @Select(DevicesState.availableDevices) availableDevices$: Observable<Device[]>;
   @Select(DevicesState.knownDevices) knownDevices$: Observable<Device[]>;
   @Select(DevicesState.isScanning) isScanning$: Observable<boolean>;
+  @Select(DevicesState.connectedDevice) connectedDevice$: Observable<Device>;
 
   constructor(private store: Store, private toastController: ToastController) {}
 
@@ -47,15 +48,11 @@ export class DevicesPage {
     this.store.dispatch(new StopDiscoverDevices()).subscribe();
   }
 
-  toggleDeviceStatus(deviceState: DeviceStatus) {
-    if (deviceState.isConnected) {
-      this.store.dispatch(new DisconnectDevice(deviceState.device));
-    } else {
-      this.store.dispatch(new ConnectDevice(deviceState.device));
-    }
+  connectDevice(device: Device) {
+    this.store.dispatch(new ConnectDevice(device)).subscribe();
   }
 
-  deviceStatusTrackBy(index: number, deviceStatus: DeviceStatus): string | number {
-    return deviceStatus.device.sensorUUID;
+  disconnectDevice(device: Device) {
+    this.store.dispatch(new DisconnectDevice(device));
   }
 }
