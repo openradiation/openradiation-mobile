@@ -13,6 +13,8 @@ import { timer } from 'rxjs/internal/observable/timer';
   providedIn: 'root'
 })
 export class DevicesService {
+  private serviceUUIDs = ['00002220-0000-1000-8000-00805F9B34FB'];
+
   private isScanning = false;
   constructor(private ble: BLE, private platform: Platform, private actions$: Actions, private store: Store) {
     this.actions$.pipe(ofActionSuccessful(StopDiscoverDevices)).subscribe(() => (this.isScanning = false));
@@ -37,17 +39,20 @@ export class DevicesService {
 
   discoverDevices() {
     merge(
-      this.ble.scan([], 2).pipe(
+      this.ble.scan(this.serviceUUIDs, 2).pipe(
         scan<RawDevice>((devices, newDevice) => [...devices, newDevice], []),
         throttleTime(100)
       ),
-      timer(2500, 2500).pipe(switchMap(() => this.ble.scan([], 2).pipe(bufferTime(2000))))
+      timer(3000, 3000).pipe(switchMap(() => this.ble.scan(this.serviceUUIDs, 2).pipe(bufferTime(2500))))
     )
       .pipe(
         map((rawDevices: RawDevice[]) =>
-          rawDevices.map(
-            rawDevice => new Device(rawDevice.id, this.parseAdvertising(rawDevice.advertising), rawDevice.name)
-          )
+          rawDevices
+            .filter(rawDevice => rawDevice.name !== undefined)
+            .sort((a, b) => b.rssi - a.rssi)
+            .map(rawDevice => {
+              return new Device(rawDevice.id, this.parseAdvertising(rawDevice.advertising), rawDevice.name);
+            })
         ),
         takeWhile(() => this.isScanning)
       )
@@ -56,7 +61,8 @@ export class DevicesService {
 
   private parseAdvertising(advertising: any): any {
     if (this.platform.is('android')) {
-      return new Uint8Array(advertising);
+      const manufacturerData = new Uint8Array(advertising).slice(21);
+      return new TextDecoder('utf8').decode(manufacturerData);
     } else {
       return advertising;
     }
