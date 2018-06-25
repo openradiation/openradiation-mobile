@@ -1,34 +1,30 @@
 import { Injectable } from '@angular/core';
-import { merge, Observable } from 'rxjs';
 import { BLE } from '@ionic-native/ble/ngx';
-import {
-  buffer,
-  catchError,
-  map,
-  scan,
-  shareReplay,
-  skip,
-  switchMap,
-  take,
-  takeWhile,
-  tap,
-  throttleTime
-} from 'rxjs/operators';
 import { Platform } from '@ionic/angular';
-import { fromPromise } from 'rxjs/internal-compatibility';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
-import { ConnectionLost, DevicesDiscovered, StopDiscoverDevices } from './devices.action';
-import { Device, RawDevice } from './device';
+import { merge, Observable } from 'rxjs';
+import { fromPromise } from 'rxjs/internal-compatibility';
 import { timer } from 'rxjs/internal/observable/timer';
+import { buffer, map, scan, shareReplay, skip, switchMap, take, takeWhile, tap, throttleTime } from 'rxjs/operators';
+import { DeviceType, RawDevice } from './abstract-device';
+import { Device, DeviceOGKit } from './device';
+import { DeviceOGKitService } from './device-og-kit.service';
+import { ConnectionLost, DevicesDiscovered, StopDiscoverDevices, UpdateDeviceInfo } from './devices.action';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DevicesService {
-  private serviceUUIDs = ['00002220-0000-1000-8000-00805F9B34FB'];
+  private serviceUUIDs = [DeviceOGKitService.serviceUUID];
 
   private isScanning = false;
-  constructor(private ble: BLE, private platform: Platform, private actions$: Actions, private store: Store) {
+  constructor(
+    private ble: BLE,
+    private platform: Platform,
+    private actions$: Actions,
+    private store: Store,
+    private deviceOGKitService: DeviceOGKitService
+  ) {
     this.actions$.pipe(ofActionSuccessful(StopDiscoverDevices)).subscribe(() => (this.isScanning = false));
   }
 
@@ -65,32 +61,38 @@ export class DevicesService {
       .pipe(
         map((rawDevices: RawDevice[]) =>
           rawDevices
-            .filter(rawDevice => rawDevice.name !== undefined)
             .sort((a, b) => b.rssi - a.rssi)
             .map(rawDevice => {
-              return new Device(rawDevice.id, this.parseAdvertising(rawDevice.advertising), rawDevice.name);
+              switch (rawDevice.name) {
+                case DeviceType.OGKIT:
+                  return new DeviceOGKit(rawDevice);
+                default:
+                  return null;
+              }
             })
+            .filter((device): device is Device => device !== null)
         )
       )
-      .subscribe((devices: Device[]) => this.store.dispatch(new DevicesDiscovered(devices)));
-  }
-
-  private parseAdvertising(advertising: any): any {
-    if (this.platform.is('android')) {
-      const manufacturerData = new Uint8Array(advertising).slice(21);
-      return new TextDecoder('utf8').decode(manufacturerData);
-    } else {
-      return advertising;
-    }
+      .subscribe(devices => this.store.dispatch(new DevicesDiscovered(devices)));
   }
 
   connectDevice(device: Device): Observable<any> {
     const connection = this.ble.connect(device.sensorUUID).pipe(shareReplay());
-    connection.pipe(catchError(() => this.store.dispatch(new ConnectionLost()))).subscribe();
+    connection.subscribe(
+      () => this.store.dispatch(new UpdateDeviceInfo(device)),
+      () => this.store.dispatch(new ConnectionLost())
+    );
     return connection.pipe(take(1));
   }
 
   disconnectDevice(device: Device): Observable<any> {
     return fromPromise(this.ble.disconnect(device.sensorUUID));
+  }
+
+  getDeviceInfo(device: Device): Observable<Partial<Device>> {
+    switch (device.apparatusVersion) {
+      case DeviceType.OGKIT:
+        return this.deviceOGKitService.getDeviceInfo(device);
+    }
   }
 }

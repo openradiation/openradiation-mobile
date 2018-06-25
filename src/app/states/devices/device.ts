@@ -1,18 +1,10 @@
-export class Device {
-  constructor(
-    public sensorUUID: string,
-    public apparatusId: string,
-    public apparatusVersion: string,
-    public apparatusSensorType?: string,
-    public apparatusTubeType?: string,
-    public paramAudioHits = true,
-    public paramVisualHits = true
-  ) {}
+import { AbstractDevice, DeviceType } from './abstract-device';
+
+export class DeviceOGKit extends AbstractDevice {
+  readonly apparatusVersion = DeviceType.OGKIT;
+
+  public paramAudioHits = true;
+  public paramVisualHits = true;
 }
 
-export interface RawDevice {
-  name: string;
-  id: string;
-  advertising: any;
-  rssi: number;
-}
+export type Device = DeviceOGKit;
