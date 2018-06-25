@@ -1,5 +1,5 @@
-import { Measure } from './measure';
 import { State } from '@ngxs/store';
+import { Measure } from './measure';
 
 export interface MeasuresStateModel {
   measures: Measure[];

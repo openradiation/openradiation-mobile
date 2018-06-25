@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
+import { ToastController } from '@ionic/angular';
 import { Select, Store } from '@ngxs/store';
-import { DevicesState } from '../../states/devices/devices.state';
 import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { Device } from '../../states/devices/device';
 import {
   ConnectDevice,
@@ -9,8 +10,7 @@ import {
   StartDiscoverDevices,
   StopDiscoverDevices
 } from '../../states/devices/devices.action';
-import { catchError } from 'rxjs/operators';
-import { ToastController } from '@ionic/angular';
+import { DevicesState } from '../../states/devices/devices.state';
 
 @Component({
   selector: 'devices',

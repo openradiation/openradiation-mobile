@@ -1,4 +1,5 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { tap } from 'rxjs/operators';
 import { Device } from './device';
 import {
   ConnectDevice,
@@ -6,10 +7,10 @@ import {
   DevicesDiscovered,
   DisconnectDevice,
   StartDiscoverDevices,
-  StopDiscoverDevices
+  StopDiscoverDevices,
+  UpdateDeviceInfo
 } from './devices.action';
 import { DevicesService } from './devices.service';
-import { tap } from 'rxjs/operators';
 
 export interface DevicesStateModel {
   isScanning: boolean;
@@ -121,6 +122,32 @@ export class DevicesState {
         patchState({
           connectedDevice: undefined
         });
+      })
+    );
+  }
+
+  @Action(UpdateDeviceInfo)
+  updateDeviceInfo({ patchState, getState }: StateContext<DevicesStateModel>, action: UpdateDeviceInfo) {
+    return this.devicesService.getDeviceInfo(action.device).pipe(
+      tap((update: Partial<Device>) => {
+        console.log(update);
+        const state = getState();
+        const patch: Partial<DevicesStateModel> = {};
+        const updatedDevice = { ...action.device, ...update };
+        if (state.connectedDevice && state.connectedDevice.sensorUUID === action.device.sensorUUID) {
+          patch.connectedDevice = updatedDevice;
+        }
+        const deviceIndex = state.knownDevices.findIndex(
+          knownDevice => knownDevice.sensorUUID === action.device.sensorUUID
+        );
+        if (deviceIndex > -1) {
+          patch.knownDevices = [
+            ...state.knownDevices.slice(0, deviceIndex - 1),
+            updatedDevice,
+            ...state.knownDevices.slice(deviceIndex + 1)
+          ];
+        }
+        patchState(patch);
       })
     );
   }
