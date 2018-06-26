@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -7,6 +8,7 @@ import { Device } from '../../states/devices/device';
 import {
   ConnectDevice,
   DisconnectDevice,
+  EditDeviceParams,
   StartDiscoverDevices,
   StopDiscoverDevices,
   UpdateDeviceInfo
@@ -14,7 +16,7 @@ import {
 import { DevicesState } from '../../states/devices/devices.state';
 
 @Component({
-  selector: 'devices',
+  selector: 'app-page-devices',
   templateUrl: './devices.page.html',
   styleUrls: ['./devices.page.scss']
 })
@@ -24,7 +26,7 @@ export class DevicesPage {
   @Select(DevicesState.isScanning) isScanning$: Observable<boolean>;
   @Select(DevicesState.connectedDevice) connectedDevice$: Observable<Device>;
 
-  constructor(private store: Store, private toastController: ToastController) {}
+  constructor(private store: Store, private toastController: ToastController, private router: Router) {}
 
   startDiscoverDevices() {
     this.store
@@ -53,7 +55,11 @@ export class DevicesPage {
     this.store.dispatch(new ConnectDevice(device)).subscribe(() => this.store.dispatch(new UpdateDeviceInfo(device)));
   }
 
-  disconnectDevice(device: Device) {
-    this.store.dispatch(new DisconnectDevice(device));
+  disconnectDevice() {
+    this.store.dispatch(new DisconnectDevice());
+  }
+
+  editDeviceParams(device: Device) {
+    this.store.dispatch(new EditDeviceParams(device)).subscribe(() => this.router.navigate(['device-param']));
   }
 }

@@ -20,7 +20,7 @@ export class ConnectDevice {
 
 export class DisconnectDevice {
   static readonly type = '[Devices] Disconnect device';
-  constructor(public device: Device) {}
+  constructor() {}
 }
 
 export class ConnectionLost {
@@ -30,4 +30,19 @@ export class ConnectionLost {
 export class UpdateDeviceInfo {
   static readonly type = '[Devices] Update device info';
   constructor(public device: Device) {}
+}
+
+export class EditDeviceParams {
+  static readonly type = '[Devices] Edit device params';
+  constructor(public device: Device) {}
+}
+
+export class SaveDeviceParams {
+  static readonly type = '[Devices] Save device params';
+  constructor() {}
+}
+
+export class UpdateDevice {
+  static readonly type = '[Devices] Update device';
+  constructor(public device: Device, public update: Partial<Device>) {}
 }

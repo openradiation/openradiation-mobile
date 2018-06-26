@@ -1,5 +1,5 @@
 import { BLE } from '@ionic-native/ble/ngx';
-import { Observable } from 'rxjs/internal/Observable';
+import { Observable } from 'rxjs';
 import { AbstractDevice } from './abstract-device';
 
 export abstract class AbstractDeviceService<T extends AbstractDevice> {

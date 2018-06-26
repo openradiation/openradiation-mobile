@@ -1,0 +1,40 @@
+<ion-content padding>
+    <ion-button href="/devices">
+        Paramètres capteurs
+    </ion-button>
+    <ng-container *ngIf="editedDevice$ | async as editedDevice">
+        <ion-list>
+            <ion-list-header>
+                <ion-label>Infos</ion-label>
+            </ion-list-header>
+            <ion-item>
+                Version : {{editedDevice.apparatusId}}
+            </ion-item>
+            <ion-item>
+                Type sensor : {{editedDevice.apparatusSensorType}}
+            </ion-item>
+            <ion-item>
+                Type de tube : {{editedDevice.apparatusTubeType}}
+            </ion-item>
+        </ion-list>
+        <form *ngIf="paramsModel && editedDeviceForm" [formGroup]="editedDeviceForm" novalidate ngxsForm="devices.editedDeviceForm" (ngSubmit)="onSubmit()">
+            <ng-container *ngFor="let paramModel of paramsModel">
+                <ng-container [ngSwitch]="paramModel[1].type">
+                    <ion-item *ngSwitchCase="deviceParamType.string">
+                        <ion-label floating>{{paramModel[1].label}}</ion-label>
+                        <ion-input [formControlName]="paramModel[0]"></ion-input>
+                    </ion-item>
+                    <ion-item *ngSwitchCase="deviceParamType.boolean">
+                        <ion-label>{{paramModel[1].label}}</ion-label>
+                        <ion-toggle [formControlName]="paramModel[0]"></ion-toggle>
+                    </ion-item>
+                    <ion-item *ngSwitchCase="deviceParamType.number">
+                        <ion-label floating>{{paramModel[1].label}}</ion-label>
+                        <ion-input [formControlName]="paramModel[0]"></ion-input>
+                    </ion-item>
+                </ng-container>
+            </ng-container>
+            <ion-button type="submit">Save</ion-button>
+        </form>
+    </ng-container>
+</ion-content>

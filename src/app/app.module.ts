@@ -1,12 +1,13 @@
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
+import { BLE } from '@ionic-native/ble/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-import { HttpClientModule } from '@angular/common/http';
-import { BLE } from '@ionic-native/ble/ngx';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { NgxsFormPluginModule } from '@ngxs/form-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsModule } from '@ngxs/store';
@@ -22,6 +23,7 @@ import { DevicesState } from './states/devices/devices.state';
     IonicModule.forRoot(),
     AppRoutingModule,
     NgxsModule.forRoot([DevicesState]),
+    NgxsFormPluginModule.forRoot(),
     NgxsStoragePluginModule.forRoot({
       key: ['devices.knownDevices']
     }),

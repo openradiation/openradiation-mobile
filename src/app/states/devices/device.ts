@@ -1,10 +1,22 @@
-import { AbstractDevice, DeviceType } from './abstract-device';
+import { AbstractDevice, DeviceParams, DeviceParamType, DeviceType } from './abstract-device';
 
 export class DeviceOGKit extends AbstractDevice {
   readonly apparatusVersion = DeviceType.OGKIT;
 
-  public paramAudioHits = true;
-  public paramVisualHits = true;
+  params: DeviceParams = {
+    audiHits: true,
+    visualHist: true
+  };
+  paramsModel = {
+    audiHits: {
+      label: 'audiHits',
+      type: DeviceParamType.boolean
+    },
+    visualHist: {
+      label: 'visualHits',
+      type: DeviceParamType.boolean
+    }
+  };
 }
 
 export type Device = DeviceOGKit;
