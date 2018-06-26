@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/internal/Observable';
+import { BLE } from '@ionic-native/ble/ngx';
+import { Observable } from 'rxjs';
 import { filter, scan, shareReplay, take, tap } from 'rxjs/operators';
 import { Device, DeviceOGKit } from './device';
-import { BLE } from '@ionic-native/ble/ngx';
 
 // Todo add inheritance when angular issue fixed https://github.com/angular/angular/issues/24011
 @Injectable({
   providedIn: 'root'
 })
-export class DeviceOGKitService /*extends AbstractDeviceService<Device>*/ {
+export class DeviceOGKitService /*extends AbstractDeviceService<DeviceOGKit>*/ {
   static serviceUUID = '00002220-0000-1000-8000-00805F9B34FB';
   private static sendCharacteristic = '00002222-0000-1000-8000-00805F9B34FB';
   private static receiveCharacteristic = '00002221-0000-1000-8000-00805F9B34FB';

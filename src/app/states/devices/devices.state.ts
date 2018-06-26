@@ -1,13 +1,18 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { tap } from 'rxjs/operators';
+import { of } from 'rxjs/internal/observable/of';
+import { map, tap } from 'rxjs/operators';
+import { DeviceParams } from './abstract-device';
 import { Device } from './device';
 import {
   ConnectDevice,
   ConnectionLost,
   DevicesDiscovered,
   DisconnectDevice,
+  EditDeviceParams,
+  SaveDeviceParams,
   StartDiscoverDevices,
   StopDiscoverDevices,
+  UpdateDevice,
   UpdateDeviceInfo
 } from './devices.action';
 import { DevicesService } from './devices.service';
@@ -17,6 +22,13 @@ export interface DevicesStateModel {
   availableDevices: Device[];
   knownDevices: Device[];
   connectedDevice?: Device;
+  editedDevice?: Device;
+  editedDeviceForm?: {
+    model: DeviceParams;
+    dirty: boolean;
+    status: string;
+    errors: any;
+  };
 }
 
 @State<DevicesStateModel>({
@@ -56,6 +68,11 @@ export class DevicesState {
   @Selector()
   static isScanning(state: DevicesStateModel): boolean {
     return state.isScanning;
+  }
+
+  @Selector()
+  static editedDevice(state: DevicesStateModel): Device | undefined {
+    return state.editedDevice;
   }
 
   @Action(StartDiscoverDevices, { cancelUncompleted: true })
@@ -116,38 +133,69 @@ export class DevicesState {
   }
 
   @Action(DisconnectDevice)
-  disconnectDevice({ patchState }: StateContext<DevicesStateModel>, action: DisconnectDevice) {
-    return this.devicesService.disconnectDevice(action.device).pipe(
-      tap(() => {
-        patchState({
-          connectedDevice: undefined
-        });
-      })
-    );
+  disconnectDevice({ getState, patchState }: StateContext<DevicesStateModel>) {
+    const state = getState();
+    if (state.connectedDevice) {
+      return this.devicesService.disconnectDevice(state.connectedDevice).pipe(
+        tap(() => {
+          patchState({
+            connectedDevice: undefined
+          });
+        })
+      );
+    } else {
+      return of();
+    }
   }
 
   @Action(UpdateDeviceInfo)
-  updateDeviceInfo({ patchState, getState }: StateContext<DevicesStateModel>, action: UpdateDeviceInfo) {
-    return this.devicesService.getDeviceInfo(action.device).pipe(
-      tap((update: Partial<Device>) => {
-        const state = getState();
-        const patch: Partial<DevicesStateModel> = {};
-        const updatedDevice = { ...action.device, ...update };
-        if (state.connectedDevice && state.connectedDevice.sensorUUID === action.device.sensorUUID) {
-          patch.connectedDevice = updatedDevice;
-        }
-        const deviceIndex = state.knownDevices.findIndex(
-          knownDevice => knownDevice.sensorUUID === action.device.sensorUUID
-        );
-        if (deviceIndex > -1) {
-          patch.knownDevices = [
-            ...state.knownDevices.slice(0, deviceIndex - 1),
-            updatedDevice,
-            ...state.knownDevices.slice(deviceIndex + 1)
-          ];
-        }
-        patchState(patch);
-      })
+  updateDeviceInfo({ dispatch }: StateContext<DevicesStateModel>, action: UpdateDeviceInfo) {
+    return this.devicesService
+      .getDeviceInfo(action.device)
+      .pipe(map((update: Partial<Device>) => dispatch(new UpdateDevice(action.device, update))));
+  }
+
+  @Action(EditDeviceParams)
+  editDeviceParams({ patchState }: StateContext<DevicesStateModel>, action: EditDeviceParams) {
+    patchState({
+      editedDevice: action.device,
+      editedDeviceForm: {
+        model: { ...action.device.params },
+        dirty: false,
+        status: '',
+        errors: {}
+      }
+    });
+  }
+
+  @Action(SaveDeviceParams)
+  saveDeviceParams({ getState, dispatch }: StateContext<DevicesStateModel>) {
+    const state = getState();
+    if (state.editedDevice && state.editedDeviceForm) {
+      return dispatch(new UpdateDevice(state.editedDevice, { params: { ...state.editedDeviceForm.model } }));
+    } else {
+      return of();
+    }
+  }
+
+  @Action(UpdateDevice)
+  updateItem({ patchState, getState }: StateContext<DevicesStateModel>, action: UpdateDevice) {
+    const state = getState();
+    const patch: Partial<DevicesStateModel> = {};
+    const updatedDevice = { ...action.device, ...action.update };
+    if (state.connectedDevice && state.connectedDevice.sensorUUID === action.device.sensorUUID) {
+      patch.connectedDevice = updatedDevice;
+    }
+    const deviceIndex = state.knownDevices.findIndex(
+      knownDevice => knownDevice.sensorUUID === action.device.sensorUUID
     );
+    if (deviceIndex > -1) {
+      patch.knownDevices = [
+        ...state.knownDevices.slice(0, deviceIndex - 1),
+        updatedDevice,
+        ...state.knownDevices.slice(deviceIndex + 1)
+      ];
+    }
+    patchState(patch);
   }
 }

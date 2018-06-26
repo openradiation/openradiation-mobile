@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import { BLE } from '@ionic-native/ble/ngx';
 import { Platform } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
-import { merge, Observable } from 'rxjs';
+import { merge, Observable, timer } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
-import { timer } from 'rxjs/internal/observable/timer';
 import {
   buffer,
   catchError,
