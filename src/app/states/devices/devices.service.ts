@@ -5,11 +5,23 @@ import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { merge, Observable } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { timer } from 'rxjs/internal/observable/timer';
-import { buffer, map, scan, shareReplay, skip, switchMap, take, takeWhile, tap, throttleTime } from 'rxjs/operators';
+import {
+  buffer,
+  catchError,
+  map,
+  scan,
+  shareReplay,
+  skip,
+  switchMap,
+  take,
+  takeWhile,
+  tap,
+  throttleTime
+} from 'rxjs/operators';
 import { DeviceType, RawDevice } from './abstract-device';
 import { Device, DeviceOGKit } from './device';
 import { DeviceOGKitService } from './device-og-kit.service';
-import { ConnectionLost, DevicesDiscovered, StopDiscoverDevices, UpdateDeviceInfo } from './devices.action';
+import { ConnectionLost, DevicesDiscovered, StopDiscoverDevices } from './devices.action';
 
 @Injectable({
   providedIn: 'root'
@@ -78,10 +90,7 @@ export class DevicesService {
 
   connectDevice(device: Device): Observable<any> {
     const connection = this.ble.connect(device.sensorUUID).pipe(shareReplay());
-    connection.subscribe(
-      () => this.store.dispatch(new UpdateDeviceInfo(device)),
-      () => this.store.dispatch(new ConnectionLost())
-    );
+    connection.pipe(catchError(() => this.store.dispatch(new ConnectionLost()))).subscribe();
     return connection.pipe(take(1));
   }
 

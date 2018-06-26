@@ -40,10 +40,7 @@ export class DeviceOGKitService /*extends AbstractDeviceService<Device>*/ {
         }
         return update;
       }, {}),
-      filter(update => {
-        console.log(update);
-        return update.apparatusSensorType !== undefined && update.apparatusTubeType !== undefined;
-      }),
+      filter(update => update.apparatusSensorType !== undefined && update.apparatusTubeType !== undefined),
       take(1),
       tap(() =>
         this.ble.stopNotification(

@@ -130,7 +130,6 @@ export class DevicesState {
   updateDeviceInfo({ patchState, getState }: StateContext<DevicesStateModel>, action: UpdateDeviceInfo) {
     return this.devicesService.getDeviceInfo(action.device).pipe(
       tap((update: Partial<Device>) => {
-        console.log(update);
         const state = getState();
         const patch: Partial<DevicesStateModel> = {};
         const updatedDevice = { ...action.device, ...update };
