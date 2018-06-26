@@ -1,12 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { environment } from '../../../environments/environment';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.page.html',
   styleUrls: ['./map.page.scss']
 })
-export class MapPage implements OnInit {
-  constructor() {}
+export class MapPage {
+  iframeURL: SafeResourceUrl;
 
-  ngOnInit() {}
+  constructor(private domSanitizer: DomSanitizer) {
+    this.iframeURL = domSanitizer.bypassSecurityTrustResourceUrl(environment.INAPPBROWSER_URI);
+  }
 }
