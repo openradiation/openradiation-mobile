@@ -8,7 +8,8 @@ import {
   ConnectDevice,
   DisconnectDevice,
   StartDiscoverDevices,
-  StopDiscoverDevices
+  StopDiscoverDevices,
+  UpdateDeviceInfo
 } from '../../states/devices/devices.action';
 import { DevicesState } from '../../states/devices/devices.state';
 
@@ -49,7 +50,7 @@ export class DevicesPage {
   }
 
   connectDevice(device: Device) {
-    this.store.dispatch(new ConnectDevice(device)).subscribe();
+    this.store.dispatch(new ConnectDevice(device)).subscribe(() => this.store.dispatch(new UpdateDeviceInfo(device)));
   }
 
   disconnectDevice(device: Device) {
