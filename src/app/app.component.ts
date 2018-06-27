@@ -14,12 +14,14 @@ export class AppComponent {
   }
 
   initializeApp() {
-    // TODO use platform.ready() again when it's fixed
+    // TODO use platform.ready() again when it's fixed https://github.com/ionic-team/ionic/issues/14647
     /*this.platform.ready().then(() => {
+      this.statusBar.overlaysWebView(true);
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });*/
     document.addEventListener('deviceready', () => {
+      this.statusBar.overlaysWebView(true);
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
