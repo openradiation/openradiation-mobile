@@ -14,6 +14,7 @@ import { NgxsModule } from '@ngxs/store';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DevicesState } from './states/devices/devices.state';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -31,7 +32,7 @@ import { DevicesState } from './states/devices/devices.state';
     NgxsReduxDevtoolsPluginModule.forRoot(),
     HttpClientModule
   ],
-  providers: [StatusBar, SplashScreen, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, BLE],
+  providers: [StatusBar, SplashScreen, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, BLE, Geolocation],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
