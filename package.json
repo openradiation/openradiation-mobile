@@ -18,7 +18,7 @@
     "analyze": "webpack-bundle-analyzer ./dist/stats.json",
     "compodoc:build": "compodoc -p src/tsconfig.app.json --disableLifeCycleHooks",
     "compodoc:serve": "compodoc -p src/tsconfig.app.json --disableLifeCycleHooks -s -w",
-    "prettier": "prettier --write \"src/**/*.ts\" \"src/**/*.scss\" \"./**/*.md\""
+    "prettier": "prettier --write \"src/**/*.ts\" \"src/**/*.scss\" \"src/**/*.md\""
   },
   "license": "Apache-2.0",
   "dependencies": {
@@ -31,6 +31,7 @@
     "@angular/router": "6.0.6",
     "@ionic-native/ble": "5.0.0-beta.11",
     "@ionic-native/core": "5.0.0-beta.11",
+    "@ionic-native/diagnostic": "^5.0.0-beta.12",
     "@ionic-native/geolocation": "^5.0.0-beta.12",
     "@ionic-native/ionic-webview": "^5.0.0-beta.11",
     "@ionic-native/splash-screen": "5.0.0-beta.11",
@@ -56,6 +57,7 @@
     "cordova-plugin-splashscreen": "^5.0.2",
     "cordova-plugin-statusbar": "^2.4.2",
     "cordova-plugin-whitelist": "^1.3.3",
+    "cordova.plugins.diagnostic": "^4.0.8",
     "core-js": "^2.5.3",
     "rxjs": "6.2.1",
     "zone.js": "^0.8.26"
@@ -103,7 +105,8 @@
       "cordova-plugin-statusbar": {},
       "cordova-plugin-geolocation": {
         "GEOLOCATION_USAGE_DESCRIPTION": "To locate you"
-      }
+      },
+      "cordova.plugins.diagnostic": {}
     },
     "platforms": [
       "android",
