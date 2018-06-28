@@ -46,3 +46,11 @@ export class UpdateDevice {
   static readonly type = '[Devices] Update device';
   constructor(public device: Device, public update: Partial<Device>) {}
 }
+
+export class WaitForBLEConnection {
+  static readonly type = '[Devices] Wait for BLE connection';
+}
+
+export class BLEConnectionLost {
+  static readonly type = '[Devices] BLE connection lost';
+}
