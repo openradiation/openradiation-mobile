@@ -1,5 +1,5 @@
 <ion-content padding>
-    <ion-button href="/tabs/(settings:settings)">
+    <ion-button (click)="goToSettings()">
         Paramètres
     </ion-button>
     <ion-list *ngIf="connectedDevice$ | async as connectedDevice">

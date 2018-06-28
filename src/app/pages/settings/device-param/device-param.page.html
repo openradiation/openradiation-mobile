@@ -1,5 +1,5 @@
 <ion-content padding>
-    <ion-button href="/devices">
+    <ion-button (click)="goToDevices()">
         Paramètres capteurs
     </ion-button>
     <ng-container *ngIf="editedDevice$ | async as editedDevice">

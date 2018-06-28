@@ -3,10 +3,10 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { DeviceParamModel, DeviceParamType } from '../../states/devices/abstract-device';
-import { Device } from '../../states/devices/device';
-import { SaveDeviceParams } from '../../states/devices/devices.action';
-import { DevicesState, DevicesStateModel } from '../../states/devices/devices.state';
+import { DeviceParamModel, DeviceParamType } from '../../../states/devices/abstract-device';
+import { Device } from '../../../states/devices/device';
+import { SaveDeviceParams } from '../../../states/devices/devices.action';
+import { DevicesState, DevicesStateModel } from '../../../states/devices/devices.state';
 
 @Component({
   selector: 'app-page-device-param',
@@ -36,6 +36,17 @@ export class DeviceParamPage {
   }
 
   onSubmit() {
-    this.store.dispatch(new SaveDeviceParams()).subscribe(() => this.router.navigate(['devices']));
+    this.store.dispatch(new SaveDeviceParams()).subscribe(() => this.goToDevices());
+  }
+
+  goToDevices() {
+    this.router.navigate([
+      'tabs',
+      {
+        outlets: {
+          settings: 'devices'
+        }
+      }
+    ]);
   }
 }

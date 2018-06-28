@@ -4,35 +4,16 @@ import { RouterModule, Routes } from '@angular/router';
 import { HistoryPage } from '../history/history.page';
 import { HomePage } from '../home/home.page';
 import { MapPage } from '../map/map.page';
-import { SettingsPage } from '../settings/settings.page';
+import { SettingsPage } from '../settings/settings/settings.page';
 import { TabsPage } from './tabs.page';
+import { DevicesPage } from '../settings/devices/devices.page';
+import { DeviceParamPage } from '../settings/device-param/device-param.page';
 
 const routes: Routes = [
   {
     path: 'tabs',
     component: TabsPage,
     children: [
-      // TODO switch to lazyloading in tabs once it's fixed => https://github.com/ionic-team/ionic/issues/14566
-      // {
-      //   path: 'home',
-      //   outlet: 'home',
-      //   loadChildren: '../home/home.module#HomePageModule'
-      // },
-      // {
-      //   path: 'history',
-      //   outlet: 'history',
-      //   loadChildren: '../history/history.module#HistoryPageModule'
-      // },
-      // {
-      //   path: 'settings',
-      //   outlet: 'settings',
-      //   loadChildren: '../settings/settings.module#SettingsPageModule'
-      // },
-      // {
-      //   path: 'map',
-      //   outlet: 'map',
-      //   loadChildren: '../map/map.module#MapPageModule'
-      // }
       {
         path: 'home',
         outlet: 'home',
@@ -47,6 +28,16 @@ const routes: Routes = [
         path: 'settings',
         outlet: 'settings',
         component: SettingsPage
+      },
+      {
+        path: 'devices',
+        outlet: 'settings',
+        component: DevicesPage
+      },
+      {
+        path: 'device-param',
+        outlet: 'settings',
+        component: DeviceParamPage
       },
       {
         path: 'map',
