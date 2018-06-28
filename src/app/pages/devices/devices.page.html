@@ -2,12 +2,6 @@
     <ion-button href="/tabs/(settings:settings)">
         Paramètres
     </ion-button>
-    <ng-container *ngIf="isScanning$ | async; else isNotScanning">
-        <ion-button (click)="stopDiscoverDevices()">Stop discover devices</ion-button>
-    </ng-container>
-    <ng-template #isNotScanning>
-        <ion-button (click)="startDiscoverDevices()">Start discover devices</ion-button>
-    </ng-template>
     <ion-list *ngIf="connectedDevice$ | async as connectedDevice">
         <ion-list-header>
             <ion-label>Capteur connecté</ion-label>
@@ -26,7 +20,7 @@
     </ion-list>
     <ion-list *ngIf="isScanning$ | async">
         <ion-list-header>
-            <ion-label>Capteurs disponibles</ion-label>
+            <ion-label>Recherche des capteurs disponibles</ion-label>
         </ion-list-header>
         <ion-item *ngFor="let availableDevice of availableDevices$ | async">
             <ion-label>

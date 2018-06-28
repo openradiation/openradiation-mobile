@@ -7,28 +7,30 @@ import { fromPromise } from 'rxjs/internal-compatibility';
 import {
   buffer,
   catchError,
+  filter,
   map,
   scan,
+  share,
   shareReplay,
   skip,
   switchMap,
   take,
-  takeWhile,
+  takeUntil,
   tap,
   throttleTime
 } from 'rxjs/operators';
 import { DeviceType, RawDevice } from './abstract-device';
 import { Device, DeviceOGKit } from './device';
 import { DeviceOGKitService } from './device-og-kit.service';
-import { ConnectionLost, DevicesDiscovered, StopDiscoverDevices } from './devices.action';
+import { BLEConnectionLost, ConnectionLost, DevicesDiscovered, StopDiscoverDevices } from './devices.action';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DevicesService {
   private serviceUUIDs = [DeviceOGKitService.serviceUUID];
+  private bleState: Observable<any>;
 
-  private isScanning = false;
   constructor(
     private ble: BLE,
     private platform: Platform,
@@ -36,7 +38,16 @@ export class DevicesService {
     private store: Store,
     private deviceOGKitService: DeviceOGKitService
   ) {
-    this.actions$.pipe(ofActionSuccessful(StopDiscoverDevices)).subscribe(() => (this.isScanning = false));
+    this.bleState = this.ble.startStateNotifications().pipe(share());
+    this.bleState.subscribe();
+  }
+
+  waitForBLEActivation(): Observable<any> {
+    return this.bleState.pipe(
+      takeUntil(this.actions$.pipe(ofActionSuccessful(StopDiscoverDevices))),
+      filter(notification => notification === 'on'),
+      take(1)
+    );
   }
 
   startDiscoverDevices(): Observable<any> {
@@ -48,16 +59,20 @@ export class DevicesService {
           throw err;
         }
       })
-    ).pipe(
-      tap(() => {
-        this.isScanning = true;
-        this.discoverDevices();
-      })
-    );
+    ).pipe(tap(() => this.discoverDevices()));
   }
 
   discoverDevices() {
-    const time = timer(5000, 5000).pipe(takeWhile(() => this.isScanning));
+    this.bleState
+      .pipe(
+        takeUntil(this.actions$.pipe(ofActionSuccessful(StopDiscoverDevices, BLEConnectionLost))),
+        filter(notification => notification === 'off'),
+        take(1)
+      )
+      .subscribe(() => this.store.dispatch(new BLEConnectionLost()));
+    const time = timer(5000, 5000).pipe(
+      takeUntil(this.actions$.pipe(ofActionSuccessful(StopDiscoverDevices, BLEConnectionLost)))
+    );
     merge(
       this.ble.scan(this.serviceUUIDs, 3).pipe(
         scan<RawDevice>((devices, newDevice) => [...devices, newDevice], []),

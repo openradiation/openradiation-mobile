@@ -1,17 +1,18 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
-import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Actions, ofActionErrored, ofActionSuccessful, Select, Store } from '@ngxs/store';
+import { Observable, Subscription } from 'rxjs';
 import { Device } from '../../states/devices/device';
 import {
+  BLEConnectionLost,
   ConnectDevice,
   DisconnectDevice,
   EditDeviceParams,
   StartDiscoverDevices,
   StopDiscoverDevices,
-  UpdateDeviceInfo
+  UpdateDeviceInfo,
+  WaitForBLEConnection
 } from '../../states/devices/devices.action';
 import { DevicesState } from '../../states/devices/devices.state';
 
@@ -26,25 +27,46 @@ export class DevicesPage {
   @Select(DevicesState.isScanning) isScanning$: Observable<boolean>;
   @Select(DevicesState.connectedDevice) connectedDevice$: Observable<Device>;
 
-  constructor(private store: Store, private toastController: ToastController, private router: Router) {}
+  private actionsSubscription: Subscription[] = [];
+
+  constructor(
+    private store: Store,
+    private toastController: ToastController,
+    private router: Router,
+    private actions$: Actions
+  ) {}
+
+  ionViewDidEnter() {
+    this.actionsSubscription.push(
+      this.actions$
+        .pipe(ofActionSuccessful(WaitForBLEConnection))
+        .subscribe(() => this.store.dispatch(new StartDiscoverDevices()).subscribe()),
+      this.actions$.pipe(ofActionErrored(StartDiscoverDevices)).subscribe(() => this.onBLEError()),
+      this.actions$.pipe(ofActionSuccessful(BLEConnectionLost)).subscribe(() => this.onBLEError())
+    );
+    this.startDiscoverDevices();
+  }
+
+  ionViewWillLeave() {
+    this.actionsSubscription.forEach(subscription => subscription.unsubscribe());
+    this.actionsSubscription = [];
+    this.stopDiscoverDevices();
+  }
+
+  onBLEError() {
+    this.store.dispatch(new WaitForBLEConnection()).subscribe();
+    this.toastController
+      .create({
+        message: 'Bluetooth not available, please active it',
+        closeButtonText: 'Ok',
+        duration: 3000,
+        showCloseButton: true
+      })
+      .then(toast => toast.present());
+  }
 
   startDiscoverDevices() {
-    this.store
-      .dispatch(new StartDiscoverDevices())
-      .pipe(
-        catchError(err => {
-          this.toastController
-            .create({
-              message: 'Bluetooth not available, please active it',
-              closeButtonText: 'Ok',
-              duration: 3000,
-              showCloseButton: true
-            })
-            .then(toast => toast.present());
-          return err;
-        })
-      )
-      .subscribe();
+    this.store.dispatch(new StartDiscoverDevices()).subscribe();
   }
 
   stopDiscoverDevices() {
@@ -56,7 +78,7 @@ export class DevicesPage {
   }
 
   disconnectDevice() {
-    this.store.dispatch(new DisconnectDevice());
+    this.store.dispatch(new DisconnectDevice()).subscribe();
   }
 
   editDeviceParams(device: Device) {

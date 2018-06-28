@@ -1,9 +1,10 @@
-import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { Action, Actions, ofActionSuccessful, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs/internal/observable/of';
-import { map, tap } from 'rxjs/operators';
+import { map, takeUntil, tap } from 'rxjs/operators';
 import { DeviceParams } from './abstract-device';
 import { Device } from './device';
 import {
+  BLEConnectionLost,
   ConnectDevice,
   ConnectionLost,
   DevicesDiscovered,
@@ -13,7 +14,8 @@ import {
   StartDiscoverDevices,
   StopDiscoverDevices,
   UpdateDevice,
-  UpdateDeviceInfo
+  UpdateDeviceInfo,
+  WaitForBLEConnection
 } from './devices.action';
 import { DevicesService } from './devices.service';
 
@@ -40,7 +42,7 @@ export interface DevicesStateModel {
   }
 })
 export class DevicesState {
-  constructor(private devicesService: DevicesService) {}
+  constructor(private devicesService: DevicesService, private actions$: Actions) {}
 
   @Selector()
   static availableDevices(state: DevicesStateModel): Device[] {
@@ -86,8 +88,23 @@ export class DevicesState {
     );
   }
 
-  @Action(StopDiscoverDevices, { cancelUncompleted: true })
+  @Action(StopDiscoverDevices)
   stopDiscoverDevices({ patchState }: StateContext<DevicesStateModel>) {
+    patchState({
+      isScanning: false,
+      availableDevices: []
+    });
+  }
+
+  @Action(WaitForBLEConnection, { cancelUncompleted: true })
+  waitForBLEConnection() {
+    return this.devicesService
+      .waitForBLEActivation()
+      .pipe(takeUntil(this.actions$.pipe(ofActionSuccessful(StopDiscoverDevices))));
+  }
+
+  @Action(BLEConnectionLost)
+  bleConnectionLost({ patchState }: StateContext<DevicesStateModel>) {
     patchState({
       isScanning: false,
       availableDevices: []
@@ -106,7 +123,7 @@ export class DevicesState {
     });
   }
 
-  @Action(ConnectDevice)
+  @Action(ConnectDevice, { cancelUncompleted: true })
   connectDevice({ getState, patchState }: StateContext<DevicesStateModel>, action: ConnectDevice) {
     return this.devicesService.connectDevice(action.device).pipe(
       tap(() => {
@@ -148,7 +165,7 @@ export class DevicesState {
     }
   }
 
-  @Action(UpdateDeviceInfo)
+  @Action(UpdateDeviceInfo, { cancelUncompleted: true })
   updateDeviceInfo({ dispatch }: StateContext<DevicesStateModel>, action: UpdateDeviceInfo) {
     return this.devicesService
       .getDeviceInfo(action.device)
