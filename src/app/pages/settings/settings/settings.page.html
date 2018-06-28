@@ -1,9 +1,7 @@
-<ion-header>
-    <ion-toolbar>
-        <ion-title>settings</ion-title>
-    </ion-toolbar>
-</ion-header>
+<app-header>Paramètres</app-header>
 
 <ion-content padding>
-    <ion-button (click)="goToDevices()">Capteurs</ion-button>
+    <ion-item button (click)="goToDevices()" detail>
+        <ion-label>Capteurs</ion-label>
+    </ion-item>
 </ion-content>

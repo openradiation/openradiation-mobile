@@ -1,7 +1,6 @@
+<app-header [backButton]="true" (backButtonClick)="goToDevices()">Paramètres capteurs</app-header>
+
 <ion-content padding>
-    <ion-button (click)="goToDevices()">
-        Paramètres capteurs
-    </ion-button>
     <ng-container *ngIf="editedDevice$ | async as editedDevice">
         <ion-list>
             <ion-list-header>
