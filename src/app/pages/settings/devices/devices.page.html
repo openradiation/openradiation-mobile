@@ -1,7 +1,6 @@
+<app-header [backButton]="true" (backButtonClick)="goToSettings()">Capteurs</app-header>
+
 <ion-content padding>
-    <ion-button (click)="goToSettings()">
-        Paramètres
-    </ion-button>
     <ion-list *ngIf="connectedDevice$ | async as connectedDevice">
         <ion-list-header>
             <ion-label>Capteur connecté</ion-label>

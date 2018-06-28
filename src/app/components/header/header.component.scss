@@ -1,0 +1,45 @@
+@import '~@ionic/angular/dist/components/app/app.ios.vars';
+@import '~@ionic/angular/dist/components/app/app.md.vars';
+
+.container {
+  background: #045cb8;
+  .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 45px;
+    margin-bottom: 10px;
+    img {
+      height: 100%;
+    }
+  }
+  .title {
+    color: white;
+    background-color: #00a0dd;
+    position: relative;
+    .back-button {
+      height: 100%;
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .label {
+      width: 100%;
+      text-align: center;
+      font-size: 30px;
+      font-family: 'ARIALROUNDED', Arial, Helvetica, sans-serif;
+    }
+  }
+}
+
+.app-ios :host {
+  .container {
+    padding-top: $app-md-statusbar-padding + 4px;
+  }
+}
+.app-md :host {
+  .container {
+    padding-top: $app-ios-statusbar-padding + 4px;
+  }
+}

@@ -17,12 +17,12 @@ export class AppComponent {
     // TODO use platform.ready() again when it's fixed https://github.com/ionic-team/ionic/issues/14647
     /*this.platform.ready().then(() => {
       this.statusBar.overlaysWebView(true);
-      this.statusBar.styleDefault();
+      this.statusBar.styleLightContent();
       this.splashScreen.hide();
     });*/
     document.addEventListener('deviceready', () => {
       this.statusBar.overlaysWebView(true);
-      this.statusBar.styleDefault();
+      this.statusBar.styleLightContent();
       this.splashScreen.hide();
     });
   }
