@@ -1,5 +1,5 @@
 <ion-content padding>
-    <ion-button routerLink="/devices">
+    <ion-button (click)="goToDevices()">
         <ng-container *ngIf="connectedDevice$ | async as connectedDevice; else noConnectedDevice">
             {{connectedDevice.apparatusVersion}} / {{connectedDevice.apparatusId}}
         </ng-container>

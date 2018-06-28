@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { Actions, ofActionErrored, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable, Subscription } from 'rxjs';
-import { Device } from '../../states/devices/device';
+import { Device } from '../../../states/devices/device';
 import {
   BLEConnectionLost,
   ConnectDevice,
@@ -13,8 +13,8 @@ import {
   StopDiscoverDevices,
   UpdateDeviceInfo,
   WaitForBLEConnection
-} from '../../states/devices/devices.action';
-import { DevicesState } from '../../states/devices/devices.state';
+} from '../../../states/devices/devices.action';
+import { DevicesState } from '../../../states/devices/devices.state';
 
 @Component({
   selector: 'app-page-devices',
@@ -82,6 +82,26 @@ export class DevicesPage {
   }
 
   editDeviceParams(device: Device) {
-    this.store.dispatch(new EditDeviceParams(device)).subscribe(() => this.router.navigate(['device-param']));
+    this.store.dispatch(new EditDeviceParams(device)).subscribe(() =>
+      this.router.navigate([
+        'tabs',
+        {
+          outlets: {
+            settings: 'device-param'
+          }
+        }
+      ])
+    );
+  }
+
+  goToSettings() {
+    this.router.navigate([
+      'tabs',
+      {
+        outlets: {
+          settings: 'settings'
+        }
+      }
+    ]);
   }
 }
