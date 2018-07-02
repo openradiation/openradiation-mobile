@@ -12,6 +12,8 @@ import { Platform } from '@ionic/angular';
 })
 export class MapPage {
   iframeURL: SafeResourceUrl;
+  isLoading = true;
+  private iframeLoads = 0;
 
   constructor(
     private domSanitizer: DomSanitizer,
@@ -36,6 +38,14 @@ export class MapPage {
       });
     } else {
       this.iframeURL = domSanitizer.bypassSecurityTrustResourceUrl(environment.INAPPBROWSER_URI);
+    }
+  }
+
+  mapLoaded() {
+    if (this.iframeLoads >= 2) {
+      this.isLoading = false;
+    } else {
+      this.iframeLoads++;
     }
   }
 }
