@@ -44,3 +44,13 @@
   font-style: normal;
   font-smooth: always;
 }
+
+ion-content,
+.no-scroll {
+  .scroll-inner {
+    height: 100%;
+  }
+  /deep/ion-scroll {
+    background: linear-gradient(to bottom, #045cb8, #00a0dd);
+  }
+}

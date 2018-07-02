@@ -1,19 +1,6 @@
-@import '~@ionic/angular/dist/components/app/app.ios.vars';
-@import '~@ionic/angular/dist/components/app/app.md.vars';
-
 iframe {
+  margin-top: 4px;
   height: 100%;
   width: 100%;
   border: none;
-}
-
-.app-ios :host {
-  iframe {
-    padding-top: $app-md-statusbar-padding + 4px;
-  }
-}
-.app-md :host {
-  iframe {
-    padding-top: $app-ios-statusbar-padding + 4px;
-  }
 }

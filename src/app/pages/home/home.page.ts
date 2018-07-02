@@ -20,7 +20,8 @@ export class HomePage {
       'tabs',
       {
         outlets: {
-          settings: 'devices'
+          settings: 'devices',
+          home: null
         }
       }
     ]);
