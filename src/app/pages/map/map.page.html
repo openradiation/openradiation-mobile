@@ -1,3 +1,8 @@
 <ion-content class="no-scroll">
-    <iframe [src]="iframeURL"></iframe>
+    <div class="content">
+        <div class="spinner-container" *ngIf="isLoading">
+            <ion-spinner color="light"></ion-spinner>
+        </div>
+        <iframe [src]="iframeURL" (load)="mapLoaded()"></iframe>
+    </div>
 </ion-content>
