@@ -1,14 +1,15 @@
 @import '~@ionic/angular/dist/components/app/app.ios.vars';
 @import '~@ionic/angular/dist/components/app/app.md.vars';
+@import 'src/theme/variables.scss';
 
 .container {
-  background: #045cb8;
+  background: $base-color;
   .logo {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 45px;
-    margin-bottom: 10px;
+    height: 55px;
+    padding-bottom: 10px;
     img {
       height: 100%;
     }

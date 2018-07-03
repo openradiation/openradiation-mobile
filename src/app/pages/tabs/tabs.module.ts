@@ -12,6 +12,9 @@ import { SettingsPageModule } from '../settings/settings/settings.module';
 import { TabsPage } from './tabs.page';
 import { DevicesPageModule } from '../settings/devices/devices.module';
 import { DeviceParamPageModule } from '../settings/device-param/device-param.module';
+import { LegalNoticePageModule } from '../legal-notice/legal-notice.module';
+import { AboutPageModule } from '../about/about.module';
+import { ManualMeasurePageModule } from '../manual-measure/manual-measure.module';
 
 @NgModule({
   imports: [
@@ -25,7 +28,10 @@ import { DeviceParamPageModule } from '../settings/device-param/device-param.mod
     MapPageModule,
     SettingsPageModule,
     DevicesPageModule,
-    DeviceParamPageModule
+    DeviceParamPageModule,
+    LegalNoticePageModule,
+    AboutPageModule,
+    ManualMeasurePageModule
   ],
   declarations: [TabsPage]
 })

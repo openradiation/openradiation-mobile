@@ -1,3 +1,5 @@
+@import 'src/theme/variables.scss';
+
 // http://ionicframework.com/docs/theming/
 
 // App Global Sass
@@ -45,12 +47,13 @@
   font-smooth: always;
 }
 
-ion-content,
-.no-scroll {
-  .scroll-inner {
-    height: 100%;
-  }
+ion-content {
   /deep/ion-scroll {
-    background: linear-gradient(to bottom, #045cb8, #00a0dd);
+    background: linear-gradient(to bottom, $base-color, #00a0dd);
+  }
+  &.no-scroll {
+    .scroll-inner {
+      height: 100%;
+    }
   }
 }

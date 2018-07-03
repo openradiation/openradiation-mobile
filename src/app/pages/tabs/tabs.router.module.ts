@@ -9,6 +9,9 @@ import { TabsPage } from './tabs.page';
 import { DevicesPage } from '../settings/devices/devices.page';
 import { DeviceParamPage } from '../settings/device-param/device-param.page';
 import { TabsGuard } from './tabs.guard';
+import { LegalNoticePage } from '../legal-notice/legal-notice.page';
+import { AboutPage } from '../about/about.page';
+import { ManualMeasurePage } from '../manual-measure/manual-measure.page';
 
 const routes: Routes = [
   {
@@ -45,6 +48,21 @@ const routes: Routes = [
         path: 'map',
         outlet: 'map',
         component: MapPage
+      },
+      {
+        path: 'legal-notice',
+        outlet: 'other',
+        component: LegalNoticePage
+      },
+      {
+        path: 'about',
+        outlet: 'other',
+        component: AboutPage
+      },
+      {
+        path: 'manual-measure',
+        outlet: 'other',
+        component: ManualMeasurePage
       }
     ]
   },
