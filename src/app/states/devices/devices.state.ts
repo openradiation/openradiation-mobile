@@ -1,5 +1,5 @@
 import { Action, Actions, ofActionSuccessful, Selector, State, StateContext } from '@ngxs/store';
-import { of } from 'rxjs/internal/observable/of';
+import { of } from 'rxjs';
 import { map, takeUntil, tap } from 'rxjs/operators';
 import { DeviceParams } from './abstract-device';
 import { Device } from './device';
