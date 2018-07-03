@@ -1,0 +1,15 @@
+<div class="container">
+    <div  class="logo">
+        <img src="assets/img/logo-big.png">
+    </div>
+    <div class="title">
+        <div class="back-button" *ngIf="backButton">
+            <ion-button fill="clear" color="light" (click)="backButtonClick.emit()">
+                <ion-icon mode="ios" slot="icon-only" name="arrow-back"></ion-icon>
+            </ion-button>
+        </div>
+        <div class="label">
+            <ng-content></ng-content>
+        </div>
+    </div>
+</div>

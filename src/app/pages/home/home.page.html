@@ -1,0 +1,24 @@
+<ion-content padding class="no-scroll">
+    <div class="content">
+        <div  class="logo">
+            <img src="assets/img/logo-big.png">
+        </div>
+        <div class="subtitle">
+            mesurer la radioactivité
+        </div>
+        <div class="gps-indicator">
+            GPS : bon
+        </div>
+        <ion-button class="connected-device-button" color="light" fill="clear" (click)="goToDevices()">
+            <ng-container *ngIf="connectedDevice$ | async as connectedDevice; else noConnectedDevice">
+                {{connectedDevice.apparatusVersion}} / {{connectedDevice.apparatusId}}
+            </ng-container>
+            <ng-template #noConnectedDevice>
+                Pas de capteurs<br>CLIQUEZ ICI
+            </ng-template>
+        </ion-button>
+        <ion-button class="measure-button" fill="clear" [disabled]="!(connectedDevice$ | async)" (click)="startMeasure()">
+            <img [src]="(connectedDevice$ | async) ? 'assets/img/button-home-on.png' : 'assets/img/button-home-off.png'">
+        </ion-button>
+    </div>
+</ion-content>

@@ -1,0 +1,23 @@
+iframe {
+  height: 100%;
+  width: 100%;
+  border: none;
+}
+
+.content {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  padding-top: 4px;
+
+  .spinner-container {
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
