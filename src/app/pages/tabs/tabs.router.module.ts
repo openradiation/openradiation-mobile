@@ -8,11 +8,13 @@ import { SettingsPage } from '../settings/settings/settings.page';
 import { TabsPage } from './tabs.page';
 import { DevicesPage } from '../settings/devices/devices.page';
 import { DeviceParamPage } from '../settings/device-param/device-param.page';
+import { TabsGuard } from './tabs.guard';
 
 const routes: Routes = [
   {
     path: 'tabs',
     component: TabsPage,
+    canActivateChild: [TabsGuard],
     children: [
       {
         path: 'home',

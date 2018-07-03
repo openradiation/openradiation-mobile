@@ -1,3 +1,18 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+    <ion-split-pane>
+        <ion-menu side="end" type="push">
+            <ion-content>
+                <ion-list>
+                    <ion-menu-toggle>
+                        <ion-item detail [routerDirection]="'root'" [routerLink]="['tabs', {outlets: {home: 'home', measures: null, settings: null, map: null}}]">
+                            <ion-label>
+                                Home
+                            </ion-label>
+                        </ion-item>
+                    </ion-menu-toggle>
+                </ion-list>
+            </ion-content>
+        </ion-menu>
+        <ion-router-outlet main></ion-router-outlet>
+    </ion-split-pane>
 </ion-app>
