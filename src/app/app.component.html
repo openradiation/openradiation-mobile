@@ -3,13 +3,24 @@
         <ion-menu side="end" type="push">
             <ion-content>
                 <ion-list>
-                    <ion-menu-toggle>
-                        <ion-item detail [routerDirection]="'root'" [routerLink]="['tabs', {outlets: {home: 'home', measures: null, settings: null, map: null}}]">
-                            <ion-label>
-                                Home
-                            </ion-label>
-                        </ion-item>
-                    </ion-menu-toggle>
+                    <ion-item detail [routerDirection]="'root'" (click)="closeMenu()" routerLinkActive="active"
+                              [routerLink]="['tabs', {outlets: {other: 'manual-measure' ,home: null, measures: null, settings: null, map: null}}]">
+                        <ion-label>
+                            Saisie manuelle
+                        </ion-label>
+                    </ion-item>
+                    <ion-item detail [routerDirection]="'root'" (click)="closeMenu()" routerLinkActive="active"
+                              [routerLink]="['tabs', {outlets: {other: 'about' ,home: null, measures: null, settings: null, map: null}}]">
+                        <ion-label>
+                            À propos
+                        </ion-label>
+                    </ion-item>
+                    <ion-item detail [routerDirection]="'root'" (click)="closeMenu()" routerLinkActive="active"
+                              [routerLink]="['tabs', {outlets: {other: 'legal-notice' ,home: null, measures: null, settings: null, map: null}}]">
+                        <ion-label>
+                            Mentions légales
+                        </ion-label>
+                    </ion-item>
                 </ion-list>
             </ion-content>
         </ion-menu>
