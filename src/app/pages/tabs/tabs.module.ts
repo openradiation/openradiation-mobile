@@ -15,6 +15,7 @@ import { DeviceParamPageModule } from '../settings/device-param/device-param.mod
 import { LegalNoticePageModule } from '../legal-notice/legal-notice.module';
 import { AboutPageModule } from '../about/about.module';
 import { ManualMeasurePageModule } from '../manual-measure/manual-measure.module';
+import { MeasuresParamPageModule } from '../settings/measures-param/measures-param.module';
 
 @NgModule({
   imports: [
@@ -29,6 +30,7 @@ import { ManualMeasurePageModule } from '../manual-measure/manual-measure.module
     SettingsPageModule,
     DevicesPageModule,
     DeviceParamPageModule,
+    MeasuresParamPageModule,
     LegalNoticePageModule,
     AboutPageModule,
     ManualMeasurePageModule

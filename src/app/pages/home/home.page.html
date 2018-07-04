@@ -14,7 +14,7 @@
                 {{connectedDevice.apparatusVersion}} / {{connectedDevice.apparatusId}}
             </ng-container>
             <ng-template #noConnectedDevice>
-                Pas de capteurs<br>CLIQUEZ ICI
+                Pas de capteur<br>CLIQUEZ ICI
             </ng-template>
         </ion-button>
         <ion-button class="measure-button" fill="clear" [disabled]="!(connectedDevice$ | async)" (click)="startMeasure()">

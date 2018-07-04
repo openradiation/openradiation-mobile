@@ -70,10 +70,10 @@ $base-color: #045cb8;
   --ion-color-medium-tint: #a2a4ab;
 
   /** dark **/
-  --ion-color-dark: #222;
-  --ion-color-dark-rgb: 34, 34, 34;
+  --ion-color-dark: rgba(0, 0, 0, 0);
+  --ion-color-dark-rgb: 0, 0, 0;
   --ion-color-dark-contrast: #fff;
-  --ion-color-dark-contrast-rgb: 255, 255, 255;
-  --ion-color-dark-shade: #1e1e1e;
-  --ion-color-dark-tint: #383838;
+  --ion-color-dark-contrast-rgb: 0, 0, 0;
+  --ion-color-dark-shade: #fff;
+  --ion-color-dark-tint: rgba(255, 255, 255, 0);
 }
