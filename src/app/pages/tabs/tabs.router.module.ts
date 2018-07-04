@@ -12,6 +12,7 @@ import { TabsGuard } from './tabs.guard';
 import { LegalNoticePage } from '../legal-notice/legal-notice.page';
 import { AboutPage } from '../about/about.page';
 import { ManualMeasurePage } from '../manual-measure/manual-measure.page';
+import { MeasuresParamPage } from '../settings/measures-param/measures-param.page';
 
 const routes: Routes = [
   {
@@ -43,6 +44,11 @@ const routes: Routes = [
         path: 'device-param',
         outlet: 'settings',
         component: DeviceParamPage
+      },
+      {
+        path: 'measures-param',
+        outlet: 'settings',
+        component: MeasuresParamPage
       },
       {
         path: 'map',

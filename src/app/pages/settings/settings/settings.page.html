@@ -1,7 +1,43 @@
 <app-header>Paramètres</app-header>
 
-<ion-content padding>
-    <ion-item button (click)="goToDevices()" detail>
-        <ion-label>Capteurs</ion-label>
-    </ion-item>
+<ion-content>
+    <ion-list>
+        <app-category-label>
+            Capteurs
+        </app-category-label>
+        <ion-item button (click)="goToDevices()" detail color="dark">
+            <ion-label>
+                Liste des capteurs
+            </ion-label>
+        </ion-item>
+    </ion-list>
+    <ion-list class="user-account">
+        <app-category-label>
+            Compte utilisateur
+        </app-category-label>
+        <ion-item color="dark">
+            <ion-label>
+                Non identifié
+            </ion-label>
+            <ion-button>
+                S'identifier
+            </ion-button>
+        </ion-item>
+    </ion-list>
+    <ion-list>
+        <app-category-label>
+            Mesures
+        </app-category-label>
+        <ion-item button (click)="goToMeasuresParam()" detail color="dark">
+            <ion-label>
+                Publication automatique des mesures
+            </ion-label>
+        </ion-item>
+        <ion-item color="dark">
+            <ion-label>
+                Mode expert
+            </ion-label>
+            <ion-toggle [ngModel]="expertMode$ | async" (ngModelChange)="toggleExpertMode($event)"></ion-toggle>
+        </ion-item>
+    </ion-list>
 </ion-content>

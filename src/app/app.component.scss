@@ -12,19 +12,22 @@ ion-item {
     color: $base-color;
   }
 }
+ion-item:not(.active) {
+  /deep/.item {
+    .item-inner {
+      background-image: url("data:image/svg+xml;charset=utf-8,<svg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2012%2020'><path%20d='M2,20l-2-2l8-8L0,2l2-2l10,10L2,20z'%20fill='#045cb8'/></svg>");
+    }
+  }
+}
 
 ion-item:last-child {
   border-bottom: none;
 }
 
 ion-item.active {
-  --ion-color-primary: white;
   /deep/.item {
     background: $base-color;
     color: white;
     border-bottom: none;
-    .item-inner {
-      background-image: url("data:image/svg+xml;charset=utf-8,<svg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2012%2020'><path%20d='M2,20l-2-2l8-8L0,2l2-2l10,10L2,20z'%20fill='rgba(255,255,255,0.6)'/></svg>");
-    }
   }
 }

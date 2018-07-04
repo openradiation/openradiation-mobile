@@ -16,6 +16,7 @@ import { AppComponent } from './app.component';
 import { DevicesState } from './states/devices/devices.state';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { MeasuresState } from './states/measures/measures.state';
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,10 +25,10 @@ import { Diagnostic } from '@ionic-native/diagnostic/ngx';
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    NgxsModule.forRoot([DevicesState]),
+    NgxsModule.forRoot([DevicesState, MeasuresState]),
     NgxsFormPluginModule.forRoot(),
     NgxsStoragePluginModule.forRoot({
-      key: ['devices.knownDevices']
+      key: ['devices.knownDevices', 'measures.measures', 'measures.autoPublish', 'measures.expertMode']
     }),
     NgxsLoggerPluginModule.forRoot(),
     NgxsReduxDevtoolsPluginModule.forRoot(),
