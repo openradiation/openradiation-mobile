@@ -3,6 +3,9 @@
 ion-content {
   /deep/ion-scroll {
     background: dimgray;
+    .scroll-inner {
+      padding-top: 4px;
+    }
   }
 }
 

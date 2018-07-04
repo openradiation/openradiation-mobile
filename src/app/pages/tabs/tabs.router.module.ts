@@ -1,18 +1,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { AboutPage } from '../about/about.page';
 import { HistoryPage } from '../history/history.page';
 import { HomePage } from '../home/home.page';
-import { MapPage } from '../map/map.page';
-import { SettingsPage } from '../settings/settings/settings.page';
-import { TabsPage } from './tabs.page';
-import { DevicesPage } from '../settings/devices/devices.page';
-import { DeviceParamPage } from '../settings/device-param/device-param.page';
-import { TabsGuard } from './tabs.guard';
 import { LegalNoticePage } from '../legal-notice/legal-notice.page';
-import { AboutPage } from '../about/about.page';
 import { ManualMeasurePage } from '../manual-measure/manual-measure.page';
+import { MapPage } from '../map/map.page';
+import { DeviceParamPage } from '../settings/device-param/device-param.page';
+import { DevicesPage } from '../settings/devices/devices.page';
 import { MeasuresParamPage } from '../settings/measures-param/measures-param.page';
+import { SettingsPage } from '../settings/settings/settings.page';
+import { TabsGuard } from './tabs.guard';
+import { TabsPage } from './tabs.page';
 
 const routes: Routes = [
   {

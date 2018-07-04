@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { BLE } from '@ionic-native/ble/ngx';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
@@ -14,8 +16,6 @@ import { NgxsModule } from '@ngxs/store';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DevicesState } from './states/devices/devices.state';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
-import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { MeasuresState } from './states/measures/measures.state';
 
 @NgModule({
