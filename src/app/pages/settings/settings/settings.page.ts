@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
-import { MeasuresState } from '../../../states/measures/measures.state';
 import { Observable } from 'rxjs/internal/Observable';
 import { DisableExpertMode, EnableExpertMode } from '../../../states/measures/measures.action';
+import { MeasuresState } from '../../../states/measures/measures.state';
 
 @Component({
   selector: 'app-settings',

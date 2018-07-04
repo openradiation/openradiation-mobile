@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { MeasuresState } from '../../../states/measures/measures.state';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs/internal/Observable';
 import { DisableAutoPublish, EnableAutoPublish } from '../../../states/measures/measures.action';
+import { MeasuresState } from '../../../states/measures/measures.state';
 
 @Component({
   selector: 'app-measures-param',

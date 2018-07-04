@@ -25,7 +25,7 @@
                     </ion-item>
                     <ion-item *ngSwitchCase="deviceParamType.boolean">
                         <ion-label>{{paramModel[1].label}}</ion-label>
-                        <ion-toggle [formControlName]="paramModel[0]"></ion-toggle>
+                        <ion-toggle color="success" [formControlName]="paramModel[0]"></ion-toggle>
                     </ion-item>
                     <ion-item *ngSwitchCase="deviceParamType.number">
                         <ion-label floating>{{paramModel[1].label}}</ion-label>
