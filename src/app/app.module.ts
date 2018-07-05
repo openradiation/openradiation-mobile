@@ -17,6 +17,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DevicesState } from './states/devices/devices.state';
 import { MeasuresState } from './states/measures/measures.state';
+import { Network } from '@ionic-native/network/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -40,7 +41,8 @@ import { MeasuresState } from './states/measures/measures.state';
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     BLE,
     Geolocation,
-    Diagnostic
+    Diagnostic,
+    Network
   ],
   bootstrap: [AppComponent]
 })
