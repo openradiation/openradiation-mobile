@@ -35,18 +35,16 @@ export class DeviceParamPage {
     }
   }
 
-  onSubmit() {
-    this.store.dispatch(new SaveDeviceParams()).subscribe(() => this.goToDevices());
-  }
-
   goToDevices() {
-    this.router.navigate([
-      'tabs',
-      {
-        outlets: {
-          settings: 'devices'
+    this.store.dispatch(new SaveDeviceParams()).subscribe(() =>
+      this.router.navigate([
+        'tabs',
+        {
+          outlets: {
+            settings: 'devices'
+          }
         }
-      }
-    ]);
+      ])
+    );
   }
 }

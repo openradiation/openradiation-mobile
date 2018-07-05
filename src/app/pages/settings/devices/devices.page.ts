@@ -81,7 +81,8 @@ export class DevicesPage {
     this.store.dispatch(new DisconnectDevice()).subscribe();
   }
 
-  editDeviceParams(device: Device) {
+  editDeviceParams(event: Event, device: Device) {
+    event.stopPropagation();
     this.store.dispatch(new EditDeviceParams(device)).subscribe(() =>
       this.router.navigate([
         'tabs',
