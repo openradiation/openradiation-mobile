@@ -64,4 +64,25 @@ ion-item {
       background-image: url("data:image/svg+xml;charset=utf-8,<svg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2012%2020'><path%20d='M2,20l-2-2l8-8L0,2l2-2l10,10L2,20z'%20fill='rgba(255,255,255,0.6)'/></svg>");
     }
   }
+
+  .item.item-input.item-input-has-focus:last-child {
+    border-bottom-color: $second-color;
+  }
+  .item.item-input-has-focus ion-label {
+    color: $second-color;
+  }
+}
+
+ion-button.flat-button {
+  button {
+    background-color: $second-color;
+    color: white;
+  }
+}
+
+ion-button.flat-button-alt {
+  button {
+    background-color: $base-color;
+    color: white;
+  }
 }

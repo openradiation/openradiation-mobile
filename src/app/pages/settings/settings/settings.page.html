@@ -15,14 +15,26 @@
         <app-category-label>
             Compte utilisateur
         </app-category-label>
-        <ion-item color="dark">
-            <ion-label>
-                Non identifié
-            </ion-label>
-            <ion-button>
-                S'identifier
-            </ion-button>
-        </ion-item>
+        <ng-container *ngIf="login$ | async as login; else notLoggedIn">
+            <ion-item color="dark">
+                <ion-label>
+                    Identifié comme<br>{{login}}
+                </ion-label>
+                <ion-button fill="clear" class="flat-button-alt" (click)="logOut()">
+                    Se déconnecter
+                </ion-button>
+            </ion-item>
+        </ng-container>
+        <ng-template #notLoggedIn>
+            <ion-item color="dark">
+                <ion-label>
+                    Non identifié
+                </ion-label>
+                <ion-button fill="clear" class="flat-button-alt" (click)="goToLogIn()">
+                    S'identifier
+                </ion-button>
+            </ion-item>
+        </ng-template>
     </ion-list>
     <ion-list>
         <app-category-label>

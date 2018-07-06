@@ -9,6 +9,7 @@ import { ManualMeasurePage } from '../manual-measure/manual-measure.page';
 import { MapPage } from '../map/map.page';
 import { DeviceParamPage } from '../settings/device-param/device-param.page';
 import { DevicesPage } from '../settings/devices/devices.page';
+import { LogInPage } from '../settings/log-in/log-in.page';
 import { MeasuresParamPage } from '../settings/measures-param/measures-param.page';
 import { SettingsPage } from '../settings/settings/settings.page';
 import { TabsGuard } from './tabs.guard';
@@ -49,6 +50,11 @@ const routes: Routes = [
         path: 'measures-param',
         outlet: 'settings',
         component: MeasuresParamPage
+      },
+      {
+        path: 'log-in',
+        outlet: 'settings',
+        component: LogInPage
       },
       {
         path: 'map',

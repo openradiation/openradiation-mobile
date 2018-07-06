@@ -1,5 +1,7 @@
+@import 'src/theme/variables';
+
 .user-account {
-  background-color: #3c1d7c;
+  background-color: $second-color;
 }
 
 ion-list {
