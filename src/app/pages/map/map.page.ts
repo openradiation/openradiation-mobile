@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
-import { Platform } from '@ionic/angular';
-import { environment } from '../../../environments/environment';
 import { Network } from '@ionic-native/network/ngx';
+import { Platform } from '@ionic/angular';
 import { take } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 
 /**
  * Constants from cordova-plugin-network-information to get network types

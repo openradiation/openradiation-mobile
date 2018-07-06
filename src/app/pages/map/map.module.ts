@@ -5,8 +5,8 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { MapPage } from './map.page';
 import { ComponentsModule } from '../../components/components.module';
+import { MapPage } from './map.page';
 
 const routes: Routes = [
   {
