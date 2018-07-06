@@ -18,6 +18,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DevicesState } from './states/devices/devices.state';
 import { MeasuresState } from './states/measures/measures.state';
+import { UserState } from './states/user/user.state';
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,10 +27,10 @@ import { MeasuresState } from './states/measures/measures.state';
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    NgxsModule.forRoot([DevicesState, MeasuresState]),
+    NgxsModule.forRoot([DevicesState, MeasuresState, UserState]),
     NgxsFormPluginModule.forRoot(),
     NgxsStoragePluginModule.forRoot({
-      key: ['devices.knownDevices', 'measures.measures', 'measures.autoPublish', 'measures.expertMode']
+      key: ['devices.knownDevices', 'measures.measures', 'measures.autoPublish', 'measures.expertMode', 'user']
     }),
     NgxsLoggerPluginModule.forRoot(),
     NgxsReduxDevtoolsPluginModule.forRoot(),

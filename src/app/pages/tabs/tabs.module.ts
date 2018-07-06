@@ -13,6 +13,7 @@ import { ManualMeasurePageModule } from '../manual-measure/manual-measure.module
 import { MapPageModule } from '../map/map.module';
 import { DeviceParamPageModule } from '../settings/device-param/device-param.module';
 import { DevicesPageModule } from '../settings/devices/devices.module';
+import { LogInPageModule } from '../settings/log-in/log-in.module';
 import { MeasuresParamPageModule } from '../settings/measures-param/measures-param.module';
 import { SettingsPageModule } from '../settings/settings/settings.module';
 import { TabsPage } from './tabs.page';
@@ -31,6 +32,7 @@ import { TabsPage } from './tabs.page';
     DevicesPageModule,
     DeviceParamPageModule,
     MeasuresParamPageModule,
+    LogInPageModule,
     LegalNoticePageModule,
     AboutPageModule,
     ManualMeasurePageModule
