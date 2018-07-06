@@ -5,16 +5,13 @@
         <app-category-label>
             Capteur connecté
         </app-category-label>
-        <ion-item color="dark">
+        <ion-item class="clickable-device" color="dark" button (click)="disconnectDevice()">
             <ion-label>
                 {{connectedDevice.apparatusVersion}}<br>{{connectedDevice.apparatusId}}
             </ion-label>
-            <ion-button *ngIf="connectedDevice.params && connectedDevice.paramsModel" fill="clear" size="default"
+            <ion-button *ngIf="connectedDevice.params && connectedDevice.paramsModel" class="inner-button" fill="clear" size="default"
                         (click)="editDeviceParams($event, connectedDevice)">
                 <img src="assets/img/icon-config.png">
-            </ion-button>
-            <ion-button (click)="disconnectDevice()">
-                Se déconnecter
             </ion-button>
         </ion-item>
     </ion-list>
@@ -22,16 +19,14 @@
         <app-category-label>
             <span class="loading">Capteurs disponibles</span>
         </app-category-label>
-        <ion-item *ngFor="let availableDevice of availableDevices$ | async" color="dark">
+        <ion-item *ngFor="let availableDevice of availableDevices$ | async" class="clickable-device" button color="dark" (click)="connectDevice(availableDevice)">
             <ion-label>
                 {{availableDevice.apparatusVersion}}<br>{{availableDevice.apparatusId}}
             </ion-label>
-            <ion-button *ngIf="availableDevice.params && availableDevice.paramsModel" fill="clear" size="default"
+            <ion-spinner *ngIf="connectingDevice && connectingDevice?.sensorUUID === availableDevice.sensorUUID" color="light"></ion-spinner>
+            <ion-button *ngIf="availableDevice.params && availableDevice.paramsModel" class="inner-button" fill="clear" size="default"
                         (click)="editDeviceParams($event, availableDevice)">
                 <img src="assets/img/icon-config.png">
-            </ion-button>
-            <ion-button (click)="connectDevice()">
-                Se connecter
             </ion-button>
         </ion-item>
     </ion-list>

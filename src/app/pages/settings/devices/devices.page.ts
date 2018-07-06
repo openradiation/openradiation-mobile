@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
-import { Actions, ofActionErrored, ofActionSuccessful, Select, Store } from '@ngxs/store';
+import { Actions, ofActionDispatched, ofActionErrored, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable, Subscription } from 'rxjs';
 import { Device } from '../../../states/devices/device';
 import {
@@ -28,6 +28,7 @@ export class DevicesPage {
   @Select(DevicesState.connectedDevice) connectedDevice$: Observable<Device>;
 
   private actionsSubscription: Subscription[] = [];
+  connectingDevice: Device | undefined;
 
   constructor(
     private store: Store,
@@ -42,7 +43,11 @@ export class DevicesPage {
         .pipe(ofActionSuccessful(WaitForBLEConnection))
         .subscribe(() => this.store.dispatch(new StartDiscoverDevices()).subscribe()),
       this.actions$.pipe(ofActionErrored(StartDiscoverDevices)).subscribe(() => this.onBLEError()),
-      this.actions$.pipe(ofActionSuccessful(BLEConnectionLost)).subscribe(() => this.onBLEError())
+      this.actions$.pipe(ofActionSuccessful(BLEConnectionLost)).subscribe(() => this.onBLEError()),
+      this.actions$
+        .pipe(ofActionDispatched(ConnectDevice))
+        .subscribe((action: ConnectDevice) => (this.connectingDevice = action.device)),
+      this.actions$.pipe(ofActionSuccessful(ConnectDevice)).subscribe(() => (this.connectingDevice = undefined))
     );
     this.startDiscoverDevices();
   }
