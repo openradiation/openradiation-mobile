@@ -50,6 +50,8 @@
 ion-content {
   /deep/ion-scroll {
     background: linear-gradient(to bottom, $base-color, #00a0dd);
+    // TODO disable when we can use this.statusBar.overlaysWebView(true) https://github.com/ionic-team/ionic/issues/13821
+    padding-top: 0 !important;
   }
   &.no-scroll {
     .scroll-inner {

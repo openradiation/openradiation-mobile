@@ -13,3 +13,9 @@ form {
   margin-top: -5px;
   padding: 0 20px;
 }
+
+.submit {
+  /deep/button {
+    width: 100%;
+  }
+}

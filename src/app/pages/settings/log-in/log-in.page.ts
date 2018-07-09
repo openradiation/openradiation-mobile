@@ -4,6 +4,9 @@ import { Router } from '@angular/router';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { Subscription } from 'rxjs/index';
 import { LogIn } from '../../../states/user/user.action';
+import { ToastController } from '@ionic/angular';
+import { catchError } from 'rxjs/operators';
+import { ErrorResponse, ErrorResponseCode } from '../../../states/measures/error-response';
 
 @Component({
   selector: 'app-log-in',
@@ -12,13 +15,15 @@ import { LogIn } from '../../../states/user/user.action';
 })
 export class LogInPage {
   loginForm: FormGroup;
+  connecting = false;
   private actionsSubscription: Subscription[] = [];
 
   constructor(
     private router: Router,
     private store: Store,
     private formBuilder: FormBuilder,
-    private actions: Actions
+    private actions: Actions,
+    private toastController: ToastController
   ) {
     this.loginForm = this.formBuilder.group({
       login: ['', Validators.required],
@@ -36,7 +41,37 @@ export class LogInPage {
   }
 
   onSubmit() {
-    this.store.dispatch(new LogIn(this.loginForm.value.login, this.loginForm.value.password));
+    this.connecting = true;
+    this.store
+      .dispatch(new LogIn(this.loginForm.value.login, this.loginForm.value.password))
+      .pipe(
+        catchError((error: ErrorResponse) => {
+          this.connecting = false;
+          switch (error.code) {
+            case ErrorResponseCode.WrongCredentials:
+              this.toastController
+                .create({
+                  message: 'Identifiants incorrects',
+                  closeButtonText: 'Ok',
+                  duration: 5000,
+                  showCloseButton: true
+                })
+                .then(toast => toast.present());
+              break;
+            default:
+              this.toastController
+                .create({
+                  message: `Connexion impossible : ${error.message}`,
+                  closeButtonText: 'Ok',
+                  duration: 5000,
+                  showCloseButton: true
+                })
+                .then(toast => toast.present());
+          }
+          throw error;
+        })
+      )
+      .subscribe();
   }
 
   goToSettings() {

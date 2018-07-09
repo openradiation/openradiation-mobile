@@ -14,7 +14,7 @@
                                                                                      href="https://www.openradiation.org/user/register">www.openradiation.org</a>,
         puis à le paramétrer ici (synchronisation ~5 min).
     </div>
-    <form [formGroup]="loginForm">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <ion-list>
             <ion-item color="dark">
                 <ion-label color="light" position="floating">Nom d'utilisateur</ion-label>
@@ -25,6 +25,13 @@
                 <ion-input type="password" formControlName="password" required></ion-input>
             </ion-item>
         </ion-list>
-        <ion-button fill="clear" class="flat-button" [disabled]="!loginForm.valid" (click)="onSubmit()">S'identifier</ion-button>
+        <ion-button fill="clear" class="flat-button submit" type="submit" [disabled]="!loginForm.valid">
+            <ng-container *ngIf="connecting; else notConnecting">
+                <ion-spinner color="light"></ion-spinner>
+            </ng-container>
+            <ng-template #notConnecting>
+                S'identifier
+            </ng-template>
+        </ion-button>
     </form>
 </ion-content>
