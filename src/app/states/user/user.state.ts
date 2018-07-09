@@ -1,7 +1,7 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { tap } from 'rxjs/operators';
 import { LogIn, LogOut } from './user.action';
 import { UserService } from './user.service';
-import { tap } from 'rxjs/operators';
 
 export interface UserStateModel {
   login?: string;

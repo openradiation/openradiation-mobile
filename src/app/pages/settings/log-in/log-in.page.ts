@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastController } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { Subscription } from 'rxjs/index';
-import { LogIn } from '../../../states/user/user.action';
-import { ToastController } from '@ionic/angular';
 import { catchError } from 'rxjs/operators';
 import { ErrorResponse, ErrorResponseCode } from '../../../states/measures/error-response';
+import { LogIn } from '../../../states/user/user.action';
 
 @Component({
   selector: 'app-log-in',
