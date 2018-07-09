@@ -1,5 +1,7 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { LogIn, LogOut } from './user.action';
+import { UserService } from './user.service';
+import { tap } from 'rxjs/operators';
 
 export interface UserStateModel {
   login?: string;
@@ -11,6 +13,8 @@ export interface UserStateModel {
   defaults: {}
 })
 export class UserState {
+  constructor(private userService: UserService) {}
+
   @Selector()
   static login(state: UserStateModel): string | undefined {
     return state.login;
@@ -18,10 +22,14 @@ export class UserState {
 
   @Action(LogIn)
   logIn({ patchState }: StateContext<UserStateModel>, action: LogIn) {
-    patchState({
-      login: action.login,
-      password: action.password
-    });
+    return this.userService.logIn(action.login, action.password).pipe(
+      tap(() =>
+        patchState({
+          login: action.login,
+          password: action.password
+        })
+      )
+    );
   }
 
   @Action(LogOut)
