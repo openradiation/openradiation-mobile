@@ -5,54 +5,62 @@ import { DisableAutoPublish, DisableExpertMode, EnableAutoPublish, EnableExpertM
 export interface MeasuresStateModel {
   measures: Measure[];
   currentMeasure?: Measure;
-  expertMode: boolean;
-  autoPublish: boolean;
+  params: {
+    expertMode: boolean;
+    autoPublish: boolean;
+  };
 }
 
 @State<MeasuresStateModel>({
   name: 'measures',
   defaults: {
     measures: [],
-    expertMode: false,
-    autoPublish: false
+    params: {
+      expertMode: false,
+      autoPublish: false
+    }
   }
 })
 export class MeasuresState {
   @Selector()
   static expertMode(state: MeasuresStateModel): boolean {
-    return state.expertMode;
+    return state.params.expertMode;
   }
 
   @Selector()
   static autoPublish(state: MeasuresStateModel): boolean {
-    return state.autoPublish;
+    return state.params.autoPublish;
   }
 
   @Action(EnableExpertMode)
-  enableExpertMode({ patchState }: StateContext<MeasuresStateModel>) {
+  enableExpertMode({ patchState, getState }: StateContext<MeasuresStateModel>) {
+    const state = getState();
     patchState({
-      expertMode: true
+      params: { ...state.params, expertMode: true }
     });
   }
 
   @Action(DisableExpertMode)
-  disableExpertMode({ patchState }: StateContext<MeasuresStateModel>) {
+  disableExpertMode({ patchState, getState }: StateContext<MeasuresStateModel>) {
+    const state = getState();
     patchState({
-      expertMode: false
+      params: { ...state.params, expertMode: false }
     });
   }
 
   @Action(EnableAutoPublish)
-  enableAutoPublish({ patchState }: StateContext<MeasuresStateModel>) {
+  enableAutoPublish({ patchState, getState }: StateContext<MeasuresStateModel>) {
+    const state = getState();
     patchState({
-      autoPublish: true
+      params: { ...state.params, autoPublish: true }
     });
   }
 
   @Action(DisableAutoPublish)
-  disableAutoPublish({ patchState }: StateContext<MeasuresStateModel>) {
+  disableAutoPublish({ patchState, getState }: StateContext<MeasuresStateModel>) {
+    const state = getState();
     patchState({
-      autoPublish: false
+      params: { ...state.params, autoPublish: false }
     });
   }
 }
