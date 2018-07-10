@@ -29,3 +29,11 @@ export class Measure {
     public sent = false
   ) {}
 }
+
+export enum PositionAccuracy {
+  Good,
+  Bad,
+  Error
+}
+
+export const POSITION_ACCURACY_THRESHOLD = 30;

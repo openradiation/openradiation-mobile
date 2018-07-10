@@ -19,6 +19,12 @@
     padding: 2px 10px;
     font-size: 14px;
     margin-bottom: 10px;
+    &.bad {
+      background-color: #ff7f00;
+    }
+    &.error {
+      background-color: #e70000;
+    }
   }
   .device-button {
     background-color: #090085;
