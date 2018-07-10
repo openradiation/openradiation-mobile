@@ -5,8 +5,8 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { HistoryPage } from './history.page';
 import { ComponentsModule } from '../../components/components.module';
+import { HistoryPage } from './history.page';
 
 const routes: Routes = [
   {

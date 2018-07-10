@@ -1,12 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
-  selector: 'manual-measure',
+  selector: 'app-manual-measure',
   templateUrl: './manual-measure.page.html',
   styleUrls: ['./manual-measure.page.scss']
 })
-export class ManualMeasurePage implements OnInit {
-  constructor() {}
-
-  ngOnInit() {}
-}
+export class ManualMeasurePage {}
