@@ -1,3 +1,5 @@
+import { Geoposition } from '@ionic-native/geolocation';
+
 export class EnableExpertMode {
   static readonly type = '[Measures] Enable expert mode';
 }
@@ -12,4 +14,17 @@ export class EnableAutoPublish {
 
 export class DisableAutoPublish {
   static readonly type = '[Measures] Disable auto publish';
+}
+
+export class StartWatchPosition {
+  static readonly type = '[Measures] Start watch position';
+}
+
+export class StopWatchPosition {
+  static readonly type = '[Measures] Stop watch position';
+}
+
+export class PositionChanged {
+  static readonly type = '[Measures] Position changed';
+  constructor(public position: Geoposition) {}
 }

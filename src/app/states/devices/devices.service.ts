@@ -62,7 +62,7 @@ export class DevicesService {
     ).pipe(tap(() => this.discoverDevices()));
   }
 
-  discoverDevices() {
+  private discoverDevices() {
     this.bleState
       .pipe(
         takeUntil(this.actions$.pipe(ofActionSuccessful(StopDiscoverDevices, BLEConnectionLost))),

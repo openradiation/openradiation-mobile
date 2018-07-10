@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { Actions, ofActionDispatched, ofActionErrored, ofActionSuccessful, Select, Store } from '@ngxs/store';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Device } from '../../../states/devices/device';
 import {
   BLEConnectionLost,
@@ -15,19 +15,19 @@ import {
   WaitForBLEConnection
 } from '../../../states/devices/devices.action';
 import { DevicesState } from '../../../states/devices/devices.state';
+import { AutoUnsubscribePage } from '../../auto-unsubscribe.page';
 
 @Component({
   selector: 'app-page-devices',
   templateUrl: './devices.page.html',
   styleUrls: ['./devices.page.scss']
 })
-export class DevicesPage {
+export class DevicesPage extends AutoUnsubscribePage {
   @Select(DevicesState.availableDevices) availableDevices$: Observable<Device[]>;
   @Select(DevicesState.knownDevices) knownDevices$: Observable<Device[]>;
   @Select(DevicesState.isScanning) isScanning$: Observable<boolean>;
   @Select(DevicesState.connectedDevice) connectedDevice$: Observable<Device>;
 
-  private actionsSubscription: Subscription[] = [];
   connectingDevice: Device | undefined;
 
   constructor(
@@ -35,10 +35,12 @@ export class DevicesPage {
     private toastController: ToastController,
     private router: Router,
     private actions$: Actions
-  ) {}
+  ) {
+    super();
+  }
 
   ionViewDidEnter() {
-    this.actionsSubscription.push(
+    this.subscriptions.push(
       this.actions$
         .pipe(ofActionSuccessful(WaitForBLEConnection))
         .subscribe(() => this.store.dispatch(new StartDiscoverDevices()).subscribe()),
@@ -49,16 +51,15 @@ export class DevicesPage {
         .subscribe((action: ConnectDevice) => (this.connectingDevice = action.device)),
       this.actions$.pipe(ofActionSuccessful(ConnectDevice)).subscribe(() => (this.connectingDevice = undefined))
     );
-    this.startDiscoverDevices();
+    this.store.dispatch(new StartDiscoverDevices()).subscribe();
   }
 
   ionViewWillLeave() {
-    this.actionsSubscription.forEach(subscription => subscription.unsubscribe());
-    this.actionsSubscription = [];
-    this.stopDiscoverDevices();
+    super.ionViewWillLeave();
+    this.store.dispatch(new StopDiscoverDevices()).subscribe();
   }
 
-  onBLEError() {
+  private onBLEError() {
     this.store.dispatch(new WaitForBLEConnection()).subscribe();
     this.toastController
       .create({
@@ -68,14 +69,6 @@ export class DevicesPage {
         showCloseButton: true
       })
       .then(toast => toast.present());
-  }
-
-  startDiscoverDevices() {
-    this.store.dispatch(new StartDiscoverDevices()).subscribe();
-  }
-
-  stopDiscoverDevices() {
-    this.store.dispatch(new StopDiscoverDevices()).subscribe();
   }
 
   connectDevice(device: Device) {
