@@ -30,7 +30,7 @@ import { UserState } from './states/user/user.state';
     NgxsModule.forRoot([DevicesState, MeasuresState, UserState]),
     NgxsFormPluginModule.forRoot(),
     NgxsStoragePluginModule.forRoot({
-      key: ['devices.knownDevices', 'measures.measures', 'measures.autoPublish', 'measures.expertMode', 'user']
+      key: ['devices.knownDevices', 'measures.measures', 'measures.params', 'user']
     }),
     NgxsLoggerPluginModule.forRoot(),
     NgxsReduxDevtoolsPluginModule.forRoot(),
