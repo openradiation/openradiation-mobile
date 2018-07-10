@@ -20,7 +20,7 @@
     font-size: 14px;
     margin-bottom: 10px;
   }
-  .connected-device-button {
+  .device-button {
     background-color: #090085;
     width: 70%;
     border-radius: 5px;
@@ -32,6 +32,23 @@
       padding: 4px;
       height: auto;
     }
+  }
+  .connected-device-header {
+    background-color: #045db8;
+    width: 70%;
+    border-radius: 5px 5px 0 0;
+    color: white;
+    font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    font-weight: 200;
+    padding: 4px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+  }
+  .connected-device-button {
+    @extend .device-button;
+    border-radius: 0 0 5px 5px;
   }
   .measure-button {
     margin: auto;
