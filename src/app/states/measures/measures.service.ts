@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
-import { switchMap, takeUntil, tap } from 'rxjs/operators';
-import { fromPromise } from 'rxjs/internal-compatibility';
-import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
-import { PositionChanged, StopWatchPosition } from './measures.action';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Platform } from '@ionic/angular';
+import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { defer, Observable, of } from 'rxjs';
+import { fromPromise } from 'rxjs/internal-compatibility';
+import { switchMap, takeUntil, tap } from 'rxjs/operators';
+import { PositionChanged, StopWatchPosition } from './measures.action';
 
 @Injectable({
   providedIn: 'root'

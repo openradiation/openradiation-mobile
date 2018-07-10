@@ -1,4 +1,6 @@
+import { Geoposition } from '@ionic-native/geolocation';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { tap } from 'rxjs/operators';
 import { Measure, POSITION_ACCURACY_THRESHOLD, PositionAccuracy } from './measure';
 import {
   DisableAutoPublish,
@@ -9,8 +11,6 @@ import {
   StartWatchPosition,
   StopWatchPosition
 } from './measures.action';
-import { tap } from 'rxjs/operators';
-import { Geoposition } from '@ionic-native/geolocation';
 import { MeasuresService } from './measures.service';
 
 export interface MeasuresStateModel {

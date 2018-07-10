@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
+import { ToastController } from '@ionic/angular';
 import { Actions, ofActionErrored, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { Device } from '../../states/devices/device';
 import { DevicesState } from '../../states/devices/devices.state';
+import { PositionAccuracy } from '../../states/measures/measure';
 import { StartWatchPosition, StopWatchPosition } from '../../states/measures/measures.action';
 import { MeasuresState } from '../../states/measures/measures.state';
 import { AutoUnsubscribePage } from '../auto-unsubscribe.page';
-import { ToastController } from '@ionic/angular';
-import { PositionAccuracy } from '../../states/measures/measure';
-import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-page-home',

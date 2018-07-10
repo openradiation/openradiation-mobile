@@ -1,0 +1,8 @@
+<div class="container" [ngClass]="{'closed': !opened}">
+    <div class="title" (click)="open.emit()">
+        {{title}}
+    </div>
+    <div class="text">
+        <ng-content></ng-content>
+    </div>
+</div>
