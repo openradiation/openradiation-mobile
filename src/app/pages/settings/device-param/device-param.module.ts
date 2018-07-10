@@ -6,8 +6,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { NgxsFormPluginModule } from '@ngxs/form-plugin';
-import { DeviceParamPage } from './device-param.page';
 import { ComponentsModule } from '../../../components/components.module';
+import { DeviceParamPage } from './device-param.page';
 
 const routes: Routes = [
   {

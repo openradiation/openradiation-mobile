@@ -10,6 +10,8 @@ import { MenuController, Platform } from '@ionic/angular';
   styleUrls: ['app.component.scss']
 })
 export class AppComponent {
+  keyboardOpen: boolean;
+
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
@@ -27,10 +29,17 @@ export class AppComponent {
       this.splashScreen.hide();
     });*/
     document.addEventListener('deviceready', () => {
-      this.statusBar.overlaysWebView(true);
+      // TODO activate back when it's fixed https://github.com/ionic-team/ionic/issues/13821
+      // this.statusBar.overlaysWebView(true);
       this.statusBar.styleLightContent();
       this.splashScreen.hide();
     });
+    // TODO remove when autoscroll to input is fixed https://github.com/ionic-team/ionic/issues/13821 https://github.com/ionic-team/ionic/issues/10629#issuecomment-395084125
+    window.addEventListener('keyboardDidShow', () => {
+      document.activeElement.scrollIntoView();
+    });
+    window.addEventListener('keyboardWillShow', () => (this.keyboardOpen = true));
+    window.addEventListener('keyboardWillHide', () => (this.keyboardOpen = false));
   }
 
   closeMenu() {

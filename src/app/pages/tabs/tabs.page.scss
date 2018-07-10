@@ -25,3 +25,15 @@
     background-image: url('assets/img/more.png');
   }
 }
+
+.keyboard-open :host {
+  /deep/ion-tabbar {
+    margin-bottom: -60px;
+  }
+}
+
+:host {
+  /deep/ion-tabbar {
+    transition: margin-bottom ease-in 200ms;
+  }
+}

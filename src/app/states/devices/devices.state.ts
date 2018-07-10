@@ -212,6 +212,8 @@ export class DevicesState {
         updatedDevice,
         ...state.knownDevices.slice(deviceIndex + 1)
       ];
+    } else {
+      patch.knownDevices = [...state.knownDevices, updatedDevice];
     }
     patchState(patch);
   }

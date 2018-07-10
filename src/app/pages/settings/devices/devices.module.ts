@@ -5,8 +5,8 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { DevicesPage } from './devices.page';
 import { ComponentsModule } from '../../../components/components.module';
+import { DevicesPage } from './devices.page';
 
 const routes: Routes = [
   {

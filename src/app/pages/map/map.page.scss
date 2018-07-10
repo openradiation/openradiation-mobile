@@ -8,7 +8,9 @@ iframe {
   position: relative;
   height: 100%;
   width: 100%;
-  padding-top: 4px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
 
   .spinner-container {
     top: 0;
@@ -19,5 +21,9 @@ iframe {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  app-category-label {
+    padding: 20px;
   }
 }
