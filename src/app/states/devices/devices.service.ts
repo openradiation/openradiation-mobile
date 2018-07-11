@@ -1,16 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BLE } from '@ionic-native/ble/ngx';
-import { Platform } from '@ionic/angular';
-import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
+import { AlertController, Platform, ToastController } from '@ionic/angular';
+import { Actions, ofActionDispatched, ofActionSuccessful, Store } from '@ngxs/store';
 import { merge, Observable, timer } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import {
   buffer,
   catchError,
-  filter,
   map,
   scan,
-  share,
   shareReplay,
   skip,
   switchMap,
@@ -22,54 +20,77 @@ import {
 import { DeviceType, RawDevice } from './abstract-device';
 import { Device, DeviceOGKit } from './device';
 import { DeviceOGKitService } from './device-og-kit.service';
-import { BLEConnectionLost, ConnectionLost, DevicesDiscovered, StopDiscoverDevices } from './devices.action';
+import {
+  BLEConnectionLost,
+  DeviceConnectionLost,
+  DevicesDiscovered,
+  StartDiscoverDevices,
+  StopDiscoverDevices
+} from './devices.action';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DevicesService {
   private serviceUUIDs = [DeviceOGKitService.serviceUUID];
-  private bleState: Observable<any>;
+  private currentAlert?: any;
 
   constructor(
     private ble: BLE,
     private platform: Platform,
     private actions$: Actions,
     private store: Store,
-    private deviceOGKitService: DeviceOGKitService
+    private diagnostic: Diagnostic,
+    private alertController: AlertController,
+    private deviceOGKitService: DeviceOGKitService,
+    private toastController: ToastController
   ) {
-    this.bleState = this.ble.startStateNotifications().pipe(share());
-    this.bleState.subscribe();
-  }
-
-  waitForBLEActivation(): Observable<any> {
-    return this.bleState.pipe(
-      takeUntil(this.actions$.pipe(ofActionSuccessful(StopDiscoverDevices))),
-      filter(notification => notification === 'on'),
-      take(1)
+    this.actions$.pipe(ofActionDispatched(StartDiscoverDevices)).subscribe(() => {
+      if (this.currentAlert) {
+        this.currentAlert.dismiss();
+        this.currentAlert = undefined;
+      }
+    });
+    this.actions$.pipe(ofActionSuccessful(DeviceConnectionLost)).subscribe(() =>
+      this.toastController
+        .create({
+          message: 'Connexion avec le capteur perdue',
+          showCloseButton: true,
+          duration: 3000,
+          closeButtonText: 'OK'
+        })
+        .then(toast => toast.present())
     );
   }
 
   startDiscoverDevices(): Observable<any> {
     return fromPromise(
-      this.ble.isEnabled().catch(err => {
-        if (this.platform.is('android')) {
-          return this.ble.enable();
-        } else {
+      this.ble
+        .isEnabled()
+        .catch(err => {
+          if (this.platform.is('android')) {
+            return this.ble.enable();
+          } else {
+            throw err;
+          }
+        })
+        .catch(err => {
+          this.onBLEError();
           throw err;
-        }
-      })
+        })
     ).pipe(tap(() => this.discoverDevices()));
   }
 
   private discoverDevices() {
-    this.bleState
-      .pipe(
-        takeUntil(this.actions$.pipe(ofActionSuccessful(StopDiscoverDevices, BLEConnectionLost))),
-        filter(notification => notification === 'off'),
-        take(1)
-      )
-      .subscribe(() => this.store.dispatch(new BLEConnectionLost()));
+    this.diagnostic.registerBluetoothStateChangeHandler((state: string) => {
+      switch (state) {
+        case this.diagnostic.bluetoothState.POWERED_OFF:
+          this.onBLEError();
+          this.store.dispatch(new BLEConnectionLost());
+          break;
+      }
+    });
     const time = timer(5000, 5000).pipe(
       takeUntil(this.actions$.pipe(ofActionSuccessful(StopDiscoverDevices, BLEConnectionLost)))
     );
@@ -104,7 +125,7 @@ export class DevicesService {
 
   connectDevice(device: Device): Observable<any> {
     const connection = this.ble.connect(device.sensorUUID).pipe(shareReplay());
-    connection.pipe(catchError(() => this.store.dispatch(new ConnectionLost()))).subscribe();
+    connection.pipe(catchError(() => this.store.dispatch(new DeviceConnectionLost()))).subscribe();
     return connection.pipe(take(1));
   }
 
@@ -117,5 +138,35 @@ export class DevicesService {
       case DeviceType.OGKIT:
         return this.deviceOGKitService.getDeviceInfo(device);
     }
+  }
+
+  private onBLEError() {
+    this.diagnostic.registerBluetoothStateChangeHandler(() => {
+      this.store.dispatch(new StartDiscoverDevices()).subscribe();
+      this.diagnostic.registerBluetoothStateChangeHandler(() => {});
+    });
+    this.alertController
+      .create({
+        header: 'Bluetooth désactivé',
+        message: `Le bluetooth est nécessaire pour la communication avec les capteurs. Merci de l'activer.`,
+        enableBackdropDismiss: false,
+        buttons: [
+          {
+            text: 'Accéder aux paramètres',
+            handler: () => {
+              if (this.platform.is('ios')) {
+                this.diagnostic.switchToSettings();
+              } else {
+                this.diagnostic.switchToBluetoothSettings();
+              }
+              return false;
+            }
+          }
+        ]
+      })
+      .then(alert => {
+        this.currentAlert = alert;
+        alert.present();
+      });
   }
 }

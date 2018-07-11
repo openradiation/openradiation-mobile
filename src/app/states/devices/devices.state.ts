@@ -1,12 +1,12 @@
-import { Action, Actions, ofActionSuccessful, Selector, State, StateContext } from '@ngxs/store';
+import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
-import { map, takeUntil, tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { DeviceParams } from './abstract-device';
 import { Device } from './device';
 import {
   BLEConnectionLost,
   ConnectDevice,
-  ConnectionLost,
+  DeviceConnectionLost,
   DevicesDiscovered,
   DisconnectDevice,
   EditDeviceParams,
@@ -14,8 +14,7 @@ import {
   StartDiscoverDevices,
   StopDiscoverDevices,
   UpdateDevice,
-  UpdateDeviceInfo,
-  WaitForBLEConnection
+  UpdateDeviceInfo
 } from './devices.action';
 import { DevicesService } from './devices.service';
 
@@ -42,7 +41,7 @@ export interface DevicesStateModel {
   }
 })
 export class DevicesState {
-  constructor(private devicesService: DevicesService, private actions$: Actions) {}
+  constructor(private devicesService: DevicesService) {}
 
   @Selector()
   static availableDevices(state: DevicesStateModel): Device[] {
@@ -96,13 +95,6 @@ export class DevicesState {
     });
   }
 
-  @Action(WaitForBLEConnection, { cancelUncompleted: true })
-  waitForBLEConnection() {
-    return this.devicesService
-      .waitForBLEActivation()
-      .pipe(takeUntil(this.actions$.pipe(ofActionSuccessful(StopDiscoverDevices))));
-  }
-
   @Action(BLEConnectionLost)
   bleConnectionLost({ patchState }: StateContext<DevicesStateModel>) {
     patchState({
@@ -142,8 +134,8 @@ export class DevicesState {
     );
   }
 
-  @Action(ConnectionLost)
-  connectionLost({ patchState }: StateContext<DevicesStateModel>) {
+  @Action(DeviceConnectionLost)
+  deviceConnectionLost({ patchState }: StateContext<DevicesStateModel>) {
     patchState({
       connectedDevice: undefined
     });

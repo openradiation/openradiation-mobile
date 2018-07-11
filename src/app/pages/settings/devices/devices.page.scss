@@ -1,3 +1,5 @@
+@import 'src/theme/variables';
+
 .loading:after {
   overflow: hidden;
   display: inline-block;
@@ -25,4 +27,12 @@
 
 .clickable-device:not(:first-child) {
   margin-top: 5px;
+}
+
+.state {
+  font-size: 16px;
+  font-weight: 200;
+  &.connected {
+    font-weight: normal;
+  }
 }
