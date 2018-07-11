@@ -9,11 +9,11 @@ export class DeviceOGKit extends AbstractDevice {
   };
   paramsModel = {
     audiHits: {
-      label: 'audiHits',
+      label: 'Signal audio pour les coups',
       type: DeviceParamType.boolean
     },
     visualHist: {
-      label: 'visualHits',
+      label: 'Signal visuel pour les coups',
       type: DeviceParamType.boolean
     }
   };
