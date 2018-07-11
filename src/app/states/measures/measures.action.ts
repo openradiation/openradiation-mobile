@@ -1,4 +1,5 @@
 import { Geoposition } from '@ionic-native/geolocation';
+import { AbstractDevice } from '../devices/abstract-device';
 
 export class EnableExpertMode {
   static readonly type = '[Measures] Enable expert mode';
@@ -27,4 +28,9 @@ export class StopWatchPosition {
 export class PositionChanged {
   static readonly type = '[Measures] Position changed';
   constructor(public position: Geoposition) {}
+}
+
+export class StartMeasure {
+  static readonly type = '[Measures] Start measure';
+  constructor(public device: AbstractDevice) {}
 }

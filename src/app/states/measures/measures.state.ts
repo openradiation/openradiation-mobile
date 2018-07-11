@@ -8,10 +8,12 @@ import {
   EnableAutoPublish,
   EnableExpertMode,
   PositionChanged,
+  StartMeasure,
   StartWatchPosition,
   StopWatchPosition
 } from './measures.action';
-import { MeasuresService } from './measures.service';
+import { PositionService } from './position.service';
+import { Device } from '@ionic-native/device/ngx';
 
 export interface MeasuresStateModel {
   measures: Measure[];
@@ -36,7 +38,7 @@ export interface MeasuresStateModel {
   }
 })
 export class MeasuresState {
-  constructor(private measuresService: MeasuresService) {}
+  constructor(private measuresService: PositionService, private device: Device) {}
 
   @Selector()
   static expertMode(state: MeasuresStateModel): boolean {
@@ -120,5 +122,24 @@ export class MeasuresState {
     patchState({
       currentPosition: action.position
     });
+  }
+
+  @Action(StartMeasure)
+  startMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, action: StartMeasure) {
+    const state = getState();
+    if (state.currentPosition) {
+      patchState({
+        currentMeasure: new Measure(
+          action.device,
+          state.currentPosition,
+          '',
+          this.device.uuid,
+          this.device.platform,
+          this.device.version,
+          this.device.model,
+          Date.now()
+        )
+      });
+    }
   }
 }
