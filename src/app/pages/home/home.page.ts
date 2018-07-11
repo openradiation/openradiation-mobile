@@ -32,7 +32,7 @@ export class HomePage extends AutoUnsubscribePage {
     this.router.events
       .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd && event.url !== '/#'))
       .subscribe(event => {
-        if (event.url === '/tabs/(home:home)') {
+        if (event.urlAfterRedirects === '/tabs/(home:home)') {
           this.store.dispatch(new StartWatchPosition()).subscribe();
           this.subscriptions.push(
             this.actions$.pipe(ofActionErrored(StartWatchPosition)).subscribe(() => this.onGPSError())
