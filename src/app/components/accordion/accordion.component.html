@@ -1,5 +1,6 @@
 <div class="container" [ngClass]="{'closed': !opened}">
     <div class="title" (click)="open.emit()">
+        <ion-ripple-effect *ngIf="!opened"></ion-ripple-effect>
         {{title}}
     </div>
     <div class="text">

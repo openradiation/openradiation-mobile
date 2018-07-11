@@ -4,16 +4,19 @@
   border: 1px solid white;
   background-color: transparent;
   color: white;
-  padding: 15px;
   border-radius: 5px;
   margin-bottom: 5px;
   .title {
     font-family: 'ARIALROUNDED', Arial, Helvetica, sans-serif;
     font-size: 20px;
+    position: relative;
+    padding: 15px;
+    padding-bottom: 10px;
   }
   .text {
     padding-top: 10px;
-    margin-top: 10px;
+    margin: 15px;
+    margin-top: 0;
     font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
     font-size: 12px;
     text-align: justify;
