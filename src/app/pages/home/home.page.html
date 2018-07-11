@@ -28,7 +28,7 @@
                 Pas de capteur<br>CLIQUEZ ICI
             </ion-button>
         </ng-template>
-        <ion-button class="measure-button" fill="clear" [disabled]="!(connectedDevice$ | async)"
+        <ion-button class="measure-button" fill="clear" [disabled]="!(connectedDevice$ | async) || ((positionAccuracy$ | async) === positionAccuracy.Error)"
                     (click)="startMeasure()">
             <img [src]="(connectedDevice$ | async) ? 'assets/img/button-home-on.png' : 'assets/img/button-home-off.png'">
         </ion-button>

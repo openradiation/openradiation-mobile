@@ -19,6 +19,7 @@ import { AppComponent } from './app.component';
 import { DevicesState } from './states/devices/devices.state';
 import { MeasuresState } from './states/measures/measures.state';
 import { UserState } from './states/user/user.state';
+import { Device } from '@ionic-native/device/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -43,7 +44,8 @@ import { UserState } from './states/user/user.state';
     BLE,
     Geolocation,
     Diagnostic,
-    Network
+    Network,
+    Device
   ],
   bootstrap: [AppComponent]
 })

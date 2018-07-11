@@ -31,6 +31,7 @@
     "@angular/router": "6.0.6",
     "@ionic-native/ble": "5.0.0-beta.11",
     "@ionic-native/core": "5.0.0-beta.11",
+    "@ionic-native/device": "^5.0.0-beta.13",
     "@ionic-native/diagnostic": "^5.0.0-beta.13",
     "@ionic-native/geolocation": "^5.0.0-beta.13",
     "@ionic-native/ionic-webview": "^5.0.0-beta.13",

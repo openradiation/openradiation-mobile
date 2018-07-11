@@ -1,15 +1,15 @@
 import { inject, TestBed } from '@angular/core/testing';
 
-import { MeasuresService } from './measures.service';
+import { PositionService } from './position.service';
 
-describe('MeasuresService', () => {
+describe('PositionService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [MeasuresService]
+      providers: [PositionService]
     });
   });
 
-  it('should be created', inject([MeasuresService], (service: MeasuresService) => {
+  it('should be created', inject([PositionService], (service: PositionService) => {
     expect(service).toBeTruthy();
   }));
 });
