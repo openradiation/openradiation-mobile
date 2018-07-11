@@ -23,8 +23,8 @@ export class DisconnectDevice {
   constructor() {}
 }
 
-export class ConnectionLost {
-  static readonly type = '[Devices] Connection lost';
+export class DeviceConnectionLost {
+  static readonly type = '[Devices] Device connection lost';
 }
 
 export class UpdateDeviceInfo {
@@ -45,10 +45,6 @@ export class SaveDeviceParams {
 export class UpdateDevice {
   static readonly type = '[Devices] Update device';
   constructor(public device: Device, public update: Partial<Device>) {}
-}
-
-export class WaitForBLEConnection {
-  static readonly type = '[Devices] Wait for BLE connection';
 }
 
 export class BLEConnectionLost {

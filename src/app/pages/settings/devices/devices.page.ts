@@ -1,21 +1,19 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { ToastController } from '@ionic/angular';
-import { Actions, ofActionDispatched, ofActionErrored, ofActionSuccessful, Select, Store } from '@ngxs/store';
+import { NavigationEnd, Router } from '@angular/router';
+import { Actions, ofActionDispatched, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { Device } from '../../../states/devices/device';
 import {
-  BLEConnectionLost,
   ConnectDevice,
   DisconnectDevice,
   EditDeviceParams,
   StartDiscoverDevices,
   StopDiscoverDevices,
-  UpdateDeviceInfo,
-  WaitForBLEConnection
+  UpdateDeviceInfo
 } from '../../../states/devices/devices.action';
 import { DevicesState } from '../../../states/devices/devices.state';
 import { AutoUnsubscribePage } from '../../auto-unsubscribe.page';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-page-devices',
@@ -30,45 +28,24 @@ export class DevicesPage extends AutoUnsubscribePage {
 
   connectingDevice: Device | undefined;
 
-  constructor(
-    private store: Store,
-    private toastController: ToastController,
-    private router: Router,
-    private actions$: Actions
-  ) {
+  constructor(private store: Store, private router: Router, private actions$: Actions) {
     super();
-  }
-
-  ionViewDidEnter() {
-    this.subscriptions.push(
-      this.actions$
-        .pipe(ofActionSuccessful(WaitForBLEConnection))
-        .subscribe(() => this.store.dispatch(new StartDiscoverDevices()).subscribe()),
-      this.actions$.pipe(ofActionErrored(StartDiscoverDevices)).subscribe(() => this.onBLEError()),
-      this.actions$.pipe(ofActionSuccessful(BLEConnectionLost)).subscribe(() => this.onBLEError()),
-      this.actions$
-        .pipe(ofActionDispatched(ConnectDevice))
-        .subscribe((action: ConnectDevice) => (this.connectingDevice = action.device)),
-      this.actions$.pipe(ofActionSuccessful(ConnectDevice)).subscribe(() => (this.connectingDevice = undefined))
-    );
-    this.store.dispatch(new StartDiscoverDevices()).subscribe();
-  }
-
-  ionViewWillLeave() {
-    super.ionViewWillLeave();
-    this.store.dispatch(new StopDiscoverDevices()).subscribe();
-  }
-
-  private onBLEError() {
-    this.store.dispatch(new WaitForBLEConnection()).subscribe();
-    this.toastController
-      .create({
-        message: 'Bluetooth not available, please active it',
-        closeButtonText: 'Ok',
-        duration: 3000,
-        showCloseButton: true
-      })
-      .then(toast => toast.present());
+    this.router.events
+      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd && event.url !== '/#'))
+      .subscribe(event => {
+        if (event.urlAfterRedirects === '/tabs/(settings:devices)') {
+          this.subscriptions.push(
+            this.actions$
+              .pipe(ofActionDispatched(ConnectDevice))
+              .subscribe((action: ConnectDevice) => (this.connectingDevice = action.device)),
+            this.actions$.pipe(ofActionSuccessful(ConnectDevice)).subscribe(() => (this.connectingDevice = undefined))
+          );
+          this.store.dispatch(new StartDiscoverDevices()).subscribe();
+        } else {
+          this.store.dispatch(new StopDiscoverDevices()).subscribe();
+          this.ionViewWillLeave();
+        }
+      });
   }
 
   connectDevice(device: Device) {
