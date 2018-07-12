@@ -1,8 +1,9 @@
 {
   "name": "OpenRadiation",
-  "type": "angular",
   "integrations": {
     "cordova": {}
   },
+  "type": "angular",
+  "app_id": "",
   "hooks": {}
 }
