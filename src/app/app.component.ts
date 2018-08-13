@@ -24,7 +24,8 @@ export class AppComponent {
   initializeApp() {
     // TODO use platform.ready() again when it's fixed https://github.com/ionic-team/ionic/issues/14647
     /*this.platform.ready().then(() => {
-      this.statusBar.overlaysWebView(true);
+      // TODO activate back when it's fixed https://github.com/ionic-team/ionic/issues/13821
+      // this.statusBar.overlaysWebView(true);
       this.statusBar.styleLightContent();
       this.splashScreen.hide();
     });*/
