@@ -3,7 +3,5 @@
   "integrations": {
     "cordova": {}
   },
-  "type": "angular",
-  "app_id": "",
-  "hooks": {}
+  "type": "angular"
 }
