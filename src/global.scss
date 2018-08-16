@@ -47,12 +47,12 @@
   font-smooth: always;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 ion-content {
   background: linear-gradient(to bottom, $base-color, $third-color);
-  /deep/ion-scroll {
-    // TODO disable when we can use this.statusBar.overlaysWebView(true) https://github.com/ionic-team/ionic/issues/13821
-    padding-top: 0 !important;
-  }
 }
 
 ion-item {

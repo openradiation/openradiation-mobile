@@ -1,6 +1,6 @@
 <app-header [backButton]="true" (backButtonClick)="goToSettings()">Capteurs</app-header>
 
-<ion-content padding>
+<ion-content>
     <ion-list>
         <app-category-label *ngIf="isScanning$ | async">
             <span class="loading">Recherche des capteurs</span>
