@@ -21,6 +21,9 @@ iframe {
     display: flex;
     align-items: center;
     justify-content: center;
+    ion-spinner {
+      color: white;
+    }
   }
 
   app-category-label {
