@@ -5,7 +5,7 @@
         <app-category-label>
             Capteurs
         </app-category-label>
-        <ion-item button detail color="dark" (click)="goToDevices()">
+        <ion-item button detail (click)="goToDevices()">
             <ion-label>
                 Liste des capteurs
             </ion-label>
@@ -16,7 +16,7 @@
             Compte utilisateur
         </app-category-label>
         <ng-container *ngIf="login$ | async as login; else notLoggedIn">
-            <ion-item color="dark">
+            <ion-item>
                 <ion-label>
                     Identifié comme<br>{{login}}
                 </ion-label>
@@ -26,7 +26,7 @@
             </ion-item>
         </ng-container>
         <ng-template #notLoggedIn>
-            <ion-item color="dark">
+            <ion-item>
                 <ion-label>
                     Non identifié
                 </ion-label>
@@ -40,12 +40,12 @@
         <app-category-label>
             Mesures
         </app-category-label>
-        <ion-item button detail color="dark" (click)="goToMeasuresParam()">
+        <ion-item button detail (click)="goToMeasuresParam()">
             <ion-label>
                 Publication automatique des mesures
             </ion-label>
         </ion-item>
-        <ion-item color="dark">
+        <ion-item>
             <ion-label>
                 Mode expert
             </ion-label>

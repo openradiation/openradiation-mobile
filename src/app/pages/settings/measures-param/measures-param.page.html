@@ -11,7 +11,7 @@
             position GPS au moment de la mesure (voir le détail sur <a target="_blank"
                                                                        href="https://www.openradiation.org/conditions-dutilisation">www.openradiation.org/conditions-dutilisation</a>).
         </div>
-        <ion-item color="dark">
+        <ion-item>
             <ion-label>Publication automatique</ion-label>
             <ion-toggle color="success" [ngModel]="autoPublish$ | async" (ngModelChange)="toggleAutoPublish($event)"></ion-toggle>
         </ion-item>
