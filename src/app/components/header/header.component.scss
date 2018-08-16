@@ -1,4 +1,3 @@
-@import '~@ionic/angular/dist/components/app/app';
 @import 'src/theme/variables.scss';
 
 .keyboard-open :host {
@@ -11,6 +10,7 @@
 
 .container {
   background: $base-color;
+  padding-top: 20px;
   .logo {
     display: flex;
     align-items: center;
@@ -39,20 +39,5 @@
       font-size: 30px;
       font-family: 'ARIALROUNDED', Arial, Helvetica, sans-serif;
     }
-  }
-}
-
-// TODO disable when we can use this.statusBar.overlaysWebView(true) https://github.com/ionic-team/ionic/issues/13821
-$app-md-statusbar-padding: 0;
-$app-ios-statusbar-padding: 0;
-
-.app-md :host {
-  .container {
-    padding-top: $app-md-statusbar-padding + 4px;
-  }
-}
-.app-ios :host {
-  .container {
-    padding-top: $app-ios-statusbar-padding + 4px;
   }
 }

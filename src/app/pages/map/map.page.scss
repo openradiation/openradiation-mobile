@@ -1,29 +1,33 @@
-iframe {
-  height: 100%;
-  width: 100%;
-  border: none;
-}
+ion-content {
+  --padding-top: 24px;
 
-.content {
-  position: relative;
-  height: 100%;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-  display: flex;
-
-  .spinner-container {
-    top: 0;
-    left: 0;
+  .content {
+    position: relative;
     height: 100%;
     width: 100%;
-    position: absolute;
-    display: flex;
     align-items: center;
     justify-content: center;
-  }
+    display: flex;
 
-  app-category-label {
-    padding: 20px;
+    iframe {
+      height: 100%;
+      width: 100%;
+      border: none;
+    }
+
+    .spinner-container {
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    app-category-label {
+      padding: 20px;
+    }
   }
 }
