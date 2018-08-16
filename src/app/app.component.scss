@@ -5,9 +5,10 @@ ion-content {
 }
 
 ion-item {
-  border-bottom: $base-color 1px solid;
-  color: $base-color;
   --detail-push-color: $base-color;
+  background: white;
+  color: $base-color;
+  border-bottom: $base-color 1px solid;
 }
 
 ion-item:last-child {
