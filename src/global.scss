@@ -55,19 +55,28 @@ ion-content {
   background: linear-gradient(to bottom, $base-color, $third-color);
 }
 
+ion-list {
+  margin: 0;
+  background: transparent;
+}
+
 ion-item {
   --detail-push-color: rgba(255, 255, 255, 0.6);
   color: white;
   font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
   font-weight: 200;
   --background-active: transparent;
+  --background: transparent;
+  --border-color: white;
 
-  .item.item-input.item-input-has-focus:last-child {
-    border-bottom-color: $second-color;
+  &.item-has-focus {
+    --border-color: #{$second-color};
+    --ion-color-primary: #{$second-color};
   }
-  .item.item-input-has-focus ion-label {
-    color: $second-color;
-  }
+}
+
+.item.item-input-has-focus ion-label {
+  color: $second-color;
 }
 
 ion-button {
@@ -77,12 +86,12 @@ ion-button {
 }
 
 ion-button.flat-button {
-  --background: #3c1d7c;
+  --background: #{$second-color};
   color: white;
 }
 
 ion-button.flat-button-alt {
-  --background: #045cb8;
+  --background: #{$base-color};
   color: white;
 }
 
@@ -91,6 +100,10 @@ a {
 }
 
 ion-toggle {
-  --checked-background: #00a0dd;
-  --checked-knob: #3c1d7c;
+  --checked-background: #{$third-color};
+  --checked-knob: #{$second-color};
+}
+
+ion-spinner {
+  color: white;
 }

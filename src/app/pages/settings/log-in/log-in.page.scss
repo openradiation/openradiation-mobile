@@ -1,18 +1,21 @@
+@import 'src/theme/variables.scss';
+
+ion-content {
+  --padding-top: 20px;
+  --padding-end: 20px;
+  --padding-bottom: 20px;
+  --padding-start: 20px;
+}
+
 .notice {
   color: white;
   text-align: justify;
-  padding: 10px;
   font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
-  font-size: 15px;
-}
-
-form {
-  margin-top: -5px;
-  padding: 0 20px;
+  font-weight: 200;
+  font-size: 14px;
+  padding-bottom: 10px;
 }
 
 .submit {
-  /deep/button {
-    width: 100%;
-  }
+  width: 100%;
 }
