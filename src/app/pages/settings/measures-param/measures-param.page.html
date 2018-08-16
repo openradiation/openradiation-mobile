@@ -1,16 +1,18 @@
 <app-header [backButton]="true" (backButtonClick)="goToSettings()">Mesures</app-header>
 
 <ion-content>
+    <div class="notice">
+        En activant la publication automatique des mesures, les mesures que vous faites et les données associées
+        sont automatiquement envoyées à la base collaborative OpenRadiation, et publiées sous licence <a
+            target="_blank" href="https://www.openradiation.org/les-donnees">ODC-ODbL (Open Database License)</a>.
+    </div>
+    <div class="notice">
+        Les données transmises correspondent aux données que vous saisissez, ainsi que des informations sur le
+        modèle et l'identifiant du capteur et/ou du téléphone utilisé, votre nom d'utilisateur, ainsi que la
+        position GPS au moment de la mesure (voir le détail sur <a target="_blank"
+                                                                   href="https://www.openradiation.org/conditions-dutilisation">www.openradiation.org/conditions-dutilisation</a>).
+    </div>
     <ion-list>
-        <div class="notice">
-            En activant la publication automatique des mesures, les mesures que vous faites et les données associées
-            sont automatiquement envoyées à la base collaborative OpenRadiation, et publiées sous licence <a
-                target="_blank" href="https://www.openradiation.org/les-donnees">ODC-ODbL (Open Database License)</a>.
-            Les données transmises correspondent aux données que vous saisissez, ainsi que des informations sur le
-            modèle et l'identifiant du capteur et/ou du téléphone utilisé, votre nom d'utilisateur, ainsi que la
-            position GPS au moment de la mesure (voir le détail sur <a target="_blank"
-                                                                       href="https://www.openradiation.org/conditions-dutilisation">www.openradiation.org/conditions-dutilisation</a>).
-        </div>
         <ion-item>
             <ion-label>Publication automatique</ion-label>
             <ion-toggle [ngModel]="autoPublish$ | async" (ngModelChange)="toggleAutoPublish($event)"></ion-toggle>
