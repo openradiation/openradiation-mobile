@@ -16,11 +16,11 @@
     </div>
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <ion-list>
-            <ion-item color="dark">
+            <ion-item>
                 <ion-label color="light" position="floating">Nom d'utilisateur</ion-label>
                 <ion-input formControlName="login" required></ion-input>
             </ion-item>
-            <ion-item color="dark">
+            <ion-item>
                 <ion-label color="light" position="floating">Mot de passe</ion-label>
                 <ion-input type="password" formControlName="password" required></ion-input>
             </ion-item>

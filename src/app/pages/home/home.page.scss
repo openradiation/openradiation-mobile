@@ -1,3 +1,5 @@
+@import 'src/theme/variables';
+
 .content {
   display: flex;
   flex-direction: column;
@@ -5,11 +7,15 @@
   height: 100%;
   .logo {
     width: 66%;
+    img {
+      width: 100%;
+    }
   }
   .subtitle {
-    color: #00a0dd;
+    color: $third-color;
     font-size: 20px;
     font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+    font-weight: 200;
     margin: 10px;
   }
   .gps-indicator {
@@ -18,7 +24,9 @@
     border-radius: 5px;
     padding: 2px 10px;
     font-size: 14px;
-    margin-bottom: 10px;
+    margin: 10px;
+    font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+    font-weight: 200;
     &.bad {
       background-color: #ff7f00;
     }
@@ -29,15 +37,15 @@
   .device-button {
     background-color: #090085;
     width: 70%;
+    font-size: 18px;
+    font-weight: 200;
     border-radius: 5px;
-    /deep/button {
-      width: 100%;
-      font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
-      font-size: 18px;
-      font-weight: 200;
-      padding: 4px;
-      height: auto;
-    }
+    --height: auto;
+    --width: 100%;
+    --padding-top: 4px;
+    --padding-end: 4px;
+    --padding-bottom: 4px;
+    --padding-start: 4px;
   }
   .connected-device-header {
     background-color: #045db8;
@@ -57,13 +65,18 @@
     border-radius: 0 0 5px 5px;
   }
   .measure-button {
-    margin: auto;
-    /deep/button {
-      height: auto;
-      padding: 0;
-      margin: 0;
-      border-radius: 50%;
-      background-color: transparent;
-    }
+    margin: auto 0;
+    --height: auto;
+    --width: 100%;
+    --padding-top: 0;
+    --padding-end: 0;
+    --padding-bottom: 0;
+    --padding-start: 0;
+    --margin-top: 0;
+    --margin-end: 0;
+    --margin-bottom: 0;
+    --margin-start: 0;
+    --border-radius: 50%;
+    --ion-background-color: transparent;
   }
 }

@@ -48,24 +48,19 @@
 }
 
 ion-content {
+  background: linear-gradient(to bottom, $base-color, $third-color);
   /deep/ion-scroll {
-    background: linear-gradient(to bottom, $base-color, #00a0dd);
     // TODO disable when we can use this.statusBar.overlaysWebView(true) https://github.com/ionic-team/ionic/issues/13821
     padding-top: 0 !important;
-  }
-  &.no-scroll {
-    .scroll-inner {
-      height: 100%;
-    }
   }
 }
 
 ion-item {
-  .item.item-detail-push {
-    .item-inner {
-      background-image: url("data:image/svg+xml;charset=utf-8,<svg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2012%2020'><path%20d='M2,20l-2-2l8-8L0,2l2-2l10,10L2,20z'%20fill='rgba(255,255,255,0.6)'/></svg>");
-    }
-  }
+  --detail-push-color: rgba(255, 255, 255, 0.6);
+  color: white;
+  font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+  font-weight: 200;
+  --background-active: transparent;
 
   .item.item-input.item-input-has-focus:last-child {
     border-bottom-color: $second-color;
@@ -75,20 +70,27 @@ ion-item {
   }
 }
 
+ion-button {
+  font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+  font-weight: 200;
+  color: white;
+}
+
 ion-button.flat-button {
-  button {
-    background-color: $second-color;
-    color: white;
-  }
+  --background: #3c1d7c;
+  color: white;
 }
 
 ion-button.flat-button-alt {
-  button {
-    background-color: $base-color;
-    color: white;
-  }
+  --background: #045cb8;
+  color: white;
 }
 
 a {
   color: $second-color !important;
+}
+
+ion-toggle {
+  --checked-background: #00a0dd;
+  --checked-knob: #3c1d7c;
 }

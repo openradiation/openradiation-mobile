@@ -19,12 +19,12 @@
         </ng-container>
         <ng-container *ngIf="connectedDevice$ | async as connectedDevice; else noConnectedDevice">
             <div class="connected-device-header">Capteur connecté</div>
-            <ion-button class="connected-device-button" color="light" fill="clear" (click)="goToDevices()">
+            <ion-button class="connected-device-button" fill="clear" (click)="goToDevices()">
                 {{connectedDevice.apparatusVersion}} / {{connectedDevice.apparatusId}}
             </ion-button>
         </ng-container>
         <ng-template #noConnectedDevice>
-            <ion-button class="device-button" color="light" fill="clear" (click)="goToDevices()">
+            <ion-button class="device-button" fill="clear" (click)="goToDevices()">
                 Pas de capteur<br>CLIQUEZ ICI
             </ion-button>
         </ng-template>
