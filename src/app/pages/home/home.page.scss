@@ -37,7 +37,7 @@ ion-content {
       }
     }
     .device-button {
-      background-color: #090085;
+      background-color: $second-color;
       width: 70%;
       font-size: 18px;
       font-weight: 200;
@@ -50,7 +50,7 @@ ion-content {
       --padding-start: 4px;
     }
     .connected-device-header {
-      background-color: #045db8;
+      background-color: $base-color;
       width: 70%;
       border-radius: 5px 5px 0 0;
       color: white;

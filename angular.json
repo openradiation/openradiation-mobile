@@ -29,6 +29,11 @@
                 "glob": "**/*.svg",
                 "input": "node_modules/@ionic/angular/dist/ionic/svg",
                 "output": "./svg"
+              },
+              {
+                "glob": "**/*.svg",
+                "input": "src/assets/icon",
+                "output": "./svg"
               }
             ],
             "styles": [
@@ -100,6 +105,11 @@
                 "glob": "**/*",
                 "input": "src/assets",
                 "output": "/assets"
+              },
+              {
+                "glob": "**/*.svg",
+                "input": "src/assets/icon",
+                "output": "/svg"
               }
             ]
           }
