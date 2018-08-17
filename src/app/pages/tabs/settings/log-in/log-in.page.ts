@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
-import { catchError } from 'rxjs/operators';
+import { catchError, take } from 'rxjs/operators';
 import { ErrorResponse, ErrorResponseCode } from '../../../../states/measures/error-response';
 import { LogIn } from '../../../../states/user/user.action';
 import { AutoUnsubscribePage } from '../../../auto-unsubscribe.page';
+import { StartManualMeasure } from '../../../../states/measures/measures.action';
 
 @Component({
   selector: 'app-log-in',
@@ -16,13 +17,15 @@ import { AutoUnsubscribePage } from '../../../auto-unsubscribe.page';
 export class LogInPage extends AutoUnsubscribePage {
   loginForm: FormGroup;
   connecting = false;
+  startMeasureAfterLogin = false;
 
   constructor(
     private router: Router,
     private store: Store,
     private formBuilder: FormBuilder,
     private toastController: ToastController,
-    private actions$: Actions
+    private actions$: Actions,
+    private activatedRoute: ActivatedRoute
   ) {
     super();
     this.loginForm = this.formBuilder.group({
@@ -32,7 +35,16 @@ export class LogInPage extends AutoUnsubscribePage {
   }
 
   ionViewDidEnter() {
-    this.subscriptions.push(this.actions$.pipe(ofActionSuccessful(LogIn)).subscribe(() => this.goToSettings()));
+    this.activatedRoute.queryParams
+      .pipe(take(1))
+      .subscribe(queryParams => (this.startMeasureAfterLogin = queryParams.startMeasureAfterLogin));
+    this.subscriptions.push(
+      this.actions$.pipe(ofActionSuccessful(LogIn)).subscribe(() => {
+        if (!this.startMeasureAfterLogin) {
+          this.goToSettings();
+        }
+      })
+    );
   }
 
   onSubmit() {
@@ -66,7 +78,11 @@ export class LogInPage extends AutoUnsubscribePage {
           throw error;
         })
       )
-      .subscribe();
+      .subscribe(() => {
+        if (this.startMeasureAfterLogin) {
+          this.store.dispatch(new StartManualMeasure());
+        }
+      });
   }
 
   goToSettings() {
