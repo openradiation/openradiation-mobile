@@ -5,7 +5,17 @@
   position: absolute;
   width: 100%;
 
+  &.ion-page-invisible {
+    opacity: 0;
+  }
+
   ion-content {
     flex: auto;
+  }
+}
+
+.keyboard-open :host {
+  ion-content {
+    --keyboard-offset: 230px;
   }
 }

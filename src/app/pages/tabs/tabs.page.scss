@@ -4,15 +4,3 @@ ion-tabs {
   --ion-tabbar-text-color: #{transparentize($second-color, 0.6)};
   --ion-tabbar-text-color-active: #{$second-color};
 }
-
-.keyboard-open :host {
-  /deep/ion-tabbar {
-    margin-bottom: -60px;
-  }
-}
-
-:host {
-  /deep/ion-tabbar {
-    transition: margin-bottom ease-in 200ms;
-  }
-}

@@ -23,10 +23,9 @@ export class AppComponent {
     private router: Router
   ) {
     this.initializeApp();
-    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
-      this.currentUrl = event.url;
-      console.log(this.currentUrl);
-    });
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => (this.currentUrl = event.url));
   }
 
   initializeApp() {
@@ -34,10 +33,6 @@ export class AppComponent {
       this.statusBar.overlaysWebView(true);
       this.statusBar.styleLightContent();
       this.splashScreen.hide();
-    });
-    // TODO remove when autoscroll to input is fixed https://github.com/ionic-team/ionic/issues/13821 https://github.com/ionic-team/ionic/issues/10629#issuecomment-395084125
-    window.addEventListener('keyboardDidShow', () => {
-      document.activeElement.scrollIntoView();
     });
     window.addEventListener('keyboardWillShow', () => (this.keyboardOpen = true));
     window.addEventListener('keyboardWillHide', () => (this.keyboardOpen = false));
