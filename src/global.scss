@@ -100,8 +100,8 @@ a {
 }
 
 ion-toggle {
-  --checked-background: #{$third-color};
-  --checked-knob: #{$second-color};
+  --background-checked: #{$third-color};
+  --handle-background-checked: #{$second-color};
 }
 
 ion-spinner {
