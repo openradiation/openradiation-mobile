@@ -41,4 +41,9 @@ export class AppComponent {
   closeMenu() {
     this.menuController.close();
   }
+
+  startManualMeasure() {
+    this.closeMenu();
+    this.router.navigate(['measure', 'manual']);
+  }
 }

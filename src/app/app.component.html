@@ -3,7 +3,7 @@
         <ion-menu side="end" type="push">
             <ion-content>
                 <ion-list>
-                    <ion-item detail (click)="closeMenu()" href="tabs/(other:manual-measure)" [ngClass]="{'active' : currentUrl === '/tabs/(other:manual-measure)'}">
+                    <ion-item detail (click)="startManualMeasure()" [ngClass]="{'active' : currentUrl === '/measure/manual'}">
                         <ion-label>
                             Saisie manuelle
                         </ion-label>
