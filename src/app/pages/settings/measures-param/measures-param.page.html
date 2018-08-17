@@ -13,7 +13,7 @@
                                                                    href="https://www.openradiation.org/conditions-dutilisation">www.openradiation.org/conditions-dutilisation</a>).
     </div>
     <ion-list>
-        <ion-item>
+        <ion-item class="no-padding">
             <ion-label>Publication automatique</ion-label>
             <ion-toggle [ngModel]="autoPublish$ | async" (ngModelChange)="toggleAutoPublish($event)"></ion-toggle>
         </ion-item>
