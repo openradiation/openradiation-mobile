@@ -34,3 +34,7 @@ export class StartMeasure {
   static readonly type = '[Measures] Start measure';
   constructor(public device: AbstractDevice) {}
 }
+
+export class StartManualMeasure {
+  static readonly type = '[Measures] Start manual measure';
+}

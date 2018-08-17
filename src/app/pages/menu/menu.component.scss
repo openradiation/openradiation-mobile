@@ -1,0 +1,25 @@
+@import 'src/theme/variables.scss';
+@import 'src/app/components/page/page';
+
+ion-content {
+  background: dimgray;
+  --padding-top: 24px;
+}
+
+ion-item {
+  --detail-push-color: $base-color;
+  background: white;
+  color: $base-color;
+  border-bottom: $base-color 1px solid;
+}
+
+ion-item:last-child {
+  border-bottom: none;
+}
+
+ion-item.active {
+  --detail-push-color: white;
+  background: $base-color;
+  color: white;
+  border-bottom: none;
+}

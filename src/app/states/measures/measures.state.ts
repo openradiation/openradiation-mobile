@@ -8,6 +8,7 @@ import {
   EnableAutoPublish,
   EnableExpertMode,
   PositionChanged,
+  StartManualMeasure,
   StartMeasure,
   StartWatchPosition,
   StopWatchPosition
@@ -130,14 +131,42 @@ export class MeasuresState {
     if (state.currentPosition) {
       patchState({
         currentMeasure: new Measure(
-          action.device,
           state.currentPosition,
+          action.device.sensorUUID,
+          action.device.apparatusId,
+          action.device.apparatusVersion,
+          action.device.apparatusSensorType,
+          action.device.apparatusTubeType,
           '',
           this.device.uuid,
           this.device.platform,
           this.device.version,
           this.device.model,
           Date.now()
+        )
+      });
+    }
+  }
+
+  @Action(StartManualMeasure)
+  startManualMeasure({ getState, patchState }: StateContext<MeasuresStateModel>) {
+    const state = getState();
+    if (state.currentPosition) {
+      patchState({
+        currentMeasure: new Measure(
+          state.currentPosition,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          '',
+          this.device.uuid,
+          this.device.platform,
+          this.device.version,
+          this.device.model,
+          Date.now(),
+          true
         )
       });
     }
