@@ -6,7 +6,7 @@
   "description": "Les citoyens mesurent la radioactivité.",
   "scripts": {
     "ng": "ng",
-    "start": "ionic serve",
+    "start": "ionic serve --no-open",
     "build": "ionic build",
     "prepare": "ionic cordova prepare",
     "build:android": "ionic cordova build android",
@@ -40,7 +40,7 @@
     "@ionic-native/network": "5.0.0-beta.14",
     "@ionic-native/splash-screen": "5.0.0-beta.14",
     "@ionic-native/status-bar": "5.0.0-beta.14",
-    "@ionic/angular": "^4.0.0-beta.2",
+    "@ionic/angular": "^4.0.0-beta.3",
     "@ionic/ng-toolkit": "^1.0.0",
     "@ionic/schematics-angular": "^1.0.0",
     "@ngxs/devtools-plugin": "^3.1.4",
@@ -49,9 +49,8 @@
     "@ngxs/router-plugin": "^3.1.4",
     "@ngxs/storage-plugin": "^3.1.4",
     "@ngxs/store": "^3.1.4",
-    "@types/text-encoding": "0.0.32",
-    "cordova-android": "7.1.1",
-    "cordova-ios": "4.5.5",
+    "cordova-android": "^7.1.1",
+    "cordova-ios": "^4.5.5",
     "cordova-plugin-ble-central": "^1.2.2",
     "cordova-plugin-compat": "^1.2.0",
     "cordova-plugin-device": "^2.0.2",
@@ -94,7 +93,7 @@
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.10.0",
-    "typescript": "~2.7.2",
+    "typescript": "2.9.2",
     "webpack-bundle-analyzer": "^2.13.1"
   },
   "cordova": {

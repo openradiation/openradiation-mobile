@@ -79,7 +79,7 @@ export class PositionService {
       .create({
         header: 'Position - Permission refusée',
         message: `La position de l'appareil est nécessaire au bon fonctionnement de l'application. Merci d'accepter la permission.`,
-        enableBackdropDismiss: false,
+        backdropDismiss: false,
         buttons: [
           {
             text: 'Accéder aux paramètres',
@@ -109,7 +109,7 @@ export class PositionService {
       .create({
         header: 'Position - GPS désactivé',
         message: `La position de l'appareil est nécessaire au bon fonctionnement de l'application. Merci d'activer le GPS.`,
-        enableBackdropDismiss: false,
+        backdropDismiss: false,
         buttons: [
           {
             text: 'Accéder aux paramètres',

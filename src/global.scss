@@ -73,10 +73,10 @@ ion-item {
     --border-color: #{$second-color};
     --ion-color-primary: #{$second-color};
   }
-}
 
-.item.item-input-has-focus ion-label {
-  color: $second-color;
+  &.no-padding {
+    --inner-padding-end: 0;
+  }
 }
 
 ion-button {

@@ -149,7 +149,7 @@ export class DevicesService {
       .create({
         header: 'Bluetooth désactivé',
         message: `Le bluetooth est nécessaire pour la communication avec les capteurs. Merci de l'activer.`,
-        enableBackdropDismiss: false,
+        backdropDismiss: false,
         buttons: [
           {
             text: 'Accéder aux paramètres',
