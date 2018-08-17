@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { MenuController, Platform } from '@ionic/angular';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -11,14 +13,20 @@ import { MenuController, Platform } from '@ionic/angular';
 })
 export class AppComponent {
   keyboardOpen: boolean;
+  currentUrl: string;
 
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private menuController: MenuController
+    private menuController: MenuController,
+    private router: Router
   ) {
     this.initializeApp();
+    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
+      this.currentUrl = event.url;
+      console.log(this.currentUrl);
+    });
   }
 
   initializeApp() {

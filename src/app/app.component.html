@@ -3,20 +3,17 @@
         <ion-menu side="end" type="push">
             <ion-content>
                 <ion-list>
-                    <ion-item detail [routerDirection]="'root'" (click)="closeMenu()" routerLinkActive="active"
-                              [routerLink]="['tabs', {outlets: {other: 'manual-measure' ,home: null, measures: null, settings: null, map: null}}]">
+                    <ion-item detail (click)="closeMenu()" href="tabs/(other:manual-measure)" [ngClass]="{'active' : currentUrl === '/tabs/(other:manual-measure)'}">
                         <ion-label>
                             Saisie manuelle
                         </ion-label>
                     </ion-item>
-                    <ion-item detail [routerDirection]="'root'" (click)="closeMenu()" routerLinkActive="active"
-                              [routerLink]="['tabs', {outlets: {other: 'about' ,home: null, measures: null, settings: null, map: null}}]">
+                    <ion-item detail (click)="closeMenu()" href="tabs/(other:about)" [ngClass]="{'active' : currentUrl === '/tabs/(other:about)'}">
                         <ion-label>
                             À propos
                         </ion-label>
                     </ion-item>
-                    <ion-item detail [routerDirection]="'root'" (click)="closeMenu()" routerLinkActive="active"
-                              [routerLink]="['tabs', {outlets: {other: 'legal-notice' ,home: null, measures: null, settings: null, map: null}}]">
+                    <ion-item detail (click)="closeMenu()" href="tabs/(other:legal-notice)" [ngClass]="{'active' : currentUrl === '/tabs/(other:legal-notice)'}">
                         <ion-label>
                             Mentions légales
                         </ion-label>
