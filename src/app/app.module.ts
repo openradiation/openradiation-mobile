@@ -20,9 +20,10 @@ import { DevicesState } from './states/devices/devices.state';
 import { MeasuresState } from './states/measures/measures.state';
 import { UserState } from './states/user/user.state';
 import { Device } from '@ionic-native/device/ngx';
+import { MenuComponent } from './pages/menu/menu.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, MenuComponent],
   entryComponents: [],
   imports: [
     BrowserModule,

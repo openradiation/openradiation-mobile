@@ -2,9 +2,7 @@ import { Component } from '@angular/core';
 
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { MenuController, Platform } from '@ionic/angular';
-import { NavigationEnd, Router } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-root',
@@ -13,19 +11,9 @@ import { filter } from 'rxjs/operators';
 })
 export class AppComponent {
   keyboardOpen: boolean;
-  currentUrl: string;
 
-  constructor(
-    private platform: Platform,
-    private splashScreen: SplashScreen,
-    private statusBar: StatusBar,
-    private menuController: MenuController,
-    private router: Router
-  ) {
+  constructor(private platform: Platform, private splashScreen: SplashScreen, private statusBar: StatusBar) {
     this.initializeApp();
-    this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe((event: NavigationEnd) => (this.currentUrl = event.url));
   }
 
   initializeApp() {
@@ -36,14 +24,5 @@ export class AppComponent {
     });
     window.addEventListener('keyboardWillShow', () => (this.keyboardOpen = true));
     window.addEventListener('keyboardWillHide', () => (this.keyboardOpen = false));
-  }
-
-  closeMenu() {
-    this.menuController.close();
-  }
-
-  startManualMeasure() {
-    this.closeMenu();
-    this.router.navigate(['measure', 'manual']);
   }
 }
