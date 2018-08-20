@@ -24,6 +24,18 @@ ion-content {
   }
 }
 
+ion-item {
+  --min-height: 60px;
+}
+
+.battery-icon {
+  display: flex;
+  align-items: center;
+  ion-icon {
+    margin-right: 4px;
+  }
+}
+
 .inner-button {
   z-index: 10;
 }

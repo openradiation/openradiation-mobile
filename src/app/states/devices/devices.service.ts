@@ -129,7 +129,10 @@ export class DevicesService {
   }
 
   connectDevice(device: Device): Observable<any> {
-    const connection = this.ble.connect(device.sensorUUID).pipe(shareReplay());
+    const connection = this.ble.connect(device.sensorUUID).pipe(
+      tap(console.log),
+      shareReplay()
+    );
     connection.pipe(catchError(() => this.store.dispatch(new DeviceConnectionLost()))).subscribe();
     return connection.pipe(take(1));
   }
@@ -139,11 +142,11 @@ export class DevicesService {
   }
 
   getDeviceInfo(device: Device): Observable<Partial<Device>> {
-    switch (device.apparatusVersion) {
+    switch (device.deviceType) {
       case DeviceType.OGKit:
         return this.deviceOGKitService.getDeviceInfo(<DeviceOGKit>device);
       case DeviceType.AtomTag:
-        return this.deviceAtomTagService.getDeviceInfo();
+        return this.deviceAtomTagService.getDeviceInfo(<DeviceAtomTag>device);
     }
   }
 

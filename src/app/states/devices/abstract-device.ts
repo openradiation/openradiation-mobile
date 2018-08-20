@@ -1,5 +1,6 @@
 export abstract class AbstractDevice {
-  abstract readonly apparatusVersion: DeviceType;
+  abstract readonly deviceType: DeviceType;
+  apparatusVersion: string;
   apparatusId: string;
   sensorUUID: string;
   apparatusSensorType: string;
@@ -9,8 +10,6 @@ export abstract class AbstractDevice {
 
   constructor(rawDevice: RawDevice) {
     this.sensorUUID = rawDevice.id;
-    const manufacturerData = new Uint8Array(rawDevice.advertising).slice(23, 29);
-    this.apparatusId = new TextDecoder('utf8').decode(manufacturerData);
   }
 }
 

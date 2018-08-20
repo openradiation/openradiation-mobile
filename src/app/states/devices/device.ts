@@ -1,7 +1,8 @@
-import { AbstractDevice, DeviceParams, DeviceParamType, DeviceType } from './abstract-device';
+import { AbstractDevice, DeviceParams, DeviceParamType, DeviceType, RawDevice } from './abstract-device';
 
 export class DeviceOGKit extends AbstractDevice {
-  readonly apparatusVersion = DeviceType.OGKit;
+  readonly deviceType = DeviceType.OGKit;
+  apparatusVersion = DeviceType.OGKit;
 
   params: DeviceParams = {
     audiHits: true,
@@ -17,10 +18,17 @@ export class DeviceOGKit extends AbstractDevice {
       type: DeviceParamType.boolean
     }
   };
+
+  constructor(rawDevice: RawDevice) {
+    super(rawDevice);
+    const manufacturerData = new Uint8Array(rawDevice.advertising).slice(23, 29);
+    this.apparatusId = new TextDecoder('utf8').decode(manufacturerData);
+  }
 }
 
 export class DeviceAtomTag extends AbstractDevice {
-  readonly apparatusVersion: DeviceType = DeviceType.AtomTag;
+  readonly deviceType: DeviceType = DeviceType.AtomTag;
+  batteryLevel: number;
 
   params: DeviceParams = {
     audiHits: true,
@@ -36,6 +44,14 @@ export class DeviceAtomTag extends AbstractDevice {
       type: DeviceParamType.boolean
     }
   };
+
+  constructor(rawDevice: RawDevice) {
+    super(rawDevice);
+    this.apparatusVersion = DeviceType.AtomTag;
+    const data = new Uint8Array(rawDevice.advertising);
+    this.batteryLevel = data[28];
+    this.apparatusId = rawDevice.id;
+  }
 }
 
 export type Device = DeviceOGKit | DeviceAtomTag;
