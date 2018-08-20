@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Actions, ofActionDispatched, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { Device } from '../../../../states/devices/device';
@@ -13,7 +13,6 @@ import {
 } from '../../../../states/devices/devices.action';
 import { DevicesState } from '../../../../states/devices/devices.state';
 import { AutoUnsubscribePage } from '../../../auto-unsubscribe.page';
-import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-page-devices',
@@ -34,22 +33,21 @@ export class DevicesPage extends AutoUnsubscribePage {
 
   constructor(private store: Store, private router: Router, private actions$: Actions) {
     super();
-    this.router.events
-      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd && event.url !== '/#'))
-      .subscribe(event => {
-        if (event.urlAfterRedirects === '/tabs/(settings:devices)') {
-          this.subscriptions.push(
-            this.actions$
-              .pipe(ofActionDispatched(ConnectDevice))
-              .subscribe((action: ConnectDevice) => (this.connectingDevice = action.device)),
-            this.actions$.pipe(ofActionSuccessful(ConnectDevice)).subscribe(() => (this.connectingDevice = undefined))
-          );
-          this.store.dispatch(new StartDiscoverDevices()).subscribe();
-        } else {
-          this.store.dispatch(new StopDiscoverDevices()).subscribe();
-          this.ionViewWillLeave();
-        }
-      });
+  }
+
+  ionViewDidEnter() {
+    this.subscriptions.push(
+      this.actions$
+        .pipe(ofActionDispatched(ConnectDevice))
+        .subscribe((action: ConnectDevice) => (this.connectingDevice = action.device)),
+      this.actions$.pipe(ofActionSuccessful(ConnectDevice)).subscribe(() => (this.connectingDevice = undefined))
+    );
+    this.store.dispatch(new StartDiscoverDevices()).subscribe();
+  }
+
+  ionViewWillLeave() {
+    this.store.dispatch(new StopDiscoverDevices()).subscribe();
+    super.ionViewWillLeave();
   }
 
   connectDevice(device: Device) {
