@@ -49,15 +49,26 @@ export class HomePage extends AutoUnsubscribePage {
   }
 
   goToDevices() {
-    this.router.navigate([
-      'tabs',
-      {
-        outlets: {
-          settings: 'devices',
-          home: null
+    this.router
+      .navigate([
+        'tabs',
+        {
+          outlets: {
+            settings: 'settings',
+            home: null
+          }
         }
-      }
-    ]);
+      ])
+      .then(() =>
+        this.router.navigate([
+          'tabs',
+          {
+            outlets: {
+              settings: 'devices'
+            }
+          }
+        ])
+      );
   }
 
   startMeasure() {
