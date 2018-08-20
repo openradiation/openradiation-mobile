@@ -9,7 +9,7 @@ import { DeviceOGKit } from './device';
   providedIn: 'root'
 })
 export class DeviceOGKitService /*extends AbstractDeviceService<DeviceOGKit>*/ {
-  static serviceUUID = '00002220-0000-1000-8000-00805F9B34FB';
+  private static serviceUUID = '00002220-0000-1000-8000-00805F9B34FB';
   private static sendCharacteristic = '00002222-0000-1000-8000-00805F9B34FB';
   private static receiveCharacteristic = '00002221-0000-1000-8000-00805F9B34FB';
 
