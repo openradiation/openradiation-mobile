@@ -67,6 +67,11 @@ export class MeasuresState {
     }
   }
 
+  @Selector()
+  static isWatchingPosition(state: MeasuresStateModel): boolean {
+    return state.isWatchingPosition;
+  }
+
   @Action(EnableExpertMode)
   enableExpertMode({ getState, patchState }: StateContext<MeasuresStateModel>) {
     const state = getState();
