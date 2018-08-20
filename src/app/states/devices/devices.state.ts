@@ -188,7 +188,7 @@ export class DevicesState {
   }
 
   @Action(UpdateDevice)
-  updateItem({ patchState, getState }: StateContext<DevicesStateModel>, action: UpdateDevice) {
+  updateDevice({ patchState, getState }: StateContext<DevicesStateModel>, action: UpdateDevice) {
     const state = getState();
     const patch: Partial<DevicesStateModel> = {};
     const updatedDevice: Device = <Device>{ ...action.device, ...action.update };
@@ -196,11 +196,11 @@ export class DevicesState {
       patch.connectedDevice = updatedDevice;
     }
     const deviceIndex = state.knownDevices.findIndex(
-      knownDevice => knownDevice.sensorUUID === action.device.sensorUUID
+      knownDevice => knownDevice.sensorUUID === updatedDevice.sensorUUID
     );
     if (deviceIndex > -1) {
       patch.knownDevices = [
-        ...state.knownDevices.slice(0, deviceIndex - 1),
+        ...state.knownDevices.slice(0, Math.max(deviceIndex - 1, 0)),
         updatedDevice,
         ...state.knownDevices.slice(deviceIndex + 1)
       ];
