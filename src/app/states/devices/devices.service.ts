@@ -18,7 +18,7 @@ import {
   throttleTime
 } from 'rxjs/operators';
 import { DeviceType, RawDevice } from './abstract-device';
-import { Device, DeviceOGKit } from './device';
+import { Device, DeviceAtomTag, DeviceOGKit } from './device';
 import { DeviceOGKitService } from './device-og-kit.service';
 import {
   BLEConnectionLost,
@@ -28,13 +28,15 @@ import {
   StopDiscoverDevices
 } from './devices.action';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { DeviceAtomTagService } from './device-atom-tag.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DevicesService {
-  private serviceUUIDs = [DeviceOGKitService.serviceUUID];
   private currentAlert?: any;
+  private scanDuration = 3;
+  private scanPeriod = 5000;
 
   constructor(
     private ble: BLE,
@@ -44,6 +46,7 @@ export class DevicesService {
     private diagnostic: Diagnostic,
     private alertController: AlertController,
     private deviceOGKitService: DeviceOGKitService,
+    private deviceAtomTagService: DeviceAtomTagService,
     private toastController: ToastController
   ) {
     this.actions$.pipe(ofActionDispatched(StartDiscoverDevices)).subscribe(() => {
@@ -91,16 +94,16 @@ export class DevicesService {
           break;
       }
     });
-    const time = timer(5000, 5000).pipe(
+    const time = timer(this.scanPeriod, this.scanPeriod).pipe(
       takeUntil(this.actions$.pipe(ofActionSuccessful(StopDiscoverDevices, BLEConnectionLost)))
     );
     merge(
-      this.ble.scan(this.serviceUUIDs, 3).pipe(
+      this.ble.scan([], this.scanDuration).pipe(
         scan<RawDevice>((devices, newDevice) => [...devices, newDevice], []),
         throttleTime(100)
       ),
       time.pipe(
-        switchMap(() => this.ble.scan(this.serviceUUIDs, 3)),
+        switchMap(() => this.ble.scan([], this.scanDuration)),
         buffer(time),
         skip(1)
       )
@@ -110,12 +113,14 @@ export class DevicesService {
           rawDevices
             .sort((a, b) => b.rssi - a.rssi)
             .map(rawDevice => {
-              switch (rawDevice.name) {
-                case DeviceType.OGKIT:
+              if (rawDevice.name) {
+                if (rawDevice.name.includes(DeviceType.OGKit)) {
                   return new DeviceOGKit(rawDevice);
-                default:
-                  return null;
+                } else if (rawDevice.name.includes(DeviceType.AtomTag)) {
+                  return new DeviceAtomTag(rawDevice);
+                }
               }
+              return null;
             })
             .filter((device): device is Device => device !== null)
         )
@@ -135,8 +140,10 @@ export class DevicesService {
 
   getDeviceInfo(device: Device): Observable<Partial<Device>> {
     switch (device.apparatusVersion) {
-      case DeviceType.OGKIT:
-        return this.deviceOGKitService.getDeviceInfo(device);
+      case DeviceType.OGKit:
+        return this.deviceOGKitService.getDeviceInfo(<DeviceOGKit>device);
+      case DeviceType.AtomTag:
+        return this.deviceAtomTagService.getDeviceInfo();
     }
   }
 
