@@ -191,7 +191,7 @@ export class DevicesState {
   updateItem({ patchState, getState }: StateContext<DevicesStateModel>, action: UpdateDevice) {
     const state = getState();
     const patch: Partial<DevicesStateModel> = {};
-    const updatedDevice = { ...action.device, ...action.update };
+    const updatedDevice: Device = <Device>{ ...action.device, ...action.update };
     if (state.connectedDevice && state.connectedDevice.sensorUUID === action.device.sensorUUID) {
       patch.connectedDevice = updatedDevice;
     }

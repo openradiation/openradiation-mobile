@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BLE } from '@ionic-native/ble/ngx';
 import { Observable } from 'rxjs';
 import { filter, scan, shareReplay, take, tap } from 'rxjs/operators';
-import { Device, DeviceOGKit } from './device';
+import { DeviceOGKit } from './device';
 
 // Todo add inheritance when angular issue fixed https://github.com/angular/angular/issues/24011
 @Injectable({
@@ -28,7 +28,7 @@ export class DeviceOGKitService /*extends AbstractDeviceService<DeviceOGKit>*/ {
       ArrayBuffer
     >data.buffer);
     return startNotification.pipe(
-      scan((update: Partial<Device>, buffer: ArrayBuffer) => {
+      scan((update: Partial<DeviceOGKit>, buffer: ArrayBuffer) => {
         const array = new Uint8Array(buffer);
         switch (array[0]) {
           case DeviceOGKitService.OUT_PACKET_SENSOR_TYPE:
