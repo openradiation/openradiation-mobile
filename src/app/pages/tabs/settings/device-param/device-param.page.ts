@@ -38,14 +38,25 @@ export class DeviceParamPage {
 
   goToDevices() {
     this.store.dispatch(new SaveDeviceParams()).subscribe(() =>
-      this.router.navigate([
-        'tabs',
-        {
-          outlets: {
-            settings: 'devices'
+      this.router
+        .navigate([
+          'tabs',
+          {
+            outlets: {
+              settings: 'settings'
+            }
           }
-        }
-      ])
+        ])
+        .then(() =>
+          this.router.navigate([
+            'tabs',
+            {
+              outlets: {
+                settings: 'devices'
+              }
+            }
+          ])
+        )
     );
   }
 }
