@@ -20,6 +20,8 @@ export class HomePage extends AutoUnsubscribePage {
   connectedDevice$: Observable<Device>;
   @Select(MeasuresState.positionAccuracy)
   positionAccuracy$: Observable<PositionAccuracy>;
+  @Select(MeasuresState.isWatchingPosition)
+  isWatchingPosition$: Observable<boolean>;
 
   positionAccuracy = PositionAccuracy;
 
@@ -36,8 +38,12 @@ export class HomePage extends AutoUnsubscribePage {
               .subscribe(() => this.router.navigate(['measure', 'scan']))
           );
         } else {
-          this.store.dispatch(new StopWatchPosition());
-          this.ionViewWillLeave();
+          this.isWatchingPosition$.pipe(take(1)).subscribe(isWatchingPosition => {
+            if (isWatchingPosition) {
+              this.store.dispatch(new StopWatchPosition());
+              this.ionViewWillLeave();
+            }
+          });
         }
       });
   }
