@@ -7,6 +7,7 @@ import { fromPromise } from 'rxjs/internal-compatibility';
 import {
   buffer,
   catchError,
+  concatMap,
   map,
   scan,
   shareReplay,
@@ -131,6 +132,7 @@ export class DevicesService {
   connectDevice(device: Device): Observable<any> {
     const connection = this.ble.connect(device.sensorUUID).pipe(
       tap(console.log),
+      concatMap(() => this.saveDeviceParams(device)),
       shareReplay()
     );
     connection.pipe(catchError(() => this.store.dispatch(new DeviceConnectionLost()))).subscribe();
