@@ -150,6 +150,15 @@ export class DevicesService {
     }
   }
 
+  saveDeviceParams(device: Device): Observable<any> {
+    switch (device.deviceType) {
+      case DeviceType.OGKit:
+        return this.deviceOGKitService.saveDeviceParams(<DeviceOGKit>device);
+      case DeviceType.AtomTag:
+        return this.deviceAtomTagService.saveDeviceParams(<DeviceAtomTag>device);
+    }
+  }
+
   private onBLEError() {
     this.diagnostic.registerBluetoothStateChangeHandler(() => {
       this.store.dispatch(new StartDiscoverDevices()).subscribe();

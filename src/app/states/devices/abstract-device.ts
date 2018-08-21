@@ -6,7 +6,8 @@ export abstract class AbstractDevice {
   apparatusSensorType: string;
   apparatusTubeType: string;
   params?: DeviceParams;
-  paramsModel?: { [K: string]: DeviceParamModel };
+  paramsModel?: DeviceParamsModel;
+  batteryLevel?: number;
 
   constructor(rawDevice: RawDevice) {
     this.sensorUUID = rawDevice.id;
@@ -33,6 +34,10 @@ export interface RawDevice {
 
 export interface DeviceParams {
   [K: string]: DeviceParamValue;
+}
+
+export interface DeviceParamsModel {
+  [K: string]: DeviceParamModel;
 }
 
 export interface DeviceParamModel {

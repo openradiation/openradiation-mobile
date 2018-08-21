@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BLE } from '@ionic-native/ble/ngx';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { filter, scan, shareReplay, take, tap } from 'rxjs/operators';
 import { DeviceOGKit } from './device';
 
@@ -50,6 +50,10 @@ export class DeviceOGKitService /*extends AbstractDeviceService<DeviceOGKit>*/ {
         )
       )
     );
+  }
+
+  saveDeviceParams(device: DeviceOGKit): Observable<any> {
+    return of(null);
   }
 
   private static decodeBuffer(array: Uint8Array): string {

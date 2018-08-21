@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BLE } from '@ionic-native/ble/ngx';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { DeviceAtomTag } from './device';
 import { map } from 'rxjs/operators';
 import { fromPromise } from 'rxjs/internal-compatibility';
@@ -13,6 +13,7 @@ import { DeviceType } from './abstract-device';
 export class DeviceAtomTagService /*extends AbstractDeviceService<DeviceAtomTag>*/ {
   private static firmwareServiceUUIID = '180a';
   private static firmwareCharacteristic = '2a26';
+  private static settingsCharacteristic = 'EA50CFCD­AC4A­4A48­BF0E­879E548AE157';
 
   constructor(protected ble: BLE) {}
 
@@ -33,5 +34,9 @@ export class DeviceAtomTagService /*extends AbstractDeviceService<DeviceAtomTag>
         };
       })
     );
+  }
+
+  saveDeviceParams(device: DeviceAtomTag): Observable<any> {
+    return of(null);
   }
 }
