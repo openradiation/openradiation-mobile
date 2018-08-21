@@ -185,9 +185,13 @@ export class DevicesState {
         ...state.editedDevice,
         ...{ params: { ...state.editedDeviceForm.model } }
       };
-      return this.devicesService
-        .saveDeviceParams(updatedDevice)
-        .pipe(map(() => dispatch(new UpdateDevice(updatedDevice))));
+      if (state.connectedDevice && state.connectedDevice.sensorUUID === state.editedDevice.sensorUUID) {
+        return this.devicesService
+          .saveDeviceParams(updatedDevice)
+          .pipe(map(() => dispatch(new UpdateDevice(updatedDevice))));
+      } else {
+        return dispatch(new UpdateDevice(updatedDevice));
+      }
     } else {
       return of();
     }
