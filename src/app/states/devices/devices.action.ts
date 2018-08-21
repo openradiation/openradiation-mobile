@@ -44,7 +44,7 @@ export class SaveDeviceParams {
 
 export class UpdateDevice {
   static readonly type = '[Devices] Update device';
-  constructor(public device: Device, public update: Partial<Device>) {}
+  constructor(public device: Device) {}
 }
 
 export class BLEConnectionLost {

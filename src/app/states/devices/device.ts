@@ -1,15 +1,22 @@
-import { AbstractDevice, DeviceParams, DeviceParamType, DeviceType, RawDevice } from './abstract-device';
+import {
+  AbstractDevice,
+  DeviceParams,
+  DeviceParamsModel,
+  DeviceParamType,
+  DeviceType,
+  RawDevice
+} from './abstract-device';
 
 export class DeviceOGKit extends AbstractDevice {
   readonly deviceType = DeviceType.OGKit;
   apparatusVersion = DeviceType.OGKit;
 
   params: DeviceParams = {
-    audiHits: true,
+    audioHits: true,
     visualHits: true
   };
-  paramsModel = {
-    audiHits: {
+  paramsModel: DeviceParamsModel = {
+    audioHits: {
       label: 'Signal audio pour les coups',
       type: DeviceParamType.boolean
     },
@@ -28,14 +35,13 @@ export class DeviceOGKit extends AbstractDevice {
 
 export class DeviceAtomTag extends AbstractDevice {
   readonly deviceType: DeviceType = DeviceType.AtomTag;
-  batteryLevel: number;
 
   params: DeviceParams = {
-    audiHits: true,
+    audioHits: true,
     vibrationHits: true
   };
-  paramsModel = {
-    audiHits: {
+  paramsModel: DeviceParamsModel = {
+    audioHits: {
       label: 'Signal audio pour les coups',
       type: DeviceParamType.boolean
     },

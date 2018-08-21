@@ -161,7 +161,7 @@ export class DevicesState {
   updateDeviceInfo({ dispatch }: StateContext<DevicesStateModel>, action: UpdateDeviceInfo) {
     return this.devicesService
       .getDeviceInfo(action.device)
-      .pipe(map((update: Partial<Device>) => dispatch(new UpdateDevice(action.device, update))));
+      .pipe(map((update: Partial<Device>) => dispatch(new UpdateDevice({ ...action.device, ...update }))));
   }
 
   @Action(EditDeviceParams)
@@ -181,7 +181,13 @@ export class DevicesState {
   saveDeviceParams({ getState, dispatch }: StateContext<DevicesStateModel>) {
     const state = getState();
     if (state.editedDevice && state.editedDeviceForm) {
-      return dispatch(new UpdateDevice(state.editedDevice, { params: { ...state.editedDeviceForm.model } }));
+      const updatedDevice = {
+        ...state.editedDevice,
+        ...{ params: { ...state.editedDeviceForm.model } }
+      };
+      return this.devicesService
+        .saveDeviceParams(updatedDevice)
+        .pipe(map(() => dispatch(new UpdateDevice(updatedDevice))));
     } else {
       return of();
     }
@@ -191,21 +197,20 @@ export class DevicesState {
   updateDevice({ patchState, getState }: StateContext<DevicesStateModel>, action: UpdateDevice) {
     const state = getState();
     const patch: Partial<DevicesStateModel> = {};
-    const updatedDevice: Device = <Device>{ ...action.device, ...action.update };
     if (state.connectedDevice && state.connectedDevice.sensorUUID === action.device.sensorUUID) {
-      patch.connectedDevice = updatedDevice;
+      patch.connectedDevice = action.device;
     }
     const deviceIndex = state.knownDevices.findIndex(
-      knownDevice => knownDevice.sensorUUID === updatedDevice.sensorUUID
+      knownDevice => knownDevice.sensorUUID === action.device.sensorUUID
     );
     if (deviceIndex > -1) {
       patch.knownDevices = [
         ...state.knownDevices.slice(0, Math.max(deviceIndex - 1, 0)),
-        updatedDevice,
+        action.device,
         ...state.knownDevices.slice(deviceIndex + 1)
       ];
     } else {
-      patch.knownDevices = [...state.knownDevices, updatedDevice];
+      patch.knownDevices = [...state.knownDevices, action.device];
     }
     patchState(patch);
   }
