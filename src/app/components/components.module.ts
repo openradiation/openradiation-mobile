@@ -7,6 +7,7 @@ import { CategoryLabelComponent } from './category-label/category-label.componen
 import { HeaderComponent } from './header/header.component';
 import { RoundButtonComponent } from './round-button/round-button.component';
 import { GpsIndicatorComponent } from './gps-indicator/gps-indicator.component';
+import { DurationPipe } from './duration/duration.pipe';
 
 @NgModule({
   imports: [CommonModule, FormsModule, IonicModule.forRoot()],
@@ -15,9 +16,17 @@ import { GpsIndicatorComponent } from './gps-indicator/gps-indicator.component';
     CategoryLabelComponent,
     AccordionComponent,
     RoundButtonComponent,
-    GpsIndicatorComponent
+    GpsIndicatorComponent,
+    DurationPipe
   ],
-  exports: [HeaderComponent, CategoryLabelComponent, AccordionComponent, RoundButtonComponent, GpsIndicatorComponent],
+  exports: [
+    HeaderComponent,
+    CategoryLabelComponent,
+    AccordionComponent,
+    RoundButtonComponent,
+    GpsIndicatorComponent,
+    DurationPipe
+  ],
   entryComponents: []
 })
 export class ComponentsModule {}

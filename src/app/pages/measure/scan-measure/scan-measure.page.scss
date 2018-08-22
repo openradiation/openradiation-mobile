@@ -1,3 +1,4 @@
+@import 'src/theme/variables';
 @import 'src/app/components/page/page';
 
 .content {
@@ -5,9 +6,102 @@
   flex-direction: column;
   align-items: center;
   height: 100%;
+  background: $third-color;
 
   app-round-button {
     margin: auto 0;
     width: 50%;
+  }
+
+  .category {
+    display: flex;
+    width: 100%;
+    .item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: auto;
+      padding: 8px;
+      .label {
+        color: $base-color;
+        font-size: 12px;
+        font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+        margin-bottom: 4px;
+      }
+      .value {
+        color: white;
+        font-size: 30px;
+        font-family: 'ARIALROUNDED', Arial, Helvetica, sans-serif;
+      }
+    }
+    .separator {
+      margin: 6px 0 4px 0;
+      border: 2px solid #81cfed;
+      border-radius: 2px;
+      flex: none;
+    }
+    .temperature {
+      position: relative;
+      padding-right: 24px;
+      .icon {
+        position: absolute;
+        top: 20px;
+        right: 10px;
+      }
+    }
+    .duration {
+      position: relative;
+      .icon {
+        position: absolute;
+        top: 6px;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img {
+          width: 100%;
+          padding: 8px;
+        }
+      }
+    }
+  }
+  .radiation {
+    background: $second-color;
+    color: white;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    position: relative;
+    margin-top: 30px;
+    .label {
+      z-index: 1;
+      font-size: 12px;
+      font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+      font-weight: 200;
+    }
+    .value {
+      z-index: 1;
+      margin: 4px;
+      font-size: 50px;
+      font-family: 'ARIALROUNDED', Arial, Helvetica, sans-serif;
+    }
+    .unit {
+      z-index: 1;
+      font-size: 12px;
+      font-family: 'ARIALROUNDED', Arial, Helvetica, sans-serif;
+    }
+    .background {
+      z-index: 0;
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      align-items: center;
+    }
   }
 }
