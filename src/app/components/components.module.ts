@@ -4,10 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { AccordionComponent } from './accordion/accordion.component';
 import { CategoryLabelComponent } from './category-label/category-label.component';
+import { DurationPipe } from './duration/duration.pipe';
+import { GpsIndicatorComponent } from './gps-indicator/gps-indicator.component';
 import { HeaderComponent } from './header/header.component';
 import { RoundButtonComponent } from './round-button/round-button.component';
-import { GpsIndicatorComponent } from './gps-indicator/gps-indicator.component';
-import { DurationPipe } from './duration/duration.pipe';
 
 @NgModule({
   imports: [CommonModule, FormsModule, IonicModule.forRoot()],

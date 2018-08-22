@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BLE } from '@ionic-native/ble/ngx';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { fromPromise } from 'rxjs/internal-compatibility';
+import { map } from 'rxjs/operators';
+import { Measure } from '../measures/measure';
 import { DeviceType } from './abstract-device';
 import { DeviceAtomTag } from './device-atom-tag';
-import { Measure } from '../measures/measure';
 
 // Todo add inheritance when angular issue fixed https://github.com/angular/angular/issues/24011
 @Injectable({

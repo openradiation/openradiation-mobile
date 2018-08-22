@@ -57,7 +57,7 @@ export class PositionService {
             .then(enabled => {
               if (!enabled) {
                 this.onGPSDisabled();
-                throw 'disabled';
+                throw new Error('disabled');
               }
             })
         );

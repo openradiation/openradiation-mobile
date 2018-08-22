@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { AlertController, MenuController } from '@ionic/angular';
 import { NavigationEnd, Router } from '@angular/router';
+import { AlertController, MenuController } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 import { StartManualMeasure } from '../../states/measures/measures.action';
 import { UserState } from '../../states/user/user.state';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-menu',

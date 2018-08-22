@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
-import { MeasuresState } from '../../../states/measures/measures.state';
 import { Observable } from 'rxjs';
-import { HitsAccuracy, HitsAccuracyThreshold, Measure, PositionAccuracy } from '../../../states/measures/measure';
-import { AutoUnsubscribePage } from '../../auto-unsubscribe.page';
-import { StartWatchPosition, StopWatchPosition } from '../../../states/measures/measures.action';
-import { DevicesState } from '../../../states/devices/devices.state';
 import { AbstractDevice } from '../../../states/devices/abstract-device';
+import { DevicesState } from '../../../states/devices/devices.state';
+import { HitsAccuracy, HitsAccuracyThreshold, Measure, PositionAccuracy } from '../../../states/measures/measure';
+import { StartWatchPosition, StopWatchPosition } from '../../../states/measures/measures.action';
+import { MeasuresState } from '../../../states/measures/measures.state';
+import { AutoUnsubscribePage } from '../../auto-unsubscribe.page';
 
 @Component({
   selector: 'app-scan-measure',
