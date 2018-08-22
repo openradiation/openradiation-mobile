@@ -3,8 +3,7 @@
 </app-header>
 
 <ion-content>
-    <div class="content">
-    <!--<div class="content" *ngIf="currentMeasure$ | async as currentMeasure">-->
+    <div class="content" *ngIf="currentMeasure$ | async as currentMeasure">
         <div class="category">
             <div class="item">
                 <div class="label">
@@ -85,6 +84,7 @@
                 </div>
             </ng-template>
             <div class="background">
+                <img src="assets/img/bg-radiation.png">
                 <img src="assets/img/bg-radiation.png">
             </div>
         </div>

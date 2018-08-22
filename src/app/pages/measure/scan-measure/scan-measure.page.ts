@@ -27,16 +27,9 @@ export class ScanMeasurePage extends AutoUnsubscribePage {
   hitsAccuracy: HitsAccuracy = HitsAccuracy.start;
   hitsAccuracyThreshold = HitsAccuracyThreshold;
   hitsAccuracyWidth = 0;
-  currentMeasure: any;
 
   constructor(private store: Store, private router: Router) {
     super();
-    this.currentMeasure = {
-      tsStart: Date.now(),
-      tsEnd: Date.now(),
-      radiation: 0.046,
-      hits: []
-    };
   }
 
   ionViewDidEnter() {

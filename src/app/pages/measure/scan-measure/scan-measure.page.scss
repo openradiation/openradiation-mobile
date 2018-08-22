@@ -153,6 +153,16 @@
       width: 100%;
       display: flex;
       align-items: center;
+      animation: moving-background 6s linear infinite;
+    }
+
+    @keyframes moving-background {
+      from {
+        left: -568px;
+      }
+      to {
+        left: 0;
+      }
     }
   }
 }
