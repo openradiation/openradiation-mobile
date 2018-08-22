@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Measure } from './measure';
 import { AbstractDevice, DeviceType } from '../devices/abstract-device';
-import { DeviceOGKitService } from '../devices/device-og-kit.service';
 import { DeviceAtomTagService } from '../devices/device-atom-tag.service';
+import { DeviceOGKitService } from '../devices/device-og-kit.service';
+import { Measure } from './measure';
 
 @Injectable({
   providedIn: 'root'

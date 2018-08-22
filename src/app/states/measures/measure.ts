@@ -14,7 +14,7 @@ export class Measure {
   accuracy: number;
   altitude: number;
   altitudeAccuracy: number;
-  hits: number = 0;
+  hits = 0;
   steps?: Step[] = [];
 
   constructor(

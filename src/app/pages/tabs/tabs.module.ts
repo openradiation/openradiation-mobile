@@ -5,11 +5,11 @@ import { IonicModule } from '@ionic/angular';
 
 import { TabsRoutingModule } from './tabs-routing.module';
 
+import { ManualMeasurePageModule } from '../measure/manual-measure/manual-measure.module';
 import { AboutPageModule } from './about/about.module';
 import { HistoryPageModule } from './history/history.module';
 import { HomePageModule } from './home/home.module';
 import { LegalNoticePageModule } from './legal-notice/legal-notice.module';
-import { ManualMeasurePageModule } from '../measure/manual-measure/manual-measure.module';
 import { MapPageModule } from './map/map.module';
 import { DeviceParamPageModule } from './settings/device-param/device-param.module';
 import { DevicesPageModule } from './settings/devices/devices.module';

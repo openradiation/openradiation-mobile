@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BLE } from '@ionic-native/ble/ngx';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { AlertController, Platform, ToastController } from '@ionic/angular';
 import { Actions, ofActionDispatched, ofActionSuccessful, Store } from '@ngxs/store';
 import { merge, Observable, timer } from 'rxjs';
@@ -19,6 +20,9 @@ import {
   throttleTime
 } from 'rxjs/operators';
 import { AbstractDevice, DeviceType, RawDevice } from './abstract-device';
+import { DeviceAtomTag } from './device-atom-tag';
+import { DeviceAtomTagService } from './device-atom-tag.service';
+import { DeviceOGKit } from './device-og-kit';
 import { DeviceOGKitService } from './device-og-kit.service';
 import {
   BLEConnectionLost,
@@ -27,10 +31,6 @@ import {
   StartDiscoverDevices,
   StopDiscoverDevices
 } from './devices.action';
-import { Diagnostic } from '@ionic-native/diagnostic/ngx';
-import { DeviceAtomTagService } from './device-atom-tag.service';
-import { DeviceOGKit } from './device-og-kit';
-import { DeviceAtomTag } from './device-atom-tag';
 
 @Injectable({
   providedIn: 'root'
