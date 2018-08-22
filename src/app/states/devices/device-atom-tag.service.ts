@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { DeviceType } from './abstract-device';
 import { DeviceAtomTag } from './device-atom-tag';
+import { Measure } from '../measures/measure';
 
 // Todo add inheritance when angular issue fixed https://github.com/angular/angular/issues/24011
 @Injectable({
@@ -65,5 +66,12 @@ export class DeviceAtomTagService /*extends AbstractDeviceService<DeviceAtomTag>
       DeviceAtomTagService.settingsCharacteristic,
       dataView.buffer
     );
+  }
+
+  // TODO implement correct computation for AtomTag
+  computeRadiationValue(measure: Measure): number {
+    const duration = (measure.tsEnd - measure.tsStart) / 1000;
+    const TcNet = measure.hits / duration - 0.14;
+    return 0.000001 * TcNet ** 3 + 0.0025 * TcNet ** 2 + 0.39 * TcNet;
   }
 }

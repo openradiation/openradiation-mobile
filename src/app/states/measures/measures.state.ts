@@ -11,10 +11,13 @@ import {
   StartManualMeasure,
   StartMeasure,
   StartWatchPosition,
-  StopWatchPosition
+  StopMeasure,
+  StopWatchPosition,
+  UpdateMeasure
 } from './measures.action';
 import { PositionService } from './position.service';
 import { Device } from '@ionic-native/device/ngx';
+import { MeasuresService } from './measure.service';
 
 export interface MeasuresStateModel {
   measures: Measure[];
@@ -39,7 +42,11 @@ export interface MeasuresStateModel {
   }
 })
 export class MeasuresState {
-  constructor(private measuresService: PositionService, private device: Device) {}
+  constructor(
+    private positionService: PositionService,
+    private device: Device,
+    private measuresService: MeasuresService
+  ) {}
 
   @Selector()
   static expertMode(state: MeasuresStateModel): boolean {
@@ -111,7 +118,7 @@ export class MeasuresState {
 
   @Action(StartWatchPosition)
   startWatchPosition({ patchState }: StateContext<MeasuresStateModel>) {
-    return this.measuresService.startWatchPosition().pipe(
+    return this.positionService.startWatchPosition().pipe(
       tap(position =>
         patchState({
           currentPosition: position,
@@ -154,6 +161,34 @@ export class MeasuresState {
           this.device.model,
           Date.now()
         )
+      });
+    }
+  }
+
+  @Action(StopMeasure)
+  stopMeasure({ getState, patchState }: StateContext<MeasuresStateModel>) {
+    const state = getState();
+    if (state.currentMeasure) {
+      patchState({
+        measures: [...state.measures, { ...state.currentMeasure, steps: undefined }],
+        currentMeasure: undefined
+      });
+    }
+  }
+
+  @Action(UpdateMeasure)
+  updateMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, action: UpdateMeasure) {
+    const state = getState();
+    if (state.currentMeasure && state.currentMeasure.steps) {
+      const currentMeasure = { ...state.currentMeasure, steps: [...state.currentMeasure.steps, action.step] };
+      currentMeasure.tsEnd = Date.now();
+      currentMeasure.hits += action.step.hits;
+      currentMeasure.radiation = this.measuresService.computeRadiationValue(currentMeasure, action.device);
+      currentMeasure.temperature =
+        currentMeasure.steps.map(step => step.temperature).reduce((acc, current) => acc + current) /
+        currentMeasure.steps.length;
+      patchState({
+        currentMeasure
       });
     }
   }

@@ -3,6 +3,7 @@ import { BLE } from '@ionic-native/ble/ngx';
 import { Observable, of } from 'rxjs';
 import { filter, scan, shareReplay, take, tap } from 'rxjs/operators';
 import { DeviceOGKit } from './device-og-kit';
+import { Measure } from '../measures/measure';
 
 // Todo add inheritance when angular issue fixed https://github.com/angular/angular/issues/24011
 @Injectable({
@@ -54,6 +55,12 @@ export class DeviceOGKitService /*extends AbstractDeviceService<DeviceOGKit>*/ {
 
   saveDeviceParams(device: DeviceOGKit): Observable<any> {
     return of(null);
+  }
+
+  computeRadiationValue(measure: Measure): number {
+    const duration = (measure.tsEnd - measure.tsStart) / 1000;
+    const TcNet = measure.hits / duration - 0.14;
+    return 0.000001 * TcNet ** 3 + 0.0025 * TcNet ** 2 + 0.39 * TcNet;
   }
 
   private static decodeBuffer(array: Uint8Array): string {
