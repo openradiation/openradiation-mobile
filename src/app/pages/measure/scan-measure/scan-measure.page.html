@@ -1,8 +1,9 @@
-<app-header></app-header>
+<app-header>
+    <app-gps-indicator other [positionAccuracy]="positionAccuracy$ | async"></app-gps-indicator>
+</app-header>
 
 <ion-content>
     <div class="content">
-        <app-gps-indicator [positionAccuracy]="positionAccuracy$ | async"></app-gps-indicator>
         <!--<div class="content" *ngIf="currentMeasure$ | async as currentMeasure">-->
         <div class="category">
             <div class="item">

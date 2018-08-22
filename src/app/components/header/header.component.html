@@ -1,6 +1,9 @@
 <div class="container">
-    <div  class="logo">
+    <div class="logo">
         <img src="assets/img/logo.png">
+    </div>
+    <div class="other-content">
+        <ng-content select="[other]"></ng-content>
     </div>
     <div class="title">
         <div class="back-button" *ngIf="backButton">

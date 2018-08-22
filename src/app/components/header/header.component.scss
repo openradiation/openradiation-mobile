@@ -13,6 +13,9 @@
 .container {
   background: $base-color;
   padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   .logo {
     display: flex;
     align-items: center;
@@ -21,14 +24,20 @@
     padding-bottom: 10px;
     opacity: 1;
     transition: height ease-in 100ms, opacity ease-in 100ms, padding-bottom ease-in 100ms;
+    flex: none;
     img {
       height: 100%;
     }
+  }
+  .other-content {
+    flex: none;
   }
   .title {
     color: white;
     background-color: $third-color;
     position: relative;
+    flex: none;
+    width: 100%;
     .back-button {
       height: 100%;
       position: absolute;
