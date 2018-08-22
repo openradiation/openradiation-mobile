@@ -32,32 +32,3 @@ export class DeviceOGKit extends AbstractDevice {
     this.apparatusId = new TextDecoder('utf8').decode(manufacturerData);
   }
 }
-
-export class DeviceAtomTag extends AbstractDevice {
-  readonly deviceType: DeviceType = DeviceType.AtomTag;
-
-  params: DeviceParams = {
-    audioHits: true,
-    vibrationHits: true
-  };
-  paramsModel: DeviceParamsModel = {
-    audioHits: {
-      label: 'Signal audio pour les coups',
-      type: DeviceParamType.boolean
-    },
-    vibrationHits: {
-      label: 'Vibration pour les coups',
-      type: DeviceParamType.boolean
-    }
-  };
-
-  constructor(rawDevice: RawDevice) {
-    super(rawDevice);
-    this.apparatusVersion = DeviceType.AtomTag;
-    const data = new Uint8Array(rawDevice.advertising);
-    this.batteryLevel = data[28];
-    this.apparatusId = rawDevice.id;
-  }
-}
-
-export type Device = DeviceOGKit | DeviceAtomTag;

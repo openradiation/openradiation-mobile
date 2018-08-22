@@ -3,8 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { DeviceParamModel, DeviceParamType } from '../../../../states/devices/abstract-device';
-import { Device } from '../../../../states/devices/device';
+import { AbstractDevice, DeviceParamModel, DeviceParamType } from '../../../../states/devices/abstract-device';
 import { SaveDeviceParams } from '../../../../states/devices/devices.action';
 import { DevicesState, DevicesStateModel } from '../../../../states/devices/devices.state';
 
@@ -15,7 +14,7 @@ import { DevicesState, DevicesStateModel } from '../../../../states/devices/devi
 })
 export class DeviceParamPage {
   @Select(DevicesState.editedDevice)
-  editedDevice$: Observable<Device>;
+  editedDevice$: Observable<AbstractDevice>;
 
   deviceParamType = DeviceParamType;
   editedDeviceForm: FormGroup;
@@ -25,9 +24,7 @@ export class DeviceParamPage {
     const editedDevice = this.store.selectSnapshot(
       ({ devices }: { devices: DevicesStateModel }) => devices.editedDevice
     );
-    if (editedDevice) {
-      this.paramsModel = Object.entries(editedDevice.paramsModel);
-    }
+    this.paramsModel = editedDevice && editedDevice.paramsModel ? Object.entries(editedDevice.paramsModel) : [];
     const editedDeviceForm = this.store.selectSnapshot(
       ({ devices }: { devices: DevicesStateModel }) => devices.editedDeviceForm
     );

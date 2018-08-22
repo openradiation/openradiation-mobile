@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BLE } from '@ionic-native/ble/ngx';
 import { Observable, of } from 'rxjs';
 import { filter, scan, shareReplay, take, tap } from 'rxjs/operators';
-import { DeviceOGKit } from './device';
+import { DeviceOGKit } from './device-og-kit';
 
 // Todo add inheritance when angular issue fixed https://github.com/angular/angular/issues/24011
 @Injectable({

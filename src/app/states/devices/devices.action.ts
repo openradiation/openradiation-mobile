@@ -1,4 +1,4 @@
-import { Device } from './device';
+import { AbstractDevice } from './abstract-device';
 
 export class StartDiscoverDevices {
   static readonly type = '[Devices] Start discover devices';
@@ -10,12 +10,12 @@ export class StopDiscoverDevices {
 
 export class DevicesDiscovered {
   static readonly type = '[Devices] Devices discovered';
-  constructor(public devices: Device[]) {}
+  constructor(public devices: AbstractDevice[]) {}
 }
 
 export class ConnectDevice {
   static readonly type = '[Devices] Connect device';
-  constructor(public device: Device) {}
+  constructor(public device: AbstractDevice) {}
 }
 
 export class DisconnectDevice {
@@ -29,12 +29,12 @@ export class DeviceConnectionLost {
 
 export class UpdateDeviceInfo {
   static readonly type = '[Devices] Update device info';
-  constructor(public device: Device) {}
+  constructor(public device: AbstractDevice) {}
 }
 
 export class EditDeviceParams {
   static readonly type = '[Devices] Edit device params';
-  constructor(public device: Device) {}
+  constructor(public device: AbstractDevice) {}
 }
 
 export class SaveDeviceParams {
@@ -44,7 +44,7 @@ export class SaveDeviceParams {
 
 export class UpdateDevice {
   static readonly type = '[Devices] Update device';
-  constructor(public device: Device) {}
+  constructor(public device: AbstractDevice) {}
 }
 
 export class BLEConnectionLost {

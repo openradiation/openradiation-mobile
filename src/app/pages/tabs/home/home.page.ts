@@ -3,7 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
-import { Device } from '../../../states/devices/device';
+import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
 import { PositionAccuracy } from '../../../states/measures/measure';
 import { StartMeasure, StartWatchPosition, StopWatchPosition } from '../../../states/measures/measures.action';
@@ -17,7 +17,7 @@ import { AutoUnsubscribePage } from '../../auto-unsubscribe.page';
 })
 export class HomePage extends AutoUnsubscribePage {
   @Select(DevicesState.connectedDevice)
-  connectedDevice$: Observable<Device>;
+  connectedDevice$: Observable<AbstractDevice>;
   @Select(MeasuresState.positionAccuracy)
   positionAccuracy$: Observable<PositionAccuracy>;
   @Select(MeasuresState.isWatchingPosition)

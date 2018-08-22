@@ -1,8 +1,7 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { DeviceParams } from './abstract-device';
-import { Device } from './device';
+import { AbstractDevice, DeviceParams } from './abstract-device';
 import {
   BLEConnectionLost,
   ConnectDevice,
@@ -20,10 +19,10 @@ import { DevicesService } from './devices.service';
 
 export interface DevicesStateModel {
   isScanning: boolean;
-  availableDevices: Device[];
-  knownDevices: Device[];
-  connectedDevice?: Device;
-  editedDevice?: Device;
+  availableDevices: AbstractDevice[];
+  knownDevices: AbstractDevice[];
+  connectedDevice?: AbstractDevice;
+  editedDevice?: AbstractDevice;
   editedDeviceForm?: {
     model: DeviceParams;
     dirty: boolean;
@@ -44,7 +43,7 @@ export class DevicesState {
   constructor(private devicesService: DevicesService) {}
 
   @Selector()
-  static availableDevices(state: DevicesStateModel): Device[] {
+  static availableDevices(state: DevicesStateModel): AbstractDevice[] {
     return state.availableDevices.filter(
       availableDevice =>
         state.connectedDevice === undefined || state.connectedDevice.sensorUUID !== availableDevice.sensorUUID
@@ -52,7 +51,7 @@ export class DevicesState {
   }
 
   @Selector()
-  static knownDevices(state: DevicesStateModel): Device[] {
+  static knownDevices(state: DevicesStateModel): AbstractDevice[] {
     return state.knownDevices.filter(knownDevice => {
       return (
         state.availableDevices.every(availableDevice => availableDevice.sensorUUID !== knownDevice.sensorUUID) &&
@@ -62,7 +61,7 @@ export class DevicesState {
   }
 
   @Selector()
-  static connectedDevice(state: DevicesStateModel): Device | undefined {
+  static connectedDevice(state: DevicesStateModel): AbstractDevice | undefined {
     return state.connectedDevice;
   }
 
@@ -72,7 +71,7 @@ export class DevicesState {
   }
 
   @Selector()
-  static editedDevice(state: DevicesStateModel): Device | undefined {
+  static editedDevice(state: DevicesStateModel): AbstractDevice | undefined {
     return state.editedDevice;
   }
 
@@ -161,7 +160,7 @@ export class DevicesState {
   updateDeviceInfo({ dispatch }: StateContext<DevicesStateModel>, action: UpdateDeviceInfo) {
     return this.devicesService
       .getDeviceInfo(action.device)
-      .pipe(map((update: Partial<Device>) => dispatch(new UpdateDevice({ ...action.device, ...update }))));
+      .pipe(map((update: Partial<AbstractDevice>) => dispatch(new UpdateDevice({ ...action.device, ...update }))));
   }
 
   @Action(EditDeviceParams)

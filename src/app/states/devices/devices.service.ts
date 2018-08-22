@@ -18,8 +18,7 @@ import {
   tap,
   throttleTime
 } from 'rxjs/operators';
-import { DeviceType, RawDevice } from './abstract-device';
-import { Device, DeviceAtomTag, DeviceOGKit } from './device';
+import { AbstractDevice, DeviceType, RawDevice } from './abstract-device';
 import { DeviceOGKitService } from './device-og-kit.service';
 import {
   BLEConnectionLost,
@@ -30,6 +29,8 @@ import {
 } from './devices.action';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { DeviceAtomTagService } from './device-atom-tag.service';
+import { DeviceOGKit } from './device-og-kit';
+import { DeviceAtomTag } from './device-atom-tag';
 
 @Injectable({
   providedIn: 'root'
@@ -113,7 +114,7 @@ export class DevicesService {
         map((rawDevices: RawDevice[]) =>
           rawDevices
             .sort((a, b) => b.rssi - a.rssi)
-            .map(rawDevice => {
+            .map<AbstractDevice | null>(rawDevice => {
               if (rawDevice.name) {
                 if (rawDevice.name.includes(DeviceType.OGKit)) {
                   return new DeviceOGKit(rawDevice);
@@ -123,13 +124,13 @@ export class DevicesService {
               }
               return null;
             })
-            .filter((device): device is Device => device !== null)
+            .filter((device): device is AbstractDevice => device !== null)
         )
       )
       .subscribe(devices => this.store.dispatch(new DevicesDiscovered(devices)));
   }
 
-  connectDevice(device: Device): Observable<any> {
+  connectDevice(device: AbstractDevice): Observable<any> {
     const connection = this.ble.connect(device.sensorUUID).pipe(
       tap(console.log),
       concatMap(() => this.saveDeviceParams(device)),
@@ -139,11 +140,11 @@ export class DevicesService {
     return connection.pipe(take(1));
   }
 
-  disconnectDevice(device: Device): Observable<any> {
+  disconnectDevice(device: AbstractDevice): Observable<any> {
     return fromPromise(this.ble.disconnect(device.sensorUUID));
   }
 
-  getDeviceInfo(device: Device): Observable<Partial<Device>> {
+  getDeviceInfo(device: AbstractDevice): Observable<Partial<AbstractDevice>> {
     switch (device.deviceType) {
       case DeviceType.OGKit:
         return this.deviceOGKitService.getDeviceInfo(<DeviceOGKit>device);
@@ -152,7 +153,7 @@ export class DevicesService {
     }
   }
 
-  saveDeviceParams(device: Device): Observable<any> {
+  saveDeviceParams(device: AbstractDevice): Observable<any> {
     switch (device.deviceType) {
       case DeviceType.OGKit:
         return this.deviceOGKitService.saveDeviceParams(<DeviceOGKit>device);
