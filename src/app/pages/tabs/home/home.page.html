@@ -6,17 +6,7 @@
         <div class="subtitle">
             mesurer la radioactivité
         </div>
-        <ng-container [ngSwitch]="positionAccuracy$ | async">
-            <div *ngSwitchCase="positionAccuracy.Good" class="gps-indicator">
-                GPS : bon
-            </div>
-            <div *ngSwitchCase="positionAccuracy.Bad" class="gps-indicator bad">
-                GPS : moyen
-            </div>
-            <div *ngSwitchCase="positionAccuracy.Error" class="gps-indicator error">
-                GPS : error
-            </div>
-        </ng-container>
+        <app-gps-indicator [positionAccuracy]="positionAccuracy$ | async"></app-gps-indicator>
         <ng-container *ngIf="connectedDevice$ | async as connectedDevice; else noConnectedDevice">
             <div class="connected-device-header">Capteur connecté</div>
             <ion-button class="connected-device-button" fill="clear" (click)="goToDevices()">

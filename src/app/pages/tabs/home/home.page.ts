@@ -23,8 +23,6 @@ export class HomePage extends AutoUnsubscribePage {
   @Select(MeasuresState.isWatchingPosition)
   isWatchingPosition$: Observable<boolean>;
 
-  positionAccuracy = PositionAccuracy;
-
   constructor(private router: Router, private store: Store, private actions$: Actions) {
     super();
     this.router.events
