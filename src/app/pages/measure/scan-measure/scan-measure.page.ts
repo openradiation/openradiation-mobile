@@ -2,10 +2,12 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 import { MeasuresState } from '../../../states/measures/measures.state';
-import { interval, Observable } from 'rxjs';
-import { Measure, PositionAccuracy } from '../../../states/measures/measure';
+import { Observable } from 'rxjs';
+import { HitsAccuracy, HitsAccuracyThreshold, Measure, PositionAccuracy } from '../../../states/measures/measure';
 import { AutoUnsubscribePage } from '../../auto-unsubscribe.page';
 import { StartWatchPosition, StopWatchPosition } from '../../../states/measures/measures.action';
+import { DevicesState } from '../../../states/devices/devices.state';
+import { AbstractDevice } from '../../../states/devices/abstract-device';
 
 @Component({
   selector: 'app-scan-measure',
@@ -17,8 +19,14 @@ export class ScanMeasurePage extends AutoUnsubscribePage {
   positionAccuracy$: Observable<PositionAccuracy>;
 
   @Select(MeasuresState.currentMeasure)
-  currentMeasure$: Observable<Measure>;
+  currentMeasure$: Observable<Measure | undefined>;
 
+  @Select(DevicesState.connectedDevice)
+  connectedDevice$: Observable<AbstractDevice>;
+
+  hitsAccuracy: HitsAccuracy = HitsAccuracy.start;
+  hitsAccuracyThreshold = HitsAccuracyThreshold;
+  hitsAccuracyWidth = 0;
   currentMeasure: any;
 
   constructor(private store: Store, private router: Router) {
@@ -26,18 +34,36 @@ export class ScanMeasurePage extends AutoUnsubscribePage {
     this.currentMeasure = {
       tsStart: Date.now(),
       tsEnd: Date.now(),
-      radiation: 0.046
+      radiation: 0.046,
+      hits: []
     };
   }
 
   ionViewDidEnter() {
-    interval(1000).subscribe(() => (this.currentMeasure.tsEnd = Date.now()));
+    this.subscriptions.push(this.currentMeasure$.subscribe(measure => this.updateHitsAccuracy(measure)));
     this.store.dispatch(new StartWatchPosition());
   }
 
   ionViewWillLeave() {
     super.ionViewWillLeave();
     this.store.dispatch(new StopWatchPosition());
+  }
+
+  updateHitsAccuracy(measure?: Measure) {
+    if (measure) {
+      if (measure.hits >= HitsAccuracyThreshold.accurate) {
+        this.hitsAccuracy = HitsAccuracy.accurate;
+      } else if (measure.hits >= HitsAccuracyThreshold.good) {
+        this.hitsAccuracy = HitsAccuracy.good;
+      } else if (measure.hits >= HitsAccuracyThreshold.medium) {
+        this.hitsAccuracy = HitsAccuracy.medium;
+      } else if (measure.hits >= HitsAccuracyThreshold.bad) {
+        this.hitsAccuracy = HitsAccuracy.bad;
+      } else {
+        this.hitsAccuracy = HitsAccuracy.start;
+      }
+      this.hitsAccuracyWidth = Math.min((measure.hits / HitsAccuracyThreshold.accurate) * 100, 100);
+    }
   }
 
   endMeasure() {}

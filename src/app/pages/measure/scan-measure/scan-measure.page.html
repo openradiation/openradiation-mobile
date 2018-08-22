@@ -4,7 +4,7 @@
 
 <ion-content>
     <div class="content">
-        <!--<div class="content" *ngIf="currentMeasure$ | async as currentMeasure">-->
+    <!--<div class="content" *ngIf="currentMeasure$ | async as currentMeasure">-->
         <div class="category">
             <div class="item">
                 <div class="label">
@@ -29,9 +29,13 @@
         </div>
         <div class="accuracy">
             <div class="label">
-                Fiabilité
+                FIABILITÉ
             </div>
-            <div class="accuracy-indicator"></div>
+            <div class="accuracy-indicator">
+                <div class="accuracy-indicator-bar" [ngStyle]="{'width.%': hitsAccuracyWidth}"
+                     [ngClass]="hitsAccuracy">
+                </div>
+            </div>
         </div>
         <div class="category">
             <div class="item">
@@ -39,7 +43,7 @@
                     Nb coups
                 </div>
                 <div class="value">
-                    {{51}}°C
+                    {{currentMeasure.hits}}
                 </div>
             </div>
             <div class="separator"></div>
@@ -48,7 +52,7 @@
                     Coups/min
                 </div>
                 <div class="value">
-                    {{15.53}}
+                    {{(currentMeasure.hits / (currentMeasure.tsEnd - currentMeasure.tsStart)) * 1000 * 60 | number: '1.2-2'}}
                 </div>
             </div>
             <div class="item duration">
@@ -64,21 +68,28 @@
             </div>
         </div>
         <div class="radiation">
-            <div class="label">
-                DÉBIT DE DOSE
-            </div>
-            <div class="value">
-                {{currentMeasure.radiation}}
-            </div>
-            <div class="unit">
-                μSvh
-            </div>
+            <ng-container *ngIf="currentMeasure.hits <= hitsAccuracyThreshold.good; else hitsAccuracyMedium">
+                <div class="start">
+                    Mesure en cours
+                </div>
+            </ng-container>
+            <ng-template #hitsAccuracyMedium>
+                <div class="label">
+                    DÉBIT DE DOSE
+                </div>
+                <div class="value">
+                    {{currentMeasure.radiation}}
+                </div>
+                <div class="unit">
+                    μSvh
+                </div>
+            </ng-template>
             <div class="background">
                 <img src="assets/img/bg-radiation.png">
             </div>
         </div>
-        <app-round-button [disabled]="false"
-                          [src]="true ? 'assets/img/button-on.png' : 'assets/img/button-off.png'"
+        <app-round-button [disabled]="currentMeasure.hits <= hitsAccuracyThreshold.accurate"
+                          [src]="currentMeasure.hits >= hitsAccuracyThreshold.accurate ? 'assets/img/button-on.png' : 'assets/img/button-off.png'"
                           (click)="endMeasure()">
             FIN
         </app-round-button>

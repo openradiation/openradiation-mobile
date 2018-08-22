@@ -21,7 +21,7 @@
       flex-direction: column;
       align-items: center;
       flex: auto;
-      padding: 8px;
+      padding: 10px;
       .label {
         color: $base-color;
         font-size: 12px;
@@ -35,7 +35,7 @@
       }
     }
     .separator {
-      margin: 6px 0 4px 0;
+      margin: 10px 0 4px 0;
       border: 2px solid #81cfed;
       border-radius: 2px;
       flex: none;
@@ -67,6 +67,49 @@
       }
     }
   }
+  .accuracy {
+    margin: 10px 0 20px 0;
+    width: 100%;
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    .label {
+      z-index: 1;
+      color: white;
+      font-size: 14px;
+      font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+    }
+    .accuracy-indicator {
+      z-index: 0;
+      position: absolute;
+      height: 20px;
+      width: 100%;
+      background: #81cfed;
+
+      .accuracy-indicator-bar {
+        height: 100%;
+        width: 0;
+        transition: width linear 200ms;
+
+        &.start {
+          background: black;
+        }
+        &.bad {
+          background: #e70000;
+        }
+        &.medium {
+          background: #ff7f00;
+        }
+        &.good {
+          background: #ffce00;
+        }
+        &.accurate {
+          background: #14c921;
+        }
+      }
+    }
+  }
   .radiation {
     background: $second-color;
     color: white;
@@ -74,9 +117,17 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    height: 120px;
     padding: 10px;
     position: relative;
-    margin-top: 30px;
+    margin-top: 26px;
+    .start {
+      z-index: 1;
+      font-size: 30px;
+      font-family: 'ARIALROUNDED', Arial, Helvetica, sans-serif;
+      text-align: center;
+    }
     .label {
       z-index: 1;
       font-size: 12px;

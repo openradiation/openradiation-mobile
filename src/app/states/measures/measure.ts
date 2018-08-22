@@ -14,6 +14,8 @@ export class Measure {
   accuracy: number;
   altitude: number;
   altitudeAccuracy: number;
+  hits: number = 0;
+  steps?: Step[] = [];
 
   constructor(
     position: Geoposition,
@@ -35,13 +37,37 @@ export class Measure {
     this.accuracy = position.coords.accuracy;
     this.altitude = position.coords.altitude;
     this.altitudeAccuracy = position.coords.altitudeAccuracy;
+    this.tsEnd = this.tsStart;
   }
+}
+
+export interface Step {
+  ts: number;
+  hits: number;
+  voltage: number;
+  temperature: number;
 }
 
 export enum PositionAccuracy {
   Good,
   Bad,
   Error
+}
+
+export enum HitsAccuracy {
+  start = 'start',
+  bad = 'bad',
+  medium = 'medium',
+  good = 'good',
+  accurate = 'accurate'
+}
+
+export enum HitsAccuracyThreshold {
+  start = 0,
+  bad = 3,
+  medium = 10,
+  good = 25,
+  accurate = 50
 }
 
 export const POSITION_ACCURACY_THRESHOLD = 30;
