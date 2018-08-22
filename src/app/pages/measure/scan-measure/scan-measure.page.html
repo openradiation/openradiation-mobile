@@ -1,5 +1,30 @@
-<app-header [backButton]="true" (backButtonClick)="goToHome()">Nouvelle mesure</app-header>
+<app-header></app-header>
 
 <ion-content>
+    <div class="content">
+        <!--<div class="content" *ngIf="currentMeasure$ | async as currentMeasure">-->
+        <app-gps-indicator [positionAccuracy]="positionAccuracy$ | async"></app-gps-indicator>
+        <div class="measure-header">
+            <div class="item">
+                <div class="label">
+                    Début de la mesure
+                </div>
+                <div class="value">
+                    <!--{{currentMeasure.tsStart | date: 'HH:MM:SS'}}-->
+                    {{0 | date: 'HH:MM:SS'}}
+                </div>
+            </div>
+        </div>
+        <div>
 
+        </div>
+        <div>
+
+        </div>
+        <app-round-button [disabled]="false"
+                          [src]="true ? 'assets/img/button-on.png' : 'assets/img/button-off.png'"
+                          (click)="endMeasure()">
+            FIN
+        </app-round-button>
+    </div>
 </ion-content>
