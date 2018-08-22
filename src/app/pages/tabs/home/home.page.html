@@ -1,7 +1,7 @@
 <ion-content>
     <div class="content">
         <div class="logo">
-            <img src="assets/img/logo-big.png">
+            <img src="assets/img/logo.png">
         </div>
         <div class="subtitle">
             mesurer la radioactivité
@@ -28,9 +28,10 @@
                 Pas de capteur<br>CLIQUEZ ICI
             </ion-button>
         </ng-template>
-        <ion-button class="measure-button" fill="clear" [disabled]="!(connectedDevice$ | async) || ((positionAccuracy$ | async) === positionAccuracy.Error)"
-                    (click)="startMeasure()">
-            <img [src]="(connectedDevice$ | async) ? 'assets/img/button-home-on.png' : 'assets/img/button-home-off.png'">
-        </ion-button>
+        <app-round-button
+                [disabled]="!(connectedDevice$ | async) || ((positionAccuracy$ | async) === positionAccuracy.Error)"
+                [src]="(connectedDevice$ | async) ? 'assets/img/button-start-measure-on.png' : 'assets/img/button-start-measure-off.png'"
+                (click)="startMeasure()">
+        </app-round-button>
     </div>
 </ion-content>

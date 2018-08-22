@@ -1,0 +1,7 @@
+<ion-button class="round-button" fill="clear" [disabled]="disabled"
+            (click)="click.emit()">
+    <img [src]="src">
+    <div class="content">
+        <ng-content></ng-content>
+    </div>
+</ion-button>
