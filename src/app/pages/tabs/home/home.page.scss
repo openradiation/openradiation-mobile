@@ -67,20 +67,8 @@ ion-content {
       @extend .device-button;
       border-radius: 0 0 5px 5px;
     }
-    .measure-button {
+    app-round-button {
       margin: auto 0;
-      --height: auto;
-      --width: 100%;
-      --padding-top: 0;
-      --padding-end: 0;
-      --padding-bottom: 0;
-      --padding-start: 0;
-      --margin-top: 0;
-      --margin-end: 0;
-      --margin-bottom: 0;
-      --margin-start: 0;
-      --border-radius: 50%;
-      -webkit-tap-highlight-color: transparent;
     }
   }
 }
