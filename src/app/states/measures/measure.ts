@@ -4,7 +4,6 @@ export class Measure {
   sent = false;
   position: number;
   tsEnd: number;
-  duration: number;
   temperature: number;
   radiation: number;
   environment: string;

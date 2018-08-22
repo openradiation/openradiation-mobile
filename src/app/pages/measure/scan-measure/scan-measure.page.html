@@ -2,24 +2,79 @@
 
 <ion-content>
     <div class="content">
-        <!--<div class="content" *ngIf="currentMeasure$ | async as currentMeasure">-->
         <app-gps-indicator [positionAccuracy]="positionAccuracy$ | async"></app-gps-indicator>
-        <div class="measure-header">
+        <!--<div class="content" *ngIf="currentMeasure$ | async as currentMeasure">-->
+        <div class="category">
             <div class="item">
                 <div class="label">
                     Début de la mesure
                 </div>
                 <div class="value">
-                    <!--{{currentMeasure.tsStart | date: 'HH:MM:SS'}}-->
-                    {{0 | date: 'HH:MM:SS'}}
+                    {{currentMeasure.tsStart | date: 'HH:mm:SS'}}
+                </div>
+            </div>
+            <div class="separator"></div>
+            <div class="item temperature">
+                <div class="label">
+                    Température capteur
+                </div>
+                <div class="value">
+                    {{31.25}}°C
+                </div>
+                <div class="icon">
+                    <img src="assets/img/icon-temp.png">
                 </div>
             </div>
         </div>
-        <div>
-
+        <div class="accuracy">
+            <div class="label">
+                Fiabilité
+            </div>
+            <div class="accuracy-indicator"></div>
         </div>
-        <div>
-
+        <div class="category">
+            <div class="item">
+                <div class="label">
+                    Nb coups
+                </div>
+                <div class="value">
+                    {{51}}°C
+                </div>
+            </div>
+            <div class="separator"></div>
+            <div class="item">
+                <div class="label">
+                    Coups/min
+                </div>
+                <div class="value">
+                    {{15.53}}
+                </div>
+            </div>
+            <div class="item duration">
+                <div class="label">
+                    Durée
+                </div>
+                <div class="value">
+                    {{(currentMeasure.tsEnd - currentMeasure.tsStart) | duration}}
+                </div>
+                <div class="icon">
+                    <img src="assets/img/icon-duration.png">
+                </div>
+            </div>
+        </div>
+        <div class="radiation">
+            <div class="label">
+                DÉBIT DE DOSE
+            </div>
+            <div class="value">
+                {{currentMeasure.radiation}}
+            </div>
+            <div class="unit">
+                μSvh
+            </div>
+            <div class="background">
+                <img src="assets/img/bg-radiation.png">
+            </div>
         </div>
         <app-round-button [disabled]="false"
                           [src]="true ? 'assets/img/button-on.png' : 'assets/img/button-off.png'"
