@@ -16,6 +16,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
   .logo {
     display: flex;
     align-items: center;
@@ -30,7 +31,15 @@
     }
   }
   .other-content {
-    flex: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding-top: 20px;
+    height: 100%;
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .title {
     color: white;
