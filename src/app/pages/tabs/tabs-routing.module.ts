@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
-import { ManualMeasurePage } from '../measure/manual-measure/manual-measure.page';
 import { AboutPage } from './about/about.page';
 import { HistoryPage } from './history/history.page';
 import { HomePage } from './home/home.page';
@@ -70,11 +68,6 @@ const routes: Routes = [
         path: 'about',
         outlet: 'other',
         component: AboutPage
-      },
-      {
-        path: 'manual-measure',
-        outlet: 'other',
-        component: ManualMeasurePage
       }
     ]
   },

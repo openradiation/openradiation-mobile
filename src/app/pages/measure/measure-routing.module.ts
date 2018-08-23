@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { ManualMeasurePage } from './manual-measure/manual-measure.page';
-import { ScanMeasurePage } from './scan-measure/scan-measure.page';
+import { MeasureReportPage } from './measure-report/measure-report-page';
+import { MeasureScanPage } from './measure-scan/measure-scan.page';
 
 const routes: Routes = [
   {
@@ -10,11 +10,11 @@ const routes: Routes = [
     children: [
       {
         path: 'scan',
-        component: ScanMeasurePage
+        component: MeasureScanPage
       },
       {
-        path: 'manual',
-        component: ManualMeasurePage
+        path: 'report',
+        component: MeasureReportPage
       }
     ]
   }
