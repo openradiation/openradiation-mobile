@@ -14,4 +14,11 @@ export class RoundButtonComponent {
 
   @Output()
   click = new EventEmitter();
+
+  onClick(event: MouseEvent) {
+    event.stopPropagation();
+    if (!this.disabled) {
+      this.click.emit();
+    }
+  }
 }
