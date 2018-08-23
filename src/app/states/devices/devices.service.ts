@@ -132,7 +132,6 @@ export class DevicesService {
 
   connectDevice(device: AbstractDevice): Observable<any> {
     const connection = this.ble.connect(device.sensorUUID).pipe(
-      tap(console.log),
       concatMap(() => this.saveDeviceParams(device)),
       shareReplay()
     );

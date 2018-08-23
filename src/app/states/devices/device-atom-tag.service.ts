@@ -59,7 +59,6 @@ export class DeviceAtomTagService /*extends AbstractDeviceService<DeviceAtomTag>
     if (param !== undefined) {
       dataView.setUint16(1, param);
     }
-    console.log(dataView.buffer);
     return this.ble.write(
       device.sensorUUID,
       DeviceAtomTagService.serviceUUID,
