@@ -21,6 +21,7 @@ import { MenuComponent } from './pages/menu/menu.component';
 import { DevicesState } from './states/devices/devices.state';
 import { MeasuresState } from './states/measures/measures.state';
 import { UserState } from './states/user/user.state';
+import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 
 @NgModule({
   declarations: [AppComponent, MenuComponent],
@@ -46,7 +47,8 @@ import { UserState } from './states/user/user.state';
     Geolocation,
     Diagnostic,
     Network,
-    Device
+    Device,
+    ScreenOrientation
   ],
   bootstrap: [AppComponent]
 })
