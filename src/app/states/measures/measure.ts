@@ -37,7 +37,7 @@ export class Measure {
     this.accuracy = position.coords.accuracy;
     this.altitude = position.coords.altitude;
     this.altitudeAccuracy = position.coords.altitudeAccuracy;
-    this.tsEnd = this.tsStart;
+    this.tsEnd = this.tsStart + 1;
   }
 }
 
