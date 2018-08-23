@@ -6,17 +6,17 @@ import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { ComponentsModule } from '../../../components/components.module';
-import { ScanMeasurePage } from './scan-measure.page';
+import { MeasureReportPage } from './measure-report-page';
 
 const routes: Routes = [
   {
     path: '',
-    component: ScanMeasurePage
+    component: MeasureReportPage
   }
 ];
 
 @NgModule({
   imports: [CommonModule, FormsModule, IonicModule, RouterModule.forChild(routes), ComponentsModule],
-  declarations: [ScanMeasurePage]
+  declarations: [MeasureReportPage]
 })
-export class ScanMeasurePageModule {}
+export class MeasureReportPageModule {}

@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-manual-measure',
-  templateUrl: './manual-measure.page.html',
-  styleUrls: ['./manual-measure.page.scss']
+  selector: 'app-measure-report',
+  templateUrl: './measure-report.page.html',
+  styleUrls: ['./measure-report.page.scss']
 })
-export class ManualMeasurePage {
+export class MeasureReportPage {
   constructor(private router: Router) {}
 
   goToHome() {

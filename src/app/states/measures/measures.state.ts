@@ -12,12 +12,15 @@ import {
   PositionChanged,
   StartManualMeasure,
   StartMeasure,
+  StartMeasureScan,
   StartWatchPosition,
   StopMeasure,
+  StopMeasureScan,
   StopWatchPosition,
   UpdateMeasure
 } from './measures.action';
 import { PositionService } from './position.service';
+import { of } from 'rxjs';
 
 export interface MeasuresStateModel {
   measures: Measure[];
@@ -154,12 +157,11 @@ export class MeasuresState {
           action.device.apparatusVersion,
           action.device.apparatusSensorType,
           action.device.apparatusTubeType,
-          '',
           this.device.uuid,
           this.device.platform,
           this.device.version,
           this.device.model,
-          Date.now()
+          ''
         )
       });
     }
@@ -181,14 +183,40 @@ export class MeasuresState {
     const state = getState();
     if (state.currentMeasure && state.currentMeasure.steps) {
       const currentMeasure = { ...state.currentMeasure, steps: [...state.currentMeasure.steps, action.step] };
-      currentMeasure.tsEnd = Date.now();
-      currentMeasure.hits += action.step.hits;
-      currentMeasure.radiation = this.measuresService.computeRadiationValue(currentMeasure, action.device);
+      currentMeasure.endTime = Date.now();
+      currentMeasure.hitsNumber += action.step.hitsNumber;
+      currentMeasure.value = this.measuresService.computeRadiationValue(currentMeasure, action.device);
       currentMeasure.temperature =
         currentMeasure.steps.map(step => step.temperature).reduce((acc, current) => acc + current) /
         currentMeasure.steps.length;
       patchState({
         currentMeasure
+      });
+    }
+  }
+
+  @Action(StartMeasureScan)
+  startMeasureScan({ getState, patchState }: StateContext<MeasuresStateModel>, action: StartMeasureScan) {
+    const state = getState();
+    if (state.currentMeasure) {
+      return this.measuresService.startMeasureScan(action.device).pipe(
+        tap(() => {
+          patchState({
+            currentMeasure: { ...state.currentMeasure!, startTime: Date.now(), endTime: Date.now() }
+          });
+        })
+      );
+    } else {
+      return of();
+    }
+  }
+
+  @Action(StopMeasureScan)
+  stopMeasureScan({ getState, patchState }: StateContext<MeasuresStateModel>) {
+    const state = getState();
+    if (state.currentMeasure) {
+      patchState({
+        currentMeasure: { ...state.currentMeasure, endTime: Date.now() }
       });
     }
   }
@@ -205,12 +233,11 @@ export class MeasuresState {
           undefined,
           undefined,
           undefined,
-          '',
           this.device.uuid,
           this.device.platform,
           this.device.version,
           this.device.model,
-          Date.now(),
+          '',
           true
         )
       });

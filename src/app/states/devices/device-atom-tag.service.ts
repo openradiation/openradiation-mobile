@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BLE } from '@ionic-native/ble/ngx';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { map } from 'rxjs/operators';
 import { Measure } from '../measures/measure';
@@ -12,21 +12,15 @@ import { DeviceAtomTag } from './device-atom-tag';
   providedIn: 'root'
 })
 export class DeviceAtomTagService /*extends AbstractDeviceService<DeviceAtomTag>*/ {
-  private static firmwareServiceUUIID = '180a';
-  private static firmwareCharacteristic = '2a26';
-  private static serviceUUID = '63462A4A-C28C-4FFD-87A4-2D23A1C72581';
-  private static settingsCharacteristic = 'ea50cfcd-ac4a-4a48-bf0e-879e548ae157';
+  private firmwareServiceUUIID = '180a';
+  private firmwareCharacteristic = '2a26';
+  private serviceUUID = '63462A4A-C28C-4FFD-87A4-2D23A1C72581';
+  private settingsCharacteristic = 'ea50cfcd-ac4a-4a48-bf0e-879e548ae157';
 
   constructor(protected ble: BLE) {}
 
   getDeviceInfo(device: DeviceAtomTag): Observable<Partial<DeviceAtomTag>> {
-    return fromPromise(
-      this.ble.read(
-        device.sensorUUID,
-        DeviceAtomTagService.firmwareServiceUUIID,
-        DeviceAtomTagService.firmwareCharacteristic
-      )
-    ).pipe(
+    return fromPromise(this.ble.read(device.sensorUUID, this.firmwareServiceUUIID, this.firmwareCharacteristic)).pipe(
       map(buffer => {
         const firmwareVersion = new TextDecoder('utf8').decode(new Uint8Array(buffer));
         return {
@@ -59,18 +53,18 @@ export class DeviceAtomTagService /*extends AbstractDeviceService<DeviceAtomTag>
     if (param !== undefined) {
       dataView.setUint16(1, param);
     }
-    return this.ble.write(
-      device.sensorUUID,
-      DeviceAtomTagService.serviceUUID,
-      DeviceAtomTagService.settingsCharacteristic,
-      dataView.buffer
-    );
+    return this.ble.write(device.sensorUUID, this.serviceUUID, this.settingsCharacteristic, dataView.buffer);
   }
 
   // TODO implement correct computation for AtomTag
   computeRadiationValue(measure: Measure): number {
-    const duration = (measure.tsEnd - measure.tsStart) / 1000;
-    const TcNet = measure.hits / duration - 0.14;
+    const duration = (measure.endTime - measure.startTime) / 1000;
+    const TcNet = measure.hitsNumber / duration - 0.14;
     return 0.000001 * TcNet ** 3 + 0.0025 * TcNet ** 2 + 0.39 * TcNet;
+  }
+
+  // TODO implement start measure for AtomTag
+  startMeasureScan(device: DeviceAtomTag): Observable<any> {
+    return of(null);
   }
 }

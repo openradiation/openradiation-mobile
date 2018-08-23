@@ -10,7 +10,7 @@
                     Début de la mesure
                 </div>
                 <div class="value">
-                    {{currentMeasure.tsStart | date: 'HH:mm:SS'}}
+                    {{currentMeasure.startTime | date: 'HH:mm:SS'}}
                 </div>
             </div>
             <div class="separator"></div>
@@ -42,7 +42,7 @@
                     Nb coups
                 </div>
                 <div class="value">
-                    {{currentMeasure.hits}}
+                    {{currentMeasure.hitsNumber}}
                 </div>
             </div>
             <div class="separator"></div>
@@ -51,7 +51,13 @@
                     Coups/min
                 </div>
                 <div class="value">
-                    {{(currentMeasure.hits / (currentMeasure.tsEnd - currentMeasure.tsStart)) * 1000 * 60 | number: '1.2-2'}}
+                    <ng-container *ngIf="currentMeasure.endTime && currentMeasure.startTime && currentMeasure.endTime > currentMeasure.startTime; else measureScanNotStarted">
+                        {{(currentMeasure.hitsNumber / (currentMeasure.endTime - currentMeasure.startTime)) * 1000 * 60 |
+                        number: '1.2-2'}}
+                    </ng-container>
+                    <ng-template #measureScanNotStarted>
+                        0.00
+                    </ng-template>
                 </div>
             </div>
             <div class="item duration">
@@ -59,7 +65,12 @@
                     Durée
                 </div>
                 <div class="value">
-                    {{(currentMeasure.tsEnd - currentMeasure.tsStart) | duration}}
+                    <ng-container *ngIf="currentMeasure.endTime && currentMeasure.startTime; else measureScanNotStarted">
+                        {{(currentMeasure.endTime - currentMeasure.startTime) | duration}}
+                    </ng-container>
+                    <ng-template #measureScanNotStarted>
+                        00:00
+                    </ng-template>
                 </div>
                 <div class="icon">
                     <img src="assets/img/icon-duration.png">
@@ -67,9 +78,9 @@
             </div>
         </div>
         <div class="radiation">
-            <ng-container *ngIf="currentMeasure.hits <= hitsAccuracyThreshold.good; else hitsAccuracyMedium">
+            <ng-container *ngIf="currentMeasure.hitsNumber <= hitsAccuracyThreshold.good; else hitsAccuracyMedium">
                 <div class="start">
-                    Mesure en cours
+                    {{currentMeasure.startTime ? 'Mesure en cours' : 'Initialisation'}}
                 </div>
             </ng-container>
             <ng-template #hitsAccuracyMedium>
@@ -77,7 +88,7 @@
                     DÉBIT DE DOSE
                 </div>
                 <div class="value">
-                    {{currentMeasure.radiation}}
+                    {{currentMeasure.value}}
                 </div>
                 <div class="unit">
                     μSvh
@@ -88,9 +99,9 @@
                 <img src="assets/img/bg-radiation.png">
             </div>
         </div>
-        <app-round-button [disabled]="currentMeasure.hits <= hitsAccuracyThreshold.accurate"
-                          [src]="currentMeasure.hits >= hitsAccuracyThreshold.accurate ? 'assets/img/button-on.png' : 'assets/img/button-off.png'"
-                          (click)="endMeasure()">
+        <app-round-button [disabled]="currentMeasure.hitsNumber <= hitsAccuracyThreshold.accurate"
+                          [src]="currentMeasure.hitsNumber >= hitsAccuracyThreshold.accurate ? 'assets/img/button-on.png' : 'assets/img/button-off.png'"
+                          (click)="stopScan()">
             FIN
         </app-round-button>
     </div>

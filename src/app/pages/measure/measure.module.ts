@@ -3,9 +3,9 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
-import { ManualMeasurePageModule } from './manual-measure/manual-measure.module';
+import { MeasureReportPageModule } from './measure-report/measure-report.module';
 import { MeasureRoutingModule } from './measure-routing.module';
-import { ScanMeasurePageModule } from './scan-measure/scan-measure.module';
+import { MeasureScanPageModule } from './measure-scan/measure-scan.module';
 
 @NgModule({
   imports: [
@@ -13,8 +13,8 @@ import { ScanMeasurePageModule } from './scan-measure/scan-measure.module';
     CommonModule,
     FormsModule,
     MeasureRoutingModule,
-    ManualMeasurePageModule,
-    ScanMeasurePageModule
+    MeasureReportPageModule,
+    MeasureScanPageModule
   ],
   declarations: []
 })
