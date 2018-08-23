@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -7,7 +7,8 @@ import { DevicesState } from '../../../states/devices/devices.state';
 import { HitsAccuracy, HitsAccuracyThreshold, Measure, PositionAccuracy } from '../../../states/measures/measure';
 import { StartWatchPosition, StopWatchPosition } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
-import { AutoUnsubscribePage } from '../../auto-unsubscribe.page';
+import { AutoUnsubscribePage } from '../../../components/page/auto-unsubscribe.page';
+import { TabsService } from '../../tabs/tabs.service';
 
 @Component({
   selector: 'app-scan-measure',
@@ -28,11 +29,17 @@ export class ScanMeasurePage extends AutoUnsubscribePage {
   hitsAccuracyThreshold = HitsAccuracyThreshold;
   hitsAccuracyWidth = 0;
 
-  constructor(private store: Store, private router: Router) {
-    super();
+  constructor(
+    protected tabsService: TabsService,
+    protected elementRef: ElementRef,
+    private store: Store,
+    private router: Router
+  ) {
+    super(tabsService, elementRef);
   }
 
   ionViewDidEnter() {
+    super.ionViewDidEnter();
     this.subscriptions.push(this.currentMeasure$.subscribe(measure => this.updateHitsAccuracy(measure)));
     this.store.dispatch(new StartWatchPosition());
   }

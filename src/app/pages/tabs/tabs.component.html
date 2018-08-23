@@ -1,4 +1,4 @@
-<ion-tabs>
+<ion-tabs (ionChange)="tabChange($event)">
     <ion-tab href="/tabs/(home:home)" icon="md-icon-home">
         <ion-router-outlet stack name="home"></ion-router-outlet>
     </ion-tab>

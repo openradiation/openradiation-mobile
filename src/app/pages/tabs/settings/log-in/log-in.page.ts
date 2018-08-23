@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
@@ -7,7 +7,8 @@ import { catchError, take } from 'rxjs/operators';
 import { ErrorResponse, ErrorResponseCode } from '../../../../states/measures/error-response';
 import { StartManualMeasure } from '../../../../states/measures/measures.action';
 import { LogIn } from '../../../../states/user/user.action';
-import { AutoUnsubscribePage } from '../../../auto-unsubscribe.page';
+import { AutoUnsubscribePage } from '../../../../components/page/auto-unsubscribe.page';
+import { TabsService } from '../../tabs.service';
 
 @Component({
   selector: 'app-log-in',
@@ -20,6 +21,8 @@ export class LogInPage extends AutoUnsubscribePage {
   startMeasureAfterLogin = false;
 
   constructor(
+    protected tabsService: TabsService,
+    protected elementRef: ElementRef,
     private router: Router,
     private store: Store,
     private formBuilder: FormBuilder,
@@ -27,7 +30,7 @@ export class LogInPage extends AutoUnsubscribePage {
     private actions$: Actions,
     private activatedRoute: ActivatedRoute
   ) {
-    super();
+    super(tabsService, elementRef);
     this.loginForm = this.formBuilder.group({
       login: ['', Validators.required],
       password: ['', Validators.required]
@@ -35,6 +38,7 @@ export class LogInPage extends AutoUnsubscribePage {
   }
 
   ionViewDidEnter() {
+    super.ionViewDidEnter();
     this.activatedRoute.queryParams
       .pipe(take(1))
       .subscribe(queryParams => (this.startMeasureAfterLogin = queryParams.startMeasureAfterLogin));
