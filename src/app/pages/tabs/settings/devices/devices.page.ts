@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, ofActionDispatched, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -12,7 +12,8 @@ import {
   UpdateDeviceInfo
 } from '../../../../states/devices/devices.action';
 import { DevicesState } from '../../../../states/devices/devices.state';
-import { AutoUnsubscribePage } from '../../../auto-unsubscribe.page';
+import { AutoUnsubscribePage } from '../../../../components/page/auto-unsubscribe.page';
+import { TabsService } from '../../tabs.service';
 
 @Component({
   selector: 'app-page-devices',
@@ -31,11 +32,18 @@ export class DevicesPage extends AutoUnsubscribePage {
 
   connectingDevice: AbstractDevice | undefined;
 
-  constructor(private store: Store, private router: Router, private actions$: Actions) {
-    super();
+  constructor(
+    protected tabsService: TabsService,
+    protected elementRef: ElementRef,
+    private store: Store,
+    private router: Router,
+    private actions$: Actions
+  ) {
+    super(tabsService, elementRef);
   }
 
   ionViewDidEnter() {
+    super.ionViewDidEnter();
     this.subscriptions.push(
       this.actions$
         .pipe(ofActionDispatched(ConnectDevice))
@@ -46,8 +54,8 @@ export class DevicesPage extends AutoUnsubscribePage {
   }
 
   ionViewWillLeave() {
-    this.store.dispatch(new StopDiscoverDevices()).subscribe();
     super.ionViewWillLeave();
+    this.store.dispatch(new StopDiscoverDevices()).subscribe();
   }
 
   connectDevice(device: AbstractDevice) {
