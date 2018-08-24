@@ -12,15 +12,15 @@ import { DeviceAtomTag } from './device-atom-tag';
   providedIn: 'root'
 })
 export class DeviceAtomTagService /*extends AbstractDeviceService<DeviceAtomTag>*/ {
-  private firmwareServiceUUIID = '180a';
+  private firmwareService = '180a';
   private firmwareCharacteristic = '2a26';
-  private serviceUUID = '63462A4A-C28C-4FFD-87A4-2D23A1C72581';
+  private service = '63462A4A-C28C-4FFD-87A4-2D23A1C72581';
   private settingsCharacteristic = 'ea50cfcd-ac4a-4a48-bf0e-879e548ae157';
 
   constructor(protected ble: BLE) {}
 
   getDeviceInfo(device: DeviceAtomTag): Observable<Partial<DeviceAtomTag>> {
-    return fromPromise(this.ble.read(device.sensorUUID, this.firmwareServiceUUIID, this.firmwareCharacteristic)).pipe(
+    return fromPromise(this.ble.read(device.sensorUUID, this.firmwareService, this.firmwareCharacteristic)).pipe(
       map(buffer => {
         const firmwareVersion = new TextDecoder('utf8').decode(new Uint8Array(buffer));
         return {
@@ -53,7 +53,7 @@ export class DeviceAtomTagService /*extends AbstractDeviceService<DeviceAtomTag>
     if (param !== undefined) {
       dataView.setUint16(1, param);
     }
-    return this.ble.write(device.sensorUUID, this.serviceUUID, this.settingsCharacteristic, dataView.buffer);
+    return this.ble.write(device.sensorUUID, this.service, this.settingsCharacteristic, dataView.buffer);
   }
 
   // TODO implement correct computation for AtomTag
