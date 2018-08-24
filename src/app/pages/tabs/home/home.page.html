@@ -19,8 +19,8 @@
             </ion-button>
         </ng-template>
         <app-round-button
-                [disabled]="!(connectedDevice$ | async) || ((positionAccuracy$ | async) === positionAccuracyEnum.Error)"
-                [src]="(connectedDevice$ | async) ? 'assets/img/button-start-measure-on.png' : 'assets/img/button-start-measure-off.png'"
+                [disabled]="!(canStartMeasure | async)"
+                [src]="(canStartMeasure | async) ? 'assets/img/button-start-measure-on.png' : 'assets/img/button-start-measure-off.png'"
                 (click)="startMeasure()">
         </app-round-button>
     </div>

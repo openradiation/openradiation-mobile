@@ -8,7 +8,7 @@ import { PositionAccuracy } from '../../states/measures/measure';
 })
 export class GpsIndicatorComponent {
   @Input()
-  positionAccuracy: PositionAccuracy;
+  positionAccuracy: number;
 
   positionAccuracyEnum = PositionAccuracy;
 }

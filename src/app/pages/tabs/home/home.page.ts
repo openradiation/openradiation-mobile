@@ -1,8 +1,8 @@
 import { Component, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
 import { PositionAccuracy } from '../../../states/measures/measure';
@@ -18,11 +18,11 @@ import { TabsService } from '../tabs.service';
 })
 export class HomePage extends AutoUnsubscribePage {
   @Select(DevicesState.connectedDevice)
-  connectedDevice$: Observable<AbstractDevice>;
+  connectedDevice$: Observable<AbstractDevice | undefined>;
   @Select(MeasuresState.positionAccuracy)
-  positionAccuracy$: Observable<PositionAccuracy>;
+  positionAccuracy$: Observable<number>;
 
-  positionAccuracyEnum = PositionAccuracy;
+  canStartMeasure: Observable<boolean>;
 
   constructor(
     protected tabsService: TabsService,
@@ -32,6 +32,13 @@ export class HomePage extends AutoUnsubscribePage {
     private actions$: Actions
   ) {
     super(tabsService, elementRef);
+
+    this.canStartMeasure = combineLatest(this.positionAccuracy$, this.connectedDevice$).pipe(
+      map(
+        ([positionAccuracy, connectedDevice]) =>
+          positionAccuracy !== PositionAccuracy.Error && connectedDevice !== undefined
+      )
+    );
   }
 
   ionViewDidEnter() {
@@ -71,9 +78,11 @@ export class HomePage extends AutoUnsubscribePage {
   }
 
   startMeasure() {
-    this.store.dispatch(new StopWatchPosition());
-    this.connectedDevice$
-      .pipe(take(1))
-      .subscribe(connectedDevice => this.store.dispatch(new StartMeasure(connectedDevice)));
+    this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
+      if (connectedDevice) {
+        this.store.dispatch(new StopWatchPosition());
+        this.store.dispatch(new StartMeasure(connectedDevice));
+      }
+    });
   }
 }
