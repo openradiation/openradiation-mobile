@@ -2,7 +2,7 @@ import { Device } from '@ionic-native/device/ngx';
 import { Geoposition } from '@ionic-native/geolocation';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { tap } from 'rxjs/operators';
-import { Measure, POSITION_ACCURACY_THRESHOLD, PositionAccuracy } from './measure';
+import { Measure } from './measure';
 import { MeasuresService } from './measure.service';
 import {
   DisableAutoPublish,
@@ -67,14 +67,8 @@ export class MeasuresState {
   }
 
   @Selector()
-  static positionAccuracy(state: MeasuresStateModel): PositionAccuracy {
-    if (state.currentPosition) {
-      return state.currentPosition.coords.accuracy < POSITION_ACCURACY_THRESHOLD
-        ? PositionAccuracy.Good
-        : PositionAccuracy.Bad;
-    } else {
-      return PositionAccuracy.Error;
-    }
+  static positionAccuracy(state: MeasuresStateModel): number {
+    return state.currentPosition ? state.currentPosition.coords.accuracy : -1;
   }
 
   @Selector()

@@ -1,11 +1,17 @@
-<ng-container [ngSwitch]="positionAccuracy">
-  <div *ngSwitchCase="positionAccuracyEnum.Good" class="gps-indicator">
-    GPS : bon
-  </div>
-  <div *ngSwitchCase="positionAccuracyEnum.Bad" class="gps-indicator bad">
-    GPS : moyen
-  </div>
-  <div *ngSwitchCase="positionAccuracyEnum.Error" class="gps-indicator error">
-    GPS : error
-  </div>
+<ng-container *ngIf="positionAccuracy <= positionAccuracyEnum.Error; else notError">
+    <div class="gps-indicator error">
+        GPS : error
+    </div>
 </ng-container>
+<ng-template #notError>
+    <ng-container *ngIf="positionAccuracy <= positionAccuracyEnum.Good; else badAccuracy">
+        <div class="gps-indicator">
+            GPS : bon
+        </div>
+    </ng-container>
+    <ng-template #badAccuracy>
+        <div class="gps-indicator bad">
+            GPS : moyen
+        </div>
+    </ng-template>
+</ng-template>

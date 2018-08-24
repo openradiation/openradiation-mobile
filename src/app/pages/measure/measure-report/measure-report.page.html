@@ -1,5 +1,11 @@
-<app-header [backButton]="true" (backButtonClick)="goToHome()">Saisie manuelle</app-header>
+<ng-container *ngIf="currentMeasure$ | async as currentMeasure">
+    <app-header>
+    </app-header>
 
-<ion-content>
-
-</ion-content>
+    <ion-content>
+        <div>
+            <app-gps-indicator other [positionAccuracy]="currentMeasure.accuracy"></app-gps-indicator>
+            <app-gps-indicator other [positionAccuracy]="currentMeasure.endAccuracy"></app-gps-indicator>
+        </div>
+    </ion-content>
+</ng-container>

@@ -69,9 +69,9 @@ export interface Step {
 }
 
 export enum PositionAccuracy {
-  Good,
-  Bad,
-  Error
+  Good = 30,
+  Bad = Infinity,
+  Error = -1
 }
 
 export enum HitsAccuracy {
@@ -89,5 +89,3 @@ export enum HitsAccuracyThreshold {
   good = 25,
   accurate = 50
 }
-
-export const POSITION_ACCURACY_THRESHOLD = 30;

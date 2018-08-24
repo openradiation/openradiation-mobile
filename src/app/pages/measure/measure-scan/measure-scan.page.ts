@@ -4,7 +4,7 @@ import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
-import { HitsAccuracy, HitsAccuracyThreshold, Measure, PositionAccuracy } from '../../../states/measures/measure';
+import { HitsAccuracy, HitsAccuracyThreshold, Measure } from '../../../states/measures/measure';
 import {
   PositionChanged,
   StartMeasureScan,
@@ -23,9 +23,6 @@ import { take } from 'rxjs/operators';
   styleUrls: ['./measure-scan.page.scss']
 })
 export class MeasureScanPage extends AutoUnsubscribePage {
-  @Select(MeasuresState.positionAccuracy)
-  positionAccuracy$: Observable<PositionAccuracy>;
-
   @Select(MeasuresState.currentMeasure)
   currentMeasure$: Observable<Measure | undefined>;
 
