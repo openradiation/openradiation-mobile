@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BLE } from '@ionic-native/ble/ngx';
-import { Observable, of } from 'rxjs';
-import { concatMap, filter, map, scan, shareReplay, take } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { filter, map, scan, shareReplay, take, tap } from 'rxjs/operators';
 import { Measure, Step } from '../measures/measure';
 import { DeviceOGKit } from './device-og-kit';
 import { fromPromise } from 'rxjs/internal-compatibility';
@@ -11,15 +11,18 @@ import { fromPromise } from 'rxjs/internal-compatibility';
   providedIn: 'root'
 })
 export class DeviceOGKitService /*extends AbstractDeviceService<DeviceOGKit>*/ {
-  private serviceUUID = '00002220-0000-1000-8000-00805F9B34FB';
+  private service = '00002220-0000-1000-8000-00805F9B34FB';
   private sendCharacteristic = '00002222-0000-1000-8000-00805F9B34FB';
   private receiveCharacteristic = '00002221-0000-1000-8000-00805F9B34FB';
 
-  private IN_PACKAGE_GET_INFO = 0x12;
-  private OUT_PACKAGE_SENSOR_TYPE = 3;
-  private OUT_PACKAGE_TUBE_TYPE = 16;
+  private SEND_GET_INFO = 0x12;
+  private RECEIVE_SENSOR_TYPE = 3;
+  private RECEIVE_TUBE_TYPE = 16;
 
-  private IN_PACKET_SET_VOLTAGE = 0x11;
+  private SEND_SET_VISUAL_HIT = 0x01;
+  private SEND_SET_AUDIO_HIT = 0x02;
+
+  private SEND_SET_VOLTAGE = 0x11;
   private tubesVoltageProfile: { [K: string]: { min: number; max: number; setVoltageOnPayload: number[] } } = {
     'SBM-20': {
       min: 340,
@@ -38,30 +41,27 @@ export class DeviceOGKitService /*extends AbstractDeviceService<DeviceOGKit>*/ {
     }
   };
 
-  private OUT_PACKET_HIT = 5;
-  private OUT_PACKET_HIT_POSITION = 0;
-  private OUT_PACKET_TEMPERATURE = 6;
-  private OUT_PACKET_TEMPERATURE_POSITION = 2;
-  private OUT_PACKET_VOLTAGE = 18;
-  private OUT_PACKET_VOLTAGE_POSITION = 9;
+  private RECEIVE_HIT = 5;
+  private RECEIVE_HIT_POSITION = 0;
+  private RECEIVE_TEMPERATURE = 6;
+  private RECEIVE_TEMPERATURE_POSITION = 2;
+  private RECEIVE_VOLTAGE = 18;
+  private RECEIVE_VOLTAGE_POSITION = 9;
 
   constructor(protected ble: BLE) {}
 
   getDeviceInfo(device: DeviceOGKit): Observable<Partial<DeviceOGKit>> {
-    const startNotification = this.ble
-      .startNotification(device.sensorUUID, this.serviceUUID, this.receiveCharacteristic)
-      .pipe(shareReplay());
-    startNotification.subscribe();
-    const data = new Uint8Array([this.IN_PACKAGE_GET_INFO]);
-    this.ble.write(device.sensorUUID, this.serviceUUID, this.sendCharacteristic, <ArrayBuffer>data.buffer);
-    return this.ble.startNotification(device.sensorUUID, this.serviceUUID, this.receiveCharacteristic).pipe(
+    const startReceiveData = this.startReceiveData(device).pipe(shareReplay());
+    startReceiveData.subscribe();
+    this.sendData(device, [this.SEND_GET_INFO]);
+    return startReceiveData.pipe(
       scan((update: Partial<DeviceOGKit>, buffer: ArrayBuffer) => {
         const array = new Uint8Array(buffer);
         switch (array[0]) {
-          case this.OUT_PACKAGE_SENSOR_TYPE:
+          case this.RECEIVE_SENSOR_TYPE:
             update.apparatusSensorType = this.decodeStringArray(array);
             break;
-          case this.OUT_PACKAGE_TUBE_TYPE:
+          case this.RECEIVE_TUBE_TYPE:
             update.apparatusTubeType = this.decodeStringArray(array);
             break;
         }
@@ -69,14 +69,16 @@ export class DeviceOGKitService /*extends AbstractDeviceService<DeviceOGKit>*/ {
       }, {}),
       filter(update => update.apparatusSensorType !== undefined && update.apparatusTubeType !== undefined),
       take(1),
-      concatMap(() =>
-        fromPromise(this.ble.stopNotification(device.sensorUUID, this.serviceUUID, this.receiveCharacteristic))
-      )
+      tap(() => this.stopReceiveData(device))
     );
   }
 
   saveDeviceParams(device: DeviceOGKit): Observable<any> {
-    return of(null);
+    return fromPromise(
+      this.sendData(device, [this.SEND_SET_VISUAL_HIT, device.params.visualHits ? 0x00 : 0x01]).then(() =>
+        this.sendData(device, [this.SEND_SET_AUDIO_HIT, device.params.audioHits ? 0x00 : 0x01])
+      )
+    );
   }
 
   computeRadiationValue(measure: Measure): number {
@@ -87,10 +89,8 @@ export class DeviceOGKitService /*extends AbstractDeviceService<DeviceOGKit>*/ {
 
   startMeasureScan(device: DeviceOGKit, stopSignal: Observable<any>): Observable<Step> {
     this.setTubeVoltageOn(device);
-    stopSignal.subscribe(() =>
-      this.ble.stopNotification(device.sensorUUID, this.serviceUUID, this.receiveCharacteristic)
-    );
-    return this.ble.startNotification(device.sensorUUID, this.serviceUUID, this.receiveCharacteristic).pipe(
+    stopSignal.subscribe(() => this.stopReceiveData(device));
+    return this.startReceiveData(device).pipe(
       map((buffer: ArrayBuffer) => this.decodeDataPackage(buffer)),
       filter((step: Step | null): step is Step => step !== null),
       filter((step: Step) => step.voltage > this.tubesVoltageProfile[device.apparatusTubeType].min)
@@ -98,16 +98,28 @@ export class DeviceOGKitService /*extends AbstractDeviceService<DeviceOGKit>*/ {
   }
 
   private setTubeVoltageOn(device: DeviceOGKit) {
-    const data = new Uint8Array([
-      this.IN_PACKET_SET_VOLTAGE,
+    this.sendData(device, [
+      this.SEND_SET_VOLTAGE,
       ...this.tubesVoltageProfile[device.apparatusTubeType].setVoltageOnPayload
     ]);
-    this.ble.write(device.sensorUUID, this.serviceUUID, this.sendCharacteristic, <ArrayBuffer>data.buffer);
   }
 
   private setTubeVoltageOff(device: DeviceOGKit) {
-    const data = new Uint8Array([this.IN_PACKET_SET_VOLTAGE, 0x00, 0x00, 0x00, 0x00]);
-    this.ble.write(device.sensorUUID, this.serviceUUID, this.sendCharacteristic, <ArrayBuffer>data.buffer);
+    this.sendData(device, [this.SEND_SET_VOLTAGE, 0x00, 0x00, 0x00, 0x00]);
+  }
+
+  private sendData(device: DeviceOGKit, data: number[]): Promise<any> {
+    return this.ble.write(device.sensorUUID, this.service, this.sendCharacteristic, <ArrayBuffer>(
+      new Uint8Array(data).buffer
+    ));
+  }
+
+  private startReceiveData(device: DeviceOGKit): Observable<any> {
+    return this.ble.startNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
+  }
+
+  private stopReceiveData(device: DeviceOGKit) {
+    return this.ble.stopNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
   }
 
   private decodeStringArray(array: Uint8Array): string {
@@ -117,15 +129,15 @@ export class DeviceOGKitService /*extends AbstractDeviceService<DeviceOGKit>*/ {
   private decodeDataPackage(buffer: ArrayBuffer): Step | null {
     const dataView = new DataView(buffer);
     if (
-      dataView.getUint8(this.OUT_PACKET_HIT_POSITION) === this.OUT_PACKET_HIT &&
-      dataView.getUint8(this.OUT_PACKET_TEMPERATURE_POSITION) === this.OUT_PACKET_TEMPERATURE &&
-      dataView.getUint8(this.OUT_PACKET_VOLTAGE_POSITION) === this.OUT_PACKET_VOLTAGE
+      dataView.getUint8(this.RECEIVE_HIT_POSITION) === this.RECEIVE_HIT &&
+      dataView.getUint8(this.RECEIVE_TEMPERATURE_POSITION) === this.RECEIVE_TEMPERATURE &&
+      dataView.getUint8(this.RECEIVE_VOLTAGE_POSITION) === this.RECEIVE_VOLTAGE
     ) {
       return {
         ts: Date.now(),
-        hitsNumber: dataView.getUint8(this.OUT_PACKET_HIT_POSITION + 1),
-        temperature: dataView.getFloat32(this.OUT_PACKET_TEMPERATURE_POSITION + 1, true),
-        voltage: dataView.getFloat32(this.OUT_PACKET_VOLTAGE_POSITION + 1, true)
+        hitsNumber: dataView.getUint8(this.RECEIVE_HIT_POSITION + 1),
+        temperature: dataView.getFloat32(this.RECEIVE_TEMPERATURE_POSITION + 1, true),
+        voltage: dataView.getFloat32(this.RECEIVE_VOLTAGE_POSITION + 1, true)
       };
     } else {
       return null;
