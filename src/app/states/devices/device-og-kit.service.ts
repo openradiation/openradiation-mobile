@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BLE } from '@ionic-native/ble/ngx';
 import { Observable, of } from 'rxjs';
-import { filter, scan, shareReplay, take, tap } from 'rxjs/operators';
-import { Measure } from '../measures/measure';
+import { filter, map, scan, shareReplay, take, tap } from 'rxjs/operators';
+import { Measure, Step } from '../measures/measure';
 import { DeviceOGKit } from './device-og-kit';
 
 // Todo add inheritance when angular issue fixed https://github.com/angular/angular/issues/24011
@@ -14,12 +14,11 @@ export class DeviceOGKitService /*extends AbstractDeviceService<DeviceOGKit>*/ {
   private sendCharacteristic = '00002222-0000-1000-8000-00805F9B34FB';
   private receiveCharacteristic = '00002221-0000-1000-8000-00805F9B34FB';
 
-  private IN_PACKET_GET_INFO = 0x12;
-  private OUT_PACKET_SENSOR_TYPE = 3;
-  private OUT_PACKET_TUBE_TYPE = 16;
+  private IN_PACKAGE_GET_INFO = 0x12;
+  private OUT_PACKAGE_SENSOR_TYPE = 3;
+  private OUT_PACKAGE_TUBE_TYPE = 16;
 
   private IN_PACKET_SET_VOLTAGE = 0x11;
-  private OUT_PACKET_VOLTAGE = 18;
   private tubesVoltageProfile: { [K: string]: { min: number; max: number; setVoltageOnPayload: number[] } } = {
     'SBM-20': {
       min: 340,
@@ -39,6 +38,11 @@ export class DeviceOGKitService /*extends AbstractDeviceService<DeviceOGKit>*/ {
   };
 
   private OUT_PACKET_HIT = 5;
+  private OUT_PACKET_HIT_POSITION = 0;
+  private OUT_PACKET_TEMPERATURE = 6;
+  private OUT_PACKET_TEMPERATURE_POSITION = 2;
+  private OUT_PACKET_VOLTAGE = 18;
+  private OUT_PACKET_VOLTAGE_POSITION = 9;
 
   constructor(protected ble: BLE) {}
 
@@ -47,17 +51,17 @@ export class DeviceOGKitService /*extends AbstractDeviceService<DeviceOGKit>*/ {
       .startNotification(device.sensorUUID, this.serviceUUID, this.receiveCharacteristic)
       .pipe(shareReplay());
     startNotification.subscribe();
-    const data = new Uint8Array([this.IN_PACKET_GET_INFO]);
+    const data = new Uint8Array([this.IN_PACKAGE_GET_INFO]);
     this.ble.write(device.sensorUUID, this.serviceUUID, this.sendCharacteristic, <ArrayBuffer>data.buffer);
     return this.ble.startNotification(device.sensorUUID, this.serviceUUID, this.receiveCharacteristic).pipe(
       scan((update: Partial<DeviceOGKit>, buffer: ArrayBuffer) => {
         const array = new Uint8Array(buffer);
         switch (array[0]) {
-          case this.OUT_PACKET_SENSOR_TYPE:
-            update.apparatusSensorType = this.decodeBuffer(array);
+          case this.OUT_PACKAGE_SENSOR_TYPE:
+            update.apparatusSensorType = this.decodeStringArray(array);
             break;
-          case this.OUT_PACKET_TUBE_TYPE:
-            update.apparatusTubeType = this.decodeBuffer(array);
+          case this.OUT_PACKAGE_TUBE_TYPE:
+            update.apparatusTubeType = this.decodeStringArray(array);
             break;
         }
         return update;
@@ -79,14 +83,13 @@ export class DeviceOGKitService /*extends AbstractDeviceService<DeviceOGKit>*/ {
   }
 
   startMeasureScan(device: DeviceOGKit): Observable<any> {
-    // this.setTubeVoltageOn(device);
+    this.setTubeVoltageOn(device);
     return this.ble.startNotification(device.sensorUUID, this.serviceUUID, this.receiveCharacteristic).pipe(
       filter((buffer: ArrayBuffer) => {
-        const array = new Uint8Array(buffer);
-        console.log(array[0]);
-        if (array[0] === this.OUT_PACKET_VOLTAGE) {
-          console.log(this.decodeBuffer(array));
-          return Number(this.decodeBuffer(array)) > this.tubesVoltageProfile[device.apparatusTubeType].min;
+        const dataPackage = this.decodeDataPackage(buffer);
+        console.log(dataPackage);
+        if (dataPackage) {
+          return dataPackage.voltage > this.tubesVoltageProfile[device.apparatusTubeType].min;
         } else {
           return false;
         }
@@ -96,12 +99,24 @@ export class DeviceOGKitService /*extends AbstractDeviceService<DeviceOGKit>*/ {
     );
   }
 
+  getSteps(device: DeviceOGKit, stopSignal: Observable<any>): Observable<Step> {
+    stopSignal.subscribe(() =>
+      this.ble.stopNotification(device.sensorUUID, this.serviceUUID, this.receiveCharacteristic)
+    );
+    return this.ble.startNotification(device.sensorUUID, this.serviceUUID, this.receiveCharacteristic).pipe(
+      map((buffer: ArrayBuffer) => this.decodeDataPackage(buffer)),
+      filter((step: Step | null): step is Step => step !== null)
+    );
+  }
+
   setTubeVoltageOn(device: DeviceOGKit) {
     const data = new Uint8Array([
       this.IN_PACKET_SET_VOLTAGE,
       ...this.tubesVoltageProfile[device.apparatusTubeType].setVoltageOnPayload
     ]);
-    this.ble.write(device.sensorUUID, this.serviceUUID, this.sendCharacteristic, <ArrayBuffer>data.buffer);
+    this.ble
+      .write(device.sensorUUID, this.serviceUUID, this.sendCharacteristic, <ArrayBuffer>data.buffer)
+      .then(console.log);
   }
 
   setTubeVoltageOff(device: DeviceOGKit) {
@@ -109,7 +124,25 @@ export class DeviceOGKitService /*extends AbstractDeviceService<DeviceOGKit>*/ {
     this.ble.write(device.sensorUUID, this.serviceUUID, this.sendCharacteristic, <ArrayBuffer>data.buffer);
   }
 
-  private decodeBuffer(array: Uint8Array): string {
+  private decodeStringArray(array: Uint8Array): string {
     return new TextDecoder('utf8').decode(array.slice(2, 2 + array[1]));
+  }
+
+  private decodeDataPackage(buffer: ArrayBuffer): Step | null {
+    const dataView = new DataView(buffer);
+    if (
+      dataView.getUint8(this.OUT_PACKET_HIT_POSITION) === this.OUT_PACKET_HIT &&
+      dataView.getUint8(this.OUT_PACKET_TEMPERATURE_POSITION) === this.OUT_PACKET_TEMPERATURE &&
+      dataView.getUint8(this.OUT_PACKET_VOLTAGE_POSITION) === this.OUT_PACKET_VOLTAGE
+    ) {
+      return {
+        ts: Date.now(),
+        hitsNumber: dataView.getUint8(this.OUT_PACKET_HIT_POSITION + 1),
+        temperature: dataView.getFloat32(this.OUT_PACKET_TEMPERATURE_POSITION + 1, true),
+        voltage: dataView.getFloat32(this.OUT_PACKET_VOLTAGE_POSITION + 1, true)
+      };
+    } else {
+      return null;
+    }
   }
 }
