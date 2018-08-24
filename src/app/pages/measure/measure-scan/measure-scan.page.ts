@@ -56,7 +56,7 @@ export class MeasureScanPage extends AutoUnsubscribePage {
     this.store.dispatch(new StartWatchPosition());
     this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
       if (connectedDevice) {
-        this.store.dispatch(new StartMeasureScan(connectedDevice));
+        this.store.dispatch(new StartMeasureScan(connectedDevice)).subscribe();
       }
     });
   }

@@ -183,7 +183,7 @@ export class MeasuresState {
     const state = getState();
     if (state.currentMeasure && state.currentMeasure.steps) {
       const currentMeasure = { ...state.currentMeasure, steps: [...state.currentMeasure.steps, action.step] };
-      currentMeasure.endTime = Date.now();
+      currentMeasure.endTime = action.step.ts;
       currentMeasure.hitsNumber += action.step.hitsNumber;
       currentMeasure.value = this.measuresService.computeRadiationValue(currentMeasure, action.device);
       currentMeasure.temperature =

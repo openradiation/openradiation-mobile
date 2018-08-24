@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BLE } from '@ionic-native/ble/ngx';
 import { Observable, of } from 'rxjs';
-import { filter, map, scan, shareReplay, take, tap } from 'rxjs/operators';
+import { concatMap, filter, map, scan, shareReplay, take } from 'rxjs/operators';
 import { Measure, Step } from '../measures/measure';
 import { DeviceOGKit } from './device-og-kit';
+import { fromPromise } from 'rxjs/internal-compatibility';
 
 // Todo add inheritance when angular issue fixed https://github.com/angular/angular/issues/24011
 @Injectable({
@@ -68,7 +69,9 @@ export class DeviceOGKitService /*extends AbstractDeviceService<DeviceOGKit>*/ {
       }, {}),
       filter(update => update.apparatusSensorType !== undefined && update.apparatusTubeType !== undefined),
       take(1),
-      tap(() => this.ble.stopNotification(device.sensorUUID, this.serviceUUID, this.receiveCharacteristic))
+      concatMap(() =>
+        fromPromise(this.ble.stopNotification(device.sensorUUID, this.serviceUUID, this.receiveCharacteristic))
+      )
     );
   }
 
@@ -82,44 +85,27 @@ export class DeviceOGKitService /*extends AbstractDeviceService<DeviceOGKit>*/ {
     return 0.000001 * TcNet ** 3 + 0.0025 * TcNet ** 2 + 0.39 * TcNet;
   }
 
-  startMeasureScan(device: DeviceOGKit): Observable<any> {
+  startMeasureScan(device: DeviceOGKit, stopSignal: Observable<any>): Observable<Step> {
     this.setTubeVoltageOn(device);
-    return this.ble.startNotification(device.sensorUUID, this.serviceUUID, this.receiveCharacteristic).pipe(
-      filter((buffer: ArrayBuffer) => {
-        const dataPackage = this.decodeDataPackage(buffer);
-        console.log(dataPackage);
-        if (dataPackage) {
-          return dataPackage.voltage > this.tubesVoltageProfile[device.apparatusTubeType].min;
-        } else {
-          return false;
-        }
-      }),
-      take(1),
-      tap(() => this.ble.stopNotification(device.sensorUUID, this.serviceUUID, this.receiveCharacteristic))
-    );
-  }
-
-  getSteps(device: DeviceOGKit, stopSignal: Observable<any>): Observable<Step> {
     stopSignal.subscribe(() =>
       this.ble.stopNotification(device.sensorUUID, this.serviceUUID, this.receiveCharacteristic)
     );
     return this.ble.startNotification(device.sensorUUID, this.serviceUUID, this.receiveCharacteristic).pipe(
       map((buffer: ArrayBuffer) => this.decodeDataPackage(buffer)),
-      filter((step: Step | null): step is Step => step !== null)
+      filter((step: Step | null): step is Step => step !== null),
+      filter((step: Step) => step.voltage > this.tubesVoltageProfile[device.apparatusTubeType].min)
     );
   }
 
-  setTubeVoltageOn(device: DeviceOGKit) {
+  private setTubeVoltageOn(device: DeviceOGKit) {
     const data = new Uint8Array([
       this.IN_PACKET_SET_VOLTAGE,
       ...this.tubesVoltageProfile[device.apparatusTubeType].setVoltageOnPayload
     ]);
-    this.ble
-      .write(device.sensorUUID, this.serviceUUID, this.sendCharacteristic, <ArrayBuffer>data.buffer)
-      .then(console.log);
+    this.ble.write(device.sensorUUID, this.serviceUUID, this.sendCharacteristic, <ArrayBuffer>data.buffer);
   }
 
-  setTubeVoltageOff(device: DeviceOGKit) {
+  private setTubeVoltageOff(device: DeviceOGKit) {
     const data = new Uint8Array([this.IN_PACKET_SET_VOLTAGE, 0x00, 0x00, 0x00, 0x00]);
     this.ble.write(device.sensorUUID, this.serviceUUID, this.sendCharacteristic, <ArrayBuffer>data.buffer);
   }
