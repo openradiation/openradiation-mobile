@@ -89,3 +89,16 @@ export enum HitsAccuracyThreshold {
   good = 25,
   accurate = 50
 }
+
+export interface MeasureReport {
+  latitude?: number;
+  longitude?: number;
+  endLatitude?: number;
+  endLongitude?: number;
+  date?: string;
+  startTime?: string;
+  duration?: number;
+  temperature?: number;
+  hitsNumber?: number;
+  value?: number;
+}

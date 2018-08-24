@@ -2,7 +2,7 @@ import { Device } from '@ionic-native/device/ngx';
 import { Geoposition } from '@ionic-native/geolocation';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { tap } from 'rxjs/operators';
-import { Measure } from './measure';
+import { Measure, MeasureReport } from './measure';
 import { MeasuresService } from './measure.service';
 import {
   DisableAutoPublish,
@@ -12,6 +12,7 @@ import {
   PositionChanged,
   StartManualMeasure,
   StartMeasure,
+  StartMeasureReport,
   StartMeasureScan,
   StartWatchPosition,
   StopMeasure,
@@ -24,9 +25,15 @@ import { of } from 'rxjs';
 
 export interface MeasuresStateModel {
   measures: Measure[];
-  currentMeasure?: Measure;
   currentPosition?: Geoposition;
   isWatchingPosition: boolean;
+  currentMeasure?: Measure;
+  measureReport?: {
+    model: MeasureReport;
+    dirty: boolean;
+    status: string;
+    errors: any;
+  };
   params: {
     expertMode: boolean;
     autoPublish: boolean;
@@ -157,6 +164,27 @@ export class MeasuresState {
     });
   }
 
+  @Action(StartManualMeasure)
+  startManualMeasure({ getState, patchState }: StateContext<MeasuresStateModel>) {
+    const state = getState();
+    if (state.currentPosition) {
+      patchState({
+        currentMeasure: new Measure(
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          this.device.uuid,
+          this.device.platform,
+          this.device.version,
+          this.device.model,
+          '',
+          true
+        )
+      });
+    }
+  }
+
   @Action(StopMeasure)
   stopMeasure({ getState, patchState }: StateContext<MeasuresStateModel>) {
     const state = getState();
@@ -227,23 +255,34 @@ export class MeasuresState {
     }
   }
 
-  @Action(StartManualMeasure)
-  startManualMeasure({ getState, patchState }: StateContext<MeasuresStateModel>) {
+  @Action(StartMeasureReport)
+  startMeasureReport({ getState, patchState }: StateContext<MeasuresStateModel>) {
     const state = getState();
-    if (state.currentPosition) {
+    if (state.currentMeasure) {
+      let model: MeasureReport;
+      if (state.currentMeasure.manualReporting) {
+        model = {};
+      } else {
+        model = {
+          latitude: state.currentMeasure.latitude,
+          longitude: state.currentMeasure.longitude,
+          endLatitude: state.currentMeasure.endLatitude,
+          endLongitude: state.currentMeasure.endLongitude,
+          date: undefined,
+          startTime: undefined,
+          duration: state.currentMeasure.endTime - state.currentMeasure.startTime,
+          temperature: state.currentMeasure.temperature,
+          hitsNumber: state.currentMeasure.hitsNumber,
+          value: state.currentMeasure.value
+        };
+      }
       patchState({
-        currentMeasure: new Measure(
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          this.device.uuid,
-          this.device.platform,
-          this.device.version,
-          this.device.model,
-          '',
-          true
-        )
+        measureReport: {
+          model,
+          dirty: false,
+          status: '',
+          errors: {}
+        }
       });
     }
   }
