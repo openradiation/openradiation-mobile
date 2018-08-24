@@ -7,5 +7,45 @@
             <app-gps-indicator other [positionAccuracy]="currentMeasure.accuracy"></app-gps-indicator>
             <app-gps-indicator other [positionAccuracy]="currentMeasure.endAccuracy"></app-gps-indicator>
         </div>
+
+        <form [formGroup]="measureReportForm" ngxsForm="measures.measureReport">
+            <ion-list>
+                <app-category-label>Début</app-category-label>
+                <ion-item>
+                    <ion-label position="floating">Latitude</ion-label>
+                    <ion-input formControlName="latitude" required></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="floating">Longitude</ion-label>
+                    <ion-input formControlName="longitude" required></ion-input>
+                </ion-item>
+            </ion-list>
+            <ion-list>
+                <app-category-label>Fin</app-category-label>
+                <ion-item>
+                    <ion-label position="floating">Lattitude</ion-label>
+                    <ion-input formControlName="endLatitude" required></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="floating">Longitude</ion-label>
+                    <ion-input formControlName="endLongitude" required></ion-input>
+                </ion-item>
+            </ion-list>
+            <ion-list>
+                <ion-item>
+                    <ion-label position="floating">Date</ion-label>
+                    <ion-input formControlName="startTime" required></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="floating">Longitude</ion-label>
+                    <ion-input formControlName="endLongitude" required></ion-input>
+                </ion-item>
+            </ion-list>
+        </form>
+        <app-round-button [disabled]="!measureReportForm.valid"
+                          [src]="measureReportForm.valid ? 'assets/img/button-on.png' : 'assets/img/button-off.png'"
+                          (click)="stopReport()">
+            OK
+        </app-round-button>
     </ion-content>
 </ng-container>
