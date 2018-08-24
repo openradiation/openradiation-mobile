@@ -6,6 +6,7 @@ import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
 import { HitsAccuracy, HitsAccuracyThreshold, Measure, PositionAccuracy } from '../../../states/measures/measure';
 import {
+  PositionChanged,
   StartMeasureScan,
   StartWatchPosition,
   StopMeasureScan,
@@ -53,17 +54,11 @@ export class MeasureScanPage extends AutoUnsubscribePage {
         .pipe(ofActionSuccessful(StopMeasureScan))
         .subscribe(() => this.router.navigate(['measure', 'report']))
     );
-    this.store.dispatch(new StartWatchPosition());
     this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
       if (connectedDevice) {
         this.store.dispatch(new StartMeasureScan(connectedDevice)).subscribe();
       }
     });
-  }
-
-  ionViewWillLeave() {
-    super.ionViewWillLeave();
-    this.store.dispatch(new StopWatchPosition());
   }
 
   updateHitsAccuracy(measure?: Measure) {
@@ -84,6 +79,12 @@ export class MeasureScanPage extends AutoUnsubscribePage {
   }
 
   stopScan() {
-    this.store.dispatch(new StopMeasureScan());
+    this.store.dispatch(new StartWatchPosition());
+    this.subscriptions.push(
+      this.actions$.pipe(ofActionSuccessful(PositionChanged)).subscribe(() => {
+        this.store.dispatch(new StopMeasureScan());
+        this.store.dispatch(new StopWatchPosition());
+      })
+    );
   }
 }
