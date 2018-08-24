@@ -148,23 +148,19 @@ export class MeasuresState {
   @Action(StartMeasure)
   startMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, action: StartMeasure) {
     const state = getState();
-    if (state.currentPosition) {
-      patchState({
-        currentMeasure: new Measure(
-          state.currentPosition,
-          action.device.sensorUUID,
-          action.device.apparatusId,
-          action.device.apparatusVersion,
-          action.device.apparatusSensorType,
-          action.device.apparatusTubeType,
-          this.device.uuid,
-          this.device.platform,
-          this.device.version,
-          this.device.model,
-          ''
-        )
-      });
-    }
+    patchState({
+      currentMeasure: new Measure(
+        action.device.apparatusId,
+        action.device.apparatusVersion,
+        action.device.apparatusSensorType,
+        action.device.apparatusTubeType,
+        this.device.uuid,
+        this.device.platform,
+        this.device.version,
+        this.device.model,
+        ''
+      )
+    });
   }
 
   @Action(StopMeasure)
@@ -198,11 +194,20 @@ export class MeasuresState {
   @Action(StartMeasureScan)
   startMeasureScan({ getState, patchState }: StateContext<MeasuresStateModel>, action: StartMeasureScan) {
     const state = getState();
-    if (state.currentMeasure) {
+    if (state.currentMeasure && state.currentPosition) {
       return this.measuresService.startMeasureScan(action.device).pipe(
         tap(() => {
           patchState({
-            currentMeasure: { ...state.currentMeasure!, startTime: Date.now(), endTime: Date.now() }
+            currentMeasure: {
+              ...state.currentMeasure!,
+              startTime: Date.now(),
+              endTime: Date.now(),
+              latitude: state.currentPosition!.coords.latitude,
+              longitude: state.currentPosition!.coords.longitude,
+              accuracy: state.currentPosition!.coords.accuracy,
+              altitude: state.currentPosition!.coords.altitude,
+              altitudeAccuracy: state.currentPosition!.coords.altitudeAccuracy
+            }
           });
         })
       );
@@ -214,9 +219,16 @@ export class MeasuresState {
   @Action(StopMeasureScan)
   stopMeasureScan({ getState, patchState }: StateContext<MeasuresStateModel>) {
     const state = getState();
-    if (state.currentMeasure) {
+    if (state.currentMeasure && state.currentPosition) {
       patchState({
-        currentMeasure: { ...state.currentMeasure, endTime: Date.now() }
+        currentMeasure: {
+          ...state.currentMeasure,
+          endLatitude: state.currentPosition.coords.longitude,
+          endLongitude: state.currentPosition.coords.latitude,
+          endAccuracy: state.currentPosition.coords.accuracy,
+          endAltitude: state.currentPosition.coords.altitude,
+          endAltitudeAccuracy: state.currentPosition.coords.altitudeAccuracy
+        }
       });
     }
   }
@@ -227,8 +239,6 @@ export class MeasuresState {
     if (state.currentPosition) {
       patchState({
         currentMeasure: new Measure(
-          state.currentPosition,
-          undefined,
           undefined,
           undefined,
           undefined,

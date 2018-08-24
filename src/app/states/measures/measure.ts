@@ -1,5 +1,3 @@
-import { Geoposition } from '@ionic-native/geolocation';
-
 export class Measure {
   apparatusId?: string;
   apparatusVersion?: string;
@@ -18,8 +16,8 @@ export class Measure {
   endLatitude: number;
   endLongitude: number;
   endAccuracy: number;
-  andAltitude: number;
-  andAltitudeAccuracy: number;
+  endAltitude: number;
+  endAltitudeAccuracy: number;
   deviceUuid: string;
   devicePlatform: string;
   deviceVersion: string;
@@ -38,8 +36,6 @@ export class Measure {
   steps?: Step[] = [];
 
   constructor(
-    position: Geoposition,
-    public sensorUUID: string | undefined,
     apparatusId: string | undefined,
     apparatusVersion: string | undefined,
     apparatusSensorType: string | undefined,
@@ -56,11 +52,6 @@ export class Measure {
     this.apparatusSensorType = apparatusSensorType;
     this.apparatusTubeType = apparatusTubeType;
     this.apparatusVersion = apparatusVersion;
-    this.longitude = position.coords.longitude;
-    this.latitude = position.coords.latitude;
-    this.accuracy = position.coords.accuracy;
-    this.altitude = position.coords.altitude;
-    this.altitudeAccuracy = position.coords.altitudeAccuracy;
     this.deviceUuid = deviceUuid;
     this.devicePlatform = devicePlatform;
     this.deviceVersion = deviceVersion;
