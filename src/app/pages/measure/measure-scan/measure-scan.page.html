@@ -5,12 +5,17 @@
 <ion-content>
     <div class="content" *ngIf="currentMeasure$ | async as currentMeasure">
         <div class="category">
+            <ng-template #measureScanNotStarted>
+                -
+            </ng-template>
             <div class="item">
                 <div class="label">
                     Début de la mesure
                 </div>
                 <div class="value">
-                    {{currentMeasure.startTime | date: 'HH:mm:SS'}}
+                    <ng-container *ngIf="currentMeasure.startTime; else measureScanNotStarted">
+                        {{currentMeasure.startTime | date: 'HH:mm:SS'}}
+                    </ng-container>
                 </div>
             </div>
             <div class="separator"></div>
@@ -19,7 +24,9 @@
                     Température capteur
                 </div>
                 <div class="value">
-                    {{31.25}}°C
+                    <ng-container *ngIf="currentMeasure.steps && currentMeasure.steps.length > 0; else measureScanNotStarted">
+                        {{currentMeasure.steps[currentMeasure.steps.length - 1].temperature}}
+                    </ng-container>
                 </div>
                 <div class="icon">
                     <img src="assets/img/icon-temp.png">
@@ -42,7 +49,9 @@
                     Nb coups
                 </div>
                 <div class="value">
-                    {{currentMeasure.hitsNumber}}
+                    <ng-container *ngIf="currentMeasure.startTime; else measureScanNotStarted">
+                        {{currentMeasure.hitsNumber}}
+                    </ng-container>
                 </div>
             </div>
             <div class="separator"></div>
@@ -55,9 +64,6 @@
                         {{(currentMeasure.hitsNumber / (currentMeasure.endTime - currentMeasure.startTime)) * 1000 * 60 |
                         number: '1.2-2'}}
                     </ng-container>
-                    <ng-template #measureScanNotStarted>
-                        0.00
-                    </ng-template>
                 </div>
             </div>
             <div class="item duration">
@@ -68,9 +74,6 @@
                     <ng-container *ngIf="currentMeasure.endTime && currentMeasure.startTime; else measureScanNotStarted">
                         {{(currentMeasure.endTime - currentMeasure.startTime) | duration}}
                     </ng-container>
-                    <ng-template #measureScanNotStarted>
-                        00:00
-                    </ng-template>
                 </div>
                 <div class="icon">
                     <img src="assets/img/icon-duration.png">
