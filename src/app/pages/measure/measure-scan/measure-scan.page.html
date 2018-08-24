@@ -91,7 +91,7 @@
                     DÉBIT DE DOSE
                 </div>
                 <div class="value">
-                    {{currentMeasure.value}}
+                    {{currentMeasure.value | number: '1.3-3'}}
                 </div>
                 <div class="unit">
                     μSvh
@@ -102,7 +102,7 @@
                 <img src="assets/img/bg-radiation.png">
             </div>
         </div>
-        <app-round-button [disabled]="currentMeasure.hitsNumber <= hitsAccuracyThreshold.accurate"
+        <app-round-button [disabled]="!(currentMeasure.hitsNumber >= hitsAccuracyThreshold.accurate)"
                           [src]="currentMeasure.hitsNumber >= hitsAccuracyThreshold.accurate ? 'assets/img/button-on.png' : 'assets/img/button-off.png'"
                           (click)="stopScan()">
             FIN

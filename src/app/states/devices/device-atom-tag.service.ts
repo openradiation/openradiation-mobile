@@ -3,7 +3,7 @@ import { BLE } from '@ionic-native/ble/ngx';
 import { Observable, of } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { map } from 'rxjs/operators';
-import { Measure } from '../measures/measure';
+import { Measure, Step } from '../measures/measure';
 import { DeviceType } from './abstract-device';
 import { DeviceAtomTag } from './device-atom-tag';
 
@@ -64,7 +64,7 @@ export class DeviceAtomTagService /*extends AbstractDeviceService<DeviceAtomTag>
   }
 
   // TODO implement start measure for AtomTag
-  startMeasureScan(device: DeviceAtomTag): Observable<any> {
-    return of(null);
+  startMeasureScan(device: DeviceAtomTag, stopSignal: Observable<any>): Observable<Step> {
+    return of();
   }
 }
