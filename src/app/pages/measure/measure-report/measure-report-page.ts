@@ -34,6 +34,10 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     private dateService: DateService
   ) {
     super(tabsService, elementRef);
+  }
+
+  ionViewDidEnter() {
+    super.ionViewDidEnter();
 
     /*const measureReport = this.store.selectSnapshot(
       ({ measures }: { measures: MeasuresStateModel }) => measures.measureReport
@@ -79,11 +83,16 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     if (measureReport) {
       this.measureReportForm = this.formBuilder.group(measureReport.model);
     }
-  }
-
-  ionViewDidEnter() {
-    super.ionViewDidEnter();
     this.subscriptions.push(
+      this.measureReportForm.valueChanges.subscribe(value => {
+        if (typeof value.duration !== 'string' && value.duration !== null) {
+          this.measureReportForm
+            .get('duration')!
+            .setValue(
+              this.dateService.toISODuration((value.duration.minute.value * 60 + value.duration.second.value) * 1000)
+            );
+        }
+      }),
       this.actions$.pipe(ofActionSuccessful(StopMeasureReport)).subscribe(() =>
         this.router.navigate([
           'tabs',
