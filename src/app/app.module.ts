@@ -22,6 +22,7 @@ import { DevicesState } from './states/devices/devices.state';
 import { MeasuresState } from './states/measures/measures.state';
 import { UserState } from './states/user/user.state';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [AppComponent, MenuComponent],
@@ -48,7 +49,8 @@ import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
     Diagnostic,
     Network,
     Device,
-    ScreenOrientation
+    ScreenOrientation,
+    DatePipe
   ],
   bootstrap: [AppComponent]
 })
