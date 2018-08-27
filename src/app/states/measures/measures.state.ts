@@ -273,7 +273,10 @@ export class MeasuresState {
           duration: undefined,
           temperature: undefined,
           hitsNumber: undefined,
-          value: undefined
+          value: undefined,
+          measurementHeight: undefined,
+          measurementEnvironment: undefined,
+          rain: undefined
         };
       } else {
         model = {
@@ -286,7 +289,10 @@ export class MeasuresState {
           duration: this.dateService.toISODuration(state.currentMeasure.endTime - state.currentMeasure.startTime),
           temperature: state.currentMeasure.temperature,
           hitsNumber: state.currentMeasure.hitsNumber,
-          value: state.currentMeasure.value
+          value: state.currentMeasure.value,
+          measurementHeight: undefined,
+          measurementEnvironment: undefined,
+          rain: undefined
         };
       }
       patchState({
@@ -314,11 +320,17 @@ export class MeasuresState {
           value: state.measureReport.model.value!,
           hitsNumber: state.measureReport.model.hitsNumber!,
           startTime,
-          endTime: startTime + (durationDate.getMinutes() * 60 + durationDate.getSeconds()) * 1000
+          endTime: startTime + (durationDate.getMinutes() * 60 + durationDate.getSeconds()) * 1000,
+          measurementHeight: state.measureReport.model.measurementHeight!,
+          measurementEnvironment: state.measureReport.model.measurementEnvironment!,
+          rain: state.measureReport.model.rain!
         };
       } else {
         currentMeasure = {
-          ...state.currentMeasure
+          ...state.currentMeasure,
+          measurementHeight: state.measureReport.model.measurementHeight!,
+          measurementEnvironment: state.measureReport.model.measurementEnvironment!,
+          rain: state.measureReport.model.rain!
         };
       }
       patchState({

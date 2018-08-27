@@ -115,4 +115,7 @@ export interface MeasureReport {
   temperature: number | undefined;
   hitsNumber: number | undefined;
   value: number | undefined;
+  measurementHeight: number | undefined;
+  measurementEnvironment: MeasureEnvironment | undefined;
+  rain: boolean | undefined;
 }

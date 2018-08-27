@@ -1,0 +1,39 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 10px;
+
+  .title {
+    font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+    font-weight: 200;
+    font-size: 16px;
+    color: inherit;
+    margin-bottom: 18px;
+  }
+  .list {
+    display: flex;
+    align-items: start;
+    justify-content: space-evenly;
+    width: 100%;
+    .item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 60px;
+      .label {
+        color: inherit;
+        font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+        font-size: 12px;
+        white-space: normal;
+        text-align: center;
+        opacity: 0.6;
+        &.selected {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}

@@ -65,10 +65,15 @@
                         <ion-input formControlName="value" required type="number"></ion-input>μSvh
                     </ion-item>
                 </ion-list>
-                <div class="environment">
-                    <div>
-
-                    </div>
+                <div class="separator"></div>
+                <app-select-icon [options]="measurementEnvironmentOptions" formControlName="measurementEnvironment" [title]="'Environnement de la mesure'">
+                </app-select-icon>
+                <div class="separator"></div>
+                <div class="options">
+                    <app-select-icon [options]="measurementHeightOptions" formControlName="measurementHeight" [title]="'Position du capteur'">
+                    </app-select-icon>
+                    <app-select-icon [options]="rainOptions" formControlName="rain" [title]="'Météo'">
+                    </app-select-icon>
                 </div>
             </form>
             <app-round-button [disabled]="!measureReportForm.valid"
