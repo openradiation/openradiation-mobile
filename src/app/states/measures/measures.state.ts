@@ -16,6 +16,7 @@ import {
   StartMeasureScan,
   StartWatchPosition,
   StopMeasure,
+  StopMeasureReport,
   StopMeasureScan,
   StopWatchPosition,
   UpdateMeasure
@@ -295,6 +296,34 @@ export class MeasuresState {
           status: '',
           errors: {}
         }
+      });
+    }
+  }
+
+  @Action(StopMeasureReport)
+  stopMeasureReport({ getState, patchState }: StateContext<MeasuresStateModel>) {
+    const state = getState();
+    if (state.currentMeasure && state.measureReport) {
+      let currentMeasure: Measure;
+      if (state.currentMeasure.manualReporting) {
+        const startTime = new Date(state.measureReport.model.startTime!).getTime();
+        const durationDate = new Date(state.measureReport.model.duration!);
+        currentMeasure = {
+          ...state.currentMeasure,
+          temperature: state.measureReport.model.temperature!,
+          value: state.measureReport.model.value!,
+          hitsNumber: state.measureReport.model.hitsNumber!,
+          startTime,
+          endTime: startTime + (durationDate.getMinutes() * 60 + durationDate.getSeconds()) * 1000
+        };
+      } else {
+        currentMeasure = {
+          ...state.currentMeasure
+        };
+      }
+      patchState({
+        measureReport: undefined,
+        currentMeasure
       });
     }
   }

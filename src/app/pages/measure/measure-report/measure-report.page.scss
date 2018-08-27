@@ -31,8 +31,6 @@
       --min-height: 0;
       &.custom-disabled {
         pointer-events: none;
-      }
-      &.item-has-value {
         ion-label {
           color: $second-color;
         }
