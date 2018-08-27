@@ -69,11 +69,21 @@ ion-item {
   --background: transparent;
   --border-color: white;
 
+  &.has-suffix {
+    padding-right: 8px;
+  }
+
   &.item-has-focus {
     --border-color: #{$second-color};
     --ion-color-primary: #{$second-color};
     ion-label {
       color: $second-color;
+    }
+  }
+
+  &.long-label {
+    ion-label {
+      white-space: normal;
     }
   }
 
