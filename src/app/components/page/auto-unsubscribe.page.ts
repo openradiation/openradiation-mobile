@@ -1,6 +1,6 @@
+import { ElementRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TabsService } from '../../pages/tabs/tabs.service';
-import { ElementRef } from '@angular/core';
 
 export class AutoUnsubscribePage {
   protected subscriptions: Subscription[] = [];

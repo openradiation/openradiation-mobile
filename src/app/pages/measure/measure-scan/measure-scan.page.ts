@@ -2,6 +2,8 @@ import { Component, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { AutoUnsubscribePage } from '../../../components/page/auto-unsubscribe.page';
 import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
 import { HitsAccuracy, HitsAccuracyThreshold, Measure } from '../../../states/measures/measure';
@@ -13,9 +15,7 @@ import {
   StopWatchPosition
 } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
-import { AutoUnsubscribePage } from '../../../components/page/auto-unsubscribe.page';
 import { TabsService } from '../../tabs/tabs.service';
-import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-measure-scan',
