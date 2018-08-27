@@ -72,6 +72,9 @@ ion-item {
   &.item-has-focus {
     --border-color: #{$second-color};
     --ion-color-primary: #{$second-color};
+    ion-label {
+      color: $second-color;
+    }
   }
 
   &.no-padding {

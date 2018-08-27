@@ -5,7 +5,7 @@ import { combineLatest, Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
-import { PositionAccuracy } from '../../../states/measures/measure';
+import { PositionAccuracyThreshold } from '../../../states/measures/measure';
 import { StartMeasure, StartWatchPosition, StopWatchPosition } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
 import { AutoUnsubscribePage } from '../../../components/page/auto-unsubscribe.page';
@@ -36,7 +36,7 @@ export class HomePage extends AutoUnsubscribePage {
     this.canStartMeasure = combineLatest(this.positionAccuracy$, this.connectedDevice$).pipe(
       map(
         ([positionAccuracy, connectedDevice]) =>
-          positionAccuracy !== PositionAccuracy.Error && connectedDevice !== undefined
+          positionAccuracy !== PositionAccuracyThreshold.Error && connectedDevice !== undefined
       )
     );
   }

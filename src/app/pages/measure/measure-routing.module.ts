@@ -14,7 +14,16 @@ const routes: Routes = [
       },
       {
         path: 'report',
-        component: MeasureReportPage
+        children: [
+          {
+            path: 'scan',
+            component: MeasureReportPage
+          },
+          {
+            path: 'manual',
+            component: MeasureReportPage
+          }
+        ]
       }
     ]
   }
