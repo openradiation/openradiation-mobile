@@ -9,7 +9,7 @@
   padding: 10px;
 
   app-round-button {
-    margin: auto 0;
+    margin-top: 20px;
     width: 50%;
   }
 
@@ -40,6 +40,15 @@
         text-align: right;
       }
     }
+  }
+
+  app-select-icon {
+    color: $second-color;
+  }
+
+  .options {
+    display: flex;
+    justify-content: space-between;
   }
 
   .separator {
