@@ -30,7 +30,7 @@ export class Measure {
   measurementHeight: number;
   tags: string[];
   enclosedObject: string;
-  measurementEnvironment: string;
+  measurementEnvironment: MeasureEnvironment;
   rain: boolean;
   sent = false;
   steps?: Step[] = [];
@@ -68,10 +68,16 @@ export interface Step {
   temperature: number;
 }
 
-export enum PositionAccuracy {
+export enum PositionAccuracyThreshold {
   Good = 30,
   Bad = Infinity,
   Error = -1
+}
+
+export enum PositionAccuracy {
+  Good = 'good',
+  Bad = 'bad',
+  Error = 'error'
 }
 
 export enum HitsAccuracy {
@@ -90,15 +96,23 @@ export enum HitsAccuracyThreshold {
   accurate = 50
 }
 
+export enum MeasureEnvironment {
+  Countryside = 'countryside',
+  City = 'city',
+  Ontheroad = 'ontheroad',
+  Inside = 'inside',
+  Plane = 'plane'
+}
+
 export interface MeasureReport {
-  latitude?: number;
-  longitude?: number;
-  endLatitude?: number;
-  endLongitude?: number;
-  date?: string;
-  startTime?: string;
-  duration?: number;
-  temperature?: number;
-  hitsNumber?: number;
-  value?: number;
+  latitude: number | undefined;
+  longitude: number | undefined;
+  endLatitude: number | undefined;
+  endLongitude: number | undefined;
+  date: string | undefined;
+  startTime: string | undefined;
+  duration: string | undefined;
+  temperature: number | undefined;
+  hitsNumber: number | undefined;
+  value: number | undefined;
 }

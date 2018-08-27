@@ -24,10 +24,12 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      this.statusBar.overlaysWebView(true);
-      this.statusBar.styleLightContent();
-      this.splashScreen.hide();
-      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+      if (this.platform.is('cordova')) {
+        this.statusBar.overlaysWebView(true);
+        this.statusBar.styleLightContent();
+        this.splashScreen.hide();
+        this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+      }
     });
     window.addEventListener('keyboardWillShow', () => (this.keyboardOpen = true));
     window.addEventListener('keyboardWillHide', () => (this.keyboardOpen = false));

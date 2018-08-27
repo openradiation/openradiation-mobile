@@ -147,8 +147,7 @@ export class MeasuresState {
   }
 
   @Action(StartMeasure)
-  startMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, action: StartMeasure) {
-    const state = getState();
+  startMeasure({ patchState }: StateContext<MeasuresStateModel>, action: StartMeasure) {
     patchState({
       currentMeasure: new Measure(
         action.device.apparatusId,
@@ -261,7 +260,18 @@ export class MeasuresState {
     if (state.currentMeasure) {
       let model: MeasureReport;
       if (state.currentMeasure.manualReporting) {
-        model = {};
+        model = {
+          latitude: state.currentPosition!.coords.latitude,
+          longitude: state.currentPosition!.coords.longitude,
+          endLatitude: state.currentPosition!.coords.latitude,
+          endLongitude: state.currentPosition!.coords.longitude,
+          date: new Date().toISOString(),
+          startTime: new Date().toISOString(),
+          duration: undefined,
+          temperature: undefined,
+          hitsNumber: undefined,
+          value: undefined
+        };
       } else {
         model = {
           latitude: state.currentMeasure.latitude,
@@ -270,7 +280,7 @@ export class MeasuresState {
           endLongitude: state.currentMeasure.endLongitude,
           date: undefined,
           startTime: undefined,
-          duration: state.currentMeasure.endTime - state.currentMeasure.startTime,
+          duration: undefined,
           temperature: state.currentMeasure.temperature,
           hitsNumber: state.currentMeasure.hitsNumber,
           value: state.currentMeasure.value
