@@ -57,6 +57,7 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     }
   ];
 
+  // TODO make real icons
   measurementHeightOptions: SelectIconOption[] = [
     {
       iconOn: 'assets/img/icon-countryside-on.png',
@@ -106,6 +107,7 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     /*const measureReport = this.store.selectSnapshot(
       ({ measures }: { measures: MeasuresStateModel }) => measures.measureReport
     );*/
+    // TODO remove mock
     this.activatedRoute.url.pipe(take(1)).subscribe(url => (this.reportScan = url[0].path === 'scan'));
     const duration = this.dateService.toISODuration(Date.now());
     const startTime = this.dateService.toISOString(Date.now());
