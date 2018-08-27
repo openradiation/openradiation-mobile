@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
+import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { shareReplay, take, takeUntil } from 'rxjs/operators';
 import { AbstractDevice, DeviceType } from '../devices/abstract-device';
+import { DeviceAtomTag } from '../devices/device-atom-tag';
 import { DeviceAtomTagService } from '../devices/device-atom-tag.service';
+import { DeviceOGKit } from '../devices/device-og-kit';
 import { DeviceOGKitService } from '../devices/device-og-kit.service';
 import { Measure, Step } from './measure';
-import { Observable } from 'rxjs';
-import { DeviceOGKit } from '../devices/device-og-kit';
-import { DeviceAtomTag } from '../devices/device-atom-tag';
-import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
-import { shareReplay, take, takeUntil } from 'rxjs/operators';
 import { StopMeasureScan, UpdateMeasure } from './measures.action';
 
 @Injectable({

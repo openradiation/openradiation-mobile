@@ -1,16 +1,16 @@
 import { Component, ElementRef } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
-import { MeasuresState } from '../../../states/measures/measures.state';
 import { Observable } from 'rxjs';
-import { Measure, MeasureEnvironment, MeasureReport } from '../../../states/measures/measure';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { AutoUnsubscribePage } from '../../../components/page/auto-unsubscribe.page';
-import { TabsService } from '../../tabs/tabs.service';
-import { StopMeasure, StopMeasureReport } from '../../../states/measures/measures.action';
 import { take } from 'rxjs/operators';
-import { DateService } from '../../../states/measures/date.service';
+import { AutoUnsubscribePage } from '../../../components/page/auto-unsubscribe.page';
 import { SelectIconOption } from '../../../components/select-icon/select-icon-option';
+import { DateService } from '../../../states/measures/date.service';
+import { Measure, MeasureEnvironment, MeasureReport } from '../../../states/measures/measure';
+import { StopMeasure, StopMeasureReport } from '../../../states/measures/measures.action';
+import { MeasuresState } from '../../../states/measures/measures.state';
+import { TabsService } from '../../tabs/tabs.service';
 
 @Component({
   selector: 'app-measure-report',

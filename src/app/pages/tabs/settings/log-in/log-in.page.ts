@@ -4,10 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { catchError, take } from 'rxjs/operators';
+import { AutoUnsubscribePage } from '../../../../components/page/auto-unsubscribe.page';
 import { ErrorResponse, ErrorResponseCode } from '../../../../states/measures/error-response';
 import { StartManualMeasure } from '../../../../states/measures/measures.action';
 import { LogIn } from '../../../../states/user/user.action';
-import { AutoUnsubscribePage } from '../../../../components/page/auto-unsubscribe.page';
 import { TabsService } from '../../tabs.service';
 
 @Component({

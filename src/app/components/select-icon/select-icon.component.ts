@@ -1,6 +1,6 @@
 import { Component, forwardRef, Input } from '@angular/core';
-import { SelectIconOption } from './select-icon-option';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { SelectIconOption } from './select-icon-option';
 
 @Component({
   selector: 'app-select-icon',

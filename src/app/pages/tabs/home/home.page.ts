@@ -3,12 +3,12 @@ import { Router } from '@angular/router';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { combineLatest, Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
+import { AutoUnsubscribePage } from '../../../components/page/auto-unsubscribe.page';
 import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
 import { PositionAccuracyThreshold } from '../../../states/measures/measure';
 import { StartMeasure, StartWatchPosition, StopWatchPosition } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
-import { AutoUnsubscribePage } from '../../../components/page/auto-unsubscribe.page';
 import { TabsService } from '../tabs.service';
 
 @Component({

@@ -2,6 +2,7 @@ import { Component, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, ofActionDispatched, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
+import { AutoUnsubscribePage } from '../../../../components/page/auto-unsubscribe.page';
 import { AbstractDevice } from '../../../../states/devices/abstract-device';
 import {
   ConnectDevice,
@@ -12,7 +13,6 @@ import {
   UpdateDeviceInfo
 } from '../../../../states/devices/devices.action';
 import { DevicesState } from '../../../../states/devices/devices.state';
-import { AutoUnsubscribePage } from '../../../../components/page/auto-unsubscribe.page';
 import { TabsService } from '../../tabs.service';
 
 @Component({
