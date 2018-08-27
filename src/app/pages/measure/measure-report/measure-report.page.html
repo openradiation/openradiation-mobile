@@ -49,9 +49,9 @@
                         <ion-datetime display-format="mm:ss" formControlName="duration" required cancelText="Annuler"
                                       doneText="Valider"></ion-datetime>
                     </ion-item>
-                    <ion-item [ngClass]="{'custom-disabled': reportScan}">
+                    <ion-item class="has-suffix long-label" [ngClass]="{'custom-disabled': reportScan}">
                         <ion-label>Température moyenne du capteur</ion-label>
-                        <ion-input formControlName="temperature" required></ion-input>
+                        <ion-input formControlName="temperature" required></ion-input>°C
                     </ion-item>
                 </ion-list>
                 <div class="separator"></div>
@@ -60,9 +60,9 @@
                         <ion-label>Nombre de coups</ion-label>
                         <ion-input formControlName="hitsNumber" required type="number"></ion-input>
                     </ion-item>
-                    <ion-item [ngClass]="{'custom-disabled': reportScan}">
+                    <ion-item class="has-suffix" [ngClass]="{'custom-disabled': reportScan}">
                         <ion-label>Mesure</ion-label>
-                        <ion-input formControlName="value" required type="number"></ion-input>
+                        <ion-input formControlName="value" required type="number"></ion-input>μSvh
                     </ion-item>
                 </ion-list>
                 <div class="environment">
