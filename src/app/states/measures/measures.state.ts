@@ -22,6 +22,7 @@ import {
 } from './measures.action';
 import { PositionService } from './position.service';
 import { of } from 'rxjs';
+import { DateService } from './date.service';
 
 export interface MeasuresStateModel {
   measures: Measure[];
@@ -55,7 +56,8 @@ export class MeasuresState {
   constructor(
     private positionService: PositionService,
     private device: Device,
-    private measuresService: MeasuresService
+    private measuresService: MeasuresService,
+    private dateService: DateService
   ) {}
 
   @Selector()
@@ -265,8 +267,8 @@ export class MeasuresState {
           longitude: state.currentPosition!.coords.longitude,
           endLatitude: state.currentPosition!.coords.latitude,
           endLongitude: state.currentPosition!.coords.longitude,
-          date: new Date().toISOString(),
-          startTime: new Date().toISOString(),
+          date: this.dateService.toISOString(new Date()),
+          startTime: this.dateService.toISOString(new Date()),
           duration: undefined,
           temperature: undefined,
           hitsNumber: undefined,
@@ -278,9 +280,9 @@ export class MeasuresState {
           longitude: state.currentMeasure.longitude,
           endLatitude: state.currentMeasure.endLatitude,
           endLongitude: state.currentMeasure.endLongitude,
-          date: undefined,
-          startTime: undefined,
-          duration: undefined,
+          date: this.dateService.toISOString(state.currentMeasure.startTime),
+          startTime: this.dateService.toISOString(state.currentMeasure.startTime),
+          duration: this.dateService.toISODuration(state.currentMeasure.endTime - state.currentMeasure.startTime),
           temperature: state.currentMeasure.temperature,
           hitsNumber: state.currentMeasure.hitsNumber,
           value: state.currentMeasure.value

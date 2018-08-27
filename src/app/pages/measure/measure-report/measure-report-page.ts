@@ -9,6 +9,7 @@ import { AutoUnsubscribePage } from '../../../components/page/auto-unsubscribe.p
 import { TabsService } from '../../tabs/tabs.service';
 import { StopMeasure, StopMeasureReport } from '../../../states/measures/measures.action';
 import { take } from 'rxjs/operators';
+import { DateService } from '../../../states/measures/date.service';
 
 @Component({
   selector: 'app-measure-report',
@@ -29,7 +30,8 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     private store: Store,
     private router: Router,
     private actions$: Actions,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private dateService: DateService
   ) {
     super(tabsService, elementRef);
 
@@ -37,10 +39,8 @@ export class MeasureReportPage extends AutoUnsubscribePage {
       ({ measures }: { measures: MeasuresStateModel }) => measures.measureReport
     );*/
     this.activatedRoute.url.pipe(take(1)).subscribe(url => (this.reportScan = url[0].path === 'scan'));
-    const duration = new Date();
-    duration.setUTCMinutes(3);
-    duration.setUTCSeconds(29);
-    const startTime = new Date().toISOString();
+    const duration = this.dateService.toISODuration(Date.now());
+    const startTime = this.dateService.toISOString(Date.now());
     const measureReport: {
       model: MeasureReport;
       dirty: boolean;
@@ -55,7 +55,7 @@ export class MeasureReportPage extends AutoUnsubscribePage {
             endLongitude: 2.2768106,
             date: startTime,
             startTime: startTime,
-            duration: duration.toISOString(),
+            duration: duration,
             temperature: 31,
             hitsNumber: 52,
             value: 0.042
