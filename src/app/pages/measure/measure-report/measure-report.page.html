@@ -78,11 +78,14 @@
                 </div>
                 <ng-container *ngIf="login$ | async">
                     <div class="separator"></div>
-                    <ion-list >
+                    <ion-list>
                         <ion-item class="description">
                             <ion-textarea formControlName="description" placeholder="Description de la mesure" rows="5"></ion-textarea>
                         </ion-item>
                     </ion-list>
+                    <div class="tags">
+                        <app-tag-list formControlName="tags" [title]="'Liste des tags'"></app-tag-list>
+                    </div>
                 </ng-container>
             </form>
             <app-round-button [disabled]="!measureReportForm.valid"
