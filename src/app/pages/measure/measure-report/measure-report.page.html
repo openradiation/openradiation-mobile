@@ -49,16 +49,16 @@
                     <ion-list>
                         <ion-item [ngClass]="{'custom-disabled': reportScan}">
                             <ion-label position="fixed">Durée</ion-label>
-                            <ion-datetime display-format="mm:ss" formControlName="duration" required cancelText="Annuler"
+                            <ion-datetime display-format="mm:ss" formControlName="duration" cancelText="Annuler"
                                           doneText="Valider" placeholder="00:00"></ion-datetime>
                         </ion-item>
                         <ion-item class="has-suffix long-label" [ngClass]="{'custom-disabled': reportScan}">
                             <ion-label position="fixed">Température moyenne</ion-label>
-                            <ion-input formControlName="temperature" required type="number" placeholder="0"></ion-input><span class="unit">°C</span>
+                            <ion-input formControlName="temperature" type="number" placeholder="0"></ion-input><span class="unit">°C</span>
                         </ion-item>
                         <ion-item [ngClass]="{'custom-disabled': reportScan}">
                             <ion-label position="fixed">Nombre de coups</ion-label>
-                            <ion-input formControlName="hitsNumber" required type="number" placeholder="0"></ion-input>
+                            <ion-input formControlName="hitsNumber" type="number" placeholder="0"></ion-input>
                         </ion-item>
                         <ion-item class="has-suffix" [ngClass]="{'custom-disabled': reportScan}">
                             <ion-label position="fixed">Mesure</ion-label>
@@ -66,21 +66,24 @@
                         </ion-item>
                     </ion-list>
                 </div>
-                <app-select-icon [options]="measurementEnvironmentOptions" formControlName="measurementEnvironment" [title]="'Environnement de la mesure'">
-                </app-select-icon>
+                <div class="environment">
+                    <app-select-icon [options]="measurementEnvironmentOptions" formControlName="measurementEnvironment" [title]="'Environnement de la mesure'">
+                    </app-select-icon>
+                </div>
                 <div class="options">
                     <app-select-icon [options]="measurementHeightOptions" formControlName="measurementHeight" [title]="'Position du capteur'">
                     </app-select-icon>
                     <app-select-icon [options]="rainOptions" formControlName="rain" [title]="'Météo'">
                     </app-select-icon>
                 </div>
-                <div class="separator"></div>
-                <ion-list *ngIf="login$ | async">
-                    <ion-item>
-                        <ion-label position="stacked">Notes</ion-label>
-                        <ion-textarea formControlName="description" placeholder="Description de la mesure"></ion-textarea>
-                    </ion-item>
-                </ion-list>
+                <ng-container *ngIf="login$ | async">
+                    <div class="separator"></div>
+                    <ion-list >
+                        <ion-item class="description">
+                            <ion-textarea formControlName="description" placeholder="Description de la mesure" rows="5"></ion-textarea>
+                        </ion-item>
+                    </ion-list>
+                </ng-container>
             </form>
             <app-round-button [disabled]="!measureReportForm.valid"
                               [src]="measureReportForm.valid ? 'assets/img/button-on.png' : 'assets/img/button-off.png'"
