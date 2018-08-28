@@ -116,7 +116,7 @@ export class MeasureReportPage extends AutoUnsubscribePage {
       }
       this.subscriptions.push(
         this.measureReportForm.valueChanges.subscribe(value => {
-          if (typeof value.duration !== 'string' && value.duration !== null) {
+          if (typeof value.duration !== 'string' && value.duration) {
             this.measureReportForm
               .get('duration')!
               .setValue(
