@@ -7,9 +7,9 @@ import { take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../components/page/auto-unsubscribe.page';
 import { SelectIconOption } from '../../../components/select-icon/select-icon-option';
 import { DateService } from '../../../states/measures/date.service';
-import { Measure, MeasureEnvironment, MeasureReport } from '../../../states/measures/measure';
-import { StopMeasure, StopMeasureReport } from '../../../states/measures/measures.action';
-import { MeasuresState } from '../../../states/measures/measures.state';
+import { Measure, MeasureEnvironment } from '../../../states/measures/measure';
+import { StartMeasureReport, StopMeasure, StopMeasureReport } from '../../../states/measures/measures.action';
+import { MeasuresState, MeasuresStateModel } from '../../../states/measures/measures.state';
 import { TabsService } from '../../tabs/tabs.service';
 import { UserState } from '../../../states/user/user.state';
 
@@ -106,87 +106,40 @@ export class MeasureReportPage extends AutoUnsubscribePage {
 
   ionViewDidEnter() {
     super.ionViewDidEnter();
-
-    /*const measureReport = this.store.selectSnapshot(
-      ({ measures }: { measures: MeasuresStateModel }) => measures.measureReport
-    );*/
-    // TODO remove mock
-    this.activatedRoute.url.pipe(take(1)).subscribe(url => (this.reportScan = url[0].path === 'scan'));
-    const duration = this.dateService.toISODuration(Date.now());
-    const startTime = this.dateService.toISOString(Date.now());
-    const measureReport: {
-      model: MeasureReport;
-      dirty: boolean;
-      status: string;
-      errors: any;
-    } = {
-      model: this.reportScan
-        ? {
-            latitude: 48.7939052,
-            longitude: 2.2768106,
-            endLatitude: 48.7939052,
-            endLongitude: 2.2768106,
-            date: startTime,
-            startTime: startTime,
-            duration: duration,
-            temperature: 31,
-            hitsNumber: 52,
-            value: 0.0425,
-            measurementHeight: undefined,
-            description: undefined,
-            tags: undefined,
-            measurementEnvironment: undefined,
-            rain: undefined
+    this.store.dispatch(new StartMeasureReport()).subscribe(() => {
+      const measureReport = this.store.selectSnapshot(
+        ({ measures }: { measures: MeasuresStateModel }) => measures.measureReport
+      );
+      this.activatedRoute.url.pipe(take(1)).subscribe(url => (this.reportScan = url[0].path === 'scan'));
+      if (measureReport) {
+        this.measureReportForm = this.formBuilder.group(measureReport.model);
+      }
+      this.subscriptions.push(
+        this.measureReportForm.valueChanges.subscribe(value => {
+          if (typeof value.duration !== 'string' && value.duration !== null) {
+            this.measureReportForm
+              .get('duration')!
+              .setValue(
+                this.dateService.toISODuration((value.duration.minute.value * 60 + value.duration.second.value) * 1000)
+              );
           }
-        : {
-            latitude: 48.7939052,
-            longitude: 2.2768106,
-            endLatitude: 48.7939052,
-            endLongitude: 2.2768106,
-            date: startTime,
-            startTime: startTime,
-            duration: undefined,
-            temperature: undefined,
-            hitsNumber: undefined,
-            value: undefined,
-            measurementHeight: undefined,
-            description: undefined,
-            tags: undefined,
-            measurementEnvironment: undefined,
-            rain: undefined
-          },
-      dirty: false,
-      status: '',
-      errors: {}
-    };
-    if (measureReport) {
-      this.measureReportForm = this.formBuilder.group(measureReport.model);
-    }
-    this.subscriptions.push(
-      this.measureReportForm.valueChanges.subscribe(value => {
-        if (typeof value.duration !== 'string' && value.duration !== null) {
-          this.measureReportForm
-            .get('duration')!
-            .setValue(
-              this.dateService.toISODuration((value.duration.minute.value * 60 + value.duration.second.value) * 1000)
-            );
-        }
-      }),
-      this.actions$.pipe(ofActionSuccessful(StopMeasure)).subscribe(() =>
-        this.router.navigate([
-          'tabs',
-          {
-            outlets: {
-              home: 'home',
-              history: null,
-              settings: null,
-              map: null,
-              other: null
+        }),
+        this.actions$.pipe(ofActionSuccessful(StopMeasure)).subscribe(() =>
+          this.router.navigate([
+            'tabs',
+            {
+              outlets: {
+                home: 'home',
+                history: null,
+                settings: null,
+                map: null,
+                other: null
+              }
             }
-          }
-        ])
-      )
-    );
+          ])
+        )
+      );
+    });
   }
 
   stopReport() {
