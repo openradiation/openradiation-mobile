@@ -1,6 +1,6 @@
 <ng-container *ngIf="currentMeasure$ | async as currentMeasure">
     <app-header>
-        <app-gps-indicator other [accuracy]="currentMeasure.accuracy"></app-gps-indicator>
+        <app-gps-indicator *ngIf="currentMeasure.startTime" other [accuracy]="currentMeasure.accuracy"></app-gps-indicator>
     </app-header>
 
     <ion-content>
