@@ -325,6 +325,10 @@ export class MeasuresState {
           hitsNumber: state.measureReport.model.hitsNumber!,
           startTime,
           endTime: startTime + (durationDate.getMinutes() * 60 + durationDate.getSeconds()) * 1000,
+          latitude: state.measureReport.model.latitude!,
+          longitude: state.measureReport.model.longitude!,
+          endLatitude: state.measureReport.model.endLatitude!,
+          endLongitude: state.measureReport.model.endLongitude!,
           measurementHeight: state.measureReport.model.measurementHeight!,
           measurementEnvironment: state.measureReport.model.measurementEnvironment!,
           rain: state.measureReport.model.rain!
@@ -339,13 +343,13 @@ export class MeasuresState {
       }
       if (state.measureReport.model.description) {
         currentMeasure = {
-          ...state.currentMeasure,
+          ...currentMeasure,
           description: state.measureReport.model.description
         };
       }
       if (state.measureReport.model.tags) {
         currentMeasure = {
-          ...state.currentMeasure,
+          ...currentMeasure,
           tags: state.measureReport.model.tags
         };
       }

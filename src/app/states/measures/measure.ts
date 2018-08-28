@@ -1,3 +1,5 @@
+import { environment } from '../../../environments/environment';
+
 export class Measure {
   apparatusId?: string;
   apparatusVersion?: string;
@@ -58,6 +60,7 @@ export class Measure {
     this.deviceModel = deviceModel;
     this.reportUuid = reportUuid;
     this.manualReporting = manualReporting;
+    this.organisationReporting = environment.appliNameVersion;
   }
 }
 
