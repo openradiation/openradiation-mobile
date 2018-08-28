@@ -116,6 +116,8 @@ export interface MeasureReport {
   hitsNumber: number | undefined;
   value: number | undefined;
   measurementHeight: number | undefined;
+  description: string | undefined;
+  tags: string[] | undefined;
   measurementEnvironment: MeasureEnvironment | undefined;
   rain: boolean | undefined;
 }

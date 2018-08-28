@@ -11,6 +11,7 @@ import { Measure, MeasureEnvironment, MeasureReport } from '../../../states/meas
 import { StopMeasure, StopMeasureReport } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
 import { TabsService } from '../../tabs/tabs.service';
+import { UserState } from '../../../states/user/user.state';
 
 @Component({
   selector: 'app-measure-report',
@@ -20,6 +21,9 @@ import { TabsService } from '../../tabs/tabs.service';
 export class MeasureReportPage extends AutoUnsubscribePage {
   @Select(MeasuresState.currentMeasure)
   currentMeasure$: Observable<Measure | undefined>;
+
+  @Select(UserState.login)
+  login$: Observable<string | undefined>;
 
   measureReportForm: FormGroup;
   reportScan = true;
@@ -128,8 +132,10 @@ export class MeasureReportPage extends AutoUnsubscribePage {
             duration: duration,
             temperature: 31,
             hitsNumber: 52,
-            value: 0.042,
+            value: 0.0425,
             measurementHeight: undefined,
+            description: undefined,
+            tags: undefined,
             measurementEnvironment: undefined,
             rain: undefined
           }
@@ -145,6 +151,8 @@ export class MeasureReportPage extends AutoUnsubscribePage {
             hitsNumber: undefined,
             value: undefined,
             measurementHeight: undefined,
+            description: undefined,
+            tags: undefined,
             measurementEnvironment: undefined,
             rain: undefined
           },
