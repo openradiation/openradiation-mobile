@@ -61,7 +61,6 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     }
   ];
 
-  // TODO make real icons
   measurementHeightOptions: SelectIconOption[] = [
     {
       iconOn: 'assets/img/icon-floor-on.png',
@@ -173,7 +172,7 @@ export class MeasureReportPage extends AutoUnsubscribePage {
             );
         }
       }),
-      this.actions$.pipe(ofActionSuccessful(StopMeasureReport)).subscribe(() =>
+      this.actions$.pipe(ofActionSuccessful(StopMeasure)).subscribe(() =>
         this.router.navigate([
           'tabs',
           {
@@ -192,12 +191,12 @@ export class MeasureReportPage extends AutoUnsubscribePage {
 
   stopReport() {
     if (this.measureReportForm.valid) {
-      this.store.dispatch(new StopMeasureReport());
       this.subscriptions.push(
         this.actions$.pipe(ofActionSuccessful(StopMeasureReport)).subscribe(() => {
           this.store.dispatch(new StopMeasure());
         })
       );
+      this.store.dispatch(new StopMeasureReport());
     }
   }
 }
