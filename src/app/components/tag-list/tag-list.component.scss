@@ -1,0 +1,39 @@
+@import 'src/theme/variables';
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 10px;
+  width: 100%;
+
+  .title {
+    font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+    font-weight: 200;
+    font-size: 16px;
+    color: $second-color;
+    margin-bottom: 10px;
+  }
+  .tag-list {
+    width: 100%;
+    margin-left: -10px;
+    ion-chip {
+      --ion-color-base: #{$second-color};
+      color: white;
+      font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+      font-weight: 200;
+      margin-left: 10px;
+    }
+  }
+  .add-tag {
+    width: 100%;
+    color: $second-color;
+    --border-color: transparent;
+    background: $forth-color;
+    border-radius: 10px;
+    margin-top: 10px;
+    ion-button {
+      color: $second-color;
+    }
+  }
+}

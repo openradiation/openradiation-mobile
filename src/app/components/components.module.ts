@@ -9,6 +9,7 @@ import { GpsIndicatorComponent } from './gps-indicator/gps-indicator.component';
 import { HeaderComponent } from './header/header.component';
 import { RoundButtonComponent } from './round-button/round-button.component';
 import { SelectIconComponent } from './select-icon/select-icon.component';
+import { TagListComponent } from './tag-list/tag-list.component';
 
 @NgModule({
   imports: [CommonModule, FormsModule, IonicModule.forRoot()],
@@ -19,7 +20,8 @@ import { SelectIconComponent } from './select-icon/select-icon.component';
     RoundButtonComponent,
     GpsIndicatorComponent,
     DurationPipe,
-    SelectIconComponent
+    SelectIconComponent,
+    TagListComponent
   ],
   exports: [
     HeaderComponent,
@@ -28,7 +30,8 @@ import { SelectIconComponent } from './select-icon/select-icon.component';
     RoundButtonComponent,
     GpsIndicatorComponent,
     DurationPipe,
-    SelectIconComponent
+    SelectIconComponent,
+    TagListComponent
   ],
   entryComponents: []
 })
