@@ -64,14 +64,14 @@ export class MeasureReportPage extends AutoUnsubscribePage {
   // TODO make real icons
   measurementHeightOptions: SelectIconOption[] = [
     {
-      iconOn: 'assets/img/icon-countryside-on.png',
-      iconOff: 'assets/img/icon-countryside-off.png',
+      iconOn: 'assets/img/icon-floor-on.png',
+      iconOff: 'assets/img/icon-floor-off.png',
       label: 'Au sol',
       value: 0
     },
     {
-      iconOn: 'assets/img/icon-ontheroad-on.png',
-      iconOff: 'assets/img/icon-ontheroad-off.png',
+      iconOn: 'assets/img/icon-elevated-on.png',
+      iconOff: 'assets/img/icon-elevated-off.png',
       label: 'À 1 mètre du sol',
       value: 1
     }
