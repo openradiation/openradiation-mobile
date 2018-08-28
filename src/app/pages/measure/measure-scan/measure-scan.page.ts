@@ -49,7 +49,7 @@ export class MeasureScanPage extends AutoUnsubscribePage {
       this.currentMeasure$.subscribe(measure => this.updateHitsAccuracy(measure)),
       this.actions$
         .pipe(ofActionSuccessful(StopMeasureScan))
-        .subscribe(() => this.router.navigate(['measure', 'report']))
+        .subscribe(() => this.router.navigate(['measure', 'report', 'scan']))
     );
     this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
       if (connectedDevice) {
