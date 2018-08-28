@@ -6,7 +6,7 @@
   flex-direction: column;
   align-items: center;
   background: $third-color;
-  padding: 10px;
+  padding: 10px 0;
 
   app-round-button {
     margin-top: 20px;
@@ -23,6 +23,7 @@
   }
 
   ion-list {
+    padding: 0 10px;
     margin: 0;
 
     ion-item {
@@ -31,13 +32,75 @@
       --min-height: 0;
       &.custom-disabled {
         pointer-events: none;
-        ion-label {
+      }
+      &:not(.custom-disabled) {
+        ion-input,
+        ion-datetime,
+        ion-textarea {
+          background: $forth-color;
+          border-radius: 10px;
           color: $second-color;
         }
+        ion-input,
+        ion-datetime {
+          height: 26px;
+          line-height: 26px;
+          padding: 0 8px;
+        }
+        ion-input {
+          --padding-top: 4px;
+          --padding-bottom: 4px;
+        }
+        ion-datetime {
+          padding: 4px 8px;
+          width: 100%;
+          text-align: right;
+          --ion-placeholder-text-color: #{transparentize($second-color, 0.5)};
+        }
+        &.has-suffix {
+          ion-input {
+            border-radius: 10px 0 0 10px;
+          }
+        }
+        .unit {
+          background: $forth-color;
+          border-radius: 0 10px 10px 0;
+          color: $second-color;
+          margin-left: -1px;
+          height: 26px;
+          line-height: 26px;
+        }
+      }
+      ion-label {
+        color: $second-color;
+        font-size: 16px;
+      }
+
+      .unit {
+        padding-right: 8px;
       }
 
       ion-input {
         text-align: right;
+      }
+    }
+  }
+
+  .measure {
+    background: $second-color;
+    padding: 10px 0;
+    margin: 10px 0;
+    ion-list {
+      ion-item {
+        ion-label {
+          color: $third-color;
+          min-width: 180px;
+        }
+
+        ion-datetime {
+          width: 100%;
+          text-align: right;
+        }
       }
     }
   }
@@ -53,7 +116,7 @@
 
   .separator {
     margin: 10px 30px;
-    border: 2px solid #81cfed;
+    border: 2px solid $forth-color;
     border-radius: 2px;
   }
 }

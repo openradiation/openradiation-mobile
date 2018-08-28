@@ -275,6 +275,8 @@ export class MeasuresState {
           hitsNumber: undefined,
           value: undefined,
           measurementHeight: undefined,
+          description: undefined,
+          tags: undefined,
           measurementEnvironment: undefined,
           rain: undefined
         };
@@ -289,8 +291,10 @@ export class MeasuresState {
           duration: this.dateService.toISODuration(state.currentMeasure.endTime - state.currentMeasure.startTime),
           temperature: state.currentMeasure.temperature,
           hitsNumber: state.currentMeasure.hitsNumber,
-          value: state.currentMeasure.value,
+          value: Number(state.currentMeasure.value.toFixed(3)),
           measurementHeight: undefined,
+          description: undefined,
+          tags: undefined,
           measurementEnvironment: undefined,
           rain: undefined
         };
@@ -331,6 +335,18 @@ export class MeasuresState {
           measurementHeight: state.measureReport.model.measurementHeight!,
           measurementEnvironment: state.measureReport.model.measurementEnvironment!,
           rain: state.measureReport.model.rain!
+        };
+      }
+      if (state.measureReport.model.description) {
+        currentMeasure = {
+          ...state.currentMeasure,
+          description: state.measureReport.model.description
+        };
+      }
+      if (state.measureReport.model.tags) {
+        currentMeasure = {
+          ...state.currentMeasure,
+          tags: state.measureReport.model.tags
         };
       }
       patchState({

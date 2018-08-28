@@ -36,7 +36,7 @@
     }
     .separator {
       margin: 10px 0 4px 0;
-      border: 2px solid #81cfed;
+      border: 2px solid $forth-color;
       border-radius: 2px;
       flex: none;
     }
@@ -85,7 +85,7 @@
       position: absolute;
       height: 20px;
       width: 100%;
-      background: #81cfed;
+      background: $forth-color;
 
       .accuracy-indicator-bar {
         height: 100%;
