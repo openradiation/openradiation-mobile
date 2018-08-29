@@ -165,5 +165,7 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     this.store.dispatch(new CancelMeasure());
   }
 
-  showDetail() {}
+  showDetail() {
+    this.router.navigate(['measure', 'report', 'steps']);
+  }
 }

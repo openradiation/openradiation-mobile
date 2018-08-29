@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { MeasureReportPage } from './measure-report/measure-report-page';
 import { MeasureScanPage } from './measure-scan/measure-scan.page';
+import { MeasureStepsPage } from './measure-steps/measure-steps.page';
 
 const routes: Routes = [
   {
@@ -22,6 +23,10 @@ const routes: Routes = [
           {
             path: 'manual',
             component: MeasureReportPage
+          },
+          {
+            path: 'steps',
+            component: MeasureStepsPage
           }
         ]
       }

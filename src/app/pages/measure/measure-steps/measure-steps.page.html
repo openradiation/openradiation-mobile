@@ -1,0 +1,17 @@
+<ng-container *ngIf="(currentMeasure$ | async)?.steps as steps">
+    <app-header [backButton]="true" (backButtonClick)="goToReport()">
+        Mesure
+    </app-header>
+
+    <ion-content>
+        <ion-list>
+            <app-category-label>Mode Expert - Données brutes</app-category-label>
+            <ion-item *ngFor="let step of steps">
+                Timestamp Coups Tension Temperature
+            </ion-item>
+            <ion-item *ngFor="let step of steps">
+                {{step.ts | date: 'HH:mm:ss'}} {{step.hitsNumber}} {{step.voltage}} {{step.temperature}}°C
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ng-container>
