@@ -3,9 +3,9 @@ import { Geoposition } from '@ionic-native/geolocation';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import * as uuid from 'uuid';
 import { DateService } from './date.service';
 import { Measure, MeasureReport } from './measure';
-import { MeasuresService } from './measures.service';
 import {
   CancelMeasure,
   DeleteMeasure,
@@ -26,8 +26,8 @@ import {
   StopWatchPosition,
   UpdateMeasure
 } from './measures.action';
+import { MeasuresService } from './measures.service';
 import { PositionService } from './position.service';
-import * as uuid from 'uuid';
 
 export interface MeasuresStateModel {
   measures: Measure[];
