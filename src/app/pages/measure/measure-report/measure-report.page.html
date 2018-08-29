@@ -1,104 +1,106 @@
 <ng-container *ngIf="measureReportForm">
-    <app-header>
-    </app-header>
+    <ng-container *ngIf="currentMeasure$ | async as currentMeasure">
+        <app-header>
+        </app-header>
 
-    <ion-content>
-        <div class="content">
-            <form [formGroup]="measureReportForm" ngxsForm="measures.measureReport">
-                <div class="position">
-                    <ion-list>
-                        <ion-item class="custom-disabled">
-                            <ion-label>Latitude de début</ion-label>
-                            <ion-input formControlName="latitude" required type="number"></ion-input>
-                        </ion-item>
-                        <ion-item class="custom-disabled">
-                            <ion-label>Longitude de début</ion-label>
-                            <ion-input formControlName="longitude" required type="number"></ion-input>
-                        </ion-item>
-                    </ion-list>
-                    <app-gps-indicator *ngIf="reportScan" [accuracy]="(currentMeasure$ | async)?.accuracy" [compact]="true"></app-gps-indicator>
-                </div>
-                <div class="separator"></div>
-                <div class="position">
-                    <ion-list>
-                        <ion-item class="custom-disabled">
-                            <ion-label>Lattitude de fin</ion-label>
-                            <ion-input formControlName="endLatitude" required type="number"></ion-input>
-                        </ion-item>
-                        <ion-item class="custom-disabled">
-                            <ion-label>Longitude de fin</ion-label>
-                            <ion-input formControlName="endLongitude" required type="number"></ion-input>
-                        </ion-item>
-                    </ion-list>
-                    <app-gps-indicator *ngIf="reportScan" [accuracy]="(currentMeasure$ | async)?.endAccuracy" [compact]="true"></app-gps-indicator>
-                </div>
-                <div class="separator"></div>
-                <ion-list>
-                    <ion-item class="custom-disabled">
-                        <ion-label>Date</ion-label>
-                        <ion-datetime display-format="DD/MM/YYYY" formControlName="date" required cancelText="Annuler"
-                                      doneText="Valider"></ion-datetime>
-                    </ion-item>
-                    <ion-item class="custom-disabled">
-                        <ion-label>Début de la mesure</ion-label>
-                        <ion-datetime display-format="HH:mm:ss" formControlName="startTime" required
-                                      cancelText="Annuler" doneText="Valider"></ion-datetime>
-                    </ion-item>
-                </ion-list>
-                <div class="measure">
-                    <ion-list>
-                        <ion-item [ngClass]="{'custom-disabled': reportScan}">
-                            <ion-label position="fixed">Durée</ion-label>
-                            <ion-datetime display-format="mm:ss" formControlName="duration" cancelText="Annuler"
-                                          doneText="Valider" placeholder="00:00"></ion-datetime>
-                        </ion-item>
-                        <ion-item class="has-suffix long-label" [ngClass]="{'custom-disabled': reportScan}">
-                            <ion-label position="fixed">Température moyenne</ion-label>
-                            <ion-input formControlName="temperature" type="number" placeholder="0"></ion-input><span class="unit">°C</span>
-                        </ion-item>
-                        <ion-item [ngClass]="{'custom-disabled': reportScan}">
-                            <ion-label position="fixed">Nombre de coups</ion-label>
-                            <ion-input formControlName="hitsNumber" type="number" placeholder="0"></ion-input>
-                        </ion-item>
-                        <ion-item class="has-suffix" [ngClass]="{'custom-disabled': reportScan}">
-                            <ion-label position="fixed">Mesure</ion-label>
-                            <ion-input formControlName="value" required type="number" placeholder="0.000"></ion-input><span class="unit">μSvh</span>
-                        </ion-item>
-                    </ion-list>
-                </div>
-                <div class="environment">
-                    <app-select-icon [options]="measurementEnvironmentOptions" formControlName="measurementEnvironment" [title]="'Environnement de la mesure'">
-                    </app-select-icon>
-                </div>
-                <div class="options">
-                    <app-select-icon [options]="measurementHeightOptions" formControlName="measurementHeight" [title]="'Position du capteur'">
-                    </app-select-icon>
-                    <app-select-icon [options]="rainOptions" formControlName="rain" [title]="'Météo'">
-                    </app-select-icon>
-                </div>
-                <ng-container *ngIf="login$ | async">
+        <ion-content>
+            <div class="content">
+                <form [formGroup]="measureReportForm" ngxsForm="measures.measureReport">
+                    <div class="position">
+                        <ion-list>
+                            <ion-item class="custom-disabled">
+                                <ion-label>Latitude de début</ion-label>
+                                <ion-input formControlName="latitude" required type="number"></ion-input>
+                            </ion-item>
+                            <ion-item class="custom-disabled">
+                                <ion-label>Longitude de début</ion-label>
+                                <ion-input formControlName="longitude" required type="number"></ion-input>
+                            </ion-item>
+                        </ion-list>
+                        <app-gps-indicator *ngIf="reportScan" [accuracy]="currentMeasure.accuracy" [compact]="true"></app-gps-indicator>
+                    </div>
+                    <div class="separator"></div>
+                    <div class="position">
+                        <ion-list>
+                            <ion-item class="custom-disabled">
+                                <ion-label>Lattitude de fin</ion-label>
+                                <ion-input formControlName="endLatitude" required type="number"></ion-input>
+                            </ion-item>
+                            <ion-item class="custom-disabled">
+                                <ion-label>Longitude de fin</ion-label>
+                                <ion-input formControlName="endLongitude" required type="number"></ion-input>
+                            </ion-item>
+                        </ion-list>
+                        <app-gps-indicator *ngIf="reportScan" [accuracy]="currentMeasure.endAccuracy" [compact]="true"></app-gps-indicator>
+                    </div>
                     <div class="separator"></div>
                     <ion-list>
-                        <ion-item class="description">
-                            <ion-textarea formControlName="description" placeholder="Description de la mesure" rows="5"></ion-textarea>
+                        <ion-item class="custom-disabled">
+                            <ion-label>Date</ion-label>
+                            <ion-datetime display-format="DD/MM/YYYY" formControlName="date" required cancelText="Annuler"
+                                          doneText="Valider"></ion-datetime>
+                        </ion-item>
+                        <ion-item class="custom-disabled">
+                            <ion-label>Début de la mesure</ion-label>
+                            <ion-datetime display-format="HH:mm:ss" formControlName="startTime" required
+                                          cancelText="Annuler" doneText="Valider"></ion-datetime>
                         </ion-item>
                     </ion-list>
-                    <div class="tags">
-                        <app-tag-list formControlName="tags" [title]="'Liste des tags'"></app-tag-list>
+                    <div class="measure">
+                        <ion-list>
+                            <ion-item [ngClass]="{'custom-disabled': reportScan}">
+                                <ion-label position="fixed">Durée</ion-label>
+                                <ion-datetime display-format="mm:ss" formControlName="duration" cancelText="Annuler"
+                                              doneText="Valider" placeholder="00:00"></ion-datetime>
+                            </ion-item>
+                            <ion-item class="has-suffix long-label" [ngClass]="{'custom-disabled': reportScan}">
+                                <ion-label position="fixed">Température moyenne</ion-label>
+                                <ion-input formControlName="temperature" type="number" placeholder="0"></ion-input><span class="unit">°C</span>
+                            </ion-item>
+                            <ion-item [ngClass]="{'custom-disabled': reportScan}">
+                                <ion-label position="fixed">Nombre de coups</ion-label>
+                                <ion-input formControlName="hitsNumber" type="number" placeholder="0"></ion-input>
+                            </ion-item>
+                            <ion-item class="has-suffix" [ngClass]="{'custom-disabled': reportScan}">
+                                <ion-label position="fixed">Mesure</ion-label>
+                                <ion-input formControlName="value" required type="number" placeholder="0.000"></ion-input><span class="unit">μSvh</span>
+                            </ion-item>
+                        </ion-list>
                     </div>
-                </ng-container>
-            </form>
-            <div class="bottom-buttons">
-                <app-round-button [disabled]="!measureReportForm.valid"
-                                  [src]="measureReportForm.valid ? 'assets/img/button-on.png' : 'assets/img/button-off.png'"
-                                  (click)="stopReport()">
-                    OK
-                </app-round-button>
-                <div class="side-buttons">
-                    <ion-button fill="clear" class="flat-button cancel" (click)="cancelMeasure()">Annuler</ion-button>
-                    <ion-button fill="clear" class="flat-button expert" (click)="showDetail()">Expert</ion-button>
+                    <div class="environment">
+                        <app-select-icon [options]="measurementEnvironmentOptions" formControlName="measurementEnvironment" [title]="'Environnement de la mesure'">
+                        </app-select-icon>
+                    </div>
+                    <div class="options">
+                        <app-select-icon [options]="measurementHeightOptions" formControlName="measurementHeight" [title]="'Position du capteur'">
+                        </app-select-icon>
+                        <app-select-icon [options]="rainOptions" formControlName="rain" [title]="'Météo'">
+                        </app-select-icon>
+                    </div>
+                    <ng-container *ngIf="login$ | async">
+                        <div class="separator"></div>
+                        <ion-list>
+                            <ion-item class="description">
+                                <ion-textarea formControlName="description" placeholder="Description de la mesure" rows="5"></ion-textarea>
+                            </ion-item>
+                        </ion-list>
+                        <div class="tags">
+                            <app-tag-list formControlName="tags" [title]="'Liste des tags'"></app-tag-list>
+                        </div>
+                    </ng-container>
+                </form>
+                <div class="bottom-buttons">
+                    <app-round-button [disabled]="!measureReportForm.valid"
+                                      [src]="measureReportForm.valid ? 'assets/img/button-on.png' : 'assets/img/button-off.png'"
+                                      (click)="stopReport()">
+                        OK
+                    </app-round-button>
+                    <div class="side-buttons">
+                        <ion-button fill="clear" class="flat-button cancel" (click)="cancelMeasure()">Annuler</ion-button>
+                        <ion-button *ngIf="!currentMeasure.manualReporting && currentMeasure.steps && expertMode$ | async" fill="clear" class="flat-button expert" (click)="showDetail()">Expert</ion-button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </ion-content>
+        </ion-content>
+    </ng-container>
 </ng-container>
