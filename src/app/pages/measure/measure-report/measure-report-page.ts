@@ -27,6 +27,9 @@ export class MeasureReportPage extends AutoUnsubscribePage {
   @Select(MeasuresState.currentMeasure)
   currentMeasure$: Observable<Measure | undefined>;
 
+  @Select(MeasuresState.expertMode)
+  expertMode$: Observable<boolean>;
+
   @Select(UserState.login)
   login$: Observable<string | undefined>;
 
