@@ -1,6 +1,6 @@
 import { Geoposition } from '@ionic-native/geolocation';
 import { AbstractDevice } from '../devices/abstract-device';
-import { Step } from './measure';
+import { Measure, Step } from './measure';
 
 export class EnableExpertMode {
   static readonly type = '[Measures] Enable expert mode';
@@ -64,4 +64,18 @@ export class StopMeasureReport {
 
 export class StartManualMeasure {
   static readonly type = '[Measures] Start manual measure';
+}
+
+export class CancelMeasure {
+  static readonly type = '[Measures] Cancel measure';
+}
+
+export class DeleteMeasure {
+  static readonly type = '[Measures] Delete measure';
+  constructor(public measure: Measure) {}
+}
+
+export class PublishMeasure {
+  static readonly type = '[Measures] Publish measure';
+  constructor(public measure: Measure) {}
 }
