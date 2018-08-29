@@ -26,6 +26,7 @@ import {
   UpdateMeasure
 } from './measures.action';
 import { PositionService } from './position.service';
+import * as uuid from 'uuid';
 
 export interface MeasuresStateModel {
   measures: Measure[];
@@ -168,7 +169,7 @@ export class MeasuresState {
         this.device.platform,
         this.device.version,
         this.device.model,
-        ''
+        uuid.v4()
       )
     });
   }
@@ -187,7 +188,7 @@ export class MeasuresState {
           this.device.platform,
           this.device.version,
           this.device.model,
-          '',
+          uuid.v4(),
           true
         )
       });

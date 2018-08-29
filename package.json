@@ -50,6 +50,7 @@
     "@ngxs/router-plugin": "^3.1.4",
     "@ngxs/storage-plugin": "^3.1.4",
     "@ngxs/store": "^3.1.4",
+    "@types/uuid": "^3.4.3",
     "cordova-android": "^7.1.1",
     "cordova-ios": "^4.5.5",
     "cordova-plugin-ble-central": "^1.2.2",
@@ -67,6 +68,7 @@
     "core-js": "^2.5.3",
     "es6-promise-plugin": "^4.2.2",
     "rxjs": "6.2.2",
+    "uuid": "^3.3.2",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
