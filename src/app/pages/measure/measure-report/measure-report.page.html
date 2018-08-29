@@ -88,11 +88,17 @@
                     </div>
                 </ng-container>
             </form>
-            <app-round-button [disabled]="!measureReportForm.valid"
-                              [src]="measureReportForm.valid ? 'assets/img/button-on.png' : 'assets/img/button-off.png'"
-                              (click)="stopReport()">
-                OK
-            </app-round-button>
+            <div class="bottom-buttons">
+                <app-round-button [disabled]="!measureReportForm.valid"
+                                  [src]="measureReportForm.valid ? 'assets/img/button-on.png' : 'assets/img/button-off.png'"
+                                  (click)="stopReport()">
+                    OK
+                </app-round-button>
+                <div class="side-buttons">
+                    <ion-button fill="clear" class="flat-button cancel" (click)="cancelMeasure()">Annuler</ion-button>
+                    <ion-button fill="clear" class="flat-button expert" (click)="showDetail()">Expert</ion-button>
+                </div>
+            </div>
         </div>
     </ion-content>
 </ng-container>
