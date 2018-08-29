@@ -272,10 +272,10 @@ export class MeasuresState {
       let model: MeasureReport;
       if (state.currentMeasure.manualReporting) {
         model = {
-          latitude: state.currentPosition!.coords.latitude,
-          longitude: state.currentPosition!.coords.longitude,
-          endLatitude: state.currentPosition!.coords.latitude,
-          endLongitude: state.currentPosition!.coords.longitude,
+          latitude: Number(state.currentPosition!.coords.latitude.toFixed(7)),
+          longitude: Number(state.currentPosition!.coords.longitude.toFixed(7)),
+          endLatitude: Number(state.currentPosition!.coords.latitude.toFixed(7)),
+          endLongitude: Number(state.currentPosition!.coords.longitude.toFixed(7)),
           date: this.dateService.toISOString(new Date()),
           startTime: this.dateService.toISOString(new Date()),
           duration: undefined,
@@ -290,10 +290,10 @@ export class MeasuresState {
         };
       } else {
         model = {
-          latitude: state.currentMeasure.latitude,
-          longitude: state.currentMeasure.longitude,
-          endLatitude: state.currentMeasure.endLatitude,
-          endLongitude: state.currentMeasure.endLongitude,
+          latitude: Number(state.currentMeasure.latitude.toFixed(7)),
+          longitude: Number(state.currentMeasure.longitude.toFixed(7)),
+          endLatitude: Number(state.currentMeasure.endLatitude.toFixed(7)),
+          endLongitude: Number(state.currentMeasure.endLongitude.toFixed(7)),
           date: this.dateService.toISOString(state.currentMeasure.startTime),
           startTime: this.dateService.toISOString(state.currentMeasure.startTime),
           duration: this.dateService.toISODuration(state.currentMeasure.endTime - state.currentMeasure.startTime),
