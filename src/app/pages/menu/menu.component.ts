@@ -60,7 +60,7 @@ export class MenuComponent {
           },
           {
             text: `S'identifier`,
-            handler: () => {
+            handler: () =>
               this.router.navigate(
                 [
                   'tabs',
@@ -75,8 +75,7 @@ export class MenuComponent {
                   }
                 ],
                 { queryParams: { startMeasureAfterLogin: true } }
-              );
-            }
+              )
           }
         ]
       })
