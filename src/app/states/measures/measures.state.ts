@@ -7,6 +7,7 @@ import { DateService } from './date.service';
 import { Measure, MeasureReport } from './measure';
 import { MeasuresService } from './measures.service';
 import {
+  CancelMeasure,
   DeleteMeasure,
   DisableAutoPublish,
   DisableExpertMode,
@@ -382,7 +383,7 @@ export class MeasuresState {
   }
 
   @Action(PublishMeasure)
-  publishMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, action: DeleteMeasure) {
+  publishMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, action: PublishMeasure) {
     if (!action.measure.sent) {
       const state = getState();
       const index = state.measures.findIndex(measure => measure.reportUuid === action.measure.reportUuid);
@@ -403,5 +404,13 @@ export class MeasuresState {
       }
     }
     return of();
+  }
+
+  @Action(CancelMeasure)
+  cancelMeasure({ patchState }: StateContext<MeasuresStateModel>) {
+    patchState({
+      currentMeasure: undefined,
+      measureReport: undefined
+    });
   }
 }

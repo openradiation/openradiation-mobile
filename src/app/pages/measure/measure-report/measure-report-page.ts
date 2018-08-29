@@ -8,7 +8,12 @@ import { AutoUnsubscribePage } from '../../../components/page/auto-unsubscribe.p
 import { SelectIconOption } from '../../../components/select-icon/select-icon-option';
 import { DateService } from '../../../states/measures/date.service';
 import { Measure, MeasureEnvironment } from '../../../states/measures/measure';
-import { StartMeasureReport, StopMeasure, StopMeasureReport } from '../../../states/measures/measures.action';
+import {
+  CancelMeasure,
+  StartMeasureReport,
+  StopMeasure,
+  StopMeasureReport
+} from '../../../states/measures/measures.action';
 import { MeasuresState, MeasuresStateModel } from '../../../states/measures/measures.state';
 import { TabsService } from '../../tabs/tabs.service';
 import { UserState } from '../../../states/user/user.state';
@@ -124,7 +129,7 @@ export class MeasureReportPage extends AutoUnsubscribePage {
               );
           }
         }),
-        this.actions$.pipe(ofActionSuccessful(StopMeasure)).subscribe(() =>
+        this.actions$.pipe(ofActionSuccessful(StopMeasure, CancelMeasure)).subscribe(() =>
           this.router.navigate([
             'tabs',
             {
@@ -152,4 +157,10 @@ export class MeasureReportPage extends AutoUnsubscribePage {
       this.store.dispatch(new StopMeasureReport());
     }
   }
+
+  cancelMeasure() {
+    this.store.dispatch(new CancelMeasure());
+  }
+
+  showDetail() {}
 }

@@ -8,9 +8,33 @@
   background: $third-color;
   padding: 15px 0;
 
-  app-round-button {
+  .bottom-buttons {
     margin-top: 20px;
-    width: 50%;
+    position: relative;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    app-round-button {
+      width: 50%;
+    }
+    .side-buttons {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      ion-button {
+        position: absolute;
+        --border-radius: 10px;
+        &.cancel {
+          right: 70%;
+        }
+        &.expert {
+          left: 70%;
+        }
+      }
+    }
   }
 
   .position {
