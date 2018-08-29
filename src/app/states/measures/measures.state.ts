@@ -375,7 +375,7 @@ export class MeasuresState {
       const index = state.measures.findIndex(measure => measure.reportUuid === action.measure.reportUuid);
       if (index !== -1) {
         patchState({
-          measures: [...state.measures.slice(0, Math.max(0, index - 1)), ...state.measures.slice(index + 1)]
+          measures: [...state.measures.slice(0, index), ...state.measures.slice(index + 1)]
         });
       }
     }
@@ -393,7 +393,7 @@ export class MeasuresState {
             measures.splice(index, 1);
             patchState({
               measures: [
-                ...state.measures.slice(0, Math.max(0, index - 1)),
+                ...state.measures.slice(0, index),
                 { ...action.measure, sent: true },
                 ...state.measures.slice(index + 1)
               ]
