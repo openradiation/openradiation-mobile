@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { shareReplay, take, takeUntil } from 'rxjs/operators';
 import { AbstractDevice, DeviceType } from '../devices/abstract-device';
 import { DeviceAtomTag } from '../devices/device-atom-tag';
@@ -39,6 +39,7 @@ export class MeasuresService {
     startMeasureScan.subscribe(step => this.store.dispatch(new UpdateMeasure(step, device)));
     return startMeasureScan.pipe(take(1));
   }
+
   computeRadiationValue(measure: Measure, device: AbstractDevice): number {
     switch (device.deviceType) {
       case DeviceType.OGKit:
@@ -46,5 +47,10 @@ export class MeasuresService {
       case DeviceType.AtomTag:
         return this.deviceAtomTagService.computeRadiationValue(measure);
     }
+  }
+
+  // TODO implement
+  publishMeasure(measure: Measure): Observable<any> {
+    return of(null);
   }
 }

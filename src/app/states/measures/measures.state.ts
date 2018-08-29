@@ -5,13 +5,15 @@ import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { DateService } from './date.service';
 import { Measure, MeasureReport } from './measure';
-import { MeasuresService } from './measure.service';
+import { MeasuresService } from './measures.service';
 import {
+  DeleteMeasure,
   DisableAutoPublish,
   DisableExpertMode,
   EnableAutoPublish,
   EnableExpertMode,
   PositionChanged,
+  PublishMeasure,
   StartManualMeasure,
   StartMeasure,
   StartMeasureReport,
@@ -89,6 +91,11 @@ export class MeasuresState {
   @Selector()
   static currentMeasure(state: MeasuresStateModel): Measure | undefined {
     return state.currentMeasure;
+  }
+
+  @Selector()
+  static measures(state: MeasuresStateModel): Measure[] {
+    return state.measures;
   }
 
   @Action(EnableExpertMode)
@@ -358,5 +365,42 @@ export class MeasuresState {
         currentMeasure
       });
     }
+  }
+
+  @Action(DeleteMeasure)
+  deleteMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, action: DeleteMeasure) {
+    if (!action.measure.sent) {
+      const state = getState();
+      const index = state.measures.findIndex(measure => measure.reportUuid === action.measure.reportUuid);
+      if (index !== -1) {
+        patchState({
+          measures: [...state.measures.slice(0, Math.max(0, index - 1)), ...state.measures.slice(index + 1)]
+        });
+      }
+    }
+  }
+
+  @Action(PublishMeasure)
+  publishMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, action: DeleteMeasure) {
+    if (!action.measure.sent) {
+      const state = getState();
+      const index = state.measures.findIndex(measure => measure.reportUuid === action.measure.reportUuid);
+      if (index !== -1) {
+        return this.measuresService.publishMeasure(action.measure).pipe(
+          tap(() => {
+            const measures = [...state.measures];
+            measures.splice(index, 1);
+            patchState({
+              measures: [
+                ...state.measures.slice(0, Math.max(0, index - 1)),
+                { ...action.measure, sent: true },
+                ...state.measures.slice(index + 1)
+              ]
+            });
+          })
+        );
+      }
+    }
+    return of();
   }
 }
