@@ -15,8 +15,8 @@ import {
   StopMeasureReport
 } from '../../../states/measures/measures.action';
 import { MeasuresState, MeasuresStateModel } from '../../../states/measures/measures.state';
-import { TabsService } from '../../tabs/tabs.service';
 import { UserState } from '../../../states/user/user.state';
+import { TabsService } from '../../tabs/tabs.service';
 
 @Component({
   selector: 'app-measure-report',

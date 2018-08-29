@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { MeasuresState } from '../../../states/measures/measures.state';
+import { AlertController } from '@ionic/angular';
+import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { Measure } from '../../../states/measures/measure';
-import { Select, Store } from '@ngxs/store';
 import { DeleteMeasure, PublishMeasure } from '../../../states/measures/measures.action';
-import { AlertController } from '@ionic/angular';
+import { MeasuresState } from '../../../states/measures/measures.state';
 
 @Component({
   selector: 'app-history',
@@ -42,7 +42,10 @@ export class HistoryPage {
     this.alertController
       .create({
         header: 'Historique',
-        message: `Êtes-vous sûr(e) de vouloir envoyer cette mesure ? En envoyant cette measure, vous acceptez que l'ensemble des données correspondant à cette measure (dont votre position GPS, votre peseudo, etc) soit publié dans la base OpenRadiation.`,
+        message:
+          `Êtes-vous sûr(e) de vouloir envoyer cette mesure ? En envoyant cette measure, vous acceptez que ` +
+          `l'ensemble des données correspondant à cette measure (dont votre position GPS, votre peseudo, etc) ` +
+          `soit publié dans la base OpenRadiation.`,
         backdropDismiss: false,
         buttons: [
           {
