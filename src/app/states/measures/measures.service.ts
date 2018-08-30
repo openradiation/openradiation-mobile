@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { shareReplay, take, takeUntil } from 'rxjs/operators';
 import { AbstractDevice, DeviceType } from '../devices/abstract-device';
 import { DeviceAtomTag } from '../devices/device-atom-tag';
@@ -9,6 +9,10 @@ import { DeviceOGKit } from '../devices/device-og-kit';
 import { DeviceOGKitService } from '../devices/device-og-kit.service';
 import { Measure, Step } from './measure';
 import { StopMeasureScan, UpdateMeasure } from './measures.action';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+import { MeasureApi } from './measure-api';
+import { UserStateModel } from '../user/user.state';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +22,8 @@ export class MeasuresService {
     private deviceOGKitService: DeviceOGKitService,
     private deviceAtomTagService: DeviceAtomTagService,
     private store: Store,
-    private actions$: Actions
+    private actions$: Actions,
+    private httpClient: HttpClient
   ) {}
 
   startMeasureScan(device: AbstractDevice): Observable<any> {
@@ -51,6 +56,46 @@ export class MeasuresService {
 
   // TODO implement
   publishMeasure(measure: Measure): Observable<any> {
-    return of(null);
+    const payload: MeasureApi = {
+      apiKey: environment.API_KEY,
+      data: {
+        apparatusId: measure.apparatusId,
+        apparatusVersion: measure.apparatusVersion,
+        apparatusSensorType: measure.apparatusSensorType,
+        apparatusTubeType: measure.apparatusTubeType,
+        temperature: measure.temperature,
+        value: measure.value,
+        hitsNumber: measure.hitsNumber,
+        startTime: measure.startTime,
+        endTime: measure.endTime,
+        latitude: measure.latitude,
+        longitude: measure.longitude,
+        accuracy: measure.accuracy,
+        altitude: measure.altitude,
+        altitudeAccuracy: measure.altitudeAccuracy,
+        endLatitude: measure.endLatitude,
+        endLongitude: measure.endLongitude,
+        endAccuracy: measure.endAccuracy,
+        endAltitude: measure.endAltitude,
+        endAltitudeAccuracy: measure.endAltitudeAccuracy,
+        deviceUuid: measure.deviceUuid,
+        devicePlatform: measure.devicePlatform,
+        deviceVersion: measure.deviceVersion,
+        deviceModel: measure.deviceModel,
+        reportUuid: measure.reportUuid,
+        manualReporting: measure.manualReporting,
+        organisationReporting: measure.organisationReporting,
+        reportContext: 'test',
+        description: measure.description,
+        measurementHeight: measure.measurementHeight,
+        tags: measure.tags,
+        enclosedObject: measure.enclosedObject,
+        userId: this.store.selectSnapshot(({ user }: { user: UserStateModel }) => user.login),
+        userPwd: this.store.selectSnapshot(({ user }: { user: UserStateModel }) => user.password),
+        measurementEnvironment: measure.measurementEnvironment,
+        rain: measure.rain
+      }
+    };
+    return this.httpClient.post(environment.API_URI, payload);
   }
 }
