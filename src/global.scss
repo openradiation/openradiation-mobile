@@ -1,3 +1,14 @@
+@import '~@ionic/angular/css/core.css';
+@import '~@ionic/angular/css/normalize.css';
+@import '~@ionic/angular/css/structure.css';
+@import '~@ionic/angular/css/typography.css';
+
+@import '~@ionic/angular/css/padding.css';
+@import '~@ionic/angular/css/float-elements.css';
+@import '~@ionic/angular/css/text-alignment.css';
+@import '~@ionic/angular/css/text-transformation.css';
+@import '~@ionic/angular/css/flex-utils.css';
+
 @import 'src/theme/variables.scss';
 
 // http://ionicframework.com/docs/theming/
@@ -63,7 +74,7 @@ ion-list {
 ion-item {
   --detail-push-color: rgba(255, 255, 255, 0.6);
   color: white;
-  font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+  --ion-font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
   font-weight: 200;
   --background-active: transparent;
   --background: transparent;
@@ -115,4 +126,10 @@ ion-toggle {
 
 ion-spinner {
   color: white;
+}
+
+.keyboard-open {
+  ion-content {
+    --keyboard-offset: 230px;
+  }
 }

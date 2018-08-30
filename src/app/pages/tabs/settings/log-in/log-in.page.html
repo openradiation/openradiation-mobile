@@ -29,13 +29,15 @@
                 <ion-input type="password" formControlName="password" required></ion-input>
             </ion-item>
         </ion-list>
-        <ion-button fill="clear" class="flat-button submit" type="submit" [disabled]="!loginForm.valid">
-            <ng-container *ngIf="connecting; else notConnecting">
-                <ion-spinner></ion-spinner>
-            </ng-container>
-            <ng-template #notConnecting>
-                S'identifier
-            </ng-template>
-        </ion-button>
+        <div class="submit">
+            <ion-button fill="clear" class="flat-button" type="submit" [disabled]="!loginForm.valid">
+                <ng-container *ngIf="connecting; else notConnecting">
+                    <ion-spinner></ion-spinner>
+                </ng-container>
+                <ng-template #notConnecting>
+                    S'identifier
+                </ng-template>
+            </ion-button>
+        </div>
     </form>
 </ion-content>

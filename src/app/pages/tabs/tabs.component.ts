@@ -17,7 +17,7 @@ export class Tabs {
   }
 
   tabChange(event: CustomEvent) {
-    if (event.detail.tab.children[0]) {
+    if (event.detail.tab && event.detail.tab.children[0]) {
       this.tabsService.currentTab.next(
         event.detail.tab.children[0].children[event.detail.tab.children[0].children.length - 1]
       );

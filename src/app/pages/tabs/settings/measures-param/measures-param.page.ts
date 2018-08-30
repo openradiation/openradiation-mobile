@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { DisableAutoPublish, EnableAutoPublish } from '../../../../states/measures/measures.action';
 import { MeasuresState } from '../../../../states/measures/measures.state';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-measures-param',
@@ -14,7 +14,7 @@ export class MeasuresParamPage {
   @Select(MeasuresState.autoPublish)
   autoPublish$: Observable<boolean>;
 
-  constructor(private router: Router, private store: Store) {}
+  constructor(private navController: NavController, private store: Store) {}
 
   toggleAutoPublish(enable: boolean) {
     if (enable) {
@@ -24,14 +24,7 @@ export class MeasuresParamPage {
     }
   }
 
-  goToSettings() {
-    this.router.navigate([
-      'tabs',
-      {
-        outlets: {
-          settings: 'settings'
-        }
-      }
-    ]);
+  goBack() {
+    this.navController.goBack();
   }
 }

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { AlertController, MenuController } from '@ionic/angular';
+import { AlertController, MenuController, NavController } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
@@ -21,6 +21,7 @@ export class MenuComponent {
   constructor(
     private menuController: MenuController,
     private router: Router,
+    private navController: NavController,
     private store: Store,
     private actions$: Actions,
     private alertController: AlertController
@@ -30,7 +31,7 @@ export class MenuComponent {
       .subscribe((event: NavigationEnd) => (this.currentUrl = event.url));
     this.actions$
       .pipe(ofActionSuccessful(StartManualMeasure))
-      .subscribe(() => this.router.navigate(['measure', 'report', 'manual']));
+      .subscribe(() => this.navController.navigateRoot(['measure', 'report', 'manual']));
   }
 
   closeMenu() {
@@ -61,7 +62,7 @@ export class MenuComponent {
           {
             text: `S'identifier`,
             handler: () =>
-              this.router.navigate(
+              this.navController.navigateForward(
                 [
                   'tabs',
                   {
@@ -74,6 +75,7 @@ export class MenuComponent {
                     }
                   }
                 ],
+                true,
                 { queryParams: { startMeasureAfterLogin: true } }
               )
           }

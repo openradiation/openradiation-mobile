@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { AbstractDevice, DeviceParamModel, DeviceParamType } from '../../../../states/devices/abstract-device';
 import { SaveDeviceParams } from '../../../../states/devices/devices.action';
 import { DevicesState, DevicesStateModel } from '../../../../states/devices/devices.state';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-page-device-param',
@@ -20,7 +20,7 @@ export class DeviceParamPage {
   editedDeviceForm: FormGroup;
   paramsModel: [string, DeviceParamModel][];
 
-  constructor(private formBuilder: FormBuilder, private store: Store, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private store: Store, private navController: NavController) {
     const editedDevice = this.store.selectSnapshot(
       ({ devices }: { devices: DevicesStateModel }) => devices.editedDevice
     );
@@ -33,27 +33,7 @@ export class DeviceParamPage {
     }
   }
 
-  goToDevices() {
-    this.store.dispatch(new SaveDeviceParams()).subscribe(() =>
-      this.router
-        .navigate([
-          'tabs',
-          {
-            outlets: {
-              settings: 'settings'
-            }
-          }
-        ])
-        .then(() =>
-          this.router.navigate([
-            'tabs',
-            {
-              outlets: {
-                settings: 'devices'
-              }
-            }
-          ])
-        )
-    );
+  goBack() {
+    this.store.dispatch(new SaveDeviceParams()).subscribe(() => this.navController.goBack());
   }
 }
