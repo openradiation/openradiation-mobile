@@ -24,7 +24,9 @@
       width: 100%;
       display: flex;
       align-items: center;
+      pointer-events: none;
       ion-button {
+        pointer-events: all;
         position: absolute;
         --border-radius: 10px;
         &.cancel {
