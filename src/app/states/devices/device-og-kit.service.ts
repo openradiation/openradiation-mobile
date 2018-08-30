@@ -69,12 +69,12 @@ export class DeviceOGKitService /*extends AbstractDeviceService<DeviceOGKit>*/ {
       }, {}),
       filter(update => update.apparatusSensorType !== undefined && update.apparatusTubeType !== undefined),
       take(1),
-      tap(() => this.stopReceiveData(device))
+      tap(() => this.stopReceiveData(device)),
+      tap(update => setTimeout(() => this.setTubeVoltageOn({ ...device, ...update }), 200))
     );
   }
 
   saveDeviceParams(device: DeviceOGKit): Observable<any> {
-    this.setTubeVoltageOn(device);
     return fromPromise(
       this.sendData(device, [this.SEND_SET_VISUAL_HIT, device.params.visualHits ? 0x00 : 0x01]).then(() =>
         this.sendData(device, [this.SEND_SET_AUDIO_HIT, device.params.audioHits ? 0x00 : 0x01])
