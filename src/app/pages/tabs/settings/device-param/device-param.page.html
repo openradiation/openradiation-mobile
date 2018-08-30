@@ -1,5 +1,5 @@
 <ng-container *ngIf="editedDevice$ | async as editedDevice">
-    <app-header [backButton]="true" (backButtonClick)="goToDevices()">{{editedDevice.apparatusVersion}}</app-header>
+    <app-header [backButton]="true" (back)="goToDevices()">{{editedDevice.apparatusVersion}}</app-header>
     <ion-content>
         <ion-list>
             <app-category-label>Infos</app-category-label>

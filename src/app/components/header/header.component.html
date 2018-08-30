@@ -6,13 +6,18 @@
         <ng-content select="[other]"></ng-content>
     </div>
     <div class="title">
-        <div class="back-button" *ngIf="backButton">
-            <ion-button fill="clear" (click)="backButtonClick.emit()">
+        <div class="side-button back" *ngIf="backButton">
+            <ion-button fill="clear" (click)="back.emit()">
                 <ion-icon mode="ios" slot="icon-only" name="arrow-back"></ion-icon>
             </ion-button>
         </div>
         <div class="label">
             <ng-content></ng-content>
+        </div>
+        <div class="side-button share" *ngIf="shareButton">
+            <ion-button fill="clear" (click)="share.emit()">
+                <ion-icon slot="icon-only" name="share"></ion-icon>
+            </ion-button>
         </div>
     </div>
 </div>

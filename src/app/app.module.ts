@@ -23,6 +23,7 @@ import { MenuComponent } from './pages/menu/menu.component';
 import { DevicesState } from './states/devices/devices.state';
 import { MeasuresState } from './states/measures/measures.state';
 import { UserState } from './states/user/user.state';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 
 @NgModule({
   declarations: [AppComponent, MenuComponent],
@@ -50,7 +51,8 @@ import { UserState } from './states/user/user.state';
     Network,
     Device,
     ScreenOrientation,
-    DatePipe
+    DatePipe,
+    SocialSharing
   ],
   bootstrap: [AppComponent]
 })

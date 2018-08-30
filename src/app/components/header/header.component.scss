@@ -47,12 +47,19 @@
     position: relative;
     flex: none;
     width: 100%;
-    .back-button {
+    .side-button {
       height: 100%;
       position: absolute;
       display: flex;
       align-items: center;
       justify-content: center;
+      top: 0;
+      &.back {
+        left: 0;
+      }
+      &.share {
+        right: 0;
+      }
     }
     .label {
       width: 100%;
