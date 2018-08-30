@@ -9,6 +9,7 @@ import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
@@ -23,7 +24,6 @@ import { MenuComponent } from './pages/menu/menu.component';
 import { DevicesState } from './states/devices/devices.state';
 import { MeasuresState } from './states/measures/measures.state';
 import { UserState } from './states/user/user.state';
-import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 
 @NgModule({
   declarations: [AppComponent, MenuComponent],

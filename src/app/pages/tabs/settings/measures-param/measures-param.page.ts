@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
+import { NavController } from '@ionic/angular';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { DisableAutoPublish, EnableAutoPublish } from '../../../../states/measures/measures.action';
 import { MeasuresState } from '../../../../states/measures/measures.state';
-import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-measures-param',

@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { NavController } from '@ionic/angular';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { AbstractDevice, DeviceParamModel, DeviceParamType } from '../../../../states/devices/abstract-device';
 import { SaveDeviceParams } from '../../../../states/devices/devices.action';
 import { DevicesState, DevicesStateModel } from '../../../../states/devices/devices.state';
-import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-page-device-param',

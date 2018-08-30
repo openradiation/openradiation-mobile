@@ -1,4 +1,5 @@
 import { Component, ElementRef } from '@angular/core';
+import { NavController } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -15,7 +16,6 @@ import {
 } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
 import { TabsService } from '../../tabs/tabs.service';
-import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-measure-scan',

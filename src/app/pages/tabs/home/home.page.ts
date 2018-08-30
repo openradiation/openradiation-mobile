@@ -1,4 +1,5 @@
 import { Component, ElementRef } from '@angular/core';
+import { NavController } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { combineLatest, Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
@@ -9,7 +10,6 @@ import { PositionAccuracyThreshold } from '../../../states/measures/measure';
 import { StartMeasure, StartWatchPosition, StopWatchPosition } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
 import { TabsService } from '../tabs.service';
-import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-page-home',
