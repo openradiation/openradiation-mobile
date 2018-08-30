@@ -1,6 +1,6 @@
 import { Component, ElementRef } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { Actions, Select, Store } from '@ngxs/store';
+import { Actions, ofActionDispatched, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { AutoUnsubscribePage } from '../../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { AbstractDevice } from '../../../../states/devices/abstract-device';
@@ -8,6 +8,7 @@ import {
   ConnectDevice,
   DisconnectDevice,
   EditDeviceParams,
+  StartDiscoverDevices,
   StopDiscoverDevices,
   UpdateDeviceInfo
 } from '../../../../states/devices/devices.action';
@@ -43,13 +44,13 @@ export class DevicesPage extends AutoUnsubscribePage {
 
   ionViewDidEnter() {
     super.ionViewDidEnter();
-    /*this.subscriptions.push(
+    this.subscriptions.push(
       this.actions$
         .pipe(ofActionDispatched(ConnectDevice))
         .subscribe((action: ConnectDevice) => (this.connectingDevice = action.device)),
       this.actions$.pipe(ofActionSuccessful(ConnectDevice)).subscribe(() => (this.connectingDevice = undefined))
     );
-    this.store.dispatch(new StartDiscoverDevices()).subscribe();*/
+    this.store.dispatch(new StartDiscoverDevices()).subscribe();
   }
 
   ionViewWillLeave() {
