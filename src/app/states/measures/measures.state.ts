@@ -8,6 +8,7 @@ import { DateService } from './date.service';
 import { Measure, MeasureReport } from './measure';
 import {
   CancelMeasure,
+  DeleteAllMeasures,
   DeleteMeasure,
   DisableAutoPublish,
   DisableExpertMode,
@@ -214,6 +215,14 @@ export class MeasuresState {
     }
   }
 
+  @Action(CancelMeasure)
+  cancelMeasure({ patchState }: StateContext<MeasuresStateModel>) {
+    patchState({
+      currentMeasure: undefined,
+      measureReport: undefined
+    });
+  }
+
   @Action(UpdateMeasure)
   updateMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, action: UpdateMeasure) {
     const state = getState();
@@ -346,19 +355,6 @@ export class MeasuresState {
     }
   }
 
-  @Action(DeleteMeasure)
-  deleteMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, action: DeleteMeasure) {
-    if (!action.measure.sent) {
-      const state = getState();
-      const index = state.measures.findIndex(measure => measure.reportUuid === action.measure.reportUuid);
-      if (index !== -1) {
-        patchState({
-          measures: [...state.measures.slice(0, index), ...state.measures.slice(index + 1)]
-        });
-      }
-    }
-  }
-
   @Action(PublishMeasure)
   publishMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, action: PublishMeasure) {
     if (!action.measure.sent) {
@@ -383,11 +379,23 @@ export class MeasuresState {
     return of();
   }
 
-  @Action(CancelMeasure)
-  cancelMeasure({ patchState }: StateContext<MeasuresStateModel>) {
+  @Action(DeleteMeasure)
+  deleteMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, action: DeleteMeasure) {
+    if (!action.measure.sent) {
+      const state = getState();
+      const index = state.measures.findIndex(measure => measure.reportUuid === action.measure.reportUuid);
+      if (index !== -1) {
+        patchState({
+          measures: [...state.measures.slice(0, index), ...state.measures.slice(index + 1)]
+        });
+      }
+    }
+  }
+
+  @Action(DeleteAllMeasures)
+  deleteAllMeasures({ patchState }: StateContext<MeasuresStateModel>) {
     patchState({
-      currentMeasure: undefined,
-      measureReport: undefined
+      measures: []
     });
   }
 }

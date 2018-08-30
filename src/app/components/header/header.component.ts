@@ -10,8 +10,12 @@ export class HeaderComponent {
   backButton = false;
   @Input()
   shareButton = false;
+  @Input()
+  deleteButton = false;
   @Output()
   back = new EventEmitter();
   @Output()
   share = new EventEmitter();
+  @Output()
+  delete = new EventEmitter();
 }

@@ -40,6 +40,10 @@ export class StopMeasure {
   static readonly type = '[Mesures] Stop measure';
 }
 
+export class CancelMeasure {
+  static readonly type = '[Measures] Cancel measure';
+}
+
 export class UpdateMeasure {
   static readonly type = '[Measures] Update measure';
   constructor(public step: Step, public device: AbstractDevice) {}
@@ -66,8 +70,9 @@ export class StartManualMeasure {
   static readonly type = '[Measures] Start manual measure';
 }
 
-export class CancelMeasure {
-  static readonly type = '[Measures] Cancel measure';
+export class PublishMeasure {
+  static readonly type = '[Measures] Publish measure';
+  constructor(public measure: Measure) {}
 }
 
 export class DeleteMeasure {
@@ -75,7 +80,6 @@ export class DeleteMeasure {
   constructor(public measure: Measure) {}
 }
 
-export class PublishMeasure {
-  static readonly type = '[Measures] Publish measure';
-  constructor(public measure: Measure) {}
+export class DeleteAllMeasures {
+  static readonly type = '[Measures] Delete all measures';
 }
