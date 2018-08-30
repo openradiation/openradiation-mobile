@@ -58,9 +58,13 @@ export class DeviceAtomTagService /*extends AbstractDeviceService<DeviceAtomTag>
 
   // TODO implement correct computation for AtomTag
   computeRadiationValue(measure: Measure): number {
-    const duration = (measure.endTime - measure.startTime) / 1000;
-    const TcNet = measure.hitsNumber / duration - 0.14;
-    return 0.000001 * TcNet ** 3 + 0.0025 * TcNet ** 2 + 0.39 * TcNet;
+    if (measure.endTime) {
+      const duration = (measure.endTime - measure.startTime) / 1000;
+      const TcNet = measure.hitsNumber / duration - 0.14;
+      return 0.000001 * TcNet ** 3 + 0.0025 * TcNet ** 2 + 0.39 * TcNet;
+    } else {
+      throw new Error('Incorrect measure : missing endTime');
+    }
   }
 
   // TODO implement start measure for AtomTag
