@@ -6,9 +6,12 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./accordion.component.scss']
 })
 export class AccordionComponent {
-  @Input() opened = true;
+  @Input()
+  opened = true;
 
-  @Input() title: string;
+  @Input()
+  title: string;
 
-  @Output() open = new EventEmitter();
+  @Output()
+  open = new EventEmitter();
 }
