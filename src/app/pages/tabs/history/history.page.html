@@ -1,34 +1,39 @@
-<app-header [deleteButton]="true" (delete)="deleteAll()">Historique</app-header>
+<ng-container *ngIf="measures$ | async as measures">
+    <app-header [deleteButton]="measures.length > 0" (delete)="deleteAll()">Historique</app-header>
 
-<ion-content>
-    <ion-list>
-        <ion-item *ngFor="let measure of measures$ | async" class="clickable-device" button
-                  (click)="showDetail(measure)">
-            <ion-label>
-                <div>
-                    {{measure.startTime | date : 'dd/MM/yyyy HH:mm:ss'}}
-                </div>
-                <div class="value">
-                    {{measure.value | number: '1.3-3'}} μSvh
-                </div>
-            </ion-label>
-            <ng-container *ngIf="measure.sent; else measureNotSent">
-                <div class="state">
-                    Publiée
-                </div>
-            </ng-container>
-            <ng-template #measureNotSent>
-                <ion-button class="inner-button" fill="clear"
-                            size="default"
-                            (click)="publish(measure)">
-                    <img src="assets/img/icon-publish.png">
-                </ion-button>
-                <ion-button class="inner-button" fill="clear"
-                            size="default"
-                            (click)="delete(measure)">
-                    <img src="assets/img/icon-delete.png">
-                </ion-button>
-            </ng-template>
-        </ion-item>
-    </ion-list>
-</ion-content>
+    <ion-content>
+        <div class="empty-list" *ngIf="measures.length <= 0">
+            Aucune mesure<br>enregistrée
+        </div>
+        <ion-list>
+            <ion-item *ngFor="let measure of measures" class="clickable-device" button
+                      (click)="showDetail(measure)">
+                <ion-label>
+                    <div>
+                        {{measure.startTime | date : 'dd/MM/yyyy HH:mm:ss'}}
+                    </div>
+                    <div class="value">
+                        {{measure.value | number: '1.3-3'}} μSvh
+                    </div>
+                </ion-label>
+                <ng-container *ngIf="measure.sent; else measureNotSent">
+                    <div class="state">
+                        Publiée
+                    </div>
+                </ng-container>
+                <ng-template #measureNotSent>
+                    <ion-button class="inner-button" fill="clear"
+                                size="default"
+                                (click)="publish(measure)">
+                        <img src="assets/img/icon-publish.png">
+                    </ion-button>
+                    <ion-button class="inner-button" fill="clear"
+                                size="default"
+                                (click)="delete(measure)">
+                        <img src="assets/img/icon-delete.png">
+                    </ion-button>
+                </ng-template>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ng-container>
