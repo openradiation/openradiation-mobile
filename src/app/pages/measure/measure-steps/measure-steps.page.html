@@ -1,43 +1,45 @@
 <ng-container *ngIf="(currentMeasure$ | async) as currentMeasure">
-    <app-header [backButton]="true" (backButtonClick)="goToReport()">
-        Mesure
-    </app-header>
+    <ng-container *ngIf="currentMeasure.steps as steps">
+        <app-header [backButton]="true" (back)="goToReport()" [shareButton]="true" (share)="shareSteps(currentMeasure)">
+            Mesure
+        </app-header>
 
-    <ion-content>
-        <ion-list>
-            <app-category-label>Mode Expert ({{currentMeasure.startTime | date: 'dd/MM/yyyy'}})</app-category-label>
-            <ion-item>
-                <div class="header">
-                    <div class="date">
-                        Timestamp
+        <ion-content>
+            <ion-list>
+                <app-category-label>Mode Expert ({{currentMeasure.startTime | date: 'dd/MM/yyyy'}})</app-category-label>
+                <ion-item>
+                    <div class="header">
+                        <div class="date">
+                            Timestamp
+                        </div>
+                        <div class="hitsNumber">
+                            Coups
+                        </div>
+                        <div class="voltage">
+                            Tension (V)
+                        </div>
+                        <div class="temperature">
+                            T° (°C)
+                        </div>
                     </div>
-                    <div class="hitsNumber">
-                        Coups
+                </ion-item>
+                <ion-item *ngFor="let step of steps">
+                    <div class="value">
+                        <div class="date">
+                            {{step.ts | date: 'HH:mm:ss'}}
+                        </div>
+                        <div class="hitsNumber">
+                            {{step.hitsNumber}}
+                        </div>
+                        <div class="voltage">
+                            {{step.voltage | number : '1.2-2'}}
+                        </div>
+                        <div class="temperature">
+                            {{step.temperature | number : '1.2-2'}}
+                        </div>
                     </div>
-                    <div class="voltage">
-                        Tension (V)
-                    </div>
-                    <div class="temperature">
-                        T° (°C)
-                    </div>
-                </div>
-            </ion-item>
-            <ion-item *ngFor="let step of currentMeasure.steps">
-                <div class="value">
-                    <div class="date">
-                        {{step.ts | date: 'HH:mm:ss'}}
-                    </div>
-                    <div class="hitsNumber">
-                        {{step.hitsNumber}}
-                    </div>
-                    <div class="voltage">
-                        {{step.voltage | number : '1.2-2'}}
-                    </div>
-                    <div class="temperature">
-                        {{step.temperature | number : '1.2-2'}}
-                    </div>
-                </div>
-            </ion-item>
-        </ion-list>
-    </ion-content>
+                </ion-item>
+            </ion-list>
+        </ion-content>
+    </ng-container>
 </ng-container>

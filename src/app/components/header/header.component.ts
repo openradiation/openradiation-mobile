@@ -6,6 +6,12 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
-  @Input() backButton = false;
-  @Output() backButtonClick = new EventEmitter();
+  @Input()
+  backButton = false;
+  @Input()
+  shareButton = false;
+  @Output()
+  back = new EventEmitter();
+  @Output()
+  share = new EventEmitter();
 }
