@@ -11,3 +11,32 @@ ion-item {
   --inner-padding-end: 0;
   --padding-start: 8px;
 }
+
+.header,
+.value {
+  display: flex;
+  width: 100%;
+
+  .date {
+    flex: auto;
+  }
+  .hitsNumber {
+    flex: none;
+    width: 70px;
+    text-align: center;
+  }
+  .voltage {
+    flex: none;
+    width: 85px;
+    text-align: center;
+  }
+  .temperature {
+    flex: none;
+    width: 85px;
+    text-align: right;
+  }
+}
+
+.header {
+  font-weight: bold;
+}

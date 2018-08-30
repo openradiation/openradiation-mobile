@@ -14,7 +14,21 @@ export class MeasureStepsPage {
   @Select(MeasuresState.currentMeasure)
   currentMeasure$: Observable<Measure | undefined>;
 
-  constructor(private router: Router) {}
+  currentMeasure: Partial<Measure> = {
+    startTime: Date.now(),
+    steps: []
+  };
+
+  constructor(private router: Router) {
+    for (let i = 0; i < 100; i++) {
+      this.currentMeasure.steps!.push({
+        ts: Date.now(),
+        voltage: Math.random() * 100 + 200,
+        temperature: Math.random() * 10 + 20,
+        hitsNumber: Math.round(Math.random() * 10)
+      });
+    }
+  }
 
   goToReport() {
     this.router.navigate(['measure', 'report', 'scan']);
