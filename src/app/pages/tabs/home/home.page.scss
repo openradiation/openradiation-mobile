@@ -1,5 +1,4 @@
 @import 'src/theme/variables';
-@import 'src/app/components/page/page';
 
 ion-content {
   --padding-top: 20px;
@@ -36,6 +35,8 @@ ion-content {
       --padding-end: 4px;
       --padding-bottom: 4px;
       --padding-start: 4px;
+      --margin-end: auto;
+      --margin-start: auto;
     }
     .connected-device-header {
       background-color: $base-color;

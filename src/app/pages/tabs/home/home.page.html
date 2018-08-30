@@ -19,7 +19,7 @@
             </ion-button>
         </ng-template>
         <app-round-button
-                [disabled]="!(canStartMeasure | async)"
+                [disabled]="false"
                 [src]="(canStartMeasure | async) ? 'assets/img/button-start-measure-on.png' : 'assets/img/button-start-measure-off.png'"
                 (click)="startMeasure()">
         </app-round-button>

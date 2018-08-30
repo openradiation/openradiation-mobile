@@ -1,15 +1,15 @@
 import { Component, ElementRef } from '@angular/core';
-import { Router } from '@angular/router';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { combineLatest, Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
-import { AutoUnsubscribePage } from '../../../components/page/auto-unsubscribe.page';
+import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
 import { PositionAccuracyThreshold } from '../../../states/measures/measure';
 import { StartMeasure, StartWatchPosition, StopWatchPosition } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
 import { TabsService } from '../tabs.service';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-page-home',
@@ -27,9 +27,9 @@ export class HomePage extends AutoUnsubscribePage {
   constructor(
     protected tabsService: TabsService,
     protected elementRef: ElementRef,
-    private router: Router,
     private store: Store,
-    private actions$: Actions
+    private actions$: Actions,
+    private navController: NavController
   ) {
     super(tabsService, elementRef);
 
@@ -45,7 +45,9 @@ export class HomePage extends AutoUnsubscribePage {
     super.ionViewDidEnter();
     this.store.dispatch(new StartWatchPosition());
     this.subscriptions.push(
-      this.actions$.pipe(ofActionSuccessful(StartMeasure)).subscribe(() => this.router.navigate(['measure', 'scan']))
+      this.actions$
+        .pipe(ofActionSuccessful(StartMeasure))
+        .subscribe(() => this.navController.navigateRoot(['measure', 'scan']))
     );
   }
 
@@ -55,26 +57,15 @@ export class HomePage extends AutoUnsubscribePage {
   }
 
   goToDevices() {
-    this.router
-      .navigate([
-        'tabs',
-        {
-          outlets: {
-            settings: 'settings',
-            home: null
-          }
+    this.navController.navigateForward([
+      'tabs',
+      {
+        outlets: {
+          settings: 'devices',
+          home: null
         }
-      ])
-      .then(() =>
-        this.router.navigate([
-          'tabs',
-          {
-            outlets: {
-              settings: 'devices'
-            }
-          }
-        ])
-      );
+      }
+    ]);
   }
 
   startMeasure() {

@@ -1,6 +1,6 @@
 <ng-container *ngIf="(currentMeasure$ | async) as currentMeasure">
     <ng-container *ngIf="currentMeasure.steps as steps">
-        <app-header [backButton]="true" (back)="goToReport()" [shareButton]="true" (share)="shareSteps(currentMeasure)">
+        <app-header [backButton]="true" (back)="goBack()" [shareButton]="true" (share)="shareSteps(currentMeasure)">
             Mesure
         </app-header>
 

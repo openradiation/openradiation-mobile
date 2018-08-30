@@ -1,10 +1,10 @@
 import { Component, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { AutoUnsubscribePage } from '../../../components/page/auto-unsubscribe.page';
+import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { SelectIconOption } from '../../../components/select-icon/select-icon-option';
 import { DateService } from '../../../states/measures/date.service';
 import { Measure, MeasureEnvironment } from '../../../states/measures/measure';
@@ -17,6 +17,7 @@ import {
 import { MeasuresState, MeasuresStateModel } from '../../../states/measures/measures.state';
 import { UserState } from '../../../states/user/user.state';
 import { TabsService } from '../../tabs/tabs.service';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-measure-report',
@@ -104,7 +105,7 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     protected elementRef: ElementRef,
     private formBuilder: FormBuilder,
     private store: Store,
-    private router: Router,
+    private navController: NavController,
     private actions$: Actions,
     private activatedRoute: ActivatedRoute,
     private dateService: DateService
@@ -133,7 +134,7 @@ export class MeasureReportPage extends AutoUnsubscribePage {
           }
         }),
         this.actions$.pipe(ofActionSuccessful(StopMeasure, CancelMeasure)).subscribe(() =>
-          this.router.navigate([
+          this.navController.navigateRoot([
             'tabs',
             {
               outlets: {
@@ -165,7 +166,7 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     this.store.dispatch(new CancelMeasure());
   }
 
-  showDetail() {
-    this.router.navigate(['measure', 'report', 'steps']);
+  showMeasureSteps() {
+    this.navController.navigateForward(['measure', 'report', 'steps']);
   }
 }

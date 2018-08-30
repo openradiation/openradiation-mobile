@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { Measure } from '../../../states/measures/measure';
 import { MeasuresState } from '../../../states/measures/measures.state';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-measure-steps',
@@ -15,10 +15,10 @@ export class MeasureStepsPage {
   @Select(MeasuresState.currentMeasure)
   currentMeasure$: Observable<Measure | undefined>;
 
-  constructor(private router: Router, private socialSharing: SocialSharing) {}
+  constructor(private navController: NavController, private socialSharing: SocialSharing) {}
 
-  goToReport() {
-    this.router.navigate(['measure', 'report', 'scan']);
+  goBack() {
+    this.navController.goBack();
   }
 
   shareSteps(measure: Measure) {

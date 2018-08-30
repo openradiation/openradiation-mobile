@@ -1,9 +1,8 @@
 import { Component, ElementRef } from '@angular/core';
-import { Router } from '@angular/router';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { AutoUnsubscribePage } from '../../../components/page/auto-unsubscribe.page';
+import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
 import { HitsAccuracy, HitsAccuracyThreshold, Measure } from '../../../states/measures/measure';
@@ -16,6 +15,7 @@ import {
 } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
 import { TabsService } from '../../tabs/tabs.service';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-measure-scan',
@@ -37,7 +37,7 @@ export class MeasureScanPage extends AutoUnsubscribePage {
     protected tabsService: TabsService,
     protected elementRef: ElementRef,
     private store: Store,
-    private router: Router,
+    private navController: NavController,
     private actions$: Actions
   ) {
     super(tabsService, elementRef);
@@ -49,7 +49,7 @@ export class MeasureScanPage extends AutoUnsubscribePage {
       this.currentMeasure$.subscribe(measure => this.updateHitsAccuracy(measure)),
       this.actions$
         .pipe(ofActionSuccessful(StopMeasureScan))
-        .subscribe(() => this.router.navigate(['measure', 'report', 'scan']))
+        .subscribe(() => this.navController.navigateForward(['measure', 'report', 'scan']))
     );
     this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
       if (connectedDevice) {

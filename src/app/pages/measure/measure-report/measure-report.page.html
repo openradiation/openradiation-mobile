@@ -97,7 +97,7 @@
                     </app-round-button>
                     <div class="side-buttons">
                         <ion-button fill="clear" class="flat-button cancel" (click)="cancelMeasure()">Annuler</ion-button>
-                        <ion-button *ngIf="!currentMeasure.manualReporting && currentMeasure.steps && expertMode$ | async" fill="clear" class="flat-button expert" (click)="showDetail()">Expert</ion-button>
+                        <ion-button *ngIf="!currentMeasure.manualReporting && currentMeasure.steps && expertMode$ | async" fill="clear" class="flat-button expert" (click)="showMeasureSteps()">Expert</ion-button>
                     </div>
                 </div>
             </div>
