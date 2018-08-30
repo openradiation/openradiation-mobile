@@ -180,18 +180,25 @@ export class MeasuresState {
     const state = getState();
     if (state.currentPosition) {
       patchState({
-        currentMeasure: new Measure(
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          this.device.uuid,
-          this.device.platform,
-          this.device.version,
-          this.device.model,
-          uuid.v4(),
-          true
-        )
+        currentMeasure: {
+          ...new Measure(
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            this.device.uuid,
+            this.device.platform,
+            this.device.version,
+            this.device.model,
+            uuid.v4(),
+            true
+          ),
+          latitude: state.currentPosition!.coords.latitude,
+          longitude: state.currentPosition!.coords.longitude,
+          endLatitude: state.currentPosition!.coords.latitude,
+          endLongitude: state.currentPosition!.coords.longitude,
+          startTime: Date.now()
+        }
       });
     }
   }
@@ -270,42 +277,30 @@ export class MeasuresState {
   startMeasureReport({ getState, patchState }: StateContext<MeasuresStateModel>) {
     const state = getState();
     if (state.currentMeasure) {
-      let model: MeasureReport;
-      if (state.currentMeasure.manualReporting) {
+      let model: MeasureReport = {
+        latitude: Number(state.currentMeasure.latitude.toFixed(7)),
+        longitude: Number(state.currentMeasure.longitude.toFixed(7)),
+        endLatitude: Number(state.currentMeasure.endLatitude.toFixed(7)),
+        endLongitude: Number(state.currentMeasure.endLongitude.toFixed(7)),
+        date: this.dateService.toISOString(state.currentMeasure.startTime),
+        startTime: this.dateService.toISOString(state.currentMeasure.startTime),
+        duration: undefined,
+        temperature: undefined,
+        hitsNumber: undefined,
+        value: undefined,
+        measurementHeight: undefined,
+        description: undefined,
+        tags: undefined,
+        measurementEnvironment: undefined,
+        rain: undefined
+      };
+      if (!state.currentMeasure.manualReporting) {
         model = {
-          latitude: Number(state.currentPosition!.coords.latitude.toFixed(7)),
-          longitude: Number(state.currentPosition!.coords.longitude.toFixed(7)),
-          endLatitude: Number(state.currentPosition!.coords.latitude.toFixed(7)),
-          endLongitude: Number(state.currentPosition!.coords.longitude.toFixed(7)),
-          date: this.dateService.toISOString(new Date()),
-          startTime: this.dateService.toISOString(new Date()),
-          duration: undefined,
-          temperature: undefined,
-          hitsNumber: undefined,
-          value: undefined,
-          measurementHeight: undefined,
-          description: undefined,
-          tags: undefined,
-          measurementEnvironment: undefined,
-          rain: undefined
-        };
-      } else {
-        model = {
-          latitude: Number(state.currentMeasure.latitude.toFixed(7)),
-          longitude: Number(state.currentMeasure.longitude.toFixed(7)),
-          endLatitude: Number(state.currentMeasure.endLatitude.toFixed(7)),
-          endLongitude: Number(state.currentMeasure.endLongitude.toFixed(7)),
-          date: this.dateService.toISOString(state.currentMeasure.startTime),
-          startTime: this.dateService.toISOString(state.currentMeasure.startTime),
-          duration: this.dateService.toISODuration(state.currentMeasure.endTime - state.currentMeasure.startTime),
-          temperature: state.currentMeasure.temperature,
+          ...model,
+          duration: this.dateService.toISODuration(state.currentMeasure.endTime! - state.currentMeasure.startTime),
+          temperature: Number(state.currentMeasure.temperature!.toFixed(2)),
           hitsNumber: state.currentMeasure.hitsNumber,
-          value: Number(state.currentMeasure.value.toFixed(3)),
-          measurementHeight: undefined,
-          description: undefined,
-          tags: undefined,
-          measurementEnvironment: undefined,
-          rain: undefined
+          value: Number(state.currentMeasure.value.toFixed(3))
         };
       }
       patchState({
@@ -323,43 +318,25 @@ export class MeasuresState {
   stopMeasureReport({ getState, patchState }: StateContext<MeasuresStateModel>) {
     const state = getState();
     if (state.currentMeasure && state.measureReport) {
-      let currentMeasure: Measure;
+      let currentMeasure: Measure = {
+        ...state.currentMeasure,
+        measurementHeight: state.measureReport.model.measurementHeight!,
+        measurementEnvironment: state.measureReport.model.measurementEnvironment!,
+        rain: state.measureReport.model.rain!,
+        description: state.measureReport.model.description,
+        tags: state.measureReport.model.tags
+      };
       if (state.currentMeasure.manualReporting) {
-        const startTime = new Date(state.measureReport.model.startTime!).getTime();
         const durationDate = new Date(state.measureReport.model.duration!);
         currentMeasure = {
           ...state.currentMeasure,
           temperature: state.measureReport.model.temperature!,
           value: state.measureReport.model.value!,
           hitsNumber: state.measureReport.model.hitsNumber!,
-          startTime,
-          endTime: startTime + (durationDate.getMinutes() * 60 + durationDate.getSeconds()) * 1000,
-          latitude: state.measureReport.model.latitude!,
-          longitude: state.measureReport.model.longitude!,
-          endLatitude: state.measureReport.model.endLatitude!,
-          endLongitude: state.measureReport.model.endLongitude!,
+          endTime: state.currentMeasure.startTime + (durationDate.getMinutes() * 60 + durationDate.getSeconds()) * 1000,
           measurementHeight: state.measureReport.model.measurementHeight!,
           measurementEnvironment: state.measureReport.model.measurementEnvironment!,
           rain: state.measureReport.model.rain!
-        };
-      } else {
-        currentMeasure = {
-          ...state.currentMeasure,
-          measurementHeight: state.measureReport.model.measurementHeight!,
-          measurementEnvironment: state.measureReport.model.measurementEnvironment!,
-          rain: state.measureReport.model.rain!
-        };
-      }
-      if (state.measureReport.model.description) {
-        currentMeasure = {
-          ...currentMeasure,
-          description: state.measureReport.model.description
-        };
-      }
-      if (state.measureReport.model.tags) {
-        currentMeasure = {
-          ...currentMeasure,
-          tags: state.measureReport.model.tags
         };
       }
       patchState({

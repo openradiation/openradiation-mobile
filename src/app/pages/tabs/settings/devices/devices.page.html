@@ -31,7 +31,7 @@
                     *ngIf="connectingDevice && connectingDevice?.sensorUUID === availableDevice.sensorUUID"></ion-spinner>
             <span class="state" *ngIf="connectingDevice?.sensorUUID !== availableDevice.sensorUUID">
                 Disponible
-                <div class="battery-icon" *ngIf="availableDevice.batteryLevel !== undefined">
+                <div class="battery-icon" *ngIf="availableDevice.batteryLevel">
                     <ion-icon name="battery-full" mode="ios"></ion-icon>{{availableDevice.batteryLevel}}%
                 </div>
             </span>

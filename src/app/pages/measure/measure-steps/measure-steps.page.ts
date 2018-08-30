@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { Select } from '@ngxs/store';
-import { MeasuresState } from '../../../states/measures/measures.state';
 import { Observable } from 'rxjs';
 import { Measure } from '../../../states/measures/measure';
-import { Router } from '@angular/router';
+import { MeasuresState } from '../../../states/measures/measures.state';
 
 @Component({
   selector: 'app-measure-steps',
