@@ -6,7 +6,7 @@ import { IonicModule } from '@ionic/angular';
 import { MeasureReportPageModule } from './measure-report/measure-report.module';
 import { MeasureRoutingModule } from './measure-routing.module';
 import { MeasureScanPageModule } from './measure-scan/measure-scan.module';
-import { MeasureStepsPage } from './measure-steps/measure-steps.page';
+import { MeasureStepsPageModule } from './measure-steps/measure-steps.module';
 
 @NgModule({
   imports: [
@@ -16,7 +16,7 @@ import { MeasureStepsPage } from './measure-steps/measure-steps.page';
     MeasureRoutingModule,
     MeasureReportPageModule,
     MeasureScanPageModule,
-    MeasureStepsPage
+    MeasureStepsPageModule
   ],
   declarations: []
 })
