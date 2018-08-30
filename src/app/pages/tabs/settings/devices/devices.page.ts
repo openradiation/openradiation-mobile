@@ -6,6 +6,7 @@ import { AutoUnsubscribePage } from '../../../../components/auto-unsubscribe/aut
 import { AbstractDevice } from '../../../../states/devices/abstract-device';
 import {
   ConnectDevice,
+  DeviceConnectionLost,
   DisconnectDevice,
   EditDeviceParams,
   StartDiscoverDevices,
@@ -48,7 +49,9 @@ export class DevicesPage extends AutoUnsubscribePage {
       this.actions$
         .pipe(ofActionDispatched(ConnectDevice))
         .subscribe((action: ConnectDevice) => (this.connectingDevice = action.device)),
-      this.actions$.pipe(ofActionSuccessful(ConnectDevice)).subscribe(() => (this.connectingDevice = undefined))
+      this.actions$
+        .pipe(ofActionSuccessful(ConnectDevice, DeviceConnectionLost, DisconnectDevice))
+        .subscribe(() => (this.connectingDevice = undefined))
     );
     this.store.dispatch(new StartDiscoverDevices()).subscribe();
   }
