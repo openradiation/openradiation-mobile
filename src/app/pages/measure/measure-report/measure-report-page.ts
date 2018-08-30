@@ -1,6 +1,7 @@
 import { Component, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { NavController } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -17,7 +18,6 @@ import {
 import { MeasuresState, MeasuresStateModel } from '../../../states/measures/measures.state';
 import { UserState } from '../../../states/user/user.state';
 import { TabsService } from '../../tabs/tabs.service';
-import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-measure-report',

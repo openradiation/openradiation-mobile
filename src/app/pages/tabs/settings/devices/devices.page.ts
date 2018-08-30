@@ -1,4 +1,5 @@
 import { Component, ElementRef } from '@angular/core';
+import { NavController } from '@ionic/angular';
 import { Actions, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { AutoUnsubscribePage } from '../../../../components/auto-unsubscribe/auto-unsubscribe.page';
@@ -12,7 +13,6 @@ import {
 } from '../../../../states/devices/devices.action';
 import { DevicesState } from '../../../../states/devices/devices.state';
 import { TabsService } from '../../tabs.service';
-import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-page-devices',
