@@ -7,6 +7,19 @@ ion-content {
   --padding-start: 10px;
 }
 
+.empty-list {
+  height: 95%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+  font-weight: 200;
+  font-size: 20px;
+  text-align: center;
+}
+
 ion-item {
   --inner-padding-end: 0;
   --padding-start: 8px;
