@@ -17,8 +17,10 @@ export class Tabs {
   }
 
   tabChange(event: CustomEvent) {
-    this.tabsService.currentTab.next(
-      event.detail.tab.children[0].children[event.detail.tab.children[0].children.length - 1]
-    );
+    if (event.detail.tab.children[0]) {
+      this.tabsService.currentTab.next(
+        event.detail.tab.children[0].children[event.detail.tab.children[0].children.length - 1]
+      );
+    }
   }
 }
