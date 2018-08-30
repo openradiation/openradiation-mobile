@@ -42,10 +42,10 @@ export class HistoryPage {
     this.alertController
       .create({
         header: 'Historique',
+        subHeader: 'Êtes-vous sûr(e) de vouloir envoyer cette mesure ?',
         message:
-          `Êtes-vous sûr(e) de vouloir envoyer cette mesure ? En envoyant cette measure, vous acceptez que ` +
-          `l'ensemble des données correspondant à cette measure (dont votre position GPS, votre peseudo, etc) ` +
-          `soit publié dans la base OpenRadiation.`,
+          `En envoyant cette mesure, vous acceptez que l'ensemble des données correspondant à cette measure ` +
+          `(dont votre position GPS, votre peseudo, etc) soit publié dans la base OpenRadiation.`,
         backdropDismiss: false,
         buttons: [
           {
