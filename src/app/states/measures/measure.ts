@@ -27,7 +27,6 @@ export class Measure {
   reportUuid: string;
   manualReporting = false;
   organisationReporting?: string;
-  reportContext = 'routine';
   description?: string;
   measurementHeight?: number;
   tags?: string[];
