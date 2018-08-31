@@ -8,8 +8,8 @@ export interface MeasureApi {
     temperature?: number;
     value: number;
     hitsNumber?: number;
-    startTime: number;
-    endTime?: number;
+    startTime: string;
+    endTime?: string;
     latitude: number;
     longitude: number;
     accuracy?: number;

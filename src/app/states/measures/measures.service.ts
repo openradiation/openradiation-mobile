@@ -54,7 +54,6 @@ export class MeasuresService {
     }
   }
 
-  // TODO implement
   publishMeasure(measure: Measure): Observable<any> {
     const payload: MeasureApi = {
       apiKey: environment.API_KEY,
@@ -66,8 +65,8 @@ export class MeasuresService {
         temperature: measure.temperature,
         value: measure.value,
         hitsNumber: measure.hitsNumber,
-        startTime: measure.startTime,
-        endTime: measure.endTime,
+        startTime: new Date(measure.startTime).toISOString(),
+        endTime: measure.endTime ? new Date(measure.endTime).toISOString() : undefined,
         latitude: measure.latitude,
         longitude: measure.longitude,
         accuracy: measure.accuracy,
