@@ -11,7 +11,7 @@
                 {{connectedDevice.apparatusVersion}}<br>{{connectedDevice.apparatusId}}
             </ion-label>
             <span class="state connected">
-                Connecté
+                {{'GENERAL.CONNECTED' | translate}}
                 <div class="battery-icon" *ngIf="connectedDevice.batteryLevel !== undefined">
                     <ion-icon name="battery-full" mode="ios"></ion-icon>{{connectedDevice.batteryLevel}}%
                 </div>

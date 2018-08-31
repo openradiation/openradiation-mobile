@@ -2,6 +2,7 @@
   "GENERAL": {
     "AVAILABLE": "Available",
     "CANCEL": "Cancel",
+    "CONNECTED": "Connected",
     "CONNEXION_ERROR": "Connexion error: {message}",
     "OK": "Ok",
     "UNAVAILABLE": "Unavailable"
