@@ -34,17 +34,17 @@
                     {{'LOG_IN.TITLE' | translate}}
                 </ion-button>
             </ion-item>
-            <ion-item class="language">
-                <ion-label>
-                    {{'LANGUAGE.TITLE' | translate}}
-                </ion-label>
-                <ion-select [ngModel]="language$ | async" (ngModelChange)="setLanguage($event)"
-                            [okText]="'GENERAL.OK' | translate" [cancelText]="'GENERAL.CANCEL' | translate">
-                    <ion-select-option value="en">{{'LANGUAGE.ENGLISH' | translate}}</ion-select-option>
-                    <ion-select-option value="fr">{{'LANGUAGE.FRENCH' | translate}}</ion-select-option>
-                </ion-select>
-            </ion-item>
         </ng-template>
+        <ion-item class="language">
+            <ion-label>
+                {{'LANGUAGE.TITLE' | translate}}
+            </ion-label>
+            <ion-select [ngModel]="language$ | async" (ngModelChange)="setLanguage($event)"
+                        [okText]="'GENERAL.OK' | translate" [cancelText]="'GENERAL.CANCEL' | translate">
+                <ion-select-option value="en">{{'LANGUAGE.ENGLISH' | translate}}</ion-select-option>
+                <ion-select-option value="fr">{{'LANGUAGE.FRENCH' | translate}}</ion-select-option>
+            </ion-select>
+        </ion-item>
     </ion-list>
     <ion-list>
         <app-category-label>
