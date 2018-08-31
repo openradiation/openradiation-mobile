@@ -1,9 +1,9 @@
-<app-header [backButton]="true" (back)="goBack()">Capteurs</app-header>
+<app-header [backButton]="true" (back)="goBack()">{{'SENSORS' | translate}}</app-header>
 
 <ion-content>
     <ion-list>
         <app-category-label *ngIf="isScanning$ | async">
-            <span class="loading">Recherche des capteurs</span>
+            <span class="loading">{{'SENSORS_SEARCH' | translate}}</span>
         </app-category-label>
         <ion-item *ngIf="connectedDevice$ | async as connectedDevice" class="clickable-device" button
                   (click)="disconnectDevice()">
