@@ -1,18 +1,18 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { shareReplay, take, takeUntil } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 import { AbstractDevice, DeviceType } from '../devices/abstract-device';
 import { DeviceAtomTag } from '../devices/device-atom-tag';
 import { DeviceAtomTagService } from '../devices/device-atom-tag.service';
 import { DeviceOGKit } from '../devices/device-og-kit';
 import { DeviceOGKitService } from '../devices/device-og-kit.service';
-import { Measure, Step } from './measure';
-import { StopMeasureScan, UpdateMeasure } from './measures.action';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
-import { ApparatusSensorType, MeasureApi } from './measure-api';
 import { UserStateModel } from '../user/user.state';
+import { Measure, Step } from './measure';
+import { ApparatusSensorType, MeasureApi } from './measure-api';
+import { StopMeasureScan, UpdateMeasure } from './measures.action';
 
 @Injectable({
   providedIn: 'root'
