@@ -26,6 +26,9 @@
     "USER_ACCOUNT": "User account",
     "WRONG_CREDENTIALS": "Wrong credentials"
   },
+  "MAP": {
+    "NO_CONNECTION": "No connexion available to display the map"
+  },
   "MEASURES": {
     "AUTO_PUBLISH": "Auto publish measures",
     "AUTO_PUBLISH_NOTICE": {
