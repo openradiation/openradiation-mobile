@@ -6,6 +6,7 @@ import {
   DeviceType,
   RawDevice
 } from './abstract-device';
+import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
 
 export class DeviceAtomTag extends AbstractDevice {
   readonly deviceType = DeviceType.AtomTag;
@@ -18,11 +19,11 @@ export class DeviceAtomTag extends AbstractDevice {
   };
   paramsModel: DeviceParamsModel = {
     audioHits: {
-      label: 'Signal audio pour les coups',
+      label: <string>_('SENSORS.PARAM.AUDIO_HITS'),
       type: DeviceParamType.boolean
     },
     vibrationHits: {
-      label: 'Vibration pour les coups',
+      label: <string>_('SENSORS.PARAM.VIBRATION_HITS'),
       type: DeviceParamType.boolean
     }
   };

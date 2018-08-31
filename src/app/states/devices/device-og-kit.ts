@@ -6,6 +6,7 @@ import {
   DeviceType,
   RawDevice
 } from './abstract-device';
+import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
 
 export class DeviceOGKit extends AbstractDevice {
   readonly deviceType = DeviceType.OGKit;
@@ -17,11 +18,11 @@ export class DeviceOGKit extends AbstractDevice {
   };
   paramsModel: DeviceParamsModel = {
     audioHits: {
-      label: 'Signal audio pour les coups',
+      label: <string>_('SENSORS.PARAM.AUDIO_HITS'),
       type: DeviceParamType.boolean
     },
     visualHits: {
-      label: 'Signal visuel pour les coups',
+      label: <string>_('SENSORS.PARAM.VISUAL_HITS'),
       type: DeviceParamType.boolean
     }
   };

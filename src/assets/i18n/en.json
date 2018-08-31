@@ -86,6 +86,11 @@
   "SENSORS": {
     "DETAILS": "Details",
     "LIST": "Sensors list",
+    "PARAM": {
+      "AUDIO_HITS": "Audio signal on hits",
+      "VIBRATION_HITS": "Vibration on hits",
+      "VISUAL_HITS": "Visual signal on hits"
+    },
     "SEARCH": "Looking for sensors",
     "TITLE": "Sensors",
     "TUBE_TYPE": "Tube type: ",
