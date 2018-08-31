@@ -4,7 +4,7 @@ import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { DisableExpertMode, EnableExpertMode } from '../../../../states/measures/measures.action';
 import { MeasuresState } from '../../../../states/measures/measures.state';
-import { LogOut } from '../../../../states/user/user.action';
+import { LogOut, SetLanguage } from '../../../../states/user/user.action';
 import { UserState } from '../../../../states/user/user.state';
 
 @Component({
@@ -18,6 +18,9 @@ export class SettingsPage {
 
   @Select(UserState.login)
   login$: Observable<string | undefined>;
+
+  @Select(UserState.language)
+  language$: Observable<string | undefined>;
 
   constructor(private navController: NavController, private store: Store) {}
 
@@ -64,5 +67,9 @@ export class SettingsPage {
 
   logOut() {
     this.store.dispatch(new LogOut());
+  }
+
+  setLanguage(language: string) {
+    this.store.dispatch(new SetLanguage(language));
   }
 }

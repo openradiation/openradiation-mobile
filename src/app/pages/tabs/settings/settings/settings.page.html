@@ -34,6 +34,16 @@
                     S'identifier
                 </ion-button>
             </ion-item>
+            <ion-item class="language">
+                <ion-label>
+                    Langue
+                </ion-label>
+                <ion-select [ngModel]="language$ | async" (ngModelChange)="setLanguage($event)"
+                            okText="Ok" cancelText="Annuler">
+                    <ion-select-option value="fr">Français</ion-select-option>
+                    <ion-select-option value="en">English</ion-select-option>
+                </ion-select>
+            </ion-item>
         </ng-template>
     </ion-list>
     <ion-list>
