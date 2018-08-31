@@ -1,12 +1,18 @@
 {
   "AUTO_PUBLISH": "Auto publish",
   "CANCEL": "Cancel",
+  "CONNEXION_ERROR": "Connexion error: {message}",
   "ENGLISH": "English",
   "EXPERT_MODE": "Expert mode",
   "FRENCH": "Français",
   "LANGUAGE": "Language",
   "LOGGED_AS": "Logged as",
   "LOG_IN": "Log in",
+  "LOG_IN_NOTICE": {
+    "PART1": null,
+    "PART2": null,
+    "PART3": null
+  },
   "LOG_OUT": "Log out",
   "MEASURES": "Measures",
   "MEASURES_AUTO_PUBLISH": "Auto publish measures",
@@ -16,8 +22,11 @@
   },
   "NOT_LOGGED": "Not logged",
   "OK": "Ok",
+  "PASSWORD": "Password",
   "SENSORS": "Sensors",
   "SENSORS_LIST": "Sensors list",
   "SETTINGS": "Settings",
-  "USER_ACCOUNT": "User account"
+  "USERNAME": "Username",
+  "USER_ACCOUNT": "User account",
+  "WRONG_CREDENTIALS": "Wrong credentials"
 }

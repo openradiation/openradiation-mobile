@@ -1,31 +1,20 @@
-<app-header [backButton]="true" (back)="goToSettings()">S'identifier</app-header>
+<app-header [backButton]="true" (back)="goToSettings()">{{'LOG_IN' | translate}}</app-header>
 
 <ion-content>
-    <div class="notice">
-        Si vous avez un compte utilisateur sur <a target="_blank" href="https://www.openradiation.org">www.openradiation.org</a>,
-        vous pouvez renseigner ici les identifiants (nom d'utilisateur et mot de passe) de votre compte.
-        Ceci vous permet d’associer les mesures que vous publiez à votre compte utilisateur :
-        ainsi vous pourrez retrouver facilement l’ensemble de vos mesures sur <a target="_blank"
-                                                                                 href="https://www.openradiation.org">www.openradiation.org</a>.
+    <div class="notice" [innerHTML]="'LOG_IN_NOTICE.PART1' | translate">
     </div>
-    <div class="notice">
-        Vous pourrez également « tagger » ou ajouter une description à vos mesures. <br/>
-        De plus, en publiant des mesures en étant identifié, vous rendez la base collaborative OpenRadiation plus
-        fiable.
+    <div class="notice" [innerHTML]="'LOG_IN_NOTICE.PART2' | translate">
     </div>
-    <div class="notice">
-        Si vous ne l’avez pas déjà fait, nous vous invitons à créer un compte sur <a target="_blank"
-                                                                                     href="https://www.openradiation.org/user/register">www.openradiation.org</a>,
-        puis à le paramétrer ici (synchronisation ~5 min).
+    <div class="notice" [innerHTML]="'LOG_IN_NOTICE.PART3' | translate">
     </div>
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <ion-list>
             <ion-item>
-                <ion-label position="floating">Nom d'utilisateur</ion-label>
+                <ion-label position="floating">{{'USERNAME' | translate}}</ion-label>
                 <ion-input formControlName="login" required></ion-input>
             </ion-item>
             <ion-item>
-                <ion-label position="floating">Mot de passe</ion-label>
+                <ion-label position="floating">{{'PASSWORD' | translate}}</ion-label>
                 <ion-input type="password" formControlName="password" required></ion-input>
             </ion-item>
         </ion-list>
@@ -35,7 +24,7 @@
                     <ion-spinner></ion-spinner>
                 </ng-container>
                 <ng-template #notConnecting>
-                    S'identifier
+                    {{'LOG_IN' | translate}}
                 </ng-template>
             </ion-button>
         </div>
