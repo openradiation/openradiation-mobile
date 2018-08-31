@@ -17,7 +17,6 @@ import { LogInPageModule } from './settings/log-in/log-in.module';
 import { MeasuresParamPageModule } from './settings/measures-param/measures-param.module';
 import { SettingsPageModule } from './settings/settings/settings.module';
 import { Tabs } from './tabs.component';
-import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -36,8 +35,7 @@ import { TranslateModule } from '@ngx-translate/core';
     LogInPageModule,
     LegalNoticePageModule,
     AboutPageModule,
-    MeasureReportPageModule,
-    TranslateModule.forChild()
+    MeasureReportPageModule
   ],
   declarations: [Tabs]
 })

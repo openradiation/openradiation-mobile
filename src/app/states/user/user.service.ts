@@ -10,7 +10,9 @@ import { TranslateService } from '@ngx-translate/core';
   providedIn: 'root'
 })
 export class UserService {
-  constructor(private httpClient: HttpClient, private translateService: TranslateService) {}
+  constructor(private httpClient: HttpClient, private translateService: TranslateService) {
+    this.translateService.setDefaultLang('fr');
+  }
 
   logIn(login: string, password: string): Observable<any> {
     return this.httpClient
