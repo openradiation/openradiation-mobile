@@ -92,8 +92,7 @@ export class MeasuresService {
         reportUuid: measure.reportUuid,
         manualReporting: measure.manualReporting,
         organisationReporting: measure.organisationReporting,
-        // TODO change to 'routine'
-        reportContext: 'test',
+        reportContext: 'routine',
         description: measure.description,
         measurementHeight: measure.measurementHeight,
         tags: measure.tags,
