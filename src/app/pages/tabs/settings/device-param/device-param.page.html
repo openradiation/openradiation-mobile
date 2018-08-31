@@ -4,13 +4,13 @@
         <ion-list>
             <app-category-label>{{'SENSORS_DETAILS' | translate}}</app-category-label>
             <ion-item>
-                Version : {{editedDevice.apparatusId}}
+                {{'SENSOR.VERSION' | translate}}{{editedDevice.apparatusId}}
             </ion-item>
             <ion-item>
-                Type sensor : {{editedDevice.apparatusSensorType}}
+                {{'SENSOR.TYPE' | translate}}{{editedDevice.apparatusSensorType}}
             </ion-item>
             <ion-item>
-                Type de tube : {{editedDevice.apparatusTubeType}}
+                {{'SENSOR.TUBE_TYPE' | translate}}{{editedDevice.apparatusTubeType}}
             </ion-item>
         </ion-list>
         <form *ngIf="paramsModel && editedDeviceForm" [formGroup]="editedDeviceForm" novalidate

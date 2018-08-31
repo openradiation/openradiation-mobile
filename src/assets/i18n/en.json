@@ -1,5 +1,6 @@
 {
   "AUTO_PUBLISH": "Auto publish",
+  "AVAILABLE": "Available",
   "CANCEL": "Cancel",
   "CONNEXION_ERROR": "Connexion error: {message}",
   "ENGLISH": "English",
@@ -23,11 +24,17 @@
   "NOT_LOGGED": "Not logged",
   "OK": "Ok",
   "PASSWORD": "Password",
+  "SENSOR": {
+    "TUBE_TYPE": "Tube type: ",
+    "TYPE": "Sensor type: ",
+    "VERSION": "Version: "
+  },
   "SENSORS": "Sensors",
   "SENSORS_DETAILS": "Details",
   "SENSORS_LIST": "Sensors list",
   "SENSORS_SEARCH": "Looking for sensors",
   "SETTINGS": "Settings",
+  "UNAVAILABLE": "Unavailable",
   "USERNAME": "Username",
   "USER_ACCOUNT": "User account",
   "WRONG_CREDENTIALS": "Wrong credentials"
