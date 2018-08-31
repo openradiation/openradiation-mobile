@@ -1,0 +1,42 @@
+<div class="scrollable home">  
+  <div class="scrollable-content">
+
+    <div class="list-group text-center">
+    	<div class="logo"></div>
+    	<div class="homesubtitle">mesurer la radioactivité</div>
+    	<div class="gps" ng-class="{error:gps=='error',bad:gps=='bad'}">
+    		GPS : 
+    		<span ng-if="gps=='error'">erreur</span>
+    		<span ng-if="gps=='bad'">moyen</span>
+    		<span ng-if="gps=='good'">bon</span>
+    	</div>
+    	<br/>
+    	<div class="capteur2" ng-class="{'on': state=='2' || state=='3','off': state=='1'}">
+    		<div ng-if="state == '2' || state == '3'">
+	    		Capteur détecté :
+	    	</div>
+	    	<div ng-if="state == '4'">
+	    		Capteur AK3Zim34 : OK
+	    	</div>
+    	</div>
+    	<div class="capteur" ng-click="buttonSearchCapteur($event)" ng-class="{'on': state=='2' || state=='3','off': state=='4'}">
+	    	<div ng-if="state == '1'" ng-click="doParam2($event)">
+	    	Pas de capteur<br/>CLIQUEZ ICI
+	    	</div>
+	    	<div ng-if="state == '2'">
+	    	Aucun capteur <span class="icon-progress"></span>
+	    	</div>
+	    	<div ng-if="state == '3'">
+	    		<div class="desc">
+			{{connectedDevice.apparatusVersion}} / {{connectedDevice.apparatusId}}
+			</div> 
+	    	</div>
+    	</div>
+      <div class="button-home-bottom">
+      	<div ng-click="doMesure($event)" class="button-home" ng-class="{'off': state=='1' || state=='2','on': state=='3' || state=='4'}"></div>
+      </div>
+
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,35 @@
+
+
+	<div class="scrollable param">
+	<div class="title">
+		<div class="back" ng-click="doParam($event)" ></div>Paramètres
+	</div>
+ 		  <div class="scrollable-content text-center">
+	<div class="page-content">
+	<div class="blocParam1">
+		<div class="bloctitle">Liste des capteurs bluetooth</div>
+		
+		<div class="nocapt" ng-hide="{{sizeOfObject(devices)}}">Aucun capteur détecté</div>
+		
+		<div ng-repeat="(key, deviceSensor) in devices" >
+			<div class="lignecapt">
+				<div class="desc">
+					{{deviceSensor.name}}
+					<div>{{deviceSensor.advertising}}</div>
+					<div class="paramcapt" ><div ng-if="connectedDevice.sensorUUID==deviceSensor.uuid" ng-click="doParam3($event)"></div></div>
+				</div>
+				<div class="connect">
+					<div ng-if="connectedDevice.sensorUUID==deviceSensor.uuid" class="button" ng-click="doDisconnect(connectedDevice.sensorUUID)">Se déconnecter</div>
+					<div ng-if="connectedDevice.sensorUUID!=deviceSensor.uuid" class="button" ng-click="doConnect(deviceSensor)">Se connecter</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	
+			</div>
+		</div>
+	</div>
+
+
+

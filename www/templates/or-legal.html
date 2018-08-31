@@ -1,0 +1,87 @@
+
+<div class="scrollable more">  
+<div class="title">
+		Mention Légales
+	</div>
+  <div class="scrollable-content text-center">
+
+	
+    	
+	<div class="page-content">
+           <div class="bloc">
+    		<div class="panel-group" ui-state='myAccordion' ui-default='1'>
+				
+				<div class="panel or-panel">
+					<div class="panel-heading" ui-set="{'myAccordion': 1}">
+				    	<h4 class="panel-title">
+							Précaution concernant les mesures
+				    	</h4>
+					</div>
+				  	<div ui-if="myAccordion == 1" ui-scope-context='1'>
+				    	<div class="panel-body">
+				     		La Base OpenRadiation est une base de données participative constituée avec des valeurs brutes restituées sans filtre. Les Partenaires OpenRadiation ne peuvent être tenus responsables des valeurs affichées et des conséquences liées à l'interprétation ou à l'utilisation qui peut être faite de ces valeurs. 
+						<br>Par ailleurs, les mesures que vous prenez avec l'Application OpenRadiation correspondent à des mesures de l'environnement faites à un moment donné et dans des conditions spécifiques. Elles ne sont pas nécessairement représentatives de votre exposition aux rayonnements ionisants sur le long terme.
+				    	</div>
+					</div>
+				</div>
+				
+				<div class="panel or-panel">
+					<div class="panel-heading" ui-set="{'myAccordion': 2}">
+				    	<h4 class="panel-title">
+							Conditions d'utilisation
+				    	</h4>
+					</div>
+					<div ui-if="myAccordion == 2" ui-scope-context='2'>
+						<div class="panel-body">
+							Vous participez à la base de données collaborative OpenRadiation dès lors que vous publiez 
+							des mesures par l’application smartphone, que la publication soit automatique ou déclenchée par une action manuelle.
+							<br>L’objet du projet OpenRadiation étant la création d’une base de données collaborative relative à la radioactivité ambiante, tout utilisateur de l’application mobile accepte explicitement de partager les données qu’il relève, que ce soit par une publication automatique ou déclenchée par une action manuelle.
+                            <br>La base de données OpenRadiation est publiée en intégralité sous la license <a target="_blank" href="https://www.openradiation.org/conditions-dutilisation#licence_odbl">ODC-ODbL (Open Database License)</a>. La plupart des données que vous soumettez participent à la constitution de la base de données OpenRadiation.  
+							<br>Vous vous engagez à respecter la législation en cours concernant notamment le droit d'auteur. L’utilisation de la base de données OpenRadiation vous engage à respecter des règles d’éthique (propos insultants, respect de la vie privée, ...).
+							<br>OpenRadiation se réserve le droit de supprimer un contenu qui lui serait signalé ne respectant pas les consignes ci-dessus, ceci sans avertissement.
+                            <br>Vous pouvez retrouver le détail de l’ensemble des conditions d’utilisation sur le site <a target="_blank" href="https://www.openradiation.org/conditions-dutilisation">www.openradiation.org/conditions-dutilisation</a>.
+                        </div>
+					</div>
+				</div>
+				
+				<div class="panel or-panel">
+					<div class="panel-heading" ui-set="{'myAccordion': 3}">		
+				    	<h4 class="panel-title">
+							Editeur
+				    	</h4>
+				  	</div>
+				  	<div ui-if="myAccordion == 3" ui-scope-context='3'>
+				    	<div class="panel-body">
+				     		L’application OpenRadiation est développée principalement par Agoralogie, avec le soutien de l’IRSN et de l’UPMC. N’hésitez pas à nous faire parvenir vos commentaires sur cette application. Le code source de l’application est publié en <a target="_blank" href="https://www.openradiation.org/developpeurs">opensource</a>. 
+                            <br>Retrouvez l’ensemble des mentions légales et les informations de contact sur <a target="_blank" href="https://www.openradiation.org/mentions-legales">www.openradiation.org/mentions-legales</a>.
+                            <br><br>Version actuelle : {{appliNameVersion}}.
+				    	</div>
+					</div>
+				</div>
+				
+				<!-- 
+				<div class="panel or-panel" ng-repeat="i in [4,5,6]">
+				  <div class="panel-heading" ui-set="{'myAccordion': i}">
+				
+				    <h4 class="panel-title">
+					Titre #{{i}}
+				    </h4>
+				  </div>
+			
+				  <div ui-if="myAccordion == i" ui-scope-context='i'>
+				    <div class="panel-body">
+				      #{{i}} Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed pretium sagittis est, ut dignissim orci vestibulum et. Aliquam imperdiet suscipit ex. Etiam tempor purus est, sit amet porta dui iaculis quis. Sed vitae convallis velit. Donec sed varius augue. Donec sed mauris mollis, accumsan elit nec, auctor ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+				    </div>
+				  </div>
+				  
+				  
+				</div>
+	 			-->
+	
+               </div>
+          </div>
+       </div>
+  
+  
+  </div>
+</div>

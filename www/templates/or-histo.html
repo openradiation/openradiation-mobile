@@ -1,0 +1,31 @@
+
+<div class="scrollable histo"> 
+<div class="title">
+		Historique
+	</div> 
+  <div class="scrollable-content text-center">
+
+	
+    	
+	<div class="page-content">
+   		<div class="bloc">
+   		
+   		<div ng-repeat="(key, measure) in measures">
+   			<div class="ligne">
+    			<div class="date">{{getDate(measure.tsStart)}} {{getTime(measure.tsStart)}}</div>
+    			<div class="value">{{measure.radiation}} &#181;Sv/h</div>
+    			<div class="button" ng-if='!measure.sent'>
+					<div ng-if='!measure.encours' class="send" ng-click="doSend(measure)"></div>
+					<div ng-if='measure.encours' class="fa fa-spinner fa-spin"></div>
+					<div class="delete" ng-click="doDelete(measure.id)"></div>
+					
+				</div>
+				<div class="published" ng-if='measure.sent'>publié</div>
+    		</div>
+		</div>
+   		
+   		
+   		</div>
+   	</div>
+  </div>
+</div>

@@ -1,0 +1,36 @@
+
+
+	<div class="scrollable param">
+	<div class="title">
+		<div class="back" ng-click="doParam2($event)" ></div>Paramètres Capteur
+	</div>
+ 		  <div class="scrollable-content text-center">
+	<div class="page-content">
+	<div class="blocParam1">
+		<div class="bloctitle">Infos</div>
+		<div class="infoscapt"><div>Version : </div>{{connectedDevice.apparatusVersion}} </div>
+		<div class="infoscapt"><div>Type sensor : </div>{{connectedDevice.apparatusSensorType}} </div>
+		<div class="infoscapt"><div>Type de tube : </div>{{connectedDevice.apparatusTubeType}} </div>
+		<!--<div class="ligne" ng-click="doParam2($event)"><div class="desc">Capteurs bluetooth</div></div>
+		
+		<div class="ligne" style="opacity:0.5"><div class="desc">Capteurs wifi</div></div>
+		<!-- <div class="ligne" style="opacity:0.5"><div class="desc">Capteurs non connecté habituel</div></div>-->
+	</div>
+	<div class="blocParam3">
+		<div class="bloctitle">Mesures</div>
+		<div class="ligne2">
+			<div class="desc">Signal audio pour les coups </div>
+			<div class="button"><ui-switch ng-change="saveAudioHits()" ng-model='$parent.connectedDevice.audioHits'></ui-switch></div>
+		</div>
+		<div class="ligne2">
+			<div class="desc">Signal visuel pour les coups </div>
+			<div class="button"><ui-switch ng-change="saveVisualHits()" ng-model='$parent.connectedDevice.visualHits'></ui-switch></div>
+		</div>
+		 
+	</div>
+			</div>
+		</div>
+	</div>
+
+
+

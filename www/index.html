@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>{{appName}}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+     <meta name="viewport" content="initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0, height=device-height"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="yes" />
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="dist/css/mobile-angular-ui-hover.min.css" />
+    <link rel="stylesheet" href="dist/css/mobile-angular-ui-base.min.css" />
+    <link rel="stylesheet" href="dist/css/mobile-angular-ui-desktop.css" />
+    <link rel="stylesheet" href="css/demo.css" />
+    
+   <script src="dist/js/angular.min.js"></script>
+   <script src="dist/js/angular-route.min.js"></script>
+    <script src="dist/js/mobile-angular-ui.min.js"></script>
+    <!-- Required to use $swipe, $drag and Translate services -->
+    <script src="dist/js/mobile-angular-ui.gestures.min.js"></script>
+    
+    <script src="dist/js/async.js"></script>
+    <script>
+      var _async = this.async;
+      this.require = function () { return _async; };
+      //this.exports = {};
+    </script>
+
+    <script src="cordova.js"></script>
+    <script src='dist/js/jquery-2.1.1.min.js'></script>
+    
+    <script src="js/init.js"></script>
+    <script src="js/demo.js"></script> 
+    <script src="js/functions.js"></script> 
+
+  </head>
+
+  <body 
+    ng-app="MobileAngularUiExamples" 
+    ng-controller="MainController"
+    >
+    
+    <!-- Sidebars -->
+     <!--<div ng-include="'templates/sidebar.html'" 
+            class="sidebar sidebar-left"></div>-->
+
+     <div ng-include="'templates/or-sidebar-right.html'" 
+            class="sidebar sidebar-right"></div>
+
+	<div class="app">
+      <!-- Navbars -->
+
+	<div ng-if="top==1">
+      <div class="navbar navbar-app navbar-absolute-top">
+        <div class="navbar-brand navbar-brand-center" ui-yield-to="title">
+        
+          <!--{{appName}}-->
+        </div>
+        <div class="clear"></div>
+      </div>
+      </div>
+
+	<div ng-if="menu==1">
+      <div class="navbar navbar-app navbar-absolute-bottom">
+        <div class="btn-group justified">
+          <a ng-click="goHome($event)" class="btn btn-navbar mesure"></a>
+          <a ng-click="doHisto($event)"  class="btn btn-navbar histo"></a>
+          <a ng-click="doParam($event)" class="btn btn-navbar param"></a>
+          <a ng-click="doCarto($event)" class="btn btn-navbar carto"></a>
+         <a ui-toggle="uiSidebarRight" class="btn btn-navbar more"></a>
+        </div>
+      </div>
+      </div>
+
+      <!-- App Body -->
+      <div class="app-body" ng-class="{loading: loading}">
+        <div ng-show="loading" class="app-content-loading">
+          <i class="fa fa-spinner fa-spin loading-spinner"></i>
+        </div>
+        <div class="app-content">
+          <ng-view></ng-view>
+        </div>
+      </div>
+
+    </div><!-- ~ .app -->
+
+    <div ui-yield-to="modals"></div>
+
+  </body>
+</html>
