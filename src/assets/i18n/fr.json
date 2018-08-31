@@ -86,6 +86,11 @@
   "SENSORS": {
     "DETAILS": "Infos",
     "LIST": "Liste des capteurs",
+    "PARAM": {
+      "AUDIO_HITS": "Signal audio pour les coups",
+      "VIBRATION_HITS": "Vibration pour les coups",
+      "VISUAL_HITS": "Signal visuel pour les coups"
+    },
     "SEARCH": "Recherche des capteurs",
     "TITLE": "Capteurs",
     "TUBE_TYPE": "Type de tube : ",
