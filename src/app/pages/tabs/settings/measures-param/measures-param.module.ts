@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { ComponentsModule } from '../../../../components/components.module';
 import { MeasuresParamPage } from './measures-param.page';
+import { TranslateModule } from '@ngx-translate/core';
 
 const routes: Routes = [
   {
@@ -16,7 +17,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule, RouterModule.forChild(routes), ComponentsModule],
+  imports: [CommonModule, FormsModule, IonicModule, RouterModule.forChild(routes), ComponentsModule, TranslateModule],
   declarations: [MeasuresParamPage]
 })
 export class MeasuresParamPageModule {}

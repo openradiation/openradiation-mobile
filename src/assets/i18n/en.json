@@ -1,4 +1,5 @@
 {
+  "AUTO_PUBLISH": "Auto publish",
   "CANCEL": "Cancel",
   "ENGLISH": "English",
   "EXPERT_MODE": "Expert mode",
@@ -9,6 +10,10 @@
   "LOG_OUT": "Log out",
   "MEASURES": "Measures",
   "MEASURES_AUTO_PUBLISH": "Auto publish measures",
+  "MEASURES_AUTO_PUBLISH_NOTICE": {
+    "PART1": null,
+    "PART2": null
+  },
   "NOT_LOGGED": "Not logged",
   "OK": "Ok",
   "SENSORS": "Sensors",

@@ -1,20 +1,13 @@
-<app-header [backButton]="true" (back)="goBack()">Mesures</app-header>
+<app-header [backButton]="true" (back)="goBack()">{{'MEASURES' | translate}}</app-header>
 
 <ion-content>
-    <div class="notice">
-        En activant la publication automatique des mesures, les mesures que vous faites et les données associées
-        sont automatiquement envoyées à la base collaborative OpenRadiation, et publiées sous licence <a
-            target="_blank" href="https://www.openradiation.org/les-donnees">ODC-ODbL (Open Database License)</a>.
+    <div class="notice" [innerHTML]="'MEASURES_AUTO_PUBLISH_NOTICE.PART1' | translate">
     </div>
-    <div class="notice">
-        Les données transmises correspondent aux données que vous saisissez, ainsi que des informations sur le
-        modèle et l'identifiant du capteur et/ou du téléphone utilisé, votre nom d'utilisateur, ainsi que la
-        position GPS au moment de la mesure (voir le détail sur <a target="_blank"
-                                                                   href="https://www.openradiation.org/conditions-dutilisation">www.openradiation.org/conditions-dutilisation</a>).
+    <div class="notice" [innerHTML]="'MEASURES_AUTO_PUBLISH_NOTICE.PART2' | translate">
     </div>
     <ion-list>
         <ion-item class="no-padding">
-            <ion-label>Publication automatique</ion-label>
+            <ion-label>{{'AUTO_PUBLISH' | translate}}</ion-label>
             <ion-toggle [ngModel]="autoPublish$ | async" (ngModelChange)="toggleAutoPublish($event)"></ion-toggle>
         </ion-item>
     </ion-list>

@@ -1,4 +1,5 @@
 {
+  "AUTO_PUBLISH": "Publication automatique",
   "CANCEL": "Annuler",
   "ENGLISH": "English",
   "EXPERT_MODE": "Mode expert",
@@ -9,6 +10,10 @@
   "LOG_OUT": "Se déconnecter",
   "MEASURES": "Mesures",
   "MEASURES_AUTO_PUBLISH": "Publication automatique des mesures",
+  "MEASURES_AUTO_PUBLISH_NOTICE": {
+    "PART1": "En activant la publication automatique des mesures, les mesures que vous faites et les données associées sont automatiquement envoyées à la base collaborative OpenRadiation, et publiées sous licence <a target=\"_blank\" href=\"https://www.openradiation.org/les-donnees\">ODC-ODbL (Open Database License)</a>.",
+    "PART2": "Les données transmises correspondent aux données que vous saisissez, ainsi que des informations sur le modèle et l'identifiant du capteur et/ou du téléphone utilisé, votre nom d'utilisateur, ainsi que la position GPS au moment de la mesure (voir le détail sur <a target=\"_blank\" href=\"https://www.openradiation.org/conditions-dutilisation\">www.openradiation.org/conditions-dutilisation</a>)."
+  },
   "NOT_LOGGED": "Non identifié",
   "OK": "Ok",
   "SENSORS": "Capteurs",
