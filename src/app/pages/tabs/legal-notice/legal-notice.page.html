@@ -1,13 +1,13 @@
 <app-header>{{'LEGAL_NOTICE.TITLE' | translate}}</app-header>
 
 <ion-content>
-    <app-accordion title="Précaution concernant les mesures" [opened]="panelOpened === 1" (open)="panelOpened = 1">
-        <div [innerHTML]="'LEGAL_NOTICE.MEASURES_PRECAUTIONS' | translate"></div>
+    <app-accordion [title]="'LEGAL_NOTICE.MEASURES_PRECAUTIONS.TITLE' | translate" [opened]="panelOpened === 1" (open)="panelOpened = 1">
+        <div [innerHTML]="'LEGAL_NOTICE.MEASURES_PRECAUTIONS.NOTICE' | translate"></div>
     </app-accordion>
-    <app-accordion title="Conditions d'utilisation" [opened]="panelOpened === 2" (open)="panelOpened = 2">
-        <div [innerHTML]="'LEGAL_NOTICE.TERMS_OF_USE' | translate"></div>
+    <app-accordion [title]="'LEGAL_NOTICE.TERMS_OF_USE.TITLE' | translate" [opened]="panelOpened === 2" (open)="panelOpened = 2">
+        <div [innerHTML]="'LEGAL_NOTICE.TERMS_OF_USE.NOTICE' | translate"></div>
     </app-accordion>
-    <app-accordion title="Editeur" [opened]="panelOpened === 3" (open)="panelOpened = 3">
-        <div [innerHTML]="'LEGAL_NOTICE.EDITOR' | translate: {appNameVersion: appNameVersion}"></div>
+    <app-accordion [title]="'LEGAL_NOTICE.EDITOR.TITLE' | translate" [opened]="panelOpened === 3" (open)="panelOpened = 3">
+        <div [innerHTML]="'LEGAL_NOTICE.EDITOR.NOTICE' | translate: {appNameVersion: appNameVersion}"></div>
     </app-accordion>
 </ion-content>

@@ -23,9 +23,18 @@
     "TITLE": "Langue"
   },
   "LEGAL_NOTICE": {
-    "EDITOR": null,
-    "MEASURES_PRECAUTIONS": null,
-    "TERMS_OF_USE": null,
+    "EDITOR": {
+      "TITLE": "Editor",
+      "NOTICE": null
+    },
+    "MEASURES_PRECAUTIONS": {
+      "TITLE": "Precautions regarding measures",
+      "NOTICE": null
+    },
+    "TERMS_OF_USE": {
+      "TITLE": "Terms of use",
+      "NOTICE": null
+    },
     "TITLE": "Legal notice"
   },
   "LOG_IN": {
