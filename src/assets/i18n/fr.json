@@ -8,6 +8,10 @@
     "OK": "Ok",
     "UNAVAILABLE": "Indisponible"
   },
+  "HISTORY": {
+    "NO_MEASURE": "Aucune mesure<br>enregistrée",
+    "TITLE": "Historique"
+  },
   "HOME": {
     "CONNECTED_SENSOR": "Capteur connecté",
     "NO_SENSORS": "Pas de capteur",
