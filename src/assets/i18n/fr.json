@@ -1,1 +1,18 @@
-{}
+{
+  "CANCEL": "Annuler",
+  "ENGLISH": "English",
+  "EXPERT_MODE": "Mode expert",
+  "FRENCH": "Français",
+  "LANGUAGE": "Langue",
+  "LOGGED_AS": "Identifié comme",
+  "LOG_IN": "S'identifier",
+  "LOG_OUT": "Se déconnecter",
+  "MEASURES": "Mesures",
+  "MEASURES_AUTO_PUBLISH": "Publication automatique des mesures",
+  "NOT_LOGGED": "Non identifié",
+  "OK": "Ok",
+  "SENSORS": "Capteurs",
+  "SENSORS_LIST": "Liste des capteurs",
+  "SETTINGS": "Paramètres",
+  "USER_ACCOUNT": "Compte utilisateur"
+}

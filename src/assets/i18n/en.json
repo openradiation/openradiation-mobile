@@ -1,1 +1,18 @@
-{}
+{
+  "CANCEL": "Cancel",
+  "ENGLISH": "English",
+  "EXPERT_MODE": "Expert mode",
+  "FRENCH": "Français",
+  "LANGUAGE": "Language",
+  "LOGGED_AS": "Logged as",
+  "LOG_IN": "Log in",
+  "LOG_OUT": "Log out",
+  "MEASURES": "Measures",
+  "MEASURES_AUTO_PUBLISH": "Auto publish measures",
+  "NOT_LOGGED": "Not logged",
+  "OK": "Ok",
+  "SENSORS": "Sensors",
+  "SENSORS_LIST": "Sensors list",
+  "SETTINGS": "Settings",
+  "USER_ACCOUNT": "User account"
+}
