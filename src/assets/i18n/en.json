@@ -2,10 +2,16 @@
   "GENERAL": {
     "AVAILABLE": "Available",
     "CANCEL": "Cancel",
+    "CLICK_HERE": "Click here",
     "CONNECTED": "Connected",
     "CONNEXION_ERROR": "Connexion error: {message}",
     "OK": "Ok",
     "UNAVAILABLE": "Unavailable"
+  },
+  "HOME": {
+    "CONNECTED_SENSOR": "Connected sensor",
+    "NO_SENSORS": "No sensor",
+    "TITLE": "measure radioactivity"
   },
   "LANGUAGE": {
     "ENGLISH": "English",
