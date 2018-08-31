@@ -205,13 +205,17 @@ export class MeasuresState {
   }
 
   @Action(StopMeasure)
-  stopMeasure({ getState, patchState }: StateContext<MeasuresStateModel>) {
+  stopMeasure({ getState, patchState, dispatch }: StateContext<MeasuresStateModel>) {
     const state = getState();
     if (state.currentMeasure) {
+      const measure = { ...state.currentMeasure, steps: undefined };
       patchState({
-        measures: [...state.measures, { ...state.currentMeasure, steps: undefined }],
+        measures: [...state.measures, measure],
         currentMeasure: undefined
       });
+      if (state.params.autoPublish) {
+        dispatch(new PublishMeasure(measure));
+      }
     }
   }
 
