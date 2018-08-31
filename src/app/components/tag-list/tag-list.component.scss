@@ -18,7 +18,7 @@
     width: 100%;
     margin-left: -10px;
     ion-chip {
-      --ion-color-base: #{$second-color};
+      --background: #{$second-color};
       color: white;
       font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
       font-weight: 200;
