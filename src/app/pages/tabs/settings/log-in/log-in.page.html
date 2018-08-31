@@ -1,20 +1,20 @@
-<app-header [backButton]="true" (back)="goToSettings()">{{'LOG_IN' | translate}}</app-header>
+<app-header [backButton]="true" (back)="goToSettings()">{{'LOG_IN.TITLE' | translate}}</app-header>
 
 <ion-content>
-    <div class="notice" [innerHTML]="'LOG_IN_NOTICE.PART1' | translate">
+    <div class="notice" [innerHTML]="'LOG_IN.NOTICE.PART1' | translate">
     </div>
-    <div class="notice" [innerHTML]="'LOG_IN_NOTICE.PART2' | translate">
+    <div class="notice" [innerHTML]="'LOG_IN.NOTICE.PART2' | translate">
     </div>
-    <div class="notice" [innerHTML]="'LOG_IN_NOTICE.PART3' | translate">
+    <div class="notice" [innerHTML]="'LOG_IN.NOTICE.PART3' | translate">
     </div>
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <ion-list>
             <ion-item>
-                <ion-label position="floating">{{'USERNAME' | translate}}</ion-label>
+                <ion-label position="floating">{{'LOG_IN.USERNAME' | translate}}</ion-label>
                 <ion-input formControlName="login" required></ion-input>
             </ion-item>
             <ion-item>
-                <ion-label position="floating">{{'PASSWORD' | translate}}</ion-label>
+                <ion-label position="floating">{{'LOG_IN.PASSWORD' | translate}}</ion-label>
                 <ion-input type="password" formControlName="password" required></ion-input>
             </ion-item>
         </ion-list>
@@ -24,7 +24,7 @@
                     <ion-spinner></ion-spinner>
                 </ng-container>
                 <ng-template #notConnecting>
-                    {{'LOG_IN' | translate}}
+                    {{'LOG_IN.TITLE' | translate}}
                 </ng-template>
             </ion-button>
         </div>

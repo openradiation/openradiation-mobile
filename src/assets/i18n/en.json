@@ -1,41 +1,50 @@
 {
-  "AUTO_PUBLISH": "Auto publish",
-  "AVAILABLE": "Available",
-  "CANCEL": "Cancel",
-  "CONNEXION_ERROR": "Connexion error: {message}",
-  "ENGLISH": "English",
-  "EXPERT_MODE": "Expert mode",
-  "FRENCH": "Français",
-  "LANGUAGE": "Language",
-  "LOGGED_AS": "Logged as",
-  "LOG_IN": "Log in",
-  "LOG_IN_NOTICE": {
-    "PART1": null,
-    "PART2": null,
-    "PART3": null
+  "GENERAL": {
+    "CANCEL": "Cancel",
+    "OK": "Ok",
+    "AVAILABLE": "Available",
+    "UNAVAILABLE": "Unavailable",
+    "CONNEXION_ERROR": "Connexion error: {message}"
   },
-  "LOG_OUT": "Log out",
-  "MEASURES": "Measures",
-  "MEASURES_AUTO_PUBLISH": "Auto publish measures",
-  "MEASURES_AUTO_PUBLISH_NOTICE": {
-    "PART1": null,
-    "PART2": null
+  "SETTINGS": {
+    "TITLE": "Settings"
   },
-  "NOT_LOGGED": "Not logged",
-  "OK": "Ok",
-  "PASSWORD": "Password",
-  "SENSOR": {
+  "MEASURES": {
+    "TITLE": "Measures",
+    "AUTO_PUBLISH": "Auto publish measures",
+    "AUTO_PUBLISH_NOTICE": {
+      "PART1": null,
+      "PART2": null
+    },
+    "EXPERT_MODE": "Expert mode"
+  },
+  "LOG_IN": {
+    "TITLE": "Log in",
+    "LOGGED_AS": "Logged as",
+    "LOG_OUT": "Log out",
+    "NOTICE": {
+      "PART1": null,
+      "PART2": null,
+      "PART3": null
+    },
+    "PASSWORD": "Password",
+    "USERNAME": "Username",
+    "USER_ACCOUNT": "User account",
+    "WRONG_CREDENTIALS": "Wrong credentials",
+    "NOT_LOGGED": "Not logged"
+  },
+  "LANGUAGE": {
+    "TITLE": "Langue",
+    "FRENCH": "Français",
+    "ENGLISH": "English"
+  },
+  "SENSORS": {
+    "TITLE": "Sensors",
+    "DETAILS": "Details",
     "TUBE_TYPE": "Tube type: ",
     "TYPE": "Sensor type: ",
-    "VERSION": "Version: "
-  },
-  "SENSORS": "Sensors",
-  "SENSORS_DETAILS": "Details",
-  "SENSORS_LIST": "Sensors list",
-  "SENSORS_SEARCH": "Looking for sensors",
-  "SETTINGS": "Settings",
-  "UNAVAILABLE": "Unavailable",
-  "USERNAME": "Username",
-  "USER_ACCOUNT": "User account",
-  "WRONG_CREDENTIALS": "Wrong credentials"
+    "VERSION": "Version: ",
+    "SEARCH": "Looking for sensors",
+    "LIST": "Sensors list"
+  }
 }
