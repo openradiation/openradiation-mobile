@@ -1,5 +1,6 @@
 {
   "AUTO_PUBLISH": "Publication automatique",
+  "AVAILABLE": "Disponible",
   "CANCEL": "Annuler",
   "CONNEXION_ERROR": "Connexion impossible : {{message}}",
   "ENGLISH": "English",
@@ -23,11 +24,17 @@
   "NOT_LOGGED": "Non identifié",
   "OK": "Ok",
   "PASSWORD": "Mot de passe",
+  "SENSOR": {
+    "TUBE_TYPE": "Type de tube : ",
+    "TYPE": "Type sensor : ",
+    "VERSION": "Version : "
+  },
   "SENSORS": "Capteurs",
   "SENSORS_DETAILS": "Infos",
   "SENSORS_LIST": "Liste des capteurs",
   "SENSORS_SEARCH": "Recherche des capteurs",
   "SETTINGS": "Paramètres",
+  "UNAVAILABLE": "Indisponible",
   "USERNAME": "Nom d'utilisateur",
   "USER_ACCOUNT": "Compte utilisateur",
   "WRONG_CREDENTIALS": "Identifiants incorrects"
