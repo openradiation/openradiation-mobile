@@ -2,21 +2,21 @@
     <app-header [backButton]="true" (back)="goBack()">{{editedDevice.apparatusVersion}}</app-header>
     <ion-content>
         <ion-list>
-            <app-category-label>{{'SENSORS_DETAILS' | translate}}</app-category-label>
+            <app-category-label>{{'SENSORS.DETAILS' | translate}}</app-category-label>
             <ion-item>
-                {{'SENSOR.VERSION' | translate}}{{editedDevice.apparatusId}}
+                {{'SENSORS.VERSION' | translate}}{{editedDevice.apparatusId}}
             </ion-item>
             <ion-item>
-                {{'SENSOR.TYPE' | translate}}{{editedDevice.apparatusSensorType}}
+                {{'SENSORS.TYPE' | translate}}{{editedDevice.apparatusSensorType}}
             </ion-item>
             <ion-item>
-                {{'SENSOR.TUBE_TYPE' | translate}}{{editedDevice.apparatusTubeType}}
+                {{'SENSORS.TUBE_TYPE' | translate}}{{editedDevice.apparatusTubeType}}
             </ion-item>
         </ion-list>
         <form *ngIf="paramsModel && editedDeviceForm" [formGroup]="editedDeviceForm" novalidate
               ngxsForm="devices.editedDeviceForm">
             <ion-list>
-                <app-category-label>{{'SETTINGS' | translate}}</app-category-label>
+                <app-category-label>{{'SETTINGS.TITLE' | translate}}</app-category-label>
                 <ng-container *ngFor="let paramModel of paramsModel">
                     <ng-container [ngSwitch]="paramModel[1].type">
                         <ion-item *ngSwitchCase="deviceParamType.string">

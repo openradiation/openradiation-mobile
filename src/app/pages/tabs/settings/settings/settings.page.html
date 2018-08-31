@@ -1,63 +1,63 @@
-<app-header>{{'SETTINGS' | translate}}</app-header>
+<app-header>{{'SETTINGS.TITLE' | translate}}</app-header>
 
 <ion-content>
     <ion-list>
         <app-category-label>
-            {{'SENSORS' | translate}}
+            {{'SENSORS.TITLE' | translate}}
         </app-category-label>
         <ion-item button detail (click)="goToDevices()">
             <ion-label>
-                {{'SENSORS_LIST' | translate}}
+                {{'SENSORS.LIST' | translate}}
             </ion-label>
         </ion-item>
     </ion-list>
     <ion-list class="user-account">
         <app-category-label>
-            {{'USER_ACCOUNT' | translate}}
+            {{'LOG_IN.USER_ACCOUNT' | translate}}
         </app-category-label>
         <ng-container *ngIf="login$ | async as login; else notLoggedIn">
             <ion-item>
                 <ion-label>
-                    {{'LOGGED_AS' | translate}}<br>{{login}}
+                    {{'LOG_IN.LOGGED_AS' | translate}}<br>{{login}}
                 </ion-label>
                 <ion-button fill="clear" class="flat-button-alt" (click)="logOut()">
-                    {{'LOG_OUT' | translate}}
+                    {{'LOG_IN.LOG_OUT' | translate}}
                 </ion-button>
             </ion-item>
         </ng-container>
         <ng-template #notLoggedIn>
             <ion-item>
                 <ion-label>
-                    {{'NOT_LOGGED' | translate}}
+                    {{'LOG_IN.NOT_LOGGED' | translate}}
                 </ion-label>
                 <ion-button fill="clear" class="flat-button-alt" (click)="goToLogIn()">
-                    {{'LOG_IN' | translate}}
+                    {{'LOG_IN.TITLE' | translate}}
                 </ion-button>
             </ion-item>
             <ion-item class="language">
                 <ion-label>
-                    {{'LANGUAGE' | translate}}
+                    {{'LANGUAGE.TITLE' | translate}}
                 </ion-label>
                 <ion-select [ngModel]="language$ | async" (ngModelChange)="setLanguage($event)"
-                            [okText]="'OK' | translate" [cancelText]="'CANCEL' | translate">
-                    <ion-select-option value="en">{{'ENGLISH' | translate}}</ion-select-option>
-                    <ion-select-option value="fr">{{'FRENCH' | translate}}</ion-select-option>
+                            [okText]="'GENERAL.OK' | translate" [cancelText]="'GENERAL.CANCEL' | translate">
+                    <ion-select-option value="en">{{'LANGUAGE.ENGLISH' | translate}}</ion-select-option>
+                    <ion-select-option value="fr">{{'LANGUAGE.FRENCH' | translate}}</ion-select-option>
                 </ion-select>
             </ion-item>
         </ng-template>
     </ion-list>
     <ion-list>
         <app-category-label>
-            {{'MEASURES' | translate}}
+            {{'MEASURES.TITLE' | translate}}
         </app-category-label>
         <ion-item button detail (click)="goToMeasuresParam()">
             <ion-label>
-                {{'MEASURES_AUTO_PUBLISH' | translate}}
+                {{'MEASURES.AUTO_PUBLISH' | translate}}
             </ion-label>
         </ion-item>
         <ion-item class="no-padding">
             <ion-label>
-                {{'EXPERT_MODE' | translate}}
+                {{'MEASURES.EXPERT_MODE' | translate}}
             </ion-label>
             <ion-toggle [ngModel]="expertMode$ | async"
                         (ngModelChange)="toggleExpertMode($event)"></ion-toggle>

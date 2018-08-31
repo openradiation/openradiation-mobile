@@ -1,9 +1,9 @@
-<app-header [backButton]="true" (back)="goBack()">{{'SENSORS' | translate}}</app-header>
+<app-header [backButton]="true" (back)="goBack()">{{'SENSORS.TITLE' | translate}}</app-header>
 
 <ion-content>
     <ion-list>
         <app-category-label *ngIf="isScanning$ | async">
-            <span class="loading">{{'SENSORS_SEARCH' | translate}}</span>
+            <span class="loading">{{'SENSORS.SEARCH' | translate}}</span>
         </app-category-label>
         <ion-item *ngIf="connectedDevice$ | async as connectedDevice" class="clickable-device" button
                   (click)="disconnectDevice()">
@@ -30,7 +30,7 @@
             <ion-spinner
                     *ngIf="connectingDevice && connectingDevice?.sensorUUID === availableDevice.sensorUUID"></ion-spinner>
             <span class="state" *ngIf="connectingDevice?.sensorUUID !== availableDevice.sensorUUID">
-                {{'AVAILABLE' | translate}}
+                {{'GENERAL.AVAILABLE' | translate}}
                 <div class="battery-icon" *ngIf="availableDevice.batteryLevel">
                     <ion-icon name="battery-full" mode="ios"></ion-icon>{{availableDevice.batteryLevel}}%
                 </div>
@@ -46,7 +46,7 @@
                 {{knownDevice.apparatusVersion}}<br>{{knownDevice.apparatusId}}
             </ion-label>
             <span class="state">
-                {{'UNAVAILABLE' | translate}}
+                {{'GENERAL.UNAVAILABLE' | translate}}
             </span>
             <ion-button *ngIf="knownDevice.params && knownDevice.paramsModel" fill="clear" size="default"
                         (click)="editDeviceParams($event, knownDevice)">

@@ -64,8 +64,8 @@ export class LogInPage extends AutoUnsubscribePage {
             case ErrorResponseCode.WrongCredentials:
               this.toastController
                 .create({
-                  message: this.translateService.instant('WRONG_CREDENTIALS'),
-                  closeButtonText: this.translateService.instant('OK'),
+                  message: this.translateService.instant('LOG_IN.WRONG_CREDENTIALS'),
+                  closeButtonText: this.translateService.instant('GENERAL.OK'),
                   duration: 5000,
                   showCloseButton: true
                 })
@@ -74,8 +74,8 @@ export class LogInPage extends AutoUnsubscribePage {
             default:
               this.toastController
                 .create({
-                  message: this.translateService.instant('CONNEXION_ERROR', { message: error.message }),
-                  closeButtonText: this.translateService.instant('OK'),
+                  message: this.translateService.instant('GENERAL.CONNEXION_ERROR', { message: error.message }),
+                  closeButtonText: this.translateService.instant('GENERAL.OK'),
                   duration: 5000,
                   showCloseButton: true
                 })

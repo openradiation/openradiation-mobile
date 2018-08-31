@@ -1,41 +1,50 @@
 {
-  "AUTO_PUBLISH": "Publication automatique",
-  "AVAILABLE": "Disponible",
-  "CANCEL": "Annuler",
-  "CONNEXION_ERROR": "Connexion impossible : {{message}}",
-  "ENGLISH": "English",
-  "EXPERT_MODE": "Mode expert",
-  "FRENCH": "Français",
-  "LANGUAGE": "Langue",
-  "LOGGED_AS": "Identifié comme",
-  "LOG_IN": "S'identifier",
-  "LOG_IN_NOTICE": {
-    "PART1": "Si vous avez un compte utilisateur sur <a target=\"_blank\" href=\"https://www.openradiation.org\">www.openradiation.org</a>, vous pouvez renseigner ici les identifiants (nom d'utilisateur et mot de passe) de votre compte. Ceci vous permet d’associer les mesures que vous publiez à votre compte utilisateur : ainsi vous pourrez retrouver facilement l’ensemble de vos mesures sur <a target=\"_blank\" href=\"https://www.openradiation.org\">www.openradiation.org</a>.",
-    "PART2": "Vous pourrez également « tagger » ou ajouter une description à vos mesures.<br/>De plus, en publiant des mesures en étant identifié, vous rendez la base collaborative OpenRadiation plus fiable.",
-    "PART3": "Si vous ne l’avez pas déjà fait, nous vous invitons à créer un compte sur <a target=\"_blank\" href=\"https://www.openradiation.org/user/register\">www.openradiation.org</a>, puis à le paramétrer ici (synchronisation ~5 min)."
+  "GENERAL": {
+    "CANCEL": "Annuler",
+    "OK": "Ok",
+    "AVAILABLE": "Disponible",
+    "UNAVAILABLE": "Indisponible",
+    "CONNEXION_ERROR": "Connexion impossible : {{message}}"
   },
-  "LOG_OUT": "Se déconnecter",
-  "MEASURES": "Mesures",
-  "MEASURES_AUTO_PUBLISH": "Publication automatique des mesures",
-  "MEASURES_AUTO_PUBLISH_NOTICE": {
-    "PART1": "En activant la publication automatique des mesures, les mesures que vous faites et les données associées sont automatiquement envoyées à la base collaborative OpenRadiation, et publiées sous licence <a target=\"_blank\" href=\"https://www.openradiation.org/les-donnees\">ODC-ODbL (Open Database License)</a>.",
-    "PART2": "Les données transmises correspondent aux données que vous saisissez, ainsi que des informations sur le modèle et l'identifiant du capteur et/ou du téléphone utilisé, votre nom d'utilisateur, ainsi que la position GPS au moment de la mesure (voir le détail sur <a target=\"_blank\" href=\"https://www.openradiation.org/conditions-dutilisation\">www.openradiation.org/conditions-dutilisation</a>)."
+  "SETTINGS": {
+    "TITLE": "Paramètres"
   },
-  "NOT_LOGGED": "Non identifié",
-  "OK": "Ok",
-  "PASSWORD": "Mot de passe",
-  "SENSOR": {
+  "MEASURES": {
+    "TITLE": "Mesures",
+    "AUTO_PUBLISH": "Publication automatique des mesures",
+    "AUTO_PUBLISH_NOTICE": {
+      "PART1": "En activant la publication automatique des mesures, les mesures que vous faites et les données associées sont automatiquement envoyées à la base collaborative OpenRadiation, et publiées sous licence <a target=\"_blank\" href=\"https://www.openradiation.org/les-donnees\">ODC-ODbL (Open Database License)</a>.",
+      "PART2": "Les données transmises correspondent aux données que vous saisissez, ainsi que des informations sur le modèle et l'identifiant du capteur et/ou du téléphone utilisé, votre nom d'utilisateur, ainsi que la position GPS au moment de la mesure (voir le détail sur <a target=\"_blank\" href=\"https://www.openradiation.org/conditions-dutilisation\">www.openradiation.org/conditions-dutilisation</a>)."
+    },
+    "EXPERT_MODE": "Mode expert"
+  },
+  "LOG_IN": {
+    "TITLE": "S'identifier",
+    "LOGGED_AS": "Identifié comme",
+    "LOG_OUT": "Se déconnecter",
+    "NOTICE": {
+      "PART1": "Si vous avez un compte utilisateur sur <a target=\"_blank\" href=\"https://www.openradiation.org\">www.openradiation.org</a>, vous pouvez renseigner ici les identifiants (nom d'utilisateur et mot de passe) de votre compte. Ceci vous permet d’associer les mesures que vous publiez à votre compte utilisateur : ainsi vous pourrez retrouver facilement l’ensemble de vos mesures sur <a target=\"_blank\" href=\"https://www.openradiation.org\">www.openradiation.org</a>.",
+      "PART2": "Vous pourrez également « tagger » ou ajouter une description à vos mesures.<br/>De plus, en publiant des mesures en étant identifié, vous rendez la base collaborative OpenRadiation plus fiable.",
+      "PART3": "Si vous ne l’avez pas déjà fait, nous vous invitons à créer un compte sur <a target=\"_blank\" href=\"https://www.openradiation.org/user/register\">www.openradiation.org</a>, puis à le paramétrer ici (synchronisation ~5 min)."
+    },
+    "PASSWORD": "Mot de passe",
+    "USERNAME": "Nom d'utilisateur",
+    "USER_ACCOUNT": "Compte utilisateur",
+    "WRONG_CREDENTIALS": "Identifiants incorrects",
+    "NOT_LOGGED": "Non identifié"
+  },
+  "LANGUAGE": {
+    "TITLE": "Langue",
+    "FRENCH": "Français",
+    "ENGLISH": "English"
+  },
+  "SENSORS": {
+    "TITLE": "Capteurs",
+    "DETAILS": "Infos",
     "TUBE_TYPE": "Type de tube : ",
     "TYPE": "Type sensor : ",
-    "VERSION": "Version : "
-  },
-  "SENSORS": "Capteurs",
-  "SENSORS_DETAILS": "Infos",
-  "SENSORS_LIST": "Liste des capteurs",
-  "SENSORS_SEARCH": "Recherche des capteurs",
-  "SETTINGS": "Paramètres",
-  "UNAVAILABLE": "Indisponible",
-  "USERNAME": "Nom d'utilisateur",
-  "USER_ACCOUNT": "Compte utilisateur",
-  "WRONG_CREDENTIALS": "Identifiants incorrects"
+    "VERSION": "Version : ",
+    "SEARCH": "Recherche des capteurs",
+    "LIST": "Liste des capteurs"
+  }
 }
