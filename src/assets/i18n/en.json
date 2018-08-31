@@ -1,4 +1,19 @@
 {
+  "ABOUT": {
+    "MEASURE": {
+      "NOTICE": null,
+      "TITLE": "Radioactivity measure"
+    },
+    "MEASURES_HOW_TO": {
+      "NOTICE": null,
+      "TITLE": "How to measure ?"
+    },
+    "OPENRADIATION_PROJECT": {
+      "NOTICE": null,
+      "TITLE": "OpenRadiation project"
+    },
+    "TITLE": "About"
+  },
   "GENERAL": {
     "AVAILABLE": "Available",
     "CANCEL": "Cancel",
@@ -24,16 +39,16 @@
   },
   "LEGAL_NOTICE": {
     "EDITOR": {
-      "TITLE": "Editor",
-      "NOTICE": null
+      "NOTICE": null,
+      "TITLE": "Editor"
     },
     "MEASURES_PRECAUTIONS": {
-      "TITLE": "Precautions regarding measures",
-      "NOTICE": null
+      "NOTICE": null,
+      "TITLE": "Precautions regarding measures"
     },
     "TERMS_OF_USE": {
-      "TITLE": "Terms of use",
-      "NOTICE": null
+      "NOTICE": null,
+      "TITLE": "Terms of use"
     },
     "TITLE": "Legal notice"
   },

@@ -1,4 +1,19 @@
 {
+  "ABOUT": {
+    "MEASURE": {
+      "NOTICE": "L’application OpenRadiation, connectée en Bluetooth avec le capteur OpenRadiation (voir les capteurs compatibles sur <a target=\"_blank\" href=\"https://www.openradiation.org\">www.openradiation.org</a>), vous permet de mesurer la radioactivité, mais aussi de participer à un projet de science citoyenne, en contribuant à la constitution de la base collaborative OpenRadiation, pour une meilleure connaissance de la radioactivité dans l’environnement. Nous vous invitons ainsi à créer un compte utilisateur sur <a target=\"_blank\" href=\"https://www.openradiation.org/user/register\">www.openradiation.org</a>, puis à paramétrer ce compte dans l’application et à activer la publication automatique des mesures (menu paramètres).",
+      "TITLE": "Mesure de la radioactivité"
+    },
+    "MEASURES_HOW_TO": {
+      "NOTICE": "Allumez votre capteur, démarrez l’application, puis connectez-la en Bluetooth au capteur. OpenRadiation est une base de données dont l’objectif est de cartographier la radioactivité dans l’environnement. Afin que les données soient homogènes, comparables et les plus représentatives possible, les mesures que vous publiez sur OpenRadiation doivent idéalement être prises en extérieur, si possible éloignées d’une habitation, et en positionnant le capteur à environ 1 mètre du sol. Plus la durée de la mesure est longue, meilleure est la statistique et plus la mesure est précise : un indicateur vous permet d’apprécier la fiabilité de la mesure en direct. Une fois la mesure réalisée, vous pouvez qualifier l’environnement dans lequel elle a été prise (à l’intérieur, dans un avion, sur une route, à la campagne, en ville) et donner des indications supplémentaires avant de la publier. Ces indications permettront d’apprécier plus finement la fiabilité de la mesure.",
+      "TITLE": "Comment prendre des mesures ?"
+    },
+    "OPENRADIATION_PROJECT": {
+      "NOTICE": "Openradiation est un projet collaboratif dont les partenaires sont l’IFFO-RME - réseau de formateurs Risques Majeurs éducation -, l’IRSN - expert public en matière de recherche et d’expertise sur les risques nucléaires et radiologiques -, Planète Sciences – association acteur de la culture scientifique et technique vers les jeunes -, et l'’UPMC - Université Pierre et Marie Curie avec en particulier le fablab PMClab -.<br/>En savoir plus sur <a target=\"_blank\" href=\"https://www.openradiation.org/qui-sommes-nous\">www.openradiation.org/qui-sommes-nous</a>.",
+      "TITLE": "Le projet OpenRadiation"
+    },
+    "TITLE": "À propos"
+  },
   "GENERAL": {
     "AVAILABLE": "Disponible",
     "CANCEL": "Annuler",
@@ -24,16 +39,16 @@
   },
   "LEGAL_NOTICE": {
     "EDITOR": {
-      "TITLE": "Éditeur",
-      "NOTICE": "L’application OpenRadiation est développée principalement par IT Link, avec le soutien de l’IRSN et de l’UPMC. N’hésitez pas à nous faire parvenir vos commentaires sur cette application. Le code source de l’application est publié en <a target=\"_blank\" href=\"https://www.openradiation.org/developpeurs\">opensource</a>.<br>Retrouvez l’ensemble des mentions légales et les informations de contact sur <a target=\"_blank\" href=\"https://www.openradiation.org/mentions-legales\">www.openradiation.org/mentions-legales</a>.<br><br>Version actuelle : {{appNameVersion}}."
+      "NOTICE": "L’application OpenRadiation est développée principalement par IT Link, avec le soutien de l’IRSN et de l’UPMC. N’hésitez pas à nous faire parvenir vos commentaires sur cette application. Le code source de l’application est publié en <a target=\"_blank\" href=\"https://www.openradiation.org/developpeurs\">opensource</a>.<br>Retrouvez l’ensemble des mentions légales et les informations de contact sur <a target=\"_blank\" href=\"https://www.openradiation.org/mentions-legales\">www.openradiation.org/mentions-legales</a>.<br><br>Version actuelle : {{appNameVersion}}.",
+      "TITLE": "Éditeur"
     },
     "MEASURES_PRECAUTIONS": {
-      "TITLE": "Précaution concernant les mesures",
-      "NOTICE": "La Base OpenRadiation est une base de données participative constituée avec des valeurs brutes restituées sans filtre. Les Partenaires OpenRadiation ne peuvent être tenus responsables des valeurs affichées et des conséquences liées à l'interprétation ou à l'utilisation qui peut être faite de ces valeurs. <br>Par ailleurs, les mesures que vous prenez avec l'Application OpenRadiation correspondent à des mesures de l'environnement faites à un moment donné et dans des conditions spécifiques. Elles ne sont pas nécessairement représentatives de votre exposition aux rayonnements ionisants sur le long terme."
+      "NOTICE": "La Base OpenRadiation est une base de données participative constituée avec des valeurs brutes restituées sans filtre. Les Partenaires OpenRadiation ne peuvent être tenus responsables des valeurs affichées et des conséquences liées à l'interprétation ou à l'utilisation qui peut être faite de ces valeurs. <br>Par ailleurs, les mesures que vous prenez avec l'Application OpenRadiation correspondent à des mesures de l'environnement faites à un moment donné et dans des conditions spécifiques. Elles ne sont pas nécessairement représentatives de votre exposition aux rayonnements ionisants sur le long terme.",
+      "TITLE": "Précaution concernant les mesures"
     },
     "TERMS_OF_USE": {
-      "TITLE": "Conditions d'utilisation",
-      "NOTICE": "Vous participez à la base de données collaborative OpenRadiation dès lors que vous publiez des mesures par l’application smartphone, que la publication soit automatique ou déclenchée par une action manuelle. <br>L’objet du projet OpenRadiation étant la création d’une base de données collaborative relative à la radioactivité ambiante, tout utilisateur de l’application mobile accepte explicitement de partager les données qu’il relève, que ce soit par une publication automatique ou déclenchée par une action manuelle.<br>La base de données OpenRadiation est publiée en intégralité sous la license <a target=\"_blank\" href=\"https://www.openradiation.org/conditions-dutilisation#licence_odbl\">ODC-ODbL (Open Database License)</a>. La plupart des données que vous soumettez participent à la constitution de la base de données OpenRadiation.<br>Vous vous engagez à respecter la législation en cours concernant notamment le droit d'auteur. L’utilisation de la base de données OpenRadiation vous engage à respecter des règles d’éthique (propos insultants, respect de la vie privée, ...).<br>OpenRadiation se réserve le droit de supprimer un contenu qui lui serait signalé ne respectant pas les consignes ci-dessus, ceci sans avertissement.<br>Vous pouvez retrouver le détail de l’ensemble des conditions d’utilisation sur le site <a target=\"_blank\" href=\"https://www.openradiation.org/conditions-dutilisation\">www.openradiation.org/conditions-dutilisation</a>."
+      "NOTICE": "Vous participez à la base de données collaborative OpenRadiation dès lors que vous publiez des mesures par l’application smartphone, que la publication soit automatique ou déclenchée par une action manuelle. <br>L’objet du projet OpenRadiation étant la création d’une base de données collaborative relative à la radioactivité ambiante, tout utilisateur de l’application mobile accepte explicitement de partager les données qu’il relève, que ce soit par une publication automatique ou déclenchée par une action manuelle.<br>La base de données OpenRadiation est publiée en intégralité sous la license <a target=\"_blank\" href=\"https://www.openradiation.org/conditions-dutilisation#licence_odbl\">ODC-ODbL (Open Database License)</a>. La plupart des données que vous soumettez participent à la constitution de la base de données OpenRadiation.<br>Vous vous engagez à respecter la législation en cours concernant notamment le droit d'auteur. L’utilisation de la base de données OpenRadiation vous engage à respecter des règles d’éthique (propos insultants, respect de la vie privée, ...).<br>OpenRadiation se réserve le droit de supprimer un contenu qui lui serait signalé ne respectant pas les consignes ci-dessus, ceci sans avertissement.<br>Vous pouvez retrouver le détail de l’ensemble des conditions d’utilisation sur le site <a target=\"_blank\" href=\"https://www.openradiation.org/conditions-dutilisation\">www.openradiation.org/conditions-dutilisation</a>.",
+      "TITLE": "Conditions d'utilisation"
     },
     "TITLE": "Mentions légales"
   },
