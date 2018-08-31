@@ -2,10 +2,16 @@
   "GENERAL": {
     "AVAILABLE": "Disponible",
     "CANCEL": "Annuler",
+    "CLICK_HERE": "Cliquez ici",
     "CONNECTED": "Connecté",
     "CONNEXION_ERROR": "Connexion impossible : {{message}}",
     "OK": "Ok",
     "UNAVAILABLE": "Indisponible"
+  },
+  "HOME": {
+    "CONNECTED_SENSOR": "Capteur connecté",
+    "NO_SENSORS": "Pas de capteur",
+    "TITLE": "mesurer la radioactivité"
   },
   "LANGUAGE": {
     "ENGLISH": "English",
