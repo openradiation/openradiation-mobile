@@ -26,6 +26,9 @@
     "USER_ACCOUNT": "Compte utilisateur",
     "WRONG_CREDENTIALS": "Identifiants incorrects"
   },
+  "MAP": {
+    "NO_CONNECTION": "Aucune connexion disponible pour afficher la carte"
+  },
   "MEASURES": {
     "AUTO_PUBLISH": "Publication automatique des mesures",
     "AUTO_PUBLISH_NOTICE": {
