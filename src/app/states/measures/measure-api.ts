@@ -3,7 +3,7 @@ export interface MeasureApi {
   data: {
     apparatusId?: string;
     apparatusVersion?: string;
-    apparatusSensorType?: string;
+    apparatusSensorType?: ApparatusSensorType;
     apparatusTubeType?: string;
     temperature?: number;
     value: number;
@@ -37,4 +37,9 @@ export interface MeasureApi {
     measurementEnvironment?: string;
     rain?: boolean;
   };
+}
+
+export enum ApparatusSensorType {
+  Geiger = 'geiger',
+  Photodiode = 'photodiode'
 }
