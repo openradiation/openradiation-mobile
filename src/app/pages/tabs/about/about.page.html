@@ -1,0 +1,40 @@
+<app-header>À propos</app-header>
+
+<ion-content>
+    <app-accordion title="Mesure de la radioactivité" [opened]="panelOpened === 1" (open)="panelOpened = 1">
+        L’application OpenRadiation, connectée en Bluetooth avec le capteur OpenRadiation
+        (voir les capteurs compatibles sur <a target="_blank"
+                                              href="https://www.openradiation.org">www.openradiation.org</a>), vous
+        permet de mesurer la radioactivité, mais aussi de participer à un projet de science citoyenne, en contribuant à
+        la constitution de la base collaborative OpenRadiation, pour une meilleure connaissance de la radioactivité dans
+        l’environnement.
+        Nous vous invitons ainsi à créer un compte utilisateur sur <a target="_blank"
+                                                                      href="https://www.openradiation.org/user/register">www.openradiation.org</a>,
+        puis à paramétrer ce compte dans l’application et à activer la publication automatique des mesures (menu
+        paramètres).
+    </app-accordion>
+    <app-accordion title="Comment prendre des mesures ?" [opened]="panelOpened === 2" (open)="panelOpened = 2">
+        Allumez votre capteur, démarrez l’application, puis connectez-la en Bluetooth au capteur.
+        OpenRadiation est une base de données dont l’objectif est de cartographier la radioactivité dans
+        l’environnement.
+        Afin que les données soient homogènes, comparables et les plus représentatives possible, les mesures que vous
+        publiez sur OpenRadiation
+        doivent idéalement être prises en extérieur, si possible éloignées d’une habitation, et en positionnant le
+        capteur à environ 1 mètre du sol.
+        Plus la durée de la mesure est longue, meilleure est la statistique et plus la mesure est précise : un
+        indicateur vous permet d’apprécier la fiabilité de la mesure
+        en direct. Une fois la mesure réalisée, vous pouvez qualifier l’environnement dans lequel elle a été prise (à
+        l’intérieur, dans un avion, sur une route, à la campagne, en ville) et donner des indications supplémentaires
+        avant de la publier.
+        Ces indications permettront d’apprécier plus finement la fiabilité de la mesure.
+    </app-accordion>
+    <app-accordion title="Le projet OpenRadiation" [opened]="panelOpened === 3" (open)="panelOpened = 3">
+        Openradiation est un projet collaboratif dont les partenaires sont l’IFFO-RME - réseau de formateurs Risques
+        Majeurs éducation -,
+        l’IRSN - expert public en matière de recherche et d’expertise sur les risques nucléaires et radiologiques -,
+        Planète Sciences –
+        association acteur de la culture scientifique et technique vers les jeunes -, et l'’UPMC - Université Pierre et
+        Marie Curie avec en particulier le fablab PMClab -.
+        <br/>En savoir plus sur <a target="_blank" href="https://www.openradiation.org/qui-sommes-nous">www.openradiation.org/qui-sommes-nous</a>.
+    </app-accordion>
+</ion-content>

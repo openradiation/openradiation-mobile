@@ -6,4 +6,8 @@ export abstract class AbstractDeviceService<T extends AbstractDevice> {
   constructor(protected ble: BLE) {}
 
   abstract getDeviceInfo(device: T): Observable<Partial<T>>;
+
+  abstract saveDeviceParams(device: T): Observable<any>;
+
+  abstract startMeasureScan(device: T): Observable<any>;
 }

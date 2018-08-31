@@ -29,6 +29,11 @@
                 "glob": "**/*.svg",
                 "input": "node_modules/@ionic/angular/dist/ionic/svg",
                 "output": "./svg"
+              },
+              {
+                "glob": "**/*.svg",
+                "input": "src/assets/icon",
+                "output": "./svg"
               }
             ],
             "styles": [
@@ -64,7 +69,6 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "aot": true,
             "browserTarget": "app:build"
           },
           "configurations": {
@@ -100,6 +104,11 @@
                 "glob": "**/*",
                 "input": "src/assets",
                 "output": "/assets"
+              },
+              {
+                "glob": "**/*.svg",
+                "input": "src/assets/icon",
+                "output": "/svg"
               }
             ]
           }
@@ -168,5 +177,13 @@
   },
   "cli": {
     "defaultCollection": "@ionic/schematics-angular"
+  },
+  "schematics": {
+    "@ionic/schematics-angular:component": {
+      "styleext": "scss"
+    },
+    "@ionic/schematics-angular:page": {
+      "styleext": "scss"
+    }
   }
 }
