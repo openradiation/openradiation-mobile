@@ -70,7 +70,7 @@ export class MeasuresService {
         apparatusVersion: measure.apparatusVersion,
         apparatusSensorType: apparatusSensorType,
         apparatusTubeType: measure.apparatusTubeType,
-        temperature: measure.temperature,
+        temperature: measure.temperature ? Math.round(measure.temperature) : undefined,
         value: measure.value,
         hitsNumber: measure.hitsNumber,
         startTime: new Date(measure.startTime).toISOString(),
