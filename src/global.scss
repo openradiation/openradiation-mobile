@@ -1,3 +1,14 @@
+@import '~@ionic/angular/css/core.css';
+@import '~@ionic/angular/css/normalize.css';
+@import '~@ionic/angular/css/structure.css';
+@import '~@ionic/angular/css/typography.css';
+
+@import '~@ionic/angular/css/padding.css';
+@import '~@ionic/angular/css/float-elements.css';
+@import '~@ionic/angular/css/text-alignment.css';
+@import '~@ionic/angular/css/text-transformation.css';
+@import '~@ionic/angular/css/flex-utils.css';
+
 @import 'src/theme/variables.scss';
 
 // http://ionicframework.com/docs/theming/
@@ -47,44 +58,78 @@
   font-smooth: always;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 ion-content {
-  /deep/ion-scroll {
-    background: linear-gradient(to bottom, $base-color, #00a0dd);
-    // TODO disable when we can use this.statusBar.overlaysWebView(true) https://github.com/ionic-team/ionic/issues/13821
-    padding-top: 0 !important;
-  }
-  &.no-scroll {
-    .scroll-inner {
-      height: 100%;
-    }
-  }
+  background: linear-gradient(to bottom, $base-color, $third-color);
+}
+
+ion-list {
+  margin: 0;
+  background: transparent;
 }
 
 ion-item {
-  .item.item-detail-push {
-    .item-inner {
-      background-image: url("data:image/svg+xml;charset=utf-8,<svg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2012%2020'><path%20d='M2,20l-2-2l8-8L0,2l2-2l10,10L2,20z'%20fill='rgba(255,255,255,0.6)'/></svg>");
+  --detail-push-color: rgba(255, 255, 255, 0.6);
+  color: white;
+  --ion-font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+  font-weight: 200;
+  --background-active: transparent;
+  --background: transparent;
+  --border-color: white;
+
+  &.item-has-focus {
+    --border-color: #{$second-color};
+    --ion-color-primary: #{$second-color};
+    ion-label {
+      color: $second-color;
     }
   }
 
-  .item.item-input.item-input-has-focus:last-child {
-    border-bottom-color: $second-color;
+  &.long-label {
+    ion-label {
+      white-space: normal;
+    }
   }
-  .item.item-input-has-focus ion-label {
-    color: $second-color;
+
+  &.no-padding {
+    --inner-padding-end: 0;
   }
+}
+
+ion-button {
+  font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+  font-weight: 200;
+  color: white;
 }
 
 ion-button.flat-button {
-  button {
-    background-color: $second-color;
-    color: white;
-  }
+  --background: #{$second-color};
+  color: white;
 }
 
 ion-button.flat-button-alt {
-  button {
-    background-color: $base-color;
-    color: white;
+  --background: #{$base-color};
+  color: white;
+}
+
+a {
+  color: $second-color !important;
+}
+
+ion-toggle {
+  --background-checked: #{$third-color};
+  --handle-background-checked: #{$second-color};
+}
+
+ion-spinner {
+  color: white;
+}
+
+.keyboard-open {
+  ion-content {
+    --keyboard-offset: 230px;
   }
 }

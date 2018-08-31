@@ -1,21 +1,22 @@
 export abstract class AbstractDevice {
-  abstract readonly apparatusVersion: DeviceType;
+  abstract readonly deviceType: DeviceType;
+  apparatusVersion: string;
   apparatusId: string;
   sensorUUID: string;
   apparatusSensorType: string;
   apparatusTubeType: string;
   params?: DeviceParams;
-  paramsModel?: { [K: string]: DeviceParamModel };
+  paramsModel?: DeviceParamsModel;
+  batteryLevel?: number;
 
   constructor(rawDevice: RawDevice) {
     this.sensorUUID = rawDevice.id;
-    const manufacturerData = new Uint8Array(rawDevice.advertising).slice(23, 29);
-    this.apparatusId = new TextDecoder('utf8').decode(manufacturerData);
   }
 }
 
 export enum DeviceType {
-  OGKIT = 'OG-KIT1'
+  OGKit = 'OG-KIT1',
+  AtomTag = 'AtomTag'
 }
 
 export interface RawDevice {
@@ -33,6 +34,10 @@ export interface RawDevice {
 
 export interface DeviceParams {
   [K: string]: DeviceParamValue;
+}
+
+export interface DeviceParamsModel {
+  [K: string]: DeviceParamModel;
 }
 
 export interface DeviceParamModel {

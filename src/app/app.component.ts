@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 
+import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { MenuController, Platform } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-root',
@@ -16,33 +17,21 @@ export class AppComponent {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private menuController: MenuController
+    private screenOrientation: ScreenOrientation
   ) {
     this.initializeApp();
   }
 
   initializeApp() {
-    // TODO use platform.ready() again when it's fixed https://github.com/ionic-team/ionic/issues/14647
-    /*this.platform.ready().then(() => {
-      this.statusBar.overlaysWebView(true);
-      this.statusBar.styleLightContent();
-      this.splashScreen.hide();
-    });*/
-    document.addEventListener('deviceready', () => {
-      // TODO activate back when it's fixed https://github.com/ionic-team/ionic/issues/13821
-      // this.statusBar.overlaysWebView(true);
-      this.statusBar.styleLightContent();
-      this.splashScreen.hide();
-    });
-    // TODO remove when autoscroll to input is fixed https://github.com/ionic-team/ionic/issues/13821 https://github.com/ionic-team/ionic/issues/10629#issuecomment-395084125
-    window.addEventListener('keyboardDidShow', () => {
-      document.activeElement.scrollIntoView();
+    this.platform.ready().then(() => {
+      if (this.platform.is('cordova')) {
+        this.statusBar.overlaysWebView(true);
+        this.statusBar.styleLightContent();
+        this.splashScreen.hide();
+        this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+      }
     });
     window.addEventListener('keyboardWillShow', () => (this.keyboardOpen = true));
     window.addEventListener('keyboardWillHide', () => (this.keyboardOpen = false));
-  }
-
-  closeMenu() {
-    this.menuController.close();
   }
 }

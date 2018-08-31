@@ -1,0 +1,36 @@
+.container {
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid white;
+  background-color: transparent;
+  color: white;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  .title {
+    font-family: 'ARIALROUNDED', Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    position: relative;
+    padding: 15px;
+  }
+  .text {
+    padding-top: 10px;
+    margin: 15px;
+    margin-top: 0;
+    font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    text-align: justify;
+    border-top: 1px solid #66ceff;
+    transition: all ease 200ms;
+    max-height: 400px;
+  }
+}
+
+.container.closed {
+  .text {
+    max-height: 0;
+    padding: 0;
+    margin: 0;
+    opacity: 0;
+    border: none;
+  }
+}
