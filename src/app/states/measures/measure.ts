@@ -59,7 +59,7 @@ export class Measure {
     this.deviceModel = deviceModel;
     this.reportUuid = reportUuid;
     this.manualReporting = manualReporting;
-    this.organisationReporting = environment.appliNameVersion;
+    this.organisationReporting = environment.appNameVersion;
   }
 }
 
