@@ -11,7 +11,7 @@ import { Measure, Step } from './measure';
 import { StopMeasureScan, UpdateMeasure } from './measures.action';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { MeasureApi } from './measure-api';
+import { ApparatusSensorType, MeasureApi } from './measure-api';
 import { UserStateModel } from '../user/user.state';
 
 @Injectable({
@@ -55,12 +55,20 @@ export class MeasuresService {
   }
 
   publishMeasure(measure: Measure): Observable<any> {
+    let apparatusSensorType: ApparatusSensorType | undefined;
+    if (measure.apparatusSensorType) {
+      if (measure.apparatusSensorType.toLowerCase().includes(ApparatusSensorType.Geiger)) {
+        apparatusSensorType = ApparatusSensorType.Geiger;
+      } else if (measure.apparatusSensorType.toLowerCase().includes(ApparatusSensorType.Photodiode)) {
+        apparatusSensorType = ApparatusSensorType.Photodiode;
+      }
+    }
     const payload: MeasureApi = {
       apiKey: environment.API_KEY,
       data: {
         apparatusId: measure.apparatusId,
         apparatusVersion: measure.apparatusVersion,
-        apparatusSensorType: measure.apparatusSensorType,
+        apparatusSensorType: apparatusSensorType,
         apparatusTubeType: measure.apparatusTubeType,
         temperature: measure.temperature,
         value: measure.value,
@@ -84,6 +92,7 @@ export class MeasuresService {
         reportUuid: measure.reportUuid,
         manualReporting: measure.manualReporting,
         organisationReporting: measure.organisationReporting,
+        // TODO change to 'routine'
         reportContext: 'test',
         description: measure.description,
         measurementHeight: measure.measurementHeight,
