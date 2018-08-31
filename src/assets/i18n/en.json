@@ -11,6 +11,12 @@
     "FRENCH": "Français",
     "TITLE": "Langue"
   },
+  "LEGAL_NOTICE": {
+    "EDITOR": null,
+    "MEASURES_PRECAUTIONS": null,
+    "TERMS_OF_USE": null,
+    "TITLE": "Legal notice"
+  },
   "LOG_IN": {
     "LOGGED_AS": "Logged as",
     "LOG_OUT": "Log out",

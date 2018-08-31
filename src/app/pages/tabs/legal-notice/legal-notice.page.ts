@@ -8,5 +8,5 @@ import { environment } from '../../../../environments/environment';
 })
 export class LegalNoticePage {
   panelOpened = 1;
-  appliNameVersion = environment.appliNameVersion;
+  appNameVersion = environment.appNameVersion;
 }
