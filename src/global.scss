@@ -1,0 +1,135 @@
+@import '~@ionic/angular/css/core.css';
+@import '~@ionic/angular/css/normalize.css';
+@import '~@ionic/angular/css/structure.css';
+@import '~@ionic/angular/css/typography.css';
+
+@import '~@ionic/angular/css/padding.css';
+@import '~@ionic/angular/css/float-elements.css';
+@import '~@ionic/angular/css/text-alignment.css';
+@import '~@ionic/angular/css/text-transformation.css';
+@import '~@ionic/angular/css/flex-utils.css';
+
+@import 'src/theme/variables.scss';
+
+// http://ionicframework.com/docs/theming/
+
+// App Global Sass
+// ----------------------------------------------------------------------------
+// Put style rules here that you want to apply globally. These styles are for
+// the entire app and not just one component. Additionally, this file can be
+// also used as an entry point to import other Sass files to be included in the
+// output CSS.
+//
+// Shared Sass variables, which can be used to adjust Ionic's default Sass
+// variables, belong in "theme/variables.scss".
+//
+// To declare rules for a specific mode, create a child rule for the .md, .ios,
+// or .wp mode classes. The mode class is automatically applied to the <body>
+// element in the app.
+@font-face {
+  font-family: 'INTERSTATE';
+  src: url('assets/fonts/Interstate_Regular.eot');
+  src: local('☺'), url('assets/fonts/Interstate_Regular.woff') format('woff'),
+    url('assets/fonts/Interstate_Regular.ttf') format('truetype'),
+    url('assets/fonts/Interstate_Regular.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-smooth: always;
+}
+
+@font-face {
+  font-family: 'INTERSTATE';
+  src: url('assets/fonts/Interstate_Light.eot');
+  src: local('☺'), url('assets/fonts/Interstate_Light.woff') format('woff'),
+    url('assets/fonts/Interstate_Light.ttf') format('truetype'), url('assets/fonts/Interstate_Light.svg') format('svg');
+  font-weight: 200;
+  font-style: normal;
+  font-smooth: always;
+}
+
+@font-face {
+  font-family: 'ARIALROUNDED';
+  src: url('assets/fonts/ArialRoundedMTBold.eot');
+  src: local('☺'), url('assets/fonts/ArialRoundedMTBold.woff') format('woff'),
+    url('assets/fonts/ArialRoundedMTBold.ttf') format('truetype'),
+    url('assets/fonts/ArialRoundedMTBold.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-smooth: always;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+ion-content {
+  background: linear-gradient(to bottom, $base-color, $third-color);
+}
+
+ion-list {
+  margin: 0;
+  background: transparent;
+}
+
+ion-item {
+  --detail-push-color: rgba(255, 255, 255, 0.6);
+  color: white;
+  --ion-font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+  font-weight: 200;
+  --background-active: transparent;
+  --background: transparent;
+  --border-color: white;
+
+  &.item-has-focus {
+    --border-color: #{$second-color};
+    --ion-color-primary: #{$second-color};
+    ion-label {
+      color: $second-color;
+    }
+  }
+
+  &.long-label {
+    ion-label {
+      white-space: normal;
+    }
+  }
+
+  &.no-padding {
+    --inner-padding-end: 0;
+  }
+}
+
+ion-button {
+  font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+  font-weight: 200;
+  color: white;
+}
+
+ion-button.flat-button {
+  --background: #{$second-color};
+  color: white;
+}
+
+ion-button.flat-button-alt {
+  --background: #{$base-color};
+  color: white;
+}
+
+a {
+  color: $second-color !important;
+}
+
+ion-toggle {
+  --background-checked: #{$third-color};
+  --handle-background-checked: #{$second-color};
+}
+
+ion-spinner {
+  color: white;
+}
+
+.keyboard-open {
+  ion-content {
+    --keyboard-offset: 230px;
+  }
+}

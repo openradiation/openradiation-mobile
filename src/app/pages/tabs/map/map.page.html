@@ -1,0 +1,15 @@
+<ion-content>
+    <div class="content">
+        <ng-container *ngIf="connectionAvailable; else noConnectionAvailable">
+            <div class="spinner-container" *ngIf="isLoading">
+                <ion-spinner></ion-spinner>
+            </div>
+            <iframe [src]="iframeURL" (load)="mapLoaded()"></iframe>
+        </ng-container>
+        <ng-template #noConnectionAvailable>
+            <app-category-label>
+                Aucune connection disponible pour afficher la carte
+            </app-category-label>
+        </ng-template>
+    </div>
+</ion-content>

@@ -1,0 +1,28 @@
+@import 'src/theme/variables.scss';
+
+:host {
+  height: 100%;
+  ion-content {
+    background: dimgray;
+    --padding-top: 24px;
+    height: 100%;
+
+    ion-item {
+      --detail-push-color: $base-color;
+      background: white;
+      color: $base-color;
+      border-bottom: $base-color 1px solid;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &.active {
+        --detail-push-color: white;
+        background: $base-color;
+        color: white;
+        border-bottom: none;
+      }
+    }
+  }
+}
