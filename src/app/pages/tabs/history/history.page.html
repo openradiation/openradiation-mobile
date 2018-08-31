@@ -1,9 +1,8 @@
 <ng-container *ngIf="measures$ | async as measures">
-    <app-header [deleteButton]="measures.length > 0" (delete)="deleteAll()">Historique</app-header>
+    <app-header [deleteButton]="measures.length > 0" (delete)="deleteAll()">{{'HISTORY.TITLE' | translate}}</app-header>
 
     <ion-content>
-        <div class="empty-list" *ngIf="measures.length <= 0">
-            Aucune mesure<br>enregistrée
+        <div class="empty-list" *ngIf="measures.length <= 0" [innerHTML]="'HISTORY.NO_MEASURE' | translate">
         </div>
         <ion-list>
             <ion-item *ngFor="let measure of measures" class="clickable-device" button
