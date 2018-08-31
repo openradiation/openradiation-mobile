@@ -79,6 +79,10 @@
     "EXPERT_MODE": "Expert mode",
     "TITLE": "Measures"
   },
+  "MEASURE_MANUAL": {
+    "ALERT": "You need to log in in order to make a manual measure.",
+    "TITLE": "Manual measure"
+  },
   "SENSORS": {
     "DETAILS": "Details",
     "LIST": "Sensors list",

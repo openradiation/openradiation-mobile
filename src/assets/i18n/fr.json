@@ -79,6 +79,10 @@
     "EXPERT_MODE": "Mode expert",
     "TITLE": "Mesures"
   },
+  "MEASURE_MANUAL": {
+    "ALERT": "Vous devez vous identifier pour pouvoir saisir manuellemment une mesure.",
+    "TITLE": "Saisie manuelle"
+  },
   "SENSORS": {
     "DETAILS": "Infos",
     "LIST": "Liste des capteurs",
