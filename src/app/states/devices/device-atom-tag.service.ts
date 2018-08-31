@@ -24,8 +24,6 @@ export class DeviceAtomTagService /*extends AbstractDeviceService<DeviceAtomTag>
       map(buffer => {
         const firmwareVersion = new TextDecoder('utf8').decode(new Uint8Array(buffer));
         return {
-          apparatusSensorType: 'geiger',
-          apparatusTubeType: 'SBM-20',
           apparatusVersion: `${DeviceType.AtomTag} ${firmwareVersion}`
         };
       })

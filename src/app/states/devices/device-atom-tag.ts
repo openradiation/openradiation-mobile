@@ -8,7 +8,9 @@ import {
 } from './abstract-device';
 
 export class DeviceAtomTag extends AbstractDevice {
-  readonly deviceType: DeviceType = DeviceType.AtomTag;
+  readonly deviceType = DeviceType.AtomTag;
+  apparatusSensorType = 'Geiger';
+  apparatusTubeType = 'SBM-20';
 
   params: DeviceParams = {
     audioHits: true,
