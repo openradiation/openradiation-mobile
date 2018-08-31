@@ -1,25 +1,17 @@
 {
   "GENERAL": {
-    "CANCEL": "Cancel",
-    "OK": "Ok",
     "AVAILABLE": "Available",
-    "UNAVAILABLE": "Unavailable",
-    "CONNEXION_ERROR": "Connexion error: {message}"
+    "CANCEL": "Cancel",
+    "CONNEXION_ERROR": "Connexion error: {message}",
+    "OK": "Ok",
+    "UNAVAILABLE": "Unavailable"
   },
-  "SETTINGS": {
-    "TITLE": "Settings"
-  },
-  "MEASURES": {
-    "TITLE": "Measures",
-    "AUTO_PUBLISH": "Auto publish measures",
-    "AUTO_PUBLISH_NOTICE": {
-      "PART1": null,
-      "PART2": null
-    },
-    "EXPERT_MODE": "Expert mode"
+  "LANGUAGE": {
+    "ENGLISH": "English",
+    "FRENCH": "Français",
+    "TITLE": "Langue"
   },
   "LOG_IN": {
-    "TITLE": "Log in",
     "LOGGED_AS": "Logged as",
     "LOG_OUT": "Log out",
     "NOTICE": {
@@ -27,24 +19,32 @@
       "PART2": null,
       "PART3": null
     },
+    "NOT_LOGGED": "Not logged",
     "PASSWORD": "Password",
+    "TITLE": "Log in",
     "USERNAME": "Username",
     "USER_ACCOUNT": "User account",
-    "WRONG_CREDENTIALS": "Wrong credentials",
-    "NOT_LOGGED": "Not logged"
+    "WRONG_CREDENTIALS": "Wrong credentials"
   },
-  "LANGUAGE": {
-    "TITLE": "Langue",
-    "FRENCH": "Français",
-    "ENGLISH": "English"
+  "MEASURES": {
+    "AUTO_PUBLISH": "Auto publish measures",
+    "AUTO_PUBLISH_NOTICE": {
+      "PART1": null,
+      "PART2": null
+    },
+    "EXPERT_MODE": "Expert mode",
+    "TITLE": "Measures"
   },
   "SENSORS": {
-    "TITLE": "Sensors",
     "DETAILS": "Details",
+    "LIST": "Sensors list",
+    "SEARCH": "Looking for sensors",
+    "TITLE": "Sensors",
     "TUBE_TYPE": "Tube type: ",
     "TYPE": "Sensor type: ",
-    "VERSION": "Version: ",
-    "SEARCH": "Looking for sensors",
-    "LIST": "Sensors list"
+    "VERSION": "Version: "
+  },
+  "SETTINGS": {
+    "TITLE": "Settings"
   }
 }
