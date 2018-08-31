@@ -27,6 +27,10 @@ ion-item {
     align-items: center;
     font-size: 14px;
 
+    .date {
+      width: 130px;
+    }
+
     .value {
       margin-left: 20px;
     }
