@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 import { StartManualMeasure } from '../../states/measures/measures.action';
 import { UserState } from '../../states/user/user.state';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-menu',
@@ -24,7 +25,8 @@ export class MenuComponent {
     private navController: NavController,
     private store: Store,
     private actions$: Actions,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private translateService: TranslateService
   ) {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
@@ -52,15 +54,15 @@ export class MenuComponent {
   private goToLogin() {
     this.alertController
       .create({
-        header: 'Saisie manuelle',
-        message: `Vous devez vous identifier pour pouvoir saisir manuellemment une mesure`,
+        header: this.translateService.instant('MEASURE_MANUAL.TITLE'),
+        message: this.translateService.instant('MEASURE_MANUAL.ALERT'),
         backdropDismiss: false,
         buttons: [
           {
-            text: 'Annuler'
+            text: this.translateService.instant('GENERAL.CANCEL')
           },
           {
-            text: `S'identifier`,
+            text: this.translateService.instant('LOG_IN.TITLE'),
             handler: () =>
               this.navController.navigateForward(
                 [
