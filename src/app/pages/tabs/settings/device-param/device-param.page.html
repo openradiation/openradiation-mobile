@@ -19,15 +19,15 @@
                 <app-category-label>{{'SETTINGS.TITLE' | translate}}</app-category-label>
                 <ng-container *ngFor="let paramModel of paramsModel">
                     <ng-container [ngSwitch]="paramModel[1].type">
-                        <ion-item *ngSwitchCase="deviceParamType.string">
+                        <ion-item *ngSwitchCase="deviceParamType.String">
                             <ion-label position="floating">{{paramModel[1].label | translate}}</ion-label>
                             <ion-input [formControlName]="paramModel[0]"></ion-input>
                         </ion-item>
-                        <ion-item class="no-padding" *ngSwitchCase="deviceParamType.boolean">
+                        <ion-item class="no-padding" *ngSwitchCase="deviceParamType.Boolean">
                             <ion-label>{{paramModel[1].label | translate}}</ion-label>
                             <ion-toggle [formControlName]="paramModel[0]"></ion-toggle>
                         </ion-item>
-                        <ion-item *ngSwitchCase="deviceParamType.number">
+                        <ion-item *ngSwitchCase="deviceParamType.Number">
                             <ion-label position="floating">{{paramModel[1].label | translate}}</ion-label>
                             <ion-input [formControlName]="paramModel[0]"></ion-input>
                         </ion-item>

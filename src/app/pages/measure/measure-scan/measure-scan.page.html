@@ -86,7 +86,7 @@
                 </div>
             </div>
             <div class="radiation">
-                <ng-container *ngIf="currentMeasure.hitsNumber <= hitsAccuracyThreshold.good; else hitsAccuracyMedium">
+                <ng-container *ngIf="currentMeasure.hitsNumber <= hitsAccuracyThreshold.Good; else hitsAccuracyMedium">
                     <div class="start">
                         {{currentMeasure.startTime ? 'Mesure en cours' : 'Initialisation'}}
                     </div>
@@ -107,8 +107,8 @@
                     <img src="assets/img/bg-radiation.png">
                 </div>
             </div>
-            <app-round-button [disabled]="!(currentMeasure.hitsNumber >= hitsAccuracyThreshold.accurate)"
-                              [src]="currentMeasure.hitsNumber >= hitsAccuracyThreshold.accurate ? 'assets/img/button-on.png' : 'assets/img/button-off.png'"
+            <app-round-button [disabled]="!(currentMeasure.hitsNumber >= hitsAccuracyThreshold.Accurate)"
+                              [src]="currentMeasure.hitsNumber >= hitsAccuracyThreshold.Accurate ? 'assets/img/button-on.png' : 'assets/img/button-off.png'"
                               (click)="stopScan()">
                 {{'GENERAL.END' | translate}}
             </app-round-button>
