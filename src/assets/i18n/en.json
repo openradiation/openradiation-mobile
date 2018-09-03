@@ -15,7 +15,7 @@
     "TITLE": "About"
   },
   "GENERAL": {
-    "ADD_TAG": "Ajouter un tag",
+    "ADD_TAG": "Add tag",
     "AVAILABLE": "Available",
     "CANCEL": "Cancel",
     "CLICK_HERE": "Click here",
@@ -23,6 +23,9 @@
     "CONNEXION_ERROR": "Connexion error: {message}",
     "DATE": "Date",
     "END": "End",
+    "ERROR": "Error",
+    "GOOD": "Good",
+    "MEDIUM": "Medium",
     "NO": "No",
     "OK": "Ok",
     "SHARE": "Share",
