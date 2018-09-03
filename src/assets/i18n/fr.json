@@ -21,13 +21,27 @@
     "CONNECTED": "Connecté",
     "CONNEXION_ERROR": "Connexion impossible : {{message}}",
     "END": "Fin",
+    "NO": "Non",
     "OK": "Ok",
     "SHARE": "Partager",
     "TIMESTAMP": "Timestamp",
-    "UNAVAILABLE": "Indisponible"
+    "UNAVAILABLE": "Indisponible",
+    "YES": "Oui"
   },
   "HISTORY": {
+    "DELETE": {
+      "NOTICE": "Êtes-vous sûr(e) de vouloir supprimer cette mesure ?"
+    },
+    "DELETE_ALL": {
+      "NOTICE": "En supprimant vos mesures, vous nettoyez tout votre historique mais vous ne supprimez pas les données déjà publiées de la base OpenRadiation.",
+      "TITLE": "Êtes-vous sûr de vouloir supprimer toutes les mesures ?"
+    },
     "NO_MEASURE": "Aucune mesure<br>enregistrée",
+    "SEND": {
+      "NOTICE": "En envoyant cette mesure, vous acceptez que l'ensemble des données correspondant à cette measure (dont votre position GPS, votre peseudo, etc) soit publié dans la base OpenRadiation.",
+      "TITLE": "Êtes-vous sûr(e) de vouloir envoyer cette mesure ?"
+    },
+    "SENT": "Publiée",
     "TITLE": "Historique"
   },
   "HOME": {
