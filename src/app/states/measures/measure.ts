@@ -82,6 +82,7 @@ export enum PositionAccuracy {
   Error = 'error'
 }
 
+// TODO Enum CamelCase
 export enum HitsAccuracy {
   start = 'start',
   bad = 'bad',
@@ -101,7 +102,7 @@ export enum HitsAccuracyThreshold {
 export enum MeasureEnvironment {
   Countryside = 'countryside',
   City = 'city',
-  Ontheroad = 'ontheroad',
+  OnTheRoad = 'ontheroad',
   Inside = 'inside',
   Plane = 'plane'
 }
