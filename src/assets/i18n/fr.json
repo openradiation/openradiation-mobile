@@ -20,10 +20,12 @@
     "CLICK_HERE": "Cliquez ici",
     "CONNECTED": "Connecté",
     "CONNEXION_ERROR": "Connexion impossible : {{message}}",
+    "DATE": "Date",
     "END": "Fin",
     "NO": "Non",
     "OK": "Ok",
     "SHARE": "Partager",
+    "SUBMIT": "Valider",
     "TIMESTAMP": "Timestamp",
     "UNAVAILABLE": "Indisponible",
     "YES": "Oui"
@@ -93,19 +95,45 @@
       "PART1": "En activant la publication automatique des mesures, les mesures que vous faites et les données associées sont automatiquement envoyées à la base collaborative OpenRadiation, et publiées sous licence <a target=\"_blank\" href=\"https://www.openradiation.org/les-donnees\">ODC-ODbL (Open Database License)</a>.",
       "PART2": "Les données transmises correspondent aux données que vous saisissez, ainsi que des informations sur le modèle et l'identifiant du capteur et/ou du téléphone utilisé, votre nom d'utilisateur, ainsi que la position GPS au moment de la mesure (voir le détail sur <a target=\"_blank\" href=\"https://www.openradiation.org/conditions-dutilisation\">www.openradiation.org/conditions-dutilisation</a>)."
     },
+    "DESCRIPTION": "Description de la mesure",
     "DOSE_RATE": "Débit de dose",
     "DOSE_RATE_UNIT": "μSvh",
     "DURATION": "Durée",
+    "END_LATITUDE": "Latitude de fin",
+    "END_LONGITUDE": "Longitude de fin",
+    "ENVIRONMENT": {
+      "CITY": "En ville",
+      "COUNTRYSIDE": "À la campagne",
+      "INSIDE": "À l'intérieur",
+      "ON_THE_ROAD": "Sur la route",
+      "PLANE": "En avion",
+      "TITLE": "Environnement de la mesure"
+    },
+    "EXPERT": "Expert",
     "EXPERT_MODE": "Mode expert",
     "FIABILITY": "Fiabilité",
     "HITS_NUMBER": "Coups",
     "HITS_PER_MIN": "Coups/min",
     "MEASURE": "Mesure",
     "MEASURE_START": "Début de la mesure",
+    "SENSOR_POSITION": {
+      "1_METER_HIGH": "À 1 mètre du sol",
+      "FLOOR": "Au sol",
+      "TITLE": "Position du capteur"
+    },
     "SENSOR_TEMPERATURE": "Température capteur",
+    "START_LATITUDE": "Latitude de début",
+    "START_LONGITUDE": "Longitude de début",
+    "TAG_LIST": "Liste des tags",
     "TEMPERATURE": "T° (°C)",
+    "TEMPERATURE_AVERAGE": "Température moyenne",
     "TITLE": "Mesures",
-    "VOLTAGE": "Tension (V)"
+    "VOLTAGE": "Tension (V)",
+    "WEATHER": {
+      "NO_RAIN": "Pas de pluie",
+      "RAIN": "Pluie",
+      "TITLE": "Météo"
+    }
   },
   "MEASURE_MANUAL": {
     "ALERT": "Vous devez vous identifier pour pouvoir saisir manuellemment une mesure.",

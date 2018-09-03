@@ -7,7 +7,7 @@
           <img [src]="option === selectedOption ? option.iconOn : option.iconOff">
       </div>
       <div class="label" [ngClass]="{'selected': option === selectedOption}">
-          {{option.label}}
+          {{option.label | translate}}
       </div>
   </div>
 </div>

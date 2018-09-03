@@ -20,10 +20,12 @@
     "CLICK_HERE": "Click here",
     "CONNECTED": "Connected",
     "CONNEXION_ERROR": "Connexion error: {message}",
+    "DATE": "Date",
     "END": "End",
     "NO": "No",
     "OK": "Ok",
     "SHARE": "Share",
+    "SUBMIT": "Submit",
     "TIMESTAMP": "Timestamp",
     "UNAVAILABLE": "Unavailable",
     "YES": "Yes"
@@ -93,19 +95,45 @@
       "PART1": null,
       "PART2": null
     },
+    "DESCRIPTION": "Measure description",
     "DOSE_RATE": "Dose rate",
     "DOSE_RATE_UNIT": "μSvh",
     "DURATION": "Duration",
+    "END_LATITUDE": "End latitude",
+    "END_LONGITUDE": "End longitude",
+    "ENVIRONMENT": {
+      "CITY": "City",
+      "COUNTRYSIDE": "Countryside",
+      "INSIDE": "Inside",
+      "ON_THE_ROAD": "On the road",
+      "PLANE": "Plane",
+      "TITLE": "Measure environment"
+    },
+    "EXPERT": "Expert",
     "EXPERT_MODE": "Expert mode",
     "FIABILITY": "Fiability",
     "HITS_NUMBER": "Hits",
     "HITS_PER_MIN": "Hits/min",
     "MEASURE": "Measure",
     "MEASURE_START": "Measure start",
+    "SENSOR_POSITION": {
+      "1_METER_HIGH": "1 meter high",
+      "FLOOR": "Au sol",
+      "TITLE": "Sensor position"
+    },
     "SENSOR_TEMPERATURE": "Sensor temperature",
+    "START_LATITUDE": "Start latitude",
+    "START_LONGITUDE": "Start longitude",
+    "TAG_LIST": "Tag list",
     "TEMPERATURE": "T° (°C)",
+    "TEMPERATURE_AVERAGE": "Average temperature",
     "TITLE": "Measures",
-    "VOLTAGE": "Voltage (V)"
+    "VOLTAGE": "Voltage (V)",
+    "WEATHER": {
+      "NO_RAIN": "No rain",
+      "RAIN": "Rain",
+      "TITLE": "Weather"
+    }
   },
   "MEASURE_MANUAL": {
     "ALERT": "You need to log in in order to make a manual measure.",
