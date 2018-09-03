@@ -359,6 +359,7 @@ export class MeasuresState {
     }
   }
 
+  // TODO Handle case with no connection
   @Action(PublishMeasure)
   publishMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, action: PublishMeasure) {
     if (!action.measure.sent) {

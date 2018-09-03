@@ -1,0 +1,183 @@
+{
+  "ABOUT": {
+    "MEASURE": {
+      "NOTICE": null,
+      "TITLE": "Radioactivity measure"
+    },
+    "MEASURES_HOW_TO": {
+      "NOTICE": null,
+      "TITLE": "How to measure ?"
+    },
+    "OPENRADIATION_PROJECT": {
+      "NOTICE": null,
+      "TITLE": "OpenRadiation project"
+    },
+    "TITLE": "About"
+  },
+  "BLUETOOTH": {
+    "GPS_DISABLED": {
+      "NOTICE": "Bluetooth is required to communicate with sensors. Please enable it.",
+      "TITLE": "Bluetooth disabled"
+    }
+  },
+  "GENERAL": {
+    "ADD_TAG": "Add tag",
+    "AVAILABLE": "Available",
+    "CANCEL": "Cancel",
+    "CLICK_HERE": "Click here",
+    "CONNECTED": "Connected",
+    "CONNEXION_ERROR": "Connexion error: {message}",
+    "DATE": "Date",
+    "END": "End",
+    "ERROR": "Error",
+    "GOOD": "Good",
+    "GO_TO_SETTINGS": "Go to settings",
+    "MEDIUM": "Medium",
+    "NO": "No",
+    "OK": "Ok",
+    "SHARE": "Share",
+    "SUBMIT": "Submit",
+    "TIMESTAMP": "Timestamp",
+    "UNAVAILABLE": "Unavailable",
+    "YES": "Yes"
+  },
+  "HISTORY": {
+    "DELETE": {
+      "NOTICE": "Are you sure you wish to delete this measure ?"
+    },
+    "DELETE_ALL": {
+      "NOTICE": null,
+      "TITLE": "Are you sure you wish to delete all measures ?"
+    },
+    "NO_MEASURE": "No saved<br>measure",
+    "SEND": {
+      "NOTICE": "By deleting your measurements, you clean your entire history but you do not delete the published data from the OpenRadiation base",
+      "TITLE": "Are you sure you wish to send this measure ?"
+    },
+    "SENT": "Sent",
+    "TITLE": "History"
+  },
+  "HOME": {
+    "CONNECTED_SENSOR": "Connected sensor",
+    "NO_SENSORS": "No sensor",
+    "TITLE": "measure radioactivity"
+  },
+  "LANGUAGE": {
+    "ENGLISH": "English",
+    "FRENCH": "Français",
+    "TITLE": "Langue"
+  },
+  "LEGAL_NOTICE": {
+    "EDITOR": {
+      "NOTICE": null,
+      "TITLE": "Editor"
+    },
+    "MEASURES_PRECAUTIONS": {
+      "NOTICE": null,
+      "TITLE": "Precautions regarding measures"
+    },
+    "TERMS_OF_USE": {
+      "NOTICE": null,
+      "TITLE": "Terms of use"
+    },
+    "TITLE": "Legal notice"
+  },
+  "LOG_IN": {
+    "LOGGED_AS": "Logged as",
+    "LOG_OUT": "Log out",
+    "NOTICE": {
+      "PART1": null,
+      "PART2": null,
+      "PART3": null
+    },
+    "NOT_LOGGED": "Not logged",
+    "PASSWORD": "Password",
+    "TITLE": "Log in",
+    "USERNAME": "Username",
+    "USER_ACCOUNT": "User account",
+    "WRONG_CREDENTIALS": "Wrong credentials"
+  },
+  "MAP": {
+    "NO_CONNECTION": "No connexion available to display the map"
+  },
+  "MEASURES": {
+    "AUTO_PUBLISH": "Auto publish measures",
+    "AUTO_PUBLISH_NOTICE": {
+      "PART1": null,
+      "PART2": null
+    },
+    "DESCRIPTION": "Measure description",
+    "DOSE_RATE": "Dose rate",
+    "DOSE_RATE_UNIT": "μSvh",
+    "DURATION": "Duration",
+    "END_LATITUDE": "End latitude",
+    "END_LONGITUDE": "End longitude",
+    "ENVIRONMENT": {
+      "CITY": "City",
+      "COUNTRYSIDE": "Countryside",
+      "INSIDE": "Inside",
+      "ON_THE_ROAD": "On the road",
+      "PLANE": "Plane",
+      "TITLE": "Measure environment"
+    },
+    "EXPERT": "Expert",
+    "EXPERT_MODE": "Expert mode",
+    "FIABILITY": "Fiability",
+    "HITS_NUMBER": "Hits",
+    "HITS_PER_MIN": "Hits/min",
+    "INIT": "Initialisation",
+    "MEASURE": "Measure",
+    "MEASURE_START": "Measure start",
+    "ONGOING": "Ongoing measure",
+    "SENSOR_POSITION": {
+      "1_METER_HIGH": "1 meter high",
+      "FLOOR": "Au sol",
+      "TITLE": "Sensor position"
+    },
+    "SENSOR_TEMPERATURE": "Sensor temperature",
+    "START_LATITUDE": "Start latitude",
+    "START_LONGITUDE": "Start longitude",
+    "TAG_LIST": "Tag list",
+    "TEMPERATURE": "T° (°C)",
+    "TEMPERATURE_AVERAGE": "Average temperature",
+    "TITLE": "Measures",
+    "VOLTAGE": "Voltage (V)",
+    "WEATHER": {
+      "NO_RAIN": "No rain",
+      "RAIN": "Rain",
+      "TITLE": "Weather"
+    }
+  },
+  "MEASURE_MANUAL": {
+    "ALERT": "You need to log in in order to make a manual measure.",
+    "TITLE": "Manual measure"
+  },
+  "POSITION": {
+    "DENIED_ALWAYS": {
+      "NOTICE": "Phone position is required for the proper functioning of the application. Please accept the permission.",
+      "TITLE": "Position - Permission denied"
+    },
+    "GPS_DISABLED": {
+      "NOTICE": "Phone position is required for the proper functioning of the application. Please enable GPS on \"High Accuracy\" mode.",
+      "TITLE": "Position - GPS disabled"
+    }
+  },
+  "SENSORS": {
+    "CONNECTION_LOST": "Connection lost with the sensor",
+    "DETAILS": "Details",
+    "LIST": "Sensors list",
+    "PARAM": {
+      "AUDIO_HITS": "Audio signal on hits",
+      "VIBRATION_HITS": "Vibration on hits",
+      "VISUAL_HITS": "Visual signal on hits"
+    },
+    "SEARCH": "Looking for sensors",
+    "TITLE": "Sensors",
+    "TUBE_TYPE": "Tube type: ",
+    "TYPE": "Sensor type: ",
+    "VERSION": "Version: "
+  },
+  "SETTINGS": {
+    "TITLE": "Settings"
+  }
+}

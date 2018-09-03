@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { NgxsFormPluginModule } from '@ngxs/form-plugin';
 import { ComponentsModule } from '../../../../components/components.module';
 import { DeviceParamPage } from './device-param.page';
+import { TranslateModule } from '@ngx-translate/core';
 
 const routes: Routes = [
   {
@@ -24,7 +25,8 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     NgxsFormPluginModule,
     ReactiveFormsModule,
-    ComponentsModule
+    ComponentsModule,
+    TranslateModule
   ],
   declarations: [DeviceParamPage]
 })

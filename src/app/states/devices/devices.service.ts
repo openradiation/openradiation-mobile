@@ -31,6 +31,7 @@ import {
   StartDiscoverDevices,
   StopDiscoverDevices
 } from './devices.action';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
@@ -49,7 +50,8 @@ export class DevicesService {
     private alertController: AlertController,
     private deviceOGKitService: DeviceOGKitService,
     private deviceAtomTagService: DeviceAtomTagService,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private translateService: TranslateService
   ) {
     this.actions$.pipe(ofActionDispatched(StartDiscoverDevices)).subscribe(() => {
       if (this.currentAlert) {
@@ -60,10 +62,10 @@ export class DevicesService {
     this.actions$.pipe(ofActionSuccessful(DeviceConnectionLost)).subscribe(() =>
       this.toastController
         .create({
-          message: 'Connexion avec le capteur perdue',
+          message: this.translateService.instant('SENSORS.CONNECTION_LOST'),
           showCloseButton: true,
           duration: 3000,
-          closeButtonText: 'OK'
+          closeButtonText: this.translateService.instant('GENERAL.OK')
         })
         .then(toast => toast.present())
     );
@@ -168,12 +170,12 @@ export class DevicesService {
     });
     this.alertController
       .create({
-        header: 'Bluetooth désactivé',
-        message: `Le bluetooth est nécessaire pour la communication avec les capteurs. Merci de l'activer.`,
+        header: this.translateService.instant('BLUETOOTH.GPS_DISABLED.TITLE'),
+        message: this.translateService.instant('BLUETOOTH.GPS_DISABLED.NOTICE'),
         backdropDismiss: false,
         buttons: [
           {
-            text: 'Accéder aux paramètres',
+            text: this.translateService.instant('GENERAL.GO_TO_SETTINGS'),
             handler: () => {
               if (this.platform.is('ios')) {
                 this.diagnostic.switchToSettings();

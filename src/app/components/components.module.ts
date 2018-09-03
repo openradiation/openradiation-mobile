@@ -10,9 +10,10 @@ import { HeaderComponent } from './header/header.component';
 import { RoundButtonComponent } from './round-button/round-button.component';
 import { SelectIconComponent } from './select-icon/select-icon.component';
 import { TagListComponent } from './tag-list/tag-list.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule.forRoot()],
+  imports: [CommonModule, FormsModule, IonicModule.forRoot(), TranslateModule],
   declarations: [
     HeaderComponent,
     CategoryLabelComponent,

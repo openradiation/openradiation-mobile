@@ -6,3 +6,8 @@ export class LogIn {
 export class LogOut {
   static readonly type = '[User] Log out';
 }
+
+export class SetLanguage {
+  static readonly type = '[User] Set language';
+  constructor(public language?: string) {}
+}

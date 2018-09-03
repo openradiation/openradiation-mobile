@@ -4,12 +4,15 @@ import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { ErrorResponse, ErrorResponseCode } from '../measures/error-response';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient, private translateService: TranslateService) {
+    this.translateService.setDefaultLang('fr');
+  }
 
   logIn(login: string, password: string): Observable<any> {
     return this.httpClient
@@ -40,5 +43,13 @@ export class UserService {
           }
         )
       );
+  }
+
+  setLanguage(language: string): Observable<any> {
+    return this.translateService.use(language);
+  }
+
+  getDefaultLanguage(): string {
+    return this.translateService.getBrowserLang();
   }
 }
