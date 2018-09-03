@@ -6,6 +6,9 @@ import { Network } from '@ionic-native/network/ngx';
 import { Platform } from '@ionic/angular';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
+import { Select } from '@ngxs/store';
+import { UserState } from '../../../states/user/user.state';
+import { Observable } from 'rxjs';
 
 /**
  * Constants from cordova-plugin-network-information to get network types
@@ -18,6 +21,9 @@ declare var Connection: any;
   styleUrls: ['./map.page.scss']
 })
 export class MapPage {
+  @Select(UserState.language)
+  language$: Observable<string | undefined>;
+
   iframeURL: SafeResourceUrl;
   isLoading = false;
   connectionAvailable = true;
@@ -49,26 +55,28 @@ export class MapPage {
   }
 
   private loadMap() {
-    this.isLoading = true;
-    if (this.platform.is('cordova')) {
+    this.language$.subscribe(language => {
       this.isLoading = true;
-      this.diagnostic.isLocationAvailable().then(locationAvailable => {
-        if (locationAvailable) {
-          this.geolocation.getCurrentPosition().then(geoposition => {
-            const zoom = 12;
-            const lat = geoposition.coords.latitude.toFixed(7);
-            const long = geoposition.coords.longitude.toFixed(7);
-            this.iframeURL = this.domSanitizer.bypassSecurityTrustResourceUrl(
-              `${environment.INAPPBROWSER_URI}/${zoom}/${lat}/${long}`
-            );
-          });
-        } else {
-          this.iframeURL = this.domSanitizer.bypassSecurityTrustResourceUrl(environment.INAPPBROWSER_URI);
-        }
-      });
-    } else {
-      this.iframeURL = this.domSanitizer.bypassSecurityTrustResourceUrl(environment.INAPPBROWSER_URI);
-    }
+      const url = `${environment.IN_APP_BROWSER_URI.base}${
+        language === 'fr' || language === 'en' ? '/' + language : ''
+      }/${environment.IN_APP_BROWSER_URI.suffix}`;
+      if (this.platform.is('cordova')) {
+        this.isLoading = true;
+        this.diagnostic.isLocationAvailable().then(locationAvailable => {
+          if (locationAvailable) {
+            this.geolocation.getCurrentPosition().then(geoposition => {
+              const zoom = 12;
+              const lat = geoposition.coords.latitude.toFixed(7);
+              const long = geoposition.coords.longitude.toFixed(7);
+              this.iframeURL = this.domSanitizer.bypassSecurityTrustResourceUrl(
+                `${environment.IN_APP_BROWSER_URI}/${zoom}/${lat}/${long}`
+              );
+            });
+          }
+        });
+      }
+      this.iframeURL = this.domSanitizer.bypassSecurityTrustResourceUrl(url);
+    });
   }
 
   mapLoaded() {
