@@ -10,7 +10,7 @@
     </ion-chip>
 </div>
 <ion-item class="add-tag">
-    <ion-input [(ngModel)]="currentTag" placeholder="Ajouter un tag"></ion-input>
+    <ion-input [(ngModel)]="currentTag" [placeholder]="'GENERAL.ADD_TAG' | translate"></ion-input>
     <ion-button fill="clear" [disabled]="currentTag === ''" (click)="addTag()">
         <ion-icon slot="icon-only" name="add"></ion-icon>
     </ion-button>
