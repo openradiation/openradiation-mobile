@@ -8,6 +8,6 @@
         <div [innerHTML]="'LEGAL_NOTICE.TERMS_OF_USE.NOTICE' | translate"></div>
     </app-accordion>
     <app-accordion [title]="'LEGAL_NOTICE.EDITOR.TITLE' | translate" [opened]="panelOpened === 3" (open)="panelOpened = 3">
-        <div [innerHTML]="'LEGAL_NOTICE.EDITOR.NOTICE' | translate: {appNameVersion: appNameVersion}"></div>
+        <div [innerHTML]="'LEGAL_NOTICE.EDITOR.NOTICE' | translate: {APP_NAME_VERSION: appNameVersion}"></div>
     </app-accordion>
 </ion-content>
