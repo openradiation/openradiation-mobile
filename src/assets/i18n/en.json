@@ -14,6 +14,12 @@
     },
     "TITLE": "About"
   },
+  "BLUETOOTH": {
+    "GPS_DISABLED": {
+      "NOTICE": "Bluetooth is required to communicate with sensors. Please enable it.",
+      "TITLE": "Bluetooth disabled"
+    }
+  },
   "GENERAL": {
     "ADD_TAG": "Add tag",
     "AVAILABLE": "Available",
@@ -25,6 +31,7 @@
     "END": "End",
     "ERROR": "Error",
     "GOOD": "Good",
+    "GO_TO_SETTINGS": "Go to settings",
     "MEDIUM": "Medium",
     "NO": "No",
     "OK": "Ok",
@@ -148,13 +155,13 @@
       "NOTICE": "Phone position is required for the proper functioning of the application. Please accept the permission.",
       "TITLE": "Position - Permission denied"
     },
-    "GO_TO_SETTINGS": "Go to settings",
     "GPS_DISABLED": {
       "NOTICE": "Phone position is required for the proper functioning of the application. Please enable GPS on \"High Accuracy\" mode.",
       "TITLE": "Position - GPS disabled"
     }
   },
   "SENSORS": {
+    "CONNECTION_LOST": "Connection lost with the sensor",
     "DETAILS": "Details",
     "LIST": "Sensors list",
     "PARAM": {
