@@ -21,16 +21,23 @@
                     </div>
                 </ng-container>
                 <ng-template #measureNotSent>
-                    <ion-button class="inner-button" fill="clear"
-                                size="default"
-                                (click)="publish(measure)">
-                        <img src="assets/img/icon-publish.png">
-                    </ion-button>
-                    <ion-button class="inner-button" fill="clear"
-                                size="default"
-                                (click)="delete(measure)">
-                        <img src="assets/img/icon-delete.png">
-                    </ion-button>
+                    <ng-container *ngIf="!measureBeingSentMap[measure.reportUuid]; else measureBeingSent">
+                        <ion-button class="inner-button" fill="clear"
+                                    size="default"
+                                    (click)="publish(measure)">
+                            <img src="assets/img/icon-publish.png">
+                        </ion-button>
+                        <ion-button class="inner-button" fill="clear"
+                                    size="default"
+                                    (click)="delete(measure)">
+                            <img src="assets/img/icon-delete.png">
+                        </ion-button>
+                    </ng-container>
+                    <ng-template #measureBeingSent>
+                        <div class="spinner">
+                            <ion-spinner></ion-spinner>
+                        </div>
+                    </ng-template>
                 </ng-template>
             </ion-item>
         </ion-list>
