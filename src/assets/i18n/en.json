@@ -36,16 +36,16 @@
   },
   "HISTORY": {
     "DELETE": {
-      "NOTICE": "Are you sure you want to delete this measure ?"
+      "NOTICE": "Are you sure you wish to delete this measure ?"
     },
     "DELETE_ALL": {
       "NOTICE": null,
-      "TITLE": "Are you sure you want to delete all measures ?"
+      "TITLE": "Are you sure you wish to delete all measures ?"
     },
     "NO_MEASURE": "No saved<br>measure",
     "SEND": {
-      "NOTICE": null,
-      "TITLE": "Are you sure you want to send this measure ?"
+      "NOTICE": "By deleting your measurements, you clean your entire history but you do not delete the published data from the OpenRadiation base",
+      "TITLE": "Are you sure you wish to send this measure ?"
     },
     "SENT": "Sent",
     "TITLE": "History"
