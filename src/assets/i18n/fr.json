@@ -14,6 +14,12 @@
     },
     "TITLE": "À propos"
   },
+  "BLUETOOTH": {
+    "GPS_DISABLED": {
+      "NOTICE": "Le bluetooth est nécessaire pour la communication avec les capteurs. Merci de l'activer.",
+      "TITLE": "Bluetooth désactivé"
+    }
+  },
   "GENERAL": {
     "ADD_TAG": "Ajouter un tag",
     "AVAILABLE": "Disponible",
@@ -25,6 +31,7 @@
     "END": "Fin",
     "ERROR": "Erreur",
     "GOOD": "Bon",
+    "GO_TO_SETTINGS": "Go to settings",
     "MEDIUM": "Moyen",
     "NO": "Non",
     "OK": "Ok",
@@ -148,13 +155,13 @@
       "NOTICE": "La position de l'appareil est nécessaire au bon fonctionnement de l'application. Merci d'accepter la permission.",
       "TITLE": "Position - Permission refusée"
     },
-    "GO_TO_SETTINGS": "Accéder aux paramètres",
     "GPS_DISABLED": {
       "NOTICE": "La position de l'appareil est nécessaire au bon fonctionnement de l'application. Merci d'activer le GPS en mode \"Haute Précision\".",
       "TITLE": "Position - GPS désactivé"
     }
   },
   "SENSORS": {
+    "CONNECTION_LOST": "Connexion avec le capteur perdue",
     "DETAILS": "Infos",
     "LIST": "Liste des capteurs",
     "PARAM": {

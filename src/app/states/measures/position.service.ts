@@ -84,7 +84,7 @@ export class PositionService {
         backdropDismiss: false,
         buttons: [
           {
-            text: this.translateService.instant('POSITION.GO_TO_SETTINGS'),
+            text: this.translateService.instant('GENERAL.GO_TO_SETTINGS'),
             handler: () => {
               this.platform.resume.pipe(take(1)).subscribe(() => this.store.dispatch(new StartWatchPosition()));
               if (this.platform.is('ios')) {
@@ -114,7 +114,7 @@ export class PositionService {
         backdropDismiss: false,
         buttons: [
           {
-            text: this.translateService.instant('POSITION.GO_TO_SETTINGS'),
+            text: this.translateService.instant('GENERAL.GO_TO_SETTINGS'),
             handler: () => {
               if (this.platform.is('ios')) {
                 this.diagnostic.switchToSettings();
