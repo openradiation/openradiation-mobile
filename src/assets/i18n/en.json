@@ -125,8 +125,10 @@
     "FIABILITY": "Fiability",
     "HITS_NUMBER": "Hits",
     "HITS_PER_MIN": "Hits/min",
+    "INIT": "Initialisation",
     "MEASURE": "Measure",
     "MEASURE_START": "Measure start",
+    "ONGOING": "Ongoing measure",
     "SENSOR_POSITION": {
       "1_METER_HIGH": "1 meter high",
       "FLOOR": "Au sol",

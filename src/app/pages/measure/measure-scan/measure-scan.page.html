@@ -88,7 +88,12 @@
             <div class="radiation">
                 <ng-container *ngIf="currentMeasure.hitsNumber <= hitsAccuracyThreshold.Good; else hitsAccuracyMedium">
                     <div class="start">
-                        {{currentMeasure.startTime ? 'Mesure en cours' : 'Initialisation'}}
+                        <ng-container *ngIf="currentMeasure.startTime; else measureInit">
+                            {{'MEASURES.ONGOING' | translate}}
+                        </ng-container>
+                        <ng-template #measureInit>
+                            {{'MEASURES.INIT' | translate}}
+                        </ng-template>
                     </div>
                 </ng-container>
                 <ng-template #hitsAccuracyMedium>
