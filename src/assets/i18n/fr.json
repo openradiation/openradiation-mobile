@@ -21,6 +21,8 @@
     "CONNECTED": "Connecté",
     "CONNEXION_ERROR": "Connexion impossible : {{message}}",
     "OK": "Ok",
+    "SHARE": "Partager",
+    "TIMESTAMP": "Timestamp",
     "UNAVAILABLE": "Indisponible"
   },
   "HISTORY": {
@@ -77,7 +79,11 @@
       "PART2": "Les données transmises correspondent aux données que vous saisissez, ainsi que des informations sur le modèle et l'identifiant du capteur et/ou du téléphone utilisé, votre nom d'utilisateur, ainsi que la position GPS au moment de la mesure (voir le détail sur <a target=\"_blank\" href=\"https://www.openradiation.org/conditions-dutilisation\">www.openradiation.org/conditions-dutilisation</a>)."
     },
     "EXPERT_MODE": "Mode expert",
-    "TITLE": "Mesures"
+    "HITS_NUMBER": "Coups",
+    "MEASURE": "Mesure",
+    "TEMPERATURE": "T° (°C)",
+    "TITLE": "Mesures",
+    "VOLTAGE": "Tension (V)"
   },
   "MEASURE_MANUAL": {
     "ALERT": "Vous devez vous identifier pour pouvoir saisir manuellemment une mesure.",

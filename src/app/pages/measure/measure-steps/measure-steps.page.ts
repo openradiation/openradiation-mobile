@@ -5,6 +5,7 @@ import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { Measure } from '../../../states/measures/measure';
 import { MeasuresState } from '../../../states/measures/measures.state';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-measure-steps',
@@ -15,7 +16,11 @@ export class MeasureStepsPage {
   @Select(MeasuresState.currentMeasure)
   currentMeasure$: Observable<Measure | undefined>;
 
-  constructor(private navController: NavController, private socialSharing: SocialSharing) {}
+  constructor(
+    private navController: NavController,
+    private socialSharing: SocialSharing,
+    private translateService: TranslateService
+  ) {}
 
   goBack() {
     this.navController.goBack();
@@ -27,8 +32,8 @@ export class MeasureStepsPage {
         message: `ts;hitsNumber;voltage;temperature\n${measure.steps
           .map(step => Object.values(step).join(';'))
           .join('\n')}`,
-        subject: `Mesure ${measure.startTime}`,
-        chooserTitle: 'Partager'
+        subject: `${this.translateService.instant('MEASURES.MEASURE')} ${measure.startTime}`,
+        chooserTitle: this.translateService.instant('GENERAL.SHARE')
       });
     }
   }

@@ -21,6 +21,8 @@
     "CONNECTED": "Connected",
     "CONNEXION_ERROR": "Connexion error: {message}",
     "OK": "Ok",
+    "SHARE": "Share",
+    "TIMESTAMP": "Timestamp",
     "UNAVAILABLE": "Unavailable"
   },
   "HISTORY": {
@@ -77,7 +79,11 @@
       "PART2": null
     },
     "EXPERT_MODE": "Expert mode",
-    "TITLE": "Measures"
+    "HITS_NUMBER": "Hits",
+    "MEASURE": "Measure",
+    "TEMPERATURE": "T° (°C)",
+    "TITLE": "Measures",
+    "VOLTAGE": "Voltage (V)"
   },
   "MEASURE_MANUAL": {
     "ALERT": "You need to log in in order to make a manual measure.",
