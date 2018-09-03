@@ -82,21 +82,20 @@ export enum PositionAccuracy {
   Error = 'error'
 }
 
-// TODO Enum CamelCase
 export enum HitsAccuracy {
-  start = 'start',
-  bad = 'bad',
-  medium = 'medium',
-  good = 'good',
-  accurate = 'accurate'
+  Start = 'start',
+  Bad = 'bad',
+  Medium = 'medium',
+  Good = 'good',
+  Accurate = 'accurate'
 }
 
 export enum HitsAccuracyThreshold {
-  start = 0,
-  bad = 3,
-  medium = 10,
-  good = 25,
-  accurate = 50
+  Start = 0,
+  Bad = 3,
+  Medium = 10,
+  Good = 25,
+  Accurate = 50
 }
 
 export enum MeasureEnvironment {

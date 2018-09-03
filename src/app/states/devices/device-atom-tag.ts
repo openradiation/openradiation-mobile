@@ -20,11 +20,11 @@ export class DeviceAtomTag extends AbstractDevice {
   paramsModel: DeviceParamsModel = {
     audioHits: {
       label: <string>_('SENSORS.PARAM.AUDIO_HITS'),
-      type: DeviceParamType.boolean
+      type: DeviceParamType.Boolean
     },
     vibrationHits: {
       label: <string>_('SENSORS.PARAM.VIBRATION_HITS'),
-      type: DeviceParamType.boolean
+      type: DeviceParamType.Boolean
     }
   };
 

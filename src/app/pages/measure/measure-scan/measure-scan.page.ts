@@ -29,7 +29,7 @@ export class MeasureScanPage extends AutoUnsubscribePage {
   @Select(DevicesState.connectedDevice)
   connectedDevice$: Observable<AbstractDevice | undefined>;
 
-  hitsAccuracy: HitsAccuracy = HitsAccuracy.start;
+  hitsAccuracy: HitsAccuracy = HitsAccuracy.Start;
   hitsAccuracyThreshold = HitsAccuracyThreshold;
   hitsAccuracyWidth = 0;
 
@@ -60,18 +60,18 @@ export class MeasureScanPage extends AutoUnsubscribePage {
 
   updateHitsAccuracy(measure?: Measure) {
     if (measure) {
-      if (measure.hitsNumber >= HitsAccuracyThreshold.accurate) {
-        this.hitsAccuracy = HitsAccuracy.accurate;
-      } else if (measure.hitsNumber >= HitsAccuracyThreshold.good) {
-        this.hitsAccuracy = HitsAccuracy.good;
-      } else if (measure.hitsNumber >= HitsAccuracyThreshold.medium) {
-        this.hitsAccuracy = HitsAccuracy.medium;
-      } else if (measure.hitsNumber >= HitsAccuracyThreshold.bad) {
-        this.hitsAccuracy = HitsAccuracy.bad;
+      if (measure.hitsNumber >= HitsAccuracyThreshold.Accurate) {
+        this.hitsAccuracy = HitsAccuracy.Accurate;
+      } else if (measure.hitsNumber >= HitsAccuracyThreshold.Good) {
+        this.hitsAccuracy = HitsAccuracy.Good;
+      } else if (measure.hitsNumber >= HitsAccuracyThreshold.Medium) {
+        this.hitsAccuracy = HitsAccuracy.Medium;
+      } else if (measure.hitsNumber >= HitsAccuracyThreshold.Bad) {
+        this.hitsAccuracy = HitsAccuracy.Bad;
       } else {
-        this.hitsAccuracy = HitsAccuracy.start;
+        this.hitsAccuracy = HitsAccuracy.Start;
       }
-      this.hitsAccuracyWidth = Math.min((measure.hitsNumber / HitsAccuracyThreshold.accurate) * 100, 100);
+      this.hitsAccuracyWidth = Math.min((measure.hitsNumber / HitsAccuracyThreshold.Accurate) * 100, 100);
     }
   }
 
