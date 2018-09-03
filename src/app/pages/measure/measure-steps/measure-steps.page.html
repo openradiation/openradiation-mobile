@@ -1,25 +1,25 @@
 <ng-container *ngIf="(currentMeasure$ | async) as currentMeasure">
     <ng-container *ngIf="currentMeasure.steps as steps">
         <app-header [backButton]="true" (back)="goBack()" [shareButton]="true" (share)="shareSteps(currentMeasure)">
-            Mesure
+            {{'MEASURES.TITLE' | translate}}
         </app-header>
 
         <ion-content>
             <ion-list>
-                <app-category-label>Mode Expert ({{currentMeasure.startTime | date: 'dd/MM/yyyy'}})</app-category-label>
+                <app-category-label>{{'MEASURES.EXPERT_MODE' | translate}} ({{currentMeasure.startTime | date: 'dd/MM/yyyy'}})</app-category-label>
                 <ion-item>
                     <div class="header">
                         <div class="date">
-                            Timestamp
+                            {{'GENERAL.TIMESTAMP' | translate}}
                         </div>
                         <div class="hitsNumber">
-                            Coups
+                            {{'MEASURES.HITS_NUMBER' | translate}}
                         </div>
                         <div class="voltage">
-                            Tension (V)
+                            {{'MEASURES.VOLTAGE' | translate}}
                         </div>
                         <div class="temperature">
-                            T° (°C)
+                            {{'MEASURES.TEMPERATURE' | translate}}
                         </div>
                     </div>
                 </ion-item>

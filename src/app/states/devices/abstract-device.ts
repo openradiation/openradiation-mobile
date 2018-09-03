@@ -46,9 +46,9 @@ export interface DeviceParamModel {
 }
 
 export enum DeviceParamType {
-  string,
-  boolean,
-  number
+  String,
+  Boolean,
+  Number
 }
 
 export type DeviceParamValue = string | boolean | number;

@@ -9,6 +9,7 @@ import { ErrorResponse, ErrorResponseCode } from '../../../../states/measures/er
 import { StartManualMeasure } from '../../../../states/measures/measures.action';
 import { LogIn } from '../../../../states/user/user.action';
 import { TabsService } from '../../tabs.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-log-in',
@@ -28,7 +29,8 @@ export class LogInPage extends AutoUnsubscribePage {
     private formBuilder: FormBuilder,
     private toastController: ToastController,
     private actions$: Actions,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private translateService: TranslateService
   ) {
     super(tabsService, elementRef);
     this.loginForm = this.formBuilder.group({
@@ -62,8 +64,8 @@ export class LogInPage extends AutoUnsubscribePage {
             case ErrorResponseCode.WrongCredentials:
               this.toastController
                 .create({
-                  message: 'Identifiants incorrects',
-                  closeButtonText: 'Ok',
+                  message: this.translateService.instant('LOG_IN.WRONG_CREDENTIALS'),
+                  closeButtonText: this.translateService.instant('GENERAL.OK'),
                   duration: 5000,
                   showCloseButton: true
                 })
@@ -72,8 +74,8 @@ export class LogInPage extends AutoUnsubscribePage {
             default:
               this.toastController
                 .create({
-                  message: `Connexion impossible : ${error.message}`,
-                  closeButtonText: 'Ok',
+                  message: this.translateService.instant('GENERAL.CONNEXION_ERROR', { message: error.message }),
+                  closeButtonText: this.translateService.instant('GENERAL.OK'),
                   duration: 5000,
                   showCloseButton: true
                 })

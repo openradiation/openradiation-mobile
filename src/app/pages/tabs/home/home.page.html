@@ -4,18 +4,18 @@
             <img src="assets/img/logo.png">
         </div>
         <div class="subtitle">
-            mesurer la radioactivité
+            {{'HOME.TITLE' | translate}}
         </div>
         <app-gps-indicator [accuracy]="positionAccuracy$ | async"></app-gps-indicator>
         <ng-container *ngIf="connectedDevice$ | async as connectedDevice; else noConnectedDevice">
-            <div class="connected-device-header">Capteur connecté</div>
+            <div class="connected-device-header">{{'HOME.CONNECTED_SENSOR' | translate}}</div>
             <ion-button class="connected-device-button" fill="clear" (click)="goToDevices()">
                 {{connectedDevice.apparatusVersion}} / {{connectedDevice.apparatusId}}
             </ion-button>
         </ng-container>
         <ng-template #noConnectedDevice>
             <ion-button class="device-button" fill="clear" (click)="goToDevices()">
-                Pas de capteur<br>CLIQUEZ ICI
+                {{'HOME.NO_SENSORS' | translate}}<br>{{'GENERAL.CLICK_HERE' | translate}}
             </ion-button>
         </ng-template>
         <app-round-button

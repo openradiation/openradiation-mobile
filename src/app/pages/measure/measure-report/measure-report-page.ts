@@ -18,6 +18,7 @@ import {
 import { MeasuresState, MeasuresStateModel } from '../../../states/measures/measures.state';
 import { UserState } from '../../../states/user/user.state';
 import { TabsService } from '../../tabs/tabs.service';
+import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
 
 @Component({
   selector: 'app-measure-report',
@@ -41,31 +42,31 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     {
       iconOn: 'assets/img/icon-countryside-on.png',
       iconOff: 'assets/img/icon-countryside-off.png',
-      label: 'À la campagne',
+      label: <string>_('MEASURES.ENVIRONMENT.COUNTRYSIDE'),
       value: MeasureEnvironment.Countryside
     },
     {
       iconOn: 'assets/img/icon-ontheroad-on.png',
       iconOff: 'assets/img/icon-ontheroad-off.png',
-      label: 'Sur la route',
-      value: MeasureEnvironment.Ontheroad
+      label: <string>_('MEASURES.ENVIRONMENT.ON_THE_ROAD'),
+      value: MeasureEnvironment.OnTheRoad
     },
     {
       iconOn: 'assets/img/icon-city-on.png',
       iconOff: 'assets/img/icon-city-off.png',
-      label: 'En ville',
+      label: <string>_('MEASURES.ENVIRONMENT.CITY'),
       value: MeasureEnvironment.City
     },
     {
       iconOn: 'assets/img/icon-inside-on.png',
       iconOff: 'assets/img/icon-inside-off.png',
-      label: `À l'intérieur`,
+      label: <string>_('MEASURES.ENVIRONMENT.INSIDE'),
       value: MeasureEnvironment.Inside
     },
     {
       iconOn: 'assets/img/icon-plane-on.png',
       iconOff: 'assets/img/icon-plane-off.png',
-      label: 'En avion',
+      label: <string>_('MEASURES.ENVIRONMENT.PLANE'),
       value: MeasureEnvironment.Plane
     }
   ];
@@ -74,13 +75,13 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     {
       iconOn: 'assets/img/icon-floor-on.png',
       iconOff: 'assets/img/icon-floor-off.png',
-      label: 'Au sol',
+      label: <string>_('MEASURES.SENSOR_POSITION.FLOOR'),
       value: 0
     },
     {
       iconOn: 'assets/img/icon-elevated-on.png',
       iconOff: 'assets/img/icon-elevated-off.png',
-      label: 'À 1 mètre du sol',
+      label: <string>_('MEASURES.SENSOR_POSITION.1_METER_HIGH'),
       value: 1
     }
   ];
@@ -89,13 +90,13 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     {
       iconOn: 'assets/img/icon-sun-on.png',
       iconOff: 'assets/img/icon-sun-off.png',
-      label: 'Pas de pluie',
+      label: <string>_('MEASURES.WEATHER.NO_RAIN'),
       value: false
     },
     {
       iconOn: 'assets/img/icon-rain-on.png',
       iconOff: 'assets/img/icon-rain-off.png',
-      label: 'Pluie',
+      label: <string>_('MEASURES.WEATHER.RAIN'),
       value: true
     }
   ];
