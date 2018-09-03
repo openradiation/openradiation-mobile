@@ -143,6 +143,17 @@
     "ALERT": "You need to log in in order to make a manual measure.",
     "TITLE": "Manual measure"
   },
+  "POSITION": {
+    "DENIED_ALWAYS": {
+      "NOTICE": "Phone position is required for the proper functioning of the application. Please accept the permission.",
+      "TITLE": "Position - Permission denied"
+    },
+    "GO_TO_SETTINGS": "Go to settings",
+    "GPS_DISABLED": {
+      "NOTICE": "Phone position is required for the proper functioning of the application. Please enable GPS on \"High Accuracy\" mode.",
+      "TITLE": "Position - GPS disabled"
+    }
+  },
   "SENSORS": {
     "DETAILS": "Details",
     "LIST": "Sensors list",

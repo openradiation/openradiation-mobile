@@ -143,6 +143,17 @@
     "ALERT": "Vous devez vous identifier pour pouvoir saisir manuellemment une mesure.",
     "TITLE": "Saisie manuelle"
   },
+  "POSITION": {
+    "DENIED_ALWAYS": {
+      "NOTICE": "La position de l'appareil est nécessaire au bon fonctionnement de l'application. Merci d'accepter la permission.",
+      "TITLE": "Position - Permission refusée"
+    },
+    "GO_TO_SETTINGS": "Accéder aux paramètres",
+    "GPS_DISABLED": {
+      "NOTICE": "La position de l'appareil est nécessaire au bon fonctionnement de l'application. Merci d'activer le GPS en mode \"Haute Précision\".",
+      "TITLE": "Position - GPS désactivé"
+    }
+  },
   "SENSORS": {
     "DETAILS": "Infos",
     "LIST": "Liste des capteurs",

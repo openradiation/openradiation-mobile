@@ -7,6 +7,7 @@ import { defer, Observable, of } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { take, takeUntil, tap } from 'rxjs/operators';
 import { PositionChanged, StartWatchPosition, StopWatchPosition } from './measures.action';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,8 @@ export class PositionService {
     private actions$: Actions,
     private platform: Platform,
     private store: Store,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private translateService: TranslateService
   ) {
     this.actions$.pipe(ofActionDispatched(StartWatchPosition)).subscribe(() => {
       if (this.currentAlert) {
@@ -77,12 +79,12 @@ export class PositionService {
   private onGPSDeniedAlways() {
     this.alertController
       .create({
-        header: 'Position - Permission refusée',
-        message: `La position de l'appareil est nécessaire au bon fonctionnement de l'application. Merci d'accepter la permission.`,
+        header: this.translateService.instant('POSITION.DENIED_ALWAYS.TITLE'),
+        message: this.translateService.instant('POSITION.DENIED_ALWAYS.NOTICE'),
         backdropDismiss: false,
         buttons: [
           {
-            text: 'Accéder aux paramètres',
+            text: this.translateService.instant('POSITION.GO_TO_SETTINGS'),
             handler: () => {
               this.platform.resume.pipe(take(1)).subscribe(() => this.store.dispatch(new StartWatchPosition()));
               if (this.platform.is('ios')) {
@@ -107,12 +109,12 @@ export class PositionService {
     });
     this.alertController
       .create({
-        header: 'Position - GPS désactivé',
-        message: `La position de l'appareil est nécessaire au bon fonctionnement de l'application. Merci d'activer le GPS.`,
+        header: this.translateService.instant('POSITION.GPS_DISABLED.TITLE'),
+        message: this.translateService.instant('POSITION.GPS_DISABLED.NOTICE'),
         backdropDismiss: false,
         buttons: [
           {
-            text: 'Accéder aux paramètres',
+            text: this.translateService.instant('POSITION.GO_TO_SETTINGS'),
             handler: () => {
               if (this.platform.is('ios')) {
                 this.diagnostic.switchToSettings();
