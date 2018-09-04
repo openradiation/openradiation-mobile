@@ -57,7 +57,7 @@ export class MapPage {
   private loadMap() {
     this.language$.subscribe(language => {
       this.isLoading = true;
-      const url = `${environment.IN_APP_BROWSER_URI.base}${
+      let url = `${environment.IN_APP_BROWSER_URI.base}${
         language === 'fr' || language === 'en' ? '/' + language : ''
       }/${environment.IN_APP_BROWSER_URI.suffix}`;
       if (this.platform.is('cordova')) {
@@ -68,9 +68,7 @@ export class MapPage {
               const zoom = 12;
               const lat = geoposition.coords.latitude.toFixed(7);
               const long = geoposition.coords.longitude.toFixed(7);
-              this.iframeURL = this.domSanitizer.bypassSecurityTrustResourceUrl(
-                `${environment.IN_APP_BROWSER_URI}/${zoom}/${lat}/${long}`
-              );
+              url += `/${environment.IN_APP_BROWSER_URI}/${zoom}/${lat}/${long}`;
             });
           }
         });
