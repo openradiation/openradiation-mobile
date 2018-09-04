@@ -54,6 +54,7 @@
       "NOTICE": "En envoyant cette mesure, vous acceptez que l'ensemble des données correspondant à cette measure (dont votre position GPS, votre peseudo, etc) soit publié dans la base OpenRadiation.",
       "TITLE": "Êtes-vous sûr(e) de vouloir envoyer cette mesure ?"
     },
+    "SEND_ERROR": "Impossible d'envoyer la mesure, veuillez vérifier votre connexion.",
     "SENT": "Publiée",
     "TITLE": "Historique"
   },

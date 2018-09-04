@@ -48,7 +48,7 @@ export class DevicesPage extends AutoUnsubscribePage {
     this.subscriptions.push(
       this.actions$
         .pipe(ofActionDispatched(ConnectDevice))
-        .subscribe((action: ConnectDevice) => (this.connectingDevice = action.device)),
+        .subscribe(({ device }: ConnectDevice) => (this.connectingDevice = device)),
       this.actions$
         .pipe(ofActionSuccessful(ConnectDevice, DeviceConnectionLost, DisconnectDevice))
         .subscribe(() => (this.connectingDevice = undefined))
