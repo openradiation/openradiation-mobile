@@ -112,11 +112,16 @@
                     <img src="assets/img/bg-radiation.png">
                 </div>
             </div>
-            <app-round-button [disabled]="!(currentMeasure.hitsNumber >= hitsAccuracyThreshold.Accurate)"
-                              [src]="currentMeasure.hitsNumber >= hitsAccuracyThreshold.Accurate ? 'assets/img/button-on.png' : 'assets/img/button-off.png'"
-                              (click)="stopScan()">
-                {{'GENERAL.END' | translate}}
-            </app-round-button>
+            <div class="bottom-buttons">
+                <app-round-button [disabled]="!(currentMeasure.hitsNumber >= hitsAccuracyThreshold.Accurate)"
+                                  [src]="currentMeasure.hitsNumber >= hitsAccuracyThreshold.Accurate ? 'assets/img/button-on.png' : 'assets/img/button-off.png'"
+                                  (click)="stopScan()">
+                    {{'GENERAL.END' | translate}}
+                </app-round-button>
+                <div class="side-buttons">
+                    <ion-button fill="clear" class="flat-button cancel" (click)="cancelMeasure()">{{'GENERAL.CANCEL' | translate}}</ion-button>
+                </div>
+            </div>
         </div>
     </ion-content>
 
