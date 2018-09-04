@@ -78,15 +78,7 @@ ion-item {
   font-weight: 200;
   --background-active: transparent;
   --background: transparent;
-  --border-color: white;
-
-  &.item-has-focus {
-    --border-color: #{$second-color};
-    --ion-color-primary: #{$second-color};
-    ion-label {
-      color: $second-color;
-    }
-  }
+  --border-color: transparent;
 
   &.long-label {
     ion-label {
