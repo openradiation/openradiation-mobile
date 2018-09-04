@@ -37,12 +37,17 @@ export class PositionService {
       if (this.platform.is('cordova')) {
         return fromPromise(
           this.diagnostic
-            .isLocationAuthorized()
-            .then(authorized => {
-              if (!authorized) {
-                return this.diagnostic.requestLocationAuthorization();
-              } else {
-                return true;
+            .getLocationAuthorizationStatus()
+            .then(status => {
+              switch (status) {
+                case this.diagnostic.permissionStatus.NOT_REQUESTED:
+                  return this.diagnostic.requestLocationAuthorization();
+                case this.diagnostic.permissionStatus.DENIED:
+                  return this.platform.is('ios')
+                    ? this.diagnostic.permissionStatus.DENIED_ALWAYS
+                    : this.diagnostic.requestLocationAuthorization();
+                default:
+                  return status;
               }
             })
             .then(status => {
@@ -55,7 +60,12 @@ export class PositionService {
                   throw status;
               }
             })
-            .then(() => this.diagnostic.isGpsLocationEnabled())
+            .then(
+              () =>
+                this.platform.is('android')
+                  ? this.diagnostic.isGpsLocationEnabled()
+                  : this.diagnostic.isLocationEnabled()
+            )
             .then(enabled => {
               if (!enabled) {
                 this.onGPSDisabled();
