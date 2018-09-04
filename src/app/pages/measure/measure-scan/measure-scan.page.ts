@@ -17,6 +17,7 @@ import {
 } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
 import { TabsService } from '../../tabs/tabs.service';
+import { DeviceConnectionLost } from '../../../states/devices/devices.action';
 
 @Component({
   selector: 'app-measure-scan',
@@ -57,7 +58,7 @@ export class MeasureScanPage extends AutoUnsubscribePage {
         this.store.dispatch(new StartMeasureScan(connectedDevice)).subscribe();
       }
     });
-    this.actions$.pipe(ofActionSuccessful(CancelMeasure)).subscribe(() =>
+    this.actions$.pipe(ofActionSuccessful(CancelMeasure, DeviceConnectionLost)).subscribe(() =>
       this.navController.navigateRoot([
         'tabs',
         {
