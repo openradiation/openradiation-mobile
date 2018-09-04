@@ -6,12 +6,12 @@
 
 ion-list {
   padding: 10px;
-}
 
-.language {
-  --border-color: transparent;
-  ion-select {
-    --color: white;
-    --icon-color: white;
+  .language {
+    ion-select {
+      --color: white;
+      --icon-color: white;
+    }
   }
+
 }
