@@ -36,7 +36,6 @@ export class HistoryPage extends AutoUnsubscribePage {
     super.ionViewDidEnter();
     this.subscriptions.push(
       this.actions$.pipe(ofActionErrored(PublishMeasure)).subscribe(({ measure }: PublishMeasure) => {
-        console.log('test');
         this.measureBeingSentMap[measure.reportUuid] = false;
         this.toastController
           .create({
