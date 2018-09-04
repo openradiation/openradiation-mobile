@@ -113,6 +113,15 @@ export class DevicesService {
       )
     )
       .pipe(
+        map((rawDevices: RawDevice[]) => {
+          const res: RawDevice[] = [];
+          rawDevices.forEach(rawDevice => {
+            if (!res.find(rawDevice2 => rawDevice2.id === rawDevice.id)) {
+              res.push(rawDevice);
+            }
+          });
+          return res;
+        }),
         map((rawDevices: RawDevice[]) =>
           rawDevices
             .sort((a, b) => b.rssi - a.rssi)
