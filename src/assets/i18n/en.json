@@ -54,6 +54,7 @@
       "NOTICE": "By deleting your measurements, you clean your entire history but you do not delete the published data from the OpenRadiation base",
       "TITLE": "Are you sure you wish to send this measure ?"
     },
+    "SEND_ERROR": "Could not send measure, please check your connection.",
     "SENT": "Sent",
     "TITLE": "History"
   },
