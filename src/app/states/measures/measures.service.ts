@@ -12,7 +12,7 @@ import { DeviceOGKitService } from '../devices/device-og-kit.service';
 import { UserStateModel } from '../user/user.state';
 import { Measure, Step } from './measure';
 import { ApparatusSensorType, MeasureApi } from './measure-api';
-import { StopMeasureScan, UpdateMeasure } from './measures.action';
+import { CancelMeasure, StopMeasureScan, UpdateMeasure } from './measures.action';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +28,7 @@ export class MeasuresService {
 
   startMeasureScan(device: AbstractDevice): Observable<any> {
     let startMeasureScan: Observable<Step>;
-    const stopSignal = this.actions$.pipe(ofActionSuccessful(StopMeasureScan));
+    const stopSignal = this.actions$.pipe(ofActionSuccessful(StopMeasureScan, CancelMeasure), take(1));
     switch (device.deviceType) {
       case DeviceType.OGKit:
         startMeasureScan = this.deviceOGKitService.startMeasureScan(<DeviceOGKit>device, stopSignal);
