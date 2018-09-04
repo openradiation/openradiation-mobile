@@ -112,12 +112,12 @@
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-ble-central": {
-        "BLUETOOTH_USAGE_DESCRIPTION": " "
+        "BLUETOOTH_USAGE_DESCRIPTION": "L'activation du bluetooth est nécessaire pour se connecter aux capteurs. Merci d'accepter la permission."
       },
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-statusbar": {},
       "cordova-plugin-geolocation": {
-        "GEOLOCATION_USAGE_DESCRIPTION": "To locate you"
+        "GEOLOCATION_USAGE_DESCRIPTION": "La position de l'appareil est nécessaire au bon fonctionnement de l'application. Merci d'accepter la permission."
       },
       "cordova.plugins.diagnostic": {},
       "cordova-plugin-network-information": {},
