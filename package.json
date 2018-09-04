@@ -91,6 +91,7 @@
     "codelyzer": "~4.4.2",
     "cordova": "8.0.0",
     "ionic": "4.0.6",
+    "ios-deploy": "^1.9.3",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~3.0.0",
