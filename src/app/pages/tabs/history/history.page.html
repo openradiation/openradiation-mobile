@@ -5,7 +5,7 @@
         <div class="empty-list" *ngIf="measures.length <= 0" [innerHTML]="'HISTORY.NO_MEASURE' | translate">
         </div>
         <ion-list>
-            <ion-item *ngFor="let measure of measures" class="clickable-device" button
+            <ion-item *ngFor="let measure of measures" class="clickable-device" button detail="false"
                       (click)="showDetail(measure)">
                 <ion-label>
                     <div class="date">
