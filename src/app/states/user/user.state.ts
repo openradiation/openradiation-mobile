@@ -31,12 +31,12 @@ export class UserState implements NgxsOnInit {
   }
 
   @Action(LogIn)
-  logIn({ patchState }: StateContext<UserStateModel>, action: LogIn) {
-    return this.userService.logIn(action.login, action.password).pipe(
+  logIn({ patchState }: StateContext<UserStateModel>, { login, password }: LogIn) {
+    return this.userService.logIn(login, password).pipe(
       tap(() =>
         patchState({
-          login: action.login,
-          password: action.password
+          login: login,
+          password: password
         })
       )
     );
@@ -51,8 +51,8 @@ export class UserState implements NgxsOnInit {
   }
 
   @Action(SetLanguage)
-  setLanguage({ getState, patchState }: StateContext<UserStateModel>, action: SetLanguage) {
-    const language = action.language || getState().language || this.userService.getDefaultLanguage();
+  setLanguage({ getState, patchState }: StateContext<UserStateModel>, { language }: SetLanguage) {
+    language = language || getState().language || this.userService.getDefaultLanguage();
     return this.userService.setLanguage(language).pipe(tap(() => patchState({ language })));
   }
 }
