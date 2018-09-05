@@ -29,7 +29,6 @@ export class DeviceOGKit extends AbstractDevice {
 
   constructor(rawDevice: RawDevice) {
     super(rawDevice);
-    console.log(rawDevice);
     const manufacturerData =
       rawDevice.advertising instanceof ArrayBuffer
         ? new Uint8Array(rawDevice.advertising).slice(23, 29)
