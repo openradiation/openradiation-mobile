@@ -245,6 +245,20 @@ export class MeasuresState {
     }
   }
 
+  @Action(UpdateMeasureScanTime)
+  updateMeasureScanTime({ getState, patchState }: StateContext<MeasuresStateModel>, { device }: UpdateMeasureScanTime) {
+    const state = getState();
+    if (state.currentMeasure) {
+      patchState({
+        currentMeasure: {
+          ...state.currentMeasure,
+          endTime: Date.now(),
+          value: this.measuresService.computeRadiationValue(state.currentMeasure, device)
+        }
+      });
+    }
+  }
+
   @Action(StartMeasureScan)
   startMeasureScan({ getState, patchState }: StateContext<MeasuresStateModel>, { device }: StartMeasureScan) {
     const state = getState();
