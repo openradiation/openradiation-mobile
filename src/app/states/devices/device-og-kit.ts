@@ -33,6 +33,6 @@ export class DeviceOGKit extends AbstractDevice {
       rawDevice.advertising instanceof ArrayBuffer
         ? new Uint8Array(rawDevice.advertising).slice(23, 29)
         : new Uint8Array(rawDevice.advertising.kCBAdvDataManufacturerData);
-    this.apparatusId = new TextDecoder('utf8').decode(manufacturerData);
+    this.apparatusId = new TextDecoder('utf8').decode(manufacturerData).replace(/\0/g, '');
   }
 }
