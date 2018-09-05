@@ -30,9 +30,12 @@ export class DeviceAtomTag extends AbstractDevice {
 
   constructor(rawDevice: RawDevice) {
     super(rawDevice);
+    console.log(rawDevice);
     this.apparatusVersion = DeviceType.AtomTag;
-    const data = new Uint8Array(rawDevice.advertising);
-    this.batteryLevel = data[28];
+    if (rawDevice.advertising instanceof ArrayBuffer) {
+      const data = new Uint8Array(rawDevice.advertising);
+      this.batteryLevel = data[28];
+    }
     this.apparatusId = rawDevice.id;
   }
 }
