@@ -107,9 +107,10 @@ export class DevicesState {
     const state = getState();
     patchState({
       availableDevices: [
-        ...action.devices.map(
-          device => state.knownDevices.find(knownDevice => knownDevice.sensorUUID === device.sensorUUID) || device
-        )
+        ...action.devices.map(device => ({
+          ...(state.knownDevices.find(knownDevice => knownDevice.sensorUUID === device.sensorUUID) || device),
+          batteryLevel: device.batteryLevel
+        }))
       ]
     });
   }
