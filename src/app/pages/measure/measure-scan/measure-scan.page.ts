@@ -71,7 +71,7 @@ export class MeasureScanPage extends AutoUnsubscribePage {
           }
         }
       ])
-    )
+    );
   }
 
   updateHitsAccuracy(measure?: Measure) {
