@@ -11,9 +11,9 @@ import { DeviceOGKit } from './device-og-kit';
   providedIn: 'root'
 })
 export class DeviceOGKitService /*extends AbstractDeviceService<DeviceOGKit>*/ {
-  private service = '00002220-0000-1000-8000-00805F9B34FB';
-  private sendCharacteristic = '00002222-0000-1000-8000-00805F9B34FB';
-  private receiveCharacteristic = '00002221-0000-1000-8000-00805F9B34FB';
+  private service = '2220';
+  private sendCharacteristic = '2222';
+  private receiveCharacteristic = '2221';
 
   private SEND_GET_INFO = 0x12;
   private RECEIVE_SENSOR_TYPE = 3;
