@@ -7,6 +7,7 @@ import * as uuid from 'uuid';
 import { DateService } from './date.service';
 import { Measure, MeasureReport } from './measure';
 import {
+  AddMeasureScanStep,
   CancelMeasure,
   DeleteAllMeasures,
   DeleteMeasure,
@@ -25,7 +26,7 @@ import {
   StopMeasureReport,
   StopMeasureScan,
   StopWatchPosition,
-  UpdateMeasure
+  UpdateMeasureScanTime
 } from './measures.action';
 import { MeasuresService } from './measures.service';
 import { PositionService } from './position.service';
@@ -227,8 +228,8 @@ export class MeasuresState {
     });
   }
 
-  @Action(UpdateMeasure)
-  updateMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, action: UpdateMeasure) {
+  @Action(AddMeasureScanStep)
+  addMeasureScanStep({ getState, patchState }: StateContext<MeasuresStateModel>, action: AddMeasureScanStep) {
     const state = getState();
     if (state.currentMeasure && state.currentMeasure.steps) {
       const currentMeasure = { ...state.currentMeasure, steps: [...state.currentMeasure.steps, action.step] };
