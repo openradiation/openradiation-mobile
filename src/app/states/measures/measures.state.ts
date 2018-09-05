@@ -154,20 +154,20 @@ export class MeasuresState {
   }
 
   @Action(PositionChanged)
-  positionChanged({ patchState }: StateContext<MeasuresStateModel>, action: PositionChanged) {
+  positionChanged({ patchState }: StateContext<MeasuresStateModel>, { position }: PositionChanged) {
     patchState({
-      currentPosition: action.position
+      currentPosition: position
     });
   }
 
   @Action(StartMeasure)
-  startMeasure({ patchState }: StateContext<MeasuresStateModel>, action: StartMeasure) {
+  startMeasure({ patchState }: StateContext<MeasuresStateModel>, { device }: StartMeasure) {
     patchState({
       currentMeasure: new Measure(
-        action.device.apparatusId,
-        action.device.apparatusVersion,
-        action.device.apparatusSensorType,
-        action.device.apparatusTubeType,
+        device.apparatusId,
+        device.apparatusVersion,
+        device.apparatusSensorType,
+        device.apparatusTubeType,
         this.device.uuid,
         this.device.platform,
         this.device.version,
@@ -229,13 +229,13 @@ export class MeasuresState {
   }
 
   @Action(AddMeasureScanStep)
-  addMeasureScanStep({ getState, patchState }: StateContext<MeasuresStateModel>, action: AddMeasureScanStep) {
+  addMeasureScanStep({ getState, patchState }: StateContext<MeasuresStateModel>, { step, device }: AddMeasureScanStep) {
     const state = getState();
     if (state.currentMeasure && state.currentMeasure.steps) {
-      const currentMeasure = { ...state.currentMeasure, steps: [...state.currentMeasure.steps, action.step] };
-      currentMeasure.endTime = action.step.ts;
-      currentMeasure.hitsNumber += action.step.hitsNumber;
-      currentMeasure.value = this.measuresService.computeRadiationValue(currentMeasure, action.device);
+      const currentMeasure = { ...state.currentMeasure, steps: [...state.currentMeasure.steps, step] };
+      currentMeasure.endTime = step.ts;
+      currentMeasure.hitsNumber += step.hitsNumber;
+      currentMeasure.value = this.measuresService.computeRadiationValue(currentMeasure, device);
       currentMeasure.temperature =
         currentMeasure.steps.map(step => step.temperature).reduce((acc, current) => acc + current) /
         currentMeasure.steps.length;
@@ -246,10 +246,10 @@ export class MeasuresState {
   }
 
   @Action(StartMeasureScan)
-  startMeasureScan({ getState, patchState }: StateContext<MeasuresStateModel>, action: StartMeasureScan) {
+  startMeasureScan({ getState, patchState }: StateContext<MeasuresStateModel>, { device }: StartMeasureScan) {
     const state = getState();
     if (state.currentMeasure && state.currentPosition) {
-      return this.measuresService.startMeasureScan(action.device).pipe(
+      return this.measuresService.startMeasureScan(device).pipe(
         tap(() => {
           patchState({
             currentMeasure: {
@@ -362,19 +362,19 @@ export class MeasuresState {
 
   // TODO Handle case with no connection
   @Action(PublishMeasure)
-  publishMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, action: PublishMeasure) {
-    if (!action.measure.sent) {
+  publishMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, { measure }: PublishMeasure) {
+    if (!measure.sent) {
       const state = getState();
-      const index = state.measures.findIndex(measure => measure.reportUuid === action.measure.reportUuid);
+      const index = state.measures.findIndex(measure => measure.reportUuid === measure.reportUuid);
       if (index !== -1) {
-        return this.measuresService.publishMeasure(action.measure).pipe(
+        return this.measuresService.publishMeasure(measure).pipe(
           tap(() => {
             const measures = [...state.measures];
             measures.splice(index, 1);
             patchState({
               measures: [
                 ...state.measures.slice(0, index),
-                { ...action.measure, sent: true },
+                { ...measure, sent: true },
                 ...state.measures.slice(index + 1)
               ]
             });
@@ -386,10 +386,10 @@ export class MeasuresState {
   }
 
   @Action(DeleteMeasure)
-  deleteMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, action: DeleteMeasure) {
-    if (!action.measure.sent) {
+  deleteMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, { measure }: DeleteMeasure) {
+    if (!measure.sent) {
       const state = getState();
-      const index = state.measures.findIndex(measure => measure.reportUuid === action.measure.reportUuid);
+      const index = state.measures.findIndex(measure => measure.reportUuid === measure.reportUuid);
       if (index !== -1) {
         patchState({
           measures: [...state.measures.slice(0, index), ...state.measures.slice(index + 1)]
