@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { shareReplay, take, takeUntil } from 'rxjs/operators';
+import { interval, Observable } from 'rxjs';
+import { shareReplay, take, takeUntil, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { AbstractDevice, DeviceType } from '../devices/abstract-device';
 import { DeviceAtomTag } from '../devices/device-atom-tag';
@@ -12,7 +12,8 @@ import { DeviceOGKitService } from '../devices/device-og-kit.service';
 import { UserStateModel } from '../user/user.state';
 import { Measure, Step } from './measure';
 import { ApparatusSensorType, MeasureApi } from './measure-api';
-import { StopMeasureScan, UpdateMeasure } from './measures.action';
+import { AddMeasureScanStep, CancelMeasure, StopMeasureScan, UpdateMeasureScanTime } from './measures.action';
+import { DeviceConnectionLost } from '../devices/devices.action';
 
 @Injectable({
   providedIn: 'root'
@@ -27,22 +28,42 @@ export class MeasuresService {
   ) {}
 
   startMeasureScan(device: AbstractDevice): Observable<any> {
-    let startMeasureScan: Observable<Step>;
-    const stopSignal = this.actions$.pipe(ofActionSuccessful(StopMeasureScan));
+    const stopSignal = this.actions$.pipe(
+      ofActionSuccessful(StopMeasureScan, CancelMeasure),
+      take(1)
+    );
+    this.actions$
+      .pipe(
+        ofActionSuccessful(DeviceConnectionLost),
+        take(1)
+      )
+      .subscribe(() => this.store.dispatch(new CancelMeasure()));
+    return this.detectHits(device, stopSignal).pipe(
+      take(1),
+      tap(() =>
+        interval(1000)
+          .pipe(takeUntil(stopSignal))
+          .subscribe(() => this.store.dispatch(new UpdateMeasureScanTime(device)))
+      )
+    );
+  }
+
+  private detectHits(device: AbstractDevice, stopSignal: Observable<any>): Observable<Step> {
+    let detectHits: Observable<Step>;
     switch (device.deviceType) {
       case DeviceType.OGKit:
-        startMeasureScan = this.deviceOGKitService.startMeasureScan(<DeviceOGKit>device, stopSignal);
+        detectHits = this.deviceOGKitService.startMeasureScan(<DeviceOGKit>device, stopSignal);
         break;
       case DeviceType.AtomTag:
-        startMeasureScan = this.deviceAtomTagService.startMeasureScan(<DeviceAtomTag>device, stopSignal);
+        detectHits = this.deviceAtomTagService.startMeasureScan(<DeviceAtomTag>device, stopSignal);
         break;
     }
-    startMeasureScan = startMeasureScan!.pipe(
+    detectHits = detectHits!.pipe(
       takeUntil(stopSignal),
       shareReplay()
     );
-    startMeasureScan.subscribe(step => this.store.dispatch(new UpdateMeasure(step, device)));
-    return startMeasureScan.pipe(take(1));
+    detectHits.subscribe(step => this.store.dispatch(new AddMeasureScanStep(step, device)));
+    return detectHits;
   }
 
   computeRadiationValue(measure: Measure, device: AbstractDevice): number {
