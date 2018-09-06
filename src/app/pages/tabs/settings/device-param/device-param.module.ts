@@ -5,10 +5,10 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
+import { TranslateModule } from '@ngx-translate/core';
 import { NgxsFormPluginModule } from '@ngxs/form-plugin';
 import { ComponentsModule } from '../../../../components/components.module';
 import { DeviceParamPage } from './device-param.page';
-import { TranslateModule } from '@ngx-translate/core';
 
 const routes: Routes = [
   {

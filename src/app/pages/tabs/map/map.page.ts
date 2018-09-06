@@ -4,11 +4,11 @@ import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { Platform } from '@ionic/angular';
+import { Select } from '@ngxs/store';
+import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { Select } from '@ngxs/store';
 import { UserState } from '../../../states/user/user.state';
-import { Observable } from 'rxjs';
 
 /**
  * Constants from cordova-plugin-network-information to get network types

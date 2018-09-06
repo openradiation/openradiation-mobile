@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BLE } from '@ionic-native/ble/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { AlertController, Platform, ToastController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, ofActionSuccessful, Store } from '@ngxs/store';
 import { merge, Observable, timer } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
@@ -31,7 +32,6 @@ import {
   StartDiscoverDevices,
   StopDiscoverDevices
 } from './devices.action';
-import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
