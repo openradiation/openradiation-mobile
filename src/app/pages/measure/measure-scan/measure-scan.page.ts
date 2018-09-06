@@ -8,6 +8,7 @@ import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
 import { HitsAccuracy, HitsAccuracyThreshold, Measure } from '../../../states/measures/measure';
 import {
+  CancelMeasure,
   PositionChanged,
   StartMeasureScan,
   StartWatchPosition,
@@ -56,6 +57,20 @@ export class MeasureScanPage extends AutoUnsubscribePage {
         this.store.dispatch(new StartMeasureScan(connectedDevice)).subscribe();
       }
     });
+    this.actions$.pipe(ofActionSuccessful(CancelMeasure)).subscribe(() =>
+      this.navController.navigateRoot([
+        'tabs',
+        {
+          outlets: {
+            home: 'home',
+            history: null,
+            settings: null,
+            map: null,
+            other: null
+          }
+        }
+      ])
+    );
   }
 
   updateHitsAccuracy(measure?: Measure) {
@@ -83,5 +98,9 @@ export class MeasureScanPage extends AutoUnsubscribePage {
         this.store.dispatch(new StopWatchPosition());
       })
     );
+  }
+
+  cancelMeasure() {
+    this.store.dispatch(new CancelMeasure());
   }
 }
