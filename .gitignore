@@ -33,5 +33,6 @@ documentation/
 Thumbs.db
 UserInterfaceState.xcuserstate
 
-# Hide prod API_KEY
 src/environments/environment.prod.ts
+build.json
+openradiation.keystore
