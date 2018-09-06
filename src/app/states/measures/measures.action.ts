@@ -44,9 +44,14 @@ export class CancelMeasure {
   static readonly type = '[Measures] Cancel measure';
 }
 
-export class UpdateMeasure {
-  static readonly type = '[Measures] Update measure';
+export class AddMeasureScanStep {
+  static readonly type = '[Measures] Add measure scan step';
   constructor(public step: Step, public device: AbstractDevice) {}
+}
+
+export class UpdateMeasureScanTime {
+  static readonly type = '[Measures] Update measure scan time';
+  constructor(public device: AbstractDevice) {}
 }
 
 export class StartMeasureScan {
