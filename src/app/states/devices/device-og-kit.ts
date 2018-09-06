@@ -1,3 +1,4 @@
+import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
 import {
   AbstractDevice,
   DeviceParams,
@@ -6,7 +7,6 @@ import {
   DeviceType,
   RawDevice
 } from './abstract-device';
-import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
 
 export class DeviceOGKit extends AbstractDevice {
   readonly deviceType = DeviceType.OGKit;

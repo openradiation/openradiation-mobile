@@ -1,12 +1,12 @@
 import { Component, ElementRef } from '@angular/core';
 import { AlertController, ToastController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, ofActionErrored, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
+import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { Measure } from '../../../states/measures/measure';
 import { DeleteAllMeasures, DeleteMeasure, PublishMeasure } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
-import { TranslateService } from '@ngx-translate/core';
-import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { TabsService } from '../tabs.service';
 
 @Component({
