@@ -1,0 +1,184 @@
+{
+  "ABOUT": {
+    "MEASURE": {
+      "NOTICE": "L’application OpenRadiation, connectée en Bluetooth avec le capteur OpenRadiation (voir les capteurs compatibles sur <a target=\"_blank\" href=\"https://www.openradiation.org\">www.openradiation.org</a>), vous permet de mesurer la radioactivité, mais aussi de participer à un projet de science citoyenne, en contribuant à la constitution de la base collaborative OpenRadiation, pour une meilleure connaissance de la radioactivité dans l’environnement. Nous vous invitons ainsi à créer un compte utilisateur sur <a target=\"_blank\" href=\"https://www.openradiation.org/user/register\">www.openradiation.org</a>, puis à paramétrer ce compte dans l’application et à activer la publication automatique des mesures (menu paramètres).",
+      "TITLE": "Mesure de la radioactivité"
+    },
+    "MEASURES_HOW_TO": {
+      "NOTICE": "Allumez votre capteur, démarrez l’application, puis connectez-la en Bluetooth au capteur. OpenRadiation est une base de données dont l’objectif est de cartographier la radioactivité dans l’environnement. Afin que les données soient homogènes, comparables et les plus représentatives possible, les mesures que vous publiez sur OpenRadiation doivent idéalement être prises en extérieur, si possible éloignées d’une habitation, et en positionnant le capteur à environ 1 mètre du sol. Plus la durée de la mesure est longue, meilleure est la statistique et plus la mesure est précise : un indicateur vous permet d’apprécier la fiabilité de la mesure en direct. Une fois la mesure réalisée, vous pouvez qualifier l’environnement dans lequel elle a été prise (à l’intérieur, dans un avion, sur une route, à la campagne, en ville) et donner des indications supplémentaires avant de la publier. Ces indications permettront d’apprécier plus finement la fiabilité de la mesure.",
+      "TITLE": "Comment prendre des mesures ?"
+    },
+    "OPENRADIATION_PROJECT": {
+      "NOTICE": "Openradiation est un projet collaboratif dont les partenaires sont l’IFFO-RME - réseau de formateurs Risques Majeurs éducation -, l’IRSN - expert public en matière de recherche et d’expertise sur les risques nucléaires et radiologiques -, Planète Sciences – association acteur de la culture scientifique et technique vers les jeunes -, et l'’UPMC - Université Pierre et Marie Curie avec en particulier le fablab PMClab -.<br/>En savoir plus sur <a target=\"_blank\" href=\"https://www.openradiation.org/qui-sommes-nous\">www.openradiation.org/qui-sommes-nous</a>.",
+      "TITLE": "Le projet OpenRadiation"
+    },
+    "TITLE": "À propos"
+  },
+  "BLUETOOTH": {
+    "GPS_DISABLED": {
+      "NOTICE": "Le bluetooth est nécessaire pour la communication avec les capteurs. Merci de l'activer.",
+      "TITLE": "Bluetooth désactivé"
+    }
+  },
+  "GENERAL": {
+    "ADD_TAG": "Ajouter un tag",
+    "AVAILABLE": "Disponible",
+    "CANCEL": "Annuler",
+    "CLICK_HERE": "Cliquez ici",
+    "CONNECTED": "Connecté",
+    "CONNEXION_ERROR": "Connexion impossible : {{message}}",
+    "DATE": "Date",
+    "END": "Fin",
+    "ERROR": "Erreur",
+    "GOOD": "Bon",
+    "GO_TO_SETTINGS": "Accéder aux paramètres",
+    "MEDIUM": "Moyen",
+    "NO": "Non",
+    "OK": "Ok",
+    "SHARE": "Partager",
+    "SUBMIT": "Valider",
+    "TIMESTAMP": "Timestamp",
+    "UNAVAILABLE": "Indisponible",
+    "YES": "Oui"
+  },
+  "HISTORY": {
+    "DELETE": {
+      "NOTICE": "Êtes-vous sûr(e) de vouloir supprimer cette mesure ?"
+    },
+    "DELETE_ALL": {
+      "NOTICE": "En supprimant vos mesures, vous nettoyez tout votre historique mais vous ne supprimez pas les données déjà publiées de la base OpenRadiation.",
+      "TITLE": "Êtes-vous sûr de vouloir supprimer toutes les mesures ?"
+    },
+    "NO_MEASURE": "Aucune mesure<br>enregistrée",
+    "SEND": {
+      "NOTICE": "En envoyant cette mesure, vous acceptez que l'ensemble des données correspondant à cette measure (dont votre position GPS, votre peseudo, etc) soit publié dans la base OpenRadiation.",
+      "TITLE": "Êtes-vous sûr(e) de vouloir envoyer cette mesure ?"
+    },
+    "SEND_ERROR": "Impossible d'envoyer la mesure, veuillez vérifier votre connexion.",
+    "SENT": "Publiée",
+    "TITLE": "Historique"
+  },
+  "HOME": {
+    "CONNECTED_SENSOR": "Capteur connecté",
+    "NO_SENSORS": "Pas de capteur",
+    "TITLE": "mesurer la radioactivité"
+  },
+  "LANGUAGE": {
+    "ENGLISH": "English",
+    "FRENCH": "Français",
+    "TITLE": "Langue"
+  },
+  "LEGAL_NOTICE": {
+    "EDITOR": {
+      "NOTICE": "L’application OpenRadiation est développée principalement par IT Link, avec le soutien de l’IRSN et de l’UPMC. N’hésitez pas à nous faire parvenir vos commentaires sur cette application. Le code source de l’application est publié en <a target=\"_blank\" href=\"https://www.openradiation.org/developpeurs\">opensource</a>.<br>Retrouvez l’ensemble des mentions légales et les informations de contact sur <a target=\"_blank\" href=\"https://www.openradiation.org/mentions-legales\">www.openradiation.org/mentions-legales</a>.<br><br>Version actuelle : {{appNameVersion}}.",
+      "TITLE": "Éditeur"
+    },
+    "MEASURES_PRECAUTIONS": {
+      "NOTICE": "La Base OpenRadiation est une base de données participative constituée avec des valeurs brutes restituées sans filtre. Les Partenaires OpenRadiation ne peuvent être tenus responsables des valeurs affichées et des conséquences liées à l'interprétation ou à l'utilisation qui peut être faite de ces valeurs. <br>Par ailleurs, les mesures que vous prenez avec l'Application OpenRadiation correspondent à des mesures de l'environnement faites à un moment donné et dans des conditions spécifiques. Elles ne sont pas nécessairement représentatives de votre exposition aux rayonnements ionisants sur le long terme.",
+      "TITLE": "Précaution concernant les mesures"
+    },
+    "TERMS_OF_USE": {
+      "NOTICE": "Vous participez à la base de données collaborative OpenRadiation dès lors que vous publiez des mesures par l’application smartphone, que la publication soit automatique ou déclenchée par une action manuelle. <br>L’objet du projet OpenRadiation étant la création d’une base de données collaborative relative à la radioactivité ambiante, tout utilisateur de l’application mobile accepte explicitement de partager les données qu’il relève, que ce soit par une publication automatique ou déclenchée par une action manuelle.<br>La base de données OpenRadiation est publiée en intégralité sous la license <a target=\"_blank\" href=\"https://www.openradiation.org/conditions-dutilisation#licence_odbl\">ODC-ODbL (Open Database License)</a>. La plupart des données que vous soumettez participent à la constitution de la base de données OpenRadiation.<br>Vous vous engagez à respecter la législation en cours concernant notamment le droit d'auteur. L’utilisation de la base de données OpenRadiation vous engage à respecter des règles d’éthique (propos insultants, respect de la vie privée, ...).<br>OpenRadiation se réserve le droit de supprimer un contenu qui lui serait signalé ne respectant pas les consignes ci-dessus, ceci sans avertissement.<br>Vous pouvez retrouver le détail de l’ensemble des conditions d’utilisation sur le site <a target=\"_blank\" href=\"https://www.openradiation.org/conditions-dutilisation\">www.openradiation.org/conditions-dutilisation</a>.",
+      "TITLE": "Conditions d'utilisation"
+    },
+    "TITLE": "Mentions légales"
+  },
+  "LOG_IN": {
+    "LOGGED_AS": "Identifié comme",
+    "LOG_OUT": "Se déconnecter",
+    "NOTICE": {
+      "PART1": "Si vous avez un compte utilisateur sur <a target=\"_blank\" href=\"https://www.openradiation.org\">www.openradiation.org</a>, vous pouvez renseigner ici les identifiants (nom d'utilisateur et mot de passe) de votre compte. Ceci vous permet d’associer les mesures que vous publiez à votre compte utilisateur : ainsi vous pourrez retrouver facilement l’ensemble de vos mesures sur <a target=\"_blank\" href=\"https://www.openradiation.org\">www.openradiation.org</a>.",
+      "PART2": "Vous pourrez également « tagger » ou ajouter une description à vos mesures.<br/>De plus, en publiant des mesures en étant identifié, vous rendez la base collaborative OpenRadiation plus fiable.",
+      "PART3": "Si vous ne l’avez pas déjà fait, nous vous invitons à créer un compte sur <a target=\"_blank\" href=\"https://www.openradiation.org/user/register\">www.openradiation.org</a>, puis à le paramétrer ici (synchronisation ~5 min)."
+    },
+    "NOT_LOGGED": "Non identifié",
+    "PASSWORD": "Mot de passe",
+    "TITLE": "S'identifier",
+    "USERNAME": "Nom d'utilisateur",
+    "USER_ACCOUNT": "Compte utilisateur",
+    "WRONG_CREDENTIALS": "Identifiants incorrects"
+  },
+  "MAP": {
+    "NO_CONNECTION": "Aucune connexion disponible pour afficher la carte"
+  },
+  "MEASURES": {
+    "AUTO_PUBLISH": "Publication automatique des mesures",
+    "AUTO_PUBLISH_NOTICE": {
+      "PART1": "En activant la publication automatique des mesures, les mesures que vous faites et les données associées sont automatiquement envoyées à la base collaborative OpenRadiation, et publiées sous licence <a target=\"_blank\" href=\"https://www.openradiation.org/les-donnees\">ODC-ODbL (Open Database License)</a>.",
+      "PART2": "Les données transmises correspondent aux données que vous saisissez, ainsi que des informations sur le modèle et l'identifiant du capteur et/ou du téléphone utilisé, votre nom d'utilisateur, ainsi que la position GPS au moment de la mesure (voir le détail sur <a target=\"_blank\" href=\"https://www.openradiation.org/conditions-dutilisation\">www.openradiation.org/conditions-dutilisation</a>)."
+    },
+    "DESCRIPTION": "Description de la mesure",
+    "DOSE_RATE": "Débit de dose",
+    "DOSE_RATE_UNIT": "μSvh",
+    "DURATION": "Durée",
+    "END_LATITUDE": "Latitude de fin",
+    "END_LONGITUDE": "Longitude de fin",
+    "ENVIRONMENT": {
+      "CITY": "En ville",
+      "COUNTRYSIDE": "À la campagne",
+      "INSIDE": "À l'intérieur",
+      "ON_THE_ROAD": "Sur la route",
+      "PLANE": "En avion",
+      "TITLE": "Environnement de la mesure"
+    },
+    "EXPERT": "Expert",
+    "EXPERT_MODE": "Mode expert",
+    "FIABILITY": "Fiabilité",
+    "HITS_NUMBER": "Coups",
+    "HITS_PER_MIN": "Coups/min",
+    "INIT": "Initialisation",
+    "MEASURE": "Mesure",
+    "MEASURE_START": "Début de la mesure",
+    "ONGOING": "Mesure en cours",
+    "SENSOR_POSITION": {
+      "1_METER_HIGH": "À 1 mètre du sol",
+      "FLOOR": "Au sol",
+      "TITLE": "Position du capteur"
+    },
+    "SENSOR_TEMPERATURE": "Température capteur",
+    "START_LATITUDE": "Latitude de début",
+    "START_LONGITUDE": "Longitude de début",
+    "TAG_LIST": "Liste des tags",
+    "TEMPERATURE": "T° (°C)",
+    "TEMPERATURE_AVERAGE": "Température moyenne",
+    "TITLE": "Mesures",
+    "VOLTAGE": "Tension (V)",
+    "WEATHER": {
+      "NO_RAIN": "Pas de pluie",
+      "RAIN": "Pluie",
+      "TITLE": "Météo"
+    }
+  },
+  "MEASURE_MANUAL": {
+    "ALERT": "Vous devez vous identifier pour pouvoir saisir manuellemment une mesure.",
+    "TITLE": "Saisie manuelle"
+  },
+  "POSITION": {
+    "DENIED_ALWAYS": {
+      "NOTICE": "La position de l'appareil est nécessaire au bon fonctionnement de l'application. Merci d'accepter la permission.",
+      "TITLE": "Position - Permission refusée"
+    },
+    "GPS_DISABLED": {
+      "NOTICE": "La position de l'appareil est nécessaire au bon fonctionnement de l'application. Merci d'activer le GPS en mode \"Haute Précision\".",
+      "TITLE": "Position - GPS désactivé"
+    }
+  },
+  "SENSORS": {
+    "CONNECTION_LOST": "Connexion avec le capteur perdue",
+    "DETAILS": "Infos",
+    "LIST": "Liste des capteurs",
+    "PARAM": {
+      "AUDIO_HITS": "Signal audio pour les coups",
+      "VIBRATION_HITS": "Vibration pour les coups",
+      "VISUAL_HITS": "Signal visuel pour les coups"
+    },
+    "SEARCH": "Recherche des capteurs",
+    "TITLE": "Capteurs",
+    "TUBE_TYPE": "Type de tube : ",
+    "TYPE": "Type sensor : ",
+    "VERSION": "Version : "
+  },
+  "SETTINGS": {
+    "TITLE": "Paramètres"
+  }
+}

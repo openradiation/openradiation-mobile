@@ -1,0 +1,14 @@
+<app-header [backButton]="true" (back)="goBack()">{{'MEASURES.TITLE' | translate}}</app-header>
+
+<ion-content>
+    <div class="notice" [innerHTML]="'MEASURES.AUTO_PUBLISH_NOTICE.PART1' | translate">
+    </div>
+    <div class="notice" [innerHTML]="'MEASURES.AUTO_PUBLISH_NOTICE.PART2' | translate">
+    </div>
+    <ion-list>
+        <ion-item class="no-padding">
+            <ion-label>{{'MEASURES.AUTO_PUBLISH' | translate}}</ion-label>
+            <ion-toggle [ngModel]="autoPublish$ | async" (ngModelChange)="toggleAutoPublish($event)"></ion-toggle>
+        </ion-item>
+    </ion-list>
+</ion-content>

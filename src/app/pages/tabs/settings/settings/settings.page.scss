@@ -1,0 +1,16 @@
+@import 'src/theme/variables';
+
+.user-account {
+  background-color: $second-color;
+}
+
+ion-list {
+  padding: 10px;
+
+  .language {
+    ion-select {
+      --color: white;
+      --icon-color: white;
+    }
+  }
+}

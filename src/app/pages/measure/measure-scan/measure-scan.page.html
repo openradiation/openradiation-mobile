@@ -1,0 +1,128 @@
+<ng-container *ngIf="currentMeasure$ | async as currentMeasure">
+    <app-header>
+        <app-gps-indicator *ngIf="currentMeasure.startTime" other [accuracy]="currentMeasure.accuracy"></app-gps-indicator>
+    </app-header>
+
+    <ion-content>
+        <div class="content">
+            <div class="category">
+                <ng-template #measureScanNotStarted>
+                    -
+                </ng-template>
+                <div class="item">
+                    <div class="label">
+                        {{'MEASURES.MEASURE_START' | translate}}
+                    </div>
+                    <div class="value">
+                        <ng-container *ngIf="currentMeasure.startTime; else measureScanNotStarted">
+                            {{currentMeasure.startTime | date: 'HH:mm:SS'}}
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="separator"></div>
+                <div class="item temperature">
+                    <div class="label">
+                        {{'MEASURES.SENSOR_TEMPERATURE' | translate}}
+                    </div>
+                    <div class="value">
+                        <ng-container
+                                *ngIf="currentMeasure.steps && currentMeasure.steps.length > 0; else measureScanNotStarted">
+                            {{currentMeasure.steps[currentMeasure.steps.length - 1].temperature | number : '1.2-2'}}
+                        </ng-container>
+                    </div>
+                    <div class="icon">
+                        <img src="assets/img/icon-temp.png">
+                    </div>
+                </div>
+            </div>
+            <div class="accuracy">
+                <div class="label">
+                    {{'MEASURES.FIABILITY' | translate | uppercase}}
+                </div>
+                <div class="accuracy-indicator">
+                    <div class="accuracy-indicator-bar" [ngStyle]="{'width.%': hitsAccuracyWidth}"
+                         [ngClass]="hitsAccuracy">
+                    </div>
+                </div>
+            </div>
+            <div class="category">
+                <div class="item">
+                    <div class="label">
+                        {{'MEASURES.HITS_NUMBER' | translate}}
+                    </div>
+                    <div class="value">
+                        <ng-container *ngIf="currentMeasure.startTime; else measureScanNotStarted">
+                            {{currentMeasure.hitsNumber}}
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="separator"></div>
+                <div class="item">
+                    <div class="label">
+                        {{'MEASURES.HITS_PER_MIN' | translate}}
+                    </div>
+                    <div class="value">
+                        <ng-container
+                                *ngIf="currentMeasure.endTime && currentMeasure.startTime && currentMeasure.endTime > currentMeasure.startTime; else measureScanNotStarted">
+                            {{(currentMeasure.hitsNumber / (currentMeasure.endTime - currentMeasure.startTime)) * 1000 *
+                            60 |
+                            number: '1.2-2'}}
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="item duration">
+                    <div class="label">
+                        {{'MEASURES.DURATION' | translate}}
+                    </div>
+                    <div class="value">
+                        <ng-container
+                                *ngIf="currentMeasure.endTime && currentMeasure.startTime; else measureScanNotStarted">
+                            {{(currentMeasure.endTime - currentMeasure.startTime) | duration}}
+                        </ng-container>
+                    </div>
+                    <div class="icon">
+                        <img src="assets/img/icon-duration.png">
+                    </div>
+                </div>
+            </div>
+            <div class="radiation">
+                <ng-container *ngIf="currentMeasure.hitsNumber <= hitsAccuracyThreshold.Good; else hitsAccuracyMedium">
+                    <div class="start">
+                        <ng-container *ngIf="currentMeasure.startTime; else measureInit">
+                            {{'MEASURES.ONGOING' | translate}}
+                        </ng-container>
+                        <ng-template #measureInit>
+                            {{'MEASURES.INIT' | translate}}
+                        </ng-template>
+                    </div>
+                </ng-container>
+                <ng-template #hitsAccuracyMedium>
+                    <div class="label">
+                        {{'MEASURES.DOSE_RATE' | translate | uppercase}}
+                    </div>
+                    <div class="value">
+                        {{currentMeasure.value | number: '1.3-3'}}
+                    </div>
+                    <div class="unit">
+                        {{'MEASURES.DOSE_RATE_UNIT' | translate}}
+                    </div>
+                </ng-template>
+                <div class="background">
+                    <img src="assets/img/bg-radiation.png">
+                    <img src="assets/img/bg-radiation.png">
+                </div>
+            </div>
+            <div class="bottom-buttons">
+                <app-round-button [disabled]="!(currentMeasure.hitsNumber >= hitsAccuracyThreshold.Accurate)"
+                                  [src]="currentMeasure.hitsNumber >= hitsAccuracyThreshold.Accurate ? 'assets/img/button-on.png' : 'assets/img/button-off.png'"
+                                  (click)="stopScan()">
+                    {{'GENERAL.END' | translate}}
+                </app-round-button>
+                <div class="side-buttons">
+                    <ion-button fill="clear" class="flat-button cancel" (click)="cancelMeasure()">{{'GENERAL.CANCEL' | translate}}</ion-button>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+
+</ng-container>
