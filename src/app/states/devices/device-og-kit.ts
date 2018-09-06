@@ -1,3 +1,4 @@
+import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
 import {
   AbstractDevice,
   DeviceParams,
@@ -6,7 +7,6 @@ import {
   DeviceType,
   RawDevice
 } from './abstract-device';
-import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
 
 export class DeviceOGKit extends AbstractDevice {
   readonly deviceType = DeviceType.OGKit;
@@ -29,7 +29,10 @@ export class DeviceOGKit extends AbstractDevice {
 
   constructor(rawDevice: RawDevice) {
     super(rawDevice);
-    const manufacturerData = new Uint8Array(rawDevice.advertising).slice(23, 29);
-    this.apparatusId = new TextDecoder('utf8').decode(manufacturerData);
+    const manufacturerData =
+      rawDevice.advertising instanceof ArrayBuffer
+        ? new Uint8Array(rawDevice.advertising).slice(23, 29)
+        : new Uint8Array(rawDevice.advertising.kCBAdvDataManufacturerData);
+    this.apparatusId = new TextDecoder('utf8').decode(manufacturerData).replace(/\0/g, '');
   }
 }

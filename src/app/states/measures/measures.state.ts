@@ -237,8 +237,9 @@ export class MeasuresState {
       currentMeasure.hitsNumber += step.hitsNumber;
       currentMeasure.value = this.measuresService.computeRadiationValue(currentMeasure, device);
       currentMeasure.temperature =
-        currentMeasure.steps.map(step => step.temperature).reduce((acc, current) => acc + current) /
-        currentMeasure.steps.length;
+        currentMeasure.steps
+          .map(currentMeasureStep => currentMeasureStep.temperature)
+          .reduce((acc, current) => acc + current) / currentMeasure.steps.length;
       patchState({
         currentMeasure
       });
@@ -374,12 +375,11 @@ export class MeasuresState {
     }
   }
 
-  // TODO Handle case with no connection
   @Action(PublishMeasure)
   publishMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, { measure }: PublishMeasure) {
     if (!measure.sent) {
       const state = getState();
-      const index = state.measures.findIndex(measure => measure.reportUuid === measure.reportUuid);
+      const index = state.measures.findIndex(stateMeasure => stateMeasure.reportUuid === measure.reportUuid);
       if (index !== -1) {
         return this.measuresService.publishMeasure(measure).pipe(
           tap(() => {
@@ -403,7 +403,7 @@ export class MeasuresState {
   deleteMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, { measure }: DeleteMeasure) {
     if (!measure.sent) {
       const state = getState();
-      const index = state.measures.findIndex(measure => measure.reportUuid === measure.reportUuid);
+      const index = state.measures.findIndex(stateMeasure => stateMeasure.reportUuid === measure.reportUuid);
       if (index !== -1) {
         patchState({
           measures: [...state.measures.slice(0, index), ...state.measures.slice(index + 1)]

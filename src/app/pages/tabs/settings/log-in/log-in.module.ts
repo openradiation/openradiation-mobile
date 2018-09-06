@@ -5,9 +5,9 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
+import { TranslateModule } from '@ngx-translate/core';
 import { ComponentsModule } from '../../../../components/components.module';
 import { LogInPage } from './log-in.page';
-import { TranslateModule } from '@ngx-translate/core';
 
 const routes: Routes = [
   {

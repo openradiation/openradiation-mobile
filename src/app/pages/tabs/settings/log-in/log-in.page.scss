@@ -7,6 +7,18 @@ ion-content {
   --padding-start: 20px;
 }
 
+ion-item {
+  --border-color: white;
+
+  &.item-has-focus {
+    --border-color: #{$second-color};
+    --ion-color-primary: #{$second-color};
+    ion-label {
+      color: $second-color;
+    }
+  }
+}
+
 .notice {
   color: white;
   text-align: justify;

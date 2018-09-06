@@ -3,4 +3,11 @@
 ion-tabs {
   --ion-tabbar-text-color: #{transparentize($second-color, 0.6)};
   --ion-tabbar-text-color-active: #{$second-color};
+  --ion-color-primary: #{$second-color};
+}
+
+.ios .keyboard-open {
+  :host {
+    margin-bottom: -50px;
+  }
 }

@@ -2,6 +2,7 @@ import { Component, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, ToastController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { catchError, take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../../components/auto-unsubscribe/auto-unsubscribe.page';
@@ -9,7 +10,6 @@ import { ErrorResponse, ErrorResponseCode } from '../../../../states/measures/er
 import { StartManualMeasure } from '../../../../states/measures/measures.action';
 import { LogIn } from '../../../../states/user/user.action';
 import { TabsService } from '../../tabs.service';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-log-in',

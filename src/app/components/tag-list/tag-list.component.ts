@@ -47,7 +47,6 @@ export class TagListComponent implements ControlValueAccessor {
   }
 
   addTag(): void {
-    console.log(this.currentTag);
     if (this.currentTag) {
       if (!this.tagList) {
         this.tagList = [];

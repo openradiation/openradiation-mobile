@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { NavController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { Measure } from '../../../states/measures/measure';
 import { MeasuresState } from '../../../states/measures/measures.state';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-measure-steps',

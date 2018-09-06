@@ -22,7 +22,7 @@ export enum DeviceType {
 export interface RawDevice {
   name: string;
   id: string;
-  advertising: ArrayBuffer;
+  advertising: ArrayBuffer | { kCBAdvDataManufacturerData: ArrayBuffer };
   rssi: number;
   characteristics?: {
     characteristic: string;
