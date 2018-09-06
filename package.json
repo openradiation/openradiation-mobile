@@ -5,17 +5,13 @@
   "homepage": "https://www.openradiation.org/",
   "description": "Les citoyens mesurent la radioactivité.",
   "scripts": {
-    "ng": "ng",
     "start": "ionic serve --no-open",
-    "build": "ionic build",
     "cordova:prepare": "ionic cordova prepare",
-    "build:android": "ionic cordova build android",
-    "build:ios": "ionic cordova build ios",
+    "build:android": "ionic cordova build android --prod --release --buildConfig=build.json",
+    "build:ios": "ionic cordova build ios --prod --release --buildConfig=build.json",
     "run:android": "ionic cordova run android",
     "run:ios": "ionic cordova run ios",
-    "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
     "analyze": "webpack-bundle-analyzer ./dist/stats.json",
     "compodoc:build": "compodoc -p src/tsconfig.app.json --disableLifeCycleHooks",
     "compodoc:serve": "compodoc -p src/tsconfig.app.json --disableLifeCycleHooks -s -w",
@@ -91,6 +87,7 @@
     "codelyzer": "~4.4.2",
     "cordova": "8.0.0",
     "ionic": "4.0.6",
+    "ios-deploy": "^1.9.3",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~3.0.0",
@@ -112,12 +109,12 @@
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-ble-central": {
-        "BLUETOOTH_USAGE_DESCRIPTION": " "
+        "BLUETOOTH_USAGE_DESCRIPTION": "L'activation du bluetooth est nécessaire pour se connecter aux capteurs. Merci d'accepter la permission."
       },
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-statusbar": {},
       "cordova-plugin-geolocation": {
-        "GEOLOCATION_USAGE_DESCRIPTION": "To locate you"
+        "GEOLOCATION_USAGE_DESCRIPTION": "La position de l'appareil est nécessaire au bon fonctionnement de l'application. Merci d'accepter la permission."
       },
       "cordova.plugins.diagnostic": {},
       "cordova-plugin-network-information": {},

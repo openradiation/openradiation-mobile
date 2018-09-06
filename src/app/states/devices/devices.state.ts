@@ -107,9 +107,10 @@ export class DevicesState {
     const state = getState();
     patchState({
       availableDevices: [
-        ...devices.map(
-          device => state.knownDevices.find(knownDevice => knownDevice.sensorUUID === device.sensorUUID) || device
-        )
+        ...devices.map(device => ({
+          ...(state.knownDevices.find(knownDevice => knownDevice.sensorUUID === device.sensorUUID) || device),
+          batteryLevel: device.batteryLevel
+        }))
       ]
     });
   }
@@ -119,7 +120,7 @@ export class DevicesState {
     return this.devicesService.connectDevice(device).pipe(
       tap(() => {
         const state = getState();
-        if (state.knownDevices.find(device => device.sensorUUID === device.sensorUUID)) {
+        if (state.knownDevices.find(knownDevice => knownDevice.sensorUUID === device.sensorUUID)) {
           patchState({
             connectedDevice: device
           });

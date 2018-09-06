@@ -1,3 +1,4 @@
+import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
 import {
   AbstractDevice,
   DeviceParams,
@@ -6,7 +7,6 @@ import {
   DeviceType,
   RawDevice
 } from './abstract-device';
-import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
 
 export class DeviceAtomTag extends AbstractDevice {
   readonly deviceType = DeviceType.AtomTag;
@@ -31,8 +31,13 @@ export class DeviceAtomTag extends AbstractDevice {
   constructor(rawDevice: RawDevice) {
     super(rawDevice);
     this.apparatusVersion = DeviceType.AtomTag;
-    const data = new Uint8Array(rawDevice.advertising);
-    this.batteryLevel = data[28];
+    if (rawDevice.advertising instanceof ArrayBuffer) {
+      const data = new Uint8Array(rawDevice.advertising);
+      this.batteryLevel = data[28];
+    } else {
+      const data = new Uint8Array(rawDevice.advertising.kCBAdvDataManufacturerData);
+      this.batteryLevel = data[1];
+    }
     this.apparatusId = rawDevice.id;
   }
 }

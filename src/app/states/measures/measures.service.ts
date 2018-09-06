@@ -9,11 +9,11 @@ import { DeviceAtomTag } from '../devices/device-atom-tag';
 import { DeviceAtomTagService } from '../devices/device-atom-tag.service';
 import { DeviceOGKit } from '../devices/device-og-kit';
 import { DeviceOGKitService } from '../devices/device-og-kit.service';
+import { DeviceConnectionLost } from '../devices/devices.action';
 import { UserStateModel } from '../user/user.state';
 import { Measure, Step } from './measure';
 import { ApparatusSensorType, MeasureApi } from './measure-api';
 import { AddMeasureScanStep, CancelMeasure, StopMeasureScan, UpdateMeasureScanTime } from './measures.action';
-import { DeviceConnectionLost } from '../devices/devices.action';
 
 @Injectable({
   providedIn: 'root'

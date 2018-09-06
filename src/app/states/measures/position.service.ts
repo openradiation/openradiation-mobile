@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { AlertController, Platform } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, ofActionSuccessful, Store } from '@ngxs/store';
 import { defer, Observable, of } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { take, takeUntil, tap } from 'rxjs/operators';
 import { PositionChanged, StartWatchPosition, StopWatchPosition } from './measures.action';
-import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
@@ -37,12 +37,17 @@ export class PositionService {
       if (this.platform.is('cordova')) {
         return fromPromise(
           this.diagnostic
-            .isLocationAuthorized()
-            .then(authorized => {
-              if (!authorized) {
-                return this.diagnostic.requestLocationAuthorization();
-              } else {
-                return true;
+            .getLocationAuthorizationStatus()
+            .then(status => {
+              switch (status) {
+                case this.diagnostic.permissionStatus.NOT_REQUESTED:
+                  return this.diagnostic.requestLocationAuthorization();
+                case this.diagnostic.permissionStatus.DENIED:
+                  return this.platform.is('ios')
+                    ? this.diagnostic.permissionStatus.DENIED_ALWAYS
+                    : this.diagnostic.requestLocationAuthorization();
+                default:
+                  return status;
               }
             })
             .then(status => {
@@ -55,7 +60,12 @@ export class PositionService {
                   throw status;
               }
             })
-            .then(() => this.diagnostic.isGpsLocationEnabled())
+            .then(
+              () =>
+                this.platform.is('android')
+                  ? this.diagnostic.isGpsLocationEnabled()
+                  : this.diagnostic.isLocationEnabled()
+            )
             .then(enabled => {
               if (!enabled) {
                 this.onGPSDisabled();
