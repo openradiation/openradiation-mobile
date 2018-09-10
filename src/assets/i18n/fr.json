@@ -15,7 +15,7 @@
     "TITLE": "À propos"
   },
   "BLUETOOTH": {
-    "GPS_DISABLED": {
+    "BLE_DISABLED": {
       "NOTICE": "Le bluetooth est nécessaire pour la communication avec les capteurs. Merci de l'activer.",
       "TITLE": "Bluetooth désactivé"
     }

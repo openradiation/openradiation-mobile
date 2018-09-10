@@ -15,7 +15,7 @@
     "TITLE": "About"
   },
   "BLUETOOTH": {
-    "GPS_DISABLED": {
+    "BLE_DISABLED": {
       "NOTICE": "Bluetooth is required to communicate with sensors. Please enable it.",
       "TITLE": "Bluetooth disabled"
     }
