@@ -155,11 +155,12 @@
   },
   "POSITION": {
     "DENIED_ALWAYS": {
-      "NOTICE": "Phone position is required for the proper functioning of the application. Please accept the permission.",
+      "NOTICE": "Phone position is required for for sending measure to OpenRadiation database. Please accept the permission.",
       "TITLE": "Position - Permission denied"
     },
     "GPS_DISABLED": {
-      "NOTICE": "Phone position is required for the proper functioning of the application. Please enable GPS on \"High Accuracy\" mode.",
+      "NOTICE_ANDROID": "Phone position is required for sending measure to OpenRadiation database. Please enable GPS on \"High Accuracy\" mode.",
+      "NOTICE_IOS": "Phone position is required for sending measure to OpenRadiation database",
       "TITLE": "Position - GPS disabled"
     }
   },
