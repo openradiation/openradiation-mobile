@@ -6,32 +6,13 @@ import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, ofActionSuccessful, Store } from '@ngxs/store';
 import { merge, Observable, timer } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
-import {
-  buffer,
-  catchError,
-  concatMap,
-  map,
-  scan,
-  shareReplay,
-  skip,
-  switchMap,
-  take,
-  takeUntil,
-  tap,
-  throttleTime
-} from 'rxjs/operators';
+import { buffer, catchError, concatMap, map, scan, shareReplay, skip, switchMap, take, takeUntil, tap, throttleTime } from 'rxjs/operators';
 import { AbstractDevice, DeviceType, RawDevice } from './abstract-device';
 import { DeviceAtomTag } from './device-atom-tag';
 import { DeviceAtomTagService } from './device-atom-tag.service';
 import { DeviceOGKit } from './device-og-kit';
 import { DeviceOGKitService } from './device-og-kit.service';
-import {
-  BLEConnectionLost,
-  DeviceConnectionLost,
-  DevicesDiscovered,
-  StartDiscoverDevices,
-  StopDiscoverDevices
-} from './devices.action';
+import { BLEConnectionLost, DeviceConnectionLost, DevicesDiscovered, StartDiscoverDevices, StopDiscoverDevices } from './devices.action';
 
 @Injectable({
   providedIn: 'root'
@@ -179,8 +160,8 @@ export class DevicesService {
     });
     this.alertController
       .create({
-        header: this.translateService.instant('BLUETOOTH.GPS_DISABLED.TITLE'),
-        message: this.translateService.instant('BLUETOOTH.GPS_DISABLED.NOTICE'),
+        header: this.translateService.instant('BLUETOOTH.BLE_DISABLED.TITLE'),
+        message: this.translateService.instant('BLUETOOTH.BLE_DISABLED.NOTICE'),
         backdropDismiss: false,
         buttons: [
           {
