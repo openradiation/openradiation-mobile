@@ -36,7 +36,7 @@ export class HomePage extends AutoUnsubscribePage {
     this.canStartMeasure = combineLatest(this.positionAccuracy$, this.connectedDevice$).pipe(
       map(
         ([positionAccuracy, connectedDevice]) =>
-          positionAccuracy !== PositionAccuracyThreshold.Error && connectedDevice !== undefined
+          positionAccuracy !== PositionAccuracyThreshold.No && connectedDevice !== undefined
       )
     );
   }
