@@ -6,7 +6,6 @@ import { map, take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
-import { PositionAccuracyThreshold } from '../../../states/measures/measure';
 import { StartMeasure, StartWatchPosition, StopWatchPosition } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
 import { TabsService } from '../tabs.service';
@@ -33,11 +32,8 @@ export class HomePage extends AutoUnsubscribePage {
   ) {
     super(tabsService, elementRef);
 
-    this.canStartMeasure = combineLatest(this.positionAccuracy$, this.connectedDevice$).pipe(
-      map(
-        ([positionAccuracy, connectedDevice]) =>
-          positionAccuracy !== PositionAccuracyThreshold.No && connectedDevice !== undefined
-      )
+    this.canStartMeasure = combineLatest(this.connectedDevice$).pipe(
+      map(connectedDevice => connectedDevice !== undefined)
     );
   }
 
