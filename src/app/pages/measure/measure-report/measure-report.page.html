@@ -17,7 +17,7 @@
                                 <ion-input formControlName="longitude" required type="number"></ion-input>
                             </ion-item>
                         </ion-list>
-                        <app-gps-indicator *ngIf="reportScan" [accuracy]="currentMeasure.accuracy" [compact]="true"></app-gps-indicator>
+                        <app-gps-indicator [accuracy]="currentMeasure.accuracy" [compact]="true"></app-gps-indicator>
                     </div>
                     <div class="separator"></div>
                     <div class="position">
@@ -31,7 +31,7 @@
                                 <ion-input formControlName="endLongitude" required type="number"></ion-input>
                             </ion-item>
                         </ion-list>
-                        <app-gps-indicator *ngIf="reportScan" [accuracy]="currentMeasure.endAccuracy" [compact]="true"></app-gps-indicator>
+                        <app-gps-indicator [accuracy]="currentMeasure.endAccuracy" [compact]="true"></app-gps-indicator>
                     </div>
                     <div class="separator"></div>
                     <ion-list>

@@ -197,8 +197,10 @@ export class MeasuresState {
           ),
           latitude: state.currentPosition!.coords.latitude,
           longitude: state.currentPosition!.coords.longitude,
+          accuracy: state.currentPosition!.coords.accuracy,
           endLatitude: state.currentPosition!.coords.latitude,
           endLongitude: state.currentPosition!.coords.longitude,
+          endAccuracy: state.currentPosition!.coords.accuracy,
           startTime: Date.now()
         }
       });
