@@ -10,11 +10,11 @@
                         <ion-list>
                             <ion-item class="custom-disabled">
                                 <ion-label>{{'MEASURES.START_LATITUDE' | translate}}</ion-label>
-                                <ion-input formControlName="latitude" required type="number"></ion-input>
+                                <ion-input formControlName="latitude" type="number"></ion-input>
                             </ion-item>
                             <ion-item class="custom-disabled">
                                 <ion-label>{{'MEASURES.START_LONGITUDE' | translate}}</ion-label>
-                                <ion-input formControlName="longitude" required type="number"></ion-input>
+                                <ion-input formControlName="longitude" type="number"></ion-input>
                             </ion-item>
                         </ion-list>
                         <app-gps-indicator [accuracy]="currentMeasure.accuracy" [compact]="true"></app-gps-indicator>
@@ -24,11 +24,11 @@
                         <ion-list>
                             <ion-item class="custom-disabled">
                                 <ion-label>{{'MEASURES.END_LATITUDE' | translate}}</ion-label>
-                                <ion-input formControlName="endLatitude" required type="number"></ion-input>
+                                <ion-input formControlName="endLatitude" type="number"></ion-input>
                             </ion-item>
                             <ion-item class="custom-disabled">
                                 <ion-label>{{'MEASURES.END_LONGITUDE' | translate}}</ion-label>
-                                <ion-input formControlName="endLongitude" required type="number"></ion-input>
+                                <ion-input formControlName="endLongitude" type="number"></ion-input>
                             </ion-item>
                         </ion-list>
                         <app-gps-indicator [accuracy]="currentMeasure.endAccuracy" [compact]="true"></app-gps-indicator>

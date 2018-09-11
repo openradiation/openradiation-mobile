@@ -10,13 +10,13 @@ export class Measure {
   hitsNumber = 0;
   startTime: number;
   endTime?: number;
-  latitude: number;
-  longitude: number;
+  latitude?: number;
+  longitude?: number;
   accuracy?: number;
   altitude?: number;
   altitudeAccuracy?: number;
-  endLatitude: number;
-  endLongitude: number;
+  endLatitude?: number;
+  endLongitude?: number;
   endAccuracy?: number;
   endAltitude?: number;
   endAltitudeAccuracy?: number;

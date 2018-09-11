@@ -28,7 +28,7 @@ export class StopWatchPosition {
 
 export class PositionChanged {
   static readonly type = '[Measures] Position changed';
-  constructor(public position: Geoposition) {}
+  constructor(public position?: Geoposition) {}
 }
 
 export class StartMeasure {

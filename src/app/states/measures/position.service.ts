@@ -6,7 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, ofActionSuccessful, Store } from '@ngxs/store';
 import { defer, Observable, of } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
-import { take, takeUntil, tap } from 'rxjs/operators';
+import { catchError, take, takeUntil, tap } from 'rxjs/operators';
 import { PositionChanged, StartWatchPosition, StopWatchPosition } from './measures.action';
 
 @Injectable({
@@ -76,7 +76,13 @@ export class PositionService {
       } else {
         return of(null);
       }
-    }).pipe(tap(() => this.watchPosition()));
+    }).pipe(
+      tap(() => this.watchPosition()),
+      catchError(err => {
+        this.store.dispatch(new PositionChanged(undefined));
+        throw err;
+      })
+    );
   }
 
   private watchPosition() {

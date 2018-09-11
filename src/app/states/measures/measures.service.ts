@@ -77,53 +77,57 @@ export class MeasuresService {
 
   publishMeasure(measure: Measure): Observable<any> {
     let apparatusSensorType: ApparatusSensorType | undefined;
-    if (measure.apparatusSensorType) {
-      if (measure.apparatusSensorType.toLowerCase().includes(ApparatusSensorType.Geiger)) {
-        apparatusSensorType = ApparatusSensorType.Geiger;
-      } else if (measure.apparatusSensorType.toLowerCase().includes(ApparatusSensorType.Photodiode)) {
-        apparatusSensorType = ApparatusSensorType.Photodiode;
+    if (measure.latitude && measure.longitude) {
+      if (measure.apparatusSensorType) {
+        if (measure.apparatusSensorType.toLowerCase().includes(ApparatusSensorType.Geiger)) {
+          apparatusSensorType = ApparatusSensorType.Geiger;
+        } else if (measure.apparatusSensorType.toLowerCase().includes(ApparatusSensorType.Photodiode)) {
+          apparatusSensorType = ApparatusSensorType.Photodiode;
+        }
       }
+      const payload: MeasureApi = {
+        apiKey: environment.API_KEY,
+        data: {
+          apparatusId: measure.apparatusId,
+          apparatusVersion: measure.apparatusVersion,
+          apparatusSensorType: apparatusSensorType,
+          apparatusTubeType: measure.apparatusTubeType,
+          temperature: measure.temperature ? Math.round(measure.temperature) : undefined,
+          value: measure.value,
+          hitsNumber: measure.hitsNumber,
+          startTime: new Date(measure.startTime).toISOString(),
+          endTime: measure.endTime ? new Date(measure.endTime).toISOString() : undefined,
+          latitude: measure.latitude,
+          longitude: measure.longitude,
+          accuracy: measure.accuracy,
+          altitude: measure.altitude ? Math.round(measure.altitude) : undefined,
+          altitudeAccuracy: measure.altitudeAccuracy,
+          endLatitude: measure.endLatitude,
+          endLongitude: measure.endLongitude,
+          endAccuracy: measure.endAccuracy,
+          endAltitude: measure.endAltitude ? Math.round(measure.endAltitude) : undefined,
+          endAltitudeAccuracy: measure.endAltitudeAccuracy,
+          deviceUuid: measure.deviceUuid,
+          devicePlatform: measure.devicePlatform,
+          deviceVersion: measure.deviceVersion,
+          deviceModel: measure.deviceModel,
+          reportUuid: measure.reportUuid,
+          manualReporting: measure.manualReporting,
+          organisationReporting: measure.organisationReporting,
+          reportContext: 'routine',
+          description: measure.description,
+          measurementHeight: measure.measurementHeight,
+          tags: measure.tags,
+          enclosedObject: measure.enclosedObject,
+          userId: this.store.selectSnapshot(({ user }: { user: UserStateModel }) => user.login),
+          userPwd: this.store.selectSnapshot(({ user }: { user: UserStateModel }) => user.password),
+          measurementEnvironment: measure.measurementEnvironment,
+          rain: measure.rain
+        }
+      };
+      return this.httpClient.post(environment.API_URI, payload);
+    } else {
+      throw new Error('missing Lat and long in measure');
     }
-    const payload: MeasureApi = {
-      apiKey: environment.API_KEY,
-      data: {
-        apparatusId: measure.apparatusId,
-        apparatusVersion: measure.apparatusVersion,
-        apparatusSensorType: apparatusSensorType,
-        apparatusTubeType: measure.apparatusTubeType,
-        temperature: measure.temperature ? Math.round(measure.temperature) : undefined,
-        value: measure.value,
-        hitsNumber: measure.hitsNumber,
-        startTime: new Date(measure.startTime).toISOString(),
-        endTime: measure.endTime ? new Date(measure.endTime).toISOString() : undefined,
-        latitude: measure.latitude,
-        longitude: measure.longitude,
-        accuracy: measure.accuracy,
-        altitude: measure.altitude ? Math.round(measure.altitude) : undefined,
-        altitudeAccuracy: measure.altitudeAccuracy,
-        endLatitude: measure.endLatitude,
-        endLongitude: measure.endLongitude,
-        endAccuracy: measure.endAccuracy,
-        endAltitude: measure.endAltitude ? Math.round(measure.endAltitude) : undefined,
-        endAltitudeAccuracy: measure.endAltitudeAccuracy,
-        deviceUuid: measure.deviceUuid,
-        devicePlatform: measure.devicePlatform,
-        deviceVersion: measure.deviceVersion,
-        deviceModel: measure.deviceModel,
-        reportUuid: measure.reportUuid,
-        manualReporting: measure.manualReporting,
-        organisationReporting: measure.organisationReporting,
-        reportContext: 'routine',
-        description: measure.description,
-        measurementHeight: measure.measurementHeight,
-        tags: measure.tags,
-        enclosedObject: measure.enclosedObject,
-        userId: this.store.selectSnapshot(({ user }: { user: UserStateModel }) => user.login),
-        userPwd: this.store.selectSnapshot(({ user }: { user: UserStateModel }) => user.password),
-        measurementEnvironment: measure.measurementEnvironment,
-        rain: measure.rain
-      }
-    };
-    return this.httpClient.post(environment.API_URI, payload);
   }
 }
