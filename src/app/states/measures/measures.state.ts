@@ -231,7 +231,8 @@ export class MeasuresState {
     if (state.currentMeasure) {
       const measure = { ...state.currentMeasure, steps: undefined };
       patchState({
-        measures: [...state.measures, measure]
+        measures: [...state.measures, measure],
+        currentMeasure: undefined
       });
       if (
         state.params.autoPublish &&
@@ -242,10 +243,6 @@ export class MeasuresState {
       ) {
         dispatch(new PublishMeasure(measure));
       }
-      patchState({
-        measures: [...state.measures, measure],
-        currentMeasure: undefined
-      });
     }
   }
 
