@@ -231,12 +231,21 @@ export class MeasuresState {
     if (state.currentMeasure) {
       const measure = { ...state.currentMeasure, steps: undefined };
       patchState({
+        measures: [...state.measures, measure]
+      });
+      if (
+        state.params.autoPublish &&
+        state.currentMeasure.longitude &&
+        state.currentMeasure.latitude &&
+        state.currentMeasure.endLongitude &&
+        state.currentMeasure.endLatitude
+      ) {
+        dispatch(new PublishMeasure(measure));
+      }
+      patchState({
         measures: [...state.measures, measure],
         currentMeasure: undefined
       });
-      if (state.params.autoPublish) {
-        dispatch(new PublishMeasure(measure));
-      }
     }
   }
 
