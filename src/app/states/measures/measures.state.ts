@@ -333,8 +333,8 @@ export class MeasuresState {
         patchState({
           currentMeasure: {
             ...state.currentMeasure,
-            endLatitude: state.currentPosition.coords.longitude,
-            endLongitude: state.currentPosition.coords.latitude,
+            endLatitude: state.currentPosition.coords.latitude,
+            endLongitude: state.currentPosition.coords.longitude,
             endAccuracy: state.currentPosition.coords.accuracy,
             endAltitude: state.currentPosition.coords.altitude,
             endAltitudeAccuracy: state.currentPosition.coords.altitudeAccuracy
