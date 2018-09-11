@@ -24,6 +24,7 @@
                     <ng-container *ngIf="!measureBeingSentMap[measure.reportUuid]; else measureBeingSent">
                         <ion-button class="inner-button" fill="clear"
                                     size="default"
+                                    [disabled]="!measure.latitude && !measure.longitude || !measure.endLatitude && !measure.endLongitude"
                                     (click)="publish(measure)">
                             <img src="assets/img/icon-publish.png">
                         </ion-button>

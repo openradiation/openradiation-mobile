@@ -59,23 +59,25 @@ export class HistoryPage extends AutoUnsubscribePage {
   showDetail(measure: Measure) {}
 
   publish(measure: Measure) {
-    this.alertController
-      .create({
-        header: this.translateService.instant('HISTORY.TITLE'),
-        subHeader: this.translateService.instant('HISTORY.SEND.TITLE'),
-        message: this.translateService.instant('HISTORY.SEND.NOTICE'),
-        backdropDismiss: false,
-        buttons: [
-          {
-            text: this.translateService.instant('GENERAL.NO')
-          },
-          {
-            text: this.translateService.instant('GENERAL.YES'),
-            handler: () => this.store.dispatch(new PublishMeasure(measure))
-          }
-        ]
-      })
-      .then(alert => alert.present());
+    if (measure.latitude && measure.longitude && measure.endLatitude && measure.endLongitude) {
+      this.alertController
+        .create({
+          header: this.translateService.instant('HISTORY.TITLE'),
+          subHeader: this.translateService.instant('HISTORY.SEND.TITLE'),
+          message: this.translateService.instant('HISTORY.SEND.NOTICE'),
+          backdropDismiss: false,
+          buttons: [
+            {
+              text: this.translateService.instant('GENERAL.NO')
+            },
+            {
+              text: this.translateService.instant('GENERAL.YES'),
+              handler: () => this.store.dispatch(new PublishMeasure(measure))
+            }
+          ]
+        })
+        .then(alert => alert.present());
+    }
   }
 
   delete(measure: Measure) {
