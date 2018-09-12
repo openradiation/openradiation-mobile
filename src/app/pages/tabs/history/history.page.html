@@ -18,7 +18,7 @@
                             </div>
                         </div>
                         <div class="subtile"
-                             *ngIf="measure.accuracy >= positionAccuracyThreshold.Inaccurate || measure.endAccuracy >= positionAccuracyThreshold.Inaccurate"
+                             *ngIf="!measure.accuracy || measure.accuracy >= positionAccuracyThreshold.Inaccurate || !measure.endAccuracy || measure.endAccuracy >= positionAccuracyThreshold.Inaccurate"
                              [innerHTML]="'HISTORY.MESSAGE_PREVENT_MEASURE_SENDING' | translate"></div>
                     </div>
                 </ion-label>
@@ -31,7 +31,7 @@
                     <ng-container *ngIf="!measureBeingSentMap[measure.reportUuid]; else measureBeingSent">
                         <ion-button class="inner-button" fill="clear"
                                     size="default"
-                                    [disabled]="measure.accuracy >= positionAccuracyThreshold.Inaccurate || measure.endAccuracy >= positionAccuracyThreshold.Inaccurate"
+                                    [disabled]="!measure.accuracy || measure.accuracy >= positionAccuracyThreshold.Inaccurate || !measure.endAccuracy || measure.endAccuracy >= positionAccuracyThreshold.Inaccurate"
                                     (click)="publish(measure)">
                             <img src="assets/img/icon-publish.png">
                         </ion-button>

@@ -84,7 +84,7 @@ export class MeasuresState {
 
   @Selector()
   static positionAccuracy(state: MeasuresStateModel): number {
-    return state.currentPosition ? state.currentPosition.coords.accuracy : -1;
+    return state.currentPosition ? state.currentPosition.coords.accuracy : PositionAccuracyThreshold.No;
   }
 
   @Selector()
