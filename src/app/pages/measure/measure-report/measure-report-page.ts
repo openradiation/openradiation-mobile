@@ -9,7 +9,7 @@ import { take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { SelectIconOption } from '../../../components/select-icon/select-icon-option';
 import { DateService } from '../../../states/measures/date.service';
-import { Measure, MeasureEnvironment } from '../../../states/measures/measure';
+import { Measure, MeasureEnvironment, PositionAccuracyThreshold } from '../../../states/measures/measure';
 import {
   CancelMeasure,
   StartMeasureReport,
@@ -37,6 +37,8 @@ export class MeasureReportPage extends AutoUnsubscribePage {
 
   measureReportForm: FormGroup;
   reportScan = true;
+
+  positionAccuracyThreshold = PositionAccuracyThreshold;
 
   measurementEnvironmentOptions: SelectIconOption[] = [
     {

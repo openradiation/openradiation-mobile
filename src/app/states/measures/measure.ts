@@ -60,6 +60,8 @@ export class Measure {
     this.reportUuid = reportUuid;
     this.manualReporting = manualReporting;
     this.organisationReporting = environment.APP_NAME_VERSION;
+    this.accuracy = PositionAccuracyThreshold.No;
+    this.endAccuracy = PositionAccuracyThreshold.No;
   }
 }
 
@@ -71,10 +73,10 @@ export interface Step {
 }
 
 export enum PositionAccuracyThreshold {
-  Good = 50,
-  Poor = 500,
-  Inaccurate = Infinity,
-  No = -1
+  Good = 0,
+  Poor = 50,
+  Inaccurate = 500,
+  No = Infinity
 }
 
 export enum PositionAccuracy {

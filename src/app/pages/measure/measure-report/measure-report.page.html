@@ -7,7 +7,7 @@
             <div class="content">
                 <form [formGroup]="measureReportForm" ngxsForm="measures.measureReport">
                     <div class="message"
-                         *ngIf="!currentMeasure.latitude || !currentMeasure.longitude || !currentMeasure.endLatitude || !currentMeasure.endLongitude">
+                         *ngIf="currentMeasure.accuracy >= positionAccuracyThreshold.Inaccurate || currentMeasure.endAccuracy >= positionAccuracyThreshold.Inaccurate">
                         <ion-label>{{'HISTORY.MESSAGE_PREVENT_MEASURE_SENDING' | translate}}</ion-label>
                     </div>
                     <div class="position">

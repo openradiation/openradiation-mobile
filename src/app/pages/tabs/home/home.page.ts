@@ -32,9 +32,7 @@ export class HomePage extends AutoUnsubscribePage {
   ) {
     super(tabsService, elementRef);
 
-    this.canStartMeasure = combineLatest(this.connectedDevice$).pipe(
-      map(connectedDevice => connectedDevice !== undefined)
-    );
+    this.canStartMeasure = this.connectedDevice$.pipe(map(connectedDevice => connectedDevice !== undefined));
   }
 
   ionViewDidEnter() {

@@ -6,7 +6,12 @@ import { take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
-import { HitsAccuracy, HitsAccuracyThreshold, Measure } from '../../../states/measures/measure';
+import {
+  HitsAccuracy,
+  HitsAccuracyThreshold,
+  Measure,
+  PositionAccuracyThreshold
+} from '../../../states/measures/measure';
 import {
   CancelMeasure,
   PositionChanged,
@@ -33,6 +38,8 @@ export class MeasureScanPage extends AutoUnsubscribePage {
   hitsAccuracy: HitsAccuracy = HitsAccuracy.Start;
   hitsAccuracyThreshold = HitsAccuracyThreshold;
   hitsAccuracyWidth = 0;
+
+  positionAccuracyThreshold = PositionAccuracyThreshold;
 
   constructor(
     protected tabsService: TabsService,

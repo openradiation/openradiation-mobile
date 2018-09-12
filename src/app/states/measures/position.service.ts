@@ -100,9 +100,6 @@ export class PositionService {
         backdropDismiss: false,
         buttons: [
           {
-            text: this.translateService.instant('GENERAL.CANCEL')
-          },
-          {
             text: this.translateService.instant('GENERAL.GO_TO_SETTINGS'),
             handler: () => {
               this.platform.resume.pipe(take(1)).subscribe(() => this.store.dispatch(new StartWatchPosition()));
@@ -134,9 +131,6 @@ export class PositionService {
           : this.translateService.instant('POSITION.GPS_DISABLED.NOTICE_ANDROID'),
         backdropDismiss: false,
         buttons: [
-          {
-            text: this.translateService.instant('GENERAL.CANCEL')
-          },
           {
             text: this.translateService.instant('GENERAL.GO_TO_SETTINGS'),
             handler: () => {

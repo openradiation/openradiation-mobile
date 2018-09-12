@@ -11,7 +11,7 @@ import { DeviceOGKit } from '../devices/device-og-kit';
 import { DeviceOGKitService } from '../devices/device-og-kit.service';
 import { DeviceConnectionLost } from '../devices/devices.action';
 import { UserStateModel } from '../user/user.state';
-import { Measure, Step } from './measure';
+import { Measure, PositionAccuracyThreshold, Step } from './measure';
 import { ApparatusSensorType, MeasureApi } from './measure-api';
 import { AddMeasureScanStep, CancelMeasure, StopMeasureScan, UpdateMeasureScanTime } from './measures.action';
 
@@ -77,7 +77,11 @@ export class MeasuresService {
 
   publishMeasure(measure: Measure): Observable<any> {
     let apparatusSensorType: ApparatusSensorType | undefined;
-    if (measure.latitude && measure.longitude) {
+    if (
+      measure.accuracy &&
+      measure.accuracy < PositionAccuracyThreshold.Inaccurate &&
+      (measure.endAccuracy && measure.endAccuracy < PositionAccuracyThreshold.Inaccurate)
+    ) {
       if (measure.apparatusSensorType) {
         if (measure.apparatusSensorType.toLowerCase().includes(ApparatusSensorType.Geiger)) {
           apparatusSensorType = ApparatusSensorType.Geiger;
@@ -97,8 +101,8 @@ export class MeasuresService {
           hitsNumber: measure.hitsNumber,
           startTime: new Date(measure.startTime).toISOString(),
           endTime: measure.endTime ? new Date(measure.endTime).toISOString() : undefined,
-          latitude: measure.latitude,
-          longitude: measure.longitude,
+          latitude: measure.latitude!,
+          longitude: measure.longitude!,
           accuracy: measure.accuracy,
           altitude: measure.altitude ? Math.round(measure.altitude) : undefined,
           altitudeAccuracy: measure.altitudeAccuracy,

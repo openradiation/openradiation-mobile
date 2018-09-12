@@ -5,7 +5,7 @@ import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import * as uuid from 'uuid';
 import { DateService } from './date.service';
-import { Measure, MeasureReport } from './measure';
+import { Measure, MeasureReport, PositionAccuracyThreshold } from './measure';
 import {
   AddMeasureScanStep,
   CancelMeasure,
@@ -236,10 +236,9 @@ export class MeasuresState {
       });
       if (
         state.params.autoPublish &&
-        state.currentMeasure.longitude &&
-        state.currentMeasure.latitude &&
-        state.currentMeasure.endLongitude &&
-        state.currentMeasure.endLatitude
+        (measure.accuracy &&
+          measure.accuracy < PositionAccuracyThreshold.Inaccurate &&
+          (measure.endAccuracy && measure.endAccuracy < PositionAccuracyThreshold.Inaccurate))
       ) {
         dispatch(new PublishMeasure(measure));
       }
