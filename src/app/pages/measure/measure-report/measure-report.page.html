@@ -6,6 +6,10 @@
         <ion-content>
             <div class="content">
                 <form [formGroup]="measureReportForm" ngxsForm="measures.measureReport">
+                    <div class="message"
+                         *ngIf="!currentMeasure.latitude || !currentMeasure.longitude || !currentMeasure.endLatitude || !currentMeasure.endLongitude">
+                        <ion-label>{{'HISTORY.MESSAGE_PREVENT_MEASURE_SENDING' | translate}}</ion-label>
+                    </div>
                     <div class="position">
                         <ion-list>
                             <ion-item class="custom-disabled">
@@ -37,25 +41,30 @@
                     <ion-list>
                         <ion-item class="custom-disabled">
                             <ion-label>{{'GENERAL.DATE' | translate}}</ion-label>
-                            <ion-datetime display-format="DD/MM/YYYY" formControlName="date" required [cancelText]="'GENERAL.CANCEL' | translate"
+                            <ion-datetime display-format="DD/MM/YYYY" formControlName="date" required
+                                          [cancelText]="'GENERAL.CANCEL' | translate"
                                           [doneText]="'GENERAL.SUBMIT' | translate"></ion-datetime>
                         </ion-item>
                         <ion-item class="custom-disabled">
                             <ion-label>{{'MEASURES.MEASURE_START' | translate}}</ion-label>
                             <ion-datetime display-format="HH:mm:ss" formControlName="startTime" required
-                                          [cancelText]="'GENERAL.CANCEL' | translate" [doneText]="'GENERAL.SUBMIT' | translate"></ion-datetime>
+                                          [cancelText]="'GENERAL.CANCEL' | translate"
+                                          [doneText]="'GENERAL.SUBMIT' | translate"></ion-datetime>
                         </ion-item>
                     </ion-list>
                     <div class="measure">
                         <ion-list>
                             <ion-item [ngClass]="{'custom-disabled': reportScan}">
                                 <ion-label position="fixed">{{'MEASURES.DURATION' | translate}}</ion-label>
-                                <ion-datetime display-format="mm:ss" formControlName="duration" [cancelText]="'GENERAL.CANCEL' | translate"
-                                              [doneText]="'GENERAL.SUBMIT' | translate" placeholder="00:00"></ion-datetime>
+                                <ion-datetime display-format="mm:ss" formControlName="duration"
+                                              [cancelText]="'GENERAL.CANCEL' | translate"
+                                              [doneText]="'GENERAL.SUBMIT' | translate"
+                                              placeholder="00:00"></ion-datetime>
                             </ion-item>
                             <ion-item class="has-suffix long-label" [ngClass]="{'custom-disabled': reportScan}">
                                 <ion-label position="fixed">{{'MEASURES.TEMPERATURE_AVERAGE' | translate}}</ion-label>
-                                <ion-input formControlName="temperature" type="number" placeholder="0"></ion-input><span class="unit">°C</span>
+                                <ion-input formControlName="temperature" type="number" placeholder="0"></ion-input>
+                                <span class="unit">°C</span>
                             </ion-item>
                             <ion-item [ngClass]="{'custom-disabled': reportScan}">
                                 <ion-label position="fixed">{{'MEASURES.HITS_NUMBER' | translate}}</ion-label>
@@ -63,29 +72,38 @@
                             </ion-item>
                             <ion-item class="has-suffix" [ngClass]="{'custom-disabled': reportScan}">
                                 <ion-label position="fixed">{{'MEASURES.TITLE' | translate}}</ion-label>
-                                <ion-input formControlName="value" required type="number" placeholder="0.000"></ion-input><span class="unit">{{'MEASURES.DOSE_RATE_UNIT' | translate}}</span>
+                                <ion-input formControlName="value" required type="number"
+                                           placeholder="0.000"></ion-input>
+                                <span class="unit">{{'MEASURES.DOSE_RATE_UNIT' | translate}}</span>
                             </ion-item>
                         </ion-list>
                     </div>
                     <div class="environment">
-                        <app-select-icon [options]="measurementEnvironmentOptions" formControlName="measurementEnvironment" [title]="'MEASURES.ENVIRONMENT.TITLE' | translate">
+                        <app-select-icon [options]="measurementEnvironmentOptions"
+                                         formControlName="measurementEnvironment"
+                                         [title]="'MEASURES.ENVIRONMENT.TITLE' | translate">
                         </app-select-icon>
                     </div>
                     <div class="options">
-                        <app-select-icon [options]="measurementHeightOptions" formControlName="measurementHeight" [title]="'MEASURES.SENSOR_POSITION.TITLE' | translate">
+                        <app-select-icon [options]="measurementHeightOptions" formControlName="measurementHeight"
+                                         [title]="'MEASURES.SENSOR_POSITION.TITLE' | translate">
                         </app-select-icon>
-                        <app-select-icon [options]="rainOptions" formControlName="rain" [title]="'MEASURES.WEATHER.TITLE' | translate">
+                        <app-select-icon [options]="rainOptions" formControlName="rain"
+                                         [title]="'MEASURES.WEATHER.TITLE' | translate">
                         </app-select-icon>
                     </div>
                     <ng-container *ngIf="login$ | async">
                         <div class="separator"></div>
                         <ion-list>
                             <ion-item class="description">
-                                <ion-textarea formControlName="description" [placeholder]="'MEASURES.DESCRIPTION' | translate" rows="5"></ion-textarea>
+                                <ion-textarea formControlName="description"
+                                              [placeholder]="'MEASURES.DESCRIPTION' | translate"
+                                              rows="5"></ion-textarea>
                             </ion-item>
                         </ion-list>
                         <div class="tags">
-                            <app-tag-list formControlName="tags" [title]="'MEASURES.TAG_LIST' | translate"></app-tag-list>
+                            <app-tag-list formControlName="tags"
+                                          [title]="'MEASURES.TAG_LIST' | translate"></app-tag-list>
                         </div>
                     </ng-container>
                 </form>
@@ -96,8 +114,14 @@
                         {{'GENERAL.OK' | translate}}
                     </app-round-button>
                     <div class="side-buttons">
-                        <ion-button fill="clear" class="flat-button cancel" (click)="cancelMeasure()">{{'GENERAL.CANCEL' | translate}}</ion-button>
-                        <ion-button *ngIf="!currentMeasure.manualReporting && currentMeasure.steps && expertMode$ | async" fill="clear" class="flat-button expert" (click)="showMeasureSteps()">{{'MEASURES.EXPERT' | translate}}</ion-button>
+                        <ion-button fill="clear" class="flat-button cancel" (click)="cancelMeasure()">{{'GENERAL.CANCEL'
+                            | translate}}
+                        </ion-button>
+                        <ion-button
+                                *ngIf="!currentMeasure.manualReporting && currentMeasure.steps && expertMode$ | async"
+                                fill="clear" class="flat-button expert" (click)="showMeasureSteps()">{{'MEASURES.EXPERT'
+                            | translate}}
+                        </ion-button>
                     </div>
                 </div>
             </div>

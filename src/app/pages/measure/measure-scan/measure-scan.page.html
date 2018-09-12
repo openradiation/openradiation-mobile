@@ -5,6 +5,10 @@
 
     <ion-content>
         <div class="content">
+            <div class="message"
+                 *ngIf="currentMeasure.startTime && (!currentMeasure.latitude || !currentMeasure.longitude)">
+                <div class="message-style">{{'HISTORY.MESSAGE_PREVENT_MEASURE_SENDING' | translate}}</div>
+            </div>
             <div class="category">
                 <ng-template #measureScanNotStarted>
                     -
