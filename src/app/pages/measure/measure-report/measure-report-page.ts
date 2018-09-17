@@ -124,7 +124,6 @@ export class MeasureReportPage extends AutoUnsubscribePage {
       this.activatedRoute.queryParams
         .pipe(take(1))
         .subscribe(queryParams => (this.reportScan = queryParams.reportScan));
-      console.log('valeur reportScan : ' + this.reportScan);
       this.store.dispatch(new StartMeasureReport()).subscribe(() => {
         const measureReport = this.store.selectSnapshot(
           ({ measures }: { measures: MeasuresStateModel }) => measures.measureReport
