@@ -97,14 +97,18 @@ export class MeasureScanPage extends AutoUnsubscribePage {
     }
   }
 
-  stopScan() {
-    this.store.dispatch(new StartWatchPosition());
-    this.subscriptions.push(
-      this.actions$.pipe(ofActionSuccessful(PositionChanged)).subscribe(() => {
-        this.store.dispatch(new StopMeasureScan());
-        this.store.dispatch(new StopWatchPosition());
-      })
-    );
+  stopScan(measure?: Measure) {
+    if (measure && measure.accuracy && measure.accuracy < PositionAccuracyThreshold.Inaccurate) {
+      this.store.dispatch(new StartWatchPosition());
+      this.subscriptions.push(
+        this.actions$.pipe(ofActionSuccessful(PositionChanged)).subscribe(() => {
+          this.store.dispatch(new StopMeasureScan());
+          this.store.dispatch(new StopWatchPosition());
+        })
+      );
+    } else {
+      this.store.dispatch(new StopMeasureScan());
+    }
   }
 
   cancelMeasure() {

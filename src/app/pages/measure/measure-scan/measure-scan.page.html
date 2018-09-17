@@ -119,7 +119,7 @@
             <div class="bottom-buttons">
                 <app-round-button [disabled]="!(currentMeasure.hitsNumber >= hitsAccuracyThreshold.Accurate)"
                                   [src]="currentMeasure.hitsNumber >= hitsAccuracyThreshold.Accurate ? 'assets/img/button-on.png' : 'assets/img/button-off.png'"
-                                  (click)="stopScan()">
+                                  (click)="stopScan(currentMeasure)">
                     {{'GENERAL.END' | translate}}
                 </app-round-button>
                 <div class="side-buttons">
