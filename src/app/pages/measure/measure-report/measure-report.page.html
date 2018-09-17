@@ -5,11 +5,11 @@
 
         <ion-content>
             <div class="content">
-                <form [formGroup]="measureReportForm" ngxsForm="measures.measureReport">
-                    <div class="message"
-                         *ngIf="currentMeasure.accuracy >= positionAccuracyThreshold.Inaccurate || currentMeasure.endAccuracy >= positionAccuracyThreshold.Inaccurate">
-                        <ion-label>{{'HISTORY.MESSAGE_PREVENT_MEASURE_SENDING' | translate}}</ion-label>
-                    </div>
+                <div class="message"
+                     *ngIf="currentMeasure.accuracy >= positionAccuracyThreshold.Inaccurate || currentMeasure.endAccuracy >= positionAccuracyThreshold.Inaccurate">
+                    <div class="message-style">{{'HISTORY.MESSAGE_PREVENT_MEASURE_SENDING' | translate}}</div>
+                </div>
+                <form class="form" [formGroup]="measureReportForm" ngxsForm="measures.measureReport">
                     <div class="position">
                         <ion-list>
                             <ion-item class="custom-disabled">

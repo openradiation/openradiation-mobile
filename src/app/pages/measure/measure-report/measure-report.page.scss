@@ -5,7 +5,7 @@
   flex-direction: column;
   align-items: center;
   background: $third-color;
-  padding: 8px 0 15px 0;
+  padding: 10px 0 15px 0;
 
   .bottom-buttons {
     margin-top: 20px;
@@ -42,11 +42,15 @@
     display: flex;
     white-space: normal;
     text-align: center;
-    ion-label {
+    .message-style {
       color: $second-color;
       font-size: 12px;
       font-style: italic;
     }
+  }
+
+  .form {
+    padding: 10px 0;
   }
 
   .position {
