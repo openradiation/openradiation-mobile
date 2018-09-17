@@ -55,9 +55,11 @@ export class MeasureScanPage extends AutoUnsubscribePage {
     super.ionViewDidEnter();
     this.subscriptions.push(
       this.currentMeasure$.subscribe(measure => this.updateHitsAccuracy(measure)),
-      this.actions$
-        .pipe(ofActionSuccessful(StopMeasureScan))
-        .subscribe(() => this.navController.navigateForward(['measure', 'report', 'scan']))
+      this.actions$.pipe(ofActionSuccessful(StopMeasureScan)).subscribe(() =>
+        this.navController.navigateForward(['measure', 'report'], true, {
+          queryParams: { reportScan: true }
+        })
+      )
     );
     this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
       if (connectedDevice) {

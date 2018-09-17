@@ -103,6 +103,8 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     }
   ];
 
+  private initialized = false;
+
   constructor(
     protected tabsService: TabsService,
     protected elementRef: ElementRef,
@@ -117,44 +119,57 @@ export class MeasureReportPage extends AutoUnsubscribePage {
   }
 
   ionViewDidEnter() {
-    super.ionViewDidEnter();
-    this.store.dispatch(new StartMeasureReport()).subscribe(() => {
-      const measureReport = this.store.selectSnapshot(
-        ({ measures }: { measures: MeasuresStateModel }) => measures.measureReport
-      );
-      this.activatedRoute.url.pipe(take(1)).subscribe(url => (this.reportScan = url[0].path === 'scan'));
-      if (measureReport) {
-        this.measureReportForm = this.formBuilder.group(measureReport.model);
-      }
-      this.subscriptions.push(
-        this.measureReportForm.valueChanges.subscribe(value => {
-          if (typeof value.duration !== 'string' && value.duration) {
-            this.measureReportForm
-              .get('duration')!
-              .setValue(
-                this.dateService.toISODuration((value.duration.minute.value * 60 + value.duration.second.value) * 1000)
-              );
-          }
-        }),
-        this.actions$.pipe(ofActionSuccessful(StopMeasure, CancelMeasure)).subscribe(() =>
-          this.navController.navigateRoot([
-            'tabs',
-            {
-              outlets: {
-                home: 'home',
-                history: null,
-                settings: null,
-                map: null,
-                other: null
-              }
+    if (!this.initialized) {
+      super.ionViewDidEnter();
+      this.activatedRoute.queryParams
+        .pipe(take(1))
+        .subscribe(queryParams => (this.reportScan = queryParams.reportScan));
+      console.log('valeur reportScan : ' + this.reportScan);
+      this.store.dispatch(new StartMeasureReport()).subscribe(() => {
+        const measureReport = this.store.selectSnapshot(
+          ({ measures }: { measures: MeasuresStateModel }) => measures.measureReport
+        );
+        if (measureReport) {
+          this.measureReportForm = this.formBuilder.group(measureReport.model);
+        }
+        this.init();
+      });
+      this.initialized = true;
+    } else {
+      this.init();
+    }
+  }
+
+  init() {
+    this.subscriptions.push(
+      this.measureReportForm.valueChanges.subscribe(value => {
+        if (typeof value.duration !== 'string' && value.duration) {
+          this.measureReportForm
+            .get('duration')!
+            .setValue(
+              this.dateService.toISODuration((value.duration.minute.value * 60 + value.duration.second.value) * 1000)
+            );
+        }
+      }),
+      this.actions$.pipe(ofActionSuccessful(StopMeasure, CancelMeasure)).subscribe(() =>
+        this.navController.navigateRoot([
+          'tabs',
+          {
+            outlets: {
+              home: 'home',
+              history: null,
+              settings: null,
+              map: null,
+              other: null
             }
-          ])
-        )
-      );
-    });
+          }
+        ])
+      )
+    );
   }
 
   stopReport() {
+    this.initialized = false;
     if (this.measureReportForm.valid) {
       this.subscriptions.push(
         this.actions$.pipe(ofActionSuccessful(StopMeasureReport)).subscribe(() => {
@@ -167,9 +182,10 @@ export class MeasureReportPage extends AutoUnsubscribePage {
 
   cancelMeasure() {
     this.store.dispatch(new CancelMeasure());
+    this.initialized = false;
   }
 
   showMeasureSteps() {
-    this.navController.navigateForward(['measure', 'report', 'steps']);
+    this.navController.navigateForward(['measure', 'steps']);
   }
 }
