@@ -328,15 +328,15 @@ export class MeasuresState {
   stopMeasureScan({ getState, patchState }: StateContext<MeasuresStateModel>) {
     const state = getState();
     if (state.currentMeasure) {
-      if (state.currentPosition) {
+      if (state.currentMeasure.accuracy && state.currentMeasure.accuracy < PositionAccuracyThreshold.Inaccurate) {
         patchState({
           currentMeasure: {
             ...state.currentMeasure,
-            endLatitude: state.currentPosition.coords.latitude,
-            endLongitude: state.currentPosition.coords.longitude,
-            endAccuracy: state.currentPosition.coords.accuracy,
-            endAltitude: state.currentPosition.coords.altitude,
-            endAltitudeAccuracy: state.currentPosition.coords.altitudeAccuracy
+            endLatitude: state.currentPosition!.coords.latitude,
+            endLongitude: state.currentPosition!.coords.longitude,
+            endAccuracy: state.currentPosition!.coords.accuracy,
+            endAltitude: state.currentPosition!.coords.altitude,
+            endAltitudeAccuracy: state.currentPosition!.coords.altitudeAccuracy
           }
         });
       } else {
