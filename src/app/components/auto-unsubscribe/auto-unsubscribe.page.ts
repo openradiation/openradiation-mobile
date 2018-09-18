@@ -1,7 +1,7 @@
+import { OnDestroy } from '@angular/core';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { OnDestroy } from '@angular/core';
 
 export abstract class AutoUnsubscribePage implements OnDestroy {
   protected subscriptions: Subscription[] = [];
@@ -14,7 +14,11 @@ export abstract class AutoUnsubscribePage implements OnDestroy {
     this.routerSubscribe = this.router.events
       .pipe(filter(event => event instanceof NavigationEnd || event instanceof NavigationStart))
       .subscribe(event => {
-        if (event instanceof NavigationEnd && event.url.split('?')[0] === this.url && !this.focused) {
+        if (
+          event instanceof NavigationEnd &&
+          (event.url.split('?')[0] === this.url || event.url === '/') &&
+          !this.focused
+        ) {
           this.pageEnter();
         }
         if (
