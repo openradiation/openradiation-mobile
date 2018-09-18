@@ -15,7 +15,6 @@ export abstract class AutoUnsubscribePage implements OnDestroy {
       .pipe(filter(event => event instanceof NavigationEnd || event instanceof NavigationStart))
       .subscribe(event => {
         if (event instanceof NavigationEnd && event.url.split('?')[0] === this.url && !this.focused) {
-          console.log('url End Enter -> ' + event.url);
           this.pageEnter();
         }
         if (
@@ -24,7 +23,6 @@ export abstract class AutoUnsubscribePage implements OnDestroy {
           this.focused &&
           event.url !== '/#'
         ) {
-          console.log('url Start Leave -> ' + event.url);
           this.pageLeave();
         }
       });
