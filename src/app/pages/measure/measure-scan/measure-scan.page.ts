@@ -52,8 +52,8 @@ export class MeasureScanPage extends AutoUnsubscribePage {
     super(router);
   }
 
-  ionViewDidEnter() {
-    super.ionViewDidEnter();
+  pageEnter() {
+    super.pageEnter();
     this.subscriptions.push(
       this.currentMeasure$.subscribe(measure => this.updateHitsAccuracy(measure)),
       this.actions$.pipe(ofActionSuccessful(StopMeasureScan)).subscribe(() =>

@@ -32,8 +32,8 @@ export class HistoryPage extends AutoUnsubscribePage {
     super(router);
   }
 
-  ionViewDidEnter() {
-    super.ionViewDidEnter();
+  pageEnter() {
+    super.pageEnter();
     this.subscriptions.push(
       this.actions$.pipe(ofActionErrored(PublishMeasure)).subscribe(({ measure }: PublishMeasure) => {
         this.measureBeingSentMap[measure.reportUuid] = false;

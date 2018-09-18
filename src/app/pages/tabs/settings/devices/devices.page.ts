@@ -44,8 +44,8 @@ export class DevicesPage extends AutoUnsubscribePage {
     super(router);
   }
 
-  ionViewDidEnter() {
-    super.ionViewDidEnter();
+  pageEnter() {
+    super.pageEnter();
     this.subscriptions.push(
       this.actions$
         .pipe(ofActionDispatched(ConnectDevice))
@@ -57,8 +57,8 @@ export class DevicesPage extends AutoUnsubscribePage {
     this.store.dispatch(new StartDiscoverDevices()).subscribe();
   }
 
-  ionViewWillLeave() {
-    super.ionViewWillLeave();
+  pageLeave() {
+    super.pageLeave();
     this.store.dispatch(new StopDiscoverDevices()).subscribe();
   }
 

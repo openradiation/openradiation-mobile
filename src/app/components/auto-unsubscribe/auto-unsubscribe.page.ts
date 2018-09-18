@@ -14,15 +14,18 @@ export abstract class AutoUnsubscribePage implements OnDestroy {
     this.routerSubscribe = this.router.events
       .pipe(filter(event => event instanceof NavigationEnd || event instanceof NavigationStart))
       .subscribe(event => {
-        if (event instanceof NavigationEnd) {
-          if (event.url === this.url && !this.focused && event.url !== '/#') {
-            this.ionViewDidEnter();
-          }
+        if (event instanceof NavigationEnd && event.url.split('?')[0] === this.url && !this.focused) {
+          console.log('url End Enter -> ' + event.url);
+          this.pageEnter();
         }
-        if (event instanceof NavigationStart) {
-          if (event.url !== this.url && this.focused && event.url !== '/#') {
-            this.ionViewWillLeave();
-          }
+        if (
+          event instanceof NavigationStart &&
+          event.url.split('?')[0] !== this.url &&
+          this.focused &&
+          event.url !== '/#'
+        ) {
+          console.log('url Start Leave -> ' + event.url);
+          this.pageLeave();
         }
       });
   }
@@ -31,11 +34,11 @@ export abstract class AutoUnsubscribePage implements OnDestroy {
     this.routerSubscribe.unsubscribe();
   }
 
-  ionViewDidEnter() {
+  pageEnter() {
     this.focused = true;
   }
 
-  ionViewWillLeave() {
+  pageLeave() {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
     this.subscriptions = [];
     this.focused = false;

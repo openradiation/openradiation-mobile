@@ -38,8 +38,8 @@ export class LogInPage extends AutoUnsubscribePage {
     });
   }
 
-  ionViewDidEnter() {
-    super.ionViewDidEnter();
+  pageEnter() {
+    super.pageEnter();
     this.activatedRoute.queryParams
       .pipe(take(1))
       .subscribe(queryParams => (this.startMeasureAfterLogin = queryParams.startMeasureAfterLogin));

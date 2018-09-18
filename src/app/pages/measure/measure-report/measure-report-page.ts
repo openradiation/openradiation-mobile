@@ -118,9 +118,9 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     super(router);
   }
 
-  ionViewDidEnter() {
+  pageEnter() {
     if (!this.initialized) {
-      super.ionViewDidEnter();
+      super.pageEnter();
       this.activatedRoute.queryParams
         .pipe(take(1))
         .subscribe(queryParams => (this.reportScan = queryParams.reportScan));

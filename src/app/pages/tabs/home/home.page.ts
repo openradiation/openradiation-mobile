@@ -36,8 +36,8 @@ export class HomePage extends AutoUnsubscribePage {
     this.canStartMeasure = this.connectedDevice$.pipe(map(connectedDevice => connectedDevice !== undefined));
   }
 
-  ionViewDidEnter() {
-    super.ionViewDidEnter();
+  pageEnter() {
+    super.pageEnter();
     this.store.dispatch(new StartWatchPosition());
     this.subscriptions.push(
       this.actions$
@@ -46,8 +46,8 @@ export class HomePage extends AutoUnsubscribePage {
     );
   }
 
-  ionViewWillLeave() {
-    super.ionViewWillLeave();
+  pageLeave() {
+    super.pageLeave();
     this.store.dispatch(new StopWatchPosition());
   }
 
