@@ -1,6 +1,6 @@
-import { Component, ElementRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
 import { NavController } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
@@ -18,7 +18,6 @@ import {
 } from '../../../states/measures/measures.action';
 import { MeasuresState, MeasuresStateModel } from '../../../states/measures/measures.state';
 import { UserState } from '../../../states/user/user.state';
-import { TabsService } from '../../tabs/tabs.service';
 
 @Component({
   selector: 'app-measure-report',
@@ -39,6 +38,8 @@ export class MeasureReportPage extends AutoUnsubscribePage {
   reportScan = true;
 
   positionAccuracyThreshold = PositionAccuracyThreshold;
+
+  url = '/measure/report';
 
   measurementEnvironmentOptions: SelectIconOption[] = [
     {
@@ -106,16 +107,15 @@ export class MeasureReportPage extends AutoUnsubscribePage {
   private initialized = false;
 
   constructor(
-    protected tabsService: TabsService,
-    protected elementRef: ElementRef,
+    protected activatedRoute: ActivatedRoute,
+    protected router: Router,
     private formBuilder: FormBuilder,
     private store: Store,
     private navController: NavController,
     private actions$: Actions,
-    private activatedRoute: ActivatedRoute,
     private dateService: DateService
   ) {
-    super(tabsService, elementRef);
+    super(router);
   }
 
   ionViewDidEnter() {

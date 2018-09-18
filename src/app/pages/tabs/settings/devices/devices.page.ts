@@ -1,4 +1,5 @@
-import { Component, ElementRef } from '@angular/core';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { Actions, ofActionDispatched, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -14,7 +15,6 @@ import {
   UpdateDeviceInfo
 } from '../../../../states/devices/devices.action';
 import { DevicesState } from '../../../../states/devices/devices.state';
-import { TabsService } from '../../tabs.service';
 
 @Component({
   selector: 'app-page-devices',
@@ -33,14 +33,15 @@ export class DevicesPage extends AutoUnsubscribePage {
 
   connectingDevice: AbstractDevice | undefined;
 
+  url = '/tabs/(settings:devices)';
+
   constructor(
-    protected tabsService: TabsService,
-    protected elementRef: ElementRef,
+    protected router: Router,
     private store: Store,
     private actions$: Actions,
     private navController: NavController
   ) {
-    super(tabsService, elementRef);
+    super(router);
   }
 
   ionViewDidEnter() {

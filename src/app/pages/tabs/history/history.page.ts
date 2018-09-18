@@ -1,4 +1,5 @@
-import { Component, ElementRef } from '@angular/core';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { AlertController, ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, ofActionErrored, ofActionSuccessful, Select, Store } from '@ngxs/store';
@@ -7,7 +8,6 @@ import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-u
 import { Measure, PositionAccuracyThreshold } from '../../../states/measures/measure';
 import { DeleteAllMeasures, DeleteMeasure, PublishMeasure } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
-import { TabsService } from '../tabs.service';
 
 @Component({
   selector: 'app-history',
@@ -20,16 +20,16 @@ export class HistoryPage extends AutoUnsubscribePage {
 
   measureBeingSentMap: { [K: string]: boolean } = {};
   positionAccuracyThreshold = PositionAccuracyThreshold;
+  url = '/tabs/(history:history)';
   constructor(
-    protected tabsService: TabsService,
-    protected elementRef: ElementRef,
+    protected router: Router,
     private store: Store,
     private alertController: AlertController,
     private translateService: TranslateService,
     private actions$: Actions,
     private toastController: ToastController
   ) {
-    super(tabsService, elementRef);
+    super(router);
   }
 
   ionViewDidEnter() {

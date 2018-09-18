@@ -1,23 +1,28 @@
-import { ElementRef } from '@angular/core';
+import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { TabsService } from '../../pages/tabs/tabs.service';
+import { filter } from 'rxjs/operators';
 
-export class AutoUnsubscribePage {
+export abstract class AutoUnsubscribePage {
   protected subscriptions: Subscription[] = [];
   private focused = false;
 
-  constructor(protected tabsService: TabsService, protected elementRef: ElementRef) {
-    this.tabsService.currentTab.subscribe(currentTab => {
-      if (this.elementRef.nativeElement === currentTab) {
-        if (!this.focused) {
-          this.ionViewDidEnter();
+  protected abstract url: string;
+
+  protected constructor(protected router: Router) {
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd || event instanceof NavigationStart))
+      .subscribe(event => {
+        if (event instanceof NavigationEnd) {
+          if (event.url === this.url && !this.focused) {
+            this.ionViewDidEnter();
+          }
         }
-      } else {
-        if (this.focused) {
-          this.ionViewWillLeave();
+        if (event instanceof NavigationStart) {
+          if (event.url !== this.url && this.focused) {
+            this.ionViewWillLeave();
+          }
         }
-      }
-    });
+      });
   }
 
   ionViewDidEnter() {
