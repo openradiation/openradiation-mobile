@@ -7,30 +7,16 @@ import { MeasureStepsPage } from './measure-steps/measure-steps.page';
 
 const routes: Routes = [
   {
-    path: '',
-    children: [
-      {
-        path: 'scan',
-        component: MeasureScanPage
-      },
-      {
-        path: 'report',
-        children: [
-          {
-            path: 'scan',
-            component: MeasureReportPage
-          },
-          {
-            path: 'manual',
-            component: MeasureReportPage
-          },
-          {
-            path: 'steps',
-            component: MeasureStepsPage
-          }
-        ]
-      }
-    ]
+    path: 'scan',
+    component: MeasureScanPage
+  },
+  {
+    path: 'report',
+    component: MeasureReportPage
+  },
+  {
+    path: 'steps',
+    component: MeasureStepsPage
   }
 ];
 

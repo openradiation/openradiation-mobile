@@ -5,6 +5,10 @@
 
     <ion-content>
         <div class="content">
+            <div class="message"
+                 *ngIf="currentMeasure.startTime && currentMeasure.accuracy >= positionAccuracyThreshold.Inaccurate">
+                <div class="message-style">{{'HISTORY.MESSAGE_PREVENT_MEASURE_SENDING' | translate}}</div>
+            </div>
             <div class="category">
                 <ng-template #measureScanNotStarted>
                     -
@@ -115,7 +119,7 @@
             <div class="bottom-buttons">
                 <app-round-button [disabled]="!(currentMeasure.hitsNumber >= hitsAccuracyThreshold.Accurate)"
                                   [src]="currentMeasure.hitsNumber >= hitsAccuracyThreshold.Accurate ? 'assets/img/button-on.png' : 'assets/img/button-off.png'"
-                                  (click)="stopScan()">
+                                  (click)="stopScan(currentMeasure)">
                     {{'GENERAL.END' | translate}}
                 </app-round-button>
                 <div class="side-buttons">

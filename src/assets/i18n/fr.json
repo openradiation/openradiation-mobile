@@ -15,7 +15,7 @@
     "TITLE": "À propos"
   },
   "BLUETOOTH": {
-    "GPS_DISABLED": {
+    "BLE_DISABLED": {
       "NOTICE": "Le bluetooth est nécessaire pour la communication avec les capteurs. Merci de l'activer.",
       "TITLE": "Bluetooth désactivé"
     }
@@ -29,12 +29,12 @@
     "CONNEXION_ERROR": "Connexion impossible : {{message}}",
     "DATE": "Date",
     "END": "Fin",
-    "ERROR": "Erreur",
     "GOOD": "Bon",
     "GO_TO_SETTINGS": "Accéder aux paramètres",
-    "MEDIUM": "Moyen",
+    "INACCURATE": "Imprécis",
     "NO": "Non",
     "OK": "Ok",
+    "POOR": "Moyen",
     "SHARE": "Partager",
     "SUBMIT": "Valider",
     "TIMESTAMP": "Timestamp",
@@ -49,6 +49,7 @@
       "NOTICE": "En supprimant vos mesures, vous nettoyez tout votre historique mais vous ne supprimez pas les données déjà publiées de la base OpenRadiation.",
       "TITLE": "Êtes-vous sûr de vouloir supprimer toutes les mesures ?"
     },
+    "MESSAGE_PREVENT_MEASURE_SENDING": "Position de la mesure incorecte, Envoi impossible",
     "NO_MEASURE": "Aucune mesure<br>enregistrée",
     "SEND": {
       "NOTICE": "En envoyant cette mesure, vous acceptez que l'ensemble des données correspondant à cette measure (dont votre position GPS, votre peseudo, etc) soit publié dans la base OpenRadiation.",
@@ -155,11 +156,12 @@
   },
   "POSITION": {
     "DENIED_ALWAYS": {
-      "NOTICE": "La position de l'appareil est nécessaire au bon fonctionnement de l'application. Merci d'accepter la permission.",
+      "NOTICE": "La position de l'appareil est nécessaire  pour l'envoi des mesures à la base OpenRadiation. Merci d'accepter la permission.",
       "TITLE": "Position - Permission refusée"
     },
     "GPS_DISABLED": {
-      "NOTICE": "La position de l'appareil est nécessaire au bon fonctionnement de l'application. Merci d'activer le GPS en mode \"Haute Précision\".",
+      "NOTICE_ANDROID": "La position de l'appareil est nécessaire pour l'envoi des mesures à la base OpenRadiation. Merci d'activer le GPS en mode \"Haute Précision\".",
+      "NOTICE_IOS": "La position de l'appareil est nécessaire pour l'envoi des mesures à la base OpenRadiation.",
       "TITLE": "Position - GPS désactivé"
     }
   },

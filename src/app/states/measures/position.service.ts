@@ -6,7 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, ofActionSuccessful, Store } from '@ngxs/store';
 import { defer, Observable, of } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
-import { take, takeUntil, tap } from 'rxjs/operators';
+import { catchError, take, takeUntil, tap } from 'rxjs/operators';
 import { PositionChanged, StartWatchPosition, StopWatchPosition } from './measures.action';
 
 @Injectable({
@@ -76,14 +76,33 @@ export class PositionService {
       } else {
         return of(null);
       }
-    }).pipe(tap(() => this.watchPosition()));
+    }).pipe(
+      tap(() => this.watchPosition()),
+      catchError(err => {
+        this.store.dispatch(new PositionChanged(undefined));
+        throw err;
+      })
+    );
   }
 
   private watchPosition() {
+    this.watchGPSActivation();
     this.geolocation
       .watchPosition({ enableHighAccuracy: true })
       .pipe(takeUntil(this.actions$.pipe(ofActionSuccessful(StopWatchPosition))))
       .subscribe(position => this.store.dispatch(new PositionChanged(position)));
+  }
+
+  watchGPSActivation() {
+    this.diagnostic.registerLocationStateChangeHandler((status: string) => {
+      if (
+        (this.platform.is('android') && status === this.diagnostic.locationMode.LOCATION_OFF) ||
+        (this.platform.is('ios') && status !== this.diagnostic.permissionStatus.GRANTED)
+      ) {
+        this.store.dispatch(new StopWatchPosition());
+        this.store.dispatch(new StartWatchPosition()).subscribe();
+      }
+    });
   }
 
   private onGPSDeniedAlways() {
@@ -120,7 +139,9 @@ export class PositionService {
     this.alertController
       .create({
         header: this.translateService.instant('POSITION.GPS_DISABLED.TITLE'),
-        message: this.translateService.instant('POSITION.GPS_DISABLED.NOTICE'),
+        message: this.platform.is('ios')
+          ? this.translateService.instant('POSITION.GPS_DISABLED.NOTICE_IOS')
+          : this.translateService.instant('POSITION.GPS_DISABLED.NOTICE_ANDROID'),
         backdropDismiss: false,
         buttons: [
           {

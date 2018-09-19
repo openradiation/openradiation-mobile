@@ -10,13 +10,13 @@ export class Measure {
   hitsNumber = 0;
   startTime: number;
   endTime?: number;
-  latitude: number;
-  longitude: number;
+  latitude?: number;
+  longitude?: number;
   accuracy?: number;
   altitude?: number;
   altitudeAccuracy?: number;
-  endLatitude: number;
-  endLongitude: number;
+  endLatitude?: number;
+  endLongitude?: number;
   endAccuracy?: number;
   endAltitude?: number;
   endAltitudeAccuracy?: number;
@@ -60,6 +60,8 @@ export class Measure {
     this.reportUuid = reportUuid;
     this.manualReporting = manualReporting;
     this.organisationReporting = environment.APP_NAME_VERSION;
+    this.accuracy = PositionAccuracyThreshold.No;
+    this.endAccuracy = PositionAccuracyThreshold.No;
   }
 }
 
@@ -71,15 +73,17 @@ export interface Step {
 }
 
 export enum PositionAccuracyThreshold {
-  Good = 30,
-  Bad = Infinity,
-  Error = -1
+  Good = 0,
+  Poor = 50,
+  Inaccurate = 500,
+  No = Infinity
 }
 
 export enum PositionAccuracy {
   Good = 'good',
-  Bad = 'bad',
-  Error = 'error'
+  Poor = 'poor',
+  Inaccurate = 'inaccurate',
+  No = 'no'
 }
 
 export enum HitsAccuracy {

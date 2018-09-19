@@ -15,7 +15,7 @@
     "TITLE": "About"
   },
   "BLUETOOTH": {
-    "GPS_DISABLED": {
+    "BLE_DISABLED": {
       "NOTICE": "Bluetooth is required to communicate with sensors. Please enable it.",
       "TITLE": "Bluetooth disabled"
     }
@@ -29,12 +29,12 @@
     "CONNEXION_ERROR": "Connexion error: {message}",
     "DATE": "Date",
     "END": "End",
-    "ERROR": "Error",
     "GOOD": "Good",
     "GO_TO_SETTINGS": "Go to settings",
-    "MEDIUM": "Medium",
+    "INACCURATE": "Inaccurate",
     "NO": "No",
     "OK": "Ok",
+    "POOR": "Poor",
     "SHARE": "Share",
     "SUBMIT": "Submit",
     "TIMESTAMP": "Timestamp",
@@ -49,9 +49,10 @@
       "NOTICE": null,
       "TITLE": "Are you sure you wish to delete all measures ?"
     },
+    "MESSAGE_PREVENT_MEASURE_SENDING": "Invalid measurement position, it can not be sent.",
     "NO_MEASURE": "No saved<br>measure",
     "SEND": {
-      "NOTICE": "By deleting your measurements, you clean your entire history but you do not delete the published data from the OpenRadiation base",
+      "NOTICE": "By deleting your measurements, you clean your entire history but you do not delete the published data from the OpenRadiation base.",
       "TITLE": "Are you sure you wish to send this measure ?"
     },
     "SEND_ERROR": "Could not send measure, please check your connection.",
@@ -155,11 +156,12 @@
   },
   "POSITION": {
     "DENIED_ALWAYS": {
-      "NOTICE": "Phone position is required for the proper functioning of the application. Please accept the permission.",
+      "NOTICE": "Phone position is required for for sending measure to OpenRadiation database. Please accept the permission.",
       "TITLE": "Position - Permission denied"
     },
     "GPS_DISABLED": {
-      "NOTICE": "Phone position is required for the proper functioning of the application. Please enable GPS on \"High Accuracy\" mode.",
+      "NOTICE_ANDROID": "Phone position is required for sending measure to OpenRadiation database. Please enable GPS on \"High Accuracy\" mode.",
+      "NOTICE_IOS": "Phone position is required for sending measure to OpenRadiation database",
       "TITLE": "Position - GPS disabled"
     }
   },

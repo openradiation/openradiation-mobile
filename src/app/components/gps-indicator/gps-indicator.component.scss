@@ -7,10 +7,13 @@
   font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
   font-weight: 200;
   text-align: center;
-  &.bad {
+  &.poor {
     background-color: #ff7f00;
   }
-  &.error {
+  &.inaccurate {
     background-color: #e70000;
+  }
+  &.no {
+    background-color: #989aa2;
   }
 }
