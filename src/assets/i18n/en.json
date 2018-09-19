@@ -108,12 +108,10 @@
       "PART1": null,
       "PART2": null
     },
-    "DESCRIPTION": "Measure description",
+    "DESCRIPTION": "Description",
     "DOSE_RATE": "Dose rate",
     "DOSE_RATE_UNIT": "μSv/h",
     "DURATION": "Duration",
-    "END_LATITUDE": "End latitude",
-    "END_LONGITUDE": "End longitude",
     "ENVIRONMENT": {
       "CITY": "City",
       "COUNTRYSIDE": "Countryside",
@@ -131,18 +129,17 @@
     "MEASURE": "Measure",
     "MEASURE_START": "Measure start",
     "ONGOING": "Ongoing measure",
+    "REPPORT_LATITUDE": "Latitude",
+    "REPPORT_LONGITUDE": "Longitude",
     "SENSOR_POSITION": {
       "1_METER_HIGH": "1 meter high",
       "FLOOR": "Au sol",
       "TITLE": "Sensor position"
     },
     "SENSOR_TEMPERATURE": "Sensor temperature",
-    "START_LATITUDE": "Start latitude",
-    "START_LONGITUDE": "Start longitude",
     "TAG_LIST": "Tag list",
     "TEMPERATURE": "T° (°C)",
-    "TEMPERATURE_AVERAGE": "Average temperature",
-    "TITLE": "Measures",
+    "TITLE": "Measure",
     "VOLTAGE": "Voltage (V)",
     "WEATHER": {
       "NO_RAIN": "No rain",

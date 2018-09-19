@@ -108,12 +108,10 @@
       "PART1": "En activant la publication automatique des mesures, les mesures que vous faites et les données associées sont automatiquement envoyées à la base collaborative OpenRadiation, et publiées sous licence <a target=\"_blank\" href=\"https://www.openradiation.org/les-donnees\">ODC-ODbL (Open Database License)</a>.",
       "PART2": "Les données transmises correspondent aux données que vous saisissez, ainsi que des informations sur le modèle et l'identifiant du capteur et/ou du téléphone utilisé, votre nom d'utilisateur, ainsi que la position GPS au moment de la mesure (voir le détail sur <a target=\"_blank\" href=\"https://www.openradiation.org/conditions-dutilisation\">www.openradiation.org/conditions-dutilisation</a>)."
     },
-    "DESCRIPTION": "Description de la mesure",
+    "DESCRIPTION": "Description",
     "DOSE_RATE": "Débit de dose",
     "DOSE_RATE_UNIT": "μSv/h",
     "DURATION": "Durée",
-    "END_LATITUDE": "Latitude de fin",
-    "END_LONGITUDE": "Longitude de fin",
     "ENVIRONMENT": {
       "CITY": "En ville",
       "COUNTRYSIDE": "À la campagne",
@@ -131,18 +129,17 @@
     "MEASURE": "Mesure",
     "MEASURE_START": "Début de la mesure",
     "ONGOING": "Mesure en cours",
+    "REPPORT_LATITUDE": "Latitude",
+    "REPPORT_LONGITUDE": "Longitude",
     "SENSOR_POSITION": {
       "1_METER_HIGH": "À 1 mètre du sol",
       "FLOOR": "Au sol",
       "TITLE": "Position du capteur"
     },
     "SENSOR_TEMPERATURE": "Température capteur",
-    "START_LATITUDE": "Latitude de début",
-    "START_LONGITUDE": "Longitude de début",
     "TAG_LIST": "Liste des tags",
     "TEMPERATURE": "T° (°C)",
-    "TEMPERATURE_AVERAGE": "Température moyenne",
-    "TITLE": "Mesures",
+    "TITLE": "Mesure",
     "VOLTAGE": "Tension (V)",
     "WEATHER": {
       "NO_RAIN": "Pas de pluie",
