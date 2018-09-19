@@ -9,7 +9,7 @@
                  *ngIf="currentMeasure.startTime && currentMeasure.accuracy >= positionAccuracyThreshold.Inaccurate">
                 <div class="message-style">{{'HISTORY.MESSAGE_PREVENT_MEASURE_SENDING' | translate}}</div>
             </div>
-            <div class="category">
+            <div class="category top">
                 <ng-template #measureScanNotStarted>
                     -
                 </ng-template>
