@@ -86,10 +86,23 @@ export class PositionService {
   }
 
   private watchPosition() {
+    this.watchGPSActivation();
     this.geolocation
       .watchPosition({ enableHighAccuracy: true })
       .pipe(takeUntil(this.actions$.pipe(ofActionSuccessful(StopWatchPosition))))
       .subscribe(position => this.store.dispatch(new PositionChanged(position)));
+  }
+
+  watchGPSActivation() {
+    this.diagnostic.registerLocationStateChangeHandler((status: string) => {
+      if (
+        (this.platform.is('android') && status === this.diagnostic.locationMode.LOCATION_OFF) ||
+        (this.platform.is('ios') && status !== this.diagnostic.permissionStatus.GRANTED)
+      ) {
+        this.store.dispatch(new StopWatchPosition());
+        this.store.dispatch(new StartWatchPosition()).subscribe();
+      }
+    });
   }
 
   private onGPSDeniedAlways() {
