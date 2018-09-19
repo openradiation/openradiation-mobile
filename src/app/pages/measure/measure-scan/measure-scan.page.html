@@ -90,7 +90,7 @@
                 </div>
             </div>
             <div class="radiation">
-                <ng-container *ngIf="currentMeasure.hitsNumber <= hitsAccuracyThreshold.Good; else hitsAccuracyMedium">
+                <ng-container *ngIf="currentMeasure.hitsNumber <= hitsAccuracyThreshold.Medium; else hitsAccuracyMedium">
                     <div class="start">
                         <ng-container *ngIf="currentMeasure.startTime; else measureInit">
                             {{'MEASURES.ONGOING' | translate}}

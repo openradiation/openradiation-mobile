@@ -96,9 +96,9 @@ export enum HitsAccuracy {
 
 export enum HitsAccuracyThreshold {
   Start = 0,
-  Bad = 3,
-  Medium = 10,
-  Good = 25,
+  Bad = 4,
+  Medium = 15,
+  Good = 30,
   Accurate = 50
 }
 

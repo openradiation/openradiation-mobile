@@ -110,7 +110,7 @@
     },
     "DESCRIPTION": "Measure description",
     "DOSE_RATE": "Dose rate",
-    "DOSE_RATE_UNIT": "μSvh",
+    "DOSE_RATE_UNIT": "μSv/h",
     "DURATION": "Duration",
     "END_LATITUDE": "End latitude",
     "END_LONGITUDE": "End longitude",
