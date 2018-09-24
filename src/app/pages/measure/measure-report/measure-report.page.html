@@ -57,7 +57,7 @@
                                 <ion-input formControlName="hitsNumber" type="number" placeholder="0"></ion-input>
                             </ion-item>
                             <ion-item class="has-suffix" [ngClass]="{'custom-disabled': reportScan}">
-                                <ion-label position="fixed">{{'MEASURES.TITLE' | translate}}</ion-label>
+                                <ion-label position="fixed">{{'MEASURES.TITLE' | translate}}<span *ngIf="!reportScan"> *</span></ion-label>
                                 <ion-input formControlName="value" required type="number"
                                            placeholder="0.000"></ion-input>
                                 <span class="unit">{{'MEASURES.DOSE_RATE_UNIT' | translate}}</span>
