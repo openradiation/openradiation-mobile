@@ -175,8 +175,8 @@
     "SEARCH": "Recherche de capteurs",
     "TITLE": "Capteurs",
     "TUBE_TYPE": "Type de tube : ",
-    "TYPE": "Type sensor : ",
-    "VERSION": "Version : "
+    "TYPE": "Type de capteur : ",
+    "VERSION": "Identifiant : "
   },
   "SETTINGS": {
     "TITLE": "Paramètres"
