@@ -76,6 +76,9 @@
       &.temperature {
         position: relative;
         padding-right: 24px;
+        .temperature_unit {
+          font-size: 20px;
+        }
         .icon {
           position: absolute;
           top: 20px;

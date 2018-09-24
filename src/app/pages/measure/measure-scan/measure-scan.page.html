@@ -31,7 +31,7 @@
                     <div class="value">
                         <ng-container
                                 *ngIf="currentMeasure.steps && currentMeasure.steps.length > 0; else measureScanNotStarted">
-                            {{currentMeasure.steps[currentMeasure.steps.length - 1].temperature | number : '1.2-2'}}<span> °C</span>
+                            {{currentMeasure.steps[currentMeasure.steps.length - 1].temperature | number : '1.2-2'}}<span class="temperature_unit"> °C</span>
                         </ng-container>
                     </div>
                     <div class="icon">
