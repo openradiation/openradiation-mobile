@@ -63,17 +63,20 @@ export class MapPage {
       if (this.platform.is('cordova')) {
         this.isLoading = true;
         this.diagnostic.isLocationAvailable().then(locationAvailable => {
+          console.log(locationAvailable);
           if (locationAvailable) {
             this.geolocation.getCurrentPosition().then(geoposition => {
               const zoom = 12;
               const lat = geoposition.coords.latitude.toFixed(7);
               const long = geoposition.coords.longitude.toFixed(7);
               url += `/${environment.IN_APP_BROWSER_URI}/${zoom}/${lat}/${long}`;
+              console.log('lat : ' + lat + '  , long : ' + long);
             });
           }
         });
       }
       this.iframeURL = this.domSanitizer.bypassSecurityTrustResourceUrl(url);
+      console.log('url:  ' + url);
     });
   }
 
