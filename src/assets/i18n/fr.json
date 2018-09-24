@@ -103,7 +103,7 @@
     "NO_CONNECTION": "Aucune connexion disponible pour afficher la carte"
   },
   "MEASURES": {
-    "AUTO_PUBLISH": "Publication automatique des mesures",
+    "AUTO_PUBLISH": "Publication automatique",
     "AUTO_PUBLISH_NOTICE": {
       "PART1": "En activant la publication automatique des mesures, les mesures que vous faites et les données associées sont automatiquement envoyées à la base collaborative OpenRadiation, et publiées sous licence <a target=\"_blank\" href=\"https://www.openradiation.org/les-donnees\">ODC-ODbL (Open Database License)</a>.",
       "PART2": "Les données transmises correspondent aux données que vous saisissez, ainsi que des informations sur le modèle et l'identifiant du capteur et/ou du téléphone utilisé, votre nom d'utilisateur, ainsi que la position GPS au moment de la mesure (voir le détail sur <a target=\"_blank\" href=\"https://www.openradiation.org/conditions-dutilisation\">www.openradiation.org/conditions-dutilisation</a>)."
