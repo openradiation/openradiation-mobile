@@ -1,14 +1,16 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { Platform } from '@ionic/angular';
-import { Select } from '@ngxs/store';
+import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { UserState } from '../../../states/user/user.state';
+import { PositionChanged, StartWatchPosition, StopWatchPosition } from '../../../states/measures/measures.action';
+import { MeasuresStateModel } from '../../../states/measures/measures.state';
 
 /**
  * Constants from cordova-plugin-network-information to get network types
@@ -34,7 +36,10 @@ export class MapPage {
     private geolocation: Geolocation,
     private diagnostic: Diagnostic,
     private platform: Platform,
-    private network: Network
+    private network: Network,
+    private store: Store,
+    private actions$: Actions,
+    private changeDetectorRef: ChangeDetectorRef
   ) {
     if (this.platform.is('cordova')) {
       if (this.network.type === Connection.NONE || this.network.type === Connection.UNKNOWN) {
@@ -55,26 +60,23 @@ export class MapPage {
   }
 
   private loadMap() {
-    this.language$.subscribe(language => {
-      this.isLoading = true;
-      let url = `${environment.IN_APP_BROWSER_URI.base}${
-        language === 'fr' || language === 'en' ? '/' + language : ''
-      }/${environment.IN_APP_BROWSER_URI.suffix}`;
-      if (this.platform.is('cordova')) {
-        this.isLoading = true;
-        this.diagnostic.isLocationAvailable().then(locationAvailable => {
-          if (locationAvailable) {
-            this.geolocation.getCurrentPosition().then(geoposition => {
-              const zoom = 12;
-              const lat = geoposition.coords.latitude.toFixed(7);
-              const long = geoposition.coords.longitude.toFixed(7);
-              url += `/${environment.IN_APP_BROWSER_URI}/${zoom}/${lat}/${long}`;
-            });
-          }
-        });
-      }
+    this.isLoading = true;
+    // TODO: put the language in the url when the API will be fixed
+    let url = `${environment.IN_APP_BROWSER_URI.base}/${environment.IN_APP_BROWSER_URI.suffix}`;
+    this.store.dispatch(new StartWatchPosition());
+    this.actions$.pipe(ofActionSuccessful(PositionChanged)).subscribe(() => {
+      const position = this.store.selectSnapshot(
+        ({ measures }: { measures: MeasuresStateModel }) => measures.currentPosition!.coords
+      );
+      const lat = position.latitude.toFixed(7);
+      const long = position.longitude.toFixed(7);
+      const zoom = 12;
+      url += `/${zoom}/${lat}/${long}`;
+      this.store.dispatch(new StopWatchPosition());
       this.iframeURL = this.domSanitizer.bypassSecurityTrustResourceUrl(url);
+      this.changeDetectorRef.markForCheck();
     });
+    this.iframeURL = this.domSanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
   mapLoaded() {
