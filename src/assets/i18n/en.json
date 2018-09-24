@@ -104,6 +104,7 @@
   },
   "MEASURES": {
     "AUTO_PUBLISH": "Auto publish measures",
+    "AUTO_PUBLISH_TITLE": "Auto publish",
     "AUTO_PUBLISH_NOTICE": {
       "PART1": null,
       "PART2": null
