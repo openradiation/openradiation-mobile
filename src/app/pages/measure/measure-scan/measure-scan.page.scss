@@ -6,6 +6,7 @@
   align-items: center;
   min-height: 100%;
   background: $third-color;
+  padding-top: 7px;
 
   .bottom-buttons {
     margin: 20px 0;
@@ -37,7 +38,7 @@
 
   .message {
     display: flex;
-    padding-top: 7px;
+    padding-top: 5px;
     white-space: normal;
     text-align: center;
     .message-style {
