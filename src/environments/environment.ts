@@ -4,7 +4,7 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 export const environment = {
   production: false,
-  APP_NAME_VERSION: 'OpenRadiation app 2.0.0 test',
+  APP_NAME_VERSION: 'OpenRadiation app 2.0.0-beta.1 test',
   API_KEY: '50adef3bdec466edc25f40c8fedccbce',
   API_URI: 'https://submit.open-radiation.net/measurements',
   IN_APP_BROWSER_URI: {
