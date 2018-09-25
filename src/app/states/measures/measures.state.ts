@@ -239,11 +239,7 @@ export class MeasuresState {
           historyMeasure => historyMeasure.reportUuid === currentMeasure.reportUuid
         );
         if (measureIndex > -1) {
-          patch.measures = [
-            ...measures.slice(0, Math.max(measureIndex - 1, 0)),
-            measure,
-            ...measures.slice(measureIndex + 1)
-          ];
+          patch.measures = [...measures.slice(0, measureIndex), measure, ...measures.slice(measureIndex + 1)];
         } else {
           patch.measures = [...measures, measure];
         }
@@ -379,16 +375,18 @@ export class MeasuresState {
         duration: currentMeasure.endTime
           ? this.dateService.toISODuration(currentMeasure.endTime - currentMeasure.startTime)
           : undefined,
-        temperature: currentMeasure.temperature ? Number(currentMeasure.temperature!.toFixed(2)) : undefined,
-        hitsNumber: currentMeasure.hitsNumber ? currentMeasure.hitsNumber : undefined,
-        value: currentMeasure.value ? Number(currentMeasure.value.toFixed(3)) : undefined,
-        measurementHeight: currentMeasure.measurementHeight ? currentMeasure.measurementHeight : undefined,
-        description: currentMeasure.description ? currentMeasure.description : undefined,
+        temperature:
+          currentMeasure.temperature !== undefined ? Number(currentMeasure.temperature!.toFixed(2)) : undefined,
+        hitsNumber: currentMeasure.hitsNumber !== undefined ? currentMeasure.hitsNumber : undefined,
+        value: currentMeasure.value !== undefined ? Number(currentMeasure.value.toFixed(3)) : undefined,
+        measurementHeight:
+          currentMeasure.measurementHeight !== undefined ? currentMeasure.measurementHeight : undefined,
+        description: currentMeasure.description !== undefined ? currentMeasure.description : undefined,
         tags: currentMeasure.tags ? currentMeasure.tags : undefined,
         measurementEnvironment: currentMeasure.measurementEnvironment
           ? currentMeasure.measurementEnvironment
           : undefined,
-        rain: currentMeasure.rain ? currentMeasure.rain : undefined
+        rain: currentMeasure.rain !== undefined ? currentMeasure.rain : undefined
       };
       patchState({
         measureReport: {
