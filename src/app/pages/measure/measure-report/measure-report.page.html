@@ -13,41 +13,27 @@
                     <div class="position">
                         <ion-list>
                             <ion-item class="custom-disabled">
-                                <ion-label>{{'MEASURES.START_LATITUDE' | translate}}</ion-label>
-                                <ion-input formControlName="latitude" type="number"></ion-input>
+                                <ion-label class="value">{{'MEASURES.REPPORT_LATITUDE' | translate}}</ion-label>
+                                <ion-input class="values" formControlName="latitude" type="number"></ion-input>
                             </ion-item>
                             <ion-item class="custom-disabled">
-                                <ion-label>{{'MEASURES.START_LONGITUDE' | translate}}</ion-label>
-                                <ion-input formControlName="longitude" type="number"></ion-input>
+                                <ion-label class="value">{{'MEASURES.REPPORT_LONGITUDE' | translate}}</ion-label>
+                                <ion-input class="values" formControlName="longitude" type="number"></ion-input>
                             </ion-item>
                         </ion-list>
                         <app-gps-indicator [accuracy]="currentMeasure.accuracy" [compact]="true"></app-gps-indicator>
                     </div>
                     <div class="separator"></div>
-                    <div class="position">
-                        <ion-list>
-                            <ion-item class="custom-disabled">
-                                <ion-label>{{'MEASURES.END_LATITUDE' | translate}}</ion-label>
-                                <ion-input formControlName="endLatitude" type="number"></ion-input>
-                            </ion-item>
-                            <ion-item class="custom-disabled">
-                                <ion-label>{{'MEASURES.END_LONGITUDE' | translate}}</ion-label>
-                                <ion-input formControlName="endLongitude" type="number"></ion-input>
-                            </ion-item>
-                        </ion-list>
-                        <app-gps-indicator [accuracy]="currentMeasure.endAccuracy" [compact]="true"></app-gps-indicator>
-                    </div>
-                    <div class="separator"></div>
                     <ion-list>
                         <ion-item class="custom-disabled">
-                            <ion-label>{{'GENERAL.DATE' | translate}}</ion-label>
-                            <ion-datetime display-format="DD/MM/YYYY" formControlName="date" required
+                            <ion-label class="value">{{'GENERAL.DATE' | translate}}</ion-label>
+                            <ion-datetime class="values" display-format="DD/MM/YYYY" formControlName="date" required
                                           [cancelText]="'GENERAL.CANCEL' | translate"
                                           [doneText]="'GENERAL.SUBMIT' | translate"></ion-datetime>
                         </ion-item>
                         <ion-item class="custom-disabled">
-                            <ion-label>{{'MEASURES.MEASURE_START' | translate}}</ion-label>
-                            <ion-datetime display-format="HH:mm:ss" formControlName="startTime" required
+                            <ion-label class="value">{{'MEASURES.MEASURE_START' | translate}}</ion-label>
+                            <ion-datetime class="values" display-format="HH:mm:ss" formControlName="startTime" required
                                           [cancelText]="'GENERAL.CANCEL' | translate"
                                           [doneText]="'GENERAL.SUBMIT' | translate"></ion-datetime>
                         </ion-item>
@@ -62,7 +48,7 @@
                                               placeholder="00:00"></ion-datetime>
                             </ion-item>
                             <ion-item class="has-suffix long-label" [ngClass]="{'custom-disabled': reportScan}">
-                                <ion-label position="fixed">{{'MEASURES.TEMPERATURE_AVERAGE' | translate}}</ion-label>
+                                <ion-label position="fixed">{{'MEASURES.SENSOR_TEMPERATURE' | translate}}</ion-label>
                                 <ion-input formControlName="temperature" type="number" placeholder="0"></ion-input>
                                 <span class="unit">°C</span>
                             </ion-item>
@@ -71,7 +57,7 @@
                                 <ion-input formControlName="hitsNumber" type="number" placeholder="0"></ion-input>
                             </ion-item>
                             <ion-item class="has-suffix" [ngClass]="{'custom-disabled': reportScan}">
-                                <ion-label position="fixed">{{'MEASURES.TITLE' | translate}}</ion-label>
+                                <ion-label position="fixed">{{'MEASURES.TITLE' | translate}}<span *ngIf="!reportScan"> *</span></ion-label>
                                 <ion-input formControlName="value" required type="number"
                                            placeholder="0.000"></ion-input>
                                 <span class="unit">{{'MEASURES.DOSE_RATE_UNIT' | translate}}</span>

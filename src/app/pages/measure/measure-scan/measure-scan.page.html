@@ -9,7 +9,7 @@
                  *ngIf="currentMeasure.startTime && currentMeasure.accuracy >= positionAccuracyThreshold.Inaccurate">
                 <div class="message-style">{{'HISTORY.MESSAGE_PREVENT_MEASURE_SENDING' | translate}}</div>
             </div>
-            <div class="category">
+            <div class="category top">
                 <ng-template #measureScanNotStarted>
                     -
                 </ng-template>
@@ -31,7 +31,7 @@
                     <div class="value">
                         <ng-container
                                 *ngIf="currentMeasure.steps && currentMeasure.steps.length > 0; else measureScanNotStarted">
-                            {{currentMeasure.steps[currentMeasure.steps.length - 1].temperature | number : '1.2-2'}}
+                            {{currentMeasure.steps[currentMeasure.steps.length - 1].temperature | number : '1.2-2'}}<span class="temperature-unit"> °C</span>
                         </ng-container>
                     </div>
                     <div class="icon">
@@ -90,7 +90,7 @@
                 </div>
             </div>
             <div class="radiation">
-                <ng-container *ngIf="currentMeasure.hitsNumber <= hitsAccuracyThreshold.Good; else hitsAccuracyMedium">
+                <ng-container *ngIf="currentMeasure.hitsNumber <= hitsAccuracyThreshold.Medium; else hitsAccuracyMedium">
                     <div class="start">
                         <ng-container *ngIf="currentMeasure.startTime; else measureInit">
                             {{'MEASURES.ONGOING' | translate}}
