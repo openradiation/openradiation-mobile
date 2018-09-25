@@ -7,20 +7,8 @@ import { take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
-import {
-  HitsAccuracy,
-  HitsAccuracyThreshold,
-  Measure,
-  PositionAccuracyThreshold
-} from '../../../states/measures/measure';
-import {
-  CancelMeasure,
-  PositionChanged,
-  StartMeasureScan,
-  StartWatchPosition,
-  StopMeasureScan,
-  StopWatchPosition
-} from '../../../states/measures/measures.action';
+import { HitsAccuracy, HitsAccuracyThreshold, Measure, PositionAccuracyThreshold } from '../../../states/measures/measure';
+import { CancelMeasure, PositionChanged, StartMeasureScan, StartWatchPosition, StopMeasureScan, StopWatchPosition } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
 
 @Component({
@@ -56,11 +44,9 @@ export class MeasureScanPage extends AutoUnsubscribePage {
     super.pageEnter();
     this.subscriptions.push(
       this.currentMeasure$.subscribe(measure => this.updateHitsAccuracy(measure)),
-      this.actions$.pipe(ofActionSuccessful(StopMeasureScan)).subscribe(() =>
-        this.navController.navigateForward(['measure', 'report'], true, {
-          queryParams: { reportScan: true }
-        })
-      )
+      this.actions$
+        .pipe(ofActionSuccessful(StopMeasureScan))
+        .subscribe(() => this.navController.navigateForward(['measure', 'report'], true))
     );
     this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
       if (connectedDevice) {
