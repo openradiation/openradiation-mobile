@@ -401,7 +401,7 @@ export class MeasuresState {
       if (state.currentMeasure.manualReporting) {
         const durationDate = new Date(state.measureReport.model.duration!);
         currentMeasure = {
-          ...state.currentMeasure,
+          ...currentMeasure,
           temperature: state.measureReport.model.temperature!,
           value: state.measureReport.model.value!,
           hitsNumber: state.measureReport.model.hitsNumber!,
