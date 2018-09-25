@@ -2,7 +2,7 @@
     {{title}}
 </div>
 <div class="list">
-  <div class="item" *ngFor="let option of options" (click)="writeValue(option)">
+  <div class="item" *ngFor="let option of options" (click)="writeValue(option.value)">
       <div class="icon">
           <img [src]="option === selectedOption ? option.iconOn : option.iconOff">
       </div>
