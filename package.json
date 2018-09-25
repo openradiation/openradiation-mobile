@@ -7,6 +7,8 @@
   "scripts": {
     "start": "ionic serve --no-open",
     "cordova:prepare": "ionic cordova prepare",
+    "build:beta:android": "ionic cordova build android --prod --release --buildConfig=build.json --configuration beta",
+    "build:beta:ios": "ionic cordova build ios --prod --release --buildConfig=build.json --configuration beta",
     "build:android": "ionic cordova build android --prod --release --buildConfig=build.json",
     "build:ios": "ionic cordova build ios --prod --release --buildConfig=build.json",
     "run:android": "ionic cordova run android",
@@ -87,7 +89,6 @@
     "codelyzer": "~4.4.2",
     "cordova": "8.0.0",
     "ionic": "4.0.6",
-    "ios-deploy": "^1.9.3",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~3.0.0",
