@@ -228,20 +228,35 @@ export class MeasuresState {
 
   @Action(StopMeasure)
   stopMeasure({ getState, patchState, dispatch }: StateContext<MeasuresStateModel>) {
-    const state = getState();
-    if (state.currentMeasure) {
-      const measure = { ...state.currentMeasure, steps: undefined };
-      patchState({
-        measures: [...state.measures, measure],
-        currentMeasure: undefined
-      });
-      if (
-        state.params.autoPublish &&
-        (measure.accuracy &&
+    const { currentMeasure, measures, params } = getState();
+    if (currentMeasure) {
+      const patch: Partial<MeasuresStateModel> = { currentMeasure: undefined };
+      if (currentMeasure.sent) {
+        patchState(patch);
+      } else {
+        const measure = { ...currentMeasure, steps: undefined };
+        const measureIndex = measures.findIndex(
+          historyMeasure => historyMeasure.reportUuid === currentMeasure.reportUuid
+        );
+        if (measureIndex > -1) {
+          patch.measures = [
+            ...measures.slice(0, Math.max(measureIndex - 1, 0)),
+            measure,
+            ...measures.slice(measureIndex + 1)
+          ];
+        } else {
+          patch.measures = [...measures, measure];
+        }
+        patchState(patch);
+        if (
+          params.autoPublish &&
+          measure.accuracy &&
           measure.accuracy < PositionAccuracyThreshold.Inaccurate &&
-          (measure.endAccuracy && measure.endAccuracy < PositionAccuracyThreshold.Inaccurate))
-      ) {
-        dispatch(new PublishMeasure(measure));
+          measure.endAccuracy &&
+          measure.endAccuracy < PositionAccuracyThreshold.Inaccurate
+        ) {
+          dispatch(new PublishMeasure(measure));
+        }
       }
     }
   }
