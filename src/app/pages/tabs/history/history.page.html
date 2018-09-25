@@ -32,12 +32,12 @@
                         <ion-button class="inner-button" fill="clear"
                                     size="default"
                                     [disabled]="!measure.accuracy || measure.accuracy >= positionAccuracyThreshold.Inaccurate || !measure.endAccuracy || measure.endAccuracy >= positionAccuracyThreshold.Inaccurate"
-                                    (click)="publish(measure)">
+                                    (click)="publish($event, measure)">
                             <img src="assets/img/icon-publish.png">
                         </ion-button>
                         <ion-button class="inner-button" fill="clear"
                                     size="default"
-                                    (click)="delete(measure)">
+                                    (click)="delete($event, measure)">
                             <img src="assets/img/icon-delete.png">
                         </ion-button>
                     </ng-container>
