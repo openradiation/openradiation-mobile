@@ -1,6 +1,6 @@
-import { Component, ElementRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
 import { NavController } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
@@ -9,7 +9,7 @@ import { take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { SelectIconOption } from '../../../components/select-icon/select-icon-option';
 import { DateService } from '../../../states/measures/date.service';
-import { Measure, MeasureEnvironment } from '../../../states/measures/measure';
+import { Measure, MeasureEnvironment, PositionAccuracyThreshold } from '../../../states/measures/measure';
 import {
   CancelMeasure,
   StartMeasureReport,
@@ -18,7 +18,6 @@ import {
 } from '../../../states/measures/measures.action';
 import { MeasuresState, MeasuresStateModel } from '../../../states/measures/measures.state';
 import { UserState } from '../../../states/user/user.state';
-import { TabsService } from '../../tabs/tabs.service';
 
 @Component({
   selector: 'app-measure-report',
@@ -37,6 +36,10 @@ export class MeasureReportPage extends AutoUnsubscribePage {
 
   measureReportForm: FormGroup;
   reportScan = true;
+
+  positionAccuracyThreshold = PositionAccuracyThreshold;
+
+  url = '/measure/report';
 
   measurementEnvironmentOptions: SelectIconOption[] = [
     {
@@ -101,58 +104,71 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     }
   ];
 
+  private initialized = false;
+
   constructor(
-    protected tabsService: TabsService,
-    protected elementRef: ElementRef,
+    protected activatedRoute: ActivatedRoute,
+    protected router: Router,
     private formBuilder: FormBuilder,
     private store: Store,
     private navController: NavController,
     private actions$: Actions,
-    private activatedRoute: ActivatedRoute,
     private dateService: DateService
   ) {
-    super(tabsService, elementRef);
+    super(router);
   }
 
-  ionViewDidEnter() {
-    super.ionViewDidEnter();
-    this.store.dispatch(new StartMeasureReport()).subscribe(() => {
-      const measureReport = this.store.selectSnapshot(
-        ({ measures }: { measures: MeasuresStateModel }) => measures.measureReport
-      );
-      this.activatedRoute.url.pipe(take(1)).subscribe(url => (this.reportScan = url[0].path === 'scan'));
-      if (measureReport) {
-        this.measureReportForm = this.formBuilder.group(measureReport.model);
-      }
-      this.subscriptions.push(
-        this.measureReportForm.valueChanges.subscribe(value => {
-          if (typeof value.duration !== 'string' && value.duration) {
-            this.measureReportForm
-              .get('duration')!
-              .setValue(
-                this.dateService.toISODuration((value.duration.minute.value * 60 + value.duration.second.value) * 1000)
-              );
-          }
-        }),
-        this.actions$.pipe(ofActionSuccessful(StopMeasure, CancelMeasure)).subscribe(() =>
-          this.navController.navigateRoot([
-            'tabs',
-            {
-              outlets: {
-                home: 'home',
-                history: null,
-                settings: null,
-                map: null,
-                other: null
-              }
+  pageEnter() {
+    if (!this.initialized) {
+      super.pageEnter();
+      this.activatedRoute.queryParams
+        .pipe(take(1))
+        .subscribe(queryParams => (this.reportScan = queryParams.reportScan));
+      this.store.dispatch(new StartMeasureReport()).subscribe(() => {
+        const measureReport = this.store.selectSnapshot(
+          ({ measures }: { measures: MeasuresStateModel }) => measures.measureReport
+        );
+        if (measureReport) {
+          this.measureReportForm = this.formBuilder.group(measureReport.model);
+        }
+        this.init();
+      });
+      this.initialized = true;
+    } else {
+      this.init();
+    }
+  }
+
+  init() {
+    this.subscriptions.push(
+      this.measureReportForm.valueChanges.subscribe(value => {
+        if (typeof value.duration !== 'string' && value.duration) {
+          this.measureReportForm
+            .get('duration')!
+            .setValue(
+              this.dateService.toISODuration((value.duration.minute.value * 60 + value.duration.second.value) * 1000)
+            );
+        }
+      }),
+      this.actions$.pipe(ofActionSuccessful(StopMeasure, CancelMeasure)).subscribe(() =>
+        this.navController.navigateRoot([
+          'tabs',
+          {
+            outlets: {
+              home: 'home',
+              history: null,
+              settings: null,
+              map: null,
+              other: null
             }
-          ])
-        )
-      );
-    });
+          }
+        ])
+      )
+    );
   }
 
   stopReport() {
+    this.initialized = false;
     if (this.measureReportForm.valid) {
       this.subscriptions.push(
         this.actions$.pipe(ofActionSuccessful(StopMeasureReport)).subscribe(() => {
@@ -165,9 +181,10 @@ export class MeasureReportPage extends AutoUnsubscribePage {
 
   cancelMeasure() {
     this.store.dispatch(new CancelMeasure());
+    this.initialized = false;
   }
 
   showMeasureSteps() {
-    this.navController.navigateForward(['measure', 'report', 'steps']);
+    this.navController.navigateForward(['measure', 'steps']);
   }
 }

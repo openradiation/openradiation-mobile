@@ -4,11 +4,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100%;
+  min-height: 100%;
   background: $third-color;
+  padding-top: 7px;
 
   .bottom-buttons {
-    margin-top: 4px;
+    margin: 20px 0;
     position: relative;
     display: flex;
     width: 100%;
@@ -35,15 +36,32 @@
     }
   }
 
+  .message {
+    display: flex;
+    padding-top: 5px;
+    white-space: normal;
+    text-align: center;
+    .message-style {
+      color: $base-color;
+      font-size: 12px;
+      font-style: italic;
+    }
+  }
+
   .category {
     display: flex;
     width: 100%;
+    padding-top: 5px;
+    &.top {
+      padding-bottom: 10px;
+      padding-top: 5px;
+    }
     .item {
       display: flex;
       flex-direction: column;
       align-items: center;
       flex: auto;
-      padding: 10px;
+      padding: 20px 10px 10px 10px;
       .label {
         color: $base-color;
         font-size: 12px;
@@ -55,39 +73,42 @@
         font-size: 30px;
         font-family: 'ARIALROUNDED', Arial, Helvetica, sans-serif;
       }
-    }
-    .separator {
-      margin: 10px 0 4px 0;
-      border: 2px solid $forth-color;
-      border-radius: 2px;
-      flex: none;
-    }
-    .temperature {
-      position: relative;
-      padding-right: 24px;
-      .icon {
-        position: absolute;
-        top: 20px;
-        right: 10px;
+      &.temperature {
+        position: relative;
+        padding-right: 24px;
+        .temperature-unit {
+          font-size: 20px;
+        }
+        .icon {
+          position: absolute;
+          top: 20px;
+          right: 10px;
+        }
       }
-    }
-    .duration {
-      position: relative;
-      .icon {
-        position: absolute;
-        top: 6px;
-        left: 0;
-        height: 100%;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        img {
+      &.duration {
+        position: relative;
+        .icon {
+          position: absolute;
+          top: 6px;
+          left: 0;
+          height: 100%;
           width: 100%;
-          padding: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          img {
+            width: 100%;
+            padding: 8px;
+          }
         }
       }
     }
+  }
+  .separator {
+    margin: 10px 0 4px 0;
+    border: 1px solid $forth-color;
+    border-radius: 2px;
+    flex: none;
   }
   .accuracy {
     margin: 10px 0 20px 0;

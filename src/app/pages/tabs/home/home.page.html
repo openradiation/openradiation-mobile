@@ -10,7 +10,7 @@
         <ng-container *ngIf="connectedDevice$ | async as connectedDevice; else noConnectedDevice">
             <div class="connected-device-header">{{'HOME.CONNECTED_SENSOR' | translate}}</div>
             <ion-button class="connected-device-button" fill="clear" (click)="goToDevices()">
-                {{connectedDevice.apparatusVersion}} / {{connectedDevice.apparatusId}}
+                {{connectedDevice.apparatusVersion}}
             </ion-button>
         </ng-container>
         <ng-template #noConnectedDevice>

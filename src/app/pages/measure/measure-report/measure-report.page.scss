@@ -5,7 +5,7 @@
   flex-direction: column;
   align-items: center;
   background: $third-color;
-  padding: 15px 0;
+  padding: 7px 0 15px 0;
 
   .bottom-buttons {
     margin-top: 20px;
@@ -38,6 +38,22 @@
     }
   }
 
+  .message {
+    display: flex;
+    white-space: normal;
+    text-align: center;
+    padding: 5px;
+    .message-style {
+      color: $second-color;
+      font-size: 12px;
+      font-style: italic;
+    }
+  }
+
+  .form {
+    padding: 10px 0;
+  }
+
   .position {
     display: flex;
     align-items: center;
@@ -45,6 +61,11 @@
       margin-right: 16px;
       flex: none;
     }
+  }
+
+  .values {
+    font-size: 14px;
+    padding: 0;
   }
 
   ion-list {
@@ -106,7 +127,7 @@
       }
       ion-label {
         color: $second-color;
-        font-size: 16px;
+        font-size: 14px;
       }
 
       .unit {
@@ -154,7 +175,7 @@
 
   .separator {
     margin: 10px 30px;
-    border: 2px solid $forth-color;
+    border: 1px solid $forth-color;
     border-radius: 2px;
   }
 

@@ -1,15 +1,14 @@
-import { Component, ElementRef } from '@angular/core';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
-import { PositionAccuracyThreshold } from '../../../states/measures/measure';
 import { StartMeasure, StartWatchPosition, StopWatchPosition } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
-import { TabsService } from '../tabs.service';
 
 @Component({
   selector: 'app-page-home',
@@ -24,25 +23,21 @@ export class HomePage extends AutoUnsubscribePage {
 
   canStartMeasure: Observable<boolean>;
 
+  url = '/tabs/(home:home)';
+
   constructor(
-    protected tabsService: TabsService,
-    protected elementRef: ElementRef,
+    protected router: Router,
     private store: Store,
     private actions$: Actions,
     private navController: NavController
   ) {
-    super(tabsService, elementRef);
+    super(router);
 
-    this.canStartMeasure = combineLatest(this.positionAccuracy$, this.connectedDevice$).pipe(
-      map(
-        ([positionAccuracy, connectedDevice]) =>
-          positionAccuracy !== PositionAccuracyThreshold.Error && connectedDevice !== undefined
-      )
-    );
+    this.canStartMeasure = this.connectedDevice$.pipe(map(connectedDevice => connectedDevice !== undefined));
   }
 
-  ionViewDidEnter() {
-    super.ionViewDidEnter();
+  pageEnter() {
+    super.pageEnter();
     this.store.dispatch(new StartWatchPosition());
     this.subscriptions.push(
       this.actions$
@@ -51,8 +46,8 @@ export class HomePage extends AutoUnsubscribePage {
     );
   }
 
-  ionViewWillLeave() {
-    super.ionViewWillLeave();
+  pageLeave() {
+    super.pageLeave();
     this.store.dispatch(new StopWatchPosition());
   }
 

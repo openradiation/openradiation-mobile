@@ -179,8 +179,8 @@ export class DevicesService {
     });
     this.alertController
       .create({
-        header: this.translateService.instant('BLUETOOTH.GPS_DISABLED.TITLE'),
-        message: this.translateService.instant('BLUETOOTH.GPS_DISABLED.NOTICE'),
+        header: this.translateService.instant('BLUETOOTH.BLE_DISABLED.TITLE'),
+        message: this.translateService.instant('BLUETOOTH.BLE_DISABLED.NOTICE'),
         backdropDismiss: false,
         buttons: [
           {

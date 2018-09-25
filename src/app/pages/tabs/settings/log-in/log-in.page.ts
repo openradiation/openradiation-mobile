@@ -1,6 +1,6 @@
-import { Component, ElementRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NavController, ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
@@ -9,7 +9,6 @@ import { AutoUnsubscribePage } from '../../../../components/auto-unsubscribe/aut
 import { ErrorResponse, ErrorResponseCode } from '../../../../states/measures/error-response';
 import { StartManualMeasure } from '../../../../states/measures/measures.action';
 import { LogIn } from '../../../../states/user/user.action';
-import { TabsService } from '../../tabs.service';
 
 @Component({
   selector: 'app-log-in',
@@ -20,27 +19,27 @@ export class LogInPage extends AutoUnsubscribePage {
   loginForm: FormGroup;
   connecting = false;
   startMeasureAfterLogin = false;
+  url = '/tabs/(settings:log-in)';
 
   constructor(
-    protected tabsService: TabsService,
-    protected elementRef: ElementRef,
+    protected activatedRoute: ActivatedRoute,
+    protected router: Router,
     private navController: NavController,
     private store: Store,
     private formBuilder: FormBuilder,
     private toastController: ToastController,
     private actions$: Actions,
-    private activatedRoute: ActivatedRoute,
     private translateService: TranslateService
   ) {
-    super(tabsService, elementRef);
+    super(router);
     this.loginForm = this.formBuilder.group({
       login: ['', Validators.required],
       password: ['', Validators.required]
     });
   }
 
-  ionViewDidEnter() {
-    super.ionViewDidEnter();
+  pageEnter() {
+    super.pageEnter();
     this.activatedRoute.queryParams
       .pipe(take(1))
       .subscribe(queryParams => (this.startMeasureAfterLogin = queryParams.startMeasureAfterLogin));

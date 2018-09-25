@@ -17,12 +17,14 @@ export class GpsIndicatorComponent implements OnChanges {
   positionAccuracyEnum = PositionAccuracy;
 
   ngOnChanges() {
-    if (!this.accuracy || this.accuracy <= PositionAccuracyThreshold.Error) {
-      this.positionAccuracy = PositionAccuracy.Error;
-    } else if (this.accuracy <= PositionAccuracyThreshold.Good) {
-      this.positionAccuracy = PositionAccuracy.Good;
+    if (!this.accuracy || this.accuracy === PositionAccuracyThreshold.No) {
+      this.positionAccuracy = PositionAccuracy.No;
+    } else if (this.accuracy >= PositionAccuracyThreshold.Inaccurate) {
+      this.positionAccuracy = PositionAccuracy.Inaccurate;
+    } else if (this.accuracy >= PositionAccuracyThreshold.Poor) {
+      this.positionAccuracy = PositionAccuracy.Poor;
     } else {
-      this.positionAccuracy = PositionAccuracy.Bad;
+      this.positionAccuracy = PositionAccuracy.Good;
     }
   }
 }

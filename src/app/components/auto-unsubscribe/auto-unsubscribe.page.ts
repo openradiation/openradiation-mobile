@@ -1,30 +1,47 @@
-import { ElementRef } from '@angular/core';
+import { OnDestroy } from '@angular/core';
+import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { TabsService } from '../../pages/tabs/tabs.service';
+import { filter } from 'rxjs/operators';
 
-export class AutoUnsubscribePage {
+// TODO Remove this abstract class when Ionic issues with lifecycle events are fixed.
+export abstract class AutoUnsubscribePage implements OnDestroy {
   protected subscriptions: Subscription[] = [];
   private focused = false;
+  private routerSubscribe: Subscription;
 
-  constructor(protected tabsService: TabsService, protected elementRef: ElementRef) {
-    this.tabsService.currentTab.subscribe(currentTab => {
-      if (this.elementRef.nativeElement === currentTab) {
-        if (!this.focused) {
-          this.ionViewDidEnter();
+  protected abstract url: string;
+
+  protected constructor(protected router: Router) {
+    this.routerSubscribe = this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd || event instanceof NavigationStart))
+      .subscribe(event => {
+        if (
+          event instanceof NavigationEnd &&
+          (event.url.split('?')[0] === this.url || event.url === '/') &&
+          !this.focused
+        ) {
+          this.pageEnter();
         }
-      } else {
-        if (this.focused) {
-          this.ionViewWillLeave();
+        if (
+          event instanceof NavigationStart &&
+          event.url.split('?')[0] !== this.url &&
+          this.focused &&
+          event.url !== '/#'
+        ) {
+          this.pageLeave();
         }
-      }
-    });
+      });
   }
 
-  ionViewDidEnter() {
+  ngOnDestroy() {
+    this.routerSubscribe.unsubscribe();
+  }
+
+  pageEnter() {
     this.focused = true;
   }
 
-  ionViewWillLeave() {
+  pageLeave() {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
     this.subscriptions = [];
     this.focused = false;

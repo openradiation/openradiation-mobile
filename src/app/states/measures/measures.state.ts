@@ -5,7 +5,7 @@ import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import * as uuid from 'uuid';
 import { DateService } from './date.service';
-import { Measure, MeasureReport } from './measure';
+import { Measure, MeasureReport, PositionAccuracyThreshold } from './measure';
 import {
   AddMeasureScanStep,
   CancelMeasure,
@@ -84,7 +84,7 @@ export class MeasuresState {
 
   @Selector()
   static positionAccuracy(state: MeasuresStateModel): number {
-    return state.currentPosition ? state.currentPosition.coords.accuracy : -1;
+    return state.currentPosition ? state.currentPosition.coords.accuracy : PositionAccuracyThreshold.No;
   }
 
   @Selector()
@@ -197,8 +197,28 @@ export class MeasuresState {
           ),
           latitude: state.currentPosition!.coords.latitude,
           longitude: state.currentPosition!.coords.longitude,
+          accuracy: state.currentPosition!.coords.accuracy,
           endLatitude: state.currentPosition!.coords.latitude,
           endLongitude: state.currentPosition!.coords.longitude,
+          endAccuracy: state.currentPosition!.coords.accuracy,
+          startTime: Date.now()
+        }
+      });
+    } else {
+      patchState({
+        currentMeasure: {
+          ...new Measure(
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            this.device.uuid,
+            this.device.platform,
+            this.device.version,
+            this.device.model,
+            uuid.v4(),
+            true
+          ),
           startTime: Date.now()
         }
       });
@@ -214,7 +234,12 @@ export class MeasuresState {
         measures: [...state.measures, measure],
         currentMeasure: undefined
       });
-      if (state.params.autoPublish) {
+      if (
+        state.params.autoPublish &&
+        (measure.accuracy &&
+          measure.accuracy < PositionAccuracyThreshold.Inaccurate &&
+          (measure.endAccuracy && measure.endAccuracy < PositionAccuracyThreshold.Inaccurate))
+      ) {
         dispatch(new PublishMeasure(measure));
       }
     }
@@ -263,23 +288,37 @@ export class MeasuresState {
   @Action(StartMeasureScan)
   startMeasureScan({ getState, patchState }: StateContext<MeasuresStateModel>, { device }: StartMeasureScan) {
     const state = getState();
-    if (state.currentMeasure && state.currentPosition) {
-      return this.measuresService.startMeasureScan(device).pipe(
-        tap(() => {
-          patchState({
-            currentMeasure: {
-              ...state.currentMeasure!,
-              startTime: Date.now(),
-              endTime: Date.now(),
-              latitude: state.currentPosition!.coords.latitude,
-              longitude: state.currentPosition!.coords.longitude,
-              accuracy: state.currentPosition!.coords.accuracy,
-              altitude: state.currentPosition!.coords.altitude,
-              altitudeAccuracy: state.currentPosition!.coords.altitudeAccuracy
-            }
-          });
-        })
-      );
+    if (state.currentMeasure) {
+      if (state.currentPosition) {
+        return this.measuresService.startMeasureScan(device).pipe(
+          tap(() => {
+            patchState({
+              currentMeasure: {
+                ...state.currentMeasure!,
+                startTime: Date.now(),
+                endTime: Date.now(),
+                latitude: state.currentPosition!.coords.latitude,
+                longitude: state.currentPosition!.coords.longitude,
+                accuracy: state.currentPosition!.coords.accuracy,
+                altitude: state.currentPosition!.coords.altitude,
+                altitudeAccuracy: state.currentPosition!.coords.altitudeAccuracy
+              }
+            });
+          })
+        );
+      } else {
+        return this.measuresService.startMeasureScan(device).pipe(
+          tap(() => {
+            patchState({
+              currentMeasure: {
+                ...state.currentMeasure!,
+                startTime: Date.now(),
+                endTime: Date.now()
+              }
+            });
+          })
+        );
+      }
     } else {
       return of();
     }
@@ -288,17 +327,25 @@ export class MeasuresState {
   @Action(StopMeasureScan)
   stopMeasureScan({ getState, patchState }: StateContext<MeasuresStateModel>) {
     const state = getState();
-    if (state.currentMeasure && state.currentPosition) {
-      patchState({
-        currentMeasure: {
-          ...state.currentMeasure,
-          endLatitude: state.currentPosition.coords.longitude,
-          endLongitude: state.currentPosition.coords.latitude,
-          endAccuracy: state.currentPosition.coords.accuracy,
-          endAltitude: state.currentPosition.coords.altitude,
-          endAltitudeAccuracy: state.currentPosition.coords.altitudeAccuracy
-        }
-      });
+    if (state.currentMeasure) {
+      if (state.currentMeasure.accuracy && state.currentMeasure.accuracy < PositionAccuracyThreshold.Inaccurate) {
+        patchState({
+          currentMeasure: {
+            ...state.currentMeasure,
+            endLatitude: state.currentPosition!.coords.latitude,
+            endLongitude: state.currentPosition!.coords.longitude,
+            endAccuracy: state.currentPosition!.coords.accuracy,
+            endAltitude: state.currentPosition!.coords.altitude,
+            endAltitudeAccuracy: state.currentPosition!.coords.altitudeAccuracy
+          }
+        });
+      } else {
+        patchState({
+          currentMeasure: {
+            ...state.currentMeasure
+          }
+        });
+      }
     }
   }
 
@@ -307,10 +354,10 @@ export class MeasuresState {
     const state = getState();
     if (state.currentMeasure) {
       let model: MeasureReport = {
-        latitude: Number(state.currentMeasure.latitude.toFixed(7)),
-        longitude: Number(state.currentMeasure.longitude.toFixed(7)),
-        endLatitude: Number(state.currentMeasure.endLatitude.toFixed(7)),
-        endLongitude: Number(state.currentMeasure.endLongitude.toFixed(7)),
+        latitude: undefined,
+        longitude: undefined,
+        endLatitude: undefined,
+        endLongitude: undefined,
         date: this.dateService.toISOString(state.currentMeasure.startTime),
         startTime: this.dateService.toISOString(state.currentMeasure.startTime),
         duration: undefined,
@@ -323,6 +370,20 @@ export class MeasuresState {
         measurementEnvironment: undefined,
         rain: undefined
       };
+      if (
+        state.currentMeasure.latitude &&
+        state.currentMeasure.longitude &&
+        state.currentMeasure.endLatitude &&
+        state.currentMeasure.endLongitude
+      ) {
+        model = {
+          ...model,
+          latitude: Number(state.currentMeasure.latitude.toFixed(7)),
+          longitude: Number(state.currentMeasure.longitude.toFixed(7)),
+          endLatitude: Number(state.currentMeasure.endLatitude.toFixed(7)),
+          endLongitude: Number(state.currentMeasure.endLongitude.toFixed(7))
+        };
+      }
       if (!state.currentMeasure.manualReporting) {
         model = {
           ...model,
