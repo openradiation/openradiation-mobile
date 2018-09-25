@@ -17,6 +17,7 @@ import {
   EnableExpertMode,
   PositionChanged,
   PublishMeasure,
+  ShowMeasure,
   StartManualMeasure,
   StartMeasure,
   StartMeasureReport,
@@ -351,48 +352,29 @@ export class MeasuresState {
 
   @Action(StartMeasureReport)
   startMeasureReport({ getState, patchState }: StateContext<MeasuresStateModel>) {
-    const state = getState();
-    if (state.currentMeasure) {
-      let model: MeasureReport = {
-        latitude: undefined,
-        longitude: undefined,
-        endLatitude: undefined,
-        endLongitude: undefined,
-        date: this.dateService.toISOString(state.currentMeasure.startTime),
-        startTime: this.dateService.toISOString(state.currentMeasure.startTime),
-        duration: undefined,
-        temperature: undefined,
-        hitsNumber: undefined,
-        value: undefined,
-        measurementHeight: undefined,
-        description: undefined,
-        tags: undefined,
-        measurementEnvironment: undefined,
-        rain: undefined
+    const { currentMeasure } = getState();
+    if (currentMeasure) {
+      const model: MeasureReport = {
+        latitude: currentMeasure.latitude ? Number(currentMeasure.latitude.toFixed(7)) : undefined,
+        longitude: currentMeasure.longitude ? Number(currentMeasure.longitude.toFixed(7)) : undefined,
+        endLatitude: currentMeasure.endLatitude ? Number(currentMeasure.endLatitude.toFixed(7)) : undefined,
+        endLongitude: currentMeasure.endLongitude ? Number(currentMeasure.endLongitude.toFixed(7)) : undefined,
+        date: this.dateService.toISOString(currentMeasure.startTime),
+        startTime: this.dateService.toISOString(currentMeasure.startTime),
+        duration: currentMeasure.endTime
+          ? this.dateService.toISODuration(currentMeasure.endTime - currentMeasure.startTime)
+          : undefined,
+        temperature: currentMeasure.temperature ? Number(currentMeasure.temperature!.toFixed(2)) : undefined,
+        hitsNumber: currentMeasure.hitsNumber ? currentMeasure.hitsNumber : undefined,
+        value: currentMeasure.value ? Number(currentMeasure.value.toFixed(3)) : undefined,
+        measurementHeight: currentMeasure.measurementHeight ? currentMeasure.measurementHeight : undefined,
+        description: currentMeasure.description ? currentMeasure.description : undefined,
+        tags: currentMeasure.tags ? currentMeasure.tags : undefined,
+        measurementEnvironment: currentMeasure.measurementEnvironment
+          ? currentMeasure.measurementEnvironment
+          : undefined,
+        rain: currentMeasure.rain ? currentMeasure.rain : undefined
       };
-      if (
-        state.currentMeasure.latitude &&
-        state.currentMeasure.longitude &&
-        state.currentMeasure.endLatitude &&
-        state.currentMeasure.endLongitude
-      ) {
-        model = {
-          ...model,
-          latitude: Number(state.currentMeasure.latitude.toFixed(7)),
-          longitude: Number(state.currentMeasure.longitude.toFixed(7)),
-          endLatitude: Number(state.currentMeasure.endLatitude.toFixed(7)),
-          endLongitude: Number(state.currentMeasure.endLongitude.toFixed(7))
-        };
-      }
-      if (!state.currentMeasure.manualReporting) {
-        model = {
-          ...model,
-          duration: this.dateService.toISODuration(state.currentMeasure.endTime! - state.currentMeasure.startTime),
-          temperature: Number(state.currentMeasure.temperature!.toFixed(2)),
-          hitsNumber: state.currentMeasure.hitsNumber,
-          value: Number(state.currentMeasure.value.toFixed(3))
-        };
-      }
       patchState({
         measureReport: {
           model,
@@ -477,6 +459,13 @@ export class MeasuresState {
   deleteAllMeasures({ patchState }: StateContext<MeasuresStateModel>) {
     patchState({
       measures: []
+    });
+  }
+
+  @Action(ShowMeasure)
+  showMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, { measure }: PublishMeasure) {
+    patchState({
+      currentMeasure: { ...measure }
     });
   }
 }

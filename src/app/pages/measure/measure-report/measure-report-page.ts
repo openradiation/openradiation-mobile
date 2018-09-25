@@ -5,7 +5,6 @@ import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
 import { NavController } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { SelectIconOption } from '../../../components/select-icon/select-icon-option';
 import { DateService } from '../../../states/measures/date.service';
@@ -121,13 +120,11 @@ export class MeasureReportPage extends AutoUnsubscribePage {
   pageEnter() {
     if (!this.initialized) {
       super.pageEnter();
-      this.activatedRoute.queryParams
-        .pipe(take(1))
-        .subscribe(queryParams => (this.reportScan = queryParams.reportScan));
       this.store.dispatch(new StartMeasureReport()).subscribe(() => {
-        const measureReport = this.store.selectSnapshot(
-          ({ measures }: { measures: MeasuresStateModel }) => measures.measureReport
+        const { measureReport, currentMeasure } = this.store.selectSnapshot(
+          ({ measures }: { measures: MeasuresStateModel }) => measures
         );
+        this.reportScan = !currentMeasure!.manualReporting;
         if (measureReport) {
           this.measureReportForm = this.formBuilder.group(measureReport.model);
         }
