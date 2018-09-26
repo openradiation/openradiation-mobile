@@ -58,9 +58,11 @@ export class HistoryPage extends AutoUnsubscribePage {
       this.actions$
         .pipe(ofActionSuccessful(PublishMeasure))
         .subscribe(({ measure }: PublishMeasure) => (this.measureBeingSentMap[measure.reportUuid] = false)),
-      this.actions$
-        .pipe(ofActionSuccessful(ShowMeasure))
-        .subscribe(() => this.navController.navigateRoot(['measure', 'report']))
+      this.actions$.pipe(ofActionSuccessful(ShowMeasure)).subscribe(() =>
+        this.navController.navigateForward(['measure', 'report'], true, {
+          queryParams: { goBackHistory: true }
+        })
+      )
     );
   }
 

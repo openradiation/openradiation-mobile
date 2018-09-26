@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
 import { NavController } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
@@ -17,6 +17,7 @@ import {
 } from '../../../states/measures/measures.action';
 import { MeasuresState, MeasuresStateModel } from '../../../states/measures/measures.state';
 import { UserState } from '../../../states/user/user.state';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-measure-report',
@@ -35,6 +36,7 @@ export class MeasureReportPage extends AutoUnsubscribePage {
 
   measureReportForm: FormGroup;
   reportScan = true;
+  goBackHistory = false;
 
   positionAccuracyThreshold = PositionAccuracyThreshold;
 
@@ -106,6 +108,7 @@ export class MeasureReportPage extends AutoUnsubscribePage {
   private initialized = false;
 
   constructor(
+    protected activatedRoute: ActivatedRoute,
     protected router: Router,
     private formBuilder: FormBuilder,
     private store: Store,
@@ -153,20 +156,27 @@ export class MeasureReportPage extends AutoUnsubscribePage {
             );
         }
       }),
-      this.actions$.pipe(ofActionSuccessful(StopMeasure, CancelMeasure)).subscribe(() =>
-        this.navController.navigateRoot([
-          'tabs',
-          {
-            outlets: {
-              home: 'home',
-              history: null,
-              settings: null,
-              map: null,
-              other: null
+      this.activatedRoute.queryParams
+        .pipe(take(1))
+        .subscribe(queryParams => (this.goBackHistory = queryParams.goBackHistory)),
+      this.actions$.pipe(ofActionSuccessful(StopMeasure, CancelMeasure)).subscribe(() => {
+        if (!this.goBackHistory) {
+          this.navController.navigateRoot([
+            'tabs',
+            {
+              outlets: {
+                home: 'home',
+                history: null,
+                settings: null,
+                map: null,
+                other: null
+              }
             }
-          }
-        ])
-      )
+          ]);
+        } else {
+          this.navController.goBack();
+        }
+      })
     );
   }
 
