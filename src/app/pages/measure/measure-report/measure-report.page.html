@@ -40,23 +40,23 @@
                     </ion-list>
                     <div class="measure">
                         <ion-list>
-                            <ion-item [ngClass]="{'custom-disabled': reportScan}">
+                            <ion-item [ngClass]="{'custom-disabled': reportScan || isSend}">
                                 <ion-label position="fixed">{{'MEASURES.DURATION' | translate}}</ion-label>
                                 <ion-datetime display-format="mm:ss" formControlName="duration"
                                               [cancelText]="'GENERAL.CANCEL' | translate"
                                               [doneText]="'GENERAL.SUBMIT' | translate"
                                               placeholder="00:00"></ion-datetime>
                             </ion-item>
-                            <ion-item class="has-suffix long-label" [ngClass]="{'custom-disabled': reportScan}">
+                            <ion-item class="has-suffix long-label" [ngClass]="{'custom-disabled': reportScan || isSend}">
                                 <ion-label position="fixed">{{'MEASURES.SENSOR_TEMPERATURE' | translate}}</ion-label>
                                 <ion-input formControlName="temperature" type="number" placeholder="0"></ion-input>
                                 <span class="unit">°C</span>
                             </ion-item>
-                            <ion-item [ngClass]="{'custom-disabled': reportScan}">
+                            <ion-item [ngClass]="{'custom-disabled': reportScan || isSend}">
                                 <ion-label position="fixed">{{'MEASURES.HITS_NUMBER' | translate}}</ion-label>
                                 <ion-input formControlName="hitsNumber" type="number" placeholder="0"></ion-input>
                             </ion-item>
-                            <ion-item class="has-suffix" [ngClass]="{'custom-disabled': reportScan}">
+                            <ion-item class="has-suffix" [ngClass]="{'custom-disabled': reportScan || isSend}">
                                 <ion-label position="fixed">{{'MEASURES.TITLE' | translate}}<span *ngIf="!reportScan"> *</span></ion-label>
                                 <ion-input formControlName="value" required type="number"
                                            placeholder="0.000"></ion-input>

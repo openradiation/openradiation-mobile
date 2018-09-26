@@ -476,7 +476,7 @@ export class MeasuresState {
   }
 
   @Action(ShowMeasure)
-  showMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, { measure }: PublishMeasure) {
+  showMeasure({ patchState }: StateContext<MeasuresStateModel>, { measure }: PublishMeasure) {
     patchState({
       currentMeasure: { ...measure }
     });
