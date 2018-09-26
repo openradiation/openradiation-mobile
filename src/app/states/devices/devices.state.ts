@@ -104,11 +104,11 @@ export class DevicesState {
 
   @Action(DevicesDiscovered)
   devicesDiscovered({ getState, patchState }: StateContext<DevicesStateModel>, { devices }: DevicesDiscovered) {
-    const state = getState();
+    const { knownDevices } = getState();
     patchState({
       availableDevices: [
         ...devices.map(device => ({
-          ...(state.knownDevices.find(knownDevice => knownDevice.sensorUUID === device.sensorUUID) || device),
+          ...(knownDevices.find(knownDevice => knownDevice.sensorUUID === device.sensorUUID) || device),
           batteryLevel: device.batteryLevel
         }))
       ]
@@ -119,15 +119,15 @@ export class DevicesState {
   connectDevice({ getState, patchState }: StateContext<DevicesStateModel>, { device }: ConnectDevice) {
     return this.devicesService.connectDevice(device).pipe(
       tap(() => {
-        const state = getState();
-        if (state.knownDevices.find(knownDevice => knownDevice.sensorUUID === device.sensorUUID)) {
+        const { knownDevices } = getState();
+        if (knownDevices.find(knownDevice => knownDevice.sensorUUID === device.sensorUUID)) {
           patchState({
             connectedDevice: device
           });
         } else {
           patchState({
             connectedDevice: device,
-            knownDevices: [...state.knownDevices, device]
+            knownDevices: [...knownDevices, device]
           });
         }
       })
@@ -143,9 +143,9 @@ export class DevicesState {
 
   @Action(DisconnectDevice)
   disconnectDevice({ getState, patchState }: StateContext<DevicesStateModel>) {
-    const state = getState();
-    if (state.connectedDevice) {
-      return this.devicesService.disconnectDevice(state.connectedDevice).pipe(
+    const { connectedDevice } = getState();
+    if (connectedDevice) {
+      return this.devicesService.disconnectDevice(connectedDevice).pipe(
         tap(() => {
           patchState({
             connectedDevice: undefined
@@ -179,13 +179,13 @@ export class DevicesState {
 
   @Action(SaveDeviceParams)
   saveDeviceParams({ getState, dispatch }: StateContext<DevicesStateModel>) {
-    const state = getState();
-    if (state.editedDevice && state.editedDeviceForm) {
+    const { editedDevice, editedDeviceForm, connectedDevice } = getState();
+    if (editedDevice && editedDeviceForm) {
       const updatedDevice = {
-        ...state.editedDevice,
-        ...{ params: { ...state.editedDeviceForm.model } }
+        ...editedDevice,
+        ...{ params: { ...editedDeviceForm.model } }
       };
-      if (state.connectedDevice && state.connectedDevice.sensorUUID === state.editedDevice.sensorUUID) {
+      if (connectedDevice && connectedDevice.sensorUUID === editedDevice.sensorUUID) {
         return this.devicesService
           .saveDeviceParams(updatedDevice)
           .pipe(map(() => dispatch(new UpdateDevice(updatedDevice))));
@@ -199,20 +199,20 @@ export class DevicesState {
 
   @Action(UpdateDevice)
   updateDevice({ patchState, getState }: StateContext<DevicesStateModel>, { device }: UpdateDevice) {
-    const state = getState();
+    const { connectedDevice, knownDevices } = getState();
     const patch: Partial<DevicesStateModel> = {};
-    if (state.connectedDevice && state.connectedDevice.sensorUUID === device.sensorUUID) {
+    if (connectedDevice && connectedDevice.sensorUUID === device.sensorUUID) {
       patch.connectedDevice = device;
     }
-    const deviceIndex = state.knownDevices.findIndex(knownDevice => knownDevice.sensorUUID === device.sensorUUID);
+    const deviceIndex = knownDevices.findIndex(knownDevice => knownDevice.sensorUUID === device.sensorUUID);
     if (deviceIndex > -1) {
       patch.knownDevices = [
-        ...state.knownDevices.slice(0, Math.max(deviceIndex - 1, 0)),
+        ...knownDevices.slice(0, Math.max(deviceIndex - 1, 0)),
         device,
-        ...state.knownDevices.slice(deviceIndex + 1)
+        ...knownDevices.slice(deviceIndex + 1)
       ];
     } else {
-      patch.knownDevices = [...state.knownDevices, device];
+      patch.knownDevices = [...knownDevices, device];
     }
     patchState(patch);
   }
