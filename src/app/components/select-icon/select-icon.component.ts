@@ -16,6 +16,7 @@ import { SelectIconOption } from './select-icon-option';
 })
 export class SelectIconComponent implements ControlValueAccessor {
   selectedOption: SelectIconOption | undefined;
+  isDisabled: boolean;
 
   @Input()
   title?: string;
@@ -41,5 +42,9 @@ export class SelectIconComponent implements ControlValueAccessor {
     const selectedOption = this.options.find(option => option.value === value);
     this.selectedOption = this.selectedOption === selectedOption ? undefined : selectedOption;
     this.onChange(this.selectedOption ? this.selectedOption.value : undefined);
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.isDisabled = isDisabled;
   }
 }

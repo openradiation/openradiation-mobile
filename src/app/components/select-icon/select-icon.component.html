@@ -1,7 +1,7 @@
 <div class="title" *ngIf="title">
     {{title}}
 </div>
-<div class="list">
+<div class="list" [ngClass]="{disabled: isDisabled}">
   <div class="item" *ngFor="let option of options" (click)="writeValue(option.value)">
       <div class="icon">
           <img [src]="option === selectedOption ? option.iconOn : option.iconOff">

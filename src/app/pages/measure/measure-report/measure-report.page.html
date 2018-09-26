@@ -68,17 +68,16 @@
                         </ion-list>
                     </div>
                     <div class="environment">
-                        <app-select-icon [options]="measurementEnvironmentOptions" [disabled]="currentMeasure.sent"
+                        <app-select-icon [options]="measurementEnvironmentOptions"
                                          formControlName="measurementEnvironment"
                                          [title]="'MEASURES.ENVIRONMENT.TITLE' | translate">
                         </app-select-icon>
                     </div>
                     <div class="options">
                         <app-select-icon [options]="measurementHeightOptions" formControlName="measurementHeight"
-                                         [disabled]="currentMeasure.sent"
                                          [title]="'MEASURES.SENSOR_POSITION.TITLE' | translate">
                         </app-select-icon>
-                        <app-select-icon [options]="rainOptions" formControlName="rain" [disabled]="currentMeasure.sent"
+                        <app-select-icon [options]="rainOptions" formControlName="rain"
                                          [title]="'MEASURES.WEATHER.TITLE' | translate">
                         </app-select-icon>
                     </div>
@@ -86,14 +85,15 @@
                         <div class="separator"></div>
                         <ion-list>
                             <ion-item class="description">
-                                <ion-textarea formControlName="description" [disabled]="currentMeasure.sent"
-                                              [placeholder]="'MEASURES.DESCRIPTION' | translate"
-                                              rows="5"></ion-textarea>
+                                <ion-textarea formControlName="description" rows="5"
+                                              [placeholder]="'MEASURES.DESCRIPTION' | translate">
+                                </ion-textarea>
                             </ion-item>
                         </ion-list>
                         <div class="tags">
-                            <app-tag-list formControlName="tags" [disabled]="currentMeasure.sent"
-                                          [title]="'MEASURES.TAG_LIST' | translate"></app-tag-list>
+                            <app-tag-list formControlName="tags"
+                                          [title]="'MEASURES.TAG_LIST' | translate">
+                            </app-tag-list>
                         </div>
                     </ng-container>
                 </form>

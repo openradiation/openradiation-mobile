@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
 import { NavController } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
@@ -106,7 +106,6 @@ export class MeasureReportPage extends AutoUnsubscribePage {
   private initialized = false;
 
   constructor(
-    protected activatedRoute: ActivatedRoute,
     protected router: Router,
     private formBuilder: FormBuilder,
     private store: Store,
@@ -126,7 +125,14 @@ export class MeasureReportPage extends AutoUnsubscribePage {
         );
         this.reportScan = !currentMeasure!.manualReporting;
         if (measureReport) {
-          this.measureReportForm = this.formBuilder.group(measureReport.model);
+          this.measureReportForm = this.formBuilder.group({ ...measureReport.model, tags: [measureReport.model.tags] });
+          if (currentMeasure!.sent) {
+            this.measureReportForm.get('measurementEnvironment')!.disable();
+            this.measureReportForm.get('measurementHeight')!.disable();
+            this.measureReportForm.get('rain')!.disable();
+            this.measureReportForm.get('description')!.disable();
+            this.measureReportForm.get('tags')!.disable();
+          }
         }
         this.init();
       });
