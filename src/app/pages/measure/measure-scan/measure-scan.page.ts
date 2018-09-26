@@ -56,10 +56,22 @@ export class MeasureScanPage extends AutoUnsubscribePage {
     super.pageEnter();
     this.subscriptions.push(
       this.currentMeasure$.subscribe(measure => this.updateHitsAccuracy(measure)),
-      this.actions$.pipe(ofActionSuccessful(StopMeasureScan)).subscribe(() =>
-        this.navController.navigateForward(['measure', 'report'], true, {
-          queryParams: { reportScan: true }
-        })
+      this.actions$
+        .pipe(ofActionSuccessful(StopMeasureScan))
+        .subscribe(() => this.navController.navigateRoot(['measure', 'report'], true)),
+      this.actions$.pipe(ofActionSuccessful(CancelMeasure)).subscribe(() =>
+        this.navController.navigateRoot([
+          'tabs',
+          {
+            outlets: {
+              home: 'home',
+              history: null,
+              settings: null,
+              map: null,
+              other: null
+            }
+          }
+        ])
       )
     );
     this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
@@ -67,20 +79,6 @@ export class MeasureScanPage extends AutoUnsubscribePage {
         this.store.dispatch(new StartMeasureScan(connectedDevice)).subscribe();
       }
     });
-    this.actions$.pipe(ofActionSuccessful(CancelMeasure)).subscribe(() =>
-      this.navController.navigateRoot([
-        'tabs',
-        {
-          outlets: {
-            home: 'home',
-            history: null,
-            settings: null,
-            map: null,
-            other: null
-          }
-        }
-      ])
-    );
   }
 
   updateHitsAccuracy(measure?: Measure) {

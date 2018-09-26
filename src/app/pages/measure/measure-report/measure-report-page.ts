@@ -34,7 +34,7 @@ export class MeasureReportPage extends AutoUnsubscribePage {
   @Select(UserState.login)
   login$: Observable<string | undefined>;
 
-  measureReportForm: FormGroup;
+  measureReportForm?: FormGroup;
   reportScan = true;
 
   positionAccuracyThreshold = PositionAccuracyThreshold;
@@ -104,8 +104,6 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     }
   ];
 
-  private initialized = false;
-
   constructor(
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
@@ -119,57 +117,72 @@ export class MeasureReportPage extends AutoUnsubscribePage {
   }
 
   pageEnter() {
-    if (!this.initialized) {
-      super.pageEnter();
-      this.activatedRoute.queryParams
-        .pipe(take(1))
-        .subscribe(queryParams => (this.reportScan = queryParams.reportScan));
-      this.store.dispatch(new StartMeasureReport()).subscribe(() => {
-        const measureReport = this.store.selectSnapshot(
-          ({ measures }: { measures: MeasuresStateModel }) => measures.measureReport
-        );
-        if (measureReport) {
-          this.measureReportForm = this.formBuilder.group(measureReport.model);
+    super.pageEnter();
+    this.store.dispatch(new StartMeasureReport()).subscribe(() => {
+      const { measureReport, currentMeasure } = this.store.selectSnapshot(
+        ({ measures }: { measures: MeasuresStateModel }) => measures
+      );
+      this.reportScan = !currentMeasure!.manualReporting;
+      if (measureReport) {
+        this.measureReportForm = this.formBuilder.group({ ...measureReport.model, tags: [measureReport.model.tags] });
+        if (currentMeasure!.sent) {
+          this.measureReportForm.get('measurementEnvironment')!.disable();
+          this.measureReportForm.get('measurementHeight')!.disable();
+          this.measureReportForm.get('rain')!.disable();
+          this.measureReportForm.get('description')!.disable();
+          this.measureReportForm.get('tags')!.disable();
         }
-        this.init();
-      });
-      this.initialized = true;
-    } else {
+      }
       this.init();
-    }
+    });
   }
 
   init() {
     this.subscriptions.push(
-      this.measureReportForm.valueChanges.subscribe(value => {
+      this.measureReportForm!.valueChanges.subscribe(value => {
         if (typeof value.duration !== 'string' && value.duration) {
-          this.measureReportForm
-            .get('duration')!
-            .setValue(
-              this.dateService.toISODuration((value.duration.minute.value * 60 + value.duration.second.value) * 1000)
-            );
+          this.measureReportForm!.get('duration')!.setValue(
+            this.dateService.toISODuration((value.duration.minute.value * 60 + value.duration.second.value) * 1000)
+          );
         }
       }),
-      this.actions$.pipe(ofActionSuccessful(StopMeasure, CancelMeasure)).subscribe(() =>
-        this.navController.navigateRoot([
-          'tabs',
-          {
-            outlets: {
-              home: 'home',
-              history: null,
-              settings: null,
-              map: null,
-              other: null
-            }
+      this.actions$.pipe(ofActionSuccessful(StopMeasure, CancelMeasure)).subscribe(() => {
+        this.activatedRoute.queryParams.pipe(take(1)).subscribe(queryParams => {
+          this.measureReportForm = undefined;
+          if (queryParams.goBackHistory) {
+            this.navController.navigateRoot([
+              'tabs',
+              {
+                outlets: {
+                  home: null,
+                  history: 'history',
+                  settings: null,
+                  map: null,
+                  other: null
+                }
+              }
+            ]);
+          } else {
+            this.navController.navigateRoot([
+              'tabs',
+              {
+                outlets: {
+                  home: 'home',
+                  history: null,
+                  settings: null,
+                  map: null,
+                  other: null
+                }
+              }
+            ]);
           }
-        ])
-      )
+        });
+      })
     );
   }
 
   stopReport() {
-    this.initialized = false;
-    if (this.measureReportForm.valid) {
+    if (this.measureReportForm!.valid) {
       this.subscriptions.push(
         this.actions$.pipe(ofActionSuccessful(StopMeasureReport)).subscribe(() => {
           this.store.dispatch(new StopMeasure());
@@ -181,7 +194,6 @@ export class MeasureReportPage extends AutoUnsubscribePage {
 
   cancelMeasure() {
     this.store.dispatch(new CancelMeasure());
-    this.initialized = false;
   }
 
   showMeasureSteps() {

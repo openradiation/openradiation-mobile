@@ -16,6 +16,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 export class TagListComponent implements ControlValueAccessor {
   tagList: string[] | undefined;
   currentTag = '';
+  isDisabled: boolean;
 
   @Input()
   title?: string;
@@ -37,6 +38,10 @@ export class TagListComponent implements ControlValueAccessor {
   writeValue(tagList: any): void {
     this.tagList = tagList;
     this.onChange(this.tagList);
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.isDisabled = isDisabled;
   }
 
   deleteTag(index: number): void {

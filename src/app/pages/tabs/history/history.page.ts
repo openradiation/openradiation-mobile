@@ -1,12 +1,17 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController, ToastController } from '@ionic/angular';
+import { AlertController, NavController, ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, ofActionErrored, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { Measure, PositionAccuracyThreshold } from '../../../states/measures/measure';
-import { DeleteAllMeasures, DeleteMeasure, PublishMeasure } from '../../../states/measures/measures.action';
+import {
+  DeleteAllMeasures,
+  DeleteMeasure,
+  PublishMeasure,
+  ShowMeasure
+} from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
 
 @Component({
@@ -27,7 +32,8 @@ export class HistoryPage extends AutoUnsubscribePage {
     private alertController: AlertController,
     private translateService: TranslateService,
     private actions$: Actions,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private navController: NavController
   ) {
     super(router);
   }
@@ -51,14 +57,21 @@ export class HistoryPage extends AutoUnsubscribePage {
       }),
       this.actions$
         .pipe(ofActionSuccessful(PublishMeasure))
-        .subscribe(({ measure }: PublishMeasure) => (this.measureBeingSentMap[measure.reportUuid] = false))
+        .subscribe(({ measure }: PublishMeasure) => (this.measureBeingSentMap[measure.reportUuid] = false)),
+      this.actions$.pipe(ofActionSuccessful(ShowMeasure)).subscribe(() =>
+        this.navController.navigateRoot(['measure', 'report'], true, {
+          queryParams: { goBackHistory: true }
+        })
+      )
     );
   }
 
-  // TODO implement
-  showDetail(measure: Measure) {}
+  showDetail(measure: Measure) {
+    this.store.dispatch(new ShowMeasure(measure));
+  }
 
-  publish(measure: Measure) {
+  publish(event: Event, measure: Measure) {
+    event.stopPropagation();
     if (
       measure.accuracy &&
       measure.accuracy < PositionAccuracyThreshold.Inaccurate &&
@@ -84,7 +97,8 @@ export class HistoryPage extends AutoUnsubscribePage {
     }
   }
 
-  delete(measure: Measure) {
+  delete(event: Event, measure: Measure) {
+    event.stopPropagation();
     this.alertController
       .create({
         header: this.translateService.instant('HISTORY.TITLE'),

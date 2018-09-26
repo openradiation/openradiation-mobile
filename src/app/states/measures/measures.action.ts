@@ -88,3 +88,8 @@ export class DeleteMeasure {
 export class DeleteAllMeasures {
   static readonly type = '[Measures] Delete all measures';
 }
+
+export class ShowMeasure {
+  static readonly type = '[Measures] Show measure detail';
+  constructor(public measure: Measure) {}
+}

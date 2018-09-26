@@ -16,6 +16,7 @@ import { SelectIconOption } from './select-icon-option';
 })
 export class SelectIconComponent implements ControlValueAccessor {
   selectedOption: SelectIconOption | undefined;
+  isDisabled: boolean;
 
   @Input()
   title?: string;
@@ -37,8 +38,13 @@ export class SelectIconComponent implements ControlValueAccessor {
     this.onTouched = fn;
   }
 
-  writeValue(option: SelectIconOption): void {
-    this.selectedOption = this.selectedOption === option ? undefined : option;
+  writeValue(value: any): void {
+    const selectedOption = this.options.find(option => option.value === value);
+    this.selectedOption = this.selectedOption === selectedOption ? undefined : selectedOption;
     this.onChange(this.selectedOption ? this.selectedOption.value : undefined);
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.isDisabled = isDisabled;
   }
 }

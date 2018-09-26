@@ -75,18 +75,21 @@ export class MapPage extends AutoUnsubscribePage {
     let url = `${environment.IN_APP_BROWSER_URI.base}/${environment.IN_APP_BROWSER_URI.suffix}`;
     this.store.dispatch(new StartWatchPosition());
     this.subscriptions.push(
-      this.actions$.pipe(ofActionSuccessful(PositionChanged)).subscribe(() => {
-        const position = this.store.selectSnapshot(
-          ({ measures }: { measures: MeasuresStateModel }) => measures.currentPosition!.coords
-        );
-        const lat = position.latitude.toFixed(7);
-        const long = position.longitude.toFixed(7);
-        const zoom = 12;
-        url += `/${zoom}/${lat}/${long}`;
-        this.store.dispatch(new StopWatchPosition());
-        this.iframeURL = this.domSanitizer.bypassSecurityTrustResourceUrl(url);
-        this.changeDetectorRef.markForCheck();
-      })
+      this.actions$
+        .pipe(ofActionSuccessful(PositionChanged))
+        .pipe(take(1))
+        .subscribe(() => {
+          const { latitude, longitude } = this.store.selectSnapshot(
+            ({ measures }: { measures: MeasuresStateModel }) => measures.currentPosition!.coords
+          );
+          const lat = latitude.toFixed(7);
+          const long = longitude.toFixed(7);
+          const zoom = 12;
+          url += `/${zoom}/${lat}/${long}`;
+          this.store.dispatch(new StopWatchPosition());
+          this.iframeURL = this.domSanitizer.bypassSecurityTrustResourceUrl(url);
+          this.changeDetectorRef.markForCheck();
+        })
     );
     this.iframeURL = this.domSanitizer.bypassSecurityTrustResourceUrl(url);
   }

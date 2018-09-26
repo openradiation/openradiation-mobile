@@ -40,24 +40,27 @@
                     </ion-list>
                     <div class="measure">
                         <ion-list>
-                            <ion-item [ngClass]="{'custom-disabled': reportScan}">
+                            <ion-item [ngClass]="{'custom-disabled': reportScan || currentMeasure.sent}">
                                 <ion-label position="fixed">{{'MEASURES.DURATION' | translate}}</ion-label>
                                 <ion-datetime display-format="mm:ss" formControlName="duration"
                                               [cancelText]="'GENERAL.CANCEL' | translate"
                                               [doneText]="'GENERAL.SUBMIT' | translate"
                                               placeholder="00:00"></ion-datetime>
                             </ion-item>
-                            <ion-item class="has-suffix long-label" [ngClass]="{'custom-disabled': reportScan}">
+                            <ion-item class="has-suffix long-label"
+                                      [ngClass]="{'custom-disabled': reportScan || currentMeasure.sent}">
                                 <ion-label position="fixed">{{'MEASURES.SENSOR_TEMPERATURE' | translate}}</ion-label>
                                 <ion-input formControlName="temperature" type="number" placeholder="0"></ion-input>
                                 <span class="unit">°C</span>
                             </ion-item>
-                            <ion-item [ngClass]="{'custom-disabled': reportScan}">
+                            <ion-item [ngClass]="{'custom-disabled': reportScan || currentMeasure.sent}">
                                 <ion-label position="fixed">{{'MEASURES.HITS_NUMBER' | translate}}</ion-label>
                                 <ion-input formControlName="hitsNumber" type="number" placeholder="0"></ion-input>
                             </ion-item>
-                            <ion-item class="has-suffix" [ngClass]="{'custom-disabled': reportScan}">
-                                <ion-label position="fixed">{{'MEASURES.TITLE' | translate}}<span *ngIf="!reportScan"> *</span></ion-label>
+                            <ion-item class="has-suffix"
+                                      [ngClass]="{'custom-disabled': reportScan || currentMeasure.sent}">
+                                <ion-label position="fixed">{{'MEASURES.TITLE' | translate}}<span
+                                        *ngIf="!reportScan"> *</span></ion-label>
                                 <ion-input formControlName="value" required type="number"
                                            placeholder="0.000"></ion-input>
                                 <span class="unit">{{'MEASURES.DOSE_RATE_UNIT' | translate}}</span>
@@ -82,27 +85,35 @@
                         <div class="separator"></div>
                         <ion-list>
                             <ion-item class="description">
-                                <ion-textarea formControlName="description"
-                                              [placeholder]="'MEASURES.DESCRIPTION' | translate"
-                                              rows="5"></ion-textarea>
+                                <ion-textarea formControlName="description" rows="5"
+                                              [placeholder]="'MEASURES.DESCRIPTION' | translate">
+                                </ion-textarea>
                             </ion-item>
                         </ion-list>
                         <div class="tags">
                             <app-tag-list formControlName="tags"
-                                          [title]="'MEASURES.TAG_LIST' | translate"></app-tag-list>
+                                          [title]="'MEASURES.TAG_LIST' | translate">
+                            </app-tag-list>
                         </div>
                     </ng-container>
                 </form>
                 <div class="bottom-buttons">
-                    <app-round-button [disabled]="!measureReportForm.valid"
-                                      [src]="measureReportForm.valid ? 'assets/img/button-on.png' : 'assets/img/button-off.png'"
+                    <app-round-button [disabled]="!measureReportForm.valid || currentMeasure.sent"
+                                      [src]="measureReportForm.valid && !currentMeasure.sent ? 'assets/img/button-on.png' : 'assets/img/button-off.png'"
                                       (click)="stopReport()">
                         {{'GENERAL.OK' | translate}}
                     </app-round-button>
                     <div class="side-buttons">
-                        <ion-button fill="clear" class="flat-button cancel" (click)="cancelMeasure()">{{'GENERAL.CANCEL'
+                        <ion-button *ngIf="!currentMeasure.sent;else backButton" fill="clear" class="flat-button cancel"
+                                    (click)="cancelMeasure()">{{'GENERAL.CANCEL'
                             | translate}}
                         </ion-button>
+                        <ng-template #backButton>
+                            <ion-button fill="clear"
+                                        class="flat-button cancel" (click)="cancelMeasure()">{{'GENERAL.BACK'
+                                | translate}}
+                            </ion-button>
+                        </ng-template>
                         <ion-button
                                 *ngIf="!currentMeasure.manualReporting && currentMeasure.steps && expertMode$ | async"
                                 fill="clear" class="flat-button expert" (click)="showMeasureSteps()">{{'MEASURES.EXPERT'
