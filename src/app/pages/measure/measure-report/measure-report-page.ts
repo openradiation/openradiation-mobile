@@ -35,7 +35,6 @@ export class MeasureReportPage extends AutoUnsubscribePage {
 
   measureReportForm: FormGroup;
   reportScan = true;
-  isSend = false;
 
   positionAccuracyThreshold = PositionAccuracyThreshold;
 
@@ -126,7 +125,6 @@ export class MeasureReportPage extends AutoUnsubscribePage {
           ({ measures }: { measures: MeasuresStateModel }) => measures
         );
         this.reportScan = !currentMeasure!.manualReporting;
-        this.isSend = currentMeasure!.sent;
         if (measureReport) {
           this.measureReportForm = this.formBuilder.group(measureReport.model);
         }

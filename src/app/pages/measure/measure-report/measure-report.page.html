@@ -40,23 +40,23 @@
                     </ion-list>
                     <div class="measure">
                         <ion-list>
-                            <ion-item [ngClass]="{'custom-disabled': reportScan || isSend}">
+                            <ion-item [ngClass]="{'custom-disabled': reportScan || currentMeasure.sent}">
                                 <ion-label position="fixed">{{'MEASURES.DURATION' | translate}}</ion-label>
                                 <ion-datetime display-format="mm:ss" formControlName="duration"
                                               [cancelText]="'GENERAL.CANCEL' | translate"
                                               [doneText]="'GENERAL.SUBMIT' | translate"
                                               placeholder="00:00"></ion-datetime>
                             </ion-item>
-                            <ion-item class="has-suffix long-label" [ngClass]="{'custom-disabled': reportScan || isSend}">
+                            <ion-item class="has-suffix long-label" [ngClass]="{'custom-disabled': reportScan || currentMeasure.sent}">
                                 <ion-label position="fixed">{{'MEASURES.SENSOR_TEMPERATURE' | translate}}</ion-label>
                                 <ion-input formControlName="temperature" type="number" placeholder="0"></ion-input>
                                 <span class="unit">°C</span>
                             </ion-item>
-                            <ion-item [ngClass]="{'custom-disabled': reportScan || isSend}">
+                            <ion-item [ngClass]="{'custom-disabled': reportScan || currentMeasure.sent}">
                                 <ion-label position="fixed">{{'MEASURES.HITS_NUMBER' | translate}}</ion-label>
                                 <ion-input formControlName="hitsNumber" type="number" placeholder="0"></ion-input>
                             </ion-item>
-                            <ion-item class="has-suffix" [ngClass]="{'custom-disabled': reportScan || isSend}">
+                            <ion-item class="has-suffix" [ngClass]="{'custom-disabled': reportScan || currentMeasure.sent}">
                                 <ion-label position="fixed">{{'MEASURES.TITLE' | translate}}<span *ngIf="!reportScan"> *</span></ion-label>
                                 <ion-input formControlName="value" required type="number"
                                            placeholder="0.000"></ion-input>
@@ -65,16 +65,17 @@
                         </ion-list>
                     </div>
                     <div class="environment">
-                        <app-select-icon [options]="measurementEnvironmentOptions"
+                        <app-select-icon [options]="measurementEnvironmentOptions" [disabled]="currentMeasure.sent"
                                          formControlName="measurementEnvironment"
                                          [title]="'MEASURES.ENVIRONMENT.TITLE' | translate">
                         </app-select-icon>
                     </div>
                     <div class="options">
                         <app-select-icon [options]="measurementHeightOptions" formControlName="measurementHeight"
+                                         [disabled]="currentMeasure.sent"
                                          [title]="'MEASURES.SENSOR_POSITION.TITLE' | translate">
                         </app-select-icon>
-                        <app-select-icon [options]="rainOptions" formControlName="rain"
+                        <app-select-icon [options]="rainOptions" formControlName="rain" [disabled]="currentMeasure.sent"
                                          [title]="'MEASURES.WEATHER.TITLE' | translate">
                         </app-select-icon>
                     </div>
@@ -82,13 +83,13 @@
                         <div class="separator"></div>
                         <ion-list>
                             <ion-item class="description">
-                                <ion-textarea formControlName="description"
+                                <ion-textarea formControlName="description" [disabled]="currentMeasure.sent"
                                               [placeholder]="'MEASURES.DESCRIPTION' | translate"
                                               rows="5"></ion-textarea>
                             </ion-item>
                         </ion-list>
                         <div class="tags">
-                            <app-tag-list formControlName="tags"
+                            <app-tag-list formControlName="tags" [disabled]="currentMeasure.sent"
                                           [title]="'MEASURES.TAG_LIST' | translate"></app-tag-list>
                         </div>
                     </ng-container>
