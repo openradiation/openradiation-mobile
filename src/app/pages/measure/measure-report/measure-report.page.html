@@ -94,7 +94,7 @@
                     </ng-container>
                 </form>
                 <div class="bottom-buttons">
-                    <app-round-button [disabled]="!measureReportForm.valid"
+                    <app-round-button [disabled]="!measureReportForm.valid || currentMeasure.sent"
                                       [src]="measureReportForm.valid ? 'assets/img/button-on.png' : 'assets/img/button-off.png'"
                                       (click)="stopReport()">
                         {{'GENERAL.OK' | translate}}
