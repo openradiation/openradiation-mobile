@@ -36,7 +36,6 @@ export class MeasureReportPage extends AutoUnsubscribePage {
 
   measureReportForm: FormGroup;
   reportScan = true;
-  goBackHistory = false;
 
   positionAccuracyThreshold = PositionAccuracyThreshold;
 
@@ -156,26 +155,28 @@ export class MeasureReportPage extends AutoUnsubscribePage {
             );
         }
       }),
-      this.activatedRoute.queryParams
-        .pipe(take(1))
-        .subscribe(queryParams => (this.goBackHistory = queryParams.goBackHistory)),
       this.actions$.pipe(ofActionSuccessful(StopMeasure, CancelMeasure)).subscribe(() => {
-        if (!this.goBackHistory) {
-          this.navController.navigateRoot([
-            'tabs',
-            {
-              outlets: {
-                home: 'home',
-                history: null,
-                settings: null,
-                map: null,
-                other: null
+        this.activatedRoute.queryParams.pipe(take(1)).subscribe(queryParams => {
+          if (queryParams.goBackHistory) {
+            console.log('goBack');
+            this.navController.goBack();
+          } else {
+            console.log('goHome');
+
+            this.navController.navigateRoot([
+              'tabs',
+              {
+                outlets: {
+                  home: 'home',
+                  history: null,
+                  settings: null,
+                  map: null,
+                  other: null
+                }
               }
-            }
-          ]);
-        } else {
-          this.navController.goBack();
-        }
+            ]);
+          }
+        });
       })
     );
   }

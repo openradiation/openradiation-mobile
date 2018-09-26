@@ -33,7 +33,7 @@ export class MenuComponent {
       .subscribe((event: NavigationEnd) => (this.currentUrl = event.url));
     this.actions$
       .pipe(ofActionSuccessful(StartManualMeasure))
-      .subscribe(() => this.navController.navigateRoot(['measure', 'report']));
+      .subscribe(() => this.navController.navigateRoot(['measure', 'report'], true));
   }
 
   closeMenu() {
