@@ -47,7 +47,8 @@
                                               [doneText]="'GENERAL.SUBMIT' | translate"
                                               placeholder="00:00"></ion-datetime>
                             </ion-item>
-                            <ion-item class="has-suffix long-label" [ngClass]="{'custom-disabled': reportScan || currentMeasure.sent}">
+                            <ion-item class="has-suffix long-label"
+                                      [ngClass]="{'custom-disabled': reportScan || currentMeasure.sent}">
                                 <ion-label position="fixed">{{'MEASURES.SENSOR_TEMPERATURE' | translate}}</ion-label>
                                 <ion-input formControlName="temperature" type="number" placeholder="0"></ion-input>
                                 <span class="unit">°C</span>
@@ -56,8 +57,10 @@
                                 <ion-label position="fixed">{{'MEASURES.HITS_NUMBER' | translate}}</ion-label>
                                 <ion-input formControlName="hitsNumber" type="number" placeholder="0"></ion-input>
                             </ion-item>
-                            <ion-item class="has-suffix" [ngClass]="{'custom-disabled': reportScan || currentMeasure.sent}">
-                                <ion-label position="fixed">{{'MEASURES.TITLE' | translate}}<span *ngIf="!reportScan"> *</span></ion-label>
+                            <ion-item class="has-suffix"
+                                      [ngClass]="{'custom-disabled': reportScan || currentMeasure.sent}">
+                                <ion-label position="fixed">{{'MEASURES.TITLE' | translate}}<span
+                                        *ngIf="!reportScan"> *</span></ion-label>
                                 <ion-input formControlName="value" required type="number"
                                            placeholder="0.000"></ion-input>
                                 <span class="unit">{{'MEASURES.DOSE_RATE_UNIT' | translate}}</span>
@@ -101,9 +104,16 @@
                         {{'GENERAL.OK' | translate}}
                     </app-round-button>
                     <div class="side-buttons">
-                        <ion-button fill="clear" class="flat-button cancel" (click)="cancelMeasure()">{{'GENERAL.CANCEL'
+                        <ion-button *ngIf="!currentMeasure.sent;else backButton" fill="clear" class="flat-button cancel"
+                                    (click)="cancelMeasure()">{{'GENERAL.CANCEL'
                             | translate}}
                         </ion-button>
+                        <ng-template #backButton>
+                            <ion-button fill="clear"
+                                        class="flat-button cancel" (click)="cancelMeasure()">{{'GENERAL.BACK'
+                                | translate}}
+                            </ion-button>
+                        </ng-template>
                         <ion-button
                                 *ngIf="!currentMeasure.manualReporting && currentMeasure.steps && expertMode$ | async"
                                 fill="clear" class="flat-button expert" (click)="showMeasureSteps()">{{'MEASURES.EXPERT'
