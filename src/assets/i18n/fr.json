@@ -5,11 +5,11 @@
       "TITLE": "Mesure de la radioactivité"
     },
     "MEASURES_HOW_TO": {
-      "NOTICE": "Allumez votre capteur, démarrez l’application, puis connectez-la en Bluetooth au capteur. OpenRadiation est une base de données dont l’objectif est de cartographier la radioactivité dans l’environnement. Afin que les données soient homogènes, comparables et les plus représentatives possible, les mesures que vous publiez sur OpenRadiation doivent idéalement être prises en extérieur, si possible éloignées d’une habitation, et en positionnant le capteur à environ 1 mètre du sol. Plus la durée de la mesure est longue, meilleure est la statistique et plus la mesure est précise : un indicateur vous permet d’apprécier la fiabilité de la mesure en direct. Une fois la mesure réalisée, vous pouvez qualifier l’environnement dans lequel elle a été prise (à l’intérieur, dans un avion, sur une route, à la campagne, en ville) et donner des indications supplémentaires avant de la publier. Ces indications permettront d’apprécier plus finement la fiabilité de la mesure.",
-      "TITLE": "Comment prendre des mesures ?"
+      "NOTICE": "Allumez votre capteur, démarrez l’application, puis connectez-la en Bluetooth au capteur. OpenRadiation est une base de données dont l’objectif est de cartographier la radioactivité dans l’environnement. Afin que les données soient homogènes, comparables et les plus représentatives possible, les mesures que vous publiez sur OpenRadiation doivent idéalement être prises en extérieur, si possible éloignées d’une habitation, et en positionnant le capteur à environ 1 mètre du sol. Plus la durée de la mesure est longue, meilleure est la statistique et plus la mesure est précise : un indicateur vous permet d’apprécier la fiabilité de la mesure en direct. Une fois la mesure réalisée, vous pouvez qualifier l’environnement dans lequel elle a été prise (à l’intérieur, dans un avion, sur une route, à la campagne, en ville) et donner des indications supplémentaires avant de la publier. Ces indications permettront d’apprécier plus finement la fiabilité de la mesure.",
+      "TITLE": "Comment prendre des mesures ?"
     },
     "OPENRADIATION_PROJECT": {
-      "NOTICE": "Openradiation est un projet collaboratif dont les partenaires sont l’IFFO-RME - réseau de formateurs Risques Majeurs éducation -, l’IRSN - expert public en matière de recherche et d’expertise sur les risques nucléaires et radiologiques -, Planète Sciences – association acteur de la culture scientifique et technique vers les jeunes -, et l'’UPMC - Université Pierre et Marie Curie avec en particulier le fablab PMClab -.<br/>En savoir plus sur <a target=\"_blank\" href=\"https://www.openradiation.org/qui-sommes-nous\">www.openradiation.org/qui-sommes-nous</a>.",
+      "NOTICE": "Openradiation est un projet collaboratif dont les partenaires sont l’IFFO-RME - réseau de formateurs Risques Majeurs éducation -, l’IRSN - expert public en matière de recherche et d’expertise sur les risques nucléaires et radiologiques -, Planète Sciences – association acteur de la culture scientifique et technique vers les jeunes -, et SORBONNE UNIVERSITE avec en particulier le fablab PMClab.<br/>En savoir plus sur <a target=\"_blank\" href=\"https://www.openradiation.org/qui-sommes-nous\">www.openradiation.org/qui-sommes-nous</a>.",
       "TITLE": "Le projet OpenRadiation"
     },
     "TITLE": "À propos"
@@ -50,10 +50,10 @@
       "NOTICE": "En supprimant vos mesures, vous nettoyez tout votre historique mais vous ne supprimez pas les données déjà publiées de la base OpenRadiation.",
       "TITLE": "Êtes-vous sûr de vouloir supprimer toutes les mesures ?"
     },
-    "MESSAGE_PREVENT_MEASURE_SENDING": "Position de la mesure incorecte, Envoi impossible",
+    "MESSAGE_PREVENT_MEASURE_SENDING": "Position de la mesure incorrecte, envoi impossible",
     "NO_MEASURE": "Aucune mesure<br>enregistrée",
     "SEND": {
-      "NOTICE": "En envoyant cette mesure, vous acceptez que l'ensemble des données correspondant à cette measure (dont votre position GPS, votre peseudo, etc) soit publié dans la base OpenRadiation.",
+      "NOTICE": "En envoyant cette mesure, vous acceptez que l'ensemble des données correspondant à cette mesure (dont votre position GPS, votre pseudo, etc) soit publié dans la base OpenRadiation.",
       "TITLE": "Êtes-vous sûr(e) de vouloir envoyer cette mesure ?"
     },
     "SEND_ERROR": "Impossible d'envoyer la mesure, veuillez vérifier votre connexion.",
@@ -90,7 +90,7 @@
     "LOG_OUT": "Se déconnecter",
     "NOTICE": {
       "PART1": "Si vous avez un compte utilisateur sur <a target=\"_blank\" href=\"https://www.openradiation.org\">www.openradiation.org</a>, vous pouvez renseigner ici les identifiants (nom d'utilisateur et mot de passe) de votre compte. Ceci vous permet d’associer les mesures que vous publiez à votre compte utilisateur : ainsi vous pourrez retrouver facilement l’ensemble de vos mesures sur <a target=\"_blank\" href=\"https://www.openradiation.org\">www.openradiation.org</a>.",
-      "PART2": "Vous pourrez également « tagger » ou ajouter une description à vos mesures.<br/>De plus, en publiant des mesures en étant identifié, vous rendez la base collaborative OpenRadiation plus fiable.",
+      "PART2": "Vous pourrez également « tagger » ou ajouter une description à vos mesures. De plus, en publiant des mesures en étant identifié, vous rendez la base collaborative OpenRadiation plus fiable.",
       "PART3": "Si vous ne l’avez pas déjà fait, nous vous invitons à créer un compte sur <a target=\"_blank\" href=\"https://www.openradiation.org/user/register\">www.openradiation.org</a>, puis à le paramétrer ici (synchronisation ~5 min)."
     },
     "NOT_LOGGED": "Non identifié",
@@ -112,7 +112,7 @@
     },
     "DESCRIPTION": "Description",
     "DOSE_RATE": "Débit de dose",
-    "DOSE_RATE_UNIT": "μSv/h",
+    "DOSE_RATE_UNIT": "µSv/h",
     "DURATION": "Durée",
     "ENVIRONMENT": {
       "CITY": "En ville",
