@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Network } from '@ionic-native/network/ngx';
@@ -8,11 +9,10 @@ import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { UserState } from '../../../states/user/user.state';
+import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { PositionChanged, StartWatchPosition, StopWatchPosition } from '../../../states/measures/measures.action';
 import { MeasuresStateModel } from '../../../states/measures/measures.state';
-import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
-import { Router } from '@angular/router';
+import { UserState } from '../../../states/user/user.state';
 
 /**
  * Constants from cordova-plugin-network-information to get network types
@@ -70,28 +70,31 @@ export class MapPage extends AutoUnsubscribePage {
   }
 
   private loadMap() {
-    this.isLoading = true;
-    // TODO: put the language in the url when the API will be fixed
-    let url = `${environment.IN_APP_BROWSER_URI.base}/${environment.IN_APP_BROWSER_URI.suffix}`;
-    this.store.dispatch(new StartWatchPosition());
-    this.subscriptions.push(
-      this.actions$
-        .pipe(ofActionSuccessful(PositionChanged))
-        .pipe(take(1))
-        .subscribe(() => {
-          const { latitude, longitude } = this.store.selectSnapshot(
-            ({ measures }: { measures: MeasuresStateModel }) => measures.currentPosition!.coords
-          );
-          const lat = latitude.toFixed(7);
-          const long = longitude.toFixed(7);
-          const zoom = 12;
-          url += `/${zoom}/${lat}/${long}`;
-          this.store.dispatch(new StopWatchPosition());
-          this.iframeURL = this.domSanitizer.bypassSecurityTrustResourceUrl(url);
-          this.changeDetectorRef.markForCheck();
-        })
-    );
-    this.iframeURL = this.domSanitizer.bypassSecurityTrustResourceUrl(url);
+    this.language$.subscribe(language => {
+      this.isLoading = true;
+      let url = `${environment.IN_APP_BROWSER_URI.base}${
+        language === 'fr' || language === 'en' ? '/' + language : ''
+      }/${environment.IN_APP_BROWSER_URI.suffix}`;
+      this.store.dispatch(new StartWatchPosition());
+      this.subscriptions.push(
+        this.actions$
+          .pipe(ofActionSuccessful(PositionChanged))
+          .pipe(take(1))
+          .subscribe(() => {
+            const { latitude, longitude } = this.store.selectSnapshot(
+              ({ measures }: { measures: MeasuresStateModel }) => measures.currentPosition!.coords
+            );
+            const lat = latitude.toFixed(7);
+            const long = longitude.toFixed(7);
+            const zoom = 12;
+            url += `/${zoom}/${lat}/${long}`;
+            this.store.dispatch(new StopWatchPosition());
+            this.iframeURL = this.domSanitizer.bypassSecurityTrustResourceUrl(url);
+            this.changeDetectorRef.markForCheck();
+          })
+      );
+      this.iframeURL = this.domSanitizer.bypassSecurityTrustResourceUrl(url);
+    });
   }
 
   mapLoaded() {
