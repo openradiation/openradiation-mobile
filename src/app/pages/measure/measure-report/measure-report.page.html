@@ -42,10 +42,10 @@
                         <ion-list>
                             <ion-item [ngClass]="{'custom-disabled': reportScan || currentMeasure.sent}">
                                 <ion-label position="fixed">{{'MEASURES.DURATION' | translate}}</ion-label>
-                                <ion-datetime display-format="mm's''" formControlName="duration"
+                                <ion-datetime display-format="HH:mm'ss''" pickerFormat="HH mm ss" formControlName="duration"
                                               [cancelText]="'GENERAL.CANCEL' | translate"
                                               [doneText]="'GENERAL.SUBMIT' | translate"
-                                              placeholder="00:00"></ion-datetime>
+                                              placeholder="00'00''"></ion-datetime>
                             </ion-item>
                             <ion-item class="has-suffix long-label"
                                       [ngClass]="{'custom-disabled': reportScan || currentMeasure.sent}">

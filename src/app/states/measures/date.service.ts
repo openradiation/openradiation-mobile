@@ -12,9 +12,13 @@ export class DateService {
   }
 
   toISODuration(duration: number): string {
-    const minutes = Math.floor(duration / (1000 * 60));
-    const seconds = Math.round((duration % (1000 * 60)) / 1000);
+    const hourConstant = 1000 * 60 * 60;
+    const minuteConstant = 1000 * 60;
+    const hours = Math.floor(duration / hourConstant);
+    const minutes = Math.floor((duration % hourConstant) / minuteConstant);
+    const seconds = Math.round((duration % minuteConstant) / 1000);
     const date = new Date();
+    date.setHours(hours);
     date.setMinutes(minutes);
     date.setSeconds(seconds);
     return this.toISOString(date);

@@ -141,8 +141,14 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     this.subscriptions.push(
       this.measureReportForm!.valueChanges.subscribe(value => {
         if (typeof value.duration !== 'string' && value.duration) {
+          console.log(
+            value.duration.hour.value + ' ' + value.duration.minute.value + ' ' + value.duration.second.value
+          );
           this.measureReportForm!.get('duration')!.setValue(
-            this.dateService.toISODuration((value.duration.minute.value * 60 + value.duration.second.value) * 1000)
+            this.dateService.toISODuration(
+              (value.duration.hour.value * 60 * 60 + value.duration.minute.value * 60 + value.duration.second.value) *
+                1000
+            )
           );
         }
       }),
