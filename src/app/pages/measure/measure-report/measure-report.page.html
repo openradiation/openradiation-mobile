@@ -33,7 +33,7 @@
                         </ion-item>
                         <ion-item class="custom-disabled">
                             <ion-label class="value">{{'MEASURES.MEASURE_START' | translate}}</ion-label>
-                            <ion-datetime class="values" display-format="HH:mm:ss" formControlName="startTime" required
+                            <ion-datetime class="values" display-format="HH:mm'ss''" formControlName="startTime" required
                                           [cancelText]="'GENERAL.CANCEL' | translate"
                                           [doneText]="'GENERAL.SUBMIT' | translate"></ion-datetime>
                         </ion-item>
@@ -42,7 +42,7 @@
                         <ion-list>
                             <ion-item [ngClass]="{'custom-disabled': reportScan || currentMeasure.sent}">
                                 <ion-label position="fixed">{{'MEASURES.DURATION' | translate}}</ion-label>
-                                <ion-datetime display-format="mm:ss" formControlName="duration"
+                                <ion-datetime display-format="mm's''" formControlName="duration"
                                               [cancelText]="'GENERAL.CANCEL' | translate"
                                               [doneText]="'GENERAL.SUBMIT' | translate"
                                               placeholder="00:00"></ion-datetime>
