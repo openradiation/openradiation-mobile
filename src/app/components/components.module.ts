@@ -5,7 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { AccordionComponent } from './accordion/accordion.component';
 import { CategoryLabelComponent } from './category-label/category-label.component';
-import { DurationPipe } from './duration/duration.pipe';
+import { DurationPipe } from './pipes/duration/duration.pipe';
 import { GpsIndicatorComponent } from './gps-indicator/gps-indicator.component';
 import { HeaderComponent } from './header/header.component';
 import { RoundButtonComponent } from './round-button/round-button.component';
