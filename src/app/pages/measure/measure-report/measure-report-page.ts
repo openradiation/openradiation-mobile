@@ -10,12 +10,7 @@ import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-u
 import { SelectIconOption } from '../../../components/select-icon/select-icon-option';
 import { DateService } from '../../../states/measures/date.service';
 import { Measure, MeasureEnvironment, PositionAccuracyThreshold } from '../../../states/measures/measure';
-import {
-  CancelMeasure,
-  StartMeasureReport,
-  StopMeasure,
-  StopMeasureReport
-} from '../../../states/measures/measures.action';
+import { CancelMeasure, StartMeasureReport, StopMeasure, StopMeasureReport } from '../../../states/measures/measures.action';
 import { MeasuresState, MeasuresStateModel } from '../../../states/measures/measures.state';
 import { UserState } from '../../../states/user/user.state';
 
@@ -141,9 +136,6 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     this.subscriptions.push(
       this.measureReportForm!.valueChanges.subscribe(value => {
         if (typeof value.duration !== 'string' && value.duration) {
-          console.log(
-            value.duration.hour.value + ' ' + value.duration.minute.value + ' ' + value.duration.second.value
-          );
           this.measureReportForm!.get('duration')!.setValue(
             this.dateService.toISODuration(
               (value.duration.hour.value * 60 * 60 + value.duration.minute.value * 60 + value.duration.second.value) *
