@@ -142,7 +142,10 @@ export class MeasureReportPage extends AutoUnsubscribePage {
       this.measureReportForm!.valueChanges.subscribe(value => {
         if (typeof value.duration !== 'string' && value.duration) {
           this.measureReportForm!.get('duration')!.setValue(
-            this.dateService.toISODuration((value.duration.minute.value * 60 + value.duration.second.value) * 1000)
+            this.dateService.toISODuration(
+              (value.duration.hour.value * 60 * 60 + value.duration.minute.value * 60 + value.duration.second.value) *
+                1000
+            )
           );
         }
       }),

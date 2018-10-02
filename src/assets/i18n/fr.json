@@ -112,7 +112,7 @@
     },
     "DESCRIPTION": "Description",
     "DOSE_RATE": "Débit de dose",
-    "DOSE_RATE_UNIT": "µSv/h",
+    "DOSE_RATE_UNIT": "μSv/h",
     "DURATION": "Durée",
     "ENVIRONMENT": {
       "CITY": "En ville",

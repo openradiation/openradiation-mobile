@@ -19,7 +19,7 @@
                     </div>
                     <div class="value">
                         <ng-container *ngIf="currentMeasure.startTime; else measureScanNotStarted">
-                            {{currentMeasure.startTime | date: 'HH:mm:SS'}}
+                            {{currentMeasure.startTime | date: 'HH:mm\'\'\'ss"'}}
                         </ng-container>
                     </div>
                 </div>
@@ -56,7 +56,7 @@
                     </div>
                     <div class="value">
                         <ng-container *ngIf="currentMeasure.startTime; else measureScanNotStarted">
-                            {{currentMeasure.hitsNumber}}
+                            {{currentMeasure.hitsNumber | hitNumber}}
                         </ng-container>
                     </div>
                 </div>
@@ -70,7 +70,7 @@
                                 *ngIf="currentMeasure.endTime && currentMeasure.startTime && currentMeasure.endTime > currentMeasure.startTime; else measureScanNotStarted">
                             {{(currentMeasure.hitsNumber / (currentMeasure.endTime - currentMeasure.startTime)) * 1000 *
                             60 |
-                            number: '1.2-2'}}
+                            hitNumberPerMin}}
                         </ng-container>
                     </div>
                 </div>

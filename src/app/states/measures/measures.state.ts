@@ -418,7 +418,9 @@ export class MeasuresState {
           temperature: measureReport.model.temperature!,
           value: measureReport.model.value!,
           hitsNumber: measureReport.model.hitsNumber!,
-          endTime: currentMeasure.startTime + (durationDate.getMinutes() * 60 + durationDate.getSeconds()) * 1000,
+          endTime:
+            currentMeasure.startTime +
+            (durationDate.getHours() * 60 * 60 + durationDate.getMinutes() * 60 + durationDate.getSeconds()) * 1000,
           measurementHeight: measureReport.model.measurementHeight!,
           measurementEnvironment: measureReport.model.measurementEnvironment!,
           rain: measureReport.model.rain!
