@@ -1,8 +1,8 @@
-import { HitNumberMinPipe } from './hit-number-min.pipe';
+import { HitNumberPerMinPipe } from './hit-number-per-min.pipe';
 
 describe('HitNumberMinPipe', () => {
   it('create an instance', () => {
-    const pipe = new HitNumberMinPipe();
+    const pipe = new HitNumberPerMinPipe();
     expect(pipe).toBeTruthy();
   });
 });

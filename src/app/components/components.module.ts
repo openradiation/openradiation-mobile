@@ -6,7 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AccordionComponent } from './accordion/accordion.component';
 import { CategoryLabelComponent } from './category-label/category-label.component';
 import { DurationPipe } from './pipes/duration/duration.pipe';
-import { HitNumberMinPipe } from './pipes/hit-number-min/hit-number-min.pipe';
+import { HitNumberPerMinPipe } from './pipes/hit-number-per-min/hit-number-per-min.pipe';
 import { HitNumberPipe } from './pipes/hit-number/hit-number.pipe';
 import { DosePipe } from './pipes/dose/dose.pipe';
 import { GpsIndicatorComponent } from './gps-indicator/gps-indicator.component';
@@ -24,7 +24,7 @@ import { TagListComponent } from './tag-list/tag-list.component';
     RoundButtonComponent,
     GpsIndicatorComponent,
     DurationPipe,
-    HitNumberMinPipe,
+    HitNumberPerMinPipe,
     HitNumberPipe,
     DosePipe,
     SelectIconComponent,
@@ -37,7 +37,7 @@ import { TagListComponent } from './tag-list/tag-list.component';
     RoundButtonComponent,
     GpsIndicatorComponent,
     DurationPipe,
-    HitNumberMinPipe,
+    HitNumberPerMinPipe,
     HitNumberPipe,
     DosePipe,
     SelectIconComponent,
