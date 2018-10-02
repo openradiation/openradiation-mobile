@@ -18,7 +18,8 @@
     "compodoc:build": "compodoc -p src/tsconfig.app.json --disableLifeCycleHooks",
     "compodoc:serve": "compodoc -p src/tsconfig.app.json --disableLifeCycleHooks -s -w",
     "prettier": "prettier --write \"src/**/*.ts\" \"src/**/*.scss\" \"src/**/*.md\"",
-    "extract": "ngx-translate-extract --input ./src --output ./src/assets/i18n/en.json ./src/assets/i18n/fr.json --clean --sort --format namespaced-json --format-indentation \"  \" --marker _"
+    "extract": "ngx-translate-extract --input ./src --output ./src/assets/i18n/en.json ./src/assets/i18n/fr.json --clean --sort --format namespaced-json --format-indentation \"  \" --marker _",
+    "pluggin:add": "ionic cordova plugin add"
   },
   "license": "Apache-2.0",
   "dependencies": {
@@ -30,6 +31,7 @@
     "@angular/platform-browser-dynamic": "~6.1.1",
     "@angular/router": "~6.1.1",
     "@ionic-native/ble": "5.0.0-beta.15",
+    "@ionic-native/camera": "5.0.0-beta.15",
     "@ionic-native/core": "5.0.0-beta.15",
     "@ionic-native/device": "5.0.0-beta.15",
     "@ionic-native/diagnostic": "5.0.0-beta.15",
@@ -54,6 +56,7 @@
     "cordova-android": "7.1.1",
     "cordova-ios": "4.5.5",
     "cordova-plugin-ble-central": "^1.2.2",
+    "cordova-plugin-camera": "^4.0.3",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-geolocation": "^4.0.1",
     "cordova-plugin-ionic-keyboard": "^2.1.2",
@@ -120,7 +123,8 @@
       "cordova.plugins.diagnostic": {},
       "cordova-plugin-network-information": {},
       "cordova-plugin-screen-orientation": {},
-      "cordova-plugin-x-socialsharing": {}
+      "cordova-plugin-x-socialsharing": {},
+      "cordova-plugin-camera": {}
     },
     "platforms": [
       "android",
