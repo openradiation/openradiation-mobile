@@ -1,9 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'hitNumber'
+  name: 'hitNumberMin'
 })
-export class HitNumberPipe implements PipeTransform {
+export class HitNumberMinPipe implements PipeTransform {
   transform(value: number): string {
     if (value > 999999) {
       return value.toExponential(2);

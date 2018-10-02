@@ -70,7 +70,7 @@
                                 *ngIf="currentMeasure.endTime && currentMeasure.startTime && currentMeasure.endTime > currentMeasure.startTime; else measureScanNotStarted">
                             {{(currentMeasure.hitsNumber / (currentMeasure.endTime - currentMeasure.startTime)) * 1000 *
                             60 |
-                            hitNumber}}
+                            hitNumberMin}}
                         </ng-container>
                     </div>
                 </div>
