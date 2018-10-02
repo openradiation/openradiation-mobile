@@ -10,7 +10,12 @@ import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-u
 import { SelectIconOption } from '../../../components/select-icon/select-icon-option';
 import { DateService } from '../../../states/measures/date.service';
 import { Measure, MeasureEnvironment, PositionAccuracyThreshold } from '../../../states/measures/measure';
-import { CancelMeasure, StartMeasureReport, StopMeasure, StopMeasureReport } from '../../../states/measures/measures.action';
+import {
+  CancelMeasure,
+  StartMeasureReport,
+  StopMeasure,
+  StopMeasureReport
+} from '../../../states/measures/measures.action';
 import { MeasuresState, MeasuresStateModel } from '../../../states/measures/measures.state';
 import { UserState } from '../../../states/user/user.state';
 
