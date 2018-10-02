@@ -11,9 +11,13 @@ export class DurationPipe implements PipeTransform {
     const minutes = Math.floor((value % hourConstant) / minuteConstant);
     const seconds = Math.round((value % minuteConstant) / 1000);
     if (hours >= 1) {
-      return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}'`;
+      return `${this.formatNumber(hours)}:${this.formatNumber(minutes)}'`;
     } else {
-      return `${minutes.toString().padStart(2, '0')}'${seconds.toString().padStart(2, '0')}"`;
+      return `${this.formatNumber(minutes)}'${this.formatNumber(seconds)}"`;
     }
+  }
+
+  formatNumber(value: number): string {
+    return value.toString().padStart(2, '0');
   }
 }
