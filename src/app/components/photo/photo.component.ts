@@ -4,8 +4,8 @@ import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 
 @Component({
   selector: 'app-photo',
-  templateUrl: './tag-list.component.html',
-  styleUrls: ['./tag-list.component.scss'],
+  templateUrl: './photo.component.html',
+  styleUrls: ['./photo.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

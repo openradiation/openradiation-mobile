@@ -1,0 +1,8 @@
+<div class="title" *ngIf="title && (!isDisabled || tagList?.length > 0)">
+    {{title}}
+</div>
+<div class="photo" [ngClass]="{disabled: isDisabled}">
+    <ion-button>Photo</ion-button>
+    <ion-button>Gallery</ion-button>
+    <ion-img></ion-img>
+</div>

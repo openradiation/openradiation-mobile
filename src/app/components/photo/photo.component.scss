@@ -1,0 +1,17 @@
+@import 'src/theme/variables';
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 10px;
+  width: 100%;
+
+  .title {
+    font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+    font-weight: 200;
+    font-size: 16px;
+    color: $second-color;
+    margin-bottom: 10px;
+  }
+}
