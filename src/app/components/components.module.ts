@@ -8,6 +8,7 @@ import { CategoryLabelComponent } from './category-label/category-label.componen
 import { DurationPipe } from './pipes/duration/duration.pipe';
 import { HitNumberMinPipe } from './pipes/hit-number-min/hit-number-min.pipe';
 import { HitNumberPipe } from './pipes/hit-number/hit-number.pipe';
+import { DosePipe } from './pipes/dose/dose.pipe';
 import { GpsIndicatorComponent } from './gps-indicator/gps-indicator.component';
 import { HeaderComponent } from './header/header.component';
 import { RoundButtonComponent } from './round-button/round-button.component';
@@ -25,6 +26,7 @@ import { TagListComponent } from './tag-list/tag-list.component';
     DurationPipe,
     HitNumberMinPipe,
     HitNumberPipe,
+    DosePipe,
     SelectIconComponent,
     TagListComponent
   ],
@@ -37,6 +39,7 @@ import { TagListComponent } from './tag-list/tag-list.component';
     DurationPipe,
     HitNumberMinPipe,
     HitNumberPipe,
+    DosePipe,
     SelectIconComponent,
     TagListComponent
   ],
