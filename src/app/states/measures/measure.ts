@@ -35,6 +35,7 @@ export class Measure {
   rain?: boolean;
   sent = false;
   steps?: Step[] = [];
+  photo?: string;
 
   constructor(
     apparatusId: string | undefined,
@@ -126,4 +127,5 @@ export interface MeasureReport {
   tags: string[] | undefined;
   measurementEnvironment: MeasureEnvironment | undefined;
   rain: boolean | undefined;
+  photo: string | undefined;
 }
