@@ -1,6 +1,6 @@
 import { Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { Camera, CameraOptions, PictureSourceType } from '@ionic-native/camera/ngx';
 
 @Component({
   selector: 'app-photo',
@@ -37,8 +37,8 @@ export class PhotoComponent implements ControlValueAccessor {
     this.onTouched = fn;
   }
 
-  writeValue(tagList: any): void {
-    this.photo = tagList;
+  writeValue(photo: string): void {
+    this.photo = photo;
     this.onChange(this.photo);
   }
 
@@ -46,15 +46,19 @@ export class PhotoComponent implements ControlValueAccessor {
     this.isDisabled = isDisabled;
   }
 
-  addPhoto(photo: string): void {}
-
   deletePhoto(): void {
+    this.photo = '';
+  }
+
+  addPhoto(source: PictureSourceType): void {
     const options: CameraOptions = {
       quality: 100,
-      destinationType: this.camera.DestinationType.FILE_URI,
+      destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
-      sourceType: this.camera.PictureSourceType.PHOTOLIBRARY
+      sourceType: source,
+      targetWidth: 600,
+      targetHeight: 800
     };
 
     this.camera.getPicture(options).then(

@@ -2,7 +2,18 @@
     {{title}}
 </div>
 <div class="photo" [ngClass]="{disabled: isDisabled}">
-    <ion-button>Photo</ion-button>
-    <ion-button>Gallery</ion-button>
-    <ion-img></ion-img>
+    <div *ngIf="!photo;else show_picture">
+        <ion-button class="flat-button photo-buttons" fill="clear"
+                    (click)="addPhoto(this.camera.PictureSourceType.CAMERA)">Photo
+        </ion-button>
+        <ion-button class="flat-button photo-buttons" fill="clear"
+                    (click)="addPhoto(this.camera.PictureSourceType.PHOTOLIBRARY)">Gallery
+        </ion-button>
+    </div>
+    <ng-template #show_picture>
+        <ion-img class="picture" [src]=photo></ion-img>
+        <ion-button class="icon" (click)="deletePhoto()" fill="clear">
+            <ion-icon slot="icon-only" name="trash"></ion-icon>
+        </ion-button>
+    </ng-template>
 </div>
