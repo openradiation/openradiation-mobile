@@ -37,7 +37,7 @@ export class PhotoComponent implements ControlValueAccessor {
     this.onTouched = fn;
   }
 
-  writeValue(photo: string): void {
+  writeValue(photo: any): void {
     this.photo = photo;
     this.onChange(this.photo);
   }
@@ -47,7 +47,7 @@ export class PhotoComponent implements ControlValueAccessor {
   }
 
   deletePhoto(): void {
-    this.photo = '';
+    this.writeValue(undefined);
   }
 
   addPhoto(source: PictureSourceType): void {
@@ -63,7 +63,7 @@ export class PhotoComponent implements ControlValueAccessor {
 
     this.camera.getPicture(options).then(
       imageData => {
-        this.photo = 'data:image/jpeg;base64,' + imageData;
+        this.writeValue('data:image/jpeg;base64,' + imageData);
       },
       err => {
         console.log('error photo ' + err);
