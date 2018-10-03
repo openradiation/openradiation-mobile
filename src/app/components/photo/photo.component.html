@@ -6,7 +6,6 @@
         <ion-button (click)="addPhoto(this.camera.PictureSourceType.CAMERA)" *ngIf="!isDisabled"
                     class="flat-button photo-button" fill="clear">
             <app-round-button class="button-icon" [src]="'assets/img/icon-photo.png'">
-
             </app-round-button>
         </ion-button>
         <ion-button (click)="addPhoto(this.camera.PictureSourceType.PHOTOLIBRARY)" *ngIf="!isDisabled"

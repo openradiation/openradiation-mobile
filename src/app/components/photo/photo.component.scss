@@ -23,7 +23,17 @@
 
     .photo-button {
       margin: 0 10px;
-      --border-radius: 10px;
+      width: 50px;
+      --height: 50px;
+      --border-radius: 50%;
+      --padding-start: 0;
+      --padding-bottom: 0;
+      --padding-end: 0;
+      --padding-top: 0;
+      --margin-top: 0;
+      --margin-bottom: 0;
+      --margin-start: 0;
+      --margin-end: 0;
       .button-icon {
         padding: 10px;
       }
