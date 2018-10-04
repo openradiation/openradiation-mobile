@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { BLE } from '@ionic-native/ble/ngx';
+import { Camera } from '@ionic-native/camera/ngx';
 import { Device } from '@ionic-native/device/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
@@ -61,7 +62,8 @@ import { UserState } from './states/user/user.state';
     Device,
     ScreenOrientation,
     DatePipe,
-    SocialSharing
+    SocialSharing,
+    Camera
   ],
   bootstrap: [AppComponent]
 })

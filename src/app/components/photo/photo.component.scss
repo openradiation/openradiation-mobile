@@ -1,0 +1,72 @@
+@import 'src/theme/variables';
+
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 10px;
+  width: 100%;
+
+  .title {
+    font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+    font-weight: 200;
+    font-size: 16px;
+    color: $second-color;
+    margin-bottom: 10px;
+  }
+
+  .photo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .photo-button {
+      margin: 0 10px;
+      width: 50px;
+      --height: 50px;
+      --border-radius: 50%;
+      --padding-start: 0;
+      --padding-bottom: 0;
+      --padding-end: 0;
+      --padding-top: 0;
+      --margin-top: 0;
+      --margin-bottom: 0;
+      --margin-start: 0;
+      --margin-end: 0;
+      .button-icon {
+        padding: 10px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+      }
+    }
+    .overlay {
+      position: relative;
+      width: 60%;
+
+      .icon {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        color: white;
+        background: $second-color;
+        width: 36px;
+        --height: 36px;
+        border-radius: 50%;
+        --padding-start: 0;
+        --padding-bottom: 0;
+        --padding-end: 0;
+        --padding-top: 0;
+        --margin-top: 0;
+        --margin-bottom: 0;
+        --margin-start: 0;
+        --margin-end: 0;
+
+        .cross {
+          width: 36px;
+        }
+      }
+    }
+  }
+}
