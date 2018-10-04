@@ -122,13 +122,14 @@ export class MeasuresService {
           description: measure.description,
           measurementHeight: measure.measurementHeight,
           tags: measure.tags,
-          enclosedObject: measure.enclosedObject,
           userId: this.store.selectSnapshot(({ user }: { user: UserStateModel }) => user.login),
           userPwd: this.store.selectSnapshot(({ user }: { user: UserStateModel }) => user.password),
           measurementEnvironment: measure.measurementEnvironment,
-          rain: measure.rain
+          rain: measure.rain,
+          enclosedObject: measure.photo
         }
       };
+      console.log(payload);
       return this.httpClient.post(environment.API_URI, payload);
     } else {
       throw new Error('missing Lat and long in measure');

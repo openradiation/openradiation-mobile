@@ -31,11 +31,11 @@ export interface MeasureApi {
     description?: string;
     measurementHeight?: number;
     tags?: string[];
-    enclosedObject?: string;
     userId?: string;
     userPwd?: string;
     measurementEnvironment?: string;
     rain?: boolean;
+    enclosedObject?: string;
   };
 }
 
