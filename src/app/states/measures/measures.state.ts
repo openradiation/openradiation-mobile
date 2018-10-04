@@ -387,7 +387,7 @@ export class MeasuresState {
           ? currentMeasure.measurementEnvironment
           : undefined,
         rain: currentMeasure.rain !== undefined ? currentMeasure.rain : undefined,
-        photo: currentMeasure.photo !== undefined ? currentMeasure.photo : undefined
+        photo: currentMeasure.enclosedObject !== undefined ? currentMeasure.enclosedObject : undefined
       };
       patchState({
         measureReport: {
@@ -411,7 +411,7 @@ export class MeasuresState {
         rain: measureReport.model.rain!,
         description: measureReport.model.description,
         tags: measureReport.model.tags,
-        photo: measureReport.model.photo
+        enclosedObject: measureReport.model.photo
       };
       if (currentMeasure.manualReporting) {
         const durationDate = new Date(measureReport.model.duration!);

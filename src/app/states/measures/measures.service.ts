@@ -122,7 +122,7 @@ export class MeasuresService {
           description: measure.description,
           measurementHeight: measure.measurementHeight,
           tags: measure.tags,
-          enclosedObject: measure.photo,
+          enclosedObject: measure.enclosedObject,
           userId: this.store.selectSnapshot(({ user }: { user: UserStateModel }) => user.login),
           userPwd: this.store.selectSnapshot(({ user }: { user: UserStateModel }) => user.password),
           measurementEnvironment: measure.measurementEnvironment,

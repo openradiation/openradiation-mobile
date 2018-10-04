@@ -30,7 +30,7 @@ export class Measure {
   description?: string;
   measurementHeight?: number;
   tags?: string[];
-  photo?: string;
+  enclosedObject?: string;
   measurementEnvironment?: MeasureEnvironment;
   rain?: boolean;
   sent = false;
