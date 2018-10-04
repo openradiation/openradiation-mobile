@@ -129,7 +129,6 @@ export class MeasuresService {
           enclosedObject: measure.photo
         }
       };
-      console.log(payload);
       return this.httpClient.post(environment.API_URI, payload);
     } else {
       throw new Error('missing Lat and long in measure');
