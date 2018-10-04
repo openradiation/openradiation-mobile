@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { Measure, Step } from '../measures/measure';
 import { DeviceType } from './abstract-device';
 import { DeviceAtomTag } from './device-atom-tag';
+import { DeviceOGKit } from './device-og-kit';
 
 // Todo add inheritance when angular issue fixed https://github.com/angular/angular/issues/24011
 @Injectable({
@@ -16,6 +17,7 @@ export class DeviceAtomTagService /*extends AbstractDeviceService<DeviceAtomTag>
   private firmwareCharacteristic = '2a26';
   private service = '63462A4A-C28C-4FFD-87A4-2D23A1C72581';
   private settingsCharacteristic = 'ea50cfcd-ac4a-4a48-bf0e-879e548ae157';
+  private receiveCharacteristic = '70BC767E-7A1A-4304-81ED-14B9AF54F7BD';
 
   constructor(protected ble: BLE) {}
 
@@ -58,8 +60,8 @@ export class DeviceAtomTagService /*extends AbstractDeviceService<DeviceAtomTag>
   computeRadiationValue(measure: Measure): number {
     if (measure.endTime) {
       const duration = (measure.endTime - measure.startTime) / 1000;
-      const TcNet = measure.hitsNumber / duration - 0.14;
-      return 0.000001 * TcNet ** 3 + 0.0025 * TcNet ** 2 + 0.39 * TcNet;
+      const TcNet = measure.hitsNumber / duration;
+      return (TcNet * 0.128 * 3600 - 40) / 1000;
     } else {
       throw new Error('Incorrect measure : missing endTime');
     }
@@ -67,6 +69,23 @@ export class DeviceAtomTagService /*extends AbstractDeviceService<DeviceAtomTag>
 
   // TODO implement start measure for AtomTag
   startMeasureScan(device: DeviceAtomTag, stopSignal: Observable<any>): Observable<Step> {
+    stopSignal.subscribe(() => this.stopReceiveData(device));
+    this.startReceiveData(device)
+      .pipe(map((buffer: ArrayBuffer) => this.decodeDataPackage(buffer)))
+      .subscribe();
     return of();
+  }
+
+  private startReceiveData(device: DeviceAtomTag): Observable<any> {
+    return this.ble.startNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
+  }
+
+  private stopReceiveData(device: DeviceAtomTag) {
+    return this.ble.stopNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
+  }
+
+  private decodeDataPackage(buffer: ArrayBuffer): void {
+    const dataview = new DataView(buffer);
+    console.log(buffer);
   }
 }
