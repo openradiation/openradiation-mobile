@@ -123,7 +123,7 @@ export interface MeasureReport {
   value: number | undefined;
   measurementHeight: number | undefined;
   description: string | undefined;
-  photo: string | undefined;
+  enclosedObject: string | undefined;
   tags: string[] | undefined;
   measurementEnvironment: MeasureEnvironment | undefined;
   rain: boolean | undefined;

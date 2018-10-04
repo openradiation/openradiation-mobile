@@ -131,7 +131,7 @@ export class MeasureReportPage extends AutoUnsubscribePage {
           this.measureReportForm.get('rain')!.disable();
           this.measureReportForm.get('description')!.disable();
           this.measureReportForm.get('tags')!.disable();
-          this.measureReportForm.get('photo')!.disable();
+          this.measureReportForm.get('enclosedObject')!.disable();
         }
       }
       this.init();
