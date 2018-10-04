@@ -3,15 +3,13 @@
 </div>
 <div class="photo">
     <ng-container *ngIf="!photo; else showPicture">
-        <ion-button (click)="addPhoto(this.camera.PictureSourceType.CAMERA)" *ngIf="!isDisabled"
+        <ion-button (click)="byCamera()" *ngIf="!isDisabled"
                     class="flat-button photo-button" fill="clear">
-            <app-round-button class="button-icon" [src]="'assets/img/icon-photo.png'">
-            </app-round-button>
+            <img class="button-icon" [src]="'assets/img/icon-photo.png'">
         </ion-button>
-        <ion-button (click)="addPhoto(this.camera.PictureSourceType.PHOTOLIBRARY)" *ngIf="!isDisabled"
+        <ion-button (click)="byGallery()" *ngIf="!isDisabled"
                     class="flat-button photo-button" fill="clear">
-            <app-round-button class="button-icon" [src]="'assets/img/icon-gallery.png'">
-            </app-round-button>
+            <img class="button-icon" [src]="'assets/img/icon-gallery.png'">
         </ion-button>
     </ng-container>
     <ng-template #showPicture>

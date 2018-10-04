@@ -50,17 +50,31 @@ export class PhotoComponent implements ControlValueAccessor {
     this.writeValue(undefined);
   }
 
-  addPhoto(source: PictureSourceType): void {
+  byCamera(): void {
     const options: CameraOptions = {
-      quality: 100,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
-      sourceType: source,
+      sourceType: this.camera.PictureSourceType.CAMERA,
       targetWidth: 600,
       targetHeight: 800
     };
+    this.addPhoto(options);
+  }
 
+  byGallery(): void {
+    const options: CameraOptions = {
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE,
+      sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+      targetWidth: 600,
+      targetHeight: 800
+    };
+    this.addPhoto(options);
+  }
+
+  addPhoto(options: CameraOptions): void {
     this.camera.getPicture(options).then(
       imageData => {
         this.writeValue('data:image/jpeg;base64,' + imageData);
