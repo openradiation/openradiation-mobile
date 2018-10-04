@@ -3,11 +3,11 @@
 </div>
 <div class="photo">
     <ng-container *ngIf="!photo; else showPicture">
-        <ion-button (click)="byCamera()" *ngIf="!isDisabled"
+        <ion-button (click)="openCamera()" *ngIf="!isDisabled"
                     class="flat-button photo-button" fill="clear">
             <img class="button-icon" [src]="'assets/img/icon-photo.png'">
         </ion-button>
-        <ion-button (click)="byGallery()" *ngIf="!isDisabled"
+        <ion-button (click)="openGallery()" *ngIf="!isDisabled"
                     class="flat-button photo-button" fill="clear">
             <img class="button-icon" [src]="'assets/img/icon-gallery.png'">
         </ion-button>

@@ -122,11 +122,11 @@ export class MeasuresService {
           description: measure.description,
           measurementHeight: measure.measurementHeight,
           tags: measure.tags,
+          enclosedObject: measure.photo,
           userId: this.store.selectSnapshot(({ user }: { user: UserStateModel }) => user.login),
           userPwd: this.store.selectSnapshot(({ user }: { user: UserStateModel }) => user.password),
           measurementEnvironment: measure.measurementEnvironment,
-          rain: measure.rain,
-          enclosedObject: measure.photo
+          rain: measure.rain
         }
       };
       return this.httpClient.post(environment.API_URI, payload);

@@ -30,11 +30,11 @@ export class Measure {
   description?: string;
   measurementHeight?: number;
   tags?: string[];
+  photo?: string;
   measurementEnvironment?: MeasureEnvironment;
   rain?: boolean;
   sent = false;
   steps?: Step[] = [];
-  photo?: string;
 
   constructor(
     apparatusId: string | undefined,
