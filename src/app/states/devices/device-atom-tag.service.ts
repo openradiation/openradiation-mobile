@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BLE } from '@ionic-native/ble/ngx';
 import { Observable, of } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
-import { map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { Measure, Step } from '../measures/measure';
 import { DeviceType } from './abstract-device';
 import { DeviceAtomTag } from './device-atom-tag';
@@ -16,6 +16,7 @@ export class DeviceAtomTagService /*extends AbstractDeviceService<DeviceAtomTag>
   private firmwareService = '180a';
   private firmwareCharacteristic = '2a26';
   private service = '63462A4A-C28C-4FFD-87A4-2D23A1C72581';
+  //private settingsCharacteristic = '3F71E820-1D98-46D4-8ED6-324C8428868C';
   private settingsCharacteristic = 'ea50cfcd-ac4a-4a48-bf0e-879e548ae157';
   private receiveCharacteristic = '70BC767E-7A1A-4304-81ED-14B9AF54F7BD';
 
@@ -70,10 +71,14 @@ export class DeviceAtomTagService /*extends AbstractDeviceService<DeviceAtomTag>
   // TODO implement start measure for AtomTag
   startMeasureScan(device: DeviceAtomTag, stopSignal: Observable<any>): Observable<Step> {
     stopSignal.subscribe(() => this.stopReceiveData(device));
-    this.startReceiveData(device)
-      .pipe(map((buffer: ArrayBuffer) => this.decodeDataPackage(buffer)))
-      .subscribe();
-    return of();
+    // this.startReceiveData(device)
+    //   .pipe(map((buffer: ArrayBuffer) => this.decodeDataPackage(buffer)))
+    //   .subscribe();
+    // return of();
+    return this.startReceiveData(device).pipe(
+      map((buffer: ArrayBuffer) => this.decodeDataPackage(buffer)),
+      filter((step: Step | null): step is Step => step !== null)
+    );
   }
 
   private startReceiveData(device: DeviceAtomTag): Observable<any> {
@@ -84,8 +89,18 @@ export class DeviceAtomTagService /*extends AbstractDeviceService<DeviceAtomTag>
     return this.ble.stopNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
   }
 
-  private decodeDataPackage(buffer: ArrayBuffer): void {
-    const dataview = new DataView(buffer);
+  private decodeDataPackage(buffer: ArrayBuffer): Step | null {
     console.log(buffer);
+    const dataView = new DataView(buffer);
+    const temperature = dataView.getUint8(12);
+    console.log('temp: ' + temperature);
+    const hit = dataView.getUint8(9);
+    console.log('hit: ' + hit);
+    return {
+      ts: Date.now(),
+      hitsNumber: dataView.getUint8(9),
+      temperature: dataView.getUint8(12),
+      voltage: 0
+    };
   }
 }
