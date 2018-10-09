@@ -17,7 +17,6 @@ export class DeviceAtomTagService /*extends AbstractDeviceService<DeviceAtomTag>
   private firmwareCharacteristic = '2a26';
   private service = '63462A4A-C28C-4FFD-87A4-2D23A1C72581';
   private settingsCharacteristic = 'ea50cfcd-ac4a-4a48-bf0e-879e548ae157';
-  private receiveHitCharacteristic = '8E26EDC8­A1E9­4C06­9BD0­97B97E7B3FB9';
   private receiveCharacteristic = '70BC767E-7A1A-4304-81ED-14B9AF54F7BD';
 
   constructor(protected ble: BLE) {}
@@ -89,7 +88,7 @@ export class DeviceAtomTagService /*extends AbstractDeviceService<DeviceAtomTag>
     const dataView = new DataView(buffer);
     return {
       ts: Date.now(),
-      hitsNumber: dataView.getUint16(9, true),
+      hitsNumber: Math.round(dataView.getUint16(9, true) / (1 - dataView.getUint16(9, true) * 0.0003)),
       temperature: dataView.getUint8(12),
       voltage: 0
     };
