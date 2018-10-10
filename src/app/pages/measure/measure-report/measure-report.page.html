@@ -33,7 +33,8 @@
                         </ion-item>
                         <ion-item class="custom-disabled">
                             <ion-label class="value">{{'MEASURES.MEASURE_START' | translate}}</ion-label>
-                            <ion-datetime class="values" display-format="HH:mm'ss''" formControlName="startTime" required
+                            <ion-datetime class="values" display-format="HH:mm'ss''" formControlName="startTime"
+                                          required
                                           [cancelText]="'GENERAL.CANCEL' | translate"
                                           [doneText]="'GENERAL.SUBMIT' | translate"></ion-datetime>
                         </ion-item>
@@ -42,7 +43,8 @@
                         <ion-list>
                             <ion-item [ngClass]="{'custom-disabled': reportScan || currentMeasure.sent}">
                                 <ion-label position="fixed">{{'MEASURES.DURATION' | translate}}</ion-label>
-                                <ion-datetime display-format="HH:mm'ss''" pickerFormat="HH mm ss" formControlName="duration"
+                                <ion-datetime display-format="HH:mm'ss''" pickerFormat="HH mm ss"
+                                              formControlName="duration"
                                               [cancelText]="'GENERAL.CANCEL' | translate"
                                               [doneText]="'GENERAL.SUBMIT' | translate"
                                               placeholder="00'00''"></ion-datetime>
@@ -70,7 +72,8 @@
                     <div class="environment">
                         <app-select-icon [options]="measurementEnvironmentOptions"
                                          formControlName="measurementEnvironment"
-                                         [title]="'MEASURES.ENVIRONMENT.TITLE' | translate">
+                                         [title]="'MEASURES.ENVIRONMENT.TITLE' | translate"
+                                         [required]="speed === false">
                         </app-select-icon>
                     </div>
                     <div class="options">
@@ -95,9 +98,9 @@
                                           [title]="'MEASURES.TAG_LIST' | translate">
                             </app-tag-list>
                         </div>
-                         <div class="photo">
-                             <app-photo formControlName="enclosedObject" [title]="'Photo'">
-                             </app-photo>
+                        <div class="photo">
+                            <app-photo formControlName="enclosedObject" [title]="'Photo'">
+                            </app-photo>
                         </div>
                     </ng-container>
                 </form>
