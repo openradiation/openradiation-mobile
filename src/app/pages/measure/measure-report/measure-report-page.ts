@@ -219,14 +219,40 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     const { currentMeasure } = this.store.selectSnapshot(({ measures }: { measures: MeasuresStateModel }) => measures);
     const lat = currentMeasure!.latitude;
     const long = currentMeasure!.longitude;
-    const endLat = currentMeasure!.endLatitude;
-    const endLong = currentMeasure!.endLongitude;
+    const endLat = 47.960396;
+    //const endLat = currentMeasure!.endLatitude;
+    const endLong = -1.582969;
+    //const endLong = currentMeasure!.endLongitude;
+    const duration = (currentMeasure!.endTime! - currentMeasure!.startTime) / 60000;
     if (lat !== undefined && long !== undefined && endLat !== undefined && endLong !== undefined) {
-      console.log('lat ' + lat + ' long ' + long + ' endlat ' + endLat + ' endlong ' + endLong);
-      return false;
+      return this.speedCheck(lat, long, endLat, endLong, duration);
     } else {
       console.log('pos inconnue');
       return true;
     }
+  }
+
+  speedCheck(lat: number, long: number, endLat: number, endLong: number, duration: number) {
+    const distance = this.get_distance_m(lat, long, endLat, endLong);
+    const speed = (distance * 60) / duration;
+    console.log('distance ' + distance + ' duration ' + duration + ' speed ' + speed);
+    if (speed >= 30) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  get_distance_m(lat1: number, lng1: number, lat2: number, lng2: number) {
+    const earth_radius = 6378137;
+    const rlo1 = (Math.PI * lng1) / 180;
+    const rla1 = (Math.PI * lat1) / 180;
+    const rlo2 = (Math.PI * lng2) / 180;
+    const rla2 = (Math.PI * lat2) / 180;
+    const dlo = (rlo2 - rlo1) / 2;
+    const dla = (rla2 - rla1) / 2;
+    const a = Math.sin(dla) * Math.sin(dla) + Math.cos(rla1) * Math.cos(rla2) * (Math.sin(dlo) * Math.sin(dlo));
+    const d = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return (earth_radius * d) / 1000;
   }
 }
