@@ -9,6 +9,10 @@
                      *ngIf="currentMeasure.accuracy >= positionAccuracyThreshold.Inaccurate || currentMeasure.endAccuracy >= positionAccuracyThreshold.Inaccurate">
                     <div class="message-style">{{'HISTORY.MESSAGE_PREVENT_MEASURE_SENDING' | translate}}</div>
                 </div>
+                <div class="message"
+                     *ngIf="speed === false">
+                    <div class="message-style">{{'HISTORY.MESSAGE_SPEED' | translate}}</div>
+                </div>
                 <form class="form" [formGroup]="measureReportForm" ngxsForm="measures.measureReport">
                     <div class="position">
                         <ion-list>

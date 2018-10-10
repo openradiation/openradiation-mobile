@@ -36,7 +36,7 @@ export class MeasureReportPage extends AutoUnsubscribePage {
 
   measureReportForm?: FormGroup;
   reportScan = true;
-  speed = this.speedCheck();
+  speed = this.initSpeedCheck();
 
   positionAccuracyThreshold = PositionAccuracyThreshold;
 
@@ -48,21 +48,21 @@ export class MeasureReportPage extends AutoUnsubscribePage {
       iconOff: 'assets/img/icon-countryside-off.png',
       label: <string>_('MEASURES.ENVIRONMENT.COUNTRYSIDE'),
       value: MeasureEnvironment.Countryside,
-      speed: this.speedCheck()
+      speed: this.initSpeedCheck()
     },
     {
       iconOn: 'assets/img/icon-city-on.png',
       iconOff: 'assets/img/icon-city-off.png',
       label: <string>_('MEASURES.ENVIRONMENT.CITY'),
       value: MeasureEnvironment.City,
-      speed: this.speedCheck()
+      speed: this.initSpeedCheck()
     },
     {
       iconOn: 'assets/img/icon-inside-on.png',
       iconOff: 'assets/img/icon-inside-off.png',
       label: <string>_('MEASURES.ENVIRONMENT.INSIDE'),
       value: MeasureEnvironment.Inside,
-      speed: this.speedCheck()
+      speed: this.initSpeedCheck()
     },
     {
       iconOn: 'assets/img/icon-ontheroad-on.png',
@@ -215,13 +215,18 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     this.navController.navigateForward(['measure', 'steps']);
   }
 
-  speedCheck() {
+  initSpeedCheck() {
     const { currentMeasure } = this.store.selectSnapshot(({ measures }: { measures: MeasuresStateModel }) => measures);
     const lat = currentMeasure!.latitude;
     const long = currentMeasure!.longitude;
     const endLat = currentMeasure!.endLatitude;
     const endLong = currentMeasure!.endLongitude;
-    console.log('lat ' + lat + ' long ' + long + ' endlat ' + endLat + ' endlong ' + endLong);
-    return false;
+    if (lat !== undefined && long !== undefined && endLat !== undefined && endLong !== undefined) {
+      console.log('lat ' + lat + ' long ' + long + ' endlat ' + endLat + ' endlong ' + endLong);
+      return false;
+    } else {
+      console.log('pos inconnue');
+      return true;
+    }
   }
 }
