@@ -222,11 +222,9 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     const endLat = currentMeasure!.endLatitude;
     const endLong = currentMeasure!.endLongitude;
     const duration = (currentMeasure!.endTime! - currentMeasure!.startTime) / 60000;
-    console.log(duration);
     if (lat !== undefined && long !== undefined && endLat !== undefined && endLong !== undefined && duration > 0) {
       return MeasureReportPage.speedCheck(lat, long, endLat, endLong, duration);
     } else {
-      console.log('duration 0');
       return true;
     }
   }
