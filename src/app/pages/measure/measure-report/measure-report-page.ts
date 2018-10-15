@@ -134,7 +134,6 @@ export class MeasureReportPage extends AutoUnsubscribePage {
       );
       this.reportScan = !currentMeasure!.manualReporting;
       this.speed = this.initSpeedCheck();
-      console.log('speed ' + this.speed);
       if (measureReport) {
         this.measureReportForm = this.formBuilder.group({ ...measureReport.model, tags: [measureReport.model.tags] });
         if (currentMeasure!.sent) {
@@ -226,7 +225,6 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     if (lat !== undefined && long !== undefined && endLat !== undefined && endLong !== undefined) {
       return MeasureReportPage.speedCheck(lat, long, endLat, endLong, duration);
     } else {
-      console.log('pos inconnue');
       return true;
     }
   }

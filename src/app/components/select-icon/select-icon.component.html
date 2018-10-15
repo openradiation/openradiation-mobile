@@ -2,12 +2,17 @@
     {{title}}
 </div>
 <div class="list" [ngClass]="{disabled: isDisabled}">
-  <div class="item" *ngFor="let option of options" (click)="writeValue(option.value)">
-      <div class="icon">
-          <img [src]="option === selectedOption ? option.iconOn : option.iconOff">
-      </div>
-      <div class="label" [ngClass]="{'selected': option === selectedOption}">
-          {{option.label | translate}}
-      </div>
-  </div>
+    <div class="item" *ngFor="let option of options" (click)="writeValue(option.value)">
+        <div class="icon" *ngIf="option.speed;else iconOff">
+            <img [src]="option === selectedOption ? option.iconOn : option.iconOff">
+        </div>
+        <ng-template #iconOff>
+            <div class="icon">
+                <img class="iconOff" [src]="option.iconOff">
+            </div>
+        </ng-template>
+        <div class="label" [ngClass]="{'selected': option === selectedOption}">
+            {{option.label | translate}}
+        </div>
+    </div>
 </div>
