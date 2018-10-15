@@ -230,9 +230,13 @@ export class MeasureReportPage extends AutoUnsubscribePage {
   }
 
   static speedCheck(lat: number, long: number, endLat: number, endLong: number, duration: number) {
+    let speed;
     const distance = MeasureReportPage.get_distance_m(lat, long, endLat, endLong);
-    const speed = (distance * 60) / duration;
-    console.log('distance ' + distance + ' duration ' + duration + ' speed ' + speed);
+    if (distance > 0) {
+      speed = (distance * 60) / duration;
+    } else {
+      return true;
+    }
     return speed < 30;
   }
 
