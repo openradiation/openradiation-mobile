@@ -36,7 +36,7 @@ export class MeasureReportPage extends AutoUnsubscribePage {
 
   measureReportForm?: FormGroup;
   reportScan = true;
-  speed = this.initSpeedCheck();
+  speed = true;
 
   positionAccuracyThreshold = PositionAccuracyThreshold;
 
@@ -133,6 +133,7 @@ export class MeasureReportPage extends AutoUnsubscribePage {
         ({ measures }: { measures: MeasuresStateModel }) => measures
       );
       this.reportScan = !currentMeasure!.manualReporting;
+      this.speed = this.initSpeedCheck();
       console.log('speed ' + this.speed);
       if (measureReport) {
         this.measureReportForm = this.formBuilder.group({ ...measureReport.model, tags: [measureReport.model.tags] });
@@ -219,31 +220,25 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     const { currentMeasure } = this.store.selectSnapshot(({ measures }: { measures: MeasuresStateModel }) => measures);
     const lat = currentMeasure!.latitude;
     const long = currentMeasure!.longitude;
-    const endLat = 47.960396;
-    //const endLat = currentMeasure!.endLatitude;
-    const endLong = -1.582969;
-    //const endLong = currentMeasure!.endLongitude;
+    const endLat = currentMeasure!.endLatitude;
+    const endLong = currentMeasure!.endLongitude;
     const duration = (currentMeasure!.endTime! - currentMeasure!.startTime) / 60000;
     if (lat !== undefined && long !== undefined && endLat !== undefined && endLong !== undefined) {
-      return this.speedCheck(lat, long, endLat, endLong, duration);
+      return MeasureReportPage.speedCheck(lat, long, endLat, endLong, duration);
     } else {
       console.log('pos inconnue');
       return true;
     }
   }
 
-  speedCheck(lat: number, long: number, endLat: number, endLong: number, duration: number) {
-    const distance = this.get_distance_m(lat, long, endLat, endLong);
+  static speedCheck(lat: number, long: number, endLat: number, endLong: number, duration: number) {
+    const distance = MeasureReportPage.get_distance_m(lat, long, endLat, endLong);
     const speed = (distance * 60) / duration;
     console.log('distance ' + distance + ' duration ' + duration + ' speed ' + speed);
-    if (speed >= 30) {
-      return false;
-    } else {
-      return true;
-    }
+    return speed < 30;
   }
 
-  get_distance_m(lat1: number, lng1: number, lat2: number, lng2: number) {
+  static get_distance_m(lat1: number, lng1: number, lat2: number, lng2: number) {
     const earth_radius = 6378137;
     const rlo1 = (Math.PI * lng1) / 180;
     const rla1 = (Math.PI * lat1) / 180;
