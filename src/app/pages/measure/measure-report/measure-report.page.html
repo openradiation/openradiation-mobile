@@ -10,7 +10,7 @@
                     <div class="message-style">{{'HISTORY.MESSAGE_PREVENT_MEASURE_SENDING' | translate}}</div>
                 </div>
                 <div class="message"
-                     *ngIf="disabled === true">
+                     *ngIf="positionChangeSpeedOverLimit">
                     <div class="message-style">{{'HISTORY.MESSAGE_SPEED' | translate}}</div>
                 </div>
                 <form class="form" [formGroup]="measureReportForm" ngxsForm="measures.measureReport">
@@ -77,7 +77,7 @@
                         <app-select-icon [options]="measurementEnvironmentOptions"
                                          formControlName="measurementEnvironment"
                                          [title]="'MEASURES.ENVIRONMENT.TITLE' | translate"
-                                         [required]="disabled === true">
+                                         [required]="positionChangeSpeedOverLimit">
                         </app-select-icon>
                     </div>
                     <div class="options">

@@ -36,7 +36,7 @@ export class MeasureReportPage extends AutoUnsubscribePage {
 
   measureReportForm?: FormGroup;
   reportScan = true;
-  disabled = false;
+  positionChangeSpeedOverLimit = false;
 
   positionAccuracyThreshold = PositionAccuracyThreshold;
 
@@ -176,37 +176,41 @@ export class MeasureReportPage extends AutoUnsubscribePage {
   }
 
   initMeasurementEnvironmentOptions(currentMeasure: any) {
-    let disabled = false;
     const lat = currentMeasure!.latitude;
     const long = currentMeasure!.longitude;
     const endLat = currentMeasure!.endLatitude;
     const endLong = currentMeasure!.endLongitude;
     const duration = (currentMeasure!.endTime! - currentMeasure!.startTime) / 60000;
     if (lat !== undefined && long !== undefined && endLat !== undefined && endLong !== undefined && duration > 0) {
-      disabled = MeasureReportPage.disabledCheck(lat, long, endLat, endLong, duration);
+      this.positionChangeSpeedOverLimit = MeasureReportPage.checkPositionChangeSpeed(
+        lat,
+        long,
+        endLat,
+        endLong,
+        duration
+      );
     }
-    this.disabled = disabled;
     this.measurementEnvironmentOptions = [
       {
         iconOn: 'assets/img/icon-countryside-on.png',
         iconOff: 'assets/img/icon-countryside-off.png',
         label: <string>_('MEASURES.ENVIRONMENT.COUNTRYSIDE'),
         value: MeasureEnvironment.Countryside,
-        disabled: disabled
+        disabled: this.positionChangeSpeedOverLimit
       },
       {
         iconOn: 'assets/img/icon-city-on.png',
         iconOff: 'assets/img/icon-city-off.png',
         label: <string>_('MEASURES.ENVIRONMENT.CITY'),
         value: MeasureEnvironment.City,
-        disabled: disabled
+        disabled: this.positionChangeSpeedOverLimit
       },
       {
         iconOn: 'assets/img/icon-inside-on.png',
         iconOff: 'assets/img/icon-inside-off.png',
         label: <string>_('MEASURES.ENVIRONMENT.INSIDE'),
         value: MeasureEnvironment.Inside,
-        disabled: disabled
+        disabled: this.positionChangeSpeedOverLimit
       },
       {
         iconOn: 'assets/img/icon-ontheroad-on.png',
@@ -223,16 +227,16 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     ];
   }
 
-  static disabledCheck(lat: number, long: number, endLat: number, endLong: number, duration: number) {
-    let disabled;
+  static checkPositionChangeSpeed(lat: number, long: number, endLat: number, endLong: number, duration: number) {
+    let speed;
     const distance = MeasureReportPage.getDistance(lat, long, endLat, endLong);
     console.log('istance ' + distance);
     if (distance > 0) {
-      disabled = (distance * 60) / duration;
+      speed = (distance * 60) / duration;
     } else {
       return false;
     }
-    return disabled > 30;
+    return speed > 30;
   }
 
   static getDistance(lat1: number, lng1: number, lat2: number, lng2: number) {
