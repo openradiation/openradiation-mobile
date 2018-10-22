@@ -3,7 +3,7 @@
 </div>
 <div class="list" [ngClass]="{disabled: isDisabled}">
     <div class="item" *ngFor="let option of options" (click)="writeValue(option.value)"
-         [ngClass]="{'item-disabled': option.enabled === false}">
+         [ngClass]="{'item-disabled': option.disabled === true}">
         <div>
             <img [src]="option === selectedOption ? option.iconOn : option.iconOff">
         </div>

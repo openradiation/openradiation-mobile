@@ -36,7 +36,7 @@ export class MeasureReportPage extends AutoUnsubscribePage {
 
   measureReportForm?: FormGroup;
   reportScan = true;
-  speed = true;
+  disabled = false;
 
   positionAccuracyThreshold = PositionAccuracyThreshold;
 
@@ -176,37 +176,37 @@ export class MeasureReportPage extends AutoUnsubscribePage {
   }
 
   initMeasurementEnvironmentOptions(currentMeasure: any) {
-    let speed = true;
+    let disabled = false;
     const lat = currentMeasure!.latitude;
     const long = currentMeasure!.longitude;
     const endLat = currentMeasure!.endLatitude;
     const endLong = currentMeasure!.endLongitude;
     const duration = (currentMeasure!.endTime! - currentMeasure!.startTime) / 60000;
     if (lat !== undefined && long !== undefined && endLat !== undefined && endLong !== undefined && duration > 0) {
-      speed = MeasureReportPage.speedCheck(lat, long, endLat, endLong, duration);
+      disabled = MeasureReportPage.disabledCheck(lat, long, endLat, endLong, duration);
     }
-    this.speed = speed;
+    this.disabled = disabled;
     this.measurementEnvironmentOptions = [
       {
         iconOn: 'assets/img/icon-countryside-on.png',
         iconOff: 'assets/img/icon-countryside-off.png',
         label: <string>_('MEASURES.ENVIRONMENT.COUNTRYSIDE'),
         value: MeasureEnvironment.Countryside,
-        enabled: speed
+        disabled: disabled
       },
       {
         iconOn: 'assets/img/icon-city-on.png',
         iconOff: 'assets/img/icon-city-off.png',
         label: <string>_('MEASURES.ENVIRONMENT.CITY'),
         value: MeasureEnvironment.City,
-        enabled: speed
+        disabled: disabled
       },
       {
         iconOn: 'assets/img/icon-inside-on.png',
         iconOff: 'assets/img/icon-inside-off.png',
         label: <string>_('MEASURES.ENVIRONMENT.INSIDE'),
         value: MeasureEnvironment.Inside,
-        enabled: speed
+        disabled: disabled
       },
       {
         iconOn: 'assets/img/icon-ontheroad-on.png',
@@ -223,18 +223,19 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     ];
   }
 
-  static speedCheck(lat: number, long: number, endLat: number, endLong: number, duration: number) {
-    let speed;
-    const distance = MeasureReportPage.get_distance_m(lat, long, endLat, endLong);
+  static disabledCheck(lat: number, long: number, endLat: number, endLong: number, duration: number) {
+    let disabled;
+    const distance = MeasureReportPage.getDistance(lat, long, endLat, endLong);
+    console.log('istance ' + distance);
     if (distance > 0) {
-      speed = (distance * 60) / duration;
+      disabled = (distance * 60) / duration;
     } else {
-      return true;
+      return false;
     }
-    return speed < 30;
+    return disabled > 30;
   }
 
-  static get_distance_m(lat1: number, lng1: number, lat2: number, lng2: number) {
+  static getDistance(lat1: number, lng1: number, lat2: number, lng2: number) {
     const earth_radius = 6378137;
     const rlo1 = (Math.PI * lng1) / 180;
     const rla1 = (Math.PI * lat1) / 180;
