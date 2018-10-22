@@ -42,58 +42,20 @@ export class MeasureReportPage extends AutoUnsubscribePage {
 
   url = '/measure/report';
 
-  measurementEnvironmentOptions: SelectIconOption[] = [
-    {
-      iconOn: 'assets/img/icon-countryside-on.png',
-      iconOff: 'assets/img/icon-countryside-off.png',
-      label: <string>_('MEASURES.ENVIRONMENT.COUNTRYSIDE'),
-      value: MeasureEnvironment.Countryside,
-      speed: this.initSpeedCheck()
-    },
-    {
-      iconOn: 'assets/img/icon-city-on.png',
-      iconOff: 'assets/img/icon-city-off.png',
-      label: <string>_('MEASURES.ENVIRONMENT.CITY'),
-      value: MeasureEnvironment.City,
-      speed: this.initSpeedCheck()
-    },
-    {
-      iconOn: 'assets/img/icon-inside-on.png',
-      iconOff: 'assets/img/icon-inside-off.png',
-      label: <string>_('MEASURES.ENVIRONMENT.INSIDE'),
-      value: MeasureEnvironment.Inside,
-      speed: this.initSpeedCheck()
-    },
-    {
-      iconOn: 'assets/img/icon-ontheroad-on.png',
-      iconOff: 'assets/img/icon-ontheroad-off.png',
-      label: <string>_('MEASURES.ENVIRONMENT.ON_THE_ROAD'),
-      value: MeasureEnvironment.OnTheRoad,
-      speed: true
-    },
-    {
-      iconOn: 'assets/img/icon-plane-on.png',
-      iconOff: 'assets/img/icon-plane-off.png',
-      label: <string>_('MEASURES.ENVIRONMENT.PLANE'),
-      value: MeasureEnvironment.Plane,
-      speed: true
-    }
-  ];
+  measurementEnvironmentOptions: SelectIconOption[];
 
   measurementHeightOptions: SelectIconOption[] = [
     {
       iconOn: 'assets/img/icon-floor-on.png',
       iconOff: 'assets/img/icon-floor-off.png',
       label: <string>_('MEASURES.SENSOR_POSITION.FLOOR'),
-      value: 0,
-      speed: true
+      value: 0
     },
     {
       iconOn: 'assets/img/icon-elevated-on.png',
       iconOff: 'assets/img/icon-elevated-off.png',
       label: <string>_('MEASURES.SENSOR_POSITION.1_METER_HIGH'),
-      value: 1,
-      speed: true
+      value: 1
     }
   ];
 
@@ -102,15 +64,13 @@ export class MeasureReportPage extends AutoUnsubscribePage {
       iconOn: 'assets/img/icon-sun-on.png',
       iconOff: 'assets/img/icon-sun-off.png',
       label: <string>_('MEASURES.WEATHER.NO_RAIN'),
-      value: false,
-      speed: true
+      value: false
     },
     {
       iconOn: 'assets/img/icon-rain-on.png',
       iconOff: 'assets/img/icon-rain-off.png',
       label: <string>_('MEASURES.WEATHER.RAIN'),
-      value: true,
-      speed: true
+      value: true
     }
   ];
 
@@ -133,7 +93,7 @@ export class MeasureReportPage extends AutoUnsubscribePage {
         ({ measures }: { measures: MeasuresStateModel }) => measures
       );
       this.reportScan = !currentMeasure!.manualReporting;
-      this.speed = this.initSpeedCheck();
+      this.initMeasurementEnvironmentOptions(currentMeasure);
       if (measureReport) {
         this.measureReportForm = this.formBuilder.group({ ...measureReport.model, tags: [measureReport.model.tags] });
         if (currentMeasure!.sent) {
@@ -215,18 +175,54 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     this.navController.navigateForward(['measure', 'steps']);
   }
 
-  initSpeedCheck() {
-    const { currentMeasure } = this.store.selectSnapshot(({ measures }: { measures: MeasuresStateModel }) => measures);
+  initMeasurementEnvironmentOptions(currentMeasure: any) {
+    let speed = true;
     const lat = currentMeasure!.latitude;
     const long = currentMeasure!.longitude;
     const endLat = currentMeasure!.endLatitude;
     const endLong = currentMeasure!.endLongitude;
     const duration = (currentMeasure!.endTime! - currentMeasure!.startTime) / 60000;
     if (lat !== undefined && long !== undefined && endLat !== undefined && endLong !== undefined && duration > 0) {
-      return MeasureReportPage.speedCheck(lat, long, endLat, endLong, duration);
+      speed = MeasureReportPage.speedCheck(lat, long, endLat, endLong, duration);
     } else {
-      return true;
+      speed = true;
     }
+    this.speed = speed;
+    this.measurementEnvironmentOptions = [
+      {
+        iconOn: 'assets/img/icon-countryside-on.png',
+        iconOff: 'assets/img/icon-countryside-off.png',
+        label: <string>_('MEASURES.ENVIRONMENT.COUNTRYSIDE'),
+        value: MeasureEnvironment.Countryside,
+        enabled: speed
+      },
+      {
+        iconOn: 'assets/img/icon-city-on.png',
+        iconOff: 'assets/img/icon-city-off.png',
+        label: <string>_('MEASURES.ENVIRONMENT.CITY'),
+        value: MeasureEnvironment.City,
+        enabled: speed
+      },
+      {
+        iconOn: 'assets/img/icon-inside-on.png',
+        iconOff: 'assets/img/icon-inside-off.png',
+        label: <string>_('MEASURES.ENVIRONMENT.INSIDE'),
+        value: MeasureEnvironment.Inside,
+        enabled: speed
+      },
+      {
+        iconOn: 'assets/img/icon-ontheroad-on.png',
+        iconOff: 'assets/img/icon-ontheroad-off.png',
+        label: <string>_('MEASURES.ENVIRONMENT.ON_THE_ROAD'),
+        value: MeasureEnvironment.OnTheRoad
+      },
+      {
+        iconOn: 'assets/img/icon-plane-on.png',
+        iconOff: 'assets/img/icon-plane-off.png',
+        label: <string>_('MEASURES.ENVIRONMENT.PLANE'),
+        value: MeasureEnvironment.Plane
+      }
+    ];
   }
 
   static speedCheck(lat: number, long: number, endLat: number, endLong: number, duration: number) {

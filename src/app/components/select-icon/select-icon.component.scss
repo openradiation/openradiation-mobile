@@ -34,10 +34,10 @@
           opacity: 1;
         }
       }
-      .iconOff {
-        pointer-events: none;
-        opacity: 0.4;
-      }
+    }
+    .item-disabled {
+      pointer-events: none;
+      opacity: 0.4;
     }
 
     &.disabled {

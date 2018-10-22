@@ -40,10 +40,8 @@ export class SelectIconComponent implements ControlValueAccessor {
 
   writeValue(value: any): void {
     const selectedOption = this.options.find(option => option.value === value);
-    if (selectedOption && selectedOption.speed) {
-      this.selectedOption = this.selectedOption === selectedOption ? undefined : selectedOption;
-      this.onChange(this.selectedOption ? this.selectedOption.value : undefined);
-    }
+    this.selectedOption = this.selectedOption === selectedOption ? undefined : selectedOption;
+    this.onChange(this.selectedOption ? this.selectedOption.value : undefined);
   }
 
   setDisabledState(isDisabled: boolean): void {

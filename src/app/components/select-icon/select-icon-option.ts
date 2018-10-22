@@ -3,5 +3,5 @@ export interface SelectIconOption {
   iconOff: string;
   label: string;
   value: any;
-  speed: boolean;
+  enabled?: boolean;
 }
