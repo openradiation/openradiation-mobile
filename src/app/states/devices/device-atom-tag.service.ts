@@ -26,7 +26,7 @@ export class DeviceAtomTagService /*extends AbstractDeviceService<DeviceAtomTag>
       map(buffer => {
         const firmwareVersion = new TextDecoder('utf8').decode(new Uint8Array(buffer));
         return {
-          apparatusVersion: `${DeviceType.AtomTag} ${firmwareVersion}`
+          apparatusVersion: `${DeviceType.AtomTag} ${firmwareVersion.replace(/\0/g, '')}`
         };
       })
     );
@@ -88,7 +88,7 @@ export class DeviceAtomTagService /*extends AbstractDeviceService<DeviceAtomTag>
     const dataView = new DataView(buffer);
     return {
       ts: Date.now(),
-      hitsNumber: Math.round(dataView.getUint16(9, true) / (1 - dataView.getUint16(9, true) * 0.0003)),
+      hitsNumber: dataView.getUint16(9, true),
       temperature: dataView.getUint8(12),
       voltage: 0
     };
