@@ -184,8 +184,6 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     const duration = (currentMeasure!.endTime! - currentMeasure!.startTime) / 60000;
     if (lat !== undefined && long !== undefined && endLat !== undefined && endLong !== undefined && duration > 0) {
       speed = MeasureReportPage.speedCheck(lat, long, endLat, endLong, duration);
-    } else {
-      speed = true;
     }
     this.speed = speed;
     this.measurementEnvironmentOptions = [
