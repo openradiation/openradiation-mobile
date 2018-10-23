@@ -56,7 +56,6 @@ export class DeviceAtomTagService /*extends AbstractDeviceService<DeviceAtomTag>
     return this.ble.write(device.sensorUUID, this.service, this.settingsCharacteristic, dataView.buffer);
   }
 
-  // TODO implement correct computation for AtomTag
   computeRadiationValue(measure: Measure): number {
     if (measure.endTime) {
       const duration = (measure.endTime - measure.startTime) / 1000;
@@ -67,7 +66,6 @@ export class DeviceAtomTagService /*extends AbstractDeviceService<DeviceAtomTag>
     }
   }
 
-  // TODO implement start measure for AtomTag
   startMeasureScan(device: DeviceAtomTag, stopSignal: Observable<any>): Observable<Step> {
     stopSignal.subscribe(() => this.stopReceiveData(device));
     return this.startReceiveData(device).pipe(
