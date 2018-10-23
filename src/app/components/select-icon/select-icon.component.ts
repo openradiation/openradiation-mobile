@@ -24,6 +24,9 @@ export class SelectIconComponent implements ControlValueAccessor {
   @Input()
   options: SelectIconOption[];
 
+  @Input()
+  required?: boolean;
+
   // Function to call when the rating changes.
   private onChange = (option: any) => {};
 

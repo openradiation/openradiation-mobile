@@ -51,6 +51,7 @@
       "TITLE": "Are you sure you wish to delete all measurements?"
     },
     "MESSAGE_PREVENT_MEASURE_SENDING": "Invalid measurement geolocation, it can not be sent.",
+    "MESSAGE_SPEED": "High speed, selection of a measurement environment is mandatory",
     "NO_MEASURE": "No saved<br>measurement",
     "SEND": {
       "NOTICE": "By sending this measurement, you accept that all data corresponding to this measurement (including your GPS position, your user name etc.) will be published in the OpenRadiation base.",
@@ -105,11 +106,11 @@
   },
   "MEASURES": {
     "AUTO_PUBLISH": "Auto publications",
-    "AUTO_PUBLISH_TITLE": "Auto publications",
     "AUTO_PUBLISH_NOTICE": {
       "PART1": "If you activate automatic measurement publications, your measurements and the associated data will be automatically sent to the OpenRadiation collaborative base, and published under a <a target=\"_blank\" href=\"https://www.openradiation.org/en/terms-use#odc_odbl\">ODC-ODbL (Open Database License)</a>.",
       "PART2": "The data transmitted include the data you enter, and information on the model and identifier for the model and/or the telephone used, your user name, and the GPS position at the time of the measurement (see details at <a target=\"_blank\" href=\"https://www.openradiation.org/en/terms-use\">www.openradiation.org/en/terms-use</a>)."
     },
+    "AUTO_PUBLISH_TITLE": "Auto publications",
     "DESCRIPTION": "Description",
     "DOSE_RATE": "Dose rate",
     "DOSE_RATE_UNIT": "μSv/h",
