@@ -21,6 +21,7 @@ export class DeviceSafeCast extends AbstractDevice {
 
   constructor(rawDevice: RawDevice) {
     super(rawDevice);
+    this.apparatusVersion = DeviceType.SafeCast;
     this.apparatusId = rawDevice.id;
   }
 }

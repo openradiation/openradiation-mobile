@@ -134,6 +134,8 @@ export class DevicesService {
                   return new DeviceOGKit(rawDevice);
                 } else if (rawDevice.name.includes(DeviceType.AtomTag)) {
                   return new DeviceAtomTag(rawDevice);
+                } else if (rawDevice.name.includes(DeviceType.SafeCast)) {
+                  return new DeviceSafeCast(rawDevice);
                 }
               }
               return null;
