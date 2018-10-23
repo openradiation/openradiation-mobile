@@ -117,9 +117,18 @@ export class DevicesState {
 
   @Action(ConnectDevice, { cancelUncompleted: true })
   connectDevice({ getState, patchState }: StateContext<DevicesStateModel>, { device }: ConnectDevice) {
+    const { knownDevices, connectedDevice } = getState();
+    if (connectedDevice) {
+      this.devicesService.disconnectDevice(connectedDevice).pipe(
+        tap(() => {
+          patchState({
+            connectedDevice: undefined
+          });
+        })
+      );
+    }
     return this.devicesService.connectDevice(device).pipe(
       tap(() => {
-        const { knownDevices } = getState();
         if (knownDevices.find(knownDevice => knownDevice.sensorUUID === device.sensorUUID)) {
           patchState({
             connectedDevice: device
