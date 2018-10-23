@@ -116,31 +116,24 @@ export class DevicesState {
   }
 
   @Action(ConnectDevice, { cancelUncompleted: true })
-  connectDevice({ getState, patchState }: StateContext<DevicesStateModel>, { device }: ConnectDevice) {
-    const { knownDevices, connectedDevice } = getState();
-    if (connectedDevice) {
-      this.devicesService.disconnectDevice(connectedDevice).pipe(
+  connectDevice({ getState, patchState, dispatch }: StateContext<DevicesStateModel>, { device }: ConnectDevice) {
+    return dispatch(new DisconnectDevice()).pipe(() => {
+      return this.devicesService.connectDevice(device).pipe(
         tap(() => {
-          patchState({
-            connectedDevice: undefined
-          });
+          const { knownDevices } = getState();
+          if (knownDevices.find(knownDevice => knownDevice.sensorUUID === device.sensorUUID)) {
+            patchState({
+              connectedDevice: device
+            });
+          } else {
+            patchState({
+              connectedDevice: device,
+              knownDevices: [...knownDevices, device]
+            });
+          }
         })
       );
-    }
-    return this.devicesService.connectDevice(device).pipe(
-      tap(() => {
-        if (knownDevices.find(knownDevice => knownDevice.sensorUUID === device.sensorUUID)) {
-          patchState({
-            connectedDevice: device
-          });
-        } else {
-          patchState({
-            connectedDevice: device,
-            knownDevices: [...knownDevices, device]
-          });
-        }
-      })
-    );
+    });
   }
 
   @Action(DeviceConnectionLost)
@@ -162,7 +155,7 @@ export class DevicesState {
         })
       );
     } else {
-      return of();
+      return of(null);
     }
   }
 
