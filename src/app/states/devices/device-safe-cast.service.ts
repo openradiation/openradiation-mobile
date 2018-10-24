@@ -22,9 +22,9 @@ export class DeviceSafeCastService /*extends AbstractDeviceService<DeviceSafeCas
   // TODO implement correct computation for SafeCast
   computeRadiationValue(measure: Measure): number {
     if (measure.endTime) {
-      const duration = measure.endTime - measure.startTime;
-      const TcNet = (measure.hitsNumber / duration) * 1000 * 60;
-      return TcNet / 334;
+      const duration = (measure.endTime - measure.startTime) / 1000;
+      const TcNet = measure.hitsNumber / duration;
+      return (TcNet * 60) / 334;
     } else {
       throw new Error('Incorrect measure : missing endTime');
     }
@@ -63,8 +63,8 @@ export class DeviceSafeCastService /*extends AbstractDeviceService<DeviceSafeCas
     return {
       ts: Date.now(),
       hitsNumber: Number(data[4]),
-      temperature: 0,
-      voltage: 0
+      temperature: undefined,
+      voltage: undefined
     };
   }
 }

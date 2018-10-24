@@ -273,10 +273,12 @@ export class MeasuresState {
       newCurrentMeasure.endTime = step.ts;
       newCurrentMeasure.hitsNumber += step.hitsNumber;
       newCurrentMeasure.value = this.measuresService.computeRadiationValue(newCurrentMeasure, device);
-      newCurrentMeasure.temperature =
-        newCurrentMeasure.steps
-          .map(currentMeasureStep => currentMeasureStep.temperature)
-          .reduce((acc, current) => acc + current) / newCurrentMeasure.steps.length;
+      if (newCurrentMeasure.steps[0] && newCurrentMeasure.steps[0].temperature !== undefined) {
+        newCurrentMeasure.temperature =
+          newCurrentMeasure.steps
+            .map(currentMeasureStep => currentMeasureStep.temperature!)
+            .reduce((acc, current) => acc + current) / newCurrentMeasure.steps.length;
+      }
       patchState({
         currentMeasure: newCurrentMeasure
       });
