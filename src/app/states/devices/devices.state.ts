@@ -1,6 +1,6 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { concatMap, map, tap } from 'rxjs/operators';
 import { AbstractDevice, DeviceParams } from './abstract-device';
 import {
   BLEConnectionLost,
@@ -116,20 +116,24 @@ export class DevicesState {
   }
 
   @Action(ConnectDevice, { cancelUncompleted: true })
-  connectDevice({ getState, patchState }: StateContext<DevicesStateModel>, { device }: ConnectDevice) {
-    return this.devicesService.connectDevice(device).pipe(
-      tap(() => {
-        const { knownDevices } = getState();
-        if (knownDevices.find(knownDevice => knownDevice.sensorUUID === device.sensorUUID)) {
-          patchState({
-            connectedDevice: device
-          });
-        } else {
-          patchState({
-            connectedDevice: device,
-            knownDevices: [...knownDevices, device]
-          });
-        }
+  connectDevice({ getState, patchState, dispatch }: StateContext<DevicesStateModel>, { device }: ConnectDevice) {
+    return dispatch(new DisconnectDevice()).pipe(
+      concatMap(() => {
+        return this.devicesService.connectDevice(device).pipe(
+          tap(() => {
+            const { knownDevices } = getState();
+            if (knownDevices.find(knownDevice => knownDevice.sensorUUID === device.sensorUUID)) {
+              patchState({
+                connectedDevice: device
+              });
+            } else {
+              patchState({
+                connectedDevice: device,
+                knownDevices: [...knownDevices, device]
+              });
+            }
+          })
+        );
       })
     );
   }
@@ -153,7 +157,7 @@ export class DevicesState {
         })
       );
     } else {
-      return of();
+      return of(null);
     }
   }
 
