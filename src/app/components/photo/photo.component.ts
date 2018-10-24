@@ -75,13 +75,8 @@ export class PhotoComponent implements ControlValueAccessor {
   }
 
   addPhoto(options: CameraOptions): void {
-    this.camera.getPicture(options).then(
-      imageData => {
-        this.writeValue('data:image/jpeg;base64,' + imageData);
-      },
-      err => {
-        console.log('error photo ' + err);
-      }
-    );
+    this.camera.getPicture(options).then(imageData => {
+      this.writeValue('data:image/jpeg;base64,' + imageData);
+    });
   }
 }
