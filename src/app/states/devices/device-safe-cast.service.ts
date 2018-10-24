@@ -3,6 +3,7 @@ import { BLE } from '@ionic-native/ble/ngx';
 import { Observable, of } from 'rxjs';
 import { Measure, Step } from '../measures/measure';
 import { DeviceSafeCast } from './device-safe-cast';
+import { bufferCount, filter, map, tap } from 'rxjs/operators';
 
 // Todo add inheritance when angular issue fixed https://github.com/angular/angular/issues/24011
 @Injectable({
@@ -10,7 +11,7 @@ import { DeviceSafeCast } from './device-safe-cast';
 })
 export class DeviceSafeCastService /*extends AbstractDeviceService<DeviceSafeCast>*/ {
   private service = 'ef080d8c-c3be-41ff-bd3f-05a5f4795d7f';
-  private settingsCharacteristic = '38117f3c-28ab-4718-ab95-172b363f2ae0';
+  private receiveCharacteristic = 'a1e8f5b1-696b-4e4c-87c6-69dfe0b0093b';
 
   constructor(protected ble: BLE) {}
 
@@ -20,11 +21,50 @@ export class DeviceSafeCastService /*extends AbstractDeviceService<DeviceSafeCas
 
   // TODO implement correct computation for SafeCast
   computeRadiationValue(measure: Measure): number {
-    return 0;
+    if (measure.endTime) {
+      const duration = measure.endTime - measure.startTime;
+      const TcNet = (measure.hitsNumber / duration) * 1000 * 60;
+      return TcNet / 334;
+    } else {
+      throw new Error('Incorrect measure : missing endTime');
+    }
   }
 
   // TODO implement start measure for SafeCast
   startMeasureScan(device: DeviceSafeCast, stopSignal: Observable<any>): Observable<Step> {
-    return of();
+    stopSignal.subscribe(() => this.stopReceiveData(device));
+    let readingBufferSequence = false;
+    return this.startReceiveData(device).pipe(
+      filter((buffer: ArrayBuffer) => {
+        const dataView = new DataView(buffer);
+        return dataView.getUint8(0) === 36 || readingBufferSequence;
+      }),
+      tap(() => (readingBufferSequence = true)),
+      bufferCount(18),
+      tap(() => (readingBufferSequence = false)),
+      map(buffers => this.decodeDataPackage(buffers)),
+      filter((step: Step | null): step is Step => step !== null)
+    );
+  }
+
+  private startReceiveData(device: DeviceSafeCast): Observable<any> {
+    return this.ble.startNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
+  }
+
+  private stopReceiveData(device: DeviceSafeCast) {
+    return this.ble.stopNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
+  }
+
+  private decodeDataPackage(buffers: ArrayBuffer[]): Step | null {
+    const data = buffers
+      .map(buffer => new TextDecoder('utf8').decode(buffer))
+      .join('')
+      .split(',');
+    return {
+      ts: Date.now(),
+      hitsNumber: Number(data[4]),
+      temperature: 0,
+      voltage: 0
+    };
   }
 }

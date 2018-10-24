@@ -15,6 +15,7 @@ import { Measure, PositionAccuracyThreshold, Step } from './measure';
 import { ApparatusSensorType, MeasureApi } from './measure-api';
 import { AddMeasureScanStep, CancelMeasure, StopMeasureScan, UpdateMeasureScanTime } from './measures.action';
 import { DeviceSafeCastService } from '../devices/device-safe-cast.service';
+import { DeviceSafeCast } from '../devices/device-safe-cast';
 
 @Injectable({
   providedIn: 'root'
@@ -58,6 +59,9 @@ export class MeasuresService {
         break;
       case DeviceType.AtomTag:
         detectHits = this.deviceAtomTagService.startMeasureScan(<DeviceAtomTag>device, stopSignal);
+        break;
+      case DeviceType.SafeCast:
+        detectHits = this.deviceSafeCastService.startMeasureScan(<DeviceSafeCast>device, stopSignal);
         break;
     }
     detectHits = detectHits!.pipe(

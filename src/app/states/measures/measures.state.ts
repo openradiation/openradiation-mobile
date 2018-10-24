@@ -269,16 +269,16 @@ export class MeasuresState {
   addMeasureScanStep({ getState, patchState }: StateContext<MeasuresStateModel>, { step, device }: AddMeasureScanStep) {
     const { currentMeasure } = getState();
     if (currentMeasure && currentMeasure.steps) {
-      const currentMeasure_ = { ...currentMeasure, steps: [...currentMeasure.steps, step] };
-      currentMeasure_.endTime = step.ts;
-      currentMeasure_.hitsNumber += step.hitsNumber;
-      currentMeasure_.value = this.measuresService.computeRadiationValue(currentMeasure_, device);
-      currentMeasure_.temperature =
-        currentMeasure_.steps
+      const newCurrentMeasure = { ...currentMeasure, steps: [...currentMeasure.steps, step] };
+      newCurrentMeasure.endTime = step.ts;
+      newCurrentMeasure.hitsNumber += step.hitsNumber;
+      newCurrentMeasure.value = this.measuresService.computeRadiationValue(newCurrentMeasure, device);
+      newCurrentMeasure.temperature =
+        newCurrentMeasure.steps
           .map(currentMeasureStep => currentMeasureStep.temperature)
-          .reduce((acc, current) => acc + current) / currentMeasure_.steps.length;
+          .reduce((acc, current) => acc + current) / newCurrentMeasure.steps.length;
       patchState({
-        currentMeasure: currentMeasure_
+        currentMeasure: newCurrentMeasure
       });
     }
   }
