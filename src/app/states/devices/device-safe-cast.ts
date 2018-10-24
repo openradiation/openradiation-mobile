@@ -1,16 +1,8 @@
-import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
-import {
-  AbstractDevice,
-  DeviceParams,
-  DeviceParamsModel,
-  DeviceParamType,
-  DeviceType,
-  RawDevice
-} from './abstract-device';
+import { AbstractDevice, DeviceParams, DeviceType, RawDevice } from './abstract-device';
 
 export class DeviceSafeCast extends AbstractDevice {
   readonly deviceType = DeviceType.SafeCast;
-  apparatusVersion = 'bGeigieBLEv201';
+  apparatusVersion: string = DeviceType.SafeCast;
   apparatusSensorType = 'Geiger';
   apparatusTubeType = 'LND 7317 pancake';
 
@@ -21,7 +13,7 @@ export class DeviceSafeCast extends AbstractDevice {
 
   constructor(rawDevice: RawDevice) {
     super(rawDevice);
-    this.apparatusVersion = DeviceType.SafeCast;
+    this.apparatusVersion = rawDevice.name;
     this.apparatusId = rawDevice.id;
   }
 }

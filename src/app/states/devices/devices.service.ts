@@ -166,7 +166,7 @@ export class DevicesService {
       case DeviceType.AtomTag:
         return this.deviceAtomTagService.getDeviceInfo(<DeviceAtomTag>device);
       case DeviceType.SafeCast:
-        return this.deviceSafeCastService.getDeviceInfo(<DeviceSafeCast>device);
+        return this.deviceSafeCastService.getDeviceInfo();
     }
   }
 
@@ -177,7 +177,7 @@ export class DevicesService {
       case DeviceType.AtomTag:
         return this.deviceAtomTagService.saveDeviceParams(<DeviceAtomTag>device);
       case DeviceType.SafeCast:
-        return of();
+        return of(null);
     }
   }
 
