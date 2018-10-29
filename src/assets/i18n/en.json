@@ -154,6 +154,10 @@
     "ALERT": "You must be logged in before you can fill out a manual measurement report.",
     "TITLE": "Manual input"
   },
+  "MEASUREMENT_SERIES": {
+    "ALERT": "You must be logged in before you can fill out a manual measurement report.",
+    "TITLE": "Measurement series"
+  },
   "POSITION": {
     "DENIED_ALWAYS": {
       "NOTICE": "Phone geolocation is required to send measurement to OpenRadiation base. Please accept the permission.",

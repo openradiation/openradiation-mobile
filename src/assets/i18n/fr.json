@@ -154,6 +154,10 @@
     "ALERT": "Vous devez vous identifier pour pouvoir saisir manuellemment une mesure.",
     "TITLE": "Saisie manuelle"
   },
+  "MEASUREMENT_SERIES": {
+    "ALERT": "Vous devez vous identifier pour pouvoir saisir manuellemment une mesure.",
+    "TITLE": "Série de mesures"
+  },
   "POSITION": {
     "DENIED_ALWAYS": {
       "NOTICE": "La position de l'appareil est nécessaire  pour l'envoi des mesures à la base OpenRadiation. Merci d'accepter la permission.",
