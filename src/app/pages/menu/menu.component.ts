@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
-import { StartManualMeasure } from '../../states/measures/measures.action';
+import { StartManualMeasure, StartSeriesMeasure } from '../../states/measures/measures.action';
 import { UserState } from '../../states/user/user.state';
 
 @Component({
@@ -38,6 +38,17 @@ export class MenuComponent {
 
   closeMenu() {
     this.menuController.close();
+  }
+
+  startSeriesMeasure() {
+    this.closeMenu();
+    this.login$.pipe(take(1)).subscribe(login => {
+      if (login !== undefined) {
+        this.actions$.subscribe(() => this.navController.navigateRoot(['measure', 'series'], true));
+      } else {
+        this.goToLogin();
+      }
+    });
   }
 
   startManualMeasure() {

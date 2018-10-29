@@ -1,0 +1,27 @@
+<ng-container>
+    <ng-container>
+        <app-header>
+        </app-header>
+
+        <ion-content>
+            <div class="content">
+                <div class="message">
+                    <div class="message-style">{{'HISTORY.MESSAGE_PREVENT_MEASURE_SENDING' | translate}}</div>
+                </div>
+                <form class="form">
+                    test
+                </form>
+                <div class="bottom-buttons">
+                    <app-round-button [src]="'assets/img/button-off.png'">
+                        {{'GENERAL.OK' | translate}}
+                    </app-round-button>
+                    <div class="side-buttons">
+                        <ion-button fill="clear" class="flat-button cancel">{{'GENERAL.CANCEL'
+                            | translate}}
+                        </ion-button>
+                    </div>
+                </div>
+            </div>
+        </ion-content>
+    </ng-container>
+</ng-container>

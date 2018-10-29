@@ -22,6 +22,7 @@ import {
   StartMeasure,
   StartMeasureReport,
   StartMeasureScan,
+  StartSeriesMeasure,
   StartWatchPosition,
   StopMeasure,
   StopMeasureReport,
@@ -177,6 +178,9 @@ export class MeasuresState {
       )
     });
   }
+
+  @Action(StartSeriesMeasure)
+  startSeriesMeasure() {}
 
   @Action(StartManualMeasure)
   startManualMeasure({ getState, patchState }: StateContext<MeasuresStateModel>) {

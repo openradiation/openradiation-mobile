@@ -4,11 +4,16 @@ import { RouterModule, Routes } from '@angular/router';
 import { MeasureReportPage } from './measure-report/measure-report-page';
 import { MeasureScanPage } from './measure-scan/measure-scan.page';
 import { MeasureStepsPage } from './measure-steps/measure-steps.page';
+import { MeasureSeriesPage } from './measure-series/measure-series-page';
 
 const routes: Routes = [
   {
     path: 'scan',
     component: MeasureScanPage
+  },
+  {
+    path: 'series',
+    component: MeasureSeriesPage
   },
   {
     path: 'report',
