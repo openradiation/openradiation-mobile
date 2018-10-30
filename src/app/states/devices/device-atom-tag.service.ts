@@ -87,8 +87,7 @@ export class DeviceAtomTagService /*extends AbstractDeviceService<DeviceAtomTag>
     return {
       ts: Date.now(),
       hitsNumber: dataView.getUint16(9, true),
-      temperature: dataView.getUint8(12),
-      voltage: 0
+      temperature: dataView.getUint8(12)
     };
   }
 }

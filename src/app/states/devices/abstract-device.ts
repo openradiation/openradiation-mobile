@@ -16,7 +16,8 @@ export abstract class AbstractDevice {
 
 export enum DeviceType {
   OGKit = 'OG-KIT1',
-  AtomTag = 'AtomTag'
+  AtomTag = 'AtomTag',
+  SafeCast = 'bGeigieBLE'
 }
 
 export interface RawDevice {

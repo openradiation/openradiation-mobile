@@ -68,8 +68,8 @@ export class Measure {
 export interface Step {
   ts: number;
   hitsNumber: number;
-  voltage: number;
-  temperature: number;
+  voltage?: number;
+  temperature?: number;
 }
 
 export enum PositionAccuracyThreshold {

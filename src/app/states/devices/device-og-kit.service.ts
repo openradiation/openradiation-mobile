@@ -98,7 +98,7 @@ export class DeviceOGKitService /*extends AbstractDeviceService<DeviceOGKit>*/ {
     return this.startReceiveData(device).pipe(
       map((buffer: ArrayBuffer) => this.decodeDataPackage(buffer)),
       filter((step: Step | null): step is Step => step !== null),
-      filter((step: Step) => step.voltage > this.tubesVoltageProfile[device.apparatusTubeType].min)
+      filter((step: Step) => step.voltage! > this.tubesVoltageProfile[device.apparatusTubeType].min)
     );
   }
 

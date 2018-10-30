@@ -10,6 +10,7 @@ import {
 
 export class DeviceAtomTag extends AbstractDevice {
   readonly deviceType = DeviceType.AtomTag;
+  apparatusVersion: string = DeviceType.AtomTag;
   apparatusSensorType = 'Geiger';
   apparatusTubeType = 'SBM-20';
 
@@ -30,7 +31,6 @@ export class DeviceAtomTag extends AbstractDevice {
 
   constructor(rawDevice: RawDevice) {
     super(rawDevice);
-    this.apparatusVersion = DeviceType.AtomTag;
     if (rawDevice.advertising instanceof ArrayBuffer) {
       const data = new Uint8Array(rawDevice.advertising);
       this.batteryLevel = data[28];
