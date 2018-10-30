@@ -3,12 +3,15 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavController, ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
+import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { catchError, take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { ErrorResponse, ErrorResponseCode } from '../../../../states/measures/error-response';
-import { StartManualMeasure, StartSeriesMeasure } from '../../../../states/measures/measures.action';
+import { StartManualMeasure, StartSeriesMeasure, StopWatchPosition } from '../../../../states/measures/measures.action';
 import { LogIn } from '../../../../states/user/user.action';
+import { DevicesState } from '../../../../states/devices/devices.state';
+import { Observable } from 'rxjs';
+import { AbstractDevice } from '../../../../states/devices/abstract-device';
 
 export enum RedirectAfterLogin {
   StartMeasure = 'startMeasure',
@@ -21,6 +24,9 @@ export enum RedirectAfterLogin {
   styleUrls: ['./log-in.page.scss']
 })
 export class LogInPage extends AutoUnsubscribePage {
+  @Select(DevicesState.connectedDevice)
+  connectedDevice$: Observable<AbstractDevice | undefined>;
+
   loginForm: FormGroup;
   connecting = false;
   redirectAfterLogin: RedirectAfterLogin;
@@ -94,7 +100,14 @@ export class LogInPage extends AutoUnsubscribePage {
             this.store.dispatch(new StartManualMeasure());
             break;
           case RedirectAfterLogin.StartSeriesMeasure:
-            this.store.dispatch(new StartSeriesMeasure());
+            this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
+              if (connectedDevice) {
+                this.store.dispatch(new StopWatchPosition());
+                this.store.dispatch(new StartSeriesMeasure(connectedDevice));
+              } else {
+                this.goToHome();
+              }
+            });
             break;
         }
       });
@@ -102,5 +115,20 @@ export class LogInPage extends AutoUnsubscribePage {
 
   goToSettings() {
     this.navController.goBack();
+  }
+
+  goToHome() {
+    this.navController.navigateRoot([
+      'tabs',
+      {
+        outlets: {
+          home: 'home',
+          history: null,
+          settings: null,
+          map: null,
+          other: null
+        }
+      }
+    ]);
   }
 }
