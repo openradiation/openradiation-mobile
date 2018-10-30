@@ -1,6 +1,6 @@
 <ion-content>
     <ion-list>
-        <ion-item detail [disabled]="!(canStartMeasure | async)" (click)="startSeriesMeasure()" [ngClass]="{'active' : currentUrl === '/measure/series'}">
+        <ion-item detail *ngIf="(canStartMeasure | async)" (click)="startSeriesMeasure()" [ngClass]="{'active' : currentUrl === '/measure/series'}">
             <ion-label>
                 {{'MEASUREMENT_SERIES.TITLE' | translate}}
             </ion-label>
