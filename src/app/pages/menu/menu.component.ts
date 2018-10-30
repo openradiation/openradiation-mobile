@@ -57,8 +57,7 @@ export class MenuComponent {
       if (login !== undefined) {
         this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
           if (connectedDevice) {
-            this.store.dispatch(new StopWatchPosition());
-            this.store.dispatch(new StartSeriesMeasure(connectedDevice));
+            this.store.dispatch(new StartSeriesMeasure());
           }
         });
       } else {

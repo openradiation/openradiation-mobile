@@ -100,14 +100,7 @@ export class LogInPage extends AutoUnsubscribePage {
             this.store.dispatch(new StartManualMeasure());
             break;
           case RedirectAfterLogin.StartSeriesMeasure:
-            this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
-              if (connectedDevice) {
-                this.store.dispatch(new StopWatchPosition());
-                this.store.dispatch(new StartSeriesMeasure(connectedDevice));
-              } else {
-                this.goToHome();
-              }
-            });
+            this.store.dispatch(new StartSeriesMeasure());
             break;
         }
       });
@@ -115,20 +108,5 @@ export class LogInPage extends AutoUnsubscribePage {
 
   goToSettings() {
     this.navController.goBack();
-  }
-
-  goToHome() {
-    this.navController.navigateRoot([
-      'tabs',
-      {
-        outlets: {
-          home: 'home',
-          history: null,
-          settings: null,
-          map: null,
-          other: null
-        }
-      }
-    ]);
   }
 }
