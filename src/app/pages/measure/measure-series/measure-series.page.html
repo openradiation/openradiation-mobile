@@ -1,4 +1,4 @@
-<ng-container>
+<ng-container *ngIf="seriesMeasurementForm">
     <ng-container>
         <app-header>
         </app-header>
@@ -8,15 +8,30 @@
                 <div class="message">
                     <div class="message-style">{{'HISTORY.MESSAGE_PREVENT_MEASURE_SENDING' | translate}}</div>
                 </div>
-                <form class="form">
-                    test
+                <form class="form" [formGroup]="seriesMeasurementForm" ngxsForm="measures.seriesMeasurementForm">
+                    <ion-item>
+                        <ion-label position="fixed">heures 1-24</ion-label>
+                        <ion-datetime display-format="HH" pickerFormat="HH"
+                                      hourValues="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24"
+                                      [cancelText]="'GENERAL.CANCEL' | translate"
+                                      [doneText]="'GENERAL.SUBMIT' | translate"
+                                      placeholder="00"></ion-datetime>
+                    </ion-item>
+                    <ion-item >
+                        <ion-label position="fixed">minutes 5-60  5 by 5</ion-label>
+                        <ion-datetime display-format="mm'" pickerFormat="mm"
+                                      minuteValues="5,10,15,20,25,30,35,40,45,50,55,60"
+                                      [cancelText]="'GENERAL.CANCEL' | translate"
+                                      [doneText]="'GENERAL.SUBMIT' | translate"
+                                      placeholder="00'"></ion-datetime>
+                    </ion-item>
                 </form>
                 <div class="bottom-buttons">
-                    <app-round-button [src]="'assets/img/button-off.png'">
+                    <app-round-button [src]="'assets/img/button-off.png'" (click)="startSeriesMeasure()">
                         {{'GENERAL.OK' | translate}}
                     </app-round-button>
                     <div class="side-buttons">
-                        <ion-button fill="clear" class="flat-button cancel">{{'GENERAL.CANCEL'
+                        <ion-button fill="clear" class="flat-button cancel" (click)="cancelSeriesMeasure()">{{'GENERAL.CANCEL'
                             | translate}}
                         </ion-button>
                     </div>

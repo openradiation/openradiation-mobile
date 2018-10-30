@@ -128,3 +128,11 @@ export interface MeasureReport {
   measurementEnvironment: MeasureEnvironment | undefined;
   rain: boolean | undefined;
 }
+
+export interface MeasurementSeries {
+  inputDurationSeries: number | undefined;
+  seriesStartTime: number | undefined;
+  seriesEndTime: number | undefined;
+  measureHitsLimit: number | undefined;
+  measureTimeLimit: number | undefined;
+}

@@ -5,10 +5,11 @@ import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import * as uuid from 'uuid';
 import { DateService } from './date.service';
-import { Measure, MeasureReport, PositionAccuracyThreshold } from './measure';
+import { Measure, MeasurementSeries, MeasureReport, PositionAccuracyThreshold } from './measure';
 import {
   AddMeasureScanStep,
   CancelMeasure,
+  CancelSeriesMeasure,
   DeleteAllMeasures,
   DeleteMeasure,
   DisableAutoPublish,
@@ -40,6 +41,12 @@ export interface MeasuresStateModel {
   currentMeasure?: Measure;
   measureReport?: {
     model: MeasureReport;
+    dirty: boolean;
+    status: string;
+    errors: any;
+  };
+  measurementSeries?: {
+    model: MeasurementSeries;
     dirty: boolean;
     status: string;
     errors: any;
@@ -180,7 +187,23 @@ export class MeasuresState {
   }
 
   @Action(StartSeriesMeasure)
-  startSeriesMeasure() {}
+  startSeriesMeasure({ patchState }: StateContext<MeasuresStateModel>) {
+    const model: MeasurementSeries = {
+      inputDurationSeries: 0,
+      seriesEndTime: Date.now(),
+      seriesStartTime: Date.now(),
+      measureHitsLimit: 0,
+      measureTimeLimit: 0
+    };
+    patchState({
+      measurementSeries: {
+        model,
+        dirty: false,
+        status: '',
+        errors: {}
+      }
+    });
+  }
 
   @Action(StartManualMeasure)
   startManualMeasure({ getState, patchState }: StateContext<MeasuresStateModel>) {
@@ -269,20 +292,28 @@ export class MeasuresState {
     });
   }
 
+  @Action(CancelSeriesMeasure)
+  cancelSeriesMeasure({ patchState }: StateContext<MeasuresStateModel>) {
+    patchState({
+      currentMeasure: undefined,
+      measurementSeries: undefined
+    });
+  }
+
   @Action(AddMeasureScanStep)
   addMeasureScanStep({ getState, patchState }: StateContext<MeasuresStateModel>, { step, device }: AddMeasureScanStep) {
     const { currentMeasure } = getState();
     if (currentMeasure && currentMeasure.steps) {
-      const currentMeasure_ = { ...currentMeasure, steps: [...currentMeasure.steps, step] };
-      currentMeasure_.endTime = step.ts;
-      currentMeasure_.hitsNumber += step.hitsNumber;
-      currentMeasure_.value = this.measuresService.computeRadiationValue(currentMeasure_, device);
-      currentMeasure_.temperature =
-        currentMeasure_.steps
+      const measure = { ...currentMeasure, steps: [...currentMeasure.steps, step] };
+      measure.endTime = step.ts;
+      measure.hitsNumber += step.hitsNumber;
+      measure.value = this.measuresService.computeRadiationValue(measure, device);
+      measure.temperature =
+        measure.steps
           .map(currentMeasureStep => currentMeasureStep.temperature)
-          .reduce((acc, current) => acc + current) / currentMeasure_.steps.length;
+          .reduce((acc, current) => acc + current) / measure.steps.length;
       patchState({
-        currentMeasure: currentMeasure_
+        currentMeasure: measure
       });
     }
   }
