@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 import { StartManualMeasure, StartSeriesMeasure } from '../../states/measures/measures.action';
 import { UserState } from '../../states/user/user.state';
+import { RedirectAfterLogin } from '../tabs/settings/log-in/log-in.page';
 
 @Component({
   selector: 'app-menu',
@@ -34,6 +35,9 @@ export class MenuComponent {
     this.actions$
       .pipe(ofActionSuccessful(StartManualMeasure))
       .subscribe(() => this.navController.navigateRoot(['measure', 'report'], true));
+    this.actions$
+      .pipe(ofActionSuccessful(StartSeriesMeasure))
+      .subscribe(() => this.navController.navigateRoot(['measure', 'series'], true));
   }
 
   closeMenu() {
@@ -44,9 +48,9 @@ export class MenuComponent {
     this.closeMenu();
     this.login$.pipe(take(1)).subscribe(login => {
       if (login !== undefined) {
-        this.actions$.subscribe(() => this.navController.navigateRoot(['measure', 'series'], true));
+        this.store.dispatch(new StartSeriesMeasure());
       } else {
-        this.goToLogin();
+        this.goToLogin(RedirectAfterLogin.StartSeriesMeasureAfterLogin);
       }
     });
   }
@@ -57,12 +61,12 @@ export class MenuComponent {
       if (login !== undefined) {
         this.store.dispatch(new StartManualMeasure());
       } else {
-        this.goToLogin();
+        this.goToLogin(RedirectAfterLogin.StartMeasureAfterLogin);
       }
     });
   }
 
-  private goToLogin() {
+  private goToLogin(redirectAfterLogin: RedirectAfterLogin) {
     this.alertController
       .create({
         header: this.translateService.instant('MEASURE_MANUAL.TITLE'),
@@ -89,7 +93,7 @@ export class MenuComponent {
                   }
                 ],
                 true,
-                { queryParams: { startMeasureAfterLogin: true } }
+                { queryParams: { redirectAfterLogin: redirectAfterLogin } }
               )
           }
         ]

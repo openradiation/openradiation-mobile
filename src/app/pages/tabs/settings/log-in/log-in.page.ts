@@ -7,8 +7,13 @@ import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { catchError, take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { ErrorResponse, ErrorResponseCode } from '../../../../states/measures/error-response';
-import { StartManualMeasure } from '../../../../states/measures/measures.action';
+import { StartManualMeasure, StartSeriesMeasure } from '../../../../states/measures/measures.action';
 import { LogIn } from '../../../../states/user/user.action';
+
+export enum RedirectAfterLogin {
+  StartMeasureAfterLogin = 'startMeasureAfterLogin',
+  StartSeriesMeasureAfterLogin = 'startSeriesMeasureAfterLogin'
+}
 
 @Component({
   selector: 'app-log-in',
@@ -18,7 +23,7 @@ import { LogIn } from '../../../../states/user/user.action';
 export class LogInPage extends AutoUnsubscribePage {
   loginForm: FormGroup;
   connecting = false;
-  startMeasureAfterLogin = false;
+  redirectAfterLogin: RedirectAfterLogin;
   url = '/tabs/(settings:log-in)';
 
   constructor(
@@ -42,10 +47,10 @@ export class LogInPage extends AutoUnsubscribePage {
     super.pageEnter();
     this.activatedRoute.queryParams
       .pipe(take(1))
-      .subscribe(queryParams => (this.startMeasureAfterLogin = queryParams.startMeasureAfterLogin));
+      .subscribe(queryParams => (this.redirectAfterLogin = queryParams.redirectAfterLogin));
     this.subscriptions.push(
       this.actions$.pipe(ofActionSuccessful(LogIn)).subscribe(() => {
-        if (!this.startMeasureAfterLogin) {
+        if (!this.redirectAfterLogin) {
           this.goToSettings();
         }
       })
@@ -84,8 +89,13 @@ export class LogInPage extends AutoUnsubscribePage {
         })
       )
       .subscribe(() => {
-        if (this.startMeasureAfterLogin) {
-          this.store.dispatch(new StartManualMeasure());
+        switch (this.redirectAfterLogin) {
+          case 'startMeasureAfterLogin':
+            this.store.dispatch(new StartManualMeasure());
+            break;
+          case 'startSeriesMeasureAfterLogin':
+            this.store.dispatch(new StartSeriesMeasure());
+            break;
         }
       });
   }
