@@ -19,7 +19,6 @@ export class DeviceSafeCastService /*extends AbstractDeviceService<DeviceSafeCas
     return of({});
   }
 
-  // TODO implement correct computation for SafeCast
   computeRadiationValue(measure: Measure): number {
     if (measure.endTime) {
       const duration = (measure.endTime - measure.startTime) / 1000;
@@ -30,7 +29,6 @@ export class DeviceSafeCastService /*extends AbstractDeviceService<DeviceSafeCas
     }
   }
 
-  // TODO implement start measure for SafeCast
   startMeasureScan(device: DeviceSafeCast, stopSignal: Observable<any>): Observable<Step> {
     stopSignal.subscribe(() => this.stopReceiveData(device));
     let readingBufferSequence = false;
