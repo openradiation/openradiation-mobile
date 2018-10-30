@@ -50,7 +50,7 @@ export class MenuComponent {
       if (login !== undefined) {
         this.store.dispatch(new StartSeriesMeasure());
       } else {
-        this.goToLogin(RedirectAfterLogin.StartSeriesMeasureAfterLogin);
+        this.goToLogin(RedirectAfterLogin.StartSeriesMeasure);
       }
     });
   }
@@ -61,7 +61,7 @@ export class MenuComponent {
       if (login !== undefined) {
         this.store.dispatch(new StartManualMeasure());
       } else {
-        this.goToLogin(RedirectAfterLogin.StartMeasureAfterLogin);
+        this.goToLogin(RedirectAfterLogin.StartMeasure);
       }
     });
   }
