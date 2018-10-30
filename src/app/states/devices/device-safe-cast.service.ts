@@ -60,9 +60,7 @@ export class DeviceSafeCastService /*extends AbstractDeviceService<DeviceSafeCas
       .split(',');
     return {
       ts: Date.now(),
-      hitsNumber: Number(data[4]),
-      temperature: undefined,
-      voltage: undefined
+      hitsNumber: Number(data[4])
     };
   }
 }
