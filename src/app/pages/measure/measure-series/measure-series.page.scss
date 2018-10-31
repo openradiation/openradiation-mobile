@@ -1,5 +1,7 @@
 @import 'src/theme/variables';
 
+@import 'src/theme/variables';
+
 .content {
   display: flex;
   flex-direction: column;
@@ -37,6 +39,7 @@
       }
     }
   }
+
   .message {
     display: flex;
     white-space: normal;
@@ -47,5 +50,23 @@
       font-size: 12px;
       font-style: italic;
     }
+  }
+
+  .form {
+    width: 100%;
+    padding: 10px 0;
+    .title {
+      font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+      font-weight: 200;
+      font-size: 16px;
+      color: inherit;
+      margin-bottom: 18px;
+    }
+  }
+
+  .separator {
+    margin: 10px 30px;
+    border: 1px solid $forth-color;
+    border-radius: 2px;
   }
 }

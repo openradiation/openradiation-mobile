@@ -4,14 +4,7 @@ import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { DateService } from './date.service';
-import {
-  HitsAccuracyThreshold,
-  Measure,
-  MeasureReport,
-  MeasureSeries,
-  MeasureSeriesParams,
-  PositionAccuracyThreshold
-} from './measure';
+import { HitsAccuracyThreshold, Measure, MeasureReport, MeasureSeries, MeasureSeriesParams, PositionAccuracyThreshold } from './measure';
 import {
   AddMeasureScanStep,
   CancelMeasure,
@@ -261,8 +254,8 @@ export class MeasuresState {
   @Action(StartMeasureSeriesParams)
   startMeasureSeries({ patchState }: StateContext<MeasuresStateModel>) {
     const model: MeasureSeriesParams = {
-      seriesDurationLimit: 1,
-      measureHitsLimit: 0,
+      seriesDurationLimit: 24,
+      measureHitsLimit: 100,
       measureDurationLimit: 5
     };
     patchState({

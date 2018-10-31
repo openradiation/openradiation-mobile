@@ -8,14 +8,9 @@ import { take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
-import { DateService } from '../../../states/measures/date.service';
-import {
-  CancelMeasure,
-  StartMeasure,
-  StartWatchPosition,
-  StopWatchPosition
-} from '../../../states/measures/measures.action';
-import { MeasuresStateModel } from '../../../states/measures/measures.state';
+import { PositionAccuracyThreshold } from '../../../states/measures/measure';
+import { CancelMeasure, CancelSeriesMeasure, StartMeasure, StartWatchPosition, StopWatchPosition } from '../../../states/measures/measures.action';
+import { MeasuresState, MeasuresStateModel } from '../../../states/measures/measures.state';
 
 @Component({
   selector: 'app-measure-series',
@@ -26,16 +21,19 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
   @Select(DevicesState.connectedDevice)
   connectedDevice$: Observable<AbstractDevice | undefined>;
 
+  @Select(MeasuresState.positionAccuracy)
+  positionAccuracy$: Observable<number>;
+
   seriesMeasurementForm?: FormGroup;
   url = '/measure/series';
+  positionAccuracyThreshold = PositionAccuracyThreshold;
 
   constructor(
     protected router: Router,
     private store: Store,
     private navController: NavController,
     private actions$: Actions,
-    private formBuilder: FormBuilder,
-    private dateService: DateService
+    private formBuilder: FormBuilder
   ) {
     super(router);
   }
@@ -52,19 +50,7 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
     }
     this.store.dispatch(new StartWatchPosition());
     this.subscriptions.push(
-      this.seriesMeasurementForm!.valueChanges.subscribe(value => {
-        if (value.seriesDurationLimit) {
-          this.seriesMeasurementForm!.get('seriesDurationLimit')!.setValue(
-            this.dateService.toISODuration(value.seriesDurationLimit.hour.value * 60 * 60 * 1000)
-          );
-        }
-        if (value.measureDurationLimit) {
-          this.seriesMeasurementForm!.get('measureDurationLimit')!.setValue(
-            this.dateService.toISODuration(value.measureDurationLimit.minutes.value * 60 * 1000)
-          );
-        }
-      }),
-      this.actions$.pipe(ofActionSuccessful(CancelMeasure)).subscribe(() =>
+      this.actions$.pipe(ofActionSuccessful(CancelSeriesMeasure)).subscribe(() =>
         this.navController.navigateRoot([
           'tabs',
           {
