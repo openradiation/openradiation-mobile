@@ -4,7 +4,14 @@ import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { DateService } from './date.service';
-import { Measure, MeasureReport, MeasureSeries, MeasureSeriesParams, PositionAccuracyThreshold } from './measure';
+import {
+  HitsAccuracyThreshold,
+  Measure,
+  MeasureReport,
+  MeasureSeries,
+  MeasureSeriesParams,
+  PositionAccuracyThreshold
+} from './measure';
 import {
   AddMeasureScanStep,
   CancelMeasure,
@@ -343,11 +350,22 @@ export class MeasuresState {
 
   @Action(StopMeasureScan)
   stopMeasureScan({ getState, patchState }: StateContext<MeasuresStateModel>) {
-    const { currentMeasure, currentPosition } = getState();
+    const { currentMeasure, currentPosition, currentSeries } = getState();
     if (currentMeasure) {
-      patchState({
-        currentMeasure: Measure.updateEndPosition(currentMeasure, currentPosition)
-      });
+      let patch: Partial<MeasuresStateModel>;
+      const updatedMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
+      if (currentSeries) {
+        patch = { currentMeasure: undefined };
+        if (currentMeasure.hitsNumber >= HitsAccuracyThreshold.Accurate) {
+          patch.currentSeries = {
+            ...currentSeries,
+            measures: [...currentSeries.measures, updatedMeasure]
+          };
+        }
+      } else {
+        patch = { currentMeasure: updatedMeasure };
+      }
+      patchState(patch);
     }
   }
 
