@@ -5,11 +5,11 @@ import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
-import { StartManualMeasure, StartSeriesMeasure, StopWatchPosition } from '../../states/measures/measures.action';
+import { AbstractDevice } from '../../states/devices/abstract-device';
+import { DevicesState } from '../../states/devices/devices.state';
+import { StartManualMeasure, StartMeasureSeriesParams, StopWatchPosition } from '../../states/measures/measures.action';
 import { UserState } from '../../states/user/user.state';
 import { RedirectAfterLogin } from '../tabs/settings/log-in/log-in.page';
-import { DevicesState } from '../../states/devices/devices.state';
-import { AbstractDevice } from '../../states/devices/abstract-device';
 
 @Component({
   selector: 'app-menu',
@@ -42,7 +42,7 @@ export class MenuComponent {
       .pipe(ofActionSuccessful(StartManualMeasure))
       .subscribe(() => this.navController.navigateRoot(['measure', 'report'], true));
     this.actions$
-      .pipe(ofActionSuccessful(StartSeriesMeasure))
+      .pipe(ofActionSuccessful(StartMeasureSeriesParams))
       .subscribe(() => this.navController.navigateRoot(['measure', 'series'], true));
     this.canStartMeasure = this.connectedDevice$.pipe(map(connectedDevice => connectedDevice !== undefined));
   }
@@ -57,7 +57,7 @@ export class MenuComponent {
       if (login !== undefined) {
         this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
           if (connectedDevice) {
-            this.store.dispatch(new StartSeriesMeasure());
+            this.store.dispatch(new StartMeasureSeriesParams());
           }
         });
       } else {

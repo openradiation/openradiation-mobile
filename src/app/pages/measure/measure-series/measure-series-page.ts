@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NavController } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
-import { Measure } from '../../../states/measures/measure';
-import { MeasuresState, MeasuresStateModel } from '../../../states/measures/measures.state';
-import { CancelSeriesMeasure } from '../../../states/measures/measures.action';
-import { NavController } from '@ionic/angular';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { DateService } from '../../../states/measures/date.service';
+import { Measure } from '../../../states/measures/measure';
+import { CancelMeasure } from '../../../states/measures/measures.action';
+import { MeasuresState, MeasuresStateModel } from '../../../states/measures/measures.state';
 
 @Component({
   selector: 'app-measure-series',
@@ -35,12 +35,12 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
 
   pageEnter() {
     super.pageEnter();
-    const { measurementSeries, currentMeasure } = this.store.selectSnapshot(
+    const { measureSeriesParams } = this.store.selectSnapshot(
       ({ measures }: { measures: MeasuresStateModel }) => measures
     );
-    if (measurementSeries) {
+    if (measureSeriesParams) {
       this.seriesMeasurementForm = this.formBuilder.group({
-        ...measurementSeries.model
+        ...measureSeriesParams.model
       });
     }
     this.subscriptions.push(
@@ -58,7 +58,7 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
         }
         console.log('apres', value.seriesDurationLimit, value.measureDurationLimit);
       }),
-      this.actions$.pipe(ofActionSuccessful(CancelSeriesMeasure)).subscribe(() =>
+      this.actions$.pipe(ofActionSuccessful(CancelMeasure)).subscribe(() =>
         this.navController.navigateRoot([
           'tabs',
           {
@@ -75,9 +75,9 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
     );
   }
 
-  cancelSeriesMeasure() {
-    this.store.dispatch(new CancelSeriesMeasure());
-  }
+  startMeasureSeries() {}
 
-  startSeriesMeasure() {}
+  cancelMeasureSeries() {
+    this.store.dispatch(new CancelMeasure());
+  }
 }

@@ -4,14 +4,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NavController, ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
 import { catchError, take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../../components/auto-unsubscribe/auto-unsubscribe.page';
-import { ErrorResponse, ErrorResponseCode } from '../../../../states/measures/error-response';
-import { StartManualMeasure, StartSeriesMeasure, StopWatchPosition } from '../../../../states/measures/measures.action';
-import { LogIn } from '../../../../states/user/user.action';
-import { DevicesState } from '../../../../states/devices/devices.state';
-import { Observable } from 'rxjs';
 import { AbstractDevice } from '../../../../states/devices/abstract-device';
+import { DevicesState } from '../../../../states/devices/devices.state';
+import { ErrorResponse, ErrorResponseCode } from '../../../../states/measures/error-response';
+import { StartManualMeasure, StartMeasureSeriesParams } from '../../../../states/measures/measures.action';
+import { LogIn } from '../../../../states/user/user.action';
 
 export enum RedirectAfterLogin {
   StartMeasure = 'startMeasure',
@@ -100,7 +100,7 @@ export class LogInPage extends AutoUnsubscribePage {
             this.store.dispatch(new StartManualMeasure());
             break;
           case RedirectAfterLogin.StartSeriesMeasure:
-            this.store.dispatch(new StartSeriesMeasure());
+            this.store.dispatch(new StartMeasureSeriesParams());
             break;
         }
       });

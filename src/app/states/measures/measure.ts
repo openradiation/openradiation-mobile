@@ -1,3 +1,4 @@
+import * as uuid from 'uuid';
 import { environment } from '../../../environments/environment';
 
 export class Measure {
@@ -45,8 +46,8 @@ export class Measure {
     devicePlatform: string,
     deviceVersion: string,
     deviceModel: string,
-    reportUuid: string,
-    manualReporting = false
+    manualReporting = false,
+    reportUuid = uuid.v4()
   ) {
     this.apparatusId = apparatusId;
     this.apparatusVersion = apparatusVersion;
@@ -129,10 +130,16 @@ export interface MeasureReport {
   rain: boolean | undefined;
 }
 
-export interface MeasurementSeries {
+export interface MeasureSeriesParams {
   seriesDurationLimit: number | undefined;
   seriesStartTime: number | undefined;
   seriesEndTime: number | undefined;
   measureHitsLimit: number | undefined;
   measureDurationLimit: number | undefined;
+}
+
+export class MeasureSeries {
+  measures: Measure[] = [];
+
+  constructor(public params: MeasureSeriesParams, public seriesUuid = uuid.v4()) {}
 }

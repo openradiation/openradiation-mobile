@@ -3,13 +3,11 @@ import { Geoposition } from '@ionic-native/geolocation';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import * as uuid from 'uuid';
 import { DateService } from './date.service';
-import { Measure, MeasurementSeries, MeasureReport, PositionAccuracyThreshold } from './measure';
+import { Measure, MeasureReport, MeasureSeries, MeasureSeriesParams, PositionAccuracyThreshold } from './measure';
 import {
   AddMeasureScanStep,
   CancelMeasure,
-  CancelSeriesMeasure,
   DeleteAllMeasures,
   DeleteMeasure,
   DisableAutoPublish,
@@ -23,11 +21,12 @@ import {
   StartMeasure,
   StartMeasureReport,
   StartMeasureScan,
-  StartSeriesMeasure,
+  StartMeasureSeriesParams,
   StartWatchPosition,
   StopMeasure,
   StopMeasureReport,
   StopMeasureScan,
+  StopMeasureSeriesParams,
   StopWatchPosition,
   UpdateMeasureScanTime
 } from './measures.action';
@@ -39,14 +38,15 @@ export interface MeasuresStateModel {
   currentPosition?: Geoposition;
   isWatchingPosition: boolean;
   currentMeasure?: Measure;
+  currentSeries?: MeasureSeries;
   measureReport?: {
     model: MeasureReport;
     dirty: boolean;
     status: string;
     errors: any;
   };
-  measurementSeries?: {
-    model: MeasurementSeries;
+  measureSeriesParams?: {
+    model: MeasureSeriesParams;
     dirty: boolean;
     status: string;
     errors: any;
@@ -180,28 +180,8 @@ export class MeasuresState {
         this.device.uuid,
         this.device.platform,
         this.device.version,
-        this.device.model,
-        uuid.v4()
+        this.device.model
       )
-    });
-  }
-
-  @Action(StartSeriesMeasure)
-  startSeriesMeasure({ patchState }: StateContext<MeasuresStateModel>) {
-    const model: MeasurementSeries = {
-      seriesDurationLimit: 1,
-      seriesEndTime: Date.now(),
-      seriesStartTime: Date.now(),
-      measureHitsLimit: 0,
-      measureDurationLimit: 5
-    };
-    patchState({
-      measurementSeries: {
-        model,
-        dirty: false,
-        status: '',
-        errors: {}
-      }
     });
   }
 
@@ -220,7 +200,6 @@ export class MeasuresState {
             this.device.platform,
             this.device.version,
             this.device.model,
-            uuid.v4(),
             true
           ),
           latitude: currentPosition!.coords.latitude,
@@ -244,7 +223,6 @@ export class MeasuresState {
             this.device.platform,
             this.device.version,
             this.device.model,
-            uuid.v4(),
             true
           ),
           startTime: Date.now()
@@ -288,16 +266,40 @@ export class MeasuresState {
   cancelMeasure({ patchState }: StateContext<MeasuresStateModel>) {
     patchState({
       currentMeasure: undefined,
-      measureReport: undefined
+      measureReport: undefined,
+      measureSeriesParams: undefined,
+      currentSeries: undefined
     });
   }
 
-  @Action(CancelSeriesMeasure)
-  cancelSeriesMeasure({ patchState }: StateContext<MeasuresStateModel>) {
+  @Action(StartMeasureSeriesParams)
+  startMeasureSeries({ patchState }: StateContext<MeasuresStateModel>) {
+    const model: MeasureSeriesParams = {
+      seriesDurationLimit: 1,
+      seriesStartTime: Date.now(),
+      seriesEndTime: Date.now(),
+      measureHitsLimit: 0,
+      measureDurationLimit: 5
+    };
     patchState({
-      currentMeasure: undefined,
-      measurementSeries: undefined
+      measureSeriesParams: {
+        model,
+        dirty: false,
+        status: '',
+        errors: {}
+      }
     });
+  }
+
+  @Action(StopMeasureSeriesParams)
+  stopMeasureSeriesParam({ getState, patchState }: StateContext<MeasuresStateModel>) {
+    const { measureSeriesParams } = getState();
+    if (measureSeriesParams) {
+      patchState({
+        measureSeriesParams: undefined,
+        currentSeries: new MeasureSeries(measureSeriesParams.model)
+      });
+    }
   }
 
   @Action(AddMeasureScanStep)
