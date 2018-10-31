@@ -281,7 +281,15 @@ export class MeasuresState {
     if (measureSeriesParams) {
       patchState({
         measureSeriesParams: undefined,
-        currentSeries: new MeasureSeries(measureSeriesParams.model)
+        currentSeries: new MeasureSeries({
+          ...measureSeriesParams.model,
+          measureDurationLimit: measureSeriesParams.model.measureDurationLimit
+            ? measureSeriesParams.model.measureDurationLimit * 60 * 1000
+            : undefined,
+          seriesDurationLimit: measureSeriesParams.model.seriesDurationLimit
+            ? measureSeriesParams.model.seriesDurationLimit * 60 * 60 * 1000
+            : undefined
+        })
       });
     }
   }
