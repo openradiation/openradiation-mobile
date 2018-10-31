@@ -388,7 +388,7 @@ export class MeasuresState {
       const updatedMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
       if (currentSeries) {
         patch = { currentMeasure: undefined };
-        if (currentMeasure.hitsNumber >= HitsAccuracyThreshold.Accurate) {
+        if (updatedMeasure.hitsNumber >= HitsAccuracyThreshold.Accurate) {
           patch.currentSeries = MeasureSeries.addMeasureToSeries(currentSeries, updatedMeasure);
         }
       } else {
@@ -399,27 +399,31 @@ export class MeasuresState {
   }
 
   @Action(StartNextMeasureSeries)
-  startNextMeasureSeriesScan({ getState, patchState }: StateContext<MeasuresStateModel>) {
+  startNextMeasureSeriesScan({ getState, patchState, dispatch }: StateContext<MeasuresStateModel>) {
     const { currentMeasure, currentPosition, currentSeries } = getState();
     if (currentMeasure && currentSeries) {
-      const updatedMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
-      const newMeasure = Measure.updateStartPosition(
-        new Measure(
-          currentMeasure.apparatusId,
-          currentMeasure.apparatusVersion,
-          currentMeasure.apparatusSensorType,
-          currentMeasure.apparatusTubeType,
-          this.device.uuid,
-          this.device.platform,
-          this.device.version,
-          this.device.model
-        ),
-        currentPosition
-      );
-      patchState({
-        currentMeasure: newMeasure,
-        currentSeries: MeasureSeries.addMeasureToSeries(currentSeries, updatedMeasure)
-      });
+      if (currentMeasure.endTime! - currentSeries.startTime! < currentSeries.params.seriesDurationLimit!) {
+        dispatch(new StopMeasureScan());
+      } else {
+        const updatedMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
+        const newMeasure = Measure.updateStartPosition(
+          new Measure(
+            currentMeasure.apparatusId,
+            currentMeasure.apparatusVersion,
+            currentMeasure.apparatusSensorType,
+            currentMeasure.apparatusTubeType,
+            this.device.uuid,
+            this.device.platform,
+            this.device.version,
+            this.device.model
+          ),
+          currentPosition
+        );
+        patchState({
+          currentMeasure: newMeasure,
+          currentSeries: MeasureSeries.addMeasureToSeries(currentSeries, updatedMeasure)
+        });
+      }
     }
   }
 
