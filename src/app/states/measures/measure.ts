@@ -37,6 +37,7 @@ export class Measure {
   rain?: boolean;
   sent = false;
   steps?: Step[] = [];
+  seriesUuid?: string;
 
   constructor(
     apparatusId: string | undefined,
@@ -175,6 +176,8 @@ export class MeasureSeries {
   constructor(public params: MeasureSeriesParams, public seriesUuid = uuid.v4()) {}
 
   static addMeasureToSeries(measureSeries: MeasureSeries, measure: Measure) {
+    measure.tags = [`series_${measureSeries.seriesUuid}`];
+    measure.seriesUuid = measureSeries.seriesUuid;
     return {
       ...measureSeries,
       endTime: measure.endTime,
