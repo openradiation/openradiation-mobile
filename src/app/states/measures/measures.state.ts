@@ -189,10 +189,10 @@ export class MeasuresState {
   @Action(StartSeriesMeasure)
   startSeriesMeasure({ patchState }: StateContext<MeasuresStateModel>) {
     const model: MeasurementSeries = {
-      seriesDurationLimit: 1,
+      seriesDurationLimit: 24,
       seriesEndTime: Date.now(),
       seriesStartTime: Date.now(),
-      measureHitsLimit: 0,
+      measureHitsLimit: 100,
       measureDurationLimit: 5
     };
     patchState({

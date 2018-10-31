@@ -5,31 +5,29 @@
 
         <ion-content>
             <div class="content">
-                <div class="message">
+                <div class="message" *ngIf="(positionAccuracy$ | async) >= positionAccuracyThreshold.Inaccurate">
                     <div class="message-style">{{'HISTORY.MESSAGE_PREVENT_MEASURE_SENDING' | translate}}</div>
                 </div>
                 <form class="form" [formGroup]="seriesMeasurementForm" ngxsForm="measures.seriesMeasurementForm">
+                    <ion-label class="title" position="fixed">Series duration</ion-label>
                     <ion-item>
-                        <ion-label position="fixed">heures 1-24</ion-label>
-                        <ion-datetime display-format="HH" pickerFormat="HH"
-                                      hourValues="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24"
-                                      formControlName="seriesDurationLimit"
-                                      [cancelText]="'GENERAL.CANCEL' | translate"
-                                      [doneText]="'GENERAL.SUBMIT' | translate"
-                                      placeholder="01"></ion-datetime>
+                        <ion-label position="fixed">{{seriesMeasurementForm?.value.seriesDurationLimit}}</ion-label>
+                        <ion-range formControlName="seriesDurationLimit" required min="1" max="24" step="1" snaps="true"></ion-range>
                     </ion-item>
+                    <ion-label class="title" position="fixed">Measure duration</ion-label>
                     <ion-item >
-                        <ion-label position="fixed">minutes 5-60  5 by 5</ion-label>
-                        <ion-datetime display-format="mm'" pickerFormat="mm"
-                                      minuteValues="5,10,15,20,25,30,35,40,45,50,55,60"
-                                      formControlName="measureDurationLimit"
-                                      [cancelText]="'GENERAL.CANCEL' | translate"
-                                      [doneText]="'GENERAL.SUBMIT' | translate"
-                                      placeholder="05'"></ion-datetime>
+                        <ion-label position="fixed">{{seriesMeasurementForm?.value.measureDurationLimit}}</ion-label>
+                        <ion-range formControlName="measureDurationLimit" required min="5" max="60" step="5" snaps="true"></ion-range>
+                    </ion-item>
+                    <ion-label class="title" position="fixed">Hits number</ion-label>
+                    <ion-item>
+                        <ion-label position="fixed">{{seriesMeasurementForm?.value.measureHitsLimit}}</ion-label>
+                        <ion-range formControlName="measureHitsLimit" required min="100" max="1000" step="100" snaps="true"></ion-range>
                     </ion-item>
                 </form>
                 <div class="bottom-buttons">
-                    <app-round-button [src]="'assets/img/button-off.png'" (click)="startSeriesMeasure()">
+                    <app-round-button [disabled]="!seriesMeasurementForm.valid"
+                                      [src]="seriesMeasurementForm?.valid ? 'assets/img/button-on.png' : 'assets/img/button-off.png'" (click)="startSeriesMeasure()">
                         {{'GENERAL.OK' | translate}}
                     </app-round-button>
                     <div class="side-buttons">
