@@ -4,7 +4,14 @@ import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { DateService } from './date.service';
-import { HitsAccuracyThreshold, Measure, MeasureReport, MeasureSeries, MeasureSeriesParams, PositionAccuracyThreshold } from './measure';
+import {
+  HitsAccuracyThreshold,
+  Measure,
+  MeasureReport,
+  MeasureSeries,
+  MeasureSeriesParams,
+  PositionAccuracyThreshold
+} from './measure';
 import {
   AddMeasureScanStep,
   CancelMeasure,

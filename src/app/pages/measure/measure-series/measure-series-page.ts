@@ -9,7 +9,12 @@ import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-u
 import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
 import { PositionAccuracyThreshold } from '../../../states/measures/measure';
-import { CancelMeasure, CancelSeriesMeasure, StartMeasure, StartWatchPosition, StopWatchPosition } from '../../../states/measures/measures.action';
+import {
+  CancelMeasure,
+  StartMeasure,
+  StartWatchPosition,
+  StopWatchPosition
+} from '../../../states/measures/measures.action';
 import { MeasuresState, MeasuresStateModel } from '../../../states/measures/measures.state';
 
 @Component({
@@ -50,7 +55,7 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
     }
     this.store.dispatch(new StartWatchPosition());
     this.subscriptions.push(
-      this.actions$.pipe(ofActionSuccessful(CancelSeriesMeasure)).subscribe(() =>
+      this.actions$.pipe(ofActionSuccessful(CancelMeasure)).subscribe(() =>
         this.navController.navigateRoot([
           'tabs',
           {
