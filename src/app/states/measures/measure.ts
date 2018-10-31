@@ -130,9 +130,9 @@ export interface MeasureReport {
 }
 
 export interface MeasurementSeries {
-  inputDurationSeries: number | undefined;
+  seriesDurationLimit: number | undefined;
   seriesStartTime: number | undefined;
   seriesEndTime: number | undefined;
   measureHitsLimit: number | undefined;
-  measureTimeLimit: number | undefined;
+  measureDurationLimit: number | undefined;
 }

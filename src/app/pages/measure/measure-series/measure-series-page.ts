@@ -8,6 +8,7 @@ import { MeasuresState, MeasuresStateModel } from '../../../states/measures/meas
 import { CancelSeriesMeasure } from '../../../states/measures/measures.action';
 import { NavController } from '@ionic/angular';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { DateService } from '../../../states/measures/date.service';
 
 @Component({
   selector: 'app-measure-series',
@@ -26,7 +27,8 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
     private store: Store,
     private navController: NavController,
     private actions$: Actions,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private dateService: DateService
   ) {
     super(router);
   }
@@ -42,6 +44,20 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
       });
     }
     this.subscriptions.push(
+      this.seriesMeasurementForm!.valueChanges.subscribe(value => {
+        console.log('avant', value.seriesDurationLimit, typeof value.seriesDurationLimit, value.measureDurationLimit);
+        if (value.seriesDurationLimit) {
+          this.seriesMeasurementForm!.get('seriesDurationLimit')!.setValue(
+            this.dateService.toISODuration(value.seriesDurationLimit.hour.value * 60 * 60 * 1000)
+          );
+        }
+        if (value.measureDurationLimit) {
+          this.seriesMeasurementForm!.get('measureDurationLimit')!.setValue(
+            this.dateService.toISODuration(value.measureDurationLimit.minutes.value * 60 * 1000)
+          );
+        }
+        console.log('apres', value.seriesDurationLimit, value.measureDurationLimit);
+      }),
       this.actions$.pipe(ofActionSuccessful(CancelSeriesMeasure)).subscribe(() =>
         this.navController.navigateRoot([
           'tabs',
