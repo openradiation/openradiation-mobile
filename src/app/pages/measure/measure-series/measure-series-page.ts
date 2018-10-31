@@ -4,11 +4,18 @@ import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
+import { AbstractDevice } from '../../../states/devices/abstract-device';
+import { DevicesState } from '../../../states/devices/devices.state';
 import { DateService } from '../../../states/measures/date.service';
-import { Measure } from '../../../states/measures/measure';
-import { CancelMeasure } from '../../../states/measures/measures.action';
-import { MeasuresState, MeasuresStateModel } from '../../../states/measures/measures.state';
+import {
+  CancelMeasure,
+  StartMeasure,
+  StartWatchPosition,
+  StopWatchPosition
+} from '../../../states/measures/measures.action';
+import { MeasuresStateModel } from '../../../states/measures/measures.state';
 
 @Component({
   selector: 'app-measure-series',
@@ -16,8 +23,8 @@ import { MeasuresState, MeasuresStateModel } from '../../../states/measures/meas
   styleUrls: ['./measure-series.page.scss']
 })
 export class MeasureSeriesPage extends AutoUnsubscribePage {
-  @Select(MeasuresState.currentMeasure)
-  currentMeasure$: Observable<Measure | undefined>;
+  @Select(DevicesState.connectedDevice)
+  connectedDevice$: Observable<AbstractDevice | undefined>;
 
   seriesMeasurementForm?: FormGroup;
   url = '/measure/series';
@@ -43,9 +50,9 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
         ...measureSeriesParams.model
       });
     }
+    this.store.dispatch(new StartWatchPosition());
     this.subscriptions.push(
       this.seriesMeasurementForm!.valueChanges.subscribe(value => {
-        console.log('avant', value.seriesDurationLimit, typeof value.seriesDurationLimit, value.measureDurationLimit);
         if (value.seriesDurationLimit) {
           this.seriesMeasurementForm!.get('seriesDurationLimit')!.setValue(
             this.dateService.toISODuration(value.seriesDurationLimit.hour.value * 60 * 60 * 1000)
@@ -56,7 +63,6 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
             this.dateService.toISODuration(value.measureDurationLimit.minutes.value * 60 * 1000)
           );
         }
-        console.log('apres', value.seriesDurationLimit, value.measureDurationLimit);
       }),
       this.actions$.pipe(ofActionSuccessful(CancelMeasure)).subscribe(() =>
         this.navController.navigateRoot([
@@ -71,11 +77,25 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
             }
           }
         ])
-      )
+      ),
+      this.actions$
+        .pipe(ofActionSuccessful(StartMeasure))
+        .subscribe(() => this.navController.navigateRoot(['measure', 'scan']))
     );
   }
 
-  startMeasureSeries() {}
+  pageLeave() {
+    super.pageLeave();
+    this.store.dispatch(new StopWatchPosition());
+  }
+
+  startMeasureSeries() {
+    this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
+      if (connectedDevice) {
+        this.store.dispatch(new StartMeasure(connectedDevice));
+      }
+    });
+  }
 
   cancelMeasureSeries() {
     this.store.dispatch(new CancelMeasure());

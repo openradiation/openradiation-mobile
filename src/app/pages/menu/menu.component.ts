@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
 import { AbstractDevice } from '../../states/devices/abstract-device';
 import { DevicesState } from '../../states/devices/devices.state';
-import { StartManualMeasure, StartMeasureSeriesParams, StopWatchPosition } from '../../states/measures/measures.action';
+import { StartManualMeasure, StartMeasureSeriesParams } from '../../states/measures/measures.action';
 import { UserState } from '../../states/user/user.state';
 import { RedirectAfterLogin } from '../tabs/settings/log-in/log-in.page';
 

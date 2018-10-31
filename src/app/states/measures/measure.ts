@@ -1,3 +1,4 @@
+import { Geoposition } from '@ionic-native/geolocation';
 import * as uuid from 'uuid';
 import { environment } from '../../../environments/environment';
 
@@ -63,6 +64,36 @@ export class Measure {
     this.organisationReporting = environment.APP_NAME_VERSION;
     this.accuracy = PositionAccuracyThreshold.No;
     this.endAccuracy = PositionAccuracyThreshold.No;
+  }
+
+  static updateStartPosition(measure: Measure, position?: Geoposition): Measure {
+    if (position) {
+      return {
+        ...measure,
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        accuracy: position.coords.accuracy,
+        altitude: position.coords.altitude,
+        altitudeAccuracy: position.coords.altitudeAccuracy
+      };
+    } else {
+      return { ...measure };
+    }
+  }
+
+  static updateEndPosition(measure: Measure, position?: Geoposition): Measure {
+    if (measure.accuracy && measure.accuracy < PositionAccuracyThreshold.Inaccurate && position) {
+      return {
+        ...measure,
+        endLatitude: position.coords.latitude,
+        endLongitude: position.coords.longitude,
+        endAccuracy: position.coords.accuracy,
+        endAltitude: position.coords.altitude,
+        endAltitudeAccuracy: position.coords.altitudeAccuracy
+      };
+    } else {
+      return { ...measure };
+    }
   }
 }
 
@@ -132,14 +163,14 @@ export interface MeasureReport {
 
 export interface MeasureSeriesParams {
   seriesDurationLimit: number | undefined;
-  seriesStartTime: number | undefined;
-  seriesEndTime: number | undefined;
   measureHitsLimit: number | undefined;
   measureDurationLimit: number | undefined;
 }
 
 export class MeasureSeries {
   measures: Measure[] = [];
+  startTime?: number;
+  endTime?: number;
 
   constructor(public params: MeasureSeriesParams, public seriesUuid = uuid.v4()) {}
 }

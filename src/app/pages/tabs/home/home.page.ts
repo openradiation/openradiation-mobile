@@ -66,7 +66,6 @@ export class HomePage extends AutoUnsubscribePage {
   startMeasure() {
     this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
       if (connectedDevice) {
-        this.store.dispatch(new StopWatchPosition());
         this.store.dispatch(new StartMeasure(connectedDevice));
       }
     });

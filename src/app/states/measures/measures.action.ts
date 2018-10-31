@@ -40,6 +40,14 @@ export class StopMeasure {
   static readonly type = '[Mesures] Stop measure';
 }
 
+export class StartMeasureSeriesParams {
+  static readonly type = '[Measures] Start measure series params';
+}
+
+export class StopMeasureSeriesParams {
+  static readonly type = '[Measures] Stop measure series params';
+}
+
 export class CancelMeasure {
   static readonly type = '[Measures] Cancel measure';
 }
@@ -55,12 +63,16 @@ export class UpdateMeasureScanTime {
 }
 
 export class StartMeasureScan {
-  static readonly type = '[Measures] Start measure radiation scanning';
+  static readonly type = '[Measures] Start measure radiation scan';
   constructor(public device: AbstractDevice) {}
 }
 
 export class StopMeasureScan {
-  static readonly type = '[Measures] Stop measure radiation scanning';
+  static readonly type = '[Measures] Stop measure radiation scan';
+}
+
+export class StartNextMeasureSeries {
+  static readonly type = '[Measures] Start next measure series scan';
 }
 
 export class StartMeasureReport {
@@ -69,14 +81,6 @@ export class StartMeasureReport {
 
 export class StopMeasureReport {
   static readonly type = '[Measures] Stop measure report';
-}
-
-export class StartMeasureSeriesParams {
-  static readonly type = '[Measures] Start measure series params';
-}
-
-export class StopMeasureSeriesParams {
-  static readonly type = '[Measures] Stop measure series params';
 }
 
 export class StartManualMeasure {
