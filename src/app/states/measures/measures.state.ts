@@ -287,34 +287,58 @@ export class MeasuresState {
   }
 
   @Action(AddMeasureScanStep)
-  addMeasureScanStep({ getState, patchState }: StateContext<MeasuresStateModel>, { step, device }: AddMeasureScanStep) {
-    const { currentMeasure } = getState();
+  addMeasureScanStep(
+    { getState, patchState, dispatch }: StateContext<MeasuresStateModel>,
+    { step, device }: AddMeasureScanStep
+  ) {
+    const { currentMeasure, currentSeries } = getState();
     if (currentMeasure && currentMeasure.steps) {
-      const measure = { ...currentMeasure, steps: [...currentMeasure.steps, step] };
-      measure.endTime = step.ts;
-      measure.hitsNumber += step.hitsNumber;
-      measure.value = this.measuresService.computeRadiationValue(measure, device);
-      measure.temperature =
-        measure.steps
-          .map(currentMeasureStep => currentMeasureStep.temperature)
-          .reduce((acc, current) => acc + current) / measure.steps.length;
-      patchState({
-        currentMeasure: measure
-      });
+      const currentTime = Date.now();
+      const newHitsNumber = currentMeasure.hitsNumber + step.hitsNumber;
+      if (
+        currentSeries &&
+        (currentTime - currentMeasure!.startTime > currentSeries.params.measureDurationLimit! ||
+          newHitsNumber > currentSeries.params.measureHitsLimit!)
+      ) {
+        dispatch(new StartNextMeasureSeries());
+      } else {
+        const measure = {
+          ...currentMeasure,
+          endTime: step.ts,
+          hitsNumber: newHitsNumber,
+          steps: [...currentMeasure.steps, step]
+        };
+        measure.value = this.measuresService.computeRadiationValue(measure, device);
+        measure.temperature =
+          measure.steps
+            .map(currentMeasureStep => currentMeasureStep.temperature)
+            .reduce((acc, current) => acc + current) / measure.steps.length;
+        patchState({
+          currentMeasure: measure
+        });
+      }
     }
   }
 
   @Action(UpdateMeasureScanTime)
-  updateMeasureScanTime({ getState, patchState }: StateContext<MeasuresStateModel>, { device }: UpdateMeasureScanTime) {
-    const { currentMeasure } = getState();
+  updateMeasureScanTime(
+    { getState, patchState, dispatch }: StateContext<MeasuresStateModel>,
+    { device }: UpdateMeasureScanTime
+  ) {
+    const { currentMeasure, currentSeries } = getState();
     if (currentMeasure) {
-      patchState({
-        currentMeasure: {
-          ...currentMeasure,
-          endTime: Date.now(),
-          value: this.measuresService.computeRadiationValue(currentMeasure, device)
-        }
-      });
+      const currentTime = Date.now();
+      if (currentSeries && currentTime - currentMeasure!.startTime > currentSeries.params.measureDurationLimit!) {
+        dispatch(new StartNextMeasureSeries());
+      } else {
+        patchState({
+          currentMeasure: {
+            ...currentMeasure,
+            endTime: currentTime,
+            value: this.measuresService.computeRadiationValue(currentMeasure, device)
+          }
+        });
+      }
     }
   }
 
@@ -357,10 +381,7 @@ export class MeasuresState {
       if (currentSeries) {
         patch = { currentMeasure: undefined };
         if (currentMeasure.hitsNumber >= HitsAccuracyThreshold.Accurate) {
-          patch.currentSeries = {
-            ...currentSeries,
-            measures: [...currentSeries.measures, updatedMeasure]
-          };
+          patch.currentSeries = MeasureSeries.addMeasureToSeries(currentSeries, updatedMeasure);
         }
       } else {
         patch = { currentMeasure: updatedMeasure };
@@ -389,10 +410,7 @@ export class MeasuresState {
       );
       patchState({
         currentMeasure: newMeasure,
-        currentSeries: {
-          ...currentSeries,
-          measures: [...currentSeries.measures, updatedMeasure]
-        }
+        currentSeries: MeasureSeries.addMeasureToSeries(currentSeries, updatedMeasure)
       });
     }
   }

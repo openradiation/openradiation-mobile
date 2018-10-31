@@ -173,4 +173,12 @@ export class MeasureSeries {
   endTime?: number;
 
   constructor(public params: MeasureSeriesParams, public seriesUuid = uuid.v4()) {}
+
+  static addMeasureToSeries(measureSeries: MeasureSeries, measure: Measure) {
+    return {
+      ...measureSeries,
+      endTime: measure.endTime,
+      measures: [...measureSeries.measures, measure]
+    };
+  }
 }
