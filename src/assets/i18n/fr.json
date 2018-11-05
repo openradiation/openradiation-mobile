@@ -148,6 +148,11 @@
       "NO_RAIN": "Pas de pluie",
       "RAIN": "Pluie",
       "TITLE": "Météo"
+    },
+    "MEASUREMENT_SERIES": {
+      "SERIES_DURATION": "Durée de la série de mesures",
+      "MEASURE_DURATION": "Durée minimale d'une measure",
+      "HITS_NUMBER": "Nombre de coups minimun d'une mesure"
     }
   },
   "MEASURE_MANUAL": {
