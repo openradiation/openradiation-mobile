@@ -151,7 +151,7 @@
     },
     "MEASUREMENT_SERIES": {
       "SERIES_DURATION": "Durée de la série de mesures",
-      "MEASURE_DURATION": "Durée minimale d'une measure",
+      "MEASURE_DURATION": "Durée minimale d'une mesure",
       "HITS_NUMBER": "Nombre de coups minimun d'une mesure"
     }
   },
