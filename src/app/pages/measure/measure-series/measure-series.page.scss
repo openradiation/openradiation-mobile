@@ -1,12 +1,9 @@
 @import 'src/theme/variables';
 
-@import 'src/theme/variables';
-
 .content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: $third-color;
   padding: 7px 0 15px 0;
 
   .bottom-buttons {
@@ -52,16 +49,18 @@
     }
   }
 
+  .title {
+    font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+    font-weight: 200;
+    font-size: 16px;
+    color: white;
+    width: 100%;
+    margin: 16px 10px;
+  }
+
   .form {
     width: 100%;
-    padding: 10px 0;
-    .title {
-      font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
-      font-weight: 200;
-      font-size: 16px;
-      color: inherit;
-      margin-bottom: 18px;
-    }
+    padding: 5px 10px;
   }
 
   .separator {

@@ -13,21 +13,21 @@
                     </app-category-label>
                     <ion-label class="title" >{{'MEASURES.MEASUREMENT_SERIES.SERIES_DURATION' | translate}}</ion-label>
                     <ion-item>
-                        <ion-label position="fixed">{{seriesMeasurementForm?.value.seriesDurationLimit}}</ion-label>
-                        <ion-range formControlName="seriesDurationLimit" required min="1" max="24" step="1" snaps="true"></ion-range>
+                        <ion-label position="fixed">{{seriesMeasurementForm?.value.seriesDurationLimit}} h</ion-label>
+                        <ion-range formControlName="seriesDurationLimit" required min="1" max="24" step="1" snaps="true" color="primary"></ion-range>
                     </ion-item>
                     <app-category-label>
-                        {{'MEASURES.MEASUREMENT_SERIES.MEASURE_TITLE' | translate}}
+                        {{'MEASURES.MEASUREMENT_SERIES.MEASURES_TITLE' | translate}}
                     </app-category-label>
                     <ion-label class="title">{{'MEASURES.MEASUREMENT_SERIES.MEASURES_DURATION' | translate}}</ion-label>
                     <ion-item >
-                        <ion-label position="fixed">{{seriesMeasurementForm?.value.measureDurationLimit}}</ion-label>
-                        <ion-range formControlName="measureDurationLimit" required min="5" max="60" step="5" snaps="true"></ion-range>
+                        <ion-label position="fixed">{{seriesMeasurementForm?.value.measureDurationLimit}} mn</ion-label>
+                        <ion-range formControlName="measureDurationLimit" required min="5" max="60" step="5" snaps="true" color="primary"></ion-range>
                     </ion-item>
                     <ion-label class="title">{{'MEASURES.MEASUREMENT_SERIES.HITS_NUMBER' | translate}}</ion-label>
                     <ion-item>
                         <ion-label position="fixed">{{seriesMeasurementForm?.value.measureHitsLimit}}</ion-label>
-                        <ion-range formControlName="measureHitsLimit" required min="100" max="1000" step="100" snaps="true"></ion-range>
+                        <ion-range formControlName="measureHitsLimit" required min="100" max="1000" step="100" snaps="true" color="primary"></ion-range>
                     </ion-item>
                 </form>
                 <div class="bottom-buttons">
