@@ -153,7 +153,7 @@
       "SERIES_TITLE": "Series",
       "SERIES_DURATION": "Duration of the series of measures",
       "MEASURES_TITLE": "Measures",
-      "MEASURE_DURATION": "Minimum duration of a measure",
+      "MEASURES_DURATION": "Minimum duration of a measure",
       "HITS_NUMBER": "Minimum hits number of a measure"
     }
   },
