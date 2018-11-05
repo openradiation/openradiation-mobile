@@ -15,3 +15,43 @@
         <ion-router-outlet stack name="other"></ion-router-outlet>
     </ion-tab>
 </ion-tabs>
+<ion-tabs>
+
+    <ion-tab tab="home">
+        <ion-router-outlet name="home"></ion-router-outlet>
+    </ion-tab>
+    <ion-tab tab="history">
+        <ion-router-outlet name="history"></ion-router-outlet>
+    </ion-tab>
+    <ion-tab tab="settings">
+        <ion-router-outlet name="settings"></ion-router-outlet>
+    </ion-tab>
+    <ion-tab tab="map">
+        <ion-router-outlet name="map"></ion-router-outlet>
+    </ion-tab>
+
+    <ion-tab-bar slot="bottom">
+
+        <ion-tab-button tab="home" href="/tabs/(home:home)">
+            <ion-icon name="md-icon-home"></ion-icon>
+        </ion-tab-button>
+
+        <ion-tab-button tab="history" href="/tabs/(history:history)">
+            <ion-icon name="md-icon-history"></ion-icon>
+        </ion-tab-button>
+
+        <ion-tab-button tab="settings" href="/tabs/(settings:settings)">
+            <ion-icon name="md-icon-settings"></ion-icon>
+        </ion-tab-button>
+
+        <ion-tab-button tab="map" href="/tabs/(map:map)">
+            <ion-icon name="md-icon-map"></ion-icon>
+        </ion-tab-button>
+
+        <ion-tab-button (click)="openMenu()">
+            <ion-icon name="md-icon-more"></ion-icon>
+        </ion-tab-button>
+
+    </ion-tab-bar>
+
+</ion-tabs>
