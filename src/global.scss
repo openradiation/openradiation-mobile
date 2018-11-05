@@ -63,7 +63,7 @@
 }
 
 ion-content {
-  background: linear-gradient(to bottom, $base-color, $third-color);
+  --ion-background-color: linear-gradient(to bottom, $base-color, $third-color);
 }
 
 ion-list {
