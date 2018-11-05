@@ -310,19 +310,21 @@ export class MeasuresState {
       ) {
         dispatch(new StartNextMeasureSeries());
       } else {
-        const measure = {
+        const newCurrentMeasure = {
           ...currentMeasure,
           endTime: step.ts,
           hitsNumber: newHitsNumber,
           steps: [...currentMeasure.steps, step]
         };
-        measure.value = this.measuresService.computeRadiationValue(measure, device);
-        measure.temperature =
-          measure.steps
-            .map(currentMeasureStep => currentMeasureStep.temperature)
-            .reduce((acc, current) => acc + current) / measure.steps.length;
+        newCurrentMeasure.value = this.measuresService.computeRadiationValue(newCurrentMeasure, device);
+        if (newCurrentMeasure.steps[0] && newCurrentMeasure.steps[0].temperature !== undefined) {
+          newCurrentMeasure.temperature =
+            newCurrentMeasure.steps
+              .map(currentMeasureStep => currentMeasureStep.temperature!)
+              .reduce((acc, current) => acc + current) / newCurrentMeasure.steps.length;
+        }
         patchState({
-          currentMeasure: measure
+          currentMeasure: newCurrentMeasure
         });
       }
     }

@@ -14,6 +14,8 @@ import { UserStateModel } from '../user/user.state';
 import { Measure, PositionAccuracyThreshold, Step } from './measure';
 import { ApparatusSensorType, MeasureApi } from './measure-api';
 import { AddMeasureScanStep, CancelMeasure, StopMeasureScan, UpdateMeasureScanTime } from './measures.action';
+import { DeviceSafeCastService } from '../devices/device-safe-cast.service';
+import { DeviceSafeCast } from '../devices/device-safe-cast';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +24,7 @@ export class MeasuresService {
   constructor(
     private deviceOGKitService: DeviceOGKitService,
     private deviceAtomTagService: DeviceAtomTagService,
+    private deviceSafeCastService: DeviceSafeCastService,
     private store: Store,
     private actions$: Actions,
     private httpClient: HttpClient
@@ -57,6 +60,9 @@ export class MeasuresService {
       case DeviceType.AtomTag:
         detectHits = this.deviceAtomTagService.startMeasureScan(<DeviceAtomTag>device, stopSignal);
         break;
+      case DeviceType.SafeCast:
+        detectHits = this.deviceSafeCastService.startMeasureScan(<DeviceSafeCast>device, stopSignal);
+        break;
     }
     detectHits = detectHits!.pipe(
       takeUntil(stopSignal),
@@ -72,6 +78,8 @@ export class MeasuresService {
         return this.deviceOGKitService.computeRadiationValue(measure);
       case DeviceType.AtomTag:
         return this.deviceAtomTagService.computeRadiationValue(measure);
+      case DeviceType.SafeCast:
+        return this.deviceSafeCastService.computeRadiationValue(measure);
     }
   }
 

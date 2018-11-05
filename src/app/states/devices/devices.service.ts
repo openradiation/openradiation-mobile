@@ -4,7 +4,7 @@ import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { AlertController, Platform, ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, ofActionSuccessful, Store } from '@ngxs/store';
-import { merge, Observable, timer } from 'rxjs';
+import { merge, Observable, of, timer } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import {
   buffer,
@@ -25,6 +25,7 @@ import { DeviceAtomTag } from './device-atom-tag';
 import { DeviceAtomTagService } from './device-atom-tag.service';
 import { DeviceOGKit } from './device-og-kit';
 import { DeviceOGKitService } from './device-og-kit.service';
+import { DeviceSafeCastService } from './device-safe-cast.service';
 import {
   BLEConnectionLost,
   DeviceConnectionLost,
@@ -32,6 +33,7 @@ import {
   StartDiscoverDevices,
   StopDiscoverDevices
 } from './devices.action';
+import { DeviceSafeCast } from './device-safe-cast';
 
 @Injectable({
   providedIn: 'root'
@@ -50,6 +52,7 @@ export class DevicesService {
     private alertController: AlertController,
     private deviceOGKitService: DeviceOGKitService,
     private deviceAtomTagService: DeviceAtomTagService,
+    private deviceSafeCastService: DeviceSafeCastService,
     private toastController: ToastController,
     private translateService: TranslateService
   ) {
@@ -131,6 +134,8 @@ export class DevicesService {
                   return new DeviceOGKit(rawDevice);
                 } else if (rawDevice.name.includes(DeviceType.AtomTag)) {
                   return new DeviceAtomTag(rawDevice);
+                } else if (rawDevice.name.includes(DeviceType.SafeCast)) {
+                  return new DeviceSafeCast(rawDevice);
                 }
               }
               return null;
@@ -160,6 +165,8 @@ export class DevicesService {
         return this.deviceOGKitService.getDeviceInfo(<DeviceOGKit>device);
       case DeviceType.AtomTag:
         return this.deviceAtomTagService.getDeviceInfo(<DeviceAtomTag>device);
+      case DeviceType.SafeCast:
+        return this.deviceSafeCastService.getDeviceInfo();
     }
   }
 
@@ -169,6 +176,8 @@ export class DevicesService {
         return this.deviceOGKitService.saveDeviceParams(<DeviceOGKit>device);
       case DeviceType.AtomTag:
         return this.deviceAtomTagService.saveDeviceParams(<DeviceAtomTag>device);
+      case DeviceType.SafeCast:
+        return of(null);
     }
   }
 
