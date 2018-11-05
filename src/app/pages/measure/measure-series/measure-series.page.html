@@ -1,4 +1,4 @@
-<ng-container *ngIf="seriesMeasurementForm">
+<ng-container *ngIf="measureSeriesParamsForm">
     <ng-container>
         <app-header>{{'MEASUREMENT_SERIES.TITLE' | translate}}</app-header>
 
@@ -7,13 +7,13 @@
                 <div class="message" *ngIf="(positionAccuracy$ | async) >= positionAccuracyThreshold.Inaccurate">
                     <div class="message-style">{{'HISTORY.MESSAGE_PREVENT_MEASURE_SENDING' | translate}}</div>
                 </div>
-                <form class="form" [formGroup]="seriesMeasurementForm" ngxsForm="measures.seriesMeasurementForm">
+                <form class="form" [formGroup]="measureSeriesParamsForm" ngxsForm="measures.measureSeriesParams">
                     <app-category-label>
                         {{'MEASURES.MEASUREMENT_SERIES.SERIES_TITLE' | translate}}
                     </app-category-label>
                     <ion-label class="title">{{'MEASURES.MEASUREMENT_SERIES.SERIES_DURATION' | translate}}</ion-label>
                     <ion-item>
-                        <ion-label position="fixed">{{seriesMeasurementForm?.value.seriesDurationLimit}}:00</ion-label>
+                        <ion-label position="fixed">{{measureSeriesParamsForm?.value.seriesDurationLimit}}:00</ion-label>
                         <ion-range class="range" formControlName="seriesDurationLimit" required min="1" max="24"
                                    step="1" snaps="true"></ion-range>
                     </ion-item>
@@ -22,22 +22,22 @@
                     </app-category-label>
                     <ion-label class="title">{{'MEASURES.MEASUREMENT_SERIES.MEASURES_DURATION' | translate}}</ion-label>
                     <ion-item>
-                        <ion-label position="fixed">{{seriesMeasurementForm?.value.measureDurationLimit}}'</ion-label>
+                        <ion-label position="fixed">{{measureSeriesParamsForm?.value.measureDurationLimit}}'</ion-label>
                         <ion-range class="range" formControlName="measureDurationLimit" required min="5" max="60"
                                    step="5"
                                    snaps="true"></ion-range>
                     </ion-item>
                     <ion-label class="title">{{'MEASURES.MEASUREMENT_SERIES.HITS_NUMBER' | translate}}</ion-label>
                     <ion-item>
-                        <ion-label position="fixed">{{seriesMeasurementForm?.value.measureHitsLimit}}</ion-label>
+                        <ion-label position="fixed">{{measureSeriesParamsForm?.value.measureHitsLimit}}</ion-label>
                         <ion-range class="range" formControlName="measureHitsLimit" required min="100" max="1000"
                                    step="100"
                                    snaps="true"></ion-range>
                     </ion-item>
                 </form>
                 <div class="bottom-buttons">
-                    <app-round-button [disabled]="!seriesMeasurementForm.valid"
-                                      [src]="seriesMeasurementForm?.valid ? 'assets/img/button-on.png' : 'assets/img/button-off.png'"
+                    <app-round-button [disabled]="!measureSeriesParamsForm.valid"
+                                      [src]="measureSeriesParamsForm?.valid ? 'assets/img/button-on.png' : 'assets/img/button-off.png'"
                                       (click)="startMeasureSeries()">
                         {{'GENERAL.OK' | translate}}
                     </app-round-button>

@@ -130,6 +130,13 @@
     "HITS_PER_MIN": "No. of counts/min.",
     "INIT": "Start-up",
     "MEASURE": "Measurement",
+    "MEASUREMENT_SERIES": {
+      "HITS_NUMBER": "Minimum hits number of a measure",
+      "MEASURES_DURATION": "Minimum duration of a measure",
+      "MEASURES_TITLE": "Measures",
+      "SERIES_DURATION": "Duration of the series of measures",
+      "SERIES_TITLE": "Series"
+    },
     "MEASURE_START": "Measurement start",
     "ONGOING": "Measurement in progress",
     "REPPORT_LATITUDE": "Latitude",
@@ -148,13 +155,6 @@
       "NO_RAIN": "No rain",
       "RAIN": "Rain",
       "TITLE": "Weather"
-    },
-    "MEASUREMENT_SERIES": {
-      "SERIES_TITLE": "Series",
-      "SERIES_DURATION": "Duration of the series of measures",
-      "MEASURES_TITLE": "Measures",
-      "MEASURES_DURATION": "Minimum duration of a measure",
-      "HITS_NUMBER": "Minimum hits number of a measure"
     }
   },
   "MEASURE_MANUAL": {

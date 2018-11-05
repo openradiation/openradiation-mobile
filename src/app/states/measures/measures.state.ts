@@ -404,21 +404,26 @@ export class MeasuresState {
   startNextMeasureSeriesScan({ getState, patchState, dispatch }: StateContext<MeasuresStateModel>) {
     const { currentMeasure, currentPosition, currentSeries } = getState();
     if (currentMeasure && currentSeries) {
-      if (currentMeasure.endTime! - currentSeries.startTime! < currentSeries.params.seriesDurationLimit!) {
+      if (currentMeasure.endTime! - currentSeries.startTime! > currentSeries.params.seriesDurationLimit!) {
         dispatch(new StopMeasureScan());
       } else {
         const updatedMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
+        const currentTime = Date.now();
         const newMeasure = Measure.updateStartPosition(
-          new Measure(
-            currentMeasure.apparatusId,
-            currentMeasure.apparatusVersion,
-            currentMeasure.apparatusSensorType,
-            currentMeasure.apparatusTubeType,
-            this.device.uuid,
-            this.device.platform,
-            this.device.version,
-            this.device.model
-          ),
+          {
+            ...new Measure(
+              currentMeasure.apparatusId,
+              currentMeasure.apparatusVersion,
+              currentMeasure.apparatusSensorType,
+              currentMeasure.apparatusTubeType,
+              this.device.uuid,
+              this.device.platform,
+              this.device.version,
+              this.device.model
+            ),
+            startTime: currentTime,
+            endTime: currentTime
+          },
           currentPosition
         );
         patchState({

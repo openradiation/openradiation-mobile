@@ -130,6 +130,13 @@
     "HITS_PER_MIN": "Nb coups/min",
     "INIT": "Initialisation",
     "MEASURE": "Mesure",
+    "MEASUREMENT_SERIES": {
+      "HITS_NUMBER": "Nombre de coups minimun d'une mesure",
+      "MEASURES_DURATION": "Durée minimale d'une mesure",
+      "MEASURES_TITLE": "Mesures",
+      "SERIES_DURATION": "Durée de la série de mesures",
+      "SERIES_TITLE": "Série"
+    },
     "MEASURE_START": "Début de la mesure",
     "ONGOING": "Mesure en cours",
     "REPPORT_LATITUDE": "Latitude",
@@ -148,13 +155,6 @@
       "NO_RAIN": "Pas de pluie",
       "RAIN": "Pluie",
       "TITLE": "Météo"
-    },
-    "MEASUREMENT_SERIES": {
-      "SERIES_TITLE": "Série",
-      "SERIES_DURATION": "Durée de la série de mesures",
-      "MEASURES_TITLE": "Mesures",
-      "MEASURES_DURATION": "Durée minimale d'une mesure",
-      "HITS_NUMBER": "Nombre de coups minimun d'une mesure"
     }
   },
   "MEASURE_MANUAL": {

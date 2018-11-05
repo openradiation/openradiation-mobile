@@ -13,6 +13,7 @@ import {
   CancelMeasure,
   StartMeasure,
   StartWatchPosition,
+  StopMeasureSeriesParams,
   StopWatchPosition
 } from '../../../states/measures/measures.action';
 import { MeasuresState, MeasuresStateModel } from '../../../states/measures/measures.state';
@@ -29,7 +30,7 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
   @Select(MeasuresState.positionAccuracy)
   positionAccuracy$: Observable<number>;
 
-  seriesMeasurementForm?: FormGroup;
+  measureSeriesParamsForm?: FormGroup;
   url = '/measure/series';
   positionAccuracyThreshold = PositionAccuracyThreshold;
 
@@ -49,7 +50,7 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
       ({ measures }: { measures: MeasuresStateModel }) => measures
     );
     if (measureSeriesParams) {
-      this.seriesMeasurementForm = this.formBuilder.group({
+      this.measureSeriesParamsForm = this.formBuilder.group({
         ...measureSeriesParams.model
       });
     }
@@ -83,7 +84,9 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
   startMeasureSeries() {
     this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
       if (connectedDevice) {
-        this.store.dispatch(new StartMeasure(connectedDevice));
+        this.store
+          .dispatch(new StopMeasureSeriesParams())
+          .subscribe(() => this.store.dispatch(new StartMeasure(connectedDevice)));
       }
     });
   }
