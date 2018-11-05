@@ -89,6 +89,10 @@ ion-item {
   &.no-padding {
     --inner-padding-end: 0;
   }
+
+  ion-input {
+    color: inherit;
+  }
 }
 
 ion-button {
