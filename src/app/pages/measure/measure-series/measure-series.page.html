@@ -13,7 +13,7 @@
                     </app-category-label>
                     <ion-label class="title">{{'MEASURES.MEASUREMENT_SERIES.SERIES_DURATION' | translate}}</ion-label>
                     <ion-item>
-                        <ion-label position="fixed">{{measureSeriesParamsForm?.value.seriesDurationLimit}}:00</ion-label>
+                        <ion-label position="fixed">{{measureSeriesParamsForm?.value.seriesDurationLimit}}:00'</ion-label>
                         <ion-range class="range" formControlName="seriesDurationLimit" required min="1" max="24"
                                    step="1" snaps="true"></ion-range>
                     </ion-item>
@@ -22,7 +22,7 @@
                     </app-category-label>
                     <ion-label class="title">{{'MEASURES.MEASUREMENT_SERIES.MEASURES_DURATION' | translate}}</ion-label>
                     <ion-item>
-                        <ion-label position="fixed">{{measureSeriesParamsForm?.value.measureDurationLimit}}'</ion-label>
+                        <ion-label position="fixed">{{measureSeriesParamsForm?.value.measureDurationLimit}}'00''</ion-label>
                         <ion-range class="range" formControlName="measureDurationLimit" required min="5" max="60"
                                    step="5"
                                    snaps="true"></ion-range>
@@ -37,9 +37,8 @@
                 </form>
                 <div class="bottom-buttons">
                     <app-round-button [disabled]="!measureSeriesParamsForm.valid"
-                                      [src]="measureSeriesParamsForm?.valid ? 'assets/img/button-on.png' : 'assets/img/button-off.png'"
+                                      [src]="measureSeriesParamsForm?.valid ? 'assets/img/button-start-measure-on.png' : 'assets/img/button-start-measure-off.png'"
                                       (click)="startMeasureSeries()">
-                        {{'GENERAL.OK' | translate}}
                     </app-round-button>
                     <div class="side-buttons">
                         <ion-button fill="clear" class="flat-button cancel" (click)="cancelMeasureSeries()">
