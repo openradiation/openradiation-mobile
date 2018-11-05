@@ -1,7 +1,6 @@
 <ng-container *ngIf="seriesMeasurementForm">
     <ng-container>
-        <app-header>
-        </app-header>
+        <app-header>{{'MEASUREMENT_SERIES.TITLE' | translate}}</app-header>
 
         <ion-content>
             <div class="content">
@@ -9,11 +8,17 @@
                     <div class="message-style">{{'HISTORY.MESSAGE_PREVENT_MEASURE_SENDING' | translate}}</div>
                 </div>
                 <form class="form" [formGroup]="seriesMeasurementForm" ngxsForm="measures.seriesMeasurementForm">
+                    <app-category-label>
+                        {{'MEASURES.MEASUREMENT_SERIES.SERIES_TITLE' | translate}}
+                    </app-category-label>
                     <ion-label class="title" >{{'MEASURES.MEASUREMENT_SERIES.SERIES_DURATION' | translate}}</ion-label>
                     <ion-item>
                         <ion-label position="fixed">{{seriesMeasurementForm?.value.seriesDurationLimit}}</ion-label>
                         <ion-range formControlName="seriesDurationLimit" required min="1" max="24" step="1" snaps="true"></ion-range>
                     </ion-item>
+                    <app-category-label>
+                        {{'MEASURES.MEASUREMENT_SERIES.MEASURE_TITLE' | translate}}
+                    </app-category-label>
                     <ion-label class="title">{{'MEASURES.MEASUREMENT_SERIES.MEASURE_DURATION' | translate}}</ion-label>
                     <ion-item >
                         <ion-label position="fixed">{{seriesMeasurementForm?.value.measureDurationLimit}}</ion-label>
