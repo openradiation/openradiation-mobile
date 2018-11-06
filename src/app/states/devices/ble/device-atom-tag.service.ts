@@ -1,25 +1,33 @@
 import { Injectable } from '@angular/core';
-import { BLE } from '@ionic-native/ble/ngx';
-import { Observable, of } from 'rxjs';
-import { dispatch, fromPromise } from 'rxjs/internal-compatibility';
+import { Observable } from 'rxjs';
+import { fromPromise } from 'rxjs/internal-compatibility';
 import { filter, map } from 'rxjs/operators';
-import { Measure, Step } from '../measures/measure';
-import { DeviceType } from './abstract-device';
+import { Measure, Step } from '../../measures/measure';
+import { DeviceType } from '../abstract-device';
+import { AbstractBLEDeviceService } from './abstract-ble-device.service';
 import { DeviceAtomTag } from './device-atom-tag';
-import { DeviceOGKit } from './device-og-kit';
 
-// Todo add inheritance when angular issue fixed https://github.com/angular/angular/issues/24011
 @Injectable({
   providedIn: 'root'
 })
-export class DeviceAtomTagService /*extends AbstractDeviceService<DeviceAtomTag>*/ {
+export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag> {
+  // Todo remove when angular issue fixed https://github.com/angular/angular/issues/24011
+  static ngInjectableDef = undefined;
   private firmwareService = '180a';
   private firmwareCharacteristic = '2a26';
   private service = '63462A4A-C28C-4FFD-87A4-2D23A1C72581';
   private settingsCharacteristic = 'ea50cfcd-ac4a-4a48-bf0e-879e548ae157';
   private receiveCharacteristic = '70BC767E-7A1A-4304-81ED-14B9AF54F7BD';
 
-  constructor(protected ble: BLE) {}
+  computeRadiationValue(measure: Measure): number {
+    if (measure.endTime) {
+      const duration = (measure.endTime - measure.startTime) / 1000;
+      const TcNet = measure.hitsNumber / duration;
+      return (TcNet * 0.128 * 3600 - 40) / 1000;
+    } else {
+      throw new Error('Incorrect measure : missing endTime');
+    }
+  }
 
   getDeviceInfo(device: DeviceAtomTag): Observable<Partial<DeviceAtomTag>> {
     return fromPromise(this.ble.read(device.sensorUUID, this.firmwareService, this.firmwareCharacteristic)).pipe(
@@ -54,16 +62,6 @@ export class DeviceAtomTagService /*extends AbstractDeviceService<DeviceAtomTag>
       dataView.setUint16(1, param);
     }
     return this.ble.write(device.sensorUUID, this.service, this.settingsCharacteristic, dataView.buffer);
-  }
-
-  computeRadiationValue(measure: Measure): number {
-    if (measure.endTime) {
-      const duration = (measure.endTime - measure.startTime) / 1000;
-      const TcNet = measure.hitsNumber / duration;
-      return (TcNet * 0.128 * 3600 - 40) / 1000;
-    } else {
-      throw new Error('Incorrect measure : missing endTime');
-    }
   }
 
   startMeasureScan(device: DeviceAtomTag, stopSignal: Observable<any>): Observable<Step> {

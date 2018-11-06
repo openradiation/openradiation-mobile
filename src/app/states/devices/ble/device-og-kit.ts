@@ -1,14 +1,9 @@
 import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
-import {
-  AbstractDevice,
-  DeviceParams,
-  DeviceParamsModel,
-  DeviceParamType,
-  DeviceType,
-  RawDevice
-} from './abstract-device';
+import { DeviceType } from '../abstract-device';
+import { DeviceParams, DeviceParamsModel, DeviceParamType } from '../device-params';
+import { AbstractBLEDevice, RawBLEDevice } from './abstract-ble-device';
 
-export class DeviceOGKit extends AbstractDevice {
+export class DeviceOGKit extends AbstractBLEDevice {
   readonly deviceType = DeviceType.OGKit;
   apparatusVersion = DeviceType.OGKit;
 
@@ -27,7 +22,7 @@ export class DeviceOGKit extends AbstractDevice {
     }
   };
 
-  constructor(rawDevice: RawDevice) {
+  constructor(rawDevice: RawBLEDevice) {
     super(rawDevice);
     const manufacturerData =
       rawDevice.advertising instanceof ArrayBuffer

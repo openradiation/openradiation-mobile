@@ -1,7 +1,9 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
 import { concatMap, map, tap } from 'rxjs/operators';
-import { AbstractDevice, DeviceParams } from './abstract-device';
+import { AbstractDevice } from './abstract-device';
+import { BLEDevicesService } from './ble/ble-devices.service';
+import { DeviceParams } from './device-params';
 import {
   BLEConnectionLost,
   ConnectDevice,
@@ -10,12 +12,12 @@ import {
   DisconnectDevice,
   EditDeviceParams,
   SaveDeviceParams,
-  StartDiscoverDevices,
+  StartDiscoverBLEDevices,
+  StartDiscoverUSBDevices,
   StopDiscoverDevices,
   UpdateDevice,
   UpdateDeviceInfo
 } from './devices.action';
-import { DevicesService } from './devices.service';
 
 export interface DevicesStateModel {
   isScanning: boolean;
@@ -40,7 +42,7 @@ export interface DevicesStateModel {
   }
 })
 export class DevicesState {
-  constructor(private devicesService: DevicesService) {}
+  constructor(private devicesService: BLEDevicesService) {}
 
   @Selector()
   static availableDevices(state: DevicesStateModel): AbstractDevice[] {
@@ -75,8 +77,19 @@ export class DevicesState {
     return state.editedDevice;
   }
 
-  @Action(StartDiscoverDevices, { cancelUncompleted: true })
-  startDiscoverDevices({ patchState }: StateContext<DevicesStateModel>) {
+  @Action(StartDiscoverBLEDevices, { cancelUncompleted: true })
+  startDiscoverBLEDevices({ patchState }: StateContext<DevicesStateModel>) {
+    return this.devicesService.startDiscoverDevices().pipe(
+      tap(() =>
+        patchState({
+          isScanning: true
+        })
+      )
+    );
+  }
+
+  @Action(StartDiscoverUSBDevices, { cancelUncompleted: true })
+  startDiscoverUSBDevices({ patchState }: StateContext<DevicesStateModel>) {
     return this.devicesService.startDiscoverDevices().pipe(
       tap(() =>
         patchState({
@@ -119,7 +132,7 @@ export class DevicesState {
   connectDevice({ getState, patchState, dispatch }: StateContext<DevicesStateModel>, { device }: ConnectDevice) {
     return dispatch(new DisconnectDevice()).pipe(
       concatMap(() => {
-        return this.devicesService.connectBLEDevice(device).pipe(
+        return this.devicesService.connectDevice(device).pipe(
           tap(() => {
             const { knownDevices } = getState();
             if (knownDevices.find(knownDevice => knownDevice.sensorUUID === device.sensorUUID)) {
@@ -149,7 +162,7 @@ export class DevicesState {
   disconnectDevice({ getState, patchState }: StateContext<DevicesStateModel>) {
     const { connectedDevice } = getState();
     if (connectedDevice) {
-      return this.devicesService.disconnectBLEDevice(connectedDevice).pipe(
+      return this.devicesService.disconnectDevice(connectedDevice).pipe(
         tap(() => {
           patchState({
             connectedDevice: undefined

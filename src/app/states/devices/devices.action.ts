@@ -1,7 +1,11 @@
 import { AbstractDevice } from './abstract-device';
 
-export class StartDiscoverDevices {
-  static readonly type = '[Devices] Start discover devices';
+export class StartDiscoverBLEDevices {
+  static readonly type = '[Devices] Start discover BLE devices';
+}
+
+export class StartDiscoverUSBDevices {
+  static readonly type = '[Devices] Start discover USB devices';
 }
 
 export class StopDiscoverDevices {

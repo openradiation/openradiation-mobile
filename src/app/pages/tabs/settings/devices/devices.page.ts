@@ -10,7 +10,8 @@ import {
   DeviceConnectionLost,
   DisconnectDevice,
   EditDeviceParams,
-  StartDiscoverDevices,
+  StartDiscoverBLEDevices,
+  StartDiscoverUSBDevices,
   StopDiscoverDevices,
   UpdateDeviceInfo
 } from '../../../../states/devices/devices.action';
@@ -54,7 +55,8 @@ export class DevicesPage extends AutoUnsubscribePage {
         .pipe(ofActionSuccessful(ConnectDevice, DeviceConnectionLost))
         .subscribe(() => (this.connectingDevice = undefined))
     );
-    this.store.dispatch(new StartDiscoverDevices()).subscribe();
+    this.store.dispatch(new StartDiscoverBLEDevices()).subscribe();
+    this.store.dispatch(new StartDiscoverUSBDevices()).subscribe();
   }
 
   pageLeave() {
