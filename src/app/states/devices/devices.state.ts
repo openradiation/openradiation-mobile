@@ -119,7 +119,7 @@ export class DevicesState {
   connectDevice({ getState, patchState, dispatch }: StateContext<DevicesStateModel>, { device }: ConnectDevice) {
     return dispatch(new DisconnectDevice()).pipe(
       concatMap(() => {
-        return this.devicesService.connectDevice(device).pipe(
+        return this.devicesService.connectBLEDevice(device).pipe(
           tap(() => {
             const { knownDevices } = getState();
             if (knownDevices.find(knownDevice => knownDevice.sensorUUID === device.sensorUUID)) {
@@ -149,7 +149,7 @@ export class DevicesState {
   disconnectDevice({ getState, patchState }: StateContext<DevicesStateModel>) {
     const { connectedDevice } = getState();
     if (connectedDevice) {
-      return this.devicesService.disconnectDevice(connectedDevice).pipe(
+      return this.devicesService.disconnectBLEDevice(connectedDevice).pipe(
         tap(() => {
           patchState({
             connectedDevice: undefined

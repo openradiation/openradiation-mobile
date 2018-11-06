@@ -10,6 +10,7 @@ import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
+import { Serial } from '@ionic-native/serial/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
@@ -63,7 +64,8 @@ import { UserState } from './states/user/user.state';
     ScreenOrientation,
     DatePipe,
     SocialSharing,
-    Camera
+    Camera,
+    Serial
   ],
   bootstrap: [AppComponent]
 })

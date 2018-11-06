@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BLE } from '@ionic-native/ble/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { Serial } from '@ionic-native/serial/ngx';
 import { AlertController, Platform, ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, ofActionSuccessful, Store } from '@ngxs/store';
@@ -25,6 +26,7 @@ import { DeviceAtomTag } from './device-atom-tag';
 import { DeviceAtomTagService } from './device-atom-tag.service';
 import { DeviceOGKit } from './device-og-kit';
 import { DeviceOGKitService } from './device-og-kit.service';
+import { DeviceSafeCast } from './device-safe-cast';
 import { DeviceSafeCastService } from './device-safe-cast.service';
 import {
   BLEConnectionLost,
@@ -33,7 +35,6 @@ import {
   StartDiscoverDevices,
   StopDiscoverDevices
 } from './devices.action';
-import { DeviceSafeCast } from './device-safe-cast';
 
 @Injectable({
   providedIn: 'root'
@@ -54,7 +55,8 @@ export class DevicesService {
     private deviceAtomTagService: DeviceAtomTagService,
     private deviceSafeCastService: DeviceSafeCastService,
     private toastController: ToastController,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private serial: Serial
   ) {
     this.actions$.pipe(ofActionDispatched(StartDiscoverDevices)).subscribe(() => {
       if (this.currentAlert) {
@@ -75,6 +77,28 @@ export class DevicesService {
   }
 
   startDiscoverDevices(): Observable<any> {
+    this.serial
+      .requestPermission({ vid: '4D8', pid: 'F46F', driver: 'CdcAcmSerialDriver' })
+      .then(() => {
+        this.serial
+          .open({
+            baudRate: 38400,
+            dataBits: 4,
+            stopBits: 1,
+            parity: 0,
+            dtr: false,
+            rts: false,
+            sleepOnPause: false
+          })
+          .then(() => {
+            console.log('Serial connection opened');
+          });
+      })
+      .catch((error: any) => console.log(error));
+    return this.startDiscoverBLEDevices();
+  }
+
+  private startDiscoverBLEDevices(): Observable<any> {
     return fromPromise(
       this.ble
         .isEnabled()
@@ -89,10 +113,10 @@ export class DevicesService {
           this.onBLEError();
           throw err;
         })
-    ).pipe(tap(() => this.discoverDevices()));
+    ).pipe(tap(() => this.discoverBLEDevices()));
   }
 
-  private discoverDevices() {
+  private discoverBLEDevices() {
     this.diagnostic.registerBluetoothStateChangeHandler((state: string) => {
       switch (state) {
         case this.diagnostic.bluetoothState.POWERED_OFF:
@@ -146,7 +170,7 @@ export class DevicesService {
       .subscribe(devices => this.store.dispatch(new DevicesDiscovered(devices)));
   }
 
-  connectDevice(device: AbstractDevice): Observable<any> {
+  connectBLEDevice(device: AbstractDevice): Observable<any> {
     const connection = this.ble.connect(device.sensorUUID).pipe(
       concatMap(() => this.saveDeviceParams(device)),
       shareReplay()
@@ -155,7 +179,7 @@ export class DevicesService {
     return connection.pipe(take(1));
   }
 
-  disconnectDevice(device: AbstractDevice): Observable<any> {
+  disconnectBLEDevice(device: AbstractDevice): Observable<any> {
     return fromPromise(this.ble.disconnect(device.sensorUUID));
   }
 

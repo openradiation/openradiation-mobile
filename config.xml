@@ -95,6 +95,7 @@
     <plugin name="cordova-plugin-screen-orientation" spec="3.0.1" />
     <plugin name="cordova-plugin-x-socialsharing" spec="5.4.1" />
     <plugin name="cordova-plugin-camera" spec="4.0.3" />
+    <plugin name="fr.drangies.cordova.serial" spec="git+https://github.com/tkem/cordovarduino.git#cordova-android-7" />
     <engine name="android" spec="7.1.1" />
     <engine name="ios" spec="4.5.5" />
 </widget>
