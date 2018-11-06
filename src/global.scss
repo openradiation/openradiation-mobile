@@ -63,20 +63,20 @@
 }
 
 ion-content {
-  background: linear-gradient(to bottom, $base-color, $third-color);
+  --background: linear-gradient(to bottom, #{$base-color}, #{$third-color});
 }
 
 ion-list {
-  margin: 0;
-  background: transparent;
+  --ion-item-background: transparent;
 }
 
 ion-item {
-  --detail-push-color: rgba(255, 255, 255, 1);
+  --detail-icon-color: rgba(255, 255, 255, 1);
+  --detail-icon-opacity: 0.8;
   color: white;
   --ion-font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
   font-weight: 200;
-  --background-active: transparent;
+  --background-activated: transparent;
   --background: transparent;
   --border-color: transparent;
 
@@ -88,6 +88,10 @@ ion-item {
 
   &.no-padding {
     --inner-padding-end: 0;
+  }
+
+  ion-input {
+    color: inherit;
   }
 }
 
