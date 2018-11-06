@@ -8,6 +8,7 @@ import { MeasureRoutingModule } from './measure-routing.module';
 import { MeasureScanPageModule } from './measure-scan/measure-scan.module';
 import { MeasureStepsPageModule } from './measure-steps/measure-steps.module';
 import { MeasureSeriesPageModule } from './measure-series/measure-series.module';
+import { MeasureReportSeriesPageModule } from './measure-report-series/measure-report-series.module';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { MeasureSeriesPageModule } from './measure-series/measure-series.module'
     MeasureRoutingModule,
     MeasureSeriesPageModule,
     MeasureReportPageModule,
+    MeasureReportSeriesPageModule,
     MeasureScanPageModule,
     MeasureStepsPageModule
   ],

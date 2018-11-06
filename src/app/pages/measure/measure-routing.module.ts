@@ -5,6 +5,7 @@ import { MeasureReportPage } from './measure-report/measure-report-page';
 import { MeasureScanPage } from './measure-scan/measure-scan.page';
 import { MeasureStepsPage } from './measure-steps/measure-steps.page';
 import { MeasureSeriesPage } from './measure-series/measure-series-page';
+import { MeasureReportSeriesPage } from './measure-report-series/measure-report-series-page';
 
 const routes: Routes = [
   {
@@ -18,6 +19,10 @@ const routes: Routes = [
   {
     path: 'report',
     component: MeasureReportPage
+  },
+  {
+    path: 'report-series',
+    component: MeasureReportSeriesPage
   },
   {
     path: 'steps',
