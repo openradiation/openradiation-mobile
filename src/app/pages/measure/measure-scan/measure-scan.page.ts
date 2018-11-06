@@ -11,6 +11,7 @@ import {
   HitsAccuracy,
   HitsAccuracyThreshold,
   Measure,
+  MeasureSeries,
   PositionAccuracyThreshold
 } from '../../../states/measures/measure';
 import {
@@ -31,6 +32,9 @@ import { MeasuresState } from '../../../states/measures/measures.state';
 export class MeasureScanPage extends AutoUnsubscribePage {
   @Select(MeasuresState.currentMeasure)
   currentMeasure$: Observable<Measure | undefined>;
+
+  @Select(MeasuresState.currentSeries)
+  currentSeries$: Observable<MeasureSeries | undefined>;
 
   @Select(DevicesState.connectedDevice)
   connectedDevice$: Observable<AbstractDevice | undefined>;

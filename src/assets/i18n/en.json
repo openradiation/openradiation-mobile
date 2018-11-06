@@ -104,6 +104,9 @@
   "MAP": {
     "NO_CONNECTION": "No connection available to display the map"
   },
+  "MEASUREMENT_SERIES": {
+    "TITLE": "Measurement series"
+  },
   "MEASURES": {
     "AUTO_PUBLISH": "Auto publications",
     "AUTO_PUBLISH_NOTICE": {
@@ -134,6 +137,11 @@
       "HITS_NUMBER": "Minimum hits number of a measure",
       "MEASURES_DURATION": "Minimum duration of a measure",
       "MEASURES_TITLE": "Measures",
+      "MESSAGE_SCAN": {
+        "=0": "First measurement in progress",
+        "=1": "One measurement taken since",
+        "other": "# measurements taken since"
+      },
       "SERIES_DURATION": "Duration of the series of measures",
       "SERIES_TITLE": "Series"
     },
@@ -160,10 +168,6 @@
   "MEASURE_MANUAL": {
     "ALERT": "You must be logged in before you can fill out a manual measurement report.",
     "TITLE": "Manual input"
-  },
-  "MEASUREMENT_SERIES": {
-    "ALERT": "You must be logged in before you can fill out a manual measurement report.",
-    "TITLE": "Measurement series"
   },
   "POSITION": {
     "DENIED_ALWAYS": {

@@ -104,6 +104,9 @@
   "MAP": {
     "NO_CONNECTION": "Aucune connexion disponible pour afficher la carte"
   },
+  "MEASUREMENT_SERIES": {
+    "TITLE": "Série de mesures"
+  },
   "MEASURES": {
     "AUTO_PUBLISH": "Publication automatique",
     "AUTO_PUBLISH_NOTICE": {
@@ -134,6 +137,11 @@
       "HITS_NUMBER": "Nombre de coups minimun d'une mesure",
       "MEASURES_DURATION": "Durée minimale d'une mesure",
       "MEASURES_TITLE": "Mesures",
+      "MESSAGE_SCAN": {
+        "=0": "Première mesure en cours",
+        "=1": "Une mesure prise depuis",
+        "other": "# mesures prises depuis"
+      },
       "SERIES_DURATION": "Durée de la série de mesures",
       "SERIES_TITLE": "Série"
     },
@@ -160,10 +168,6 @@
   "MEASURE_MANUAL": {
     "ALERT": "Vous devez vous identifier pour pouvoir saisir manuellemment une mesure.",
     "TITLE": "Saisie manuelle"
-  },
-  "MEASUREMENT_SERIES": {
-    "ALERT": "Vous devez vous identifier pour pouvoir saisir manuellemment une mesure.",
-    "TITLE": "Série de mesures"
   },
   "POSITION": {
     "DENIED_ALWAYS": {

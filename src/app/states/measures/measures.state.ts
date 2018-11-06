@@ -115,6 +115,11 @@ export class MeasuresState {
   }
 
   @Selector()
+  static currentSeries(state: MeasuresStateModel): MeasureSeries | undefined {
+    return state.currentSeries;
+  }
+
+  @Selector()
   static measures(state: MeasuresStateModel): Measure[] {
     return state.measures;
   }
