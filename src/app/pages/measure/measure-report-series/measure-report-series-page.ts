@@ -19,51 +19,17 @@ export class MeasureReportSeriesPage extends AutoUnsubscribePage {
   @Select(MeasuresState.currentMeasure)
   currentMeasure$: Observable<Measure | undefined>;
 
-  @Select(MeasuresState.expertMode)
-  expertMode$: Observable<boolean>;
+  @Select(MeasuresState.currentSeries)
+  currentSeries$: Observable<boolean>;
 
   @Select(UserState.login)
   login$: Observable<string | undefined>;
 
   measureReportForm?: FormGroup;
-  reportScan = true;
-  positionChangeSpeedOverLimit = false;
 
   positionAccuracyThreshold = PositionAccuracyThreshold;
 
   url = '/measure/report-series';
-
-  measurementEnvironmentOptions: SelectIconOption[];
-
-  measurementHeightOptions: SelectIconOption[] = [
-    {
-      iconOn: 'assets/img/icon-floor-on.png',
-      iconOff: 'assets/img/icon-floor-off.png',
-      label: <string>_('MEASURES.SENSOR_POSITION.FLOOR'),
-      value: 0
-    },
-    {
-      iconOn: 'assets/img/icon-elevated-on.png',
-      iconOff: 'assets/img/icon-elevated-off.png',
-      label: <string>_('MEASURES.SENSOR_POSITION.1_METER_HIGH'),
-      value: 1
-    }
-  ];
-
-  rainOptions: SelectIconOption[] = [
-    {
-      iconOn: 'assets/img/icon-sun-on.png',
-      iconOff: 'assets/img/icon-sun-off.png',
-      label: <string>_('MEASURES.WEATHER.NO_RAIN'),
-      value: false
-    },
-    {
-      iconOn: 'assets/img/icon-rain-on.png',
-      iconOff: 'assets/img/icon-rain-off.png',
-      label: <string>_('MEASURES.WEATHER.RAIN'),
-      value: true
-    }
-  ];
 
   constructor(protected router: Router) {
     super(router);
