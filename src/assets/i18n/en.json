@@ -147,8 +147,8 @@
     },
     "MEASURE_START": "Measurement start",
     "ONGOING": "Measurement in progress",
-    "REPPORT_LATITUDE": "Latitude",
-    "REPPORT_LONGITUDE": "Longitude",
+    "REPORT_LATITUDE": "Latitude",
+    "REPORT_LONGITUDE": "Longitude",
     "SENSOR_POSITION": {
       "1_METER_HIGH": "1 m above the ground",
       "FLOOR": "On the ground",

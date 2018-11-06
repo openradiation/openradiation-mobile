@@ -60,6 +60,7 @@ export class MeasureScanPage extends AutoUnsubscribePage {
 
   pageEnter() {
     super.pageEnter();
+    this.store.dispatch(new StartWatchPosition());
     this.currentSeries$
       .pipe(take(1))
       .subscribe(currentSeries => (this.canEndMeasureScan = currentSeries !== undefined));
@@ -90,6 +91,10 @@ export class MeasureScanPage extends AutoUnsubscribePage {
     });
   }
 
+  pageLeave() {
+    this.store.dispatch(new StopWatchPosition());
+  }
+
   updateHitsAccuracy(measure?: Measure) {
     if (measure) {
       if (measure.hitsNumber >= HitsAccuracyThreshold.Accurate) {
@@ -110,12 +115,15 @@ export class MeasureScanPage extends AutoUnsubscribePage {
 
   stopScan(measure?: Measure) {
     if (measure && measure.accuracy && measure.accuracy < PositionAccuracyThreshold.Inaccurate) {
-      this.store.dispatch(new StartWatchPosition());
       this.subscriptions.push(
-        this.actions$.pipe(ofActionSuccessful(PositionChanged)).subscribe(() => {
-          this.store.dispatch(new StopMeasureScan());
-          this.store.dispatch(new StopWatchPosition());
-        })
+        this.actions$
+          .pipe(
+            ofActionSuccessful(PositionChanged),
+            take(1)
+          )
+          .subscribe(() => {
+            this.store.dispatch(new StopMeasureScan());
+          })
       );
     } else {
       this.store.dispatch(new StopMeasureScan());
