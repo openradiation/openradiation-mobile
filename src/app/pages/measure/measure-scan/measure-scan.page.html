@@ -121,12 +121,13 @@
             </div>
             <div class="message" *ngIf="currentSeries$ | async as currentSeries">
                 <div class="message-series">{{currentSeries.measures.length | i18nPlural:
-                    ('MEASURES.MEASUREMENT_SERIES.MESSAGE_SCAN' | translate)}} <span *ngIf="currentSeries.measures.length > 0">{{currentSeries.startTime | date: 'HH:mm\'\'\'ss"'}}</span>
+                    ('MEASURES.MEASUREMENT_SERIES.MESSAGE_SCAN' | translate)}} <span
+                            *ngIf="currentSeries.measures.length > 0">{{currentSeries.startTime | date: 'HH:mm\'\'\'ss"'}}</span>
                 </div>
             </div>
             <div class="bottom-buttons">
-                <app-round-button [disabled]="!(currentMeasure.hitsNumber >= hitsAccuracyThreshold.Accurate)"
-                                  [src]="currentMeasure.hitsNumber >= hitsAccuracyThreshold.Accurate ? 'assets/img/button-on.png' : 'assets/img/button-off.png'"
+                <app-round-button [disabled]="!canEndMeasureScan"
+                                  [src]="canEndMeasureScan ? 'assets/img/button-on.png' : 'assets/img/button-off.png'"
                                   (click)="stopScan(currentMeasure)">
                     {{'GENERAL.END' | translate}}
                 </app-round-button>

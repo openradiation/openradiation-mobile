@@ -45,6 +45,8 @@ export class MeasureScanPage extends AutoUnsubscribePage {
 
   positionAccuracyThreshold = PositionAccuracyThreshold;
 
+  canEndMeasureScan = false;
+
   url = '/measure/scan';
 
   constructor(
@@ -58,6 +60,9 @@ export class MeasureScanPage extends AutoUnsubscribePage {
 
   pageEnter() {
     super.pageEnter();
+    this.currentSeries$
+      .pipe(take(1))
+      .subscribe(currentSeries => (this.canEndMeasureScan = currentSeries !== undefined));
     this.subscriptions.push(
       this.currentMeasure$.subscribe(measure => this.updateHitsAccuracy(measure)),
       this.actions$
@@ -88,6 +93,7 @@ export class MeasureScanPage extends AutoUnsubscribePage {
   updateHitsAccuracy(measure?: Measure) {
     if (measure) {
       if (measure.hitsNumber >= HitsAccuracyThreshold.Accurate) {
+        this.canEndMeasureScan = true;
         this.hitsAccuracy = HitsAccuracy.Accurate;
       } else if (measure.hitsNumber >= HitsAccuracyThreshold.Good) {
         this.hitsAccuracy = HitsAccuracy.Good;
