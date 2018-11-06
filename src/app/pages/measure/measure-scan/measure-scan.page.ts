@@ -46,6 +46,7 @@ export class MeasureScanPage extends AutoUnsubscribePage {
   positionAccuracyThreshold = PositionAccuracyThreshold;
 
   canEndMeasureScan = false;
+  isMeasureSeries = false;
 
   url = '/measure/scan';
 
@@ -61,14 +62,21 @@ export class MeasureScanPage extends AutoUnsubscribePage {
   pageEnter() {
     super.pageEnter();
     this.store.dispatch(new StartWatchPosition());
-    this.currentSeries$
-      .pipe(take(1))
-      .subscribe(currentSeries => (this.canEndMeasureScan = currentSeries !== undefined));
+    this.currentSeries$.pipe(take(1)).subscribe(currentSeries => {
+      this.isMeasureSeries = currentSeries !== undefined;
+      this.canEndMeasureScan = this.isMeasureSeries;
+    });
     this.subscriptions.push(
       this.currentMeasure$.subscribe(measure => this.updateHitsAccuracy(measure)),
-      this.actions$
-        .pipe(ofActionSuccessful(StopMeasureScan))
-        .subscribe(() => this.navController.navigateRoot(['measure', 'report'], true)),
+      this.actions$.pipe(ofActionSuccessful(StopMeasureScan)).subscribe(() => {
+        let url;
+        if (this.isMeasureSeries) {
+          url = ['measure', 'report-series'];
+        } else {
+          url = ['measure', 'report'];
+        }
+        this.navController.navigateRoot(url, true);
+      }),
       this.actions$.pipe(ofActionSuccessful(CancelMeasure)).subscribe(() =>
         this.navController.navigateRoot([
           'tabs',
