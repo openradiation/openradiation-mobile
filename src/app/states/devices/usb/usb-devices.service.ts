@@ -3,9 +3,8 @@ import { Serial } from '@ionic-native/serial/ngx';
 import { AlertController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
-import { tap } from 'rxjs/operators';
 import { StartDiscoverUSBDevices, USBDevicesDiscovered } from '../devices.action';
 import { DevicePocketGeiger } from './device-pocket-geiger';
 
@@ -32,13 +31,22 @@ export class USBDevicesService {
   }
 
   startDiscoverDevices(): Observable<any> {
-    const device = new DevicePocketGeiger();
-    return fromPromise(
-      this.serial.requestPermission({ vid: device.vid, pid: device.pid, driver: device.driver }).catch(err => {
-        this.onUSBError();
-        throw err;
-      })
-    ).pipe(tap(() => this.store.dispatch(new USBDevicesDiscovered([device]))));
+    const usbDevices = [new DevicePocketGeiger()];
+    return forkJoin(
+      usbDevices.map(device =>
+        fromPromise(
+          this.serial
+            .requestPermission({ vid: device.vid, pid: device.pid, driver: device.driver })
+            .then(() => this.store.dispatch(new USBDevicesDiscovered([device])))
+            .catch(err => {
+              if (err === 'Permission to connect to the device was denied!') {
+                this.onUSBError();
+                throw err;
+              }
+            })
+        )
+      )
+    );
   }
 
   private onUSBError() {
