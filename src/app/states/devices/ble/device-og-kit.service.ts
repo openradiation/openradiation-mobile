@@ -9,7 +9,9 @@ import { ApparatusSensorType } from '../abstract-device';
 import { AbstractBLEDeviceService } from './abstract-ble-device.service';
 import { DeviceOGKit } from './device-og-kit';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
   private service = '2220';
   private sendCharacteristic = '2222';

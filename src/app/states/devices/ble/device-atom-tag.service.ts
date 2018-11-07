@@ -9,7 +9,9 @@ import { DeviceType } from '../abstract-device';
 import { AbstractBLEDeviceService } from './abstract-ble-device.service';
 import { DeviceAtomTag } from './device-atom-tag';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag> {
   private firmwareService = '180a';
   private firmwareCharacteristic = '2a26';

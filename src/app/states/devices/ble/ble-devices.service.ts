@@ -20,7 +20,9 @@ import { DeviceAtomTag } from './device-atom-tag';
 import { DeviceOGKit } from './device-og-kit';
 import { DeviceSafeCast } from './device-safe-cast';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class BLEDevicesService {
   private currentAlert?: any;
   private scanDuration = 3;

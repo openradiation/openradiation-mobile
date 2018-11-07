@@ -6,7 +6,9 @@ import { DeviceOGKitService } from './ble/device-og-kit.service';
 import { DeviceSafeCastService } from './ble/device-safe-cast.service';
 import { DevicePocketGeigerService } from './usb/device-pocket-geiger.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class DevicesService {
   private services: { [K in DeviceType]: AbstractDeviceService<AbstractDevice> };
 

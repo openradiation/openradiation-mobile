@@ -5,7 +5,9 @@ import { Measure, Step } from '../../measures/measure';
 import { AbstractUSBDeviceService } from './abstract-usb-device.service';
 import { DevicePocketGeiger } from './device-pocket-geiger';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class DevicePocketGeigerService extends AbstractUSBDeviceService<DevicePocketGeiger> {
   constructor(protected serial: Serial) {
     super(serial);
