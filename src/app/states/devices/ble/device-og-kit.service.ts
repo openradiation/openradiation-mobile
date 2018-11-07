@@ -137,10 +137,10 @@ export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
   }
 
   private decodeStringArray(array: Uint8Array): string {
-    return new TextDecoder('utf8').decode(array.slice(2, 2 + array[1]));
+    return this.textDecoder.decode(array.slice(2, 2 + array[1]));
   }
 
-  private decodeDataPackage(buffer: ArrayBuffer): Step | null {
+  protected decodeDataPackage(buffer: ArrayBuffer): Step | null {
     const dataView = new DataView(buffer);
     if (
       dataView.getUint8(this.RECEIVE_HIT_POSITION) === this.RECEIVE_HIT &&

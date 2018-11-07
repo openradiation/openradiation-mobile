@@ -6,6 +6,8 @@ import { AbstractDevice } from './abstract-device';
 import { DeviceConnectionLost } from './devices.action';
 
 export abstract class AbstractDeviceService<T extends AbstractDevice> {
+  protected textDecoder = new TextDecoder('utf8');
+
   constructor(protected store: Store) {}
 
   abstract getDeviceInfo(device: T): Observable<Partial<T>>;
@@ -25,7 +27,9 @@ export abstract class AbstractDeviceService<T extends AbstractDevice> {
     return connection.pipe(take(1));
   }
 
-  abstract getDeviceConnection(device: T): Observable<any>;
+  protected abstract getDeviceConnection(device: T): Observable<any>;
 
   abstract disconnectDevice(device: T): Observable<any>;
+
+  protected abstract decodeDataPackage(buffer: ArrayBuffer | ArrayBuffer[]): Step | null;
 }

@@ -60,9 +60,9 @@ export class DeviceSafeCastService extends AbstractBLEDeviceService<DeviceSafeCa
     return this.ble.stopNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
   }
 
-  private decodeDataPackage(buffers: ArrayBuffer[]): Step | null {
+  protected decodeDataPackage(buffers: ArrayBuffer[]): Step | null {
     const data = buffers
-      .map(buffer => new TextDecoder('utf8').decode(buffer))
+      .map(buffer => this.textDecoder.decode(buffer))
       .join('')
       .split(',');
     return {

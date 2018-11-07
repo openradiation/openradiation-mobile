@@ -10,7 +10,7 @@ export abstract class AbstractBLEDeviceService<T extends AbstractBLEDevice> exte
     super(store);
   }
 
-  getDeviceConnection(device: T): Observable<any> {
+  protected getDeviceConnection(device: T): Observable<any> {
     return this.ble.connect(device.sensorUUID);
   }
 

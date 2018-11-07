@@ -8,6 +8,7 @@ export class DevicePocketGeiger extends AbstractUSBDevice {
   readonly pid = 'F46F';
   readonly vid = '4D8';
   readonly baudRate = 38400;
+  readonly dataBits = 8;
 
   constructor() {
     super();

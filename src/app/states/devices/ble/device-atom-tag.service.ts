@@ -36,7 +36,7 @@ export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag
   getDeviceInfo(device: DeviceAtomTag): Observable<Partial<DeviceAtomTag>> {
     return fromPromise(this.ble.read(device.sensorUUID, this.firmwareService, this.firmwareCharacteristic)).pipe(
       map(buffer => {
-        const firmwareVersion = new TextDecoder('utf8').decode(new Uint8Array(buffer));
+        const firmwareVersion = this.textDecoder.decode(new Uint8Array(buffer));
         return {
           apparatusVersion: `${DeviceType.AtomTag} ${firmwareVersion.replace(/\0/g, '')}`
         };
@@ -84,7 +84,7 @@ export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag
     return this.ble.stopNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
   }
 
-  private decodeDataPackage(buffer: ArrayBuffer): Step | null {
+  protected decodeDataPackage(buffer: ArrayBuffer): Step | null {
     const dataView = new DataView(buffer);
     return {
       ts: Date.now(),

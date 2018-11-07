@@ -5,4 +5,5 @@ export abstract class AbstractUSBDevice extends AbstractDevice {
   abstract readonly vid: string;
   readonly driver = 'CdcAcmSerialDriver';
   abstract readonly baudRate: number;
+  abstract readonly dataBits: number;
 }

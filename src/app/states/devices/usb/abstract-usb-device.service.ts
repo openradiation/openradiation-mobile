@@ -10,11 +10,11 @@ export abstract class AbstractUSBDeviceService<T extends AbstractUSBDevice> exte
     super(store);
   }
 
-  getDeviceConnection(device: T): Observable<any> {
+  protected getDeviceConnection(device: T): Observable<any> {
     return fromPromise(
       this.serial.open({
         baudRate: device.baudRate,
-        dataBits: 4,
+        dataBits: device.dataBits,
         stopBits: 1,
         parity: 0,
         dtr: false,
