@@ -54,6 +54,15 @@
     padding: 10px 0;
   }
 
+  .position {
+    display: flex;
+    align-items: center;
+    app-gps-indicator {
+      margin-right: 16px;
+      flex: none;
+    }
+  }
+
   .values {
     font-size: 14px;
     padding: 0;
@@ -71,13 +80,62 @@
       &.custom-disabled {
         pointer-events: none;
       }
-
+      &:not(.custom-disabled) {
+        ion-input,
+        ion-datetime,
+        ion-textarea {
+          background: $forth-color;
+          border-radius: 10px;
+          color: $second-color;
+        }
+        ion-input,
+        ion-datetime {
+          height: 26px;
+          line-height: 26px;
+          padding: 0 8px;
+        }
+        ion-input {
+          --padding-top: 4px;
+          --padding-bottom: 4px;
+        }
+        ion-datetime {
+          padding: 4px 8px;
+          width: 100%;
+          text-align: right;
+          --ion-placeholder-text-color: #{transparentize($second-color, 0.5)};
+        }
+        ion-textarea {
+          --padding-start: 8px;
+        }
+        &.has-suffix {
+          ion-input {
+            border-radius: 10px 0 0 10px;
+          }
+        }
+        .unit {
+          background: $forth-color;
+          border-radius: 0 10px 10px 0;
+          color: $second-color;
+          margin-left: -1px;
+          height: 26px;
+          line-height: 26px;
+        }
+        &.description {
+          margin: 0;
+          margin-top: 10px;
+        }
+      }
       ion-label {
         color: $second-color;
         font-size: 14px;
       }
+
       .unit {
         padding-right: 8px;
+      }
+
+      ion-input {
+        text-align: right;
       }
     }
   }
@@ -90,6 +148,7 @@
       ion-item {
         ion-label {
           color: $third-color;
+          min-width: 150px;
         }
 
         ion-datetime {
@@ -118,14 +177,6 @@
     margin: 10px 30px;
     border: 1px solid $forth-color;
     border-radius: 2px;
-  }
-
-  .description {
-    color: $second-color;
-    --border-color: transparent;
-    background: $forth-color;
-    border-radius: 10px;
-    margin: 20px;
   }
 
   .tags {

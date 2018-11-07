@@ -25,7 +25,9 @@ export class MeasureReportSeriesPage extends AutoUnsubscribePage {
   @Select(UserState.login)
   login$: Observable<string | undefined>;
 
-  measureReportForm?: FormGroup;
+  measureReportSeriesForm?: FormGroup;
+  reportScan = true;
+  positionChangeSpeedOverLimit = false;
 
   positionAccuracyThreshold = PositionAccuracyThreshold;
 
@@ -104,5 +106,5 @@ export class MeasureReportSeriesPage extends AutoUnsubscribePage {
 
   stopReportSeries() {}
 
-  cancelMeasure() {}
+  cancelRepotSeries() {}
 }
