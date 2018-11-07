@@ -1,18 +1,20 @@
 import { Injectable } from '@angular/core';
+import { BLE } from '@ionic-native/ble/ngx';
+import { Store } from '@ngxs/store';
 import { Observable, of } from 'rxjs';
 import { bufferCount, filter, map, tap } from 'rxjs/operators';
 import { Measure, Step } from '../../measures/measure';
 import { AbstractBLEDeviceService } from './abstract-ble-device.service';
 import { DeviceSafeCast } from './device-safe-cast';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class DeviceSafeCastService extends AbstractBLEDeviceService<DeviceSafeCast> {
-  // Todo remove when angular issue fixed https://github.com/angular/angular/issues/24011
-  static ngInjectableDef = undefined;
   private service = 'ef080d8c-c3be-41ff-bd3f-05a5f4795d7f';
   private receiveCharacteristic = 'a1e8f5b1-696b-4e4c-87c6-69dfe0b0093b';
+
+  constructor(protected ble: BLE, protected store: Store) {
+    super(ble, store);
+  }
 
   computeRadiationValue(measure: Measure): number {
     if (measure.endTime) {

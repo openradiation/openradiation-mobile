@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { BLE } from '@ionic-native/ble/ngx';
+import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { filter, map, scan, shareReplay, take, tap } from 'rxjs/operators';
@@ -7,12 +9,8 @@ import { ApparatusSensorType } from '../abstract-device';
 import { AbstractBLEDeviceService } from './abstract-ble-device.service';
 import { DeviceOGKit } from './device-og-kit';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
-  // Todo remove when angular issue fixed https://github.com/angular/angular/issues/24011
-  static ngInjectableDef = undefined;
   private service = '2220';
   private sendCharacteristic = '2222';
   private receiveCharacteristic = '2221';
@@ -49,6 +47,10 @@ export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
   private RECEIVE_TEMPERATURE_POSITION = 2;
   private RECEIVE_VOLTAGE = 18;
   private RECEIVE_VOLTAGE_POSITION = 9;
+
+  constructor(protected ble: BLE, protected store: Store) {
+    super(ble, store);
+  }
 
   computeRadiationValue(measure: Measure): number {
     if (measure.endTime) {

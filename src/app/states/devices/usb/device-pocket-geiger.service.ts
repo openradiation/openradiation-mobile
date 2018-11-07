@@ -1,34 +1,15 @@
 import { Injectable } from '@angular/core';
+import { Serial } from '@ionic-native/serial/ngx';
 import { Observable, of } from 'rxjs';
 import { Measure, Step } from '../../measures/measure';
 import { AbstractUSBDeviceService } from './abstract-usb-device.service';
 import { DevicePocketGeiger } from './device-pocket-geiger';
 
-/*this.serial
-  .requestPermission({ vid: '4D8', pid: 'F46F', driver: 'CdcAcmSerialDriver' })
-  .then(() => {
-    this.serial
-      .open({
-        baudRate: 38400,
-        dataBits: 4,
-        stopBits: 1,
-        parity: 0,
-        dtr: false,
-        rts: false,
-        sleepOnPause: false
-      })
-      .then(() => {
-        console.log('Serial connection opened');
-      });
-  })
-  .catch((error: any) => console.log(error));*/
-
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class DevicePocketGeigerService extends AbstractUSBDeviceService<DevicePocketGeiger> {
-  // Todo remove when angular issue fixed https://github.com/angular/angular/issues/24011
-  static ngInjectableDef = undefined;
+  constructor(protected serial: Serial) {
+    super(serial);
+  }
 
   computeRadiationValue(measure: Measure): number {
     if (measure.endTime) {

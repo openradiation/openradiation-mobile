@@ -18,6 +18,8 @@ import {
   UpdateDevice,
   UpdateDeviceInfo
 } from './devices.action';
+import { DevicesService } from './devices.service';
+import { USBDevicesService } from './usb/usb-devices.service';
 
 export interface DevicesStateModel {
   isScanning: boolean;
@@ -42,7 +44,11 @@ export interface DevicesStateModel {
   }
 })
 export class DevicesState {
-  constructor(private devicesService: BLEDevicesService) {}
+  constructor(
+    private devicesService: DevicesService,
+    private bleDevicesService: BLEDevicesService,
+    private usbDevicesService: USBDevicesService
+  ) {}
 
   @Selector()
   static availableDevices(state: DevicesStateModel): AbstractDevice[] {
@@ -79,7 +85,7 @@ export class DevicesState {
 
   @Action(StartDiscoverBLEDevices, { cancelUncompleted: true })
   startDiscoverBLEDevices({ patchState }: StateContext<DevicesStateModel>) {
-    return this.devicesService.startDiscoverDevices().pipe(
+    return this.bleDevicesService.startDiscoverDevices().pipe(
       tap(() =>
         patchState({
           isScanning: true
@@ -90,7 +96,7 @@ export class DevicesState {
 
   @Action(StartDiscoverUSBDevices, { cancelUncompleted: true })
   startDiscoverUSBDevices({ patchState }: StateContext<DevicesStateModel>) {
-    return this.devicesService.startDiscoverDevices().pipe(
+    return this.usbDevicesService.startDiscoverDevices().pipe(
       tap(() =>
         patchState({
           isScanning: true
@@ -132,21 +138,24 @@ export class DevicesState {
   connectDevice({ getState, patchState, dispatch }: StateContext<DevicesStateModel>, { device }: ConnectDevice) {
     return dispatch(new DisconnectDevice()).pipe(
       concatMap(() => {
-        return this.devicesService.connectDevice(device).pipe(
-          tap(() => {
-            const { knownDevices } = getState();
-            if (knownDevices.find(knownDevice => knownDevice.sensorUUID === device.sensorUUID)) {
-              patchState({
-                connectedDevice: device
-              });
-            } else {
-              patchState({
-                connectedDevice: device,
-                knownDevices: [...knownDevices, device]
-              });
-            }
-          })
-        );
+        return this.devicesService
+          .service(device)
+          .connectDevice(device)
+          .pipe(
+            tap(() => {
+              const { knownDevices } = getState();
+              if (knownDevices.find(knownDevice => knownDevice.sensorUUID === device.sensorUUID)) {
+                patchState({
+                  connectedDevice: device
+                });
+              } else {
+                patchState({
+                  connectedDevice: device,
+                  knownDevices: [...knownDevices, device]
+                });
+              }
+            })
+          );
       })
     );
   }
@@ -162,13 +171,16 @@ export class DevicesState {
   disconnectDevice({ getState, patchState }: StateContext<DevicesStateModel>) {
     const { connectedDevice } = getState();
     if (connectedDevice) {
-      return this.devicesService.disconnectDevice(connectedDevice).pipe(
-        tap(() => {
-          patchState({
-            connectedDevice: undefined
-          });
-        })
-      );
+      return this.devicesService
+        .service(connectedDevice)
+        .disconnectDevice(connectedDevice)
+        .pipe(
+          tap(() => {
+            patchState({
+              connectedDevice: undefined
+            });
+          })
+        );
     } else {
       return of(null);
     }
@@ -177,6 +189,7 @@ export class DevicesState {
   @Action(UpdateDeviceInfo, { cancelUncompleted: true })
   updateDeviceInfo({ dispatch }: StateContext<DevicesStateModel>, { device }: UpdateDeviceInfo) {
     return this.devicesService
+      .service(device)
       .getDeviceInfo(device)
       .pipe(map((update: Partial<AbstractDevice>) => dispatch(new UpdateDevice({ ...device, ...update }))));
   }
@@ -204,6 +217,7 @@ export class DevicesState {
       };
       if (connectedDevice && connectedDevice.sensorUUID === editedDevice.sensorUUID) {
         return this.devicesService
+          .service(updatedDevice)
           .saveDeviceParams(updatedDevice)
           .pipe(map(() => dispatch(new UpdateDevice(updatedDevice))));
       } else {

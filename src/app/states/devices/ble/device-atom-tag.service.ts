@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { BLE } from '@ionic-native/ble/ngx';
+import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { filter, map } from 'rxjs/operators';
@@ -7,17 +9,17 @@ import { DeviceType } from '../abstract-device';
 import { AbstractBLEDeviceService } from './abstract-ble-device.service';
 import { DeviceAtomTag } from './device-atom-tag';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag> {
-  // Todo remove when angular issue fixed https://github.com/angular/angular/issues/24011
-  static ngInjectableDef = undefined;
   private firmwareService = '180a';
   private firmwareCharacteristic = '2a26';
   private service = '63462A4A-C28C-4FFD-87A4-2D23A1C72581';
   private settingsCharacteristic = 'ea50cfcd-ac4a-4a48-bf0e-879e548ae157';
   private receiveCharacteristic = '70BC767E-7A1A-4304-81ED-14B9AF54F7BD';
+
+  constructor(protected ble: BLE, protected store: Store) {
+    super(ble, store);
+  }
 
   computeRadiationValue(measure: Measure): number {
     if (measure.endTime) {

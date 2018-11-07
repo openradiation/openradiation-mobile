@@ -10,4 +10,8 @@ export abstract class AbstractDeviceService<T extends AbstractDevice> {
   abstract startMeasureScan(device: T, stopSignal: Observable<any>): Observable<Step>;
 
   abstract computeRadiationValue(measure: Measure): number;
+
+  abstract connectDevice(device: T): Observable<any>;
+
+  abstract disconnectDevice(device: T): Observable<any>;
 }

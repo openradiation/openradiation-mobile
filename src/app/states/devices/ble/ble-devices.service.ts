@@ -6,20 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, ofActionSuccessful, Store } from '@ngxs/store';
 import { merge, Observable, timer } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
-import {
-  buffer,
-  catchError,
-  concatMap,
-  map,
-  scan,
-  shareReplay,
-  skip,
-  switchMap,
-  take,
-  takeUntil,
-  tap,
-  throttleTime
-} from 'rxjs/operators';
+import { buffer, map, scan, skip, switchMap, takeUntil, tap, throttleTime } from 'rxjs/operators';
 import { AbstractDevice, DeviceType } from '../abstract-device';
 import {
   BLEConnectionLost,
@@ -28,15 +15,12 @@ import {
   StartDiscoverBLEDevices,
   StopDiscoverDevices
 } from '../devices.action';
-import { DevicesService } from '../devices.service';
-import { AbstractBLEDevice, RawBLEDevice } from './abstract-ble-device';
+import { RawBLEDevice } from './abstract-ble-device';
 import { DeviceAtomTag } from './device-atom-tag';
 import { DeviceOGKit } from './device-og-kit';
 import { DeviceSafeCast } from './device-safe-cast';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class BLEDevicesService {
   private currentAlert?: any;
   private scanDuration = 3;
@@ -50,8 +34,7 @@ export class BLEDevicesService {
     private diagnostic: Diagnostic,
     private alertController: AlertController,
     private toastController: ToastController,
-    private translateService: TranslateService,
-    private devicesService: DevicesService
+    private translateService: TranslateService
   ) {
     this.actions$.pipe(ofActionDispatched(StartDiscoverBLEDevices)).subscribe(() => {
       if (this.currentAlert) {
@@ -141,27 +124,6 @@ export class BLEDevicesService {
         )
       )
       .subscribe(devices => this.store.dispatch(new DevicesDiscovered(devices)));
-  }
-
-  connectDevice(device: AbstractBLEDevice): Observable<any> {
-    const connection = this.ble.connect(device.sensorUUID).pipe(
-      concatMap(() => this.saveDeviceParams(device)),
-      shareReplay()
-    );
-    connection.pipe(catchError(() => this.store.dispatch(new DeviceConnectionLost()))).subscribe();
-    return connection.pipe(take(1));
-  }
-
-  disconnectDevice(device: AbstractBLEDevice): Observable<any> {
-    return fromPromise(this.ble.disconnect(device.sensorUUID));
-  }
-
-  getDeviceInfo(device: AbstractBLEDevice): Observable<Partial<AbstractDevice>> {
-    return this.devicesService.service(device).getDeviceInfo(device);
-  }
-
-  saveDeviceParams(device: AbstractDevice): Observable<any> {
-    return this.devicesService.service(device).saveDeviceParams(device);
   }
 
   private onBLEError() {

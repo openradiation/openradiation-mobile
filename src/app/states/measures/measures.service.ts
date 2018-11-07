@@ -9,7 +9,7 @@ import { DeviceConnectionLost } from '../devices/devices.action';
 import { DevicesService } from '../devices/devices.service';
 import { UserStateModel } from '../user/user.state';
 import { Measure, PositionAccuracyThreshold, Step } from './measure';
-import { ApparatusSensorType, MeasureApi } from './measure-api';
+import { MeasureApi } from './measure-api';
 import { AddMeasureScanStep, CancelMeasure, StopMeasureScan, UpdateMeasureScanTime } from './measures.action';
 
 @Injectable({
