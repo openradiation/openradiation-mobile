@@ -47,8 +47,7 @@ export class DeviceSafeCastService extends AbstractBLEDeviceService<DeviceSafeCa
       tap(() => (readingBufferSequence = true)),
       bufferCount(18),
       tap(() => (readingBufferSequence = false)),
-      map(buffers => this.decodeDataPackage(buffers)),
-      filter((step: Step | null): step is Step => step !== null)
+      map(buffers => this.decodeDataPackage(buffers))
     );
   }
 
@@ -60,7 +59,7 @@ export class DeviceSafeCastService extends AbstractBLEDeviceService<DeviceSafeCa
     return this.ble.stopNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
   }
 
-  protected decodeDataPackage(buffers: ArrayBuffer[]): Step | null {
+  protected decodeDataPackage(buffers: ArrayBuffer[]): Step {
     const data = buffers
       .map(buffer => this.textDecoder.decode(buffer))
       .join('')

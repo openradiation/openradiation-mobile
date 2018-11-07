@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BLE } from '@ionic-native/ble/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
-import { AlertController, Platform, ToastController } from '@ionic/angular';
+import { AlertController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, ofActionSuccessful, Store } from '@ngxs/store';
 import { merge, Observable, timer } from 'rxjs';
@@ -11,7 +11,6 @@ import { AbstractDevice, DeviceType } from '../abstract-device';
 import {
   BLEConnectionLost,
   BLEDevicesDiscovered,
-  DeviceConnectionLost,
   StartDiscoverBLEDevices,
   StopDiscoverDevices
 } from '../devices.action';
@@ -35,7 +34,6 @@ export class BLEDevicesService {
     private store: Store,
     private diagnostic: Diagnostic,
     private alertController: AlertController,
-    private toastController: ToastController,
     private translateService: TranslateService
   ) {
     this.actions$.pipe(ofActionDispatched(StartDiscoverBLEDevices)).subscribe(() => {
@@ -44,16 +42,6 @@ export class BLEDevicesService {
         this.currentAlert = undefined;
       }
     });
-    this.actions$.pipe(ofActionSuccessful(DeviceConnectionLost)).subscribe(() =>
-      this.toastController
-        .create({
-          message: this.translateService.instant('SENSORS.CONNECTION_LOST'),
-          showCloseButton: true,
-          duration: 3000,
-          closeButtonText: this.translateService.instant('GENERAL.OK')
-        })
-        .then(toast => toast.present())
-    );
   }
 
   startDiscoverDevices(): Observable<any> {

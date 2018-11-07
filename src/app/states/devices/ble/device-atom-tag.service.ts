@@ -3,7 +3,7 @@ import { BLE } from '@ionic-native/ble/ngx';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
-import { filter, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Measure, Step } from '../../measures/measure';
 import { DeviceType } from '../abstract-device';
 import { AbstractBLEDeviceService } from './abstract-ble-device.service';
@@ -70,10 +70,7 @@ export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag
 
   startMeasureScan(device: DeviceAtomTag, stopSignal: Observable<any>): Observable<Step> {
     stopSignal.subscribe(() => this.stopReceiveData(device));
-    return this.startReceiveData(device).pipe(
-      map((buffer: ArrayBuffer) => this.decodeDataPackage(buffer)),
-      filter((step: Step | null): step is Step => step !== null)
-    );
+    return this.startReceiveData(device).pipe(map((buffer: ArrayBuffer) => this.decodeDataPackage(buffer)));
   }
 
   private startReceiveData(device: DeviceAtomTag): Observable<any> {
@@ -84,7 +81,7 @@ export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag
     return this.ble.stopNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
   }
 
-  protected decodeDataPackage(buffer: ArrayBuffer): Step | null {
+  protected decodeDataPackage(buffer: ArrayBuffer): Step {
     const dataView = new DataView(buffer);
     return {
       ts: Date.now(),
