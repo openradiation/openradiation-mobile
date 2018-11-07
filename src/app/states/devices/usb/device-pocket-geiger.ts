@@ -3,11 +3,11 @@ import { AbstractUSBDevice } from './abstract-usb-device';
 
 export class DevicePocketGeiger extends AbstractUSBDevice {
   readonly deviceType = DeviceType.PocketGeiger;
-  driver: 'CdcAcmSerialDriver';
-  pid: 'F46F';
-  vid: '4D8';
   apparatusVersion: string = DeviceType.PocketGeiger;
   apparatusSensorType = ApparatusSensorType.Geiger;
+  readonly pid = 'F46F';
+  readonly vid = '4D8';
+  readonly baudRate = 38400;
 
   constructor() {
     super();

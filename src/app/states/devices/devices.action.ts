@@ -1,4 +1,6 @@
 import { AbstractDevice } from './abstract-device';
+import { AbstractBLEDevice } from './ble/abstract-ble-device';
+import { AbstractUSBDevice } from './usb/abstract-usb-device';
 
 export class StartDiscoverBLEDevices {
   static readonly type = '[Devices] Start discover BLE devices';
@@ -12,9 +14,14 @@ export class StopDiscoverDevices {
   static readonly type = '[Devices] Stop discover devices';
 }
 
-export class DevicesDiscovered {
-  static readonly type = '[Devices] Devices discovered';
-  constructor(public devices: AbstractDevice[]) {}
+export class BLEDevicesDiscovered {
+  static readonly type = '[Devices] BLE Devices discovered';
+  constructor(public devices: AbstractBLEDevice[]) {}
+}
+
+export class USBDevicesDiscovered {
+  static readonly type = '[Devices] USB Devices discovered';
+  constructor(public devices: AbstractUSBDevice[]) {}
 }
 
 export class ConnectDevice {

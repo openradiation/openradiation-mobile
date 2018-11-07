@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Serial } from '@ionic-native/serial/ngx';
+import { Store } from '@ngxs/store';
 import { Observable, of } from 'rxjs';
 import { Measure, Step } from '../../measures/measure';
 import { AbstractUSBDeviceService } from './abstract-usb-device.service';
@@ -9,8 +10,8 @@ import { DevicePocketGeiger } from './device-pocket-geiger';
   providedIn: 'root'
 })
 export class DevicePocketGeigerService extends AbstractUSBDeviceService<DevicePocketGeiger> {
-  constructor(protected serial: Serial) {
-    super(serial);
+  constructor(protected store: Store, protected serial: Serial) {
+    super(store, serial);
   }
 
   computeRadiationValue(measure: Measure): number {

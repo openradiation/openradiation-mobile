@@ -10,8 +10,8 @@ import { buffer, map, scan, skip, switchMap, takeUntil, tap, throttleTime } from
 import { AbstractDevice, DeviceType } from '../abstract-device';
 import {
   BLEConnectionLost,
+  BLEDevicesDiscovered,
   DeviceConnectionLost,
-  DevicesDiscovered,
   StartDiscoverBLEDevices,
   StopDiscoverDevices
 } from '../devices.action';
@@ -125,7 +125,7 @@ export class BLEDevicesService {
             .filter((device): device is AbstractDevice => device !== null)
         )
       )
-      .subscribe(devices => this.store.dispatch(new DevicesDiscovered(devices)));
+      .subscribe(devices => this.store.dispatch(new BLEDevicesDiscovered(devices)));
   }
 
   private onBLEError() {

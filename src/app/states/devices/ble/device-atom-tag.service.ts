@@ -19,8 +19,8 @@ export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag
   private settingsCharacteristic = 'ea50cfcd-ac4a-4a48-bf0e-879e548ae157';
   private receiveCharacteristic = '70BC767E-7A1A-4304-81ED-14B9AF54F7BD';
 
-  constructor(protected ble: BLE, protected store: Store) {
-    super(ble, store);
+  constructor(protected store: Store, protected ble: BLE) {
+    super(store, ble);
   }
 
   computeRadiationValue(measure: Measure): number {

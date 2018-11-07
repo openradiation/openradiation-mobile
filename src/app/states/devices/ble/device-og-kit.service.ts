@@ -50,8 +50,8 @@ export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
   private RECEIVE_VOLTAGE = 18;
   private RECEIVE_VOLTAGE_POSITION = 9;
 
-  constructor(protected ble: BLE, protected store: Store) {
-    super(ble, store);
+  constructor(protected store: Store, protected ble: BLE) {
+    super(store, ble);
   }
 
   computeRadiationValue(measure: Measure): number {

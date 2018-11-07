@@ -14,8 +14,8 @@ export class DeviceSafeCastService extends AbstractBLEDeviceService<DeviceSafeCa
   private service = 'ef080d8c-c3be-41ff-bd3f-05a5f4795d7f';
   private receiveCharacteristic = 'a1e8f5b1-696b-4e4c-87c6-69dfe0b0093b';
 
-  constructor(protected ble: BLE, protected store: Store) {
-    super(ble, store);
+  constructor(protected store: Store, protected ble: BLE) {
+    super(store, ble);
   }
 
   computeRadiationValue(measure: Measure): number {
