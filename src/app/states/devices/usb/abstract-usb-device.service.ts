@@ -1,5 +1,5 @@
 import { Serial } from '@ionic-native/serial/ngx';
-import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
+import { Actions, ofActionDispatched, Store } from '@ngxs/store';
 import { Observable, of, timer } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { catchError, concatMap, switchMap, takeUntil, tap } from 'rxjs/operators';
@@ -33,7 +33,7 @@ export abstract class AbstractUSBDeviceService<T extends AbstractUSBDevice> exte
   private watchDeviceConnection(device: T) {
     timer(1000, 1000)
       .pipe(
-        takeUntil(this.actions$.pipe(ofActionSuccessful(DisconnectDevice, DeviceConnectionLost))),
+        takeUntil(this.actions$.pipe(ofActionDispatched(DisconnectDevice, DeviceConnectionLost))),
         switchMap(() =>
           fromPromise(this.serial.requestPermission({ vid: device.vid, pid: device.pid, driver: device.driver }))
         ),

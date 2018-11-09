@@ -3,9 +3,11 @@ import { Serial } from '@ionic-native/serial/ngx';
 import { AlertController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, Store } from '@ngxs/store';
-import { forkJoin, Observable } from 'rxjs';
+import { forkJoin, interval, Observable, of } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
-import { StartDiscoverUSBDevices, USBDevicesDiscovered } from '../devices.action';
+import { concatMap, takeUntil, takeWhile } from 'rxjs/operators';
+import { StartDiscoverUSBDevices, StopDiscoverDevices, USBDevicesDiscovered } from '../devices.action';
+import { AbstractUSBDevice } from './abstract-usb-device';
 import { DevicePocketGeiger } from './device-pocket-geiger';
 
 @Injectable({
@@ -31,22 +33,37 @@ export class USBDevicesService {
   }
 
   startDiscoverDevices(): Observable<any> {
-    const usbDevices = [new DevicePocketGeiger()];
-    return forkJoin(
-      usbDevices.map(device =>
-        fromPromise(
-          this.serial
-            .requestPermission({ vid: device.vid, pid: device.pid, driver: device.driver })
-            .then(() => this.store.dispatch(new USBDevicesDiscovered([device])))
-            .catch(err => {
-              if (err === 'Permission to connect to the device was denied!') {
-                this.onUSBError();
-                throw err;
-              }
-            })
+    this.discoverDevices();
+    return of(null);
+  }
+
+  private discoverDevices() {
+    const usbDevices: AbstractUSBDevice[] = [new DevicePocketGeiger()];
+    interval(1000)
+      .pipe(
+        takeUntil(this.actions$.pipe(ofActionDispatched(StopDiscoverDevices, StartDiscoverUSBDevices))),
+        takeWhile(() => this.currentAlert === undefined),
+        concatMap(() =>
+          forkJoin(
+            usbDevices.map(device =>
+              fromPromise(
+                this.serial
+                  .requestPermission({ vid: device.vid, pid: device.pid, driver: device.driver })
+                  .then(() => [device])
+                  .catch(err => {
+                    if (err === 'Permission to connect to the device was denied!') {
+                      this.onUSBError();
+                    }
+                    return [];
+                  })
+              )
+            )
+          )
         )
       )
-    );
+      .subscribe(devices =>
+        this.store.dispatch(new USBDevicesDiscovered((<AbstractUSBDevice[]>[]).concat(...devices)))
+      );
   }
 
   private onUSBError() {
