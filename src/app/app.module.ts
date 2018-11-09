@@ -17,7 +17,6 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsFormPluginModule } from '@ngxs/form-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
@@ -42,7 +41,6 @@ import { UserState } from './states/user/user.state';
       key: ['devices.knownDevices', 'measures.measures', 'measures.params', 'user']
     }),
     NgxsLoggerPluginModule.forRoot(),
-    NgxsReduxDevtoolsPluginModule.forRoot(),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
