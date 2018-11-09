@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { MeasureReportSeriesPage } from './measure-report-series/measure-report-series-page';
 import { MeasureReportPage } from './measure-report/measure-report-page';
 import { MeasureScanPage } from './measure-scan/measure-scan.page';
-import { MeasureStepsPage } from './measure-steps/measure-steps.page';
 import { MeasureSeriesPage } from './measure-series/measure-series-page';
-import { MeasureReportSeriesPage } from './measure-report-series/measure-report-series-page';
+import { MeasureStepsPage } from './measure-steps/measure-steps.page';
 
 const routes: Routes = [
   {
