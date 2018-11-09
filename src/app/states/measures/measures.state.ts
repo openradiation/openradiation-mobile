@@ -2,7 +2,7 @@ import { Device } from '@ionic-native/device/ngx';
 import { Geoposition } from '@ionic-native/geolocation';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { concatMap, tap } from 'rxjs/operators';
 import { DateService } from './date.service';
 import {
   HitsAccuracyThreshold,
@@ -199,27 +199,30 @@ export class MeasuresState {
   }
 
   @Action(StartManualMeasure)
-  startManualMeasure({ getState, patchState }: StateContext<MeasuresStateModel>) {
-    const { currentPosition } = getState();
-    let currentMeasure = {
-      ...new Measure(
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        this.device.uuid,
-        this.device.platform,
-        this.device.version,
-        this.device.model,
-        true
-      ),
-      startTime: Date.now()
-    };
-    currentMeasure = Measure.updateStartPosition(currentMeasure, currentPosition);
-    currentMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
-    patchState({
-      currentMeasure
-    });
+  startManualMeasure({ patchState }: StateContext<MeasuresStateModel>) {
+    return this.positionService.getCurrentPosition().pipe(
+      tap(currentPosition => {
+        let currentMeasure = {
+          ...new Measure(
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            this.device.uuid,
+            this.device.platform,
+            this.device.version,
+            this.device.model,
+            true
+          ),
+          startTime: Date.now()
+        };
+        currentMeasure = Measure.updateStartPosition(currentMeasure, currentPosition);
+        currentMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
+        patchState({
+          currentMeasure
+        });
+      })
+    );
   }
 
   @Action(StopMeasure)
@@ -313,7 +316,7 @@ export class MeasuresState {
         (currentTime - currentMeasure!.startTime > currentSeries.params.measureDurationLimit! ||
           newHitsNumber > currentSeries.params.measureHitsLimit!)
       ) {
-        dispatch(new StartNextMeasureSeries());
+        dispatch(new StartNextMeasureSeries()).subscribe();
       } else {
         const newCurrentMeasure = {
           ...currentMeasure,
@@ -344,7 +347,7 @@ export class MeasuresState {
     if (currentMeasure) {
       const currentTime = Date.now();
       if (currentSeries && currentTime - currentMeasure!.startTime > currentSeries.params.measureDurationLimit!) {
-        dispatch(new StartNextMeasureSeries());
+        dispatch(new StartNextMeasureSeries()).subscribe();
       } else {
         patchState({
           currentMeasure: {
@@ -359,83 +362,102 @@ export class MeasuresState {
 
   @Action(StartMeasureScan)
   startMeasureScan({ getState, patchState }: StateContext<MeasuresStateModel>, { device }: StartMeasureScan) {
-    const { currentMeasure, currentPosition, currentSeries } = getState();
+    const { currentMeasure, currentSeries } = getState();
     if (currentMeasure) {
-      return this.measuresService.startMeasureScan(device).pipe(
-        tap(() => {
-          const currentTime = Date.now();
-          const patch: Partial<MeasuresStateModel> = {
-            currentMeasure: {
-              ...currentMeasure!,
-              startTime: currentTime,
-              endTime: currentTime
-            }
-          };
-          if (currentSeries && !currentSeries.startTime && !currentSeries.endTime) {
-            patch.currentSeries = {
-              ...currentSeries,
-              startTime: currentTime,
-              endTime: currentTime
-            };
-          }
-          patch.currentMeasure = Measure.updateStartPosition(<Measure>patch.currentMeasure, currentPosition);
-          patchState(patch);
-        })
+      return this.positionService.getCurrentPosition().pipe(
+        concatMap(currentPosition =>
+          this.measuresService.startMeasureScan(device).pipe(
+            tap(() => {
+              const currentTime = Date.now();
+              const patch: Partial<MeasuresStateModel> = {
+                currentMeasure: {
+                  ...currentMeasure!,
+                  startTime: currentTime,
+                  endTime: currentTime
+                }
+              };
+              if (currentSeries && !currentSeries.startTime && !currentSeries.endTime) {
+                patch.currentSeries = {
+                  ...currentSeries,
+                  startTime: currentTime,
+                  endTime: currentTime
+                };
+              }
+              patch.currentMeasure = Measure.updateStartPosition(<Measure>patch.currentMeasure, currentPosition);
+              patchState(patch);
+            })
+          )
+        )
       );
     } else {
-      return of();
+      return of(null);
     }
   }
 
   @Action(StopMeasureScan)
   stopMeasureScan({ getState, patchState }: StateContext<MeasuresStateModel>) {
-    const { currentMeasure, currentPosition, currentSeries } = getState();
+    const { currentMeasure, currentSeries } = getState();
     if (currentMeasure) {
-      let patch: Partial<MeasuresStateModel>;
-      const updatedMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
-      if (currentSeries) {
-        patch = { currentMeasure: undefined };
-        if (updatedMeasure.hitsNumber >= HitsAccuracyThreshold.Accurate) {
-          patch.currentSeries = MeasureSeries.addMeasureToSeries(currentSeries, updatedMeasure);
+      const stopCurrentMeasureScan = (currentPosition: Geoposition) => {
+        let patch: Partial<MeasuresStateModel>;
+        const updatedMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
+        if (currentSeries) {
+          patch = { currentMeasure: undefined };
+          if (updatedMeasure.hitsNumber >= HitsAccuracyThreshold.Accurate) {
+            patch.currentSeries = MeasureSeries.addMeasureToSeries(currentSeries, updatedMeasure);
+          }
+        } else {
+          patch = { currentMeasure: updatedMeasure };
         }
+        patchState(patch);
+      };
+      if (currentMeasure.accuracy && currentMeasure.accuracy < PositionAccuracyThreshold.Inaccurate) {
+        return this.positionService.getCurrentPosition().pipe(tap(stopCurrentMeasureScan));
       } else {
-        patch = { currentMeasure: updatedMeasure };
+        return of(undefined).pipe(tap(stopCurrentMeasureScan));
       }
-      patchState(patch);
+    } else {
+      return of(null);
     }
   }
 
   @Action(StartNextMeasureSeries)
   startNextMeasureSeriesScan({ getState, patchState, dispatch }: StateContext<MeasuresStateModel>) {
-    const { currentMeasure, currentPosition, currentSeries } = getState();
+    const { currentMeasure, currentSeries } = getState();
     if (currentMeasure && currentSeries) {
       if (currentMeasure.endTime! - currentSeries.startTime! > currentSeries.params.seriesDurationLimit!) {
-        dispatch(new StopMeasureScan());
+        return dispatch(new StopMeasureScan());
       } else {
-        const updatedMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
-        const currentTime = Date.now();
-        const newMeasure = Measure.updateStartPosition(
-          {
-            ...new Measure(
-              currentMeasure.apparatusId,
-              currentMeasure.apparatusVersion,
-              currentMeasure.apparatusSensorType,
-              currentMeasure.apparatusTubeType,
-              this.device.uuid,
-              this.device.platform,
-              this.device.version,
-              this.device.model
-            ),
-            startTime: currentTime,
-            endTime: currentTime
-          },
-          currentPosition
+        return this.positionService.getCurrentPosition().pipe(
+          tap(currentPosition => {
+            const updatedMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
+            const currentTime = Date.now();
+            const newMeasure = Measure.updateStartPosition(
+              {
+                ...new Measure(
+                  currentMeasure.apparatusId,
+                  currentMeasure.apparatusVersion,
+                  currentMeasure.apparatusSensorType,
+                  currentMeasure.apparatusTubeType,
+                  this.device.uuid,
+                  this.device.platform,
+                  this.device.version,
+                  this.device.model
+                ),
+                startTime: currentTime,
+                endTime: currentTime
+              },
+              currentPosition
+            );
+            patchState({
+              currentMeasure: newMeasure,
+              currentSeries: MeasureSeries.addMeasureToSeries(currentSeries, updatedMeasure)
+            });
+          })
         );
-        patchState({
-          currentMeasure: newMeasure,
-          currentSeries: MeasureSeries.addMeasureToSeries(currentSeries, updatedMeasure)
-        });
       }
+    } else {
+      return of(null);
     }
   }
 
@@ -530,7 +552,7 @@ export class MeasuresState {
         );
       }
     }
-    return of();
+    return of(null);
   }
 
   @Action(DeleteMeasure)

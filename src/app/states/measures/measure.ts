@@ -84,7 +84,7 @@ export class Measure {
   }
 
   static updateEndPosition(measure: Measure, position?: Geoposition): Measure {
-    if (measure.accuracy && measure.accuracy < PositionAccuracyThreshold.Inaccurate && position) {
+    if (position) {
       return {
         ...measure,
         endLatitude: position.coords.latitude,

@@ -70,7 +70,7 @@ export class MenuComponent {
     this.closeMenu();
     this.login$.pipe(take(1)).subscribe(login => {
       if (login !== undefined) {
-        this.store.dispatch(new StartManualMeasure());
+        this.store.dispatch(new StartManualMeasure()).subscribe();
       } else {
         this.goToLogin(RedirectAfterLogin.ManualMeasure);
       }

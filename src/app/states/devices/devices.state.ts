@@ -257,7 +257,7 @@ export class DevicesState {
         return dispatch(new UpdateDevice(updatedDevice));
       }
     } else {
-      return of();
+      return of(null);
     }
   }
 

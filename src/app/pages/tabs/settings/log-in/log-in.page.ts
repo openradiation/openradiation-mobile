@@ -97,7 +97,7 @@ export class LogInPage extends AutoUnsubscribePage {
       .subscribe(() => {
         switch (this.redirectAfterLogin) {
           case RedirectAfterLogin.ManualMeasure:
-            this.store.dispatch(new StartManualMeasure());
+            this.store.dispatch(new StartManualMeasure()).subscribe();
             break;
           case RedirectAfterLogin.MeasureSeries:
             this.store.dispatch(new StartMeasureSeriesParams());

@@ -2,7 +2,6 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { Platform } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
@@ -38,7 +37,6 @@ export class MapPage extends AutoUnsubscribePage {
   constructor(
     protected router: Router,
     private domSanitizer: DomSanitizer,
-    private geolocation: Geolocation,
     private diagnostic: Diagnostic,
     private platform: Platform,
     private network: Network,

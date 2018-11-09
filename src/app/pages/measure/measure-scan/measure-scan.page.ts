@@ -15,14 +15,7 @@ import {
   MeasureSeries,
   PositionAccuracyThreshold
 } from '../../../states/measures/measure';
-import {
-  CancelMeasure,
-  PositionChanged,
-  StartMeasureScan,
-  StartWatchPosition,
-  StopMeasureScan,
-  StopWatchPosition
-} from '../../../states/measures/measures.action';
+import { CancelMeasure, StartMeasureScan, StopMeasureScan } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
 
 @Component({
@@ -68,7 +61,6 @@ export class MeasureScanPage extends AutoUnsubscribePage {
 
   pageEnter() {
     super.pageEnter();
-    this.store.dispatch(new StartWatchPosition());
     this.currentSeries$.pipe(take(1)).subscribe(currentSeries => {
       this.isMeasureSeries = currentSeries !== undefined;
       this.canEndMeasureScan = this.isMeasureSeries;
@@ -106,10 +98,6 @@ export class MeasureScanPage extends AutoUnsubscribePage {
     });
   }
 
-  pageLeave() {
-    this.store.dispatch(new StopWatchPosition());
-  }
-
   updateHitsAccuracy(measure?: Measure) {
     if (measure) {
       if (measure.hitsNumber >= HitsAccuracyThreshold.Accurate) {
@@ -128,21 +116,8 @@ export class MeasureScanPage extends AutoUnsubscribePage {
     }
   }
 
-  stopScan(measure?: Measure) {
-    if (measure && measure.accuracy && measure.accuracy < PositionAccuracyThreshold.Inaccurate) {
-      this.subscriptions.push(
-        this.actions$
-          .pipe(
-            ofActionSuccessful(PositionChanged),
-            take(1)
-          )
-          .subscribe(() => {
-            this.store.dispatch(new StopMeasureScan());
-          })
-      );
-    } else {
-      this.store.dispatch(new StopMeasureScan());
-    }
+  stopScan() {
+    this.store.dispatch(new StopMeasureScan()).subscribe();
   }
 
   cancelMeasure() {

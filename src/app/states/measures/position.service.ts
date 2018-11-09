@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { Geolocation, Geoposition } from '@ionic-native/geolocation/ngx';
 import { AlertController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, ofActionSuccessful, Store } from '@ngxs/store';
@@ -30,6 +30,14 @@ export class PositionService {
         this.currentAlert = undefined;
       }
     });
+  }
+
+  getCurrentPosition(): Observable<Geoposition | undefined> {
+    return fromPromise(
+      this.geolocation
+        .getCurrentPosition({ enableHighAccuracy: true, timeout: 5000, maximumAge: 10000 })
+        .catch(() => undefined)
+    );
   }
 
   startWatchPosition(): Observable<any> {
