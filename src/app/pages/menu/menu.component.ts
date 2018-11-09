@@ -35,9 +35,10 @@ export class MenuComponent {
     private alertController: AlertController,
     private translateService: TranslateService
   ) {
-    this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe((event: NavigationEnd) => (this.currentUrl = event.url));
+    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
+      this.currentUrl = event.url;
+      this.menuController.enable(this.currentUrl === '/' || this.currentUrl.includes('/tabs/('));
+    });
     this.actions$
       .pipe(ofActionSuccessful(StartManualMeasure))
       .subscribe(() => this.navController.navigateRoot(['measure', 'report'], true));
