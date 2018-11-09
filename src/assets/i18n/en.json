@@ -27,7 +27,7 @@
     "CANCEL": "Cancel",
     "CLICK_HERE": "Click here",
     "CONNECTED": "Connected",
-    "CONNEXION_ERROR": "Connection error: {message}",
+    "CONNEXION_ERROR": "Connection error: {{message}}",
     "DATE": "Date",
     "END": "End",
     "GOOD": "Good",
@@ -160,9 +160,9 @@
     "MEASURES_DURATION": "Measurement minimum duration",
     "MEASURES_TITLE": "Measurements",
     "MESSAGE_SCAN": {
-      "=0": "First measurement in progress",
-      "=1": "One measurement taken since",
-      "other": "# measurements taken since"
+      "NONE": "First measurement in progress",
+      "PLURAL": "{{count}} measurements taken since {{duration}}",
+      "SINGULAR": "One measurement taken since {{duration}}"
     },
     "SERIES_DURATION": "Measurement series duration",
     "SERIES_TITLE": "Series",

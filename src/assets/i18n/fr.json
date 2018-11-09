@@ -160,9 +160,9 @@
     "MEASURES_DURATION": "Durée minimale d'une mesure",
     "MEASURES_TITLE": "Mesures",
     "MESSAGE_SCAN": {
-      "=0": "Première mesure en cours",
-      "=1": "Une mesure prise depuis",
-      "other": "# mesures prises depuis"
+      "NONE": "Première mesure en cours",
+      "PLURAL": "{{count}} mesures prises depuis {{duration}}",
+      "SINGULAR": "Une mesure prise depuis {{duration}}"
     },
     "SERIES_DURATION": "Durée de la série de mesures",
     "SERIES_TITLE": "Série",

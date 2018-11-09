@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
 import { NavController } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -47,6 +48,12 @@ export class MeasureScanPage extends AutoUnsubscribePage {
 
   canEndMeasureScan = false;
   isMeasureSeries = false;
+
+  currentSeriesMessageMapping = {
+    '=0': _('MEASURE_SERIES.MESSAGE_SCAN.NONE'),
+    '=1': _('MEASURE_SERIES.MESSAGE_SCAN.SINGULAR'),
+    other: _('MEASURE_SERIES.MESSAGE_SCAN.PLURAL')
+  };
 
   url = '/measure/scan';
 
