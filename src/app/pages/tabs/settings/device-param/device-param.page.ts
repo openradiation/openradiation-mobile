@@ -3,7 +3,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { AbstractDevice, DeviceParamModel, DeviceParamType } from '../../../../states/devices/abstract-device';
+import { AbstractDevice } from '../../../../states/devices/abstract-device';
+import { DeviceParamModel, DeviceParamType } from '../../../../states/devices/device-params';
 import { SaveDeviceParams } from '../../../../states/devices/devices.action';
 import { DevicesState, DevicesStateModel } from '../../../../states/devices/devices.state';
 

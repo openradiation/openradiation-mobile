@@ -85,43 +85,43 @@ export class MeasuresState {
   ) {}
 
   @Selector()
-  static expertMode(state: MeasuresStateModel): boolean {
-    return state.params.expertMode;
+  static expertMode({ params }: MeasuresStateModel): boolean {
+    return params.expertMode;
   }
 
   @Selector()
-  static autoPublish(state: MeasuresStateModel): boolean {
-    return state.params.autoPublish;
+  static autoPublish({ params }: MeasuresStateModel): boolean {
+    return params.autoPublish;
   }
 
   @Selector()
-  static currentPosition(state: MeasuresStateModel): Geoposition | undefined {
-    return state.currentPosition;
+  static currentPosition({ currentPosition }: MeasuresStateModel): Geoposition | undefined {
+    return currentPosition;
   }
 
   @Selector()
-  static positionAccuracy(state: MeasuresStateModel): number {
-    return state.currentPosition ? state.currentPosition.coords.accuracy : PositionAccuracyThreshold.No;
+  static positionAccuracy({ currentPosition }: MeasuresStateModel): number {
+    return currentPosition ? currentPosition.coords.accuracy : PositionAccuracyThreshold.No;
   }
 
   @Selector()
-  static isWatchingPosition(state: MeasuresStateModel): boolean {
-    return state.isWatchingPosition;
+  static isWatchingPosition({ isWatchingPosition }: MeasuresStateModel): boolean {
+    return isWatchingPosition;
   }
 
   @Selector()
-  static currentMeasure(state: MeasuresStateModel): Measure | undefined {
-    return state.currentMeasure;
+  static currentMeasure({ currentMeasure }: MeasuresStateModel): Measure | undefined {
+    return currentMeasure;
   }
 
   @Selector()
-  static currentSeries(state: MeasuresStateModel): MeasureSeries | undefined {
-    return state.currentSeries;
+  static currentSeries({ currentSeries }: MeasuresStateModel): MeasureSeries | undefined {
+    return currentSeries;
   }
 
   @Selector()
-  static measures(state: MeasuresStateModel): Measure[] {
-    return state.measures;
+  static measures({ measures }: MeasuresStateModel): Measure[] {
+    return measures;
   }
 
   @Action(EnableExpertMode)

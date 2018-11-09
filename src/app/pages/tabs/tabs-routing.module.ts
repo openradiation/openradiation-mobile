@@ -11,13 +11,11 @@ import { LogInPage } from './settings/log-in/log-in.page';
 import { MeasuresParamPage } from './settings/measures-param/measures-param.page';
 import { SettingsPage } from './settings/settings/settings.page';
 import { Tabs } from './tabs.component';
-import { TabsGuard } from './tabs.guard';
 
 const routes: Routes = [
   {
     path: 'tabs',
     component: Tabs,
-    canActivateChild: [TabsGuard],
     children: [
       {
         path: 'home',

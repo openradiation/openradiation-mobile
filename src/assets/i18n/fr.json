@@ -197,5 +197,11 @@
   },
   "SETTINGS": {
     "TITLE": "Paramètres"
+  },
+  "USB": {
+    "USB_PERMISSION": {
+      "NOTICE": "Vous devez accepter la permission afin de pouvoir utiliser le capteur USB.",
+      "TITLE": "USB - permission refusée"
+    }
   }
 }

@@ -102,7 +102,7 @@
           padding: 4px 8px;
           width: 100%;
           text-align: right;
-          --ion-placeholder-text-color: #{transparentize($second-color, 0.5)};
+          --ion-placeholder-color: #{transparentize($second-color, 0.5)};
         }
         ion-textarea {
           --padding-start: 8px;

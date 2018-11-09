@@ -1,8 +1,8 @@
 @import 'src/theme/variables.scss';
 
 ion-tabs {
-  --ion-tabbar-text-color: #{transparentize($second-color, 0.6)};
-  --ion-tabbar-text-color-active: #{$second-color};
+  --ion-tab-bar-color: #{transparentize($second-color, 0.6)};
+  --ion-tab-bar-color-activated: #{$second-color};
   --ion-color-primary: #{$second-color};
 }
 

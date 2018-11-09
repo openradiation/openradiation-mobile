@@ -1,11 +1,12 @@
 import { Geoposition } from '@ionic-native/geolocation';
 import * as uuid from 'uuid';
 import { environment } from '../../../environments/environment';
+import { ApparatusSensorType } from '../devices/abstract-device';
 
 export class Measure {
   apparatusId?: string;
   apparatusVersion?: string;
-  apparatusSensorType?: string;
+  apparatusSensorType?: ApparatusSensorType;
   apparatusTubeType?: string;
   temperature?: number;
   value: number;
@@ -42,7 +43,7 @@ export class Measure {
   constructor(
     apparatusId: string | undefined,
     apparatusVersion: string | undefined,
-    apparatusSensorType: string | undefined,
+    apparatusSensorType: ApparatusSensorType | undefined,
     apparatusTubeType: string | undefined,
     deviceUuid: string,
     devicePlatform: string,

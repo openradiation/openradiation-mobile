@@ -1,22 +1,21 @@
 import { Injectable } from '@angular/core';
 import { BLE } from '@ionic-native/ble/ngx';
+import { Store } from '@ngxs/store';
 import { Observable, of } from 'rxjs';
-import { Measure, Step } from '../measures/measure';
-import { DeviceSafeCast } from './device-safe-cast';
 import { bufferCount, filter, map, tap } from 'rxjs/operators';
+import { Measure, Step } from '../../measures/measure';
+import { AbstractBLEDeviceService } from './abstract-ble-device.service';
+import { DeviceSafeCast } from './device-safe-cast';
 
-// Todo add inheritance when angular issue fixed https://github.com/angular/angular/issues/24011
 @Injectable({
   providedIn: 'root'
 })
-export class DeviceSafeCastService /*extends AbstractDeviceService<DeviceSafeCast>*/ {
+export class DeviceSafeCastService extends AbstractBLEDeviceService<DeviceSafeCast> {
   private service = 'ef080d8c-c3be-41ff-bd3f-05a5f4795d7f';
   private receiveCharacteristic = 'a1e8f5b1-696b-4e4c-87c6-69dfe0b0093b';
 
-  constructor(protected ble: BLE) {}
-
-  getDeviceInfo(): Observable<Partial<DeviceSafeCast>> {
-    return of({});
+  constructor(protected store: Store, protected ble: BLE) {
+    super(store, ble);
   }
 
   computeRadiationValue(measure: Measure): number {
@@ -27,6 +26,14 @@ export class DeviceSafeCastService /*extends AbstractDeviceService<DeviceSafeCas
     } else {
       throw new Error('Incorrect measure : missing endTime');
     }
+  }
+
+  getDeviceInfo(device: DeviceSafeCast): Observable<Partial<DeviceSafeCast>> {
+    return of({});
+  }
+
+  saveDeviceParams(device: DeviceSafeCast): Observable<any> {
+    return of(null);
   }
 
   startMeasureScan(device: DeviceSafeCast, stopSignal: Observable<any>): Observable<Step> {
@@ -40,8 +47,7 @@ export class DeviceSafeCastService /*extends AbstractDeviceService<DeviceSafeCas
       tap(() => (readingBufferSequence = true)),
       bufferCount(18),
       tap(() => (readingBufferSequence = false)),
-      map(buffers => this.decodeDataPackage(buffers)),
-      filter((step: Step | null): step is Step => step !== null)
+      map(buffers => this.decodeDataPackage(buffers))
     );
   }
 
@@ -53,9 +59,9 @@ export class DeviceSafeCastService /*extends AbstractDeviceService<DeviceSafeCas
     return this.ble.stopNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
   }
 
-  private decodeDataPackage(buffers: ArrayBuffer[]): Step | null {
+  protected decodeDataPackage(buffers: ArrayBuffer[]): Step {
     const data = buffers
-      .map(buffer => new TextDecoder('utf8').decode(buffer))
+      .map(buffer => this.textDecoder.decode(buffer))
       .join('')
       .split(',');
     return {

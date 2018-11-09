@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { NavController, Platform } from '@ionic/angular';
 import { Actions, ofActionDispatched, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { AutoUnsubscribePage } from '../../../../components/auto-unsubscribe/auto-unsubscribe.page';
@@ -10,7 +10,8 @@ import {
   DeviceConnectionLost,
   DisconnectDevice,
   EditDeviceParams,
-  StartDiscoverDevices,
+  StartDiscoverBLEDevices,
+  StartDiscoverUSBDevices,
   StopDiscoverDevices,
   UpdateDeviceInfo
 } from '../../../../states/devices/devices.action';
@@ -39,7 +40,8 @@ export class DevicesPage extends AutoUnsubscribePage {
     protected router: Router,
     private store: Store,
     private actions$: Actions,
-    private navController: NavController
+    private navController: NavController,
+    private platform: Platform
   ) {
     super(router);
   }
@@ -54,7 +56,10 @@ export class DevicesPage extends AutoUnsubscribePage {
         .pipe(ofActionSuccessful(ConnectDevice, DeviceConnectionLost))
         .subscribe(() => (this.connectingDevice = undefined))
     );
-    this.store.dispatch(new StartDiscoverDevices()).subscribe();
+    this.store.dispatch(new StartDiscoverBLEDevices()).subscribe();
+    if (this.platform.is('android')) {
+      this.store.dispatch(new StartDiscoverUSBDevices()).subscribe();
+    }
   }
 
   pageLeave() {

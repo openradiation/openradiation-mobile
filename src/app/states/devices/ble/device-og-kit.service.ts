@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
 import { BLE } from '@ionic-native/ble/ngx';
+import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { filter, map, scan, shareReplay, take, tap } from 'rxjs/operators';
-import { Measure, Step } from '../measures/measure';
+import { Measure, Step } from '../../measures/measure';
+import { ApparatusSensorType } from '../abstract-device';
+import { AbstractBLEDeviceService } from './abstract-ble-device.service';
 import { DeviceOGKit } from './device-og-kit';
 
-// Todo add inheritance when angular issue fixed https://github.com/angular/angular/issues/24011
 @Injectable({
   providedIn: 'root'
 })
-export class DeviceOGKitService /*extends AbstractDeviceService<DeviceOGKit>*/ {
+export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
   private service = '2220';
   private sendCharacteristic = '2222';
   private receiveCharacteristic = '2221';
@@ -48,7 +50,19 @@ export class DeviceOGKitService /*extends AbstractDeviceService<DeviceOGKit>*/ {
   private RECEIVE_VOLTAGE = 18;
   private RECEIVE_VOLTAGE_POSITION = 9;
 
-  constructor(protected ble: BLE) {}
+  constructor(protected store: Store, protected ble: BLE) {
+    super(store, ble);
+  }
+
+  computeRadiationValue(measure: Measure): number {
+    if (measure.endTime) {
+      const duration = (measure.endTime - measure.startTime) / 1000;
+      const TcNet = measure.hitsNumber / duration - 0.14;
+      return 0.000001 * TcNet ** 3 + 0.0025 * TcNet ** 2 + 0.39 * TcNet;
+    } else {
+      throw new Error('Incorrect measure : missing endTime');
+    }
+  }
 
   getDeviceInfo(device: DeviceOGKit): Observable<Partial<DeviceOGKit>> {
     const startReceiveData = this.startReceiveData(device).pipe(shareReplay());
@@ -59,7 +73,7 @@ export class DeviceOGKitService /*extends AbstractDeviceService<DeviceOGKit>*/ {
         const array = new Uint8Array(buffer);
         switch (array[0]) {
           case this.RECEIVE_SENSOR_TYPE:
-            update.apparatusSensorType = this.decodeStringArray(array);
+            update.apparatusSensorType = <ApparatusSensorType>this.decodeStringArray(array).toLowerCase();
             break;
           case this.RECEIVE_TUBE_TYPE:
             update.apparatusTubeType = this.decodeStringArray(array);
@@ -82,31 +96,26 @@ export class DeviceOGKitService /*extends AbstractDeviceService<DeviceOGKit>*/ {
     );
   }
 
-  computeRadiationValue(measure: Measure): number {
-    if (measure.endTime) {
-      const duration = (measure.endTime - measure.startTime) / 1000;
-      const TcNet = measure.hitsNumber / duration - 0.14;
-      return 0.000001 * TcNet ** 3 + 0.0025 * TcNet ** 2 + 0.39 * TcNet;
-    } else {
-      throw new Error('Incorrect measure : missing endTime');
-    }
-  }
-
   startMeasureScan(device: DeviceOGKit, stopSignal: Observable<any>): Observable<Step> {
     this.setTubeVoltageOn(device);
     stopSignal.subscribe(() => this.stopReceiveData(device));
     return this.startReceiveData(device).pipe(
       map((buffer: ArrayBuffer) => this.decodeDataPackage(buffer)),
       filter((step: Step | null): step is Step => step !== null),
-      filter((step: Step) => step.voltage! > this.tubesVoltageProfile[device.apparatusTubeType].min)
+      filter(
+        (step: Step) =>
+          !device.apparatusTubeType || step.voltage! > this.tubesVoltageProfile[device.apparatusTubeType].min
+      )
     );
   }
 
   private setTubeVoltageOn(device: DeviceOGKit) {
-    this.sendData(device, [
-      this.SEND_SET_VOLTAGE,
-      ...this.tubesVoltageProfile[device.apparatusTubeType].setVoltageOnPayload
-    ]);
+    if (device.apparatusTubeType) {
+      this.sendData(device, [
+        this.SEND_SET_VOLTAGE,
+        ...this.tubesVoltageProfile[device.apparatusTubeType].setVoltageOnPayload
+      ]);
+    }
   }
 
   private setTubeVoltageOff(device: DeviceOGKit) {
@@ -128,10 +137,10 @@ export class DeviceOGKitService /*extends AbstractDeviceService<DeviceOGKit>*/ {
   }
 
   private decodeStringArray(array: Uint8Array): string {
-    return new TextDecoder('utf8').decode(array.slice(2, 2 + array[1]));
+    return this.textDecoder.decode(array.slice(2, 2 + array[1]));
   }
 
-  private decodeDataPackage(buffer: ArrayBuffer): Step | null {
+  protected decodeDataPackage(buffer: ArrayBuffer): Step | null {
     const dataView = new DataView(buffer);
     if (
       dataView.getUint8(this.RECEIVE_HIT_POSITION) === this.RECEIVE_HIT &&

@@ -8,7 +8,7 @@
     height: 100%;
 
     ion-item {
-      --detail-push-color: $base-color;
+      --detail-icon-color: $base-color;
       background: white;
       color: $base-color;
       border-bottom: $base-color 1px solid;
@@ -18,7 +18,7 @@
       }
 
       &.active {
-        --detail-push-color: white;
+        --detail-icon-color: white;
         background: $base-color;
         color: white;
         border-bottom: none;
