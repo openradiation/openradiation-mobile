@@ -4,30 +4,23 @@ import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { interval, Observable } from 'rxjs';
 import { shareReplay, take, takeUntil, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { AbstractDevice, DeviceType } from '../devices/abstract-device';
-import { DeviceAtomTag } from '../devices/device-atom-tag';
-import { DeviceAtomTagService } from '../devices/device-atom-tag.service';
-import { DeviceOGKit } from '../devices/device-og-kit';
-import { DeviceOGKitService } from '../devices/device-og-kit.service';
+import { AbstractDevice } from '../devices/abstract-device';
 import { DeviceConnectionLost } from '../devices/devices.action';
+import { DevicesService } from '../devices/devices.service';
 import { UserStateModel } from '../user/user.state';
 import { Measure, PositionAccuracyThreshold, Step } from './measure';
-import { ApparatusSensorType, MeasureApi } from './measure-api';
+import { MeasureApi } from './measure-api';
 import { AddMeasureScanStep, CancelMeasure, StopMeasureScan, UpdateMeasureScanTime } from './measures.action';
-import { DeviceSafeCastService } from '../devices/device-safe-cast.service';
-import { DeviceSafeCast } from '../devices/device-safe-cast';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MeasuresService {
   constructor(
-    private deviceOGKitService: DeviceOGKitService,
-    private deviceAtomTagService: DeviceAtomTagService,
-    private deviceSafeCastService: DeviceSafeCastService,
     private store: Store,
     private actions$: Actions,
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private devicesService: DevicesService
   ) {}
 
   startMeasureScan(device: AbstractDevice): Observable<any> {
@@ -52,57 +45,33 @@ export class MeasuresService {
   }
 
   private detectHits(device: AbstractDevice, stopSignal: Observable<any>): Observable<Step> {
-    let detectHits: Observable<Step>;
-    switch (device.deviceType) {
-      case DeviceType.OGKit:
-        detectHits = this.deviceOGKitService.startMeasureScan(<DeviceOGKit>device, stopSignal);
-        break;
-      case DeviceType.AtomTag:
-        detectHits = this.deviceAtomTagService.startMeasureScan(<DeviceAtomTag>device, stopSignal);
-        break;
-      case DeviceType.SafeCast:
-        detectHits = this.deviceSafeCastService.startMeasureScan(<DeviceSafeCast>device, stopSignal);
-        break;
-    }
-    detectHits = detectHits!.pipe(
-      takeUntil(stopSignal),
-      shareReplay()
-    );
+    const detectHits = this.devicesService
+      .service(device)
+      .startMeasureScan(device, stopSignal)
+      .pipe(
+        takeUntil(stopSignal),
+        shareReplay()
+      );
     detectHits.subscribe(step => this.store.dispatch(new AddMeasureScanStep(step, device)));
     return detectHits;
   }
 
   computeRadiationValue(measure: Measure, device: AbstractDevice): number {
-    switch (device.deviceType) {
-      case DeviceType.OGKit:
-        return this.deviceOGKitService.computeRadiationValue(measure);
-      case DeviceType.AtomTag:
-        return this.deviceAtomTagService.computeRadiationValue(measure);
-      case DeviceType.SafeCast:
-        return this.deviceSafeCastService.computeRadiationValue(measure);
-    }
+    return this.devicesService.service(device).computeRadiationValue(measure);
   }
 
   publishMeasure(measure: Measure): Observable<any> {
-    let apparatusSensorType: ApparatusSensorType | undefined;
     if (
       measure.accuracy &&
       measure.accuracy < PositionAccuracyThreshold.Inaccurate &&
       (measure.endAccuracy && measure.endAccuracy < PositionAccuracyThreshold.Inaccurate)
     ) {
-      if (measure.apparatusSensorType) {
-        if (measure.apparatusSensorType.toLowerCase().includes(ApparatusSensorType.Geiger)) {
-          apparatusSensorType = ApparatusSensorType.Geiger;
-        } else if (measure.apparatusSensorType.toLowerCase().includes(ApparatusSensorType.Photodiode)) {
-          apparatusSensorType = ApparatusSensorType.Photodiode;
-        }
-      }
       const payload: MeasureApi = {
         apiKey: environment.API_KEY,
         data: {
           apparatusId: measure.apparatusId,
           apparatusVersion: measure.apparatusVersion,
-          apparatusSensorType: apparatusSensorType,
+          apparatusSensorType: measure.apparatusSensorType,
           apparatusTubeType: measure.apparatusTubeType,
           temperature: measure.temperature ? Math.round(measure.temperature) : undefined,
           value: measure.value,

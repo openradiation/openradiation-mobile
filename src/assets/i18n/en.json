@@ -182,5 +182,11 @@
   },
   "SETTINGS": {
     "TITLE": "Settings"
+  },
+  "USB": {
+    "USB_PERMISSION": {
+      "NOTICE": "You need to accept the permission in order to use the USB sensor.",
+      "TITLE": "USB - Permission denied"
+    }
   }
 }

@@ -27,10 +27,8 @@ export class SelectIconComponent implements ControlValueAccessor {
   @Input()
   required?: boolean;
 
-  // Function to call when the rating changes.
   private onChange = (option: any) => {};
 
-  // Function to call when the input is touched (when a star is clicked).
   private onTouched = () => {};
 
   registerOnChange(fn: (option: any) => void): void {

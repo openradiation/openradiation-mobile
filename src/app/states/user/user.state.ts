@@ -17,13 +17,13 @@ export class UserState implements NgxsOnInit {
   constructor(private userService: UserService) {}
 
   @Selector()
-  static login(state: UserStateModel): string | undefined {
-    return state.login;
+  static login({ login }: UserStateModel): string | undefined {
+    return login;
   }
 
   @Selector()
-  static language(state: UserStateModel): string | undefined {
-    return state.language;
+  static language({ language }: UserStateModel): string | undefined {
+    return language;
   }
 
   ngxsOnInit({ dispatch }: StateContext<UserStateModel>) {
