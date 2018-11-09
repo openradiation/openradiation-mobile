@@ -1,6 +1,6 @@
 <ng-container *ngIf="measureSeriesParamsForm">
     <ng-container>
-        <app-header>{{'MEASUREMENT_SERIES.TITLE' | translate}}</app-header>
+        <app-header>{{'MEASURE_SERIES.TITLE' | translate}}</app-header>
 
         <ion-content>
             <div class="content">
@@ -9,25 +9,25 @@
                 </div>
                 <form class="form" [formGroup]="measureSeriesParamsForm" ngxsForm="measures.measureSeriesParams">
                     <app-category-label>
-                        {{'MEASURES.MEASUREMENT_SERIES.SERIES_TITLE' | translate}}
+                        {{'MEASURE_SERIES.SERIES_TITLE' | translate}}
                     </app-category-label>
-                    <ion-label class="title">{{'MEASURES.MEASUREMENT_SERIES.SERIES_DURATION' | translate}}</ion-label>
+                    <ion-label class="title">{{'MEASURE_SERIES.SERIES_DURATION' | translate}}</ion-label>
                     <ion-item>
                         <ion-label position="fixed">{{measureSeriesParamsForm?.value.seriesDurationLimit}}:00'</ion-label>
                         <ion-range class="range" formControlName="seriesDurationLimit" required min="1" max="24"
                                    step="1" snaps="true"></ion-range>
                     </ion-item>
                     <app-category-label>
-                        {{'MEASURES.MEASUREMENT_SERIES.MEASURES_TITLE' | translate}}
+                        {{'MEASURE_SERIES.MEASURES_TITLE' | translate}}
                     </app-category-label>
-                    <ion-label class="title">{{'MEASURES.MEASUREMENT_SERIES.MEASURES_DURATION' | translate}}</ion-label>
+                    <ion-label class="title">{{'MEASURE_SERIES.MEASURES_DURATION' | translate}}</ion-label>
                     <ion-item>
                         <ion-label position="fixed">{{measureSeriesParamsForm?.value.measureDurationLimit}}'00''</ion-label>
                         <ion-range class="range" formControlName="measureDurationLimit" required min="5" max="60"
                                    step="5"
                                    snaps="true"></ion-range>
                     </ion-item>
-                    <ion-label class="title">{{'MEASURES.MEASUREMENT_SERIES.HITS_NUMBER' | translate}}</ion-label>
+                    <ion-label class="title">{{'MEASURE_SERIES.HITS_NUMBER' | translate}}</ion-label>
                     <ion-item>
                         <ion-label position="fixed">{{measureSeriesParamsForm?.value.measureHitsLimit}}</ion-label>
                         <ion-range class="range" formControlName="measureHitsLimit" required min="100" max="1000"

@@ -51,7 +51,7 @@ export class MenuComponent {
     this.menuController.close();
   }
 
-  startSeriesMeasure() {
+  startMeasureSeries() {
     this.closeMenu();
     this.login$.pipe(take(1)).subscribe(login => {
       if (login !== undefined) {
@@ -61,7 +61,7 @@ export class MenuComponent {
           }
         });
       } else {
-        this.goToLogin(RedirectAfterLogin.StartSeriesMeasure);
+        this.goToLogin(RedirectAfterLogin.MeasureSeries);
       }
     });
   }
@@ -72,7 +72,7 @@ export class MenuComponent {
       if (login !== undefined) {
         this.store.dispatch(new StartManualMeasure());
       } else {
-        this.goToLogin(RedirectAfterLogin.StartMeasure);
+        this.goToLogin(RedirectAfterLogin.ManualMeasure);
       }
     });
   }
@@ -80,8 +80,14 @@ export class MenuComponent {
   private goToLogin(redirectAfterLogin: RedirectAfterLogin) {
     this.alertController
       .create({
-        header: this.translateService.instant('MEASURE_MANUAL.TITLE'),
-        message: this.translateService.instant('MEASURE_MANUAL.ALERT'),
+        header:
+          redirectAfterLogin === RedirectAfterLogin.ManualMeasure
+            ? this.translateService.instant('MEASURE_MANUAL.TITLE')
+            : this.translateService.instant('MEASURE_SERIES.TITLE'),
+        message:
+          redirectAfterLogin === RedirectAfterLogin.ManualMeasure
+            ? this.translateService.instant('MEASURE_MANUAL.ALERT')
+            : this.translateService.instant('MEASURE_SERIES.ALERT'),
         backdropDismiss: false,
         buttons: [
           {

@@ -14,8 +14,8 @@ import { StartManualMeasure, StartMeasureSeriesParams } from '../../../../states
 import { LogIn } from '../../../../states/user/user.action';
 
 export enum RedirectAfterLogin {
-  StartMeasure = 'startMeasure',
-  StartSeriesMeasure = 'startSeriesMeasure'
+  ManualMeasure = 'manualMeasure',
+  MeasureSeries = 'measureSeries'
 }
 
 @Component({
@@ -96,10 +96,10 @@ export class LogInPage extends AutoUnsubscribePage {
       )
       .subscribe(() => {
         switch (this.redirectAfterLogin) {
-          case RedirectAfterLogin.StartMeasure:
+          case RedirectAfterLogin.ManualMeasure:
             this.store.dispatch(new StartManualMeasure());
             break;
-          case RedirectAfterLogin.StartSeriesMeasure:
+          case RedirectAfterLogin.MeasureSeries:
             this.store.dispatch(new StartMeasureSeriesParams());
             break;
         }

@@ -104,9 +104,6 @@
   "MAP": {
     "NO_CONNECTION": "Aucune connexion disponible pour afficher la carte"
   },
-  "MEASUREMENT_SERIES": {
-    "TITLE": "Série de mesures"
-  },
   "MEASURES": {
     "AUTO_PUBLISH": "Publication automatique",
     "AUTO_PUBLISH_NOTICE": {
@@ -133,18 +130,6 @@
     "HITS_PER_MIN": "Nb coups/min",
     "INIT": "Initialisation",
     "MEASURE": "Mesure",
-    "MEASUREMENT_SERIES": {
-      "HITS_NUMBER": "Nombre de coups minimun d'une mesure",
-      "MEASURES_DURATION": "Durée minimale d'une mesure",
-      "MEASURES_TITLE": "Mesures",
-      "MESSAGE_SCAN": {
-        "=0": "Première mesure en cours",
-        "=1": "Une mesure prise depuis",
-        "other": "# mesures prises depuis"
-      },
-      "SERIES_DURATION": "Durée de la série de mesures",
-      "SERIES_TITLE": "Série"
-    },
     "MEASURE_START": "Début de la mesure",
     "ONGOING": "Mesure en cours",
     "REPORT_LATITUDE": "Latitude",
@@ -168,6 +153,20 @@
   "MEASURE_MANUAL": {
     "ALERT": "Vous devez vous identifier pour pouvoir saisir manuellemment une mesure.",
     "TITLE": "Saisie manuelle"
+  },
+  "MEASURE_SERIES": {
+    "ALERT": "Vous devez vous identifier pour pouvoir commencer une série de mesure.",
+    "HITS_NUMBER": "Nb coups minimun d'une mesure",
+    "MEASURES_DURATION": "Durée minimale d'une mesure",
+    "MEASURES_TITLE": "Mesures",
+    "MESSAGE_SCAN": {
+      "=0": "Première mesure en cours",
+      "=1": "Une mesure prise depuis",
+      "other": "# mesures prises depuis"
+    },
+    "SERIES_DURATION": "Durée de la série de mesures",
+    "SERIES_TITLE": "Série",
+    "TITLE": "Série de mesures"
   },
   "POSITION": {
     "DENIED_ALWAYS": {

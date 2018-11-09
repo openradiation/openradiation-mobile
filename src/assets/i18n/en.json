@@ -104,9 +104,6 @@
   "MAP": {
     "NO_CONNECTION": "No connection available to display the map"
   },
-  "MEASUREMENT_SERIES": {
-    "TITLE": "Measurement series"
-  },
   "MEASURES": {
     "AUTO_PUBLISH": "Auto publications",
     "AUTO_PUBLISH_NOTICE": {
@@ -133,18 +130,6 @@
     "HITS_PER_MIN": "No. of counts/min.",
     "INIT": "Start-up",
     "MEASURE": "Measurement",
-    "MEASUREMENT_SERIES": {
-      "HITS_NUMBER": "Minimum hits number of a measure",
-      "MEASURES_DURATION": "Minimum duration of a measure",
-      "MEASURES_TITLE": "Measures",
-      "MESSAGE_SCAN": {
-        "=0": "First measurement in progress",
-        "=1": "One measurement taken since",
-        "other": "# measurements taken since"
-      },
-      "SERIES_DURATION": "Duration of the series of measures",
-      "SERIES_TITLE": "Series"
-    },
     "MEASURE_START": "Measurement start",
     "ONGOING": "Measurement in progress",
     "REPORT_LATITUDE": "Latitude",
@@ -168,6 +153,20 @@
   "MEASURE_MANUAL": {
     "ALERT": "You must be logged in before you can fill out a manual measurement report.",
     "TITLE": "Manual input"
+  },
+  "MEASURE_SERIES": {
+    "ALERT": "You must be logged in before you can start a measurement series.",
+    "HITS_NUMBER": "Measurement minimum no. of counts",
+    "MEASURES_DURATION": "Measurement minimum duration",
+    "MEASURES_TITLE": "Measurements",
+    "MESSAGE_SCAN": {
+      "=0": "First measurement in progress",
+      "=1": "One measurement taken since",
+      "other": "# measurements taken since"
+    },
+    "SERIES_DURATION": "Measurement series duration",
+    "SERIES_TITLE": "Series",
+    "TITLE": "Measurement series"
   },
   "POSITION": {
     "DENIED_ALWAYS": {

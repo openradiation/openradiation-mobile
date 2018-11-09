@@ -121,7 +121,7 @@
             </div>
             <div class="message" *ngIf="currentSeries$ | async as currentSeries">
                 <div class="message-series">{{currentSeries.measures.length | i18nPlural:
-                    ('MEASURES.MEASUREMENT_SERIES.MESSAGE_SCAN' | translate)}} <span
+                    ('MEASURE_SERIES.MESSAGE_SCAN' | translate)}} <span
                             *ngIf="currentSeries.measures.length > 0">{{currentSeries.startTime | date: 'HH:mm\'\'\'ss"'}}</span>
                 </div>
             </div>
