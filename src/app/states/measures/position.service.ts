@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation/ngx';
-import { AlertController, Platform } from '@ionic/angular';
+import { AlertController, LoadingController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, ofActionSuccessful, Store } from '@ngxs/store';
 import { defer, Observable, of } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
-import { catchError, take, takeUntil, tap } from 'rxjs/operators';
+import { catchError, concatMap, take, takeUntil, tap } from 'rxjs/operators';
 import { PositionChanged, StartWatchPosition, StopWatchPosition } from './measures.action';
 
 @Injectable({
@@ -22,7 +22,8 @@ export class PositionService {
     private platform: Platform,
     private store: Store,
     private alertController: AlertController,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    public loadingController: LoadingController
   ) {
     this.actions$.pipe(ofActionDispatched(StartWatchPosition)).subscribe(() => {
       if (this.currentAlert) {
@@ -34,9 +35,19 @@ export class PositionService {
 
   getCurrentPosition(): Observable<Geoposition | undefined> {
     return fromPromise(
-      this.geolocation
-        .getCurrentPosition({ enableHighAccuracy: true, timeout: 5000, maximumAge: 10000 })
-        .catch(() => undefined)
+      this.loadingController
+        .create({
+          message: this.translateService.instant('POSITION.ACQUISITION')
+        })
+        .then(loadingIndicator => loadingIndicator.present())
+    ).pipe(
+      concatMap(() =>
+        fromPromise(
+          this.geolocation
+            .getCurrentPosition({ enableHighAccuracy: true, timeout: 5000, maximumAge: 10000 })
+            .catch(() => undefined)
+        ).pipe(tap(() => this.loadingController.dismiss()))
+      )
     );
   }
 

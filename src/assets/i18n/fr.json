@@ -169,6 +169,7 @@
     "TITLE": "Série de mesures"
   },
   "POSITION": {
+    "ACQUISITION": "Position en cours d'acquisition",
     "DENIED_ALWAYS": {
       "NOTICE": "La position de l'appareil est nécessaire  pour l'envoi des mesures à la base OpenRadiation. Merci d'accepter la permission.",
       "TITLE": "Position - Permission refusée"
