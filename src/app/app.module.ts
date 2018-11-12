@@ -21,6 +21,7 @@ import { NgxsFormPluginModule } from '@ngxs/form-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsModule } from '@ngxs/store';
+import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MenuComponent } from './pages/menu/menu.component';
@@ -40,7 +41,9 @@ import { UserState } from './states/user/user.state';
     NgxsStoragePluginModule.forRoot({
       key: ['devices.knownDevices', 'measures.measures', 'measures.params', 'user']
     }),
-    NgxsLoggerPluginModule.forRoot(),
+    NgxsLoggerPluginModule.forRoot({
+      disabled: environment.production
+    }),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
