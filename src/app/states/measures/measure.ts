@@ -3,7 +3,22 @@ import * as uuid from 'uuid';
 import { environment } from '../../../environments/environment';
 import { ApparatusSensorType } from '../devices/abstract-device';
 
-export class Measure {
+export abstract class AbstractMeasure {
+  abstract readonly type: MeasureType;
+  startTime: number;
+  endTime?: number;
+  sent = false;
+
+  constructor(public id: string) {}
+}
+
+export enum MeasureType {
+  Measure = 'Measure',
+  MeasureSeries = 'MeasureSeries'
+}
+
+export class Measure extends AbstractMeasure {
+  readonly type = MeasureType.Measure;
   apparatusId?: string;
   apparatusVersion?: string;
   apparatusSensorType?: ApparatusSensorType;
@@ -11,8 +26,6 @@ export class Measure {
   temperature?: number;
   value: number;
   hitsNumber = 0;
-  startTime: number;
-  endTime?: number;
   latitude?: number;
   longitude?: number;
   accuracy?: number;
@@ -36,7 +49,6 @@ export class Measure {
   enclosedObject?: string;
   measurementEnvironment?: MeasureEnvironment;
   rain?: boolean;
-  sent = false;
   steps?: Step[] = [];
 
   constructor(
@@ -51,6 +63,7 @@ export class Measure {
     manualReporting = false,
     reportUuid = uuid.v4()
   ) {
+    super(reportUuid);
     this.apparatusId = apparatusId;
     this.apparatusVersion = apparatusVersion;
     this.apparatusSensorType = apparatusSensorType;
@@ -168,15 +181,17 @@ export interface MeasureSeriesParams {
   measureDurationLimit: number | undefined;
 }
 
-export class MeasureSeries {
+export class MeasureSeries extends AbstractMeasure {
+  readonly type = MeasureType.MeasureSeries;
   measures: Measure[] = [];
-  startTime?: number;
-  endTime?: number;
 
-  constructor(public params: MeasureSeriesParams, public seriesUuid = uuid.v4()) {}
+  constructor(public params: MeasureSeriesParams, public seriesUuid = uuid.v4()) {
+    super(seriesUuid);
+  }
 
   static addMeasureToSeries(measureSeries: MeasureSeries, measure: Measure) {
     measure.tags = [`series_${measureSeries.seriesUuid.replace(/-/g, '').slice(-18)}`];
+    measure.steps = undefined;
     return {
       ...measureSeries,
       endTime: measure.endTime,

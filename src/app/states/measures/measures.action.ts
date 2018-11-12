@@ -1,6 +1,6 @@
 import { Geoposition } from '@ionic-native/geolocation';
 import { AbstractDevice } from '../devices/abstract-device';
-import { Measure, Step } from './measure';
+import { Measure, MeasureSeries, Step } from './measure';
 
 export class EnableExpertMode {
   static readonly type = '[Measures] Enable expert mode';
@@ -37,7 +37,11 @@ export class StartMeasure {
 }
 
 export class StopMeasure {
-  static readonly type = '[Mesures] Stop measure';
+  static readonly type = '[Measures] Stop measure';
+}
+
+export class CancelMeasure {
+  static readonly type = '[Measures] Cancel measure';
 }
 
 export class StartMeasureSeriesParams {
@@ -48,8 +52,8 @@ export class StopMeasureSeriesParams {
   static readonly type = '[Measures] Stop measure series params';
 }
 
-export class CancelMeasure {
-  static readonly type = '[Measures] Cancel measure';
+export class StopMeasureSeries {
+  static readonly type = '[Measures] Stop measure serues';
 }
 
 export class AddMeasureScanStep {
@@ -89,12 +93,12 @@ export class StartManualMeasure {
 
 export class PublishMeasure {
   static readonly type = '[Measures] Publish measure';
-  constructor(public measure: Measure) {}
+  constructor(public measure: Measure | MeasureSeries) {}
 }
 
 export class DeleteMeasure {
   static readonly type = '[Measures] Delete measure';
-  constructor(public measure: Measure) {}
+  constructor(public measure: Measure | MeasureSeries) {}
 }
 
 export class DeleteAllMeasures {
@@ -103,5 +107,5 @@ export class DeleteAllMeasures {
 
 export class ShowMeasure {
   static readonly type = '[Measures] Show measure detail';
-  constructor(public measure: Measure) {}
+  constructor(public measure: Measure | MeasureSeries) {}
 }

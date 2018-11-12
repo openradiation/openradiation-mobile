@@ -10,6 +10,7 @@ import {
   MeasureReport,
   MeasureSeries,
   MeasureSeriesParams,
+  MeasureType,
   PositionAccuracyThreshold
 } from './measure';
 import {
@@ -42,7 +43,7 @@ import { MeasuresService } from './measures.service';
 import { PositionService } from './position.service';
 
 export interface MeasuresStateModel {
-  measures: Measure[];
+  measures: (Measure | MeasureSeries)[];
   currentPosition?: Geoposition;
   isWatchingPosition: boolean;
   currentMeasure?: Measure;
@@ -120,7 +121,7 @@ export class MeasuresState {
   }
 
   @Selector()
-  static measures({ measures }: MeasuresStateModel): Measure[] {
+  static measures({ measures }: MeasuresStateModel): (Measure | MeasureSeries)[] {
     return measures;
   }
 
@@ -234,9 +235,7 @@ export class MeasuresState {
         patchState(patch);
       } else {
         const measure = { ...currentMeasure, steps: undefined };
-        const measureIndex = measures.findIndex(
-          historyMeasure => historyMeasure.reportUuid === currentMeasure.reportUuid
-        );
+        const measureIndex = measures.findIndex(historyMeasure => historyMeasure.id === measure.id);
         if (measureIndex > -1) {
           patch.measures = [...measures.slice(0, measureIndex), measure, ...measures.slice(measureIndex + 1)];
         } else {
@@ -313,7 +312,7 @@ export class MeasuresState {
       const newHitsNumber = currentMeasure.hitsNumber + step.hitsNumber;
       if (
         currentSeries &&
-        ((currentTime - currentMeasure!.startTime > currentSeries.params.measureDurationLimit! &&
+        ((currentTime - currentMeasure.startTime > currentSeries.params.measureDurationLimit! &&
           currentMeasure.hitsNumber > HitsAccuracyThreshold.Accurate) ||
           newHitsNumber > currentSeries.params.measureHitsLimit!)
       ) {
@@ -347,7 +346,7 @@ export class MeasuresState {
     const { currentMeasure, currentSeries } = getState();
     if (currentMeasure) {
       const currentTime = Date.now();
-      if (currentSeries && currentTime - currentMeasure!.startTime > currentSeries.params.measureDurationLimit!) {
+      if (currentSeries && currentTime - currentMeasure.startTime > currentSeries.params.measureDurationLimit!) {
         dispatch(new StartNextMeasureSeries()).subscribe();
       } else {
         patchState({
@@ -370,21 +369,22 @@ export class MeasuresState {
           this.measuresService.startMeasureScan(device).pipe(
             tap(() => {
               const currentTime = Date.now();
-              const patch: Partial<MeasuresStateModel> = {
-                currentMeasure: {
-                  ...currentMeasure!,
-                  startTime: currentTime,
-                  endTime: currentTime
-                }
-              };
-              if (currentSeries && !currentSeries.startTime && !currentSeries.endTime) {
+              const patch: Partial<MeasuresStateModel> = {};
+              if (currentSeries) {
                 patch.currentSeries = {
                   ...currentSeries,
                   startTime: currentTime,
                   endTime: currentTime
                 };
               }
-              patch.currentMeasure = Measure.updateStartPosition(<Measure>patch.currentMeasure, currentPosition);
+              patch.currentMeasure = Measure.updateStartPosition(
+                {
+                  ...currentMeasure,
+                  startTime: currentTime,
+                  endTime: currentTime
+                },
+                currentPosition
+              );
               patchState(patch);
             })
           )
@@ -426,7 +426,7 @@ export class MeasuresState {
   startNextMeasureSeriesScan({ getState, patchState, dispatch }: StateContext<MeasuresStateModel>) {
     const { currentMeasure, currentSeries } = getState();
     if (currentMeasure && currentSeries) {
-      if (currentMeasure.endTime! - currentSeries.startTime! > currentSeries.params.seriesDurationLimit!) {
+      if (currentMeasure.endTime! - currentSeries.startTime > currentSeries.params.seriesDurationLimit!) {
         return dispatch(new StopMeasureScan());
       } else {
         return this.positionService.getCurrentPosition().pipe(
@@ -540,16 +540,14 @@ export class MeasuresState {
   publishMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, { measure }: PublishMeasure) {
     if (!measure.sent) {
       const { measures } = getState();
-      const index = measures.findIndex(stateMeasure => stateMeasure.reportUuid === measure.reportUuid);
+      const index = measures.findIndex(stateMeasure => stateMeasure.id === measure.id);
       if (index !== -1) {
         return this.measuresService.publishMeasure(measure).pipe(
-          tap(() => {
-            const measures_ = [...measures];
-            measures_.splice(index, 1);
+          tap(() =>
             patchState({
               measures: [...measures.slice(0, index), { ...measure, sent: true }, ...measures.slice(index + 1)]
-            });
-          })
+            })
+          )
         );
       }
     }
@@ -560,7 +558,7 @@ export class MeasuresState {
   deleteMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, { measure }: DeleteMeasure) {
     if (!measure.sent) {
       const { measures } = getState();
-      const index = measures.findIndex(stateMeasure => stateMeasure.reportUuid === measure.reportUuid);
+      const index = measures.findIndex(stateMeasure => stateMeasure.id === measure.id);
       if (index !== -1) {
         patchState({
           measures: [...measures.slice(0, index), ...measures.slice(index + 1)]
@@ -578,8 +576,14 @@ export class MeasuresState {
 
   @Action(ShowMeasure)
   showMeasure({ patchState }: StateContext<MeasuresStateModel>, { measure }: PublishMeasure) {
-    patchState({
-      currentMeasure: { ...measure }
-    });
+    if (measure.type === MeasureType.Measure) {
+      patchState({
+        currentMeasure: { ...measure }
+      });
+    } else {
+      patchState({
+        currentSeries: { ...measure }
+      });
+    }
   }
 }
