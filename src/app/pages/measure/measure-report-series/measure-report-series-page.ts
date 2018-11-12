@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
-import { Select } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { SelectIconOption } from '../../../components/select-icon/select-icon-option';
 import { Measure, MeasureEnvironment, PositionAccuracyThreshold } from '../../../states/measures/measure';
-import { MeasuresState } from '../../../states/measures/measures.state';
+import { MeasuresState, MeasuresStateModel } from '../../../states/measures/measures.state';
 import { UserState } from '../../../states/user/user.state';
+import { StartMeasureSeriesReport } from '../../../states/measures/measures.action';
 
 @Component({
   selector: 'app-measure-report-series',
@@ -96,12 +97,23 @@ export class MeasureReportSeriesPage extends AutoUnsubscribePage {
     }
   ];
 
-  constructor(protected router: Router) {
+  constructor(protected router: Router, private store: Store, private formBuilder: FormBuilder) {
     super(router);
   }
 
   pageEnter() {
     super.pageEnter();
+    this.store.dispatch(new StartMeasureSeriesReport()).subscribe(() => {
+      const { measureSeriesReport, currentSeries } = this.store.selectSnapshot(
+        ({ measures }: { measures: MeasuresStateModel }) => measures
+      );
+      if (measureSeriesReport) {
+        this.measureReportSeriesForm = this.formBuilder.group({
+          ...measureSeriesReport.model,
+          tags: [measureSeriesReport.model.tags]
+        });
+      }
+    });
   }
 
   stopReportSeries() {}

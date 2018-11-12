@@ -15,11 +15,11 @@
                     <ion-list>
                         <ion-item class="custom-disabled">
                             <ion-label class="value">Nombre mesures automatique</ion-label>
-                            <ion-input type="number" placeholder="0"></ion-input>
+                            <ion-input type="number" formControlName="seriesNumbersMeasures" placeholder="0"></ion-input>
                         </ion-item>
                         <ion-item class="custom-disabled">
                             <ion-label class="value">Durée mesure automatique</ion-label>
-                            <ion-datetime class="values" display-format="HH:mm'ss''" formControlName="startTime"
+                            <ion-datetime class="values" display-format="HH:mm'ss''" formControlName="measureDurationLimit"
                                           required
                                           [cancelText]="'GENERAL.CANCEL' | translate"
                                           [doneText]="'GENERAL.SUBMIT' | translate"></ion-datetime>
@@ -42,7 +42,7 @@
                         </ion-item>
                         <ion-item class="custom-disabled">
                             <ion-label class="value">Durée totale</ion-label>
-                            <ion-datetime class="values" display-format="DD/MM/YYYY" formControlName="date" required
+                            <ion-datetime class="values" display-format="DD/MM/YYYY" formControlName="duration" required
                                           [cancelText]="'GENERAL.CANCEL' | translate"
                                           [doneText]="'GENERAL.SUBMIT' | translate"></ion-datetime>
                         </ion-item>
@@ -51,13 +51,13 @@
                         <ion-list>
                             <ion-item [ngClass]="'custom-disabled'">
                                 <ion-label position="fixed">Moyenne nb coups</ion-label>
-                                <ion-input formControlName="hitsNumber" type="number" placeholder="0"></ion-input>
+                                <ion-input formControlName="hitsNumberAverage" type="number" placeholder="0"></ion-input>
                             </ion-item>
                             <ion-item class="has-suffix"
                                       [ngClass]="'custom-disabled'">
                                 <ion-label position="fixed">moyenne mesure<span
                                         *ngIf="!reportScan"> *</span></ion-label>
-                                <ion-input formControlName="value" required type="number"
+                                <ion-input formControlName="valueAverage" required type="number"
                                            placeholder="0.000"></ion-input>
                                 <span class="unit">{{'MEASURES.DOSE_RATE_UNIT' | translate}}</span>
                             </ion-item>
