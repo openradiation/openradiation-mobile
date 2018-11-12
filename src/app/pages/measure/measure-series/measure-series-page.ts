@@ -9,13 +9,7 @@ import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-u
 import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
 import { PositionAccuracyThreshold } from '../../../states/measures/measure';
-import {
-  CancelMeasure,
-  StartMeasure,
-  StartWatchPosition,
-  StopMeasureSeriesParams,
-  StopWatchPosition
-} from '../../../states/measures/measures.action';
+import { CancelMeasure, StartMeasure, StopMeasureSeriesParams } from '../../../states/measures/measures.action';
 import { MeasuresState, MeasuresStateModel } from '../../../states/measures/measures.state';
 
 @Component({
@@ -54,7 +48,6 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
         ...measureSeriesParams.model
       });
     }
-    this.store.dispatch(new StartWatchPosition());
     this.subscriptions.push(
       this.actions$.pipe(ofActionSuccessful(CancelMeasure)).subscribe(() =>
         this.navController.navigateRoot([
@@ -74,11 +67,6 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
         .pipe(ofActionSuccessful(StartMeasure))
         .subscribe(() => this.navController.navigateRoot(['measure', 'scan']))
     );
-  }
-
-  pageLeave() {
-    super.pageLeave();
-    this.store.dispatch(new StopWatchPosition());
   }
 
   startMeasureSeries() {
