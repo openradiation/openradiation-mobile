@@ -19,7 +19,7 @@
                         </ion-item>
                         <ion-item class="custom-disabled">
                             <ion-label class="value">Durée mesure automatique</ion-label>
-                            <ion-datetime class="values" display-format="HH:mm'ss''" formControlName="measureDurationLimit"
+                            <ion-datetime class="values" display-format="mm'ss''" formControlName="measureDurationLimit"
                                           required
                                           [cancelText]="'GENERAL.CANCEL' | translate"
                                           [doneText]="'GENERAL.SUBMIT' | translate"></ion-datetime>
@@ -66,14 +66,17 @@
                     <div class="environment">
                         <app-select-icon [options]="measurementEnvironmentOptions"
                                          formControlName="measurementEnvironment"
+                                         required
                                          [title]="'MEASURES.ENVIRONMENT.TITLE' | translate">
                         </app-select-icon>
                     </div>
                     <div class="options">
                         <app-select-icon [options]="measurementHeightOptions" formControlName="measurementHeight"
+                                         required
                                          [title]="'MEASURES.SENSOR_POSITION.TITLE' | translate">
                         </app-select-icon>
                         <app-select-icon [options]="rainOptions" formControlName="rain"
+                                         required
                                          [title]="'MEASURES.WEATHER.TITLE' | translate">
                         </app-select-icon>
                     </div>
