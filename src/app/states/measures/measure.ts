@@ -168,6 +168,21 @@ export interface MeasureSeriesParams {
   measureDurationLimit: number | undefined;
 }
 
+export interface MeasureSeriesReport {
+  seriesNumbersMeasures: number | undefined;
+  measureDurationLimit: number | undefined;
+  date: string | undefined;
+  startTime: string | undefined;
+  duration: string | undefined;
+  hitsNumberAverage: number | undefined;
+  valueAverage: number | undefined;
+  measurementHeight: number | undefined;
+  description: string | undefined;
+  tags: string[] | undefined;
+  measurementEnvironment: MeasureEnvironment | undefined;
+  rain: boolean | undefined;
+}
+
 export class MeasureSeries {
   measures: Measure[] = [];
   startTime?: number;
