@@ -313,7 +313,8 @@ export class MeasuresState {
       const newHitsNumber = currentMeasure.hitsNumber + step.hitsNumber;
       if (
         currentSeries &&
-        (currentTime - currentMeasure!.startTime > currentSeries.params.measureDurationLimit! ||
+        ((currentTime - currentMeasure!.startTime > currentSeries.params.measureDurationLimit! &&
+          currentMeasure.hitsNumber > HitsAccuracyThreshold.Accurate) ||
           newHitsNumber > currentSeries.params.measureHitsLimit!)
       ) {
         dispatch(new StartNextMeasureSeries()).subscribe();
