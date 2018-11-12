@@ -72,7 +72,12 @@ export class HistoryPage extends AutoUnsubscribePage {
 
   publish(event: Event, measure: Measure) {
     event.stopPropagation();
-    if (measure.accuracy && measure.endAccuracy) {
+    if (
+      measure.accuracy &&
+      measure.accuracy < PositionAccuracyThreshold.No &&
+      measure.endAccuracy &&
+      measure.endAccuracy < PositionAccuracyThreshold.No
+    ) {
       this.alertController
         .create({
           header: this.translateService.instant('HISTORY.TITLE'),

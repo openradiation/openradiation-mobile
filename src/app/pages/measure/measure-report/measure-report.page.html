@@ -6,7 +6,7 @@
         <ion-content>
             <div class="content">
                 <div class="message"
-                     *ngIf="!currentMeasure.accuracy || !currentMeasure.endAccuracy">
+                     *ngIf="currentMeasure.accuracy >= positionAccuracyThreshold.No || currentMeasure.endAccuracy >= positionAccuracyThreshold.No">
                     <div class="message-style">{{'HISTORY.MESSAGE_PREVENT_MEASURE_SENDING' | translate}}</div>
                 </div>
                 <div class="message"

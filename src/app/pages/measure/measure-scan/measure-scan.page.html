@@ -7,7 +7,7 @@
     <ion-content>
         <div class="content">
             <div class="message"
-                 *ngIf="currentMeasure.startTime && !currentMeasure.accuracy">
+                 *ngIf="currentMeasure.startTime && currentMeasure.accuracy >= positionAccuracyThreshold.No">
                 <div class="message-style">{{'HISTORY.MESSAGE_PREVENT_MEASURE_SENDING' | translate}}</div>
             </div>
             <div class="category top">
