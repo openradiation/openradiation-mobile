@@ -519,9 +519,14 @@ export class MeasuresState {
         duration: currentSeries.endTime
           ? this.dateService.toISODuration(currentSeries.endTime - currentSeries.startTime!)
           : undefined,
-        hitsNumberAverage:
-          currentSeries.measures.reduce((acc, obj) => acc + obj.hitsNumber, 0) / currentSeries.measures.length,
-        valueAverage: currentSeries.measures.reduce((acc, obj) => acc + obj.value, 0) / currentSeries.measures.length,
+        hitsNumberAverage: Number(
+          (
+            currentSeries.measures.reduce((acc, obj) => acc + obj.hitsNumber, 0) / currentSeries.measures.length
+          ).toFixed(3)
+        ),
+        valueAverage: Number(
+          (currentSeries.measures.reduce((acc, obj) => acc + obj.value, 0) / currentSeries.measures.length).toFixed(3)
+        ),
         measurementHeight: currentSeries.measures[0].measurementHeight,
         description: currentSeries.measures[0].description,
         tags: currentSeries.measures[0].tags,
