@@ -52,10 +52,6 @@ export class StopMeasureSeriesParams {
   static readonly type = '[Measures] Stop measure series params';
 }
 
-export class StopMeasureSeries {
-  static readonly type = '[Measures] Stop measure serues';
-}
-
 export class AddMeasureScanStep {
   static readonly type = '[Measures] Add measure scan step';
   constructor(public step: Step, public device: AbstractDevice) {}

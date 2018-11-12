@@ -302,32 +302,29 @@ export class MeasuresState {
   ) {
     const { currentMeasure, currentSeries } = getState();
     if (currentMeasure && currentMeasure.steps) {
-      const currentTime = Date.now();
-      const newHitsNumber = currentMeasure.hitsNumber + step.hitsNumber;
+      const newCurrentMeasure = {
+        ...currentMeasure,
+        endTime: step.ts,
+        hitsNumber: currentMeasure.hitsNumber + step.hitsNumber,
+        steps: [...currentMeasure.steps, step]
+      };
+      newCurrentMeasure.value = this.measuresService.computeRadiationValue(newCurrentMeasure, device);
+      if (newCurrentMeasure.steps[0] && newCurrentMeasure.steps[0].temperature !== undefined) {
+        newCurrentMeasure.temperature =
+          newCurrentMeasure.steps
+            .map(currentMeasureStep => currentMeasureStep.temperature!)
+            .reduce((acc, current) => acc + current) / newCurrentMeasure.steps.length;
+      }
+      patchState({
+        currentMeasure: newCurrentMeasure
+      });
       if (
         currentSeries &&
-        ((currentTime - currentMeasure.startTime > currentSeries.params.measureDurationLimit! &&
+        ((step.ts - currentMeasure.startTime > currentSeries.params.measureDurationLimit! &&
           currentMeasure.hitsNumber > HitsAccuracyThreshold.Accurate) ||
-          newHitsNumber > currentSeries.params.measureHitsLimit!)
+          newCurrentMeasure.hitsNumber > currentSeries.params.measureHitsLimit!)
       ) {
         dispatch(new StartNextMeasureSeries()).subscribe();
-      } else {
-        const newCurrentMeasure = {
-          ...currentMeasure,
-          endTime: step.ts,
-          hitsNumber: newHitsNumber,
-          steps: [...currentMeasure.steps, step]
-        };
-        newCurrentMeasure.value = this.measuresService.computeRadiationValue(newCurrentMeasure, device);
-        if (newCurrentMeasure.steps[0] && newCurrentMeasure.steps[0].temperature !== undefined) {
-          newCurrentMeasure.temperature =
-            newCurrentMeasure.steps
-              .map(currentMeasureStep => currentMeasureStep.temperature!)
-              .reduce((acc, current) => acc + current) / newCurrentMeasure.steps.length;
-        }
-        patchState({
-          currentMeasure: newCurrentMeasure
-        });
       }
     }
   }
