@@ -79,6 +79,10 @@ export class StartMeasureReport {
   static readonly type = '[Measures] Start measure report';
 }
 
+export class StartMeasureSeriesReport {
+  static readonly type = '[Measures] Start measure series report';
+}
+
 export class StopMeasureReport {
   static readonly type = '[Measures] Stop measure report';
 }

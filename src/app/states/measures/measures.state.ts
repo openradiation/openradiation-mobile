@@ -10,6 +10,7 @@ import {
   MeasureReport,
   MeasureSeries,
   MeasureSeriesParams,
+  MeasureSeriesReport,
   PositionAccuracyThreshold
 } from './measure';
 import {
@@ -29,6 +30,7 @@ import {
   StartMeasureReport,
   StartMeasureScan,
   StartMeasureSeriesParams,
+  StartMeasureSeriesReport,
   StartNextMeasureSeries,
   StartWatchPosition,
   StopMeasure,
@@ -55,6 +57,12 @@ export interface MeasuresStateModel {
   };
   measureSeriesParams?: {
     model: MeasureSeriesParams;
+    dirty: boolean;
+    status: string;
+    errors: any;
+  };
+  measureSeriesReport?: {
+    model: MeasureSeriesReport;
     dirty: boolean;
     status: string;
     errors: any;
@@ -466,32 +474,63 @@ export class MeasuresState {
   startMeasureReport({ getState, patchState }: StateContext<MeasuresStateModel>) {
     const { currentMeasure } = getState();
     if (currentMeasure) {
+      const startTimeIOSString = this.dateService.toISOString(currentMeasure.startTime);
       const model: MeasureReport = {
         latitude: currentMeasure.latitude ? Number(currentMeasure.latitude.toFixed(7)) : undefined,
         longitude: currentMeasure.longitude ? Number(currentMeasure.longitude.toFixed(7)) : undefined,
         endLatitude: currentMeasure.endLatitude ? Number(currentMeasure.endLatitude.toFixed(7)) : undefined,
         endLongitude: currentMeasure.endLongitude ? Number(currentMeasure.endLongitude.toFixed(7)) : undefined,
-        date: this.dateService.toISOString(currentMeasure.startTime),
-        startTime: this.dateService.toISOString(currentMeasure.startTime),
+        date: startTimeIOSString,
+        startTime: startTimeIOSString,
         duration: currentMeasure.endTime
           ? this.dateService.toISODuration(currentMeasure.endTime - currentMeasure.startTime)
           : undefined,
         temperature:
           currentMeasure.temperature !== undefined ? Number(currentMeasure.temperature!.toFixed(2)) : undefined,
-        hitsNumber: currentMeasure.hitsNumber !== undefined ? currentMeasure.hitsNumber : undefined,
+        hitsNumber: currentMeasure.hitsNumber,
         value: currentMeasure.value !== undefined ? Number(currentMeasure.value.toFixed(3)) : undefined,
-        measurementHeight:
-          currentMeasure.measurementHeight !== undefined ? currentMeasure.measurementHeight : undefined,
-        description: currentMeasure.description !== undefined ? currentMeasure.description : undefined,
-        tags: currentMeasure.tags ? currentMeasure.tags : undefined,
-        measurementEnvironment: currentMeasure.measurementEnvironment
-          ? currentMeasure.measurementEnvironment
-          : undefined,
-        rain: currentMeasure.rain !== undefined ? currentMeasure.rain : undefined,
-        enclosedObject: currentMeasure.enclosedObject !== undefined ? currentMeasure.enclosedObject : undefined
+        measurementHeight: currentMeasure.measurementHeight,
+        description: currentMeasure.description,
+        tags: currentMeasure.tags,
+        measurementEnvironment: currentMeasure.measurementEnvironment,
+        rain: currentMeasure.rain,
+        enclosedObject: currentMeasure.enclosedObject
       };
       patchState({
         measureReport: {
+          model,
+          dirty: false,
+          status: '',
+          errors: {}
+        }
+      });
+    }
+  }
+
+  @Action(StartMeasureSeriesReport)
+  StartMeasureSeriesReport({ getState, patchState }: StateContext<MeasuresStateModel>) {
+    const { currentSeries } = getState();
+    if (currentSeries) {
+      const startTimeIOSString = this.dateService.toISOString(currentSeries.startTime!);
+      const model: MeasureSeriesReport = {
+        seriesNumbersMeasures: currentSeries.measures.length,
+        measureDurationLimit: currentSeries.params.measureDurationLimit,
+        date: startTimeIOSString,
+        startTime: startTimeIOSString,
+        duration: currentSeries.endTime
+          ? this.dateService.toISODuration(currentSeries.endTime - currentSeries.startTime!)
+          : undefined,
+        hitsNumberAverage:
+          currentSeries.measures.reduce((acc, obj) => acc + obj.hitsNumber, 0) / currentSeries.measures.length,
+        valueAverage: currentSeries.measures.reduce((acc, obj) => acc + obj.value, 0) / currentSeries.measures.length,
+        measurementHeight: currentSeries.measures[0].measurementHeight,
+        description: currentSeries.measures[0].description,
+        tags: currentSeries.measures[0].tags,
+        measurementEnvironment: currentSeries.measures[0].measurementEnvironment,
+        rain: currentSeries.measures[0].rain
+      };
+      patchState({
+        measureSeriesReport: {
           model,
           dirty: false,
           status: '',
