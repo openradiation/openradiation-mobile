@@ -14,6 +14,7 @@ import { PositionChanged, StartWatchPosition, StopWatchPosition } from './measur
 })
 export class PositionService {
   private currentAlert?: any;
+  isAcquiringPosition = false;
 
   constructor(
     private geolocation: Geolocation,
@@ -34,6 +35,7 @@ export class PositionService {
   }
 
   getCurrentPosition(): Observable<Geoposition | undefined> {
+    this.isAcquiringPosition = true;
     return fromPromise(
       this.loadingController
         .create({
@@ -45,8 +47,16 @@ export class PositionService {
         fromPromise(
           this.geolocation
             .getCurrentPosition({ enableHighAccuracy: true, timeout: 5000, maximumAge: 10000 })
-            .catch(() => undefined)
-        ).pipe(tap(() => this.loadingController.dismiss()))
+            .catch(() => {
+              this.isAcquiringPosition = false;
+              return undefined;
+            })
+        ).pipe(
+          tap(() => {
+            this.loadingController.dismiss();
+            this.isAcquiringPosition = false;
+          })
+        )
       )
     );
   }

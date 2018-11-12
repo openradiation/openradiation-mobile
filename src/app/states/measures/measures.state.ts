@@ -338,9 +338,10 @@ export class MeasuresState {
           currentMeasure.hitsNumber > HitsAccuracyThreshold.Accurate) ||
           newCurrentMeasure.hitsNumber > currentSeries.params.measureHitsLimit!)
       ) {
-        dispatch(new StartNextMeasureSeries()).subscribe();
+        return dispatch(new StartNextMeasureSeries());
       }
     }
+    return of(null);
   }
 
   @Action(UpdateMeasureScanTime)
@@ -352,7 +353,7 @@ export class MeasuresState {
     if (currentMeasure) {
       const currentTime = Date.now();
       if (currentSeries && currentTime - currentMeasure.startTime > currentSeries.params.measureDurationLimit!) {
-        dispatch(new StartNextMeasureSeries()).subscribe();
+        return dispatch(new StartNextMeasureSeries());
       } else {
         patchState({
           currentMeasure: {
@@ -363,6 +364,7 @@ export class MeasuresState {
         });
       }
     }
+    return of(null);
   }
 
   @Action(StartMeasureScan)
@@ -428,7 +430,7 @@ export class MeasuresState {
   }
 
   @Action(StartNextMeasureSeries)
-  startNextMeasureSeriesScan({ getState, patchState, dispatch }: StateContext<MeasuresStateModel>) {
+  startNextMeasureSeries({ getState, patchState, dispatch }: StateContext<MeasuresStateModel>) {
     const { currentMeasure, currentSeries } = getState();
     if (currentMeasure && currentSeries) {
       if (currentMeasure.endTime! - currentSeries.startTime > currentSeries.params.seriesDurationLimit!) {

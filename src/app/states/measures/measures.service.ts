@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { interval, Observable, of } from 'rxjs';
-import { shareReplay, take, takeUntil, tap } from 'rxjs/operators';
+import { filter, shareReplay, take, takeUntil, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { AbstractDevice } from '../devices/abstract-device';
 import { DeviceConnectionLost } from '../devices/devices.action';
@@ -11,6 +11,7 @@ import { UserStateModel } from '../user/user.state';
 import { Measure, MeasureSeries, MeasureType, PositionAccuracyThreshold, Step } from './measure';
 import { MeasureApi } from './measure-api';
 import { AddMeasureScanStep, CancelMeasure, StopMeasureScan, UpdateMeasureScanTime } from './measures.action';
+import { PositionService } from './position.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,8 @@ export class MeasuresService {
     private store: Store,
     private actions$: Actions,
     private httpClient: HttpClient,
-    private devicesService: DevicesService
+    private devicesService: DevicesService,
+    private positionService: PositionService
   ) {}
 
   startMeasureScan(device: AbstractDevice): Observable<any> {
@@ -38,8 +40,11 @@ export class MeasuresService {
       take(1),
       tap(() =>
         interval(1000)
-          .pipe(takeUntil(stopSignal))
-          .subscribe(() => this.store.dispatch(new UpdateMeasureScanTime(device)))
+          .pipe(
+            takeUntil(stopSignal),
+            filter(() => !this.positionService.isAcquiringPosition)
+          )
+          .subscribe(() => this.store.dispatch(new UpdateMeasureScanTime(device)).subscribe())
       )
     );
   }
@@ -50,9 +55,10 @@ export class MeasuresService {
       .startMeasureScan(device, stopSignal)
       .pipe(
         takeUntil(stopSignal),
+        filter(() => !this.positionService.isAcquiringPosition),
         shareReplay()
       );
-    detectHits.subscribe(step => this.store.dispatch(new AddMeasureScanStep(step, device)));
+    detectHits.subscribe(step => this.store.dispatch(new AddMeasureScanStep(step, device)).subscribe());
     return detectHits;
   }
 

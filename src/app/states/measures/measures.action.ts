@@ -72,7 +72,7 @@ export class StopMeasureScan {
 }
 
 export class StartNextMeasureSeries {
-  static readonly type = '[Measures] Start next measure series scan';
+  static readonly type = '[Measures] Start next measure series';
 }
 
 export class StartMeasureReport {
