@@ -242,13 +242,7 @@ export class MeasuresState {
           patch.measures = [...measures, measure];
         }
         patchState(patch);
-        if (
-          params.autoPublish &&
-          measure.accuracy &&
-          measure.accuracy < PositionAccuracyThreshold.Inaccurate &&
-          measure.endAccuracy &&
-          measure.endAccuracy < PositionAccuracyThreshold.Inaccurate
-        ) {
+        if (params.autoPublish && measure.accuracy && measure.endAccuracy) {
           dispatch(new PublishMeasure(measure));
         }
       }
@@ -412,7 +406,7 @@ export class MeasuresState {
         }
         patchState(patch);
       };
-      if (currentMeasure.accuracy && currentMeasure.accuracy < PositionAccuracyThreshold.Inaccurate) {
+      if (currentMeasure.accuracy) {
         return this.positionService.getCurrentPosition().pipe(tap(stopCurrentMeasureScan));
       } else {
         return of(undefined).pipe(tap(stopCurrentMeasureScan));

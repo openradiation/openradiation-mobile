@@ -8,7 +8,7 @@ import { AbstractDevice } from '../devices/abstract-device';
 import { DeviceConnectionLost } from '../devices/devices.action';
 import { DevicesService } from '../devices/devices.service';
 import { UserStateModel } from '../user/user.state';
-import { Measure, MeasureSeries, MeasureType, PositionAccuracyThreshold, Step } from './measure';
+import { Measure, MeasureSeries, MeasureType, Step } from './measure';
 import { MeasureApi } from './measure-api';
 import { AddMeasureScanStep, CancelMeasure, StopMeasureScan, UpdateMeasureScanTime } from './measures.action';
 
@@ -63,11 +63,7 @@ export class MeasuresService {
   publishMeasure(measure: Measure | MeasureSeries): Observable<any> {
     switch (measure.type) {
       case MeasureType.Measure: {
-        if (
-          measure.accuracy &&
-          measure.accuracy < PositionAccuracyThreshold.Inaccurate &&
-          (measure.endAccuracy && measure.endAccuracy < PositionAccuracyThreshold.Inaccurate)
-        ) {
+        if (measure.accuracy && measure.endAccuracy) {
           const payload: MeasureApi = {
             apiKey: environment.API_KEY,
             data: {
@@ -110,7 +106,7 @@ export class MeasuresService {
           };
           return this.httpClient.post(environment.API_URI, payload);
         } else {
-          throw new Error('missing Lat and long in measure');
+          throw new Error('missing start or end position in measure');
         }
       }
       case MeasureType.MeasureSeries: {

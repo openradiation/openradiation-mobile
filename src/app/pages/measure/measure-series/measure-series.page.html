@@ -4,9 +4,6 @@
 
         <ion-content>
             <div class="content">
-                <div class="message" *ngIf="(positionAccuracy$ | async) >= positionAccuracyThreshold.Inaccurate">
-                    <div class="message-style">{{'HISTORY.MESSAGE_PREVENT_MEASURE_SENDING' | translate}}</div>
-                </div>
                 <form class="form" [formGroup]="measureSeriesParamsForm" ngxsForm="measures.measureSeriesParams">
                     <app-category-label>
                         {{'MEASURE_SERIES.SERIES_TITLE' | translate}}
