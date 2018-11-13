@@ -8,12 +8,12 @@ import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxsFormPluginModule } from '@ngxs/form-plugin';
 import { ComponentsModule } from '../../../components/components.module';
-import { MeasureReportSeriesPage } from './measure-report-series-page';
+import { MeasureSeriesReportPage } from './measure-series-report-page';
 
 const routes: Routes = [
   {
     path: '',
-    component: MeasureReportSeriesPage
+    component: MeasureSeriesReportPage
   }
 ];
 
@@ -28,6 +28,6 @@ const routes: Routes = [
     ComponentsModule,
     TranslateModule
   ],
-  declarations: [MeasureReportSeriesPage]
+  declarations: [MeasureSeriesReportPage]
 })
 export class MeasureReportSeriesPageModule {}

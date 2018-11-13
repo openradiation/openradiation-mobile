@@ -91,6 +91,10 @@ export class StartManualMeasure {
   static readonly type = '[Measures] Start manual measure';
 }
 
+export class StopMeasureSeriesReport {
+  static readonly type = '[Measures] Stop measure series report';
+}
+
 export class PublishMeasure {
   static readonly type = '[Measures] Publish measure';
   constructor(public measure: Measure | MeasureSeries) {}

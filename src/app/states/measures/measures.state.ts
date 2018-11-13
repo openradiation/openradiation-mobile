@@ -38,6 +38,7 @@ import {
   StopMeasureReport,
   StopMeasureScan,
   StopMeasureSeriesParams,
+  StopMeasureSeriesReport,
   StopWatchPosition,
   UpdateMeasureScanTime
 } from './measures.action';
@@ -494,7 +495,6 @@ export class MeasuresState {
         rain: currentMeasure.rain,
         enclosedObject: currentMeasure.enclosedObject
       };
-      console.log(model);
       patchState({
         measureReport: {
           model,
@@ -580,6 +580,27 @@ export class MeasuresState {
       patchState({
         measureReport: undefined,
         currentMeasure: updatedCurrentMeasure
+      });
+    }
+  }
+
+  @Action(StopMeasureSeriesReport)
+  stopMeasureSeriesReport({ getState, patchState }: StateContext<MeasuresStateModel>) {
+    const { currentSeries, measureSeriesReport } = getState();
+    if (currentSeries && measureSeriesReport) {
+      patchState({
+        measureSeriesReport: undefined,
+        currentSeries: {
+          ...currentSeries,
+          measures: currentSeries.measures.map(measure => ({
+            ...measure,
+            measurementHeight: measureSeriesReport.model.measurementHeight,
+            measurementEnvironment: measureSeriesReport.model.measurementEnvironment,
+            rain: measureSeriesReport.model.rain,
+            description: measureSeriesReport.model.description,
+            tags: measureSeriesReport.model.tags
+          }))
+        }
       });
     }
   }

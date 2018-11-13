@@ -9,23 +9,27 @@ import { take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { SelectIconOption } from '../../../components/select-icon/select-icon-option';
 import { MeasureEnvironment, MeasureSeries, PositionAccuracyThreshold } from '../../../states/measures/measure';
-import { CancelMeasure, StartMeasureSeriesReport } from '../../../states/measures/measures.action';
+import {
+  CancelMeasure,
+  StartMeasureSeriesReport,
+  StopMeasure,
+  StopMeasureSeriesReport
+} from '../../../states/measures/measures.action';
 import { MeasuresStateModel } from '../../../states/measures/measures.state';
 import { UserState } from '../../../states/user/user.state';
 
 @Component({
-  selector: 'app-measure-report-series',
-  templateUrl: './measure-report-series.page.html',
-  styleUrls: ['./measure-report-series.page.scss']
+  selector: 'app-measure-series-report',
+  templateUrl: './measure-series-report.page.html',
+  styleUrls: ['./measure-series-report.page.scss']
 })
-export class MeasureReportSeriesPage extends AutoUnsubscribePage {
+export class MeasureSeriesReportPage extends AutoUnsubscribePage {
   @Select(UserState.login)
   login$: Observable<string | undefined>;
 
   currentSeries?: MeasureSeries;
-  measureReportSeriesForm?: FormGroup;
+  measureSeriesReportForm?: FormGroup;
   reportScan = true;
-  positionChangeSpeedOverLimit = false;
 
   positionAccuracyThreshold = PositionAccuracyThreshold;
 
@@ -113,7 +117,7 @@ export class MeasureReportSeriesPage extends AutoUnsubscribePage {
       );
       this.currentSeries = currentSeries;
       if (measureSeriesReport) {
-        this.measureReportSeriesForm = this.formBuilder.group({
+        this.measureSeriesReportForm = this.formBuilder.group({
           ...measureSeriesReport.model,
           tags: [measureSeriesReport.model.tags]
         });
@@ -123,9 +127,9 @@ export class MeasureReportSeriesPage extends AutoUnsubscribePage {
   }
 
   init() {
-    this.actions$.pipe(ofActionSuccessful(CancelMeasure)).subscribe(() => {
+    this.actions$.pipe(ofActionSuccessful(StopMeasure, CancelMeasure)).subscribe(() => {
       this.activatedRoute.queryParams.pipe(take(1)).subscribe(queryParams => {
-        this.measureReportSeriesForm = undefined;
+        this.measureSeriesReportForm = undefined;
         if (queryParams.goBackHistory) {
           this.navController.navigateRoot([
             'tabs',
@@ -157,7 +161,14 @@ export class MeasureReportSeriesPage extends AutoUnsubscribePage {
     });
   }
 
-  stopReport() {}
+  stopReport() {
+    this.subscriptions.push(
+      this.actions$.pipe(ofActionSuccessful(StopMeasureSeriesReport)).subscribe(() => {
+        this.store.dispatch(new StopMeasure());
+      })
+    );
+    this.store.dispatch(new StopMeasureSeriesReport());
+  }
 
   cancelSeries() {
     this.store.dispatch(new CancelMeasure());

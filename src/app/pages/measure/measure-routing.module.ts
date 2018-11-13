@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { MeasureReportSeriesPage } from './measure-report-series/measure-report-series-page';
+import { MeasureSeriesReportPage } from './measure-series-report/measure-series-report-page';
 import { MeasureReportPage } from './measure-report/measure-report-page';
 import { MeasureScanPage } from './measure-scan/measure-scan.page';
 import { MeasureSeriesPage } from './measure-series/measure-series-page';
@@ -22,7 +22,7 @@ const routes: Routes = [
   },
   {
     path: 'report-series',
-    component: MeasureReportSeriesPage
+    component: MeasureSeriesReportPage
   },
   {
     path: 'steps',
