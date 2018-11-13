@@ -90,7 +90,7 @@
                             </ion-item>
                         </ion-list>
                         <div class="tags">
-                            <app-tag-list formControlName="tags"
+                            <app-tag-list formControlName="tags" [hiddenTag]="currentSeries?.id"
                                           [title]="'MEASURES.TAG_LIST' | translate">
                             </app-tag-list>
                         </div>
@@ -98,20 +98,18 @@
                 </form>
                 <div class="bottom-buttons">
                     <app-round-button
-                            (click)="stopReportSeries()" [src]="'assets/img/button-off.png'">
+                            (click)="stopReport()" [src]="'assets/img/button-off.png'">
                         {{'GENERAL.OK' | translate}}
                     </app-round-button>
                     <div class="side-buttons">
-                        <ion-button fill="clear" class="flat-button cancel"
-                                    (click)="cancelRepotSeries()">{{'GENERAL.CANCEL'
-                            | translate}}
+                        <ion-button fill="clear" class="flat-button cancel" (click)="cancelSeries()">
+                            <ng-container *ngIf="!currentSeries.sent; else backButton">
+                                {{'GENERAL.CANCEL' | translate}}
+                            </ng-container>
+                            <ng-template #backButton>
+                                {{'GENERAL.BACK' | translate}}
+                            </ng-template>
                         </ion-button>
-                        <ng-template #backButton>
-                            <ion-button fill="clear"
-                                        class="flat-button cancel" (click)="cancelRepotSeries()">{{'GENERAL.BACK'
-                                | translate}}
-                            </ion-button>
-                        </ng-template>
                     </div>
                 </div>
             </div>

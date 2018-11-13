@@ -6,10 +6,10 @@ import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { SelectIconOption } from '../../../components/select-icon/select-icon-option';
-import { Measure, MeasureEnvironment, PositionAccuracyThreshold } from '../../../states/measures/measure';
-import { MeasuresState, MeasuresStateModel } from '../../../states/measures/measures.state';
-import { UserState } from '../../../states/user/user.state';
+import { MeasureEnvironment, MeasureSeries, PositionAccuracyThreshold } from '../../../states/measures/measure';
 import { StartMeasureSeriesReport } from '../../../states/measures/measures.action';
+import { MeasuresStateModel } from '../../../states/measures/measures.state';
+import { UserState } from '../../../states/user/user.state';
 
 @Component({
   selector: 'app-measure-report-series',
@@ -17,15 +17,10 @@ import { StartMeasureSeriesReport } from '../../../states/measures/measures.acti
   styleUrls: ['./measure-report-series.page.scss']
 })
 export class MeasureReportSeriesPage extends AutoUnsubscribePage {
-  @Select(MeasuresState.currentMeasure)
-  currentMeasure$: Observable<Measure | undefined>;
-
-  @Select(MeasuresState.currentSeries)
-  currentSeries$: Observable<boolean>;
-
   @Select(UserState.login)
   login$: Observable<string | undefined>;
 
+  currentSeries?: MeasureSeries;
   measureReportSeriesForm?: FormGroup;
   reportScan = true;
   positionChangeSpeedOverLimit = false;
@@ -107,6 +102,7 @@ export class MeasureReportSeriesPage extends AutoUnsubscribePage {
       const { measureSeriesReport, currentSeries } = this.store.selectSnapshot(
         ({ measures }: { measures: MeasuresStateModel }) => measures
       );
+      this.currentSeries = currentSeries;
       if (measureSeriesReport) {
         this.measureReportSeriesForm = this.formBuilder.group({
           ...measureSeriesReport.model,
@@ -116,7 +112,7 @@ export class MeasureReportSeriesPage extends AutoUnsubscribePage {
     });
   }
 
-  stopReportSeries() {}
+  stopReport() {}
 
-  cancelRepotSeries() {}
+  cancelSeries() {}
 }

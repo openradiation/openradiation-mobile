@@ -200,12 +200,18 @@ export class MeasureSeries extends AbstractMeasure {
   readonly type = MeasureType.MeasureSeries;
   measures: Measure[] = [];
 
-  constructor(public params: MeasureSeriesParams, public seriesUuid = uuid.v4()) {
+  constructor(
+    public params: MeasureSeriesParams,
+    public seriesUuid = `series_${uuid
+      .v4()
+      .replace(/-/g, '')
+      .slice(-18)}`
+  ) {
     super(seriesUuid);
   }
 
   static addMeasureToSeries(measureSeries: MeasureSeries, measure: Measure) {
-    measure.tags = [`series_${measureSeries.seriesUuid.replace(/-/g, '').slice(-18)}`];
+    measure.tags = [measureSeries.seriesUuid];
     measure.steps = undefined;
     return {
       ...measureSeries,

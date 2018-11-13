@@ -1,5 +1,5 @@
-<ng-container *ngIf="measureReportForm">
-    <ng-container *ngIf="currentMeasure$ | async as currentMeasure">
+<ng-container *ngIf="measureReportForm && currentMeasure">
+    <ng-container *ngIf="currentMeasure as currentMeasure">
         <app-header>
         </app-header>
 
@@ -115,20 +115,18 @@
                         {{'GENERAL.OK' | translate}}
                     </app-round-button>
                     <div class="side-buttons">
-                        <ion-button *ngIf="!currentMeasure.sent;else backButton" fill="clear" class="flat-button cancel"
-                                    (click)="cancelMeasure()">{{'GENERAL.CANCEL'
-                            | translate}}
+                        <ion-button fill="clear" class="flat-button cancel" (click)="cancelMeasure()">
+                            <ng-container *ngIf="!currentMeasure.sent; else backButton">
+                                {{'GENERAL.CANCEL' | translate}}
+                            </ng-container>
+                            <ng-template #backButton>
+                                {{'GENERAL.BACK' | translate}}
+                            </ng-template>
                         </ion-button>
-                        <ng-template #backButton>
-                            <ion-button fill="clear"
-                                        class="flat-button cancel" (click)="cancelMeasure()">{{'GENERAL.BACK'
-                                | translate}}
-                            </ion-button>
-                        </ng-template>
                         <ion-button
                                 *ngIf="!currentMeasure.manualReporting && currentMeasure.steps && expertMode$ | async"
-                                fill="clear" class="flat-button expert" (click)="showMeasureSteps()">{{'MEASURES.EXPERT'
-                            | translate}}
+                                fill="clear" class="flat-button expert" (click)="showMeasureSteps()">
+                            {{'MEASURES.EXPERT' | translate}}
                         </ion-button>
                     </div>
                 </div>

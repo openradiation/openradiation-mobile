@@ -25,15 +25,13 @@ import { UserState } from '../../../states/user/user.state';
   styleUrls: ['./measure-report.page.scss']
 })
 export class MeasureReportPage extends AutoUnsubscribePage {
-  @Select(MeasuresState.currentMeasure)
-  currentMeasure$: Observable<Measure | undefined>;
-
   @Select(MeasuresState.expertMode)
   expertMode$: Observable<boolean>;
 
   @Select(UserState.login)
   login$: Observable<string | undefined>;
 
+  currentMeasure?: Measure;
   measureReportForm?: FormGroup;
   reportScan = true;
   positionChangeSpeedOverLimit = false;
@@ -92,11 +90,12 @@ export class MeasureReportPage extends AutoUnsubscribePage {
       const { measureReport, currentMeasure } = this.store.selectSnapshot(
         ({ measures }: { measures: MeasuresStateModel }) => measures
       );
-      this.reportScan = !currentMeasure!.manualReporting;
-      this.initMeasurementEnvironmentOptions(currentMeasure);
+      this.currentMeasure = currentMeasure;
+      this.reportScan = !this.currentMeasure!.manualReporting;
+      this.initMeasurementEnvironmentOptions(this.currentMeasure);
       if (measureReport) {
         this.measureReportForm = this.formBuilder.group({ ...measureReport.model, tags: [measureReport.model.tags] });
-        if (currentMeasure!.sent) {
+        if (this.currentMeasure!.sent) {
           this.measureReportForm.get('measurementEnvironment')!.disable();
           this.measureReportForm.get('measurementHeight')!.disable();
           this.measureReportForm.get('rain')!.disable();
