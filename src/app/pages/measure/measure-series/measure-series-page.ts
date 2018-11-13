@@ -21,9 +21,6 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
   @Select(DevicesState.connectedDevice)
   connectedDevice$: Observable<AbstractDevice | undefined>;
 
-  @Select(MeasuresState.positionAccuracy)
-  positionAccuracy$: Observable<number>;
-
   measureSeriesParamsForm?: FormGroup;
   url = '/measure/series';
   positionAccuracyThreshold = PositionAccuracyThreshold;
