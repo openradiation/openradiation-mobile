@@ -320,7 +320,7 @@ export class MeasuresState {
       const newCurrentMeasure = {
         ...currentMeasure,
         endTime: step.ts,
-        hitsNumber: currentMeasure.hitsNumber + step.hitsNumber,
+        hitsNumber: currentMeasure.hitsNumber! + step.hitsNumber,
         steps: [...currentMeasure.steps, step]
       };
       newCurrentMeasure.value = this.measuresService.computeRadiationValue(newCurrentMeasure, device);
@@ -336,7 +336,7 @@ export class MeasuresState {
       if (
         currentSeries &&
         ((step.ts - currentMeasure.startTime > currentSeries.params.measureDurationLimit! &&
-          currentMeasure.hitsNumber > HitsAccuracyThreshold.Accurate) ||
+          currentMeasure.hitsNumber! > HitsAccuracyThreshold.Accurate) ||
           newCurrentMeasure.hitsNumber > currentSeries.params.measureHitsLimit!)
       ) {
         return dispatch(new StartNextMeasureSeries());
@@ -411,7 +411,7 @@ export class MeasuresState {
         const updatedMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
         if (currentSeries) {
           patch = { currentMeasure: undefined };
-          if (updatedMeasure.hitsNumber >= HitsAccuracyThreshold.Accurate) {
+          if (updatedMeasure.hitsNumber! >= HitsAccuracyThreshold.Accurate) {
             patch.currentSeries = MeasureSeries.addMeasureToSeries(currentSeries, updatedMeasure);
           }
         } else {
@@ -485,7 +485,7 @@ export class MeasuresState {
           ? this.dateService.toISODuration(currentMeasure.endTime - currentMeasure.startTime)
           : undefined,
         temperature:
-          currentMeasure.temperature !== undefined ? Number(currentMeasure.temperature!.toFixed(2)) : undefined,
+          currentMeasure.temperature !== undefined ? Number(currentMeasure.temperature.toFixed(2)) : undefined,
         hitsNumber: currentMeasure.hitsNumber,
         value: currentMeasure.value !== undefined ? Number(currentMeasure.value.toFixed(3)) : undefined,
         measurementHeight: currentMeasure.measurementHeight,
@@ -521,11 +521,14 @@ export class MeasuresState {
           : undefined,
         hitsNumberAverage: Number(
           (
-            currentSeries.measures.reduce((acc, obj) => acc + obj.hitsNumber, 0) / currentSeries.measures.length
+            currentSeries.measures.reduce((acc, measure) => acc + measure.hitsNumber!, 0) /
+            currentSeries.measures.length
           ).toFixed(1)
         ),
         valueAverage: Number(
-          (currentSeries.measures.reduce((acc, obj) => acc + obj.value, 0) / currentSeries.measures.length).toFixed(3)
+          (
+            currentSeries.measures.reduce((acc, measure) => acc + measure.value, 0) / currentSeries.measures.length
+          ).toFixed(3)
         ),
         measurementHeight: currentSeries.measures[0].measurementHeight,
         description: currentSeries.measures[0].description,
@@ -558,19 +561,21 @@ export class MeasuresState {
         enclosedObject: measureReport.model.enclosedObject
       };
       if (currentMeasure.manualReporting) {
-        const durationDate = new Date(measureReport.model.duration!);
         updatedCurrentMeasure = {
           ...updatedCurrentMeasure,
           temperature: measureReport.model.temperature,
           value: measureReport.model.value!,
-          hitsNumber: measureReport.model.hitsNumber!,
-          endTime:
-            currentMeasure.startTime +
-            (durationDate.getHours() * 60 * 60 + durationDate.getMinutes() * 60 + durationDate.getSeconds()) * 1000,
-          measurementHeight: measureReport.model.measurementHeight,
-          measurementEnvironment: measureReport.model.measurementEnvironment,
-          rain: measureReport.model.rain
+          hitsNumber: measureReport.model.hitsNumber
         };
+        if (measureReport.model.duration !== undefined) {
+          const durationDate = new Date(measureReport.model.duration);
+          updatedCurrentMeasure = {
+            ...updatedCurrentMeasure,
+            endTime:
+              currentMeasure.startTime +
+              (durationDate.getHours() * 60 * 60 + durationDate.getMinutes() * 60 + durationDate.getSeconds()) * 1000
+          };
+        }
       }
       patchState({
         measureReport: undefined,
@@ -583,7 +588,6 @@ export class MeasuresState {
   stopMeasureSeriesReport({ getState, patchState }: StateContext<MeasuresStateModel>) {
     const { currentSeries, measureSeriesReport } = getState();
     if (currentSeries && measureSeriesReport) {
-      console.log('stoprepoet');
       patchState({
         measureSeriesReport: undefined,
         currentSeries: {
@@ -604,15 +608,16 @@ export class MeasuresState {
   @Action(PublishMeasure)
   publishMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, { measure }: PublishMeasure) {
     if (!measure.sent) {
-      const { measures } = getState();
+      let { measures } = getState();
       const index = measures.findIndex(stateMeasure => stateMeasure.id === measure.id);
       if (index !== -1) {
         return this.measuresService.publishMeasure(measure).pipe(
-          tap(() =>
+          tap(() => {
+            measures = getState().measures;
             patchState({
               measures: [...measures.slice(0, index), { ...measure, sent: true }, ...measures.slice(index + 1)]
-            })
-          )
+            });
+          })
         );
       }
     }

@@ -4,7 +4,7 @@ import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { map } from 'rxjs/operators';
-import { Measure, Step } from '../../measures/measure';
+import { Step } from '../../measures/measure';
 import { DeviceType } from '../abstract-device';
 import { AbstractBLEDeviceService } from './abstract-ble-device.service';
 import { DeviceAtomTag } from './device-atom-tag';
@@ -23,14 +23,8 @@ export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag
     super(store, ble);
   }
 
-  computeRadiationValue(measure: Measure): number {
-    if (measure.endTime) {
-      const duration = (measure.endTime - measure.startTime) / 1000;
-      const TcNet = measure.hitsNumber / duration;
-      return (TcNet * 0.128 * 3600 - 40) / 1000;
-    } else {
-      throw new Error('Incorrect measure : missing endTime');
-    }
+  protected convertHitsNumberPerSec(hitsNumberPerSec: number): number {
+    return (hitsNumberPerSec * 0.128 * 3600 - 40) / 1000;
   }
 
   getDeviceInfo(device: DeviceAtomTag): Observable<Partial<DeviceAtomTag>> {
