@@ -39,7 +39,8 @@ export class PositionService {
     return fromPromise(
       this.loadingController
         .create({
-          message: this.translateService.instant('POSITION.ACQUISITION')
+          message: this.translateService.instant('POSITION.ACQUISITION'),
+          cssClass: 'custom-loading-indicator'
         })
         .then(loadingIndicator => loadingIndicator.present())
     ).pipe(

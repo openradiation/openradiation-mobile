@@ -129,3 +129,10 @@ ion-spinner {
     --keyboard-offset: 230px;
   }
 }
+
+.custom-loading-indicator {
+  .loading-wrapper {
+    background: $base-color;
+    color: white;
+  }
+}
