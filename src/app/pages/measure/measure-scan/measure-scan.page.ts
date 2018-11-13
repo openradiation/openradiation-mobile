@@ -97,7 +97,7 @@ export class MeasureScanPage extends AutoUnsubscribePage {
   }
 
   updateHitsAccuracy(measure?: Measure) {
-    if (measure && measure.hitsNumber) {
+    if (measure && measure.hitsNumber !== undefined) {
       if (measure.hitsNumber >= HitsAccuracyThreshold.Accurate) {
         this.canEndMeasureScan = true;
         this.hitsAccuracy = HitsAccuracy.Accurate;
