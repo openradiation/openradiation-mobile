@@ -484,7 +484,7 @@ export class MeasuresState {
           ? this.dateService.toISODuration(currentMeasure.endTime - currentMeasure.startTime)
           : undefined,
         temperature:
-          currentMeasure.temperature !== undefined ? Number(currentMeasure.temperature!.toFixed(2)) : undefined,
+          currentMeasure.temperature !== undefined ? Number(currentMeasure.temperature.toFixed(2)) : undefined,
         hitsNumber: currentMeasure.hitsNumber,
         value: currentMeasure.value !== undefined ? Number(currentMeasure.value.toFixed(3)) : undefined,
         measurementHeight: currentMeasure.measurementHeight,
@@ -553,27 +553,29 @@ export class MeasuresState {
     if (currentMeasure && measureReport) {
       let updatedCurrentMeasure: Measure = {
         ...currentMeasure,
-        measurementHeight: measureReport.model.measurementHeight!,
-        measurementEnvironment: measureReport.model.measurementEnvironment!,
-        rain: measureReport.model.rain!,
+        measurementHeight: measureReport.model.measurementHeight,
+        measurementEnvironment: measureReport.model.measurementEnvironment,
+        rain: measureReport.model.rain,
         description: measureReport.model.description,
         tags: measureReport.model.tags,
         enclosedObject: measureReport.model.enclosedObject
       };
       if (currentMeasure.manualReporting) {
-        const durationDate = new Date(measureReport.model.duration!);
         updatedCurrentMeasure = {
           ...updatedCurrentMeasure,
-          temperature: measureReport.model.temperature!,
+          temperature: measureReport.model.temperature,
           value: measureReport.model.value!,
-          hitsNumber: measureReport.model.hitsNumber!,
-          endTime:
-            currentMeasure.startTime +
-            (durationDate.getHours() * 60 * 60 + durationDate.getMinutes() * 60 + durationDate.getSeconds()) * 1000,
-          measurementHeight: measureReport.model.measurementHeight!,
-          measurementEnvironment: measureReport.model.measurementEnvironment!,
-          rain: measureReport.model.rain!
+          hitsNumber: measureReport.model.hitsNumber
         };
+        if (measureReport.model.duration !== undefined) {
+          const durationDate = new Date(measureReport.model.duration);
+          updatedCurrentMeasure = {
+            ...updatedCurrentMeasure,
+            endTime:
+              currentMeasure.startTime +
+              (durationDate.getHours() * 60 * 60 + durationDate.getMinutes() * 60 + durationDate.getSeconds()) * 1000
+          };
+        }
       }
       patchState({
         measureReport: undefined,
