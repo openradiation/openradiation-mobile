@@ -513,7 +513,7 @@ export class MeasuresState {
       const startTimeIOSString = this.dateService.toISOString(currentSeries.startTime!);
       const model: MeasureSeriesReport = {
         seriesNumbersMeasures: currentSeries.measures.length,
-        measureDurationLimit: currentSeries.params.measureDurationLimit,
+        measureDurationLimit: this.dateService.toISODuration(currentSeries.params.measureDurationLimit!),
         date: startTimeIOSString,
         startTime: startTimeIOSString,
         duration: currentSeries.endTime

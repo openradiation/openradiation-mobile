@@ -183,7 +183,7 @@ export interface MeasureSeriesParams {
 
 export interface MeasureSeriesReport {
   seriesNumbersMeasures: number | undefined;
-  measureDurationLimit: number | undefined;
+  measureDurationLimit: string | undefined;
   date: string | undefined;
   startTime: string | undefined;
   duration: string | undefined;

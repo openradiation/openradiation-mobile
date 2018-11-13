@@ -1,15 +1,17 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
-import { Select, Store } from '@ngxs/store';
+import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { SelectIconOption } from '../../../components/select-icon/select-icon-option';
 import { Measure, MeasureEnvironment, PositionAccuracyThreshold } from '../../../states/measures/measure';
 import { MeasuresState, MeasuresStateModel } from '../../../states/measures/measures.state';
 import { UserState } from '../../../states/user/user.state';
-import { StartMeasureSeriesReport } from '../../../states/measures/measures.action';
+import { CancelMeasure, StartMeasureSeriesReport } from '../../../states/measures/measures.action';
+import { take } from 'rxjs/operators';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-measure-report-series',
@@ -97,7 +99,14 @@ export class MeasureReportSeriesPage extends AutoUnsubscribePage {
     }
   ];
 
-  constructor(protected router: Router, private store: Store, private formBuilder: FormBuilder) {
+  constructor(
+    protected activatedRoute: ActivatedRoute,
+    protected router: Router,
+    private formBuilder: FormBuilder,
+    private store: Store,
+    private navController: NavController,
+    private actions$: Actions
+  ) {
     super(router);
   }
 
@@ -113,10 +122,48 @@ export class MeasureReportSeriesPage extends AutoUnsubscribePage {
           tags: [measureSeriesReport.model.tags]
         });
       }
+      this.init();
+    });
+  }
+
+  init() {
+    this.actions$.pipe(ofActionSuccessful(CancelMeasure)).subscribe(() => {
+      this.activatedRoute.queryParams.pipe(take(1)).subscribe(queryParams => {
+        this.measureReportSeriesForm = undefined;
+        if (queryParams.goBackHistory) {
+          this.navController.navigateRoot([
+            'tabs',
+            {
+              outlets: {
+                home: null,
+                history: 'history',
+                settings: null,
+                map: null,
+                other: null
+              }
+            }
+          ]);
+        } else {
+          this.navController.navigateRoot([
+            'tabs',
+            {
+              outlets: {
+                home: 'home',
+                history: null,
+                settings: null,
+                map: null,
+                other: null
+              }
+            }
+          ]);
+        }
+      });
     });
   }
 
   stopReportSeries() {}
 
-  cancelRepotSeries() {}
+  cancelRepotSeries() {
+    this.store.dispatch(new CancelMeasure());
+  }
 }
