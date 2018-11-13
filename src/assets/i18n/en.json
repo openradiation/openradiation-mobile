@@ -50,6 +50,10 @@
       "NOTICE": "By deleting your measurements, you clean your entire history but you do not delete the published data from the OpenRadiation base.",
       "TITLE": "Are you sure you wish to delete all measurements?"
     },
+    "MEASURE_SERIES": {
+      "PLURAL": "{{count}} measurements",
+      "SINGULAR": "{{count}} measurement"
+    },
     "MESSAGE_PREVENT_MEASURE_SENDING": "Invalid measurement geolocation, it can not be sent.",
     "MESSAGE_SPEED": "High speed, selection of a measurement environment is mandatory",
     "NO_MEASURE": "No saved<br>measurement",

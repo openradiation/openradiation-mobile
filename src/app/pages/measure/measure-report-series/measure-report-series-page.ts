@@ -2,16 +2,16 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
+import { NavController } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { SelectIconOption } from '../../../components/select-icon/select-icon-option';
-import { Measure, MeasureEnvironment, PositionAccuracyThreshold } from '../../../states/measures/measure';
-import { MeasuresState, MeasuresStateModel } from '../../../states/measures/measures.state';
-import { UserState } from '../../../states/user/user.state';
+import { MeasureEnvironment, MeasureSeries, PositionAccuracyThreshold } from '../../../states/measures/measure';
 import { CancelMeasure, StartMeasureSeriesReport } from '../../../states/measures/measures.action';
-import { take } from 'rxjs/operators';
-import { NavController } from '@ionic/angular';
+import { MeasuresStateModel } from '../../../states/measures/measures.state';
+import { UserState } from '../../../states/user/user.state';
 
 @Component({
   selector: 'app-measure-report-series',
@@ -19,15 +19,10 @@ import { NavController } from '@ionic/angular';
   styleUrls: ['./measure-report-series.page.scss']
 })
 export class MeasureReportSeriesPage extends AutoUnsubscribePage {
-  @Select(MeasuresState.currentMeasure)
-  currentMeasure$: Observable<Measure | undefined>;
-
-  @Select(MeasuresState.currentSeries)
-  currentSeries$: Observable<boolean>;
-
   @Select(UserState.login)
   login$: Observable<string | undefined>;
 
+  currentSeries?: MeasureSeries;
   measureReportSeriesForm?: FormGroup;
   reportScan = true;
   positionChangeSpeedOverLimit = false;
@@ -116,6 +111,7 @@ export class MeasureReportSeriesPage extends AutoUnsubscribePage {
       const { measureSeriesReport, currentSeries } = this.store.selectSnapshot(
         ({ measures }: { measures: MeasuresStateModel }) => measures
       );
+      this.currentSeries = currentSeries;
       if (measureSeriesReport) {
         this.measureReportSeriesForm = this.formBuilder.group({
           ...measureSeriesReport.model,
@@ -161,9 +157,9 @@ export class MeasureReportSeriesPage extends AutoUnsubscribePage {
     });
   }
 
-  stopReportSeries() {}
+  stopReport() {}
 
-  cancelRepotSeries() {
+  cancelSeries() {
     this.store.dispatch(new CancelMeasure());
   }
 }

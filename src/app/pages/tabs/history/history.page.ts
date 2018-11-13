@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
 import { AlertController, NavController, ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, ofActionErrored, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
-import { Measure, MeasureSeries, PositionAccuracyThreshold } from '../../../states/measures/measure';
+import { Measure, MeasureSeries, MeasureType, PositionAccuracyThreshold } from '../../../states/measures/measure';
 import {
   DeleteAllMeasures,
   DeleteMeasure,
@@ -25,7 +26,15 @@ export class HistoryPage extends AutoUnsubscribePage {
 
   measureBeingSentMap: { [K: string]: boolean } = {};
   positionAccuracyThreshold = PositionAccuracyThreshold;
+  measureType = MeasureType;
+
+  measureSeriesMessageMapping = {
+    '=1': _('HISTORY.MEASURE_SERIES.SINGULAR'),
+    other: _('HISTORY.MEASURE_SERIES.PLURAL')
+  };
+
   url = '/tabs/(history:history)';
+
   constructor(
     protected router: Router,
     private store: Store,
@@ -58,11 +67,15 @@ export class HistoryPage extends AutoUnsubscribePage {
       this.actions$
         .pipe(ofActionSuccessful(PublishMeasure))
         .subscribe(({ measure }: PublishMeasure) => (this.measureBeingSentMap[measure.id] = false)),
-      this.actions$.pipe(ofActionSuccessful(ShowMeasure)).subscribe(() =>
-        this.navController.navigateRoot(['measure', 'report'], true, {
-          queryParams: { goBackHistory: true }
-        })
-      )
+      this.actions$.pipe(ofActionSuccessful(ShowMeasure)).subscribe(action => {
+        this.navController.navigateRoot(
+          ['measure', action.measure.type === MeasureType.Measure ? 'report' : 'report-series'],
+          true,
+          {
+            queryParams: { goBackHistory: true }
+          }
+        );
+      })
     );
   }
 

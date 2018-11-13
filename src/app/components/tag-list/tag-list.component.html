@@ -2,12 +2,14 @@
     {{title}}
 </div>
 <div class="tag-list" [ngClass]="{disabled: isDisabled}">
-    <ion-chip *ngFor="let tag of tagList; index as index">
-        <ion-label>{{tag}}</ion-label>
-        <ion-chip-button *ngIf="!isDisabled" fill="clear" color="light" (click)="deleteTag(index)">
-            <ion-icon name="close-circle"></ion-icon>
-        </ion-chip-button>
-    </ion-chip>
+    <ng-container *ngFor="let tag of tagList; index as index">
+        <ion-chip *ngIf="tag !== hiddenTag">
+            <ion-label>{{tag}}</ion-label>
+            <ion-chip-button *ngIf="!isDisabled" fill="clear" color="light" (click)="deleteTag(index)">
+                <ion-icon name="close-circle"></ion-icon>
+            </ion-chip-button>
+        </ion-chip>
+    </ng-container>
 </div>
 <ion-item class="add-tag" *ngIf="!isDisabled">
     <ion-input [(ngModel)]="currentTag" [placeholder]="'GENERAL.ADD_TAG' | translate"></ion-input>

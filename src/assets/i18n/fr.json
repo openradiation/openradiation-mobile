@@ -50,6 +50,10 @@
       "NOTICE": "En supprimant vos mesures, vous nettoyez tout votre historique mais vous ne supprimez pas les données déjà publiées de la base OpenRadiation.",
       "TITLE": "Êtes-vous sûr de vouloir supprimer toutes les mesures ?"
     },
+    "MEASURE_SERIES": {
+      "PLURAL": "{{count}} mesures",
+      "SINGULAR": "{{count}} mesure"
+    },
     "MESSAGE_PREVENT_MEASURE_SENDING": "Position de la mesure incorrecte, envoi impossible",
     "MESSAGE_SPEED": "Vitesse élevée, sélection d'un environnement de mesure obligatoire",
     "NO_MEASURE": "Aucune mesure<br>enregistrée",

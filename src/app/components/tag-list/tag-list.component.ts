@@ -21,6 +21,9 @@ export class TagListComponent implements ControlValueAccessor {
   @Input()
   title?: string;
 
+  @Input()
+  hiddenTag?: string;
+
   private onChange = (option: any) => {};
 
   private onTouched = () => {};
