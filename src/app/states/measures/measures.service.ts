@@ -4,7 +4,7 @@ import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { forkJoin, interval, Observable, of } from 'rxjs';
 import { filter, shareReplay, take, takeUntil, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { AbstractDevice } from '../devices/abstract-device';
+import { AbstractDevice, ApparatusSensorType } from '../devices/abstract-device';
 import { DeviceConnectionLost } from '../devices/devices.action';
 import { DevicesService } from '../devices/devices.service';
 import { UserStateModel } from '../user/user.state';
@@ -12,6 +12,7 @@ import { Measure, MeasureSeries, MeasureType, PositionAccuracyThreshold, Step } 
 import { MeasureApi } from './measure-api';
 import { AddMeasureScanStep, CancelMeasure, StopMeasureScan, UpdateMeasureScanTime } from './measures.action';
 import { PositionService } from './position.service';
+import { addUndefinedDefaults } from '@angular-devkit/core/src/json/schema/transforms';
 
 @Injectable({
   providedIn: 'root'
@@ -89,7 +90,7 @@ export class MeasuresService {
         data: {
           apparatusId: measure.apparatusId,
           apparatusVersion: measure.apparatusVersion,
-          apparatusSensorType: measure.apparatusSensorType,
+          apparatusSensorType: this.formatApparatusSensorType(measure.apparatusSensorType),
           apparatusTubeType: measure.apparatusTubeType,
           temperature: measure.temperature ? Math.round(measure.temperature) : undefined,
           value: measure.value,
@@ -128,5 +129,16 @@ export class MeasuresService {
     } else {
       return of(null);
     }
+  }
+
+  private formatApparatusSensorType(apparatusSensorType?: string): ApparatusSensorType | undefined {
+    if (apparatusSensorType !== undefined) {
+      if (apparatusSensorType.includes(ApparatusSensorType.Geiger)) {
+        return ApparatusSensorType.Geiger;
+      } else if (apparatusSensorType.includes(ApparatusSensorType.Photodiode)) {
+        return ApparatusSensorType.Photodiode;
+      }
+    }
+    return undefined;
   }
 }
