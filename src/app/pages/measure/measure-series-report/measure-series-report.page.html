@@ -8,7 +8,7 @@
                 <div class="message"  *ngIf="currentSeries.accuracy >= positionAccuracyThreshold.No || currentSeries.endAccuracy >= positionAccuracyThreshold.No">
                     <div class="message-style">{{'HISTORY.MESSAGE_PREVENT_MEASURE_SENDING' | translate}}</div>
                 </div>
-                <form class="form" [formGroup]="measureReportSeriesForm" ngxsForm="measures.measureReportSeries">
+                <form class="form" [formGroup]="measureReportSeriesForm" ngxsForm="measures.measureSeriesReport">
                     <ion-list>
                         <ion-item class="custom-disabled">
                             <ion-label class="value">{{'MEASURE_SERIES.REPORT.MEASURE_NUMBER' | translate}}</ion-label>
