@@ -68,13 +68,7 @@ export class MeasureScanPage extends AutoUnsubscribePage {
     this.subscriptions.push(
       this.currentMeasure$.subscribe(measure => this.updateHitsAccuracy(measure)),
       this.actions$.pipe(ofActionSuccessful(StopMeasureScan)).subscribe(() => {
-        let url;
-        if (this.isMeasureSeries) {
-          url = ['measure', 'report-series'];
-        } else {
-          url = ['measure', 'report'];
-        }
-        this.navController.navigateRoot(url, true);
+        this.navController.navigateRoot(['measure', this.isMeasureSeries ? 'report-series' : 'report'], true);
       }),
       this.actions$.pipe(ofActionSuccessful(CancelMeasure)).subscribe(() =>
         this.navController.navigateRoot([
