@@ -30,7 +30,6 @@ export class MeasureSeriesReportPage extends AutoUnsubscribePage {
   currentSeries?: MeasureSeries;
   measureSeriesReportForm?: FormGroup;
   reportScan = true;
-  positionChangeSpeedOverLimit = false;
 
   positionAccuracyThreshold = PositionAccuracyThreshold;
 
