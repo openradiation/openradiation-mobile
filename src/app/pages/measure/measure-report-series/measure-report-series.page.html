@@ -11,11 +11,11 @@
                 <form class="form" [formGroup]="measureReportSeriesForm" ngxsForm="measures.measureReportSeries">
                     <ion-list>
                         <ion-item class="custom-disabled">
-                            <ion-label class="value">Nombre mesures automatique</ion-label>
+                            <ion-label class="value">{{'MEASURE_SERIES.REPORT.MEASURE_NUMBER' | translate}}</ion-label>
                             <ion-input type="number" formControlName="seriesNumbersMeasures" placeholder="0"></ion-input>
                         </ion-item>
                         <ion-item class="custom-disabled">
-                            <ion-label class="value">Durée mesure automatique</ion-label>
+                            <ion-label class="value">{{'MEASURE_SERIES.REPORT.MEASURE_DURATION' | translate}}</ion-label>
                             <ion-datetime class="values" display-format="HH:mm'ss''" formControlName="measureDurationLimit"
                                           required
                                           [cancelText]="'GENERAL.CANCEL' | translate"
@@ -31,14 +31,14 @@
                                           [doneText]="'GENERAL.SUBMIT' | translate"></ion-datetime>
                         </ion-item>
                         <ion-item class="custom-disabled">
-                            <ion-label class="value">Début premiere mesure</ion-label>
+                            <ion-label class="value">{{'MEASURE_SERIES.REPORT.FIRST_MEASURE-TIME' | translate}}</ion-label>
                             <ion-datetime class="values" display-format="HH:mm'ss''" formControlName="startTime"
                                           required
                                           [cancelText]="'GENERAL.CANCEL' | translate"
                                           [doneText]="'GENERAL.SUBMIT' | translate"></ion-datetime>
                         </ion-item>
                         <ion-item class="custom-disabled">
-                            <ion-label class="value">Durée totale</ion-label>
+                            <ion-label class="value">{{'MEASURE_SERIES.REPORT.SERIES_DURATION' | translate}}</ion-label>
                             <ion-datetime class="values" display-format="HH:mm'ss''" formControlName="duration" required
                                           [cancelText]="'GENERAL.CANCEL' | translate"
                                           [doneText]="'GENERAL.SUBMIT' | translate"></ion-datetime>
@@ -47,12 +47,12 @@
                     <div class="measure">
                         <ion-list>
                             <ion-item [ngClass]="'custom-disabled'">
-                                <ion-label position="fixed">Moyenne nb coups</ion-label>
+                                <ion-label position="fixed">{{'MEASURE_SERIES.REPORT.HITS_AVERAGE' | translate}}</ion-label>
                                 <ion-input formControlName="hitsNumberAverage" type="number" placeholder="0"></ion-input>
                             </ion-item>
                             <ion-item class="has-suffix"
                                       [ngClass]="'custom-disabled'">
-                                <ion-label position="fixed">moyenne mesure<span
+                                <ion-label position="fixed">{{'MEASURE_SERIES.REPORT.VALUE_AVERAGE' | translate}}<span
                                         *ngIf="!reportScan"> *</span></ion-label>
                                 <ion-input formControlName="valueAverage" required type="number"
                                            placeholder="0.000"></ion-input>

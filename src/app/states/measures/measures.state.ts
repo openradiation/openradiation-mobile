@@ -522,7 +522,7 @@ export class MeasuresState {
         hitsNumberAverage: Number(
           (
             currentSeries.measures.reduce((acc, obj) => acc + obj.hitsNumber, 0) / currentSeries.measures.length
-          ).toFixed(3)
+          ).toFixed(1)
         ),
         valueAverage: Number(
           (currentSeries.measures.reduce((acc, obj) => acc + obj.value, 0) / currentSeries.measures.length).toFixed(3)

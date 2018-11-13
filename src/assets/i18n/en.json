@@ -164,6 +164,14 @@
       "PLURAL": "{{count}} measurements taken since {{duration}}",
       "SINGULAR": "One measurement taken since {{duration}}"
     },
+    "REPORT": {
+      "FIRST_MEASURE-TIME": "Beginning of the first measurement",
+      "HITS_AVERAGE": "Average hits number",
+      "MEASURE_DURATION": "Maximum measure duration",
+      "MEASURE_NUMBER": "Number of measurements",
+      "SERIES_DURATION": "Total duration of measurements",
+      "VALUE_AVERAGE": "Average measures"
+    },
     "SERIES_DURATION": "Measurement series duration",
     "SERIES_TITLE": "Series",
     "TITLE": "Measurement series"

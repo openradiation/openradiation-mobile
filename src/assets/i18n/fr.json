@@ -164,6 +164,14 @@
       "PLURAL": "{{count}} mesures prises depuis {{duration}}",
       "SINGULAR": "Une mesure prise depuis {{duration}}"
     },
+    "REPORT": {
+      "FIRST_MEASURE-TIME": "Début de la première mesure",
+      "HITS_AVERAGE": "Moyenne Nb coups",
+      "MEASURE_DURATION": "Durée maximale de la mesure",
+      "MEASURE_NUMBER": "Nombre de mesures",
+      "SERIES_DURATION": "Durée totale des mesures",
+      "VALUE_AVERAGE": "Moyenne des mesures"
+    },
     "SERIES_DURATION": "Durée de la série de mesures",
     "SERIES_TITLE": "Série",
     "TITLE": "Série de mesures"
