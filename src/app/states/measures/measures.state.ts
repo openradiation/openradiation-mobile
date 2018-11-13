@@ -581,15 +581,16 @@ export class MeasuresState {
   @Action(PublishMeasure)
   publishMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, { measure }: PublishMeasure) {
     if (!measure.sent) {
-      const { measures } = getState();
+      let { measures } = getState();
       const index = measures.findIndex(stateMeasure => stateMeasure.id === measure.id);
       if (index !== -1) {
         return this.measuresService.publishMeasure(measure).pipe(
-          tap(() =>
+          tap(() => {
+            measures = getState().measures;
             patchState({
               measures: [...measures.slice(0, index), { ...measure, sent: true }, ...measures.slice(index + 1)]
-            })
-          )
+            });
+          })
         );
       }
     }
