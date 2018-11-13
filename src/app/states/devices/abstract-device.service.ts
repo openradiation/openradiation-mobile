@@ -15,7 +15,7 @@ export abstract class AbstractDeviceService<T extends AbstractDevice> {
   abstract startMeasureScan(device: T, stopSignal: Observable<any>): Observable<Step>;
 
   computeRadiationValue(measure: Measure): number {
-    if (measure.endTime && measure.hitsNumber) {
+    if (measure.endTime && measure.hitsNumber !== undefined) {
       const duration = (measure.endTime - measure.startTime) / 1000;
       const hitsNumberPerSec = measure.hitsNumber / duration;
       return this.convertHitsNumberPerSec(hitsNumberPerSec);
