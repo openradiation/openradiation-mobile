@@ -352,16 +352,15 @@ export class MeasuresState {
     const { currentMeasure, currentSeries } = getState();
     if (currentMeasure) {
       const currentTime = Date.now();
+      patchState({
+        currentMeasure: {
+          ...currentMeasure,
+          endTime: currentTime,
+          value: this.measuresService.computeRadiationValue(currentMeasure, device)
+        }
+      });
       if (currentSeries && currentTime - currentMeasure.startTime > currentSeries.params.measureDurationLimit!) {
         return dispatch(new StartNextMeasureSeries());
-      } else {
-        patchState({
-          currentMeasure: {
-            ...currentMeasure,
-            endTime: currentTime,
-            value: this.measuresService.computeRadiationValue(currentMeasure, device)
-          }
-        });
       }
     }
     return of(null);
