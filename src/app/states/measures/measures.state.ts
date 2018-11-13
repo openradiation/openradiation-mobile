@@ -494,6 +494,7 @@ export class MeasuresState {
         rain: currentMeasure.rain,
         enclosedObject: currentMeasure.enclosedObject
       };
+      console.log(model);
       patchState({
         measureReport: {
           model,
@@ -550,7 +551,7 @@ export class MeasuresState {
   stopMeasureReport({ getState, patchState }: StateContext<MeasuresStateModel>) {
     const { currentMeasure, measureReport } = getState();
     if (currentMeasure && measureReport) {
-      let currentMeasure_: Measure = {
+      let updatedCurrentMeasure: Measure = {
         ...currentMeasure,
         measurementHeight: measureReport.model.measurementHeight!,
         measurementEnvironment: measureReport.model.measurementEnvironment!,
@@ -561,8 +562,8 @@ export class MeasuresState {
       };
       if (currentMeasure.manualReporting) {
         const durationDate = new Date(measureReport.model.duration!);
-        currentMeasure_ = {
-          ...currentMeasure_,
+        updatedCurrentMeasure = {
+          ...updatedCurrentMeasure,
           temperature: measureReport.model.temperature!,
           value: measureReport.model.value!,
           hitsNumber: measureReport.model.hitsNumber!,
@@ -576,7 +577,7 @@ export class MeasuresState {
       }
       patchState({
         measureReport: undefined,
-        currentMeasure: currentMeasure_
+        currentMeasure: updatedCurrentMeasure
       });
     }
   }
