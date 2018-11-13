@@ -34,6 +34,7 @@ export class MeasureReportPage extends AutoUnsubscribePage {
   currentMeasure?: Measure;
   measureReportForm?: FormGroup;
   reportScan = true;
+  inputDisabled = false;
   positionChangeSpeedOverLimit = false;
 
   positionAccuracyThreshold = PositionAccuracyThreshold;
@@ -92,6 +93,7 @@ export class MeasureReportPage extends AutoUnsubscribePage {
       );
       this.currentMeasure = currentMeasure;
       this.reportScan = !this.currentMeasure!.manualReporting;
+      this.inputDisabled = this.reportScan || this.currentMeasure!.sent;
       this.initMeasurementEnvironmentOptions(this.currentMeasure);
       if (measureReport) {
         this.measureReportForm = this.formBuilder.group({ ...measureReport.model, tags: [measureReport.model.tags] });

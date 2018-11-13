@@ -3,7 +3,7 @@ import { Serial } from '@ionic-native/serial/ngx';
 import { Actions, Store } from '@ngxs/store';
 import { Observable, of } from 'rxjs';
 import { filter, map, startWith, takeUntil } from 'rxjs/operators';
-import { Measure, Step } from '../../measures/measure';
+import { Step } from '../../measures/measure';
 import { AbstractUSBDeviceService } from './abstract-usb-device.service';
 import { DevicePocketGeiger } from './device-pocket-geiger';
 
@@ -18,14 +18,8 @@ export class DevicePocketGeigerService extends AbstractUSBDeviceService<DevicePo
     super(store, serial, actions$);
   }
 
-  computeRadiationValue(measure: Measure): number {
-    if (measure.endTime) {
-      const duration = (measure.endTime - measure.startTime) / 1000;
-      const TcNet = measure.hitsNumber / duration;
-      return (TcNet * 60) / 53.032;
-    } else {
-      throw new Error('Incorrect measure : missing endTime');
-    }
+  protected convertHitsNumberPerSec(hitsNumberPerSec: number): number {
+    return (hitsNumberPerSec * 60) / 53.032;
   }
 
   getDeviceInfo(device: DevicePocketGeiger): Observable<Partial<DevicePocketGeiger>> {

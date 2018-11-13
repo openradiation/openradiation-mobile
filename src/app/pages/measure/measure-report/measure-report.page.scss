@@ -77,6 +77,7 @@
       --border-color: transparent;
       margin: -5px 0;
       --min-height: 0;
+      font-size: 15px;
       &.custom-disabled {
         pointer-events: none;
       }
@@ -99,7 +100,6 @@
           --padding-bottom: 4px;
         }
         ion-datetime {
-          padding: 4px 8px;
           width: 100%;
           text-align: right;
           --ion-placeholder-color: #{transparentize($second-color, 0.5)};
@@ -132,6 +132,8 @@
 
       .unit {
         padding-right: 8px;
+        height: 27px;
+        line-height: 27px;
       }
 
       ion-input {

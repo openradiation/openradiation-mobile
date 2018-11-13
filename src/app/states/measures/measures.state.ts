@@ -319,7 +319,7 @@ export class MeasuresState {
       const newCurrentMeasure = {
         ...currentMeasure,
         endTime: step.ts,
-        hitsNumber: currentMeasure.hitsNumber + step.hitsNumber,
+        hitsNumber: currentMeasure.hitsNumber! + step.hitsNumber,
         steps: [...currentMeasure.steps, step]
       };
       newCurrentMeasure.value = this.measuresService.computeRadiationValue(newCurrentMeasure, device);
@@ -335,7 +335,7 @@ export class MeasuresState {
       if (
         currentSeries &&
         ((step.ts - currentMeasure.startTime > currentSeries.params.measureDurationLimit! &&
-          currentMeasure.hitsNumber > HitsAccuracyThreshold.Accurate) ||
+          currentMeasure.hitsNumber! > HitsAccuracyThreshold.Accurate) ||
           newCurrentMeasure.hitsNumber > currentSeries.params.measureHitsLimit!)
       ) {
         return dispatch(new StartNextMeasureSeries());
@@ -410,7 +410,7 @@ export class MeasuresState {
         const updatedMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
         if (currentSeries) {
           patch = { currentMeasure: undefined };
-          if (updatedMeasure.hitsNumber >= HitsAccuracyThreshold.Accurate) {
+          if (updatedMeasure.hitsNumber! >= HitsAccuracyThreshold.Accurate) {
             patch.currentSeries = MeasureSeries.addMeasureToSeries(currentSeries, updatedMeasure);
           }
         } else {
@@ -520,11 +520,14 @@ export class MeasuresState {
           : undefined,
         hitsNumberAverage: Number(
           (
-            currentSeries.measures.reduce((acc, obj) => acc + obj.hitsNumber, 0) / currentSeries.measures.length
+            currentSeries.measures.reduce((acc, measure) => acc + measure.hitsNumber!, 0) /
+            currentSeries.measures.length
           ).toFixed(1)
         ),
         valueAverage: Number(
-          (currentSeries.measures.reduce((acc, obj) => acc + obj.value, 0) / currentSeries.measures.length).toFixed(3)
+          (
+            currentSeries.measures.reduce((acc, measure) => acc + measure.value, 0) / currentSeries.measures.length
+          ).toFixed(3)
         ),
         measurementHeight: currentSeries.measures[0].measurementHeight,
         description: currentSeries.measures[0].description,

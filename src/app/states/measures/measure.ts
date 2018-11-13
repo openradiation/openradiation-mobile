@@ -25,7 +25,7 @@ export class Measure extends AbstractMeasure {
   apparatusTubeType?: string;
   temperature?: number;
   value: number;
-  hitsNumber = 0;
+  hitsNumber?: number;
   latitude?: number;
   longitude?: number;
   accuracy?: number;
@@ -78,6 +78,7 @@ export class Measure extends AbstractMeasure {
     this.organisationReporting = environment.APP_NAME_VERSION;
     this.accuracy = PositionAccuracyThreshold.No;
     this.endAccuracy = PositionAccuracyThreshold.No;
+    this.hitsNumber = this.manualReporting ? undefined : 0;
   }
 
   static updateStartPosition(measure: Measure, position?: Geoposition): Measure {
