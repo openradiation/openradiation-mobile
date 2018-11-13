@@ -38,6 +38,7 @@ import {
   StopMeasureReport,
   StopMeasureScan,
   StopMeasureSeriesParams,
+  StopMeasureSeriesReport,
   StopWatchPosition,
   UpdateMeasureScanTime
 } from './measures.action';
@@ -547,33 +548,55 @@ export class MeasuresState {
   stopMeasureReport({ getState, patchState }: StateContext<MeasuresStateModel>) {
     const { currentMeasure, measureReport } = getState();
     if (currentMeasure && measureReport) {
-      let currentMeasure_: Measure = {
+      let updatedCurrentMeasure: Measure = {
         ...currentMeasure,
-        measurementHeight: measureReport.model.measurementHeight!,
-        measurementEnvironment: measureReport.model.measurementEnvironment!,
-        rain: measureReport.model.rain!,
+        measurementHeight: measureReport.model.measurementHeight,
+        measurementEnvironment: measureReport.model.measurementEnvironment,
+        rain: measureReport.model.rain,
         description: measureReport.model.description,
         tags: measureReport.model.tags,
         enclosedObject: measureReport.model.enclosedObject
       };
       if (currentMeasure.manualReporting) {
         const durationDate = new Date(measureReport.model.duration!);
-        currentMeasure_ = {
-          ...currentMeasure_,
-          temperature: measureReport.model.temperature!,
+        updatedCurrentMeasure = {
+          ...updatedCurrentMeasure,
+          temperature: measureReport.model.temperature,
           value: measureReport.model.value!,
           hitsNumber: measureReport.model.hitsNumber!,
           endTime:
             currentMeasure.startTime +
             (durationDate.getHours() * 60 * 60 + durationDate.getMinutes() * 60 + durationDate.getSeconds()) * 1000,
-          measurementHeight: measureReport.model.measurementHeight!,
-          measurementEnvironment: measureReport.model.measurementEnvironment!,
-          rain: measureReport.model.rain!
+          measurementHeight: measureReport.model.measurementHeight,
+          measurementEnvironment: measureReport.model.measurementEnvironment,
+          rain: measureReport.model.rain
         };
       }
       patchState({
         measureReport: undefined,
-        currentMeasure: currentMeasure_
+        currentMeasure: updatedCurrentMeasure
+      });
+    }
+  }
+
+  @Action(StopMeasureSeriesReport)
+  stopMeasureSeriesReport({ getState, patchState }: StateContext<MeasuresStateModel>) {
+    const { currentSeries, measureSeriesReport } = getState();
+    if (currentSeries && measureSeriesReport) {
+      console.log('stoprepoet');
+      patchState({
+        measureSeriesReport: undefined,
+        currentSeries: {
+          ...currentSeries,
+          measures: currentSeries.measures.map(measure => ({
+            ...measure,
+            measurementHeight: measureSeriesReport.model.measurementHeight,
+            measurementEnvironment: measureSeriesReport.model.measurementEnvironment,
+            rain: measureSeriesReport.model.rain,
+            description: measureSeriesReport.model.description,
+            tags: measureSeriesReport.model.tags
+          }))
+        }
       });
     }
   }
