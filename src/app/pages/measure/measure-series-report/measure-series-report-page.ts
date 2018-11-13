@@ -28,7 +28,7 @@ export class MeasureSeriesReportPage extends AutoUnsubscribePage {
   login$: Observable<string | undefined>;
 
   currentSeries?: MeasureSeries;
-  measureReportSeriesForm?: FormGroup;
+  measureSeriesReportForm?: FormGroup;
   reportScan = true;
   positionChangeSpeedOverLimit = false;
 
@@ -118,7 +118,7 @@ export class MeasureSeriesReportPage extends AutoUnsubscribePage {
       );
       this.currentSeries = currentSeries;
       if (measureSeriesReport) {
-        this.measureReportSeriesForm = this.formBuilder.group({
+        this.measureSeriesReportForm = this.formBuilder.group({
           ...measureSeriesReport.model,
           tags: [measureSeriesReport.model.tags]
         });
@@ -130,7 +130,7 @@ export class MeasureSeriesReportPage extends AutoUnsubscribePage {
   init() {
     this.actions$.pipe(ofActionSuccessful(StopMeasure, CancelMeasure)).subscribe(() => {
       this.activatedRoute.queryParams.pipe(take(1)).subscribe(queryParams => {
-        this.measureReportSeriesForm = undefined;
+        this.measureSeriesReportForm = undefined;
         if (queryParams.goBackHistory) {
           this.navController.navigateRoot([
             'tabs',
