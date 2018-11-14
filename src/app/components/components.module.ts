@@ -15,6 +15,7 @@ import { HitNumberPipe } from './pipes/hit-number/hit-number.pipe';
 import { RoundButtonComponent } from './round-button/round-button.component';
 import { SelectIconComponent } from './select-icon/select-icon.component';
 import { TagListComponent } from './tag-list/tag-list.component';
+import { HistoryItemComponent } from './history-item/history-item.component';
 
 @NgModule({
   imports: [CommonModule, FormsModule, IonicModule.forRoot(), TranslateModule],
@@ -30,7 +31,8 @@ import { TagListComponent } from './tag-list/tag-list.component';
     DosePipe,
     SelectIconComponent,
     TagListComponent,
-    PhotoComponent
+    PhotoComponent,
+    HistoryItemComponent
   ],
   exports: [
     HeaderComponent,
