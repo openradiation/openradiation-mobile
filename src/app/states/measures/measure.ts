@@ -1,4 +1,4 @@
-import { Geoposition } from '@ionic-native/geolocation';
+import { Location } from 'cordova-plugin-mauron85-background-geolocation';
 import * as uuid from 'uuid';
 import { environment } from '../../../environments/environment';
 import { ApparatusSensorType } from '../devices/abstract-device';
@@ -81,30 +81,30 @@ export class Measure extends AbstractMeasure {
     this.hitsNumber = this.manualReporting ? undefined : 0;
   }
 
-  static updateStartPosition(measure: Measure, position?: Geoposition): Measure {
+  static updateStartPosition(measure: Measure, position?: Location): Measure {
     if (position) {
       return {
         ...measure,
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-        accuracy: position.coords.accuracy,
-        altitude: position.coords.altitude,
-        altitudeAccuracy: position.coords.altitudeAccuracy
+        latitude: position.latitude,
+        longitude: position.longitude,
+        accuracy: position.accuracy,
+        altitude: position.altitude
+        // altitudeAccuracy: position.altitudeAccuracy
       };
     } else {
       return { ...measure };
     }
   }
 
-  static updateEndPosition(measure: Measure, position?: Geoposition): Measure {
+  static updateEndPosition(measure: Measure, position?: Location): Measure {
     if (position) {
       return {
         ...measure,
-        endLatitude: position.coords.latitude,
-        endLongitude: position.coords.longitude,
-        endAccuracy: position.coords.accuracy,
-        endAltitude: position.coords.altitude,
-        endAltitudeAccuracy: position.coords.altitudeAccuracy
+        endLatitude: position.latitude,
+        endLongitude: position.longitude,
+        endAccuracy: position.accuracy,
+        endAltitude: position.altitude
+        // endAltitudeAccuracy: position.altitudeAccuracy
       };
     } else {
       return { ...measure };

@@ -1,4 +1,4 @@
-import { Geoposition } from '@ionic-native/geolocation';
+import { Location } from 'cordova-plugin-mauron85-background-geolocation';
 import { AbstractDevice } from '../devices/abstract-device';
 import { Measure, MeasureSeries, Step } from './measure';
 
@@ -28,7 +28,7 @@ export class StopWatchPosition {
 
 export class PositionChanged {
   static readonly type = '[Measures] Position changed';
-  constructor(public position?: Geoposition) {}
+  constructor(public position?: Location) {}
 }
 
 export class StartMeasure {

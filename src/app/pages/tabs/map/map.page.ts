@@ -80,7 +80,7 @@ export class MapPage extends AutoUnsubscribePage {
           .pipe(take(1))
           .subscribe(() => {
             const { latitude, longitude } = this.store.selectSnapshot(
-              ({ measures }: { measures: MeasuresStateModel }) => measures.currentPosition!.coords
+              ({ measures }: { measures: MeasuresStateModel }) => measures.currentPosition!
             );
             const lat = latitude.toFixed(7);
             const long = longitude.toFixed(7);
