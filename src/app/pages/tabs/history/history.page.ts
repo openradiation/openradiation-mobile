@@ -1,18 +1,12 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
 import { AlertController, NavController, ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, ofActionErrored, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { Measure, MeasureSeries, MeasureType, PositionAccuracyThreshold } from '../../../states/measures/measure';
-import {
-  DeleteAllMeasures,
-  DeleteMeasure,
-  PublishMeasure,
-  ShowMeasure
-} from '../../../states/measures/measures.action';
+import { DeleteAllMeasures, PublishMeasure, ShowMeasure } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
 
 @Component({
@@ -26,12 +20,6 @@ export class HistoryPage extends AutoUnsubscribePage {
 
   measureBeingSentMap: { [K: string]: boolean } = {};
   positionAccuracyThreshold = PositionAccuracyThreshold;
-  measureType = MeasureType;
-
-  measureSeriesMessageMapping = {
-    '=1': _('HISTORY.MEASURE_SERIES.SINGULAR'),
-    other: _('HISTORY.MEASURE_SERIES.PLURAL')
-  };
 
   url = '/tabs/(history:history)';
 
@@ -77,63 +65,6 @@ export class HistoryPage extends AutoUnsubscribePage {
         );
       })
     );
-  }
-
-  showDetail(measure: Measure) {
-    this.store.dispatch(new ShowMeasure(measure));
-  }
-
-  publish(event: Event, measure: Measure | MeasureSeries) {
-    event.stopPropagation();
-    if (this.canSendMeasure(measure)) {
-      this.alertController
-        .create({
-          header: this.translateService.instant('HISTORY.TITLE'),
-          subHeader: this.translateService.instant('HISTORY.SEND.TITLE'),
-          message: this.translateService.instant('HISTORY.SEND.NOTICE'),
-          backdropDismiss: false,
-          buttons: [
-            {
-              text: this.translateService.instant('GENERAL.NO')
-            },
-            {
-              text: this.translateService.instant('GENERAL.YES'),
-              handler: () => this.store.dispatch(new PublishMeasure(measure))
-            }
-          ]
-        })
-        .then(alert => alert.present());
-    }
-  }
-
-  canSendMeasure(measure: Measure | MeasureSeries): boolean {
-    return (
-      measure.type === MeasureType.MeasureSeries ||
-      (measure.accuracy !== undefined &&
-        measure.accuracy < PositionAccuracyThreshold.No &&
-        measure.endAccuracy !== undefined &&
-        measure.endAccuracy < PositionAccuracyThreshold.No)
-    );
-  }
-
-  delete(event: Event, measure: Measure) {
-    event.stopPropagation();
-    this.alertController
-      .create({
-        header: this.translateService.instant('HISTORY.TITLE'),
-        message: this.translateService.instant('HISTORY.DELETE.NOTICE'),
-        backdropDismiss: false,
-        buttons: [
-          {
-            text: this.translateService.instant('GENERAL.NO')
-          },
-          {
-            text: this.translateService.instant('GENERAL.YES'),
-            handler: () => this.store.dispatch(new DeleteMeasure(measure))
-          }
-        ]
-      })
-      .then(alert => alert.present());
   }
 
   deleteAll() {
