@@ -40,6 +40,10 @@ export class StopMeasure {
   static readonly type = '[Measures] Stop measure';
 }
 
+export class StopMeasureSeries {
+  static readonly type = '[Measures] Stop series';
+}
+
 export class CancelMeasure {
   static readonly type = '[Measures] Cancel measure';
 }

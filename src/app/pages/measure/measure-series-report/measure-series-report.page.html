@@ -95,8 +95,8 @@
                 </form>
                 <div class="bottom-buttons">
                     <app-round-button
-                            (click)="stopReport()" [disabled]="!measureSeriesReportForm.valid"
-                            [src]="measureSeriesReportForm?.valid ? 'assets/img/button-on.png' : 'assets/img/button-off.png'">
+                            (click)="stopReport()" [disabled]="!measureSeriesReportForm.valid  || currentSeries.sent"
+                            [src]="measureSeriesReportForm?.valid && !currentSeries.sent ? 'assets/img/button-on.png' : 'assets/img/button-off.png'">
                         {{'GENERAL.OK' | translate}}
                     </app-round-button>
                     <div class="side-buttons">

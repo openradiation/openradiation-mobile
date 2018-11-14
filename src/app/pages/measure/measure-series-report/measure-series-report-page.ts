@@ -12,8 +12,8 @@ import { MeasureEnvironment, MeasureSeries, PositionAccuracyThreshold } from '..
 import {
   CancelMeasure,
   StartMeasureSeriesReport,
-  StopMeasure,
-  StopMeasureSeriesReport
+  StopMeasureSeriesReport,
+  StopMeasureSeries
 } from '../../../states/measures/measures.action';
 import { MeasuresStateModel } from '../../../states/measures/measures.state';
 import { UserState } from '../../../states/user/user.state';
@@ -121,13 +121,20 @@ export class MeasureSeriesReportPage extends AutoUnsubscribePage {
           ...measureSeriesReport.model,
           tags: [measureSeriesReport.model.tags]
         });
+        if (this.currentSeries!.sent) {
+          this.measureSeriesReportForm.get('measurementEnvironment')!.disable();
+          this.measureSeriesReportForm.get('measurementHeight')!.disable();
+          this.measureSeriesReportForm.get('rain')!.disable();
+          this.measureSeriesReportForm.get('description')!.disable();
+          this.measureSeriesReportForm.get('tags')!.disable();
+        }
       }
       this.init();
     });
   }
 
   init() {
-    this.actions$.pipe(ofActionSuccessful(StopMeasure, CancelMeasure)).subscribe(() => {
+    this.actions$.pipe(ofActionSuccessful(StopMeasureSeries, CancelMeasure)).subscribe(() => {
       this.activatedRoute.queryParams.pipe(take(1)).subscribe(queryParams => {
         this.measureSeriesReportForm = undefined;
         if (queryParams.goBackHistory) {
@@ -164,7 +171,7 @@ export class MeasureSeriesReportPage extends AutoUnsubscribePage {
   stopReport() {
     this.subscriptions.push(
       this.actions$.pipe(ofActionSuccessful(StopMeasureSeriesReport)).subscribe(() => {
-        this.store.dispatch(new StopMeasure());
+        this.store.dispatch(new StopMeasureSeries());
       })
     );
     this.store.dispatch(new StopMeasureSeriesReport());

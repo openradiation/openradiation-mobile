@@ -83,14 +83,9 @@ export class HistoryPage extends AutoUnsubscribePage {
     this.store.dispatch(new ShowMeasure(measure));
   }
 
-  publish(event: Event, measure: Measure) {
+  publish(event: Event, measure: Measure | MeasureSeries) {
     event.stopPropagation();
-    if (
-      measure.accuracy &&
-      measure.accuracy < PositionAccuracyThreshold.No &&
-      measure.endAccuracy &&
-      measure.endAccuracy < PositionAccuracyThreshold.No
-    ) {
+    if (this.canSendMeasure(measure)) {
       this.alertController
         .create({
           header: this.translateService.instant('HISTORY.TITLE'),
@@ -109,6 +104,16 @@ export class HistoryPage extends AutoUnsubscribePage {
         })
         .then(alert => alert.present());
     }
+  }
+
+  canSendMeasure(measure: Measure | MeasureSeries): boolean {
+    return (
+      measure.type === MeasureType.MeasureSeries ||
+      (measure.accuracy !== undefined &&
+        measure.accuracy < PositionAccuracyThreshold.No &&
+        measure.endAccuracy !== undefined &&
+        measure.endAccuracy < PositionAccuracyThreshold.No)
+    );
   }
 
   delete(event: Event, measure: Measure) {

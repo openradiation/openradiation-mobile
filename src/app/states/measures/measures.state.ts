@@ -39,6 +39,7 @@ import {
   StopMeasureScan,
   StopMeasureSeriesParams,
   StopMeasureSeriesReport,
+  StopMeasureSeries,
   StopWatchPosition,
   UpdateMeasureScanTime
 } from './measures.action';
@@ -255,14 +256,31 @@ export class MeasuresState {
           patch.measures = [...measures, measure];
         }
         patchState(patch);
-        if (
-          params.autoPublish &&
-          measure.accuracy &&
-          measure.accuracy < PositionAccuracyThreshold.No &&
-          measure.endAccuracy &&
-          measure.endAccuracy < PositionAccuracyThreshold.No
-        ) {
+        if (params.autoPublish) {
           dispatch(new PublishMeasure(measure));
+        }
+      }
+    }
+  }
+
+  @Action(StopMeasureSeries)
+  stopMeasureSeries({ getState, patchState, dispatch }: StateContext<MeasuresStateModel>) {
+    const { currentSeries, measures, params } = getState();
+    if (currentSeries) {
+      const patch: Partial<MeasuresStateModel> = { currentSeries: undefined };
+      if (currentSeries.sent) {
+        patchState(patch);
+      } else {
+        const series = { ...currentSeries };
+        const measureIndex = measures.findIndex(historyMeasure => historyMeasure.id === series.id);
+        if (measureIndex > -1) {
+          patch.measures = [...measures.slice(0, measureIndex), series, ...measures.slice(measureIndex + 1)];
+        } else {
+          patch.measures = [...measures, series];
+        }
+        patchState(patch);
+        if (params.autoPublish) {
+          dispatch(new PublishMeasure(series));
         }
       }
     }
