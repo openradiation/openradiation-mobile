@@ -1,3 +1,51 @@
-<p>
-  history-item works!
-</p>
+<ng-container *ngIf="measures$ | async as measures">
+    <ion-item *ngFor="let measure of measures" button detail="false"
+              (click)="showDetail(measure)">
+        <ion-label>
+            <div class="label-container">
+                <div class="title">
+                    <div class="date">
+                        {{measure.startTime | date : 'dd/MM/yyyy HH:mm\'\'\'ss"'}}
+                    </div>
+                    <div class="value">
+                        <ng-container *ngIf="measure.type === measureType.Measure; else measureSeries">
+                            {{measure.value | dose}} {{'MEASURES.DOSE_RATE_UNIT' | translate}}
+                        </ng-container>
+                        <ng-template #measureSeries>
+                            {{measure.measures.length | i18nPlural : measureSeriesMessageMapping | translate :
+                            {count: measure.measures.length} }}
+                        </ng-template>
+                    </div>
+                </div>
+                <div class="subtile"
+                     *ngIf="!canSendMeasure(measure)"
+                     [innerHTML]="'HISTORY.MESSAGE_PREVENT_MEASURE_SENDING' | translate"></div>
+            </div>
+        </ion-label>
+        <ng-container *ngIf="measure.sent; else measureNotSent">
+            <div class="state">
+                {{'HISTORY.SENT' | translate}}
+            </div>
+        </ng-container>
+        <ng-template #measureNotSent>
+            <ng-container *ngIf="!measureBeingSentMap[measure.reportUuid]; else measureBeingSent">
+                <ion-button class="inner-button" fill="clear"
+                            size="default"
+                            [disabled]="!canSendMeasure(measure)"
+                            (click)="publish($event, measure)">
+                    <img src="assets/img/icon-publish.png">
+                </ion-button>
+                <ion-button class="inner-button" fill="clear"
+                            size="default"
+                            (click)="delete($event, measure)">
+                    <img src="assets/img/icon-delete.png">
+                </ion-button>
+            </ng-container>
+            <ng-template #measureBeingSent>
+                <div class="spinner">
+                    <ion-spinner></ion-spinner>
+                </div>
+            </ng-template>
+        </ng-template>
+    </ion-item>
+</ng-container>

@@ -46,7 +46,8 @@ import { HistoryItemComponent } from './history-item/history-item.component';
     DosePipe,
     SelectIconComponent,
     TagListComponent,
-    PhotoComponent
+    PhotoComponent,
+    HistoryItemComponent
   ],
   entryComponents: []
 })
