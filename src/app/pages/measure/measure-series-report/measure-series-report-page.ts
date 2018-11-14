@@ -121,6 +121,13 @@ export class MeasureSeriesReportPage extends AutoUnsubscribePage {
           ...measureSeriesReport.model,
           tags: [measureSeriesReport.model.tags]
         });
+        if (this.currentSeries!.sent) {
+          this.measureSeriesReportForm.get('measurementEnvironment')!.disable();
+          this.measureSeriesReportForm.get('measurementHeight')!.disable();
+          this.measureSeriesReportForm.get('rain')!.disable();
+          this.measureSeriesReportForm.get('description')!.disable();
+          this.measureSeriesReportForm.get('tags')!.disable();
+        }
       }
       this.init();
     });
