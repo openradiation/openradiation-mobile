@@ -263,7 +263,7 @@ export class MeasuresState {
   stopMeasureSeries({ getState, patchState, dispatch }: StateContext<MeasuresStateModel>) {
     const { currentSeries, measures, params } = getState();
     if (currentSeries) {
-      const patch: Partial<MeasuresStateModel> = { currentMeasure: undefined };
+      const patch: Partial<MeasuresStateModel> = { currentSeries: undefined };
       if (currentSeries.sent) {
         patchState(patch);
       } else {
