@@ -1,14 +1,14 @@
 <ng-container *ngIf="measure as measure">
     <ion-item>
+        <ng-container *ngIf="measure.type === measureType.MeasureSeries">
+            <ion-button (click)="DeploySeries($event, measure)" fill="clear" class="drop-down-button">
+                <ion-icon [name]="deploy ? 'arrow-dropdown' : 'arrow-dropright'" mode="md"
+                          size="large"></ion-icon>
+            </ion-button>
+        </ng-container>
         <ion-label>
             <div class="label-container">
                 <div class="title">
-                    <ng-container *ngIf="measure.type === measureType.MeasureSeries">
-                        <ion-button (click)="DeploySeries($event, measure)" fill="clear" class="drop-down-button">
-                            <ion-icon [name]="deploy ? 'arrow-dropdown' : 'arrow-dropright'" mode="md"
-                                      size="large"></ion-icon>
-                        </ion-button>
-                    </ng-container>
                     <div class="date">
                         {{measure.startTime | date : 'dd/MM/yyyy HH:mm\'\'\'ss"'}}
                     </div>
@@ -53,7 +53,7 @@
             </ng-template>
         </ng-template>
     </ion-item>
-    <ion-list *ngIf="deploy" class="test">
+    <ion-list *ngIf="deploy">
         <ion-item *ngFor="let measureSeriesDetail of displaySeries">
             <ion-label class="test">
                 <div class="label-container">

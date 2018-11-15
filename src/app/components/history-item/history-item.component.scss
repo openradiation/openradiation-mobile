@@ -1,10 +1,6 @@
 ion-item {
   --inner-padding-end: 0;
-  --padding-start: 8px;
-
-  .test {
-    pointer-events: none;
-  }
+  --padding-start: 0px;
 
   ion-label {
     .label-container {
