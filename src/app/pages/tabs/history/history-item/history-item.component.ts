@@ -14,6 +14,8 @@ export class HistoryItemComponent implements OnInit {
   canPublish: boolean;
   @Input()
   measureBeingSent: boolean | undefined;
+  @Input()
+  showArrowDetail: boolean;
 
   @Output()
   showDetail = new EventEmitter();

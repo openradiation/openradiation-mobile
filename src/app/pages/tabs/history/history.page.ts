@@ -108,6 +108,10 @@ export class HistoryPage extends AutoUnsubscribePage {
     );
   }
 
+  containsMeasureSeries(measures: (Measure | MeasureSeries)[]): boolean {
+    return measures.some(measure => measure.type === MeasureType.MeasureSeries);
+  }
+
   delete(measure: Measure) {
     this.alertController
       .create({

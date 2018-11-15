@@ -7,6 +7,7 @@
         <ion-list>
                 <app-history-item [measure]="measure" [canPublish]="canPublishMeasure(measure)"
                                   [measureBeingSent]="measureBeingSentMap[measure.id]"
+                                  [showArrowDetail]="containsMeasureSeries(measures)"
                                   (publish)="publish(measure)"
                                   (delete)="delete(measure)"
                                   *ngFor="let measure of measures" button detail="false"
