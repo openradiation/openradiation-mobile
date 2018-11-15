@@ -77,7 +77,7 @@ export class HistoryPage extends AutoUnsubscribePage {
   }
 
   publish(measure: Measure | MeasureSeries) {
-    if (this.canPublishMeasure(measure)) {
+    if (this.canPublish(measure)) {
       this.alertController
         .create({
           header: this.translateService.instant('HISTORY.TITLE'),
@@ -98,14 +98,28 @@ export class HistoryPage extends AutoUnsubscribePage {
     }
   }
 
-  canPublishMeasure(measure: Measure | MeasureSeries): boolean {
-    return (
-      measure.type === MeasureType.MeasureSeries ||
-      (measure.accuracy !== undefined &&
-        measure.accuracy < PositionAccuracyThreshold.No &&
-        measure.endAccuracy !== undefined &&
-        measure.endAccuracy < PositionAccuracyThreshold.No)
-    );
+  canPublish(measure: Measure | MeasureSeries): boolean {
+    switch (measure.type) {
+      case MeasureType.Measure:
+        return (
+          measure.accuracy !== undefined &&
+          measure.accuracy !== null &&
+          measure.accuracy < PositionAccuracyThreshold.No &&
+          measure.endAccuracy !== undefined &&
+          measure.endAccuracy !== null &&
+          measure.endAccuracy < PositionAccuracyThreshold.No
+        );
+      case MeasureType.MeasureSeries:
+        return measure.measures.some(
+          item =>
+            item.accuracy !== undefined &&
+            item.accuracy !== null &&
+            item.accuracy! < PositionAccuracyThreshold.No &&
+            item.endAccuracy !== undefined &&
+            item.endAccuracy !== null &&
+            item.endAccuracy! < PositionAccuracyThreshold.No
+        );
+    }
   }
 
   delete(measure: Measure) {

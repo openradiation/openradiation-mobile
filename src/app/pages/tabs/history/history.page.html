@@ -5,7 +5,8 @@
         <div class="empty-list" *ngIf="measures.length <= 0" [innerHTML]="'HISTORY.NO_MEASURE' | translate">
         </div>
         <ion-list>
-                <app-history-item [measure]="measure" [canPublish]="canPublishMeasure(measure)"
+                <app-history-item [measure]="measure"
+                                  [canPublish]="canPublish(measure)"
                                   [measureBeingSent]="measureBeingSentMap[measure.id]"
                                   (publishEvent)="publish(measure)"
                                   (deleteEvent)="delete(measure)"
