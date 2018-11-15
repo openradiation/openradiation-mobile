@@ -12,8 +12,8 @@ import { MeasureEnvironment, MeasureSeries, PositionAccuracyThreshold } from '..
 import {
   CancelMeasure,
   StartMeasureSeriesReport,
-  StopMeasureSeriesReport,
-  StopMeasureSeries
+  StopMeasureSeries,
+  StopMeasureSeriesReport
 } from '../../../states/measures/measures.action';
 import { MeasuresStateModel } from '../../../states/measures/measures.state';
 import { UserState } from '../../../states/user/user.state';
@@ -134,38 +134,40 @@ export class MeasureSeriesReportPage extends AutoUnsubscribePage {
   }
 
   init() {
-    this.actions$.pipe(ofActionSuccessful(StopMeasureSeries, CancelMeasure)).subscribe(() => {
-      this.activatedRoute.queryParams.pipe(take(1)).subscribe(queryParams => {
-        this.measureSeriesReportForm = undefined;
-        if (queryParams.goBackHistory) {
-          this.navController.navigateRoot([
-            'tabs',
-            {
-              outlets: {
-                home: null,
-                history: 'history',
-                settings: null,
-                map: null,
-                other: null
+    this.subscriptions.push(
+      this.actions$.pipe(ofActionSuccessful(StopMeasureSeries, CancelMeasure)).subscribe(() => {
+        this.activatedRoute.queryParams.pipe(take(1)).subscribe(queryParams => {
+          this.measureSeriesReportForm = undefined;
+          if (queryParams.goBackHistory) {
+            this.navController.navigateRoot([
+              'tabs',
+              {
+                outlets: {
+                  home: null,
+                  history: 'history',
+                  settings: null,
+                  map: null,
+                  other: null
+                }
               }
-            }
-          ]);
-        } else {
-          this.navController.navigateRoot([
-            'tabs',
-            {
-              outlets: {
-                home: 'home',
-                history: null,
-                settings: null,
-                map: null,
-                other: null
+            ]);
+          } else {
+            this.navController.navigateRoot([
+              'tabs',
+              {
+                outlets: {
+                  home: 'home',
+                  history: null,
+                  settings: null,
+                  map: null,
+                  other: null
+                }
               }
-            }
-          ]);
-        }
-      });
-    });
+            ]);
+          }
+        });
+      })
+    );
   }
 
   stopReport() {
