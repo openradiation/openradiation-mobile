@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController, NavController, ToastController } from '@ionic/angular';
+import { NavController, ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, ofActionErrored, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
+import { AlertService } from '../../../services/alert.service';
 import { Measure, MeasureSeries, MeasureType, PositionAccuracyThreshold } from '../../../states/measures/measure';
 import {
   DeleteAllMeasures,
@@ -31,7 +32,7 @@ export class HistoryPage extends AutoUnsubscribePage {
   constructor(
     protected router: Router,
     private store: Store,
-    private alertController: AlertController,
+    private alertService: AlertService,
     private translateService: TranslateService,
     private actions$: Actions,
     private toastController: ToastController,
@@ -78,23 +79,21 @@ export class HistoryPage extends AutoUnsubscribePage {
 
   publish(measure: Measure | MeasureSeries) {
     if (this.canPublish(measure)) {
-      this.alertController
-        .create({
-          header: this.translateService.instant('HISTORY.TITLE'),
-          subHeader: this.translateService.instant('HISTORY.SEND.TITLE'),
-          message: this.translateService.instant('HISTORY.SEND.NOTICE'),
-          backdropDismiss: false,
-          buttons: [
-            {
-              text: this.translateService.instant('GENERAL.NO')
-            },
-            {
-              text: this.translateService.instant('GENERAL.YES'),
-              handler: () => this.store.dispatch(new PublishMeasure(measure))
-            }
-          ]
-        })
-        .then(alert => alert.present());
+      this.alertService.show({
+        header: this.translateService.instant('HISTORY.TITLE'),
+        subHeader: this.translateService.instant('HISTORY.SEND.TITLE'),
+        message: this.translateService.instant('HISTORY.SEND.NOTICE'),
+        backdropDismiss: false,
+        buttons: [
+          {
+            text: this.translateService.instant('GENERAL.NO')
+          },
+          {
+            text: this.translateService.instant('GENERAL.YES'),
+            handler: () => this.store.dispatch(new PublishMeasure(measure))
+          }
+        ]
+      });
     }
   }
 
@@ -127,41 +126,37 @@ export class HistoryPage extends AutoUnsubscribePage {
   }
 
   delete(measure: Measure) {
-    this.alertController
-      .create({
-        header: this.translateService.instant('HISTORY.TITLE'),
-        message: this.translateService.instant('HISTORY.DELETE.NOTICE'),
-        backdropDismiss: false,
-        buttons: [
-          {
-            text: this.translateService.instant('GENERAL.NO')
-          },
-          {
-            text: this.translateService.instant('GENERAL.YES'),
-            handler: () => this.store.dispatch(new DeleteMeasure(measure))
-          }
-        ]
-      })
-      .then(alert => alert.present());
+    this.alertService.show({
+      header: this.translateService.instant('HISTORY.TITLE'),
+      message: this.translateService.instant('HISTORY.DELETE.NOTICE'),
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: this.translateService.instant('GENERAL.NO')
+        },
+        {
+          text: this.translateService.instant('GENERAL.YES'),
+          handler: () => this.store.dispatch(new DeleteMeasure(measure))
+        }
+      ]
+    });
   }
 
   deleteAll() {
-    this.alertController
-      .create({
-        header: this.translateService.instant('HISTORY.TITLE'),
-        subHeader: this.translateService.instant('HISTORY.DELETE_ALL.TITLE'),
-        message: this.translateService.instant('HISTORY.DELETE_ALL.NOTICE'),
-        backdropDismiss: false,
-        buttons: [
-          {
-            text: this.translateService.instant('GENERAL.NO')
-          },
-          {
-            text: this.translateService.instant('GENERAL.YES'),
-            handler: () => this.store.dispatch(new DeleteAllMeasures())
-          }
-        ]
-      })
-      .then(alert => alert.present());
+    this.alertService.show({
+      header: this.translateService.instant('HISTORY.TITLE'),
+      subHeader: this.translateService.instant('HISTORY.DELETE_ALL.TITLE'),
+      message: this.translateService.instant('HISTORY.DELETE_ALL.NOTICE'),
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: this.translateService.instant('GENERAL.NO')
+        },
+        {
+          text: this.translateService.instant('GENERAL.YES'),
+          handler: () => this.store.dispatch(new DeleteAllMeasures())
+        }
+      ]
+    });
   }
 }

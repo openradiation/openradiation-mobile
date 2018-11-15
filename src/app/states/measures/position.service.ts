@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
-import { AlertController, Platform } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
 import { BackgroundGeolocationPlugin } from 'cordova-plugin-mauron85-background-geolocation';
 import { take } from 'rxjs/operators';
+import { AlertService } from '../../services/alert.service';
 import { PositionChanged } from './measures.action';
 
 /**
@@ -23,7 +24,7 @@ export class PositionService {
     private diagnostic: Diagnostic,
     private platform: Platform,
     private store: Store,
-    private alertController: AlertController,
+    private alertService: AlertService,
     private translateService: TranslateService
   ) {}
 
@@ -98,25 +99,25 @@ export class PositionService {
   }
 
   private onGPSDeniedAlways() {
-    this.alertController
-      .create({
-        header: this.translateService.instant('POSITION.DENIED_ALWAYS.TITLE'),
-        message: this.translateService.instant('POSITION.DENIED_ALWAYS.NOTICE'),
-        backdropDismiss: false,
-        buttons: [
-          {
-            text: this.translateService.instant('GENERAL.GO_TO_SETTINGS'),
-            handler: () => {
-              this.platform.resume.pipe(take(1)).subscribe(() => this.requestAuthorization());
-              BackgroundGeolocation.showAppSettings();
+    this.alertService
+      .show(
+        {
+          header: this.translateService.instant('POSITION.DENIED_ALWAYS.TITLE'),
+          message: this.translateService.instant('POSITION.DENIED_ALWAYS.NOTICE'),
+          backdropDismiss: false,
+          buttons: [
+            {
+              text: this.translateService.instant('GENERAL.GO_TO_SETTINGS'),
+              handler: () => {
+                this.platform.resume.pipe(take(1)).subscribe(() => this.requestAuthorization());
+                BackgroundGeolocation.showAppSettings();
+              }
             }
-          }
-        ]
-      })
-      .then(alert => {
-        this.currentAlert = alert;
-        alert.present();
-      });
+          ]
+        },
+        false
+      )
+      .then(alert => (this.currentAlert = alert));
   }
 
   private watchGPSActivation() {
@@ -141,26 +142,26 @@ export class PositionService {
   }
 
   private onGPSDisabled() {
-    this.alertController
-      .create({
-        header: this.translateService.instant('POSITION.GPS_DISABLED.TITLE'),
-        message: this.platform.is('ios')
-          ? this.translateService.instant('POSITION.GPS_DISABLED.NOTICE_IOS')
-          : this.translateService.instant('POSITION.GPS_DISABLED.NOTICE_ANDROID'),
-        backdropDismiss: false,
-        buttons: [
-          {
-            text: this.translateService.instant('GENERAL.GO_TO_SETTINGS'),
-            handler: () => {
-              BackgroundGeolocation.showLocationSettings();
-              return false;
+    this.alertService
+      .show(
+        {
+          header: this.translateService.instant('POSITION.GPS_DISABLED.TITLE'),
+          message: this.platform.is('ios')
+            ? this.translateService.instant('POSITION.GPS_DISABLED.NOTICE_IOS')
+            : this.translateService.instant('POSITION.GPS_DISABLED.NOTICE_ANDROID'),
+          backdropDismiss: false,
+          buttons: [
+            {
+              text: this.translateService.instant('GENERAL.GO_TO_SETTINGS'),
+              handler: () => {
+                BackgroundGeolocation.showLocationSettings();
+                return false;
+              }
             }
-          }
-        ]
-      })
-      .then(alert => {
-        this.currentAlert = alert;
-        alert.present();
-      });
+          ]
+        },
+        false
+      )
+      .then(alert => (this.currentAlert = alert));
   }
 }

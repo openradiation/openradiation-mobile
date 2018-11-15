@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { AlertController, MenuController, NavController } from '@ionic/angular';
+import { MenuController, NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
+import { AlertService } from '../../services/alert.service';
 import { AbstractDevice } from '../../states/devices/abstract-device';
 import { DevicesState } from '../../states/devices/devices.state';
 import { StartManualMeasure, StartMeasureSeriesParams } from '../../states/measures/measures.action';
@@ -32,7 +33,7 @@ export class MenuComponent {
     private navController: NavController,
     private store: Store,
     private actions$: Actions,
-    private alertController: AlertController,
+    private alertService: AlertService,
     private translateService: TranslateService
   ) {
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
@@ -79,43 +80,41 @@ export class MenuComponent {
   }
 
   private goToLogin(redirectAfterLogin: RedirectAfterLogin) {
-    this.alertController
-      .create({
-        header:
-          redirectAfterLogin === RedirectAfterLogin.ManualMeasure
-            ? this.translateService.instant('MEASURE_MANUAL.TITLE')
-            : this.translateService.instant('MEASURE_SERIES.TITLE'),
-        message:
-          redirectAfterLogin === RedirectAfterLogin.ManualMeasure
-            ? this.translateService.instant('MEASURE_MANUAL.ALERT')
-            : this.translateService.instant('MEASURE_SERIES.ALERT'),
-        backdropDismiss: false,
-        buttons: [
-          {
-            text: this.translateService.instant('GENERAL.CANCEL')
-          },
-          {
-            text: this.translateService.instant('LOG_IN.TITLE'),
-            handler: () =>
-              this.navController.navigateForward(
-                [
-                  'tabs',
-                  {
-                    outlets: {
-                      settings: 'log-in',
-                      home: null,
-                      history: null,
-                      map: null,
-                      other: null
-                    }
+    this.alertService.show({
+      header:
+        redirectAfterLogin === RedirectAfterLogin.ManualMeasure
+          ? this.translateService.instant('MEASURE_MANUAL.TITLE')
+          : this.translateService.instant('MEASURE_SERIES.TITLE'),
+      message:
+        redirectAfterLogin === RedirectAfterLogin.ManualMeasure
+          ? this.translateService.instant('MEASURE_MANUAL.ALERT')
+          : this.translateService.instant('MEASURE_SERIES.ALERT'),
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: this.translateService.instant('GENERAL.CANCEL')
+        },
+        {
+          text: this.translateService.instant('LOG_IN.TITLE'),
+          handler: () =>
+            this.navController.navigateForward(
+              [
+                'tabs',
+                {
+                  outlets: {
+                    settings: 'log-in',
+                    home: null,
+                    history: null,
+                    map: null,
+                    other: null
                   }
-                ],
-                true,
-                { queryParams: { redirectAfterLogin: redirectAfterLogin } }
-              )
-          }
-        ]
-      })
-      .then(alert => alert.present());
+                }
+              ],
+              true,
+              { queryParams: { redirectAfterLogin: redirectAfterLogin } }
+            )
+        }
+      ]
+    });
   }
 }
