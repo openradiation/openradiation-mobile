@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
-import { Measure, MeasureSeries, MeasureType } from '../../states/measures/measure';
+import { Measure, MeasureSeries, MeasureType } from '../../../../states/measures/measure';
 
 @Component({
   selector: 'app-history-item',
@@ -16,12 +16,13 @@ export class HistoryItemComponent implements OnInit {
   measureBeingSent: boolean | undefined;
 
   @Output()
-  publishEvent: EventEmitter<Measure | MeasureSeries> = new EventEmitter();
+  showDetail = new EventEmitter();
   @Output()
-  deleteEvent = new EventEmitter();
+  publish = new EventEmitter();
+  @Output()
+  delete = new EventEmitter();
 
-  displaySeries: Measure[];
-  deploy = false;
+  showSeriesDetail = false;
   measureType = MeasureType;
   measureSeriesMessageMapping = {
     '=1': _('HISTORY.MEASURE_SERIES.SINGULAR'),
@@ -32,19 +33,22 @@ export class HistoryItemComponent implements OnInit {
 
   ngOnInit() {}
 
-  DeploySeries(event: Event, measure: MeasureSeries) {
-    event.stopPropagation();
-    this.deploy = !this.deploy;
-    this.displaySeries = measure.measures;
+  showDetailClick() {
+    this.showDetail.emit();
   }
 
-  publish(event: Event) {
+  toggleSeriesDetail(event: Event) {
     event.stopPropagation();
-    this.publishEvent.emit(this.measure);
+    this.showSeriesDetail = !this.showSeriesDetail;
   }
 
-  delete(event: Event) {
+  publishClick(event: Event) {
     event.stopPropagation();
-    this.deleteEvent.emit(this.measure);
+    this.publish.emit();
+  }
+
+  deleteClick(event: Event) {
+    event.stopPropagation();
+    this.delete.emit();
   }
 }

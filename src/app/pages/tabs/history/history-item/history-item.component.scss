@@ -5,15 +5,18 @@ ion-item {
   ion-label {
     .label-container {
       display: flex;
-      justify-content: center;
       color: white;
-      text-align: center;
       flex-direction: column;
 
       .title {
         display: flex;
         align-items: center;
         font-size: 14px;
+        justify-content: space-between;
+
+        .date {
+          width: 130px;
+        }
       }
 
       .subtile {
@@ -24,30 +27,33 @@ ion-item {
         font-style: italic;
       }
     }
-
-    .date {
-      width: 130px;
-    }
-
-    .value {
-      margin-left: auto;
-    }
   }
 
-  .state,
-  .spinner {
-    padding-right: 18px;
+  .start-content {
+    width: 36px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .end-content {
+    width: 80px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding-right: 8px;
   }
 
   .inner-button {
     z-index: 10;
-    --padding-start: 10px;
-    --padding-end: 10px;
+    --padding-start: 6px;
+    --padding-end: 6px;
   }
+}
 
-  .drop-down-button {
-    z-index: 10;
-    --padding-start: 0px;
-    --padding-end: 0px;
+.series-detail {
+  margin: -16px 0 12px;
+  ion-item {
+    height: 30px;
   }
 }
