@@ -181,7 +181,10 @@
     "TITLE": "Measurement series"
   },
   "POSITION": {
-    "ACQUISITION": "Acquiring position",
+    "BACKGROUND": {
+      "TEXT": "Measurements location tracking",
+      "TITLE": "Open Radiation"
+    },
     "DENIED_ALWAYS": {
       "NOTICE": "Phone geolocation is required to send measurement to OpenRadiation base. Please accept the permission.",
       "TITLE": "Geolocation - Permission denied"

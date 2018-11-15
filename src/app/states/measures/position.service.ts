@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
-import { AlertController, LoadingController, Platform } from '@ionic/angular';
+import { AlertController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { Actions, Store } from '@ngxs/store';
-import { BackgroundGeolocationPlugin, Location } from 'cordova-plugin-mauron85-background-geolocation';
-import { Observable, Observer, of } from 'rxjs';
-import { fromPromise } from 'rxjs/internal-compatibility';
-import { concatMap, take, tap } from 'rxjs/operators';
+import { Store } from '@ngxs/store';
+import { BackgroundGeolocationPlugin } from 'cordova-plugin-mauron85-background-geolocation';
+import { take } from 'rxjs/operators';
 import { PositionChanged } from './measures.action';
 
+/**
+ * Constants from cordova-plugin-mauron85-background-geolocation
+ */
 declare const BackgroundGeolocation: BackgroundGeolocationPlugin;
 
 @Injectable({
@@ -17,78 +18,41 @@ declare const BackgroundGeolocation: BackgroundGeolocationPlugin;
 export class PositionService {
   private currentAlert?: any;
   isAcquiringPosition = false;
-  startWatchOnHold = false;
-  locationAuthorized = false;
 
   constructor(
     private diagnostic: Diagnostic,
-    private actions$: Actions,
     private platform: Platform,
     private store: Store,
     private alertController: AlertController,
-    private translateService: TranslateService,
-    public loadingController: LoadingController
+    private translateService: TranslateService
   ) {}
 
   init() {
-    BackgroundGeolocation.configure({}, () => {
-      this.watchPosition();
-      this.requestAuthorization();
-    });
-  }
-
-  getCurrentPosition(): Observable<Location | undefined> {
-    this.isAcquiringPosition = true;
-    return fromPromise(
-      this.loadingController
-        .create({
-          message: this.translateService.instant('POSITION.ACQUISITION'),
-          cssClass: 'custom-loading-indicator'
-        })
-        .then(loadingIndicator => loadingIndicator.present())
-    ).pipe(
-      concatMap(
-        () => <Observable<Location | undefined>>Observable.create((observer: Observer<Location | undefined>) =>
-            BackgroundGeolocation.getCurrentLocation(
-              location => {
-                observer.next(location);
-                observer.complete();
-              },
-              () => {
-                observer.next(undefined);
-              },
-              {
-                timeout: 5000,
-                maximumAge: 10000,
-                enableHighAccuracy: true
-              }
-            )
-          )
-      ),
-      tap(() => {
-        this.loadingController.dismiss();
-        this.isAcquiringPosition = false;
-      })
+    BackgroundGeolocation.configure(
+      {
+        locationProvider: BackgroundGeolocation.ACTIVITY_PROVIDER,
+        desiredAccuracy: BackgroundGeolocation.HIGH_ACCURACY,
+        stationaryRadius: 50,
+        distanceFilter: 50,
+        notificationTitle: this.translateService.instant('POSITION.BACKGROUND.TITLE'),
+        notificationText: this.translateService.instant('POSITION.BACKGROUND.TEXT'),
+        notificationIconColor: '#045cb8',
+        interval: 10000,
+        fastestInterval: 5000,
+        activitiesInterval: 10000,
+        maxLocations: 1
+      },
+      () => {
+        this.watchPosition();
+        this.requestAuthorization();
+      }
     );
   }
 
-  startWatchPosition(): Observable<Location | undefined> {
-    if (this.locationAuthorized) {
-      this.startWatchOnHold = false;
-      BackgroundGeolocation.start();
-    } else {
-      this.startWatchOnHold = true;
-    }
-    return of(undefined);
-  }
-
-  stopWatchPosition(): Observable<any> {
-    this.startWatchOnHold = false;
-    BackgroundGeolocation.stop();
-    return of(null);
-  }
-
   private watchPosition() {
+    BackgroundGeolocation.getLocations(positions => {
+      this.store.dispatch(new PositionChanged(positions[0]));
+    });
     BackgroundGeolocation.on('location', position =>
       BackgroundGeolocation.startTask(taskKey => {
         this.store.dispatch(new PositionChanged(position));
@@ -125,7 +89,6 @@ export class PositionService {
             this.onGPSDeniedAlways();
             break;
           case this.diagnostic.permissionStatus.GRANTED:
-            this.locationAuthorized = true;
             this.watchGPSActivation();
             break;
           default:
@@ -169,10 +132,10 @@ export class PositionService {
       ? this.diagnostic.isGpsLocationEnabled()
       : this.diagnostic.isLocationEnabled();
     isLocationEnabled.then(enabled => {
-      if (!enabled) {
+      if (enabled) {
+        BackgroundGeolocation.start();
+      } else {
         this.onGPSDisabled();
-      } else if (this.startWatchOnHold) {
-        this.startWatchPosition();
       }
     });
   }
