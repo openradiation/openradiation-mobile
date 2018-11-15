@@ -1,6 +1,6 @@
 import { Device } from '@ionic-native/device/ngx';
-import { Geoposition } from '@ionic-native/geolocation';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { Location } from 'cordova-plugin-mauron85-background-geolocation';
 import { of } from 'rxjs';
 import { concatMap, tap } from 'rxjs/operators';
 import { DateService } from './date.service';
@@ -48,7 +48,7 @@ import { PositionService } from './position.service';
 
 export interface MeasuresStateModel {
   measures: (Measure | MeasureSeries)[];
-  currentPosition?: Geoposition;
+  currentPosition?: Location;
   isWatchingPosition: boolean;
   currentMeasure?: Measure;
   currentSeries?: MeasureSeries;
@@ -106,13 +106,13 @@ export class MeasuresState {
   }
 
   @Selector()
-  static currentPosition({ currentPosition }: MeasuresStateModel): Geoposition | undefined {
+  static currentPosition({ currentPosition }: MeasuresStateModel): Location | undefined {
     return currentPosition;
   }
 
   @Selector()
   static positionAccuracy({ currentPosition }: MeasuresStateModel): number {
-    return currentPosition ? currentPosition.coords.accuracy : PositionAccuracyThreshold.No;
+    return currentPosition ? currentPosition.accuracy : PositionAccuracyThreshold.No;
   }
 
   @Selector()
@@ -181,9 +181,13 @@ export class MeasuresState {
 
   @Action(StopWatchPosition)
   stopDiscoverDevices({ patchState }: StateContext<MeasuresStateModel>) {
-    patchState({
-      isWatchingPosition: false
-    });
+    return this.positionService.stopWatchPosition().pipe(
+      tap(() =>
+        patchState({
+          isWatchingPosition: false
+        })
+      )
+    );
   }
 
   @Action(PositionChanged)
@@ -424,7 +428,7 @@ export class MeasuresState {
   stopMeasureScan({ getState, patchState }: StateContext<MeasuresStateModel>) {
     const { currentMeasure, currentSeries } = getState();
     if (currentMeasure) {
-      const stopCurrentMeasureScan = (currentPosition: Geoposition) => {
+      const stopCurrentMeasureScan = (currentPosition: Location) => {
         let patch: Partial<MeasuresStateModel>;
         const updatedMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
         if (currentSeries) {

@@ -7,7 +7,6 @@ import { BLE } from '@ionic-native/ble/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
 import { Device } from '@ionic-native/device/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { Serial } from '@ionic-native/serial/ngx';
@@ -57,7 +56,6 @@ import { UserState } from './states/user/user.state';
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    Geolocation,
     Diagnostic,
     Network,
     Device,
