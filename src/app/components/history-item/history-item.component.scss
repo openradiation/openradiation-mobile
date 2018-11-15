@@ -2,6 +2,10 @@ ion-item {
   --inner-padding-end: 0;
   --padding-start: 8px;
 
+  .test {
+    pointer-events: none;
+  }
+
   ion-label {
     .label-container {
       display: flex;
@@ -43,5 +47,11 @@ ion-item {
     z-index: 10;
     --padding-start: 10px;
     --padding-end: 10px;
+  }
+
+  .drop-down-button {
+    z-index: 10;
+    --padding-start: 0px;
+    --padding-end: 0px;
   }
 }

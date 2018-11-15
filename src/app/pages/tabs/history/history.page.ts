@@ -6,7 +6,12 @@ import { Actions, ofActionDispatched, ofActionErrored, ofActionSuccessful, Selec
 import { Observable } from 'rxjs';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { Measure, MeasureSeries, MeasureType, PositionAccuracyThreshold } from '../../../states/measures/measure';
-import { DeleteAllMeasures, PublishMeasure, ShowMeasure } from '../../../states/measures/measures.action';
+import {
+  DeleteAllMeasures,
+  DeleteMeasure,
+  PublishMeasure,
+  ShowMeasure
+} from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
 
 @Component({
@@ -65,6 +70,61 @@ export class HistoryPage extends AutoUnsubscribePage {
         );
       })
     );
+  }
+
+  showDetail(measure: Measure) {
+    this.store.dispatch(new ShowMeasure(measure));
+  }
+
+  publish(measure: Measure | MeasureSeries) {
+    if (this.canPublishMeasure(measure)) {
+      this.alertController
+        .create({
+          header: this.translateService.instant('HISTORY.TITLE'),
+          subHeader: this.translateService.instant('HISTORY.SEND.TITLE'),
+          message: this.translateService.instant('HISTORY.SEND.NOTICE'),
+          backdropDismiss: false,
+          buttons: [
+            {
+              text: this.translateService.instant('GENERAL.NO')
+            },
+            {
+              text: this.translateService.instant('GENERAL.YES'),
+              handler: () => this.store.dispatch(new PublishMeasure(measure))
+            }
+          ]
+        })
+        .then(alert => alert.present());
+    }
+  }
+
+  canPublishMeasure(measure: Measure | MeasureSeries): boolean {
+    return (
+      measure.type === MeasureType.MeasureSeries ||
+      (measure.accuracy !== undefined &&
+        measure.accuracy < PositionAccuracyThreshold.No &&
+        measure.endAccuracy !== undefined &&
+        measure.endAccuracy < PositionAccuracyThreshold.No)
+    );
+  }
+
+  delete(measure: Measure) {
+    this.alertController
+      .create({
+        header: this.translateService.instant('HISTORY.TITLE'),
+        message: this.translateService.instant('HISTORY.DELETE.NOTICE'),
+        backdropDismiss: false,
+        buttons: [
+          {
+            text: this.translateService.instant('GENERAL.NO')
+          },
+          {
+            text: this.translateService.instant('GENERAL.YES'),
+            handler: () => this.store.dispatch(new DeleteMeasure(measure))
+          }
+        ]
+      })
+      .then(alert => alert.present());
   }
 
   deleteAll() {

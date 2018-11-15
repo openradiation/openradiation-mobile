@@ -1,9 +1,14 @@
-<ng-container *ngIf="measures$ | async as measures">
-    <ion-item *ngFor="let measure of measures" button detail="false"
-              (click)="showDetail(measure)">
+<ng-container *ngIf="measure as measure">
+    <ion-item>
         <ion-label>
             <div class="label-container">
                 <div class="title">
+                    <ng-container *ngIf="measure.type === measureType.MeasureSeries">
+                        <ion-button (click)="DeploySeries($event, measure)" fill="clear" class="drop-down-button">
+                            <ion-icon [name]="deploy ? 'arrow-dropdown' : 'arrow-dropright'" mode="md"
+                                      size="large"></ion-icon>
+                        </ion-button>
+                    </ng-container>
                     <div class="date">
                         {{measure.startTime | date : 'dd/MM/yyyy HH:mm\'\'\'ss"'}}
                     </div>
@@ -18,7 +23,7 @@
                     </div>
                 </div>
                 <div class="subtile"
-                     *ngIf="!canSendMeasure(measure)"
+                     *ngIf="!canPublish"
                      [innerHTML]="'HISTORY.MESSAGE_PREVENT_MEASURE_SENDING' | translate"></div>
             </div>
         </ion-label>
@@ -28,24 +33,42 @@
             </div>
         </ng-container>
         <ng-template #measureNotSent>
-            <ng-container *ngIf="!measureBeingSentMap[measure.reportUuid]; else measureBeingSent">
+            <ng-container *ngIf="measureBeingSent; else measureNotBeingSent">
+                <div class="spinner">
+                    <ion-spinner></ion-spinner>
+                </div>
+            </ng-container>
+            <ng-template #measureNotBeingSent>
                 <ion-button class="inner-button" fill="clear"
                             size="default"
-                            [disabled]="!canSendMeasure(measure)"
-                            (click)="publish($event, measure)">
+                            [disabled]="!canPublish"
+                            (click)="publish($event)">
                     <img src="assets/img/icon-publish.png">
                 </ion-button>
                 <ion-button class="inner-button" fill="clear"
                             size="default"
-                            (click)="delete($event, measure)">
+                            (click)="delete($event)">
                     <img src="assets/img/icon-delete.png">
                 </ion-button>
-            </ng-container>
-            <ng-template #measureBeingSent>
-                <div class="spinner">
-                    <ion-spinner></ion-spinner>
-                </div>
             </ng-template>
         </ng-template>
     </ion-item>
+    <ion-list *ngIf="deploy" class="test">
+        <ion-item *ngFor="let measureSeriesDetail of displaySeries">
+            <ion-label class="test">
+                <div class="label-container">
+                    <div class="title">
+                        <div class="date">
+                            {{measureSeriesDetail.startTime | date : 'dd/MM/yyyy HH:mm\'\'\'ss"'}}
+                        </div>
+                        <div class="value">
+                            <ng-container>
+                                {{measureSeriesDetail.value | dose}} {{'MEASURES.DOSE_RATE_UNIT' | translate}}
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </ion-label>
+        </ion-item>
+    </ion-list>
 </ng-container>
