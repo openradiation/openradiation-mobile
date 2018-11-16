@@ -65,10 +65,12 @@ export class StartMeasureScan {
 
 export class StopMeasureScan {
   static readonly type = '[Measures] Stop measure radiation scan';
+  constructor(public device: AbstractDevice) {}
 }
 
 export class StartNextMeasureSeries {
   static readonly type = '[Measures] Start next measure series';
+  constructor(public device: AbstractDevice) {}
 }
 
 export class StartMeasureReport {

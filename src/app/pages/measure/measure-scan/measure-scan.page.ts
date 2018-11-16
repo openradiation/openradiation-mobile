@@ -8,13 +8,7 @@ import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-u
 import { NavigationService } from '../../../services/navigation.service';
 import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
-import {
-  HitsAccuracy,
-  HitsAccuracyThreshold,
-  Measure,
-  MeasureSeries,
-  PositionAccuracyThreshold
-} from '../../../states/measures/measure';
+import { HitsAccuracy, Measure, MeasureSeries, PositionAccuracyThreshold } from '../../../states/measures/measure';
 import { CancelMeasure, StartMeasureScan, StopMeasureScan } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
 
@@ -34,7 +28,6 @@ export class MeasureScanPage extends AutoUnsubscribePage {
   connectedDevice$: Observable<AbstractDevice | undefined>;
 
   hitsAccuracy: HitsAccuracy = HitsAccuracy.Start;
-  hitsAccuracyThreshold = HitsAccuracyThreshold;
   hitsAccuracyWidth = 0;
 
   positionAccuracyThreshold = PositionAccuracyThreshold;
@@ -64,58 +57,62 @@ export class MeasureScanPage extends AutoUnsubscribePage {
     this.currentSeries$.pipe(take(1)).subscribe(currentSeries => {
       this.isMeasureSeries = currentSeries !== undefined;
     });
-    this.subscriptions.push(
-      this.currentMeasure$.subscribe(measure => this.updateHitsAccuracy(measure)),
-      this.currentSeries$.subscribe(currentSeries => {
-        if (currentSeries && currentSeries.measures.length > 1) {
-          this.canEndMeasureScan = true;
-        }
-      }),
-      this.actions$.pipe(ofActionSuccessful(StopMeasureScan)).subscribe(() => {
-        this.navigationService.navigateRoot(['measure', this.isMeasureSeries ? 'report-series' : 'report']);
-      }),
-      this.actions$.pipe(ofActionSuccessful(CancelMeasure)).subscribe(() =>
-        this.navigationService.navigateRoot([
-          'tabs',
-          {
-            outlets: {
-              home: 'home',
-              history: null,
-              settings: null,
-              map: null,
-              other: null
-            }
-          }
-        ])
-      )
-    );
     this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
       if (connectedDevice) {
+        this.subscriptions.push(
+          this.currentMeasure$.subscribe(measure => this.updateHitsAccuracy(connectedDevice, measure)),
+          this.currentSeries$.subscribe(currentSeries => {
+            if (currentSeries && currentSeries.measures.length > 1) {
+              this.canEndMeasureScan = true;
+            }
+          }),
+          this.actions$.pipe(ofActionSuccessful(StopMeasureScan)).subscribe(() => {
+            this.navigationService.navigateRoot(['measure', this.isMeasureSeries ? 'report-series' : 'report']);
+          }),
+          this.actions$.pipe(ofActionSuccessful(CancelMeasure)).subscribe(() =>
+            this.navigationService.navigateRoot([
+              'tabs',
+              {
+                outlets: {
+                  home: 'home',
+                  history: null,
+                  settings: null,
+                  map: null,
+                  other: null
+                }
+              }
+            ])
+          )
+        );
         this.store.dispatch(new StartMeasureScan(connectedDevice)).subscribe();
       }
     });
   }
 
-  updateHitsAccuracy(measure?: Measure) {
+  updateHitsAccuracy(device: AbstractDevice, measure?: Measure) {
     if (measure && measure.hitsNumber !== undefined) {
-      if (measure.hitsNumber >= HitsAccuracyThreshold.Accurate) {
+      if (measure.hitsNumber >= device.hitsAccuracyThreshold.accurate) {
         this.canEndMeasureScan = true;
         this.hitsAccuracy = HitsAccuracy.Accurate;
-      } else if (measure.hitsNumber >= HitsAccuracyThreshold.Good) {
+      } else if (measure.hitsNumber >= device.hitsAccuracyThreshold.good) {
         this.hitsAccuracy = HitsAccuracy.Good;
-      } else if (measure.hitsNumber >= HitsAccuracyThreshold.Medium) {
+      } else if (measure.hitsNumber >= device.hitsAccuracyThreshold.medium) {
         this.hitsAccuracy = HitsAccuracy.Medium;
-      } else if (measure.hitsNumber >= HitsAccuracyThreshold.Bad) {
+      } else if (measure.hitsNumber >= device.hitsAccuracyThreshold.bad) {
         this.hitsAccuracy = HitsAccuracy.Bad;
       } else {
         this.hitsAccuracy = HitsAccuracy.Start;
       }
-      this.hitsAccuracyWidth = Math.min((measure.hitsNumber / HitsAccuracyThreshold.Accurate) * 100, 100);
+      this.hitsAccuracyWidth = Math.min((measure.hitsNumber / device.hitsAccuracyThreshold.accurate) * 100, 100);
     }
   }
 
   stopScan() {
-    this.store.dispatch(new StopMeasureScan()).subscribe();
+    this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
+      if (connectedDevice) {
+        this.store.dispatch(new StopMeasureScan(connectedDevice)).subscribe();
+      }
+    });
   }
 
   cancelMeasure() {

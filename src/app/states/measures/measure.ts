@@ -141,14 +141,6 @@ export enum HitsAccuracy {
   Accurate = 'accurate'
 }
 
-export enum HitsAccuracyThreshold {
-  Start = 0,
-  Bad = 4,
-  Medium = 15,
-  Good = 30,
-  Accurate = 50
-}
-
 export enum MeasureEnvironment {
   Countryside = 'countryside',
   City = 'city',
