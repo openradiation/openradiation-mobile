@@ -17,20 +17,24 @@
                     <app-category-label>
                         {{'MEASURE_SERIES.MEASURES_TITLE' | translate}}
                     </app-category-label>
-                    <ion-label class="title">{{'MEASURE_SERIES.MEASURES_DURATION' | translate}}</ion-label>
-                    <ion-item>
-                        <ion-label position="fixed">{{measureSeriesParamsForm?.value.measureDurationLimit}}'00''</ion-label>
-                        <ion-range class="range" formControlName="measureDurationLimit" required min="5" max="60"
-                                   step="5"
-                                   snaps="true"></ion-range>
-                    </ion-item>
-                    <ion-label class="title">{{'MEASURE_SERIES.HITS_NUMBER' | translate}}</ion-label>
-                    <ion-item>
-                        <ion-label position="fixed">{{measureSeriesParamsForm?.value.measureHitsLimit}}</ion-label>
-                        <ion-range class="range" formControlName="measureHitsLimit" required min="100" max="1000"
-                                   step="100"
-                                   snaps="true"></ion-range>
-                    </ion-item>
+                    <ion-radio-group formControlName="paramSelected">
+                        <ion-label class="title-radio">{{'MEASURE_SERIES.MEASURES_DURATION' | translate}}</ion-label>
+                        <ion-item>
+                            <ion-label position="fixed">{{measureSeriesParamsForm?.value.measureDurationLimit}}'00''</ion-label>
+                            <ion-radio slot="start" [value]="measureSeriesParamsSelected.measureDurationLimit"  mode="md"></ion-radio>
+                            <ion-range class="range" formControlName="measureDurationLimit" required min="5" max="60"
+                                       step="5"
+                                       snaps="true"></ion-range>
+                        </ion-item>
+                        <ion-label class="title-radio">{{'MEASURE_SERIES.HITS_NUMBER' | translate}}</ion-label>
+                        <ion-item>
+                            <ion-label position="fixed">{{measureSeriesParamsForm?.value.measureHitsLimit}}</ion-label>
+                            <ion-radio slot="start" [value]="measureSeriesParamsSelected.measureHitsLimit"  mode="md"></ion-radio>
+                            <ion-range class="range" formControlName="measureHitsLimit" required min="100" max="1000"
+                                       step="100"
+                                       snaps="true"></ion-range>
+                        </ion-item>
+                    </ion-radio-group>
                 </form>
                 <div class="bottom-buttons">
                     <app-round-button [disabled]="!measureSeriesParamsForm.valid"

@@ -8,7 +8,12 @@ import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { SelectIconOption } from '../../../components/select-icon/select-icon-option';
-import { MeasureEnvironment, MeasureSeries, PositionAccuracyThreshold } from '../../../states/measures/measure';
+import {
+  MeasureEnvironment,
+  MeasureSeries,
+  MeasureSeriesParamsSelected,
+  PositionAccuracyThreshold
+} from '../../../states/measures/measure';
 import {
   CancelMeasure,
   StartMeasureSeriesReport,
@@ -32,6 +37,7 @@ export class MeasureSeriesReportPage extends AutoUnsubscribePage {
   reportScan = true;
 
   positionAccuracyThreshold = PositionAccuracyThreshold;
+  measureSeriesParamsSelected = MeasureSeriesParamsSelected;
 
   url = '/measure/report-series';
 

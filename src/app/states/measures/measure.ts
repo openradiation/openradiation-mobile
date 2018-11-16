@@ -177,14 +177,21 @@ export interface MeasureReport {
 }
 
 export interface MeasureSeriesParams {
-  seriesDurationLimit: number | undefined;
-  measureHitsLimit: number | undefined;
-  measureDurationLimit: number | undefined;
+  seriesDurationLimit: number;
+  measureHitsLimit: number;
+  measureDurationLimit: number;
+  paramSelected: MeasureSeriesParamsSelected;
+}
+
+export enum MeasureSeriesParamsSelected {
+  measureHitsLimit,
+  measureDurationLimit
 }
 
 export interface MeasureSeriesReport {
   seriesNumbersMeasures: number | undefined;
   measureDurationLimit: string | undefined;
+  measureHitsLimit: number | undefined;
   date: string | undefined;
   startTime: string | undefined;
   duration: string | undefined;

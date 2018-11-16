@@ -58,6 +58,11 @@
     margin: 16px 10px;
   }
 
+  .title-radio {
+    @extend .title;
+    padding-left: 56px;
+  }
+
   .range {
     --bar-background-active: #{$second-color};
     --bar-background: #{$forth-color};
@@ -66,5 +71,11 @@
   .form {
     width: 100%;
     padding: 5px 10px;
+  }
+
+  ion-radio {
+    margin-top: -25px;
+    --color: white;
+    --color-checked: #{$second-color};
   }
 }

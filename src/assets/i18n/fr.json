@@ -160,8 +160,8 @@
   },
   "MEASURE_SERIES": {
     "ALERT": "Vous devez vous identifier pour pouvoir commencer une série de mesure.",
-    "HITS_NUMBER": "Nb coups minimun d'une mesure",
-    "MEASURES_DURATION": "Durée minimale d'une mesure",
+    "HITS_NUMBER": "Nb coups minimun",
+    "MEASURES_DURATION": "Durée minimale",
     "MEASURES_TITLE": "Mesures",
     "MESSAGE_SCAN": {
       "NONE": "Première mesure en cours",
@@ -171,7 +171,6 @@
     "REPORT": {
       "FIRST_MEASURE-TIME": "Début de la première mesure",
       "HITS_AVERAGE": "Moyenne Nb coups",
-      "MEASURE_DURATION": "Durée maximale de la mesure",
       "MEASURE_NUMBER": "Nombre de mesures",
       "SERIES_DURATION": "Durée totale des mesures",
       "VALUE_AVERAGE": "Moyenne des mesures"

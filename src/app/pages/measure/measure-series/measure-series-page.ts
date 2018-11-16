@@ -8,9 +8,9 @@ import { take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
-import { PositionAccuracyThreshold } from '../../../states/measures/measure';
+import { MeasureSeriesParamsSelected, PositionAccuracyThreshold } from '../../../states/measures/measure';
 import { CancelMeasure, StartMeasure, StopMeasureSeriesParams } from '../../../states/measures/measures.action';
-import { MeasuresState, MeasuresStateModel } from '../../../states/measures/measures.state';
+import { MeasuresStateModel } from '../../../states/measures/measures.state';
 
 @Component({
   selector: 'app-measure-series',
@@ -24,6 +24,7 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
   measureSeriesParamsForm?: FormGroup;
   url = '/measure/series';
   positionAccuracyThreshold = PositionAccuracyThreshold;
+  measureSeriesParamsSelected = MeasureSeriesParamsSelected;
 
   constructor(
     protected router: Router,

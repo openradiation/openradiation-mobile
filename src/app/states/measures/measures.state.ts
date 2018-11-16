@@ -10,6 +10,7 @@ import {
   MeasureReport,
   MeasureSeries,
   MeasureSeriesParams,
+  MeasureSeriesParamsSelected,
   MeasureSeriesReport,
   MeasureType,
   PositionAccuracyThreshold
@@ -266,7 +267,8 @@ export class MeasuresState {
     const model: MeasureSeriesParams = {
       seriesDurationLimit: 24,
       measureHitsLimit: 100,
-      measureDurationLimit: 5
+      measureDurationLimit: 5,
+      paramSelected: MeasureSeriesParamsSelected.measureDurationLimit
     };
     patchState({
       measureSeriesParams: {
@@ -286,12 +288,8 @@ export class MeasuresState {
         measureSeriesParams: undefined,
         currentSeries: new MeasureSeries({
           ...measureSeriesParams.model,
-          measureDurationLimit: measureSeriesParams.model.measureDurationLimit
-            ? measureSeriesParams.model.measureDurationLimit * 60 * 1000
-            : undefined,
-          seriesDurationLimit: measureSeriesParams.model.seriesDurationLimit
-            ? measureSeriesParams.model.seriesDurationLimit * 60 * 60 * 1000
-            : undefined
+          measureDurationLimit: measureSeriesParams.model.measureDurationLimit * 60 * 1000,
+          seriesDurationLimit: measureSeriesParams.model.seriesDurationLimit * 60 * 60 * 1000
         })
       });
     }
@@ -320,12 +318,7 @@ export class MeasuresState {
       patchState({
         currentMeasure: newCurrentMeasure
       });
-      if (
-        currentSeries &&
-        ((step.ts - currentMeasure.startTime > currentSeries.params.measureDurationLimit! &&
-          currentMeasure.hitsNumber! > HitsAccuracyThreshold.Accurate) ||
-          newCurrentMeasure.hitsNumber > currentSeries.params.measureHitsLimit!)
-      ) {
+      if (currentSeries && this.shouldStopMeasureSeriesCurrentScan(currentSeries, newCurrentMeasure, step.ts)) {
         return dispatch(new StartNextMeasureSeries());
       }
     }
@@ -347,11 +340,28 @@ export class MeasuresState {
           value: this.measuresService.computeRadiationValue(currentMeasure, device)
         }
       });
-      if (currentSeries && currentTime - currentMeasure.startTime > currentSeries.params.measureDurationLimit!) {
+      if (currentSeries && this.shouldStopMeasureSeriesCurrentScan(currentSeries, currentMeasure, currentTime)) {
         return dispatch(new StartNextMeasureSeries());
       }
     }
     return of(null);
+  }
+
+  private shouldStopMeasureSeriesCurrentScan(
+    measureSeries: MeasureSeries,
+    measure: Measure,
+    currentTime: number
+  ): boolean {
+    switch (measureSeries.params.paramSelected) {
+      case MeasureSeriesParamsSelected.measureDurationLimit:
+        return (
+          currentTime - measure.startTime > measureSeries.params.measureDurationLimit &&
+          measure.hitsNumber !== undefined &&
+          measure.hitsNumber > HitsAccuracyThreshold.Accurate
+        );
+      case MeasureSeriesParamsSelected.measureHitsLimit:
+        return measure.hitsNumber !== undefined && measure.hitsNumber > measureSeries.params.measureHitsLimit;
+    }
   }
 
   @Action(StartMeasureScan)
@@ -407,7 +417,7 @@ export class MeasuresState {
   startNextMeasureSeries({ getState, patchState, dispatch }: StateContext<MeasuresStateModel>) {
     const { currentMeasure, currentSeries, currentPosition } = getState();
     if (currentMeasure && currentSeries) {
-      if (currentMeasure.endTime! - currentSeries.startTime > currentSeries.params.seriesDurationLimit!) {
+      if (currentMeasure.endTime! - currentSeries.startTime > currentSeries.params.seriesDurationLimit) {
         return dispatch(new StopMeasureScan());
       } else {
         const updatedMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
@@ -484,7 +494,8 @@ export class MeasuresState {
       const startTimeIOSString = this.dateService.toISOString(currentSeries.startTime!);
       const model: MeasureSeriesReport = {
         seriesNumbersMeasures: currentSeries.measures.length,
-        measureDurationLimit: this.dateService.toISODuration(currentSeries.params.measureDurationLimit!),
+        measureDurationLimit: this.dateService.toISODuration(currentSeries.params.measureDurationLimit),
+        measureHitsLimit: currentSeries.params.measureHitsLimit,
         date: startTimeIOSString,
         startTime: startTimeIOSString,
         duration: currentSeries.endTime

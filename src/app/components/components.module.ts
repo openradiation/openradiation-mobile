@@ -17,7 +17,7 @@ import { SelectIconComponent } from './select-icon/select-icon.component';
 import { TagListComponent } from './tag-list/tag-list.component';
 
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule.forRoot(), TranslateModule],
+  imports: [CommonModule, FormsModule, IonicModule, TranslateModule],
   declarations: [
     HeaderComponent,
     CategoryLabelComponent,

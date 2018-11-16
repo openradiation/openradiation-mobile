@@ -160,8 +160,8 @@
   },
   "MEASURE_SERIES": {
     "ALERT": "You must be logged in before you can start a measurement series.",
-    "HITS_NUMBER": "Measurement minimum no. of counts",
-    "MEASURES_DURATION": "Measurement minimum duration",
+    "HITS_NUMBER": "Minimum no. of counts",
+    "MEASURES_DURATION": "Minimum duration",
     "MEASURES_TITLE": "Measurements",
     "MESSAGE_SCAN": {
       "NONE": "First measurement in progress",
@@ -171,7 +171,6 @@
     "REPORT": {
       "FIRST_MEASURE-TIME": "Beginning of the first measurement",
       "HITS_AVERAGE": "Average hits number",
-      "MEASURE_DURATION": "Maximum measure duration",
       "MEASURE_NUMBER": "Number of measurements",
       "SERIES_DURATION": "Total duration of measurements",
       "VALUE_AVERAGE": "Average measures"
