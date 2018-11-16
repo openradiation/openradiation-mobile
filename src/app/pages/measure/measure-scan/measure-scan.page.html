@@ -93,17 +93,7 @@
             </div>
             <div class="radiation">
                 <ng-container
-                        *ngIf="currentMeasure.hitsNumber <= hitsAccuracyThreshold.Medium; else hitsAccuracyMedium">
-                    <div class="start">
-                        <ng-container *ngIf="currentMeasure.startTime; else measureInit">
-                            {{'MEASURES.ONGOING' | translate}}
-                        </ng-container>
-                        <ng-template #measureInit>
-                            {{'MEASURES.INIT' | translate}}
-                        </ng-template>
-                    </div>
-                </ng-container>
-                <ng-template #hitsAccuracyMedium>
+                        *ngIf="currentMeasure.hitsNumber >= hitsAccuracyThreshold.Medium; else hitsAccuracyBadOrStart">
                     <div class="label">
                         {{'MEASURES.DOSE_RATE' | translate | uppercase}}
                     </div>
@@ -112,6 +102,16 @@
                     </div>
                     <div class="unit">
                         {{'MEASURES.DOSE_RATE_UNIT' | translate}}
+                    </div>
+                </ng-container>
+                <ng-template #hitsAccuracyBadOrStart>
+                    <div class="start">
+                        <ng-container *ngIf="currentMeasure.startTime; else measureInit">
+                            {{'MEASURES.ONGOING' | translate}}
+                        </ng-container>
+                        <ng-template #measureInit>
+                            {{'MEASURES.INIT' | translate}}
+                        </ng-template>
                     </div>
                 </ng-template>
                 <div class="background">
