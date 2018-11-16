@@ -7,7 +7,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class RoundButtonComponent {
   @Input()
-  src: string;
+  srcOn: string;
+
+  @Input()
+  srcOff: string;
 
   @Input()
   disabled: boolean;

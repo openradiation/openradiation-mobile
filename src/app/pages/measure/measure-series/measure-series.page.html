@@ -38,7 +38,8 @@
                 </form>
                 <div class="bottom-buttons">
                     <app-round-button [disabled]="!measureSeriesParamsForm.valid"
-                                      [src]="measureSeriesParamsForm?.valid ? 'assets/img/button-start-measure-on.png' : 'assets/img/button-start-measure-off.png'"
+                                      [srcOn]="'assets/img/button-start-measure-on.png'"
+                                      [srcOff]="'assets/img/button-start-measure-off.png'"
                                       (click)="startMeasureSeries()">
                     </app-round-button>
                     <div class="side-buttons">

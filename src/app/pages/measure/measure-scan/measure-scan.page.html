@@ -127,7 +127,8 @@
             </div>
             <div class="bottom-buttons">
                 <app-round-button [disabled]="!canEndMeasureScan"
-                                  [src]="canEndMeasureScan ? 'assets/img/button-on.png' : 'assets/img/button-off.png'"
+                                  [srcOn]="'assets/img/button-on.png'"
+                                  [srcOff]="'assets/img/button-off.png'"
                                   (click)="stopScan()">
                     {{'GENERAL.END' | translate}}
                 </app-round-button>

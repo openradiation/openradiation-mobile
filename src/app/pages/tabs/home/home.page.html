@@ -18,10 +18,10 @@
                 {{'HOME.NO_SENSORS' | translate}}<br>{{'GENERAL.CLICK_HERE' | translate}}
             </ion-button>
         </ng-template>
-        <app-round-button
-                [disabled]="!(canStartMeasure | async)"
-                [src]="(canStartMeasure | async) ? 'assets/img/button-start-measure-on.png' : 'assets/img/button-start-measure-off.png'"
-                (click)="startMeasure()">
+        <app-round-button [disabled]="!(canStartMeasure | async)"
+                          [srcOn]="'assets/img/button-start-measure-on.png'"
+                          [srcOff]="'assets/img/button-start-measure-off.png'"
+                          (click)="startMeasure()">
         </app-round-button>
     </div>
 </ion-content>
