@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
 import { NavController } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -11,16 +12,10 @@ import {
   HitsAccuracy,
   HitsAccuracyThreshold,
   Measure,
+  MeasureSeries,
   PositionAccuracyThreshold
 } from '../../../states/measures/measure';
-import {
-  CancelMeasure,
-  PositionChanged,
-  StartMeasureScan,
-  StartWatchPosition,
-  StopMeasureScan,
-  StopWatchPosition
-} from '../../../states/measures/measures.action';
+import { CancelMeasure, StartMeasureScan, StopMeasureScan } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
 
 @Component({
@@ -32,6 +27,9 @@ export class MeasureScanPage extends AutoUnsubscribePage {
   @Select(MeasuresState.currentMeasure)
   currentMeasure$: Observable<Measure | undefined>;
 
+  @Select(MeasuresState.currentSeries)
+  currentSeries$: Observable<MeasureSeries | undefined>;
+
   @Select(DevicesState.connectedDevice)
   connectedDevice$: Observable<AbstractDevice | undefined>;
 
@@ -40,6 +38,15 @@ export class MeasureScanPage extends AutoUnsubscribePage {
   hitsAccuracyWidth = 0;
 
   positionAccuracyThreshold = PositionAccuracyThreshold;
+
+  canEndMeasureScan = false;
+  isMeasureSeries = false;
+
+  currentSeriesMessageMapping = {
+    '=0': _('MEASURE_SERIES.MESSAGE_SCAN.NONE'),
+    '=1': _('MEASURE_SERIES.MESSAGE_SCAN.SINGULAR'),
+    other: _('MEASURE_SERIES.MESSAGE_SCAN.PLURAL')
+  };
 
   url = '/measure/scan';
 
@@ -54,11 +61,19 @@ export class MeasureScanPage extends AutoUnsubscribePage {
 
   pageEnter() {
     super.pageEnter();
+    this.currentSeries$.pipe(take(1)).subscribe(currentSeries => {
+      this.isMeasureSeries = currentSeries !== undefined;
+    });
     this.subscriptions.push(
       this.currentMeasure$.subscribe(measure => this.updateHitsAccuracy(measure)),
-      this.actions$
-        .pipe(ofActionSuccessful(StopMeasureScan))
-        .subscribe(() => this.navController.navigateRoot(['measure', 'report'], true)),
+      this.currentSeries$.subscribe(currentSeries => {
+        if (currentSeries && currentSeries.measures.length > 1) {
+          this.canEndMeasureScan = true;
+        }
+      }),
+      this.actions$.pipe(ofActionSuccessful(StopMeasureScan)).subscribe(() => {
+        this.navController.navigateRoot(['measure', this.isMeasureSeries ? 'report-series' : 'report'], true);
+      }),
       this.actions$.pipe(ofActionSuccessful(CancelMeasure)).subscribe(() =>
         this.navController.navigateRoot([
           'tabs',
@@ -82,8 +97,9 @@ export class MeasureScanPage extends AutoUnsubscribePage {
   }
 
   updateHitsAccuracy(measure?: Measure) {
-    if (measure) {
+    if (measure && measure.hitsNumber !== undefined) {
       if (measure.hitsNumber >= HitsAccuracyThreshold.Accurate) {
+        this.canEndMeasureScan = true;
         this.hitsAccuracy = HitsAccuracy.Accurate;
       } else if (measure.hitsNumber >= HitsAccuracyThreshold.Good) {
         this.hitsAccuracy = HitsAccuracy.Good;
@@ -98,18 +114,8 @@ export class MeasureScanPage extends AutoUnsubscribePage {
     }
   }
 
-  stopScan(measure?: Measure) {
-    if (measure && measure.accuracy && measure.accuracy < PositionAccuracyThreshold.Inaccurate) {
-      this.store.dispatch(new StartWatchPosition());
-      this.subscriptions.push(
-        this.actions$.pipe(ofActionSuccessful(PositionChanged)).subscribe(() => {
-          this.store.dispatch(new StopMeasureScan());
-          this.store.dispatch(new StopWatchPosition());
-        })
-      );
-    } else {
-      this.store.dispatch(new StopMeasureScan());
-    }
+  stopScan() {
+    this.store.dispatch(new StopMeasureScan()).subscribe();
   }
 
   cancelMeasure() {

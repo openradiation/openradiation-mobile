@@ -4,7 +4,7 @@ import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { filter, map, scan, shareReplay, take, tap } from 'rxjs/operators';
-import { Measure, Step } from '../../measures/measure';
+import { Step } from '../../measures/measure';
 import { ApparatusSensorType } from '../abstract-device';
 import { AbstractBLEDeviceService } from './abstract-ble-device.service';
 import { DeviceOGKit } from './device-og-kit';
@@ -54,14 +54,8 @@ export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
     super(store, ble);
   }
 
-  computeRadiationValue(measure: Measure): number {
-    if (measure.endTime) {
-      const duration = (measure.endTime - measure.startTime) / 1000;
-      const TcNet = measure.hitsNumber / duration - 0.14;
-      return 0.000001 * TcNet ** 3 + 0.0025 * TcNet ** 2 + 0.39 * TcNet;
-    } else {
-      throw new Error('Incorrect measure : missing endTime');
-    }
+  protected convertHitsNumberPerSec(hitsNumberPerSec: number): number {
+    return 0.000001 * hitsNumberPerSec ** 3 + 0.0025 * hitsNumberPerSec ** 2 + 0.39 * hitsNumberPerSec;
   }
 
   getDeviceInfo(device: DeviceOGKit): Observable<Partial<DeviceOGKit>> {

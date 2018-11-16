@@ -3,12 +3,20 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavController, ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
+import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
 import { catchError, take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../../components/auto-unsubscribe/auto-unsubscribe.page';
+import { AbstractDevice } from '../../../../states/devices/abstract-device';
+import { DevicesState } from '../../../../states/devices/devices.state';
 import { ErrorResponse, ErrorResponseCode } from '../../../../states/measures/error-response';
-import { StartManualMeasure } from '../../../../states/measures/measures.action';
+import { StartManualMeasure, StartMeasureSeriesParams } from '../../../../states/measures/measures.action';
 import { LogIn } from '../../../../states/user/user.action';
+
+export enum RedirectAfterLogin {
+  ManualMeasure = 'manualMeasure',
+  MeasureSeries = 'measureSeries'
+}
 
 @Component({
   selector: 'app-log-in',
@@ -16,9 +24,12 @@ import { LogIn } from '../../../../states/user/user.action';
   styleUrls: ['./log-in.page.scss']
 })
 export class LogInPage extends AutoUnsubscribePage {
+  @Select(DevicesState.connectedDevice)
+  connectedDevice$: Observable<AbstractDevice | undefined>;
+
   loginForm: FormGroup;
   connecting = false;
-  startMeasureAfterLogin = false;
+  redirectAfterLogin: RedirectAfterLogin;
   url = '/tabs/(settings:log-in)';
 
   constructor(
@@ -42,10 +53,10 @@ export class LogInPage extends AutoUnsubscribePage {
     super.pageEnter();
     this.activatedRoute.queryParams
       .pipe(take(1))
-      .subscribe(queryParams => (this.startMeasureAfterLogin = queryParams.startMeasureAfterLogin));
+      .subscribe(queryParams => (this.redirectAfterLogin = queryParams.redirectAfterLogin));
     this.subscriptions.push(
       this.actions$.pipe(ofActionSuccessful(LogIn)).subscribe(() => {
-        if (!this.startMeasureAfterLogin) {
+        if (!this.redirectAfterLogin) {
           this.goToSettings();
         }
       })
@@ -84,8 +95,13 @@ export class LogInPage extends AutoUnsubscribePage {
         })
       )
       .subscribe(() => {
-        if (this.startMeasureAfterLogin) {
-          this.store.dispatch(new StartManualMeasure());
+        switch (this.redirectAfterLogin) {
+          case RedirectAfterLogin.ManualMeasure:
+            this.store.dispatch(new StartManualMeasure()).subscribe();
+            break;
+          case RedirectAfterLogin.MeasureSeries:
+            this.store.dispatch(new StartMeasureSeriesParams());
+            break;
         }
       });
   }

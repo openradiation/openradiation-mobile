@@ -15,11 +15,15 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 })
 export class TagListComponent implements ControlValueAccessor {
   tagList: string[] | undefined;
+  displayTagList: string[] = [];
   currentTag = '';
   isDisabled: boolean;
 
   @Input()
   title?: string;
+
+  @Input()
+  hiddenTag?: string;
 
   private onChange = (option: any) => {};
 
@@ -35,6 +39,7 @@ export class TagListComponent implements ControlValueAccessor {
 
   writeValue(tagList: any): void {
     this.tagList = tagList;
+    this.displayTagList = this.tagList ? this.tagList.filter(tag => tag !== this.hiddenTag) : [];
     this.onChange(this.tagList);
   }
 

@@ -1,16 +1,18 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
-import { interval, Observable } from 'rxjs';
-import { shareReplay, take, takeUntil, tap } from 'rxjs/operators';
+import { forkJoin, interval, Observable, of } from 'rxjs';
+import { filter, shareReplay, take, takeUntil, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { AbstractDevice } from '../devices/abstract-device';
+import { AbstractDevice, ApparatusSensorType } from '../devices/abstract-device';
 import { DeviceConnectionLost } from '../devices/devices.action';
 import { DevicesService } from '../devices/devices.service';
 import { UserStateModel } from '../user/user.state';
-import { Measure, PositionAccuracyThreshold, Step } from './measure';
+import { Measure, MeasureSeries, MeasureType, PositionAccuracyThreshold, Step } from './measure';
 import { MeasureApi } from './measure-api';
 import { AddMeasureScanStep, CancelMeasure, StopMeasureScan, UpdateMeasureScanTime } from './measures.action';
+import { PositionService } from './position.service';
+import { addUndefinedDefaults } from '@angular-devkit/core/src/json/schema/transforms';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +22,8 @@ export class MeasuresService {
     private store: Store,
     private actions$: Actions,
     private httpClient: HttpClient,
-    private devicesService: DevicesService
+    private devicesService: DevicesService,
+    private positionService: PositionService
   ) {}
 
   startMeasureScan(device: AbstractDevice): Observable<any> {
@@ -38,8 +41,11 @@ export class MeasuresService {
       take(1),
       tap(() =>
         interval(1000)
-          .pipe(takeUntil(stopSignal))
-          .subscribe(() => this.store.dispatch(new UpdateMeasureScanTime(device)))
+          .pipe(
+            takeUntil(stopSignal),
+            filter(() => !this.positionService.isAcquiringPosition)
+          )
+          .subscribe(() => this.store.dispatch(new UpdateMeasureScanTime(device)).subscribe())
       )
     );
   }
@@ -50,9 +56,10 @@ export class MeasuresService {
       .startMeasureScan(device, stopSignal)
       .pipe(
         takeUntil(stopSignal),
+        filter(() => !this.positionService.isAcquiringPosition),
         shareReplay()
       );
-    detectHits.subscribe(step => this.store.dispatch(new AddMeasureScanStep(step, device)));
+    detectHits.subscribe(step => this.store.dispatch(new AddMeasureScanStep(step, device)).subscribe());
     return detectHits;
   }
 
@@ -60,18 +67,30 @@ export class MeasuresService {
     return this.devicesService.service(device).computeRadiationValue(measure);
   }
 
-  publishMeasure(measure: Measure): Observable<any> {
+  publishMeasure(measure: Measure | MeasureSeries): Observable<any> {
+    switch (measure.type) {
+      case MeasureType.Measure: {
+        return this.postMeasure(measure);
+      }
+      case MeasureType.MeasureSeries: {
+        return forkJoin(measure.measures.map(subMeasure => this.postMeasure(subMeasure)));
+      }
+    }
+  }
+
+  private postMeasure(measure: Measure): Observable<any> {
     if (
       measure.accuracy &&
-      measure.accuracy < PositionAccuracyThreshold.Inaccurate &&
-      (measure.endAccuracy && measure.endAccuracy < PositionAccuracyThreshold.Inaccurate)
+      measure.accuracy < PositionAccuracyThreshold.No &&
+      measure.endAccuracy &&
+      measure.endAccuracy < PositionAccuracyThreshold.No
     ) {
       const payload: MeasureApi = {
         apiKey: environment.API_KEY,
         data: {
           apparatusId: measure.apparatusId,
           apparatusVersion: measure.apparatusVersion,
-          apparatusSensorType: measure.apparatusSensorType,
+          apparatusSensorType: this.formatApparatusSensorType(measure.apparatusSensorType),
           apparatusTubeType: measure.apparatusTubeType,
           temperature: measure.temperature ? Math.round(measure.temperature) : undefined,
           value: measure.value,
@@ -108,7 +127,18 @@ export class MeasuresService {
       };
       return this.httpClient.post(environment.API_URI, payload);
     } else {
-      throw new Error('missing Lat and long in measure');
+      return of(null);
     }
+  }
+
+  private formatApparatusSensorType(apparatusSensorType?: string): ApparatusSensorType | undefined {
+    if (apparatusSensorType !== undefined) {
+      if (apparatusSensorType.includes(ApparatusSensorType.Geiger)) {
+        return ApparatusSensorType.Geiger;
+      } else if (apparatusSensorType.includes(ApparatusSensorType.Photodiode)) {
+        return ApparatusSensorType.Photodiode;
+      }
+    }
+    return undefined;
   }
 }

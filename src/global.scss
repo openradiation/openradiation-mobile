@@ -77,6 +77,7 @@ ion-item {
   --ion-font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
   font-weight: 200;
   --background-activated: transparent;
+  --highlight-background: transparent;
   --background: transparent;
   --border-color: transparent;
 
@@ -127,5 +128,12 @@ ion-spinner {
 .md .keyboard-open {
   ion-content {
     --keyboard-offset: 230px;
+  }
+}
+
+.custom-loading-indicator {
+  .loading-wrapper {
+    background: $base-color;
+    color: white;
   }
 }

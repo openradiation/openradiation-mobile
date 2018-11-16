@@ -46,6 +46,11 @@
       font-size: 12px;
       font-style: italic;
     }
+    .message-series {
+      padding-top: 15px;
+      color: white;
+      font-size: 16px;
+    }
   }
 
   .category {
@@ -201,10 +206,10 @@
 
     @keyframes moving-background {
       from {
-        left: -100%;
+        transform: translateX(-100%);
       }
       to {
-        left: 0;
+        transform: translateX(0);
       }
     }
   }

@@ -3,7 +3,7 @@ import { BLE } from '@ionic-native/ble/ngx';
 import { Store } from '@ngxs/store';
 import { Observable, of } from 'rxjs';
 import { bufferCount, filter, map, tap } from 'rxjs/operators';
-import { Measure, Step } from '../../measures/measure';
+import { Step } from '../../measures/measure';
 import { AbstractBLEDeviceService } from './abstract-ble-device.service';
 import { DeviceSafeCast } from './device-safe-cast';
 
@@ -18,14 +18,8 @@ export class DeviceSafeCastService extends AbstractBLEDeviceService<DeviceSafeCa
     super(store, ble);
   }
 
-  computeRadiationValue(measure: Measure): number {
-    if (measure.endTime) {
-      const duration = (measure.endTime - measure.startTime) / 1000;
-      const TcNet = measure.hitsNumber / duration;
-      return (TcNet * 60) / 334;
-    } else {
-      throw new Error('Incorrect measure : missing endTime');
-    }
+  protected convertHitsNumberPerSec(hitsNumberPerSec: number): number {
+    return (hitsNumberPerSec * 60) / 334;
   }
 
   getDeviceInfo(device: DeviceSafeCast): Observable<Partial<DeviceSafeCast>> {

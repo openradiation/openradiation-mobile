@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Serial } from '@ionic-native/serial/ngx';
-import { AlertController, Platform } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, Store } from '@ngxs/store';
 import { forkJoin, interval, Observable, of } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { concatMap, takeUntil, takeWhile } from 'rxjs/operators';
+import { AlertService } from '../../../services/alert.service';
 import { StartDiscoverUSBDevices, StopDiscoverDevices, USBDevicesDiscovered } from '../devices.action';
 import { AbstractUSBDevice } from './abstract-usb-device';
 import { DevicePocketGeiger } from './device-pocket-geiger';
@@ -20,7 +21,7 @@ export class USBDevicesService {
     private serial: Serial,
     private store: Store,
     private translateService: TranslateService,
-    private alertController: AlertController,
+    private alertService: AlertService,
     private platform: Platform,
     private actions$: Actions
   ) {
@@ -67,24 +68,24 @@ export class USBDevicesService {
   }
 
   private onUSBError() {
-    this.alertController
-      .create({
-        header: this.translateService.instant('USB.USB_PERMISSION.TITLE'),
-        message: this.translateService.instant('USB.USB_PERMISSION.NOTICE'),
-        backdropDismiss: false,
-        buttons: [
-          {
-            text: this.translateService.instant('GENERAL.OK'),
-            handler: () => {
-              this.store.dispatch(new StartDiscoverUSBDevices());
-              return true;
+    this.alertService
+      .show(
+        {
+          header: this.translateService.instant('USB.USB_PERMISSION.TITLE'),
+          message: this.translateService.instant('USB.USB_PERMISSION.NOTICE'),
+          backdropDismiss: false,
+          buttons: [
+            {
+              text: this.translateService.instant('GENERAL.OK'),
+              handler: () => {
+                this.store.dispatch(new StartDiscoverUSBDevices());
+                return true;
+              }
             }
-          }
-        ]
-      })
-      .then(alert => {
-        this.currentAlert = alert;
-        alert.present();
-      });
+          ]
+        },
+        false
+      )
+      .then(alert => (this.currentAlert = alert));
   }
 }

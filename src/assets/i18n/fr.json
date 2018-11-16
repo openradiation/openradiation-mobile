@@ -50,6 +50,10 @@
       "NOTICE": "En supprimant vos mesures, vous nettoyez tout votre historique mais vous ne supprimez pas les données déjà publiées de la base OpenRadiation.",
       "TITLE": "Êtes-vous sûr de vouloir supprimer toutes les mesures ?"
     },
+    "MEASURE_SERIES": {
+      "PLURAL": "{{count}} mesures",
+      "SINGULAR": "{{count}} mesure"
+    },
     "MESSAGE_PREVENT_MEASURE_SENDING": "Position de la mesure incorrecte, envoi impossible",
     "MESSAGE_SPEED": "Vitesse élevée, sélection d'un environnement de mesure obligatoire",
     "NO_MEASURE": "Aucune mesure<br>enregistrée",
@@ -132,8 +136,8 @@
     "MEASURE": "Mesure",
     "MEASURE_START": "Début de la mesure",
     "ONGOING": "Mesure en cours",
-    "REPPORT_LATITUDE": "Latitude",
-    "REPPORT_LONGITUDE": "Longitude",
+    "REPORT_LATITUDE": "Latitude",
+    "REPORT_LONGITUDE": "Longitude",
     "SENSOR_POSITION": {
       "1_METER_HIGH": "À 1 mètre du sol",
       "FLOOR": "Au sol",
@@ -154,7 +158,32 @@
     "ALERT": "Vous devez vous identifier pour pouvoir saisir manuellemment une mesure.",
     "TITLE": "Saisie manuelle"
   },
+  "MEASURE_SERIES": {
+    "ALERT": "Vous devez vous identifier pour pouvoir commencer une série de mesure.",
+    "HITS_NUMBER": "Nb coups minimun",
+    "MEASURES_DURATION": "Durée minimale",
+    "MEASURES_TITLE": "Mesures",
+    "MESSAGE_SCAN": {
+      "NONE": "Première mesure en cours",
+      "PLURAL": "{{count}} mesures prises depuis {{duration}}",
+      "SINGULAR": "Une mesure prise depuis {{duration}}"
+    },
+    "REPORT": {
+      "FIRST_MEASURE-TIME": "Début de la première mesure",
+      "HITS_AVERAGE": "Moyenne Nb coups",
+      "MEASURE_NUMBER": "Nombre de mesures",
+      "SERIES_DURATION": "Durée totale des mesures",
+      "VALUE_AVERAGE": "Moyenne des mesures"
+    },
+    "SERIES_DURATION": "Durée de la série de mesures",
+    "SERIES_TITLE": "Série",
+    "TITLE": "Série de mesures"
+  },
   "POSITION": {
+    "BACKGROUND": {
+      "TEXT": "Suivi de la position des mesures",
+      "TITLE": "Open Radiation"
+    },
     "DENIED_ALWAYS": {
       "NOTICE": "La position de l'appareil est nécessaire  pour l'envoi des mesures à la base OpenRadiation. Merci d'accepter la permission.",
       "TITLE": "Position - Permission refusée"

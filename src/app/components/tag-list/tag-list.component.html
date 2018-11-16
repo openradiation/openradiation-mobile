@@ -1,8 +1,8 @@
-<div class="title" *ngIf="title && (!isDisabled || tagList?.length > 0)">
+<div class="title" *ngIf="title && (!isDisabled || displayTagList.length > 0)">
     {{title}}
 </div>
 <div class="tag-list" [ngClass]="{disabled: isDisabled}">
-    <ion-chip *ngFor="let tag of tagList; index as index">
+    <ion-chip *ngFor="let tag of displayTagList; index as index">
         <ion-label>{{tag}}</ion-label>
         <ion-chip-button *ngIf="!isDisabled" fill="clear" color="light" (click)="deleteTag(index)">
             <ion-icon name="close-circle"></ion-icon>

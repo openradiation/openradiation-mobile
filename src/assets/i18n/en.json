@@ -27,7 +27,7 @@
     "CANCEL": "Cancel",
     "CLICK_HERE": "Click here",
     "CONNECTED": "Connected",
-    "CONNEXION_ERROR": "Connection error: {message}",
+    "CONNEXION_ERROR": "Connection error: {{message}}",
     "DATE": "Date",
     "END": "End",
     "GOOD": "Good",
@@ -49,6 +49,10 @@
     "DELETE_ALL": {
       "NOTICE": "By deleting your measurements, you clean your entire history but you do not delete the published data from the OpenRadiation base.",
       "TITLE": "Are you sure you wish to delete all measurements?"
+    },
+    "MEASURE_SERIES": {
+      "PLURAL": "{{count}} measurements",
+      "SINGULAR": "{{count}} measurement"
     },
     "MESSAGE_PREVENT_MEASURE_SENDING": "Invalid measurement geolocation, it can not be sent.",
     "MESSAGE_SPEED": "High speed, selection of a measurement environment is mandatory",
@@ -132,8 +136,8 @@
     "MEASURE": "Measurement",
     "MEASURE_START": "Measurement start",
     "ONGOING": "Measurement in progress",
-    "REPPORT_LATITUDE": "Latitude",
-    "REPPORT_LONGITUDE": "Longitude",
+    "REPORT_LATITUDE": "Latitude",
+    "REPORT_LONGITUDE": "Longitude",
     "SENSOR_POSITION": {
       "1_METER_HIGH": "1 m above the ground",
       "FLOOR": "On the ground",
@@ -154,7 +158,32 @@
     "ALERT": "You must be logged in before you can fill out a manual measurement report.",
     "TITLE": "Manual input"
   },
+  "MEASURE_SERIES": {
+    "ALERT": "You must be logged in before you can start a measurement series.",
+    "HITS_NUMBER": "Minimum no. of counts",
+    "MEASURES_DURATION": "Minimum duration",
+    "MEASURES_TITLE": "Measurements",
+    "MESSAGE_SCAN": {
+      "NONE": "First measurement in progress",
+      "PLURAL": "{{count}} measurements taken since {{duration}}",
+      "SINGULAR": "One measurement taken since {{duration}}"
+    },
+    "REPORT": {
+      "FIRST_MEASURE-TIME": "Beginning of the first measurement",
+      "HITS_AVERAGE": "Average hits number",
+      "MEASURE_NUMBER": "Number of measurements",
+      "SERIES_DURATION": "Total duration of measurements",
+      "VALUE_AVERAGE": "Average measures"
+    },
+    "SERIES_DURATION": "Measurement series duration",
+    "SERIES_TITLE": "Series",
+    "TITLE": "Measurement series"
+  },
   "POSITION": {
+    "BACKGROUND": {
+      "TEXT": "Measurements location tracking",
+      "TITLE": "Open Radiation"
+    },
     "DENIED_ALWAYS": {
       "NOTICE": "Phone geolocation is required to send measurement to OpenRadiation base. Please accept the permission.",
       "TITLE": "Geolocation - Permission denied"

@@ -7,7 +7,7 @@ import { map, take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
-import { StartMeasure, StartWatchPosition, StopWatchPosition } from '../../../states/measures/measures.action';
+import { StartMeasure } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
 
 @Component({
@@ -38,17 +38,11 @@ export class HomePage extends AutoUnsubscribePage {
 
   pageEnter() {
     super.pageEnter();
-    this.store.dispatch(new StartWatchPosition());
     this.subscriptions.push(
       this.actions$
         .pipe(ofActionSuccessful(StartMeasure))
         .subscribe(() => this.navController.navigateRoot(['measure', 'scan']))
     );
-  }
-
-  pageLeave() {
-    super.pageLeave();
-    this.store.dispatch(new StopWatchPosition());
   }
 
   goToDevices() {
@@ -66,7 +60,6 @@ export class HomePage extends AutoUnsubscribePage {
   startMeasure() {
     this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
       if (connectedDevice) {
-        this.store.dispatch(new StopWatchPosition());
         this.store.dispatch(new StartMeasure(connectedDevice));
       }
     });

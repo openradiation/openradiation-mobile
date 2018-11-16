@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController, NavController, ToastController } from '@ionic/angular';
+import { NavController, ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, ofActionErrored, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
-import { Measure, PositionAccuracyThreshold } from '../../../states/measures/measure';
+import { AlertService } from '../../../services/alert.service';
+import { Measure, MeasureSeries, MeasureType, PositionAccuracyThreshold } from '../../../states/measures/measure';
 import {
   DeleteAllMeasures,
   DeleteMeasure,
@@ -21,15 +22,17 @@ import { MeasuresState } from '../../../states/measures/measures.state';
 })
 export class HistoryPage extends AutoUnsubscribePage {
   @Select(MeasuresState.measures)
-  measures$: Observable<Measure[]>;
+  measures$: Observable<(Measure | MeasureSeries)[]>;
 
   measureBeingSentMap: { [K: string]: boolean } = {};
   positionAccuracyThreshold = PositionAccuracyThreshold;
+
   url = '/tabs/(history:history)';
+
   constructor(
     protected router: Router,
     private store: Store,
-    private alertController: AlertController,
+    private alertService: AlertService,
     private translateService: TranslateService,
     private actions$: Actions,
     private toastController: ToastController,
@@ -42,7 +45,7 @@ export class HistoryPage extends AutoUnsubscribePage {
     super.pageEnter();
     this.subscriptions.push(
       this.actions$.pipe(ofActionErrored(PublishMeasure)).subscribe(({ measure }: PublishMeasure) => {
-        this.measureBeingSentMap[measure.reportUuid] = false;
+        this.measureBeingSentMap[measure.id] = false;
         this.toastController
           .create({
             message: this.translateService.instant('HISTORY.SEND_ERROR'),
@@ -53,16 +56,20 @@ export class HistoryPage extends AutoUnsubscribePage {
           .then(toast => toast.present());
       }),
       this.actions$.pipe(ofActionDispatched(PublishMeasure)).subscribe(({ measure }: PublishMeasure) => {
-        this.measureBeingSentMap[measure.reportUuid] = true;
+        this.measureBeingSentMap[measure.id] = true;
       }),
       this.actions$
         .pipe(ofActionSuccessful(PublishMeasure))
-        .subscribe(({ measure }: PublishMeasure) => (this.measureBeingSentMap[measure.reportUuid] = false)),
-      this.actions$.pipe(ofActionSuccessful(ShowMeasure)).subscribe(() =>
-        this.navController.navigateRoot(['measure', 'report'], true, {
-          queryParams: { goBackHistory: true }
-        })
-      )
+        .subscribe(({ measure }: PublishMeasure) => (this.measureBeingSentMap[measure.id] = false)),
+      this.actions$.pipe(ofActionSuccessful(ShowMeasure)).subscribe(action => {
+        this.navController.navigateRoot(
+          ['measure', action.measure.type === MeasureType.Measure ? 'report' : 'report-series'],
+          true,
+          {
+            queryParams: { goBackHistory: true }
+          }
+        );
+      })
     );
   }
 
@@ -70,70 +77,86 @@ export class HistoryPage extends AutoUnsubscribePage {
     this.store.dispatch(new ShowMeasure(measure));
   }
 
-  publish(event: Event, measure: Measure) {
-    event.stopPropagation();
-    if (
-      measure.accuracy &&
-      measure.accuracy < PositionAccuracyThreshold.Inaccurate &&
-      (measure.endAccuracy && measure.endAccuracy < PositionAccuracyThreshold.Inaccurate)
-    ) {
-      this.alertController
-        .create({
-          header: this.translateService.instant('HISTORY.TITLE'),
-          subHeader: this.translateService.instant('HISTORY.SEND.TITLE'),
-          message: this.translateService.instant('HISTORY.SEND.NOTICE'),
-          backdropDismiss: false,
-          buttons: [
-            {
-              text: this.translateService.instant('GENERAL.NO')
-            },
-            {
-              text: this.translateService.instant('GENERAL.YES'),
-              handler: () => this.store.dispatch(new PublishMeasure(measure))
-            }
-          ]
-        })
-        .then(alert => alert.present());
+  publish(measure: Measure | MeasureSeries) {
+    if (this.canPublish(measure)) {
+      this.alertService.show({
+        header: this.translateService.instant('HISTORY.TITLE'),
+        subHeader: this.translateService.instant('HISTORY.SEND.TITLE'),
+        message: this.translateService.instant('HISTORY.SEND.NOTICE'),
+        backdropDismiss: false,
+        buttons: [
+          {
+            text: this.translateService.instant('GENERAL.NO')
+          },
+          {
+            text: this.translateService.instant('GENERAL.YES'),
+            handler: () => this.store.dispatch(new PublishMeasure(measure))
+          }
+        ]
+      });
     }
   }
 
-  delete(event: Event, measure: Measure) {
-    event.stopPropagation();
-    this.alertController
-      .create({
-        header: this.translateService.instant('HISTORY.TITLE'),
-        message: this.translateService.instant('HISTORY.DELETE.NOTICE'),
-        backdropDismiss: false,
-        buttons: [
-          {
-            text: this.translateService.instant('GENERAL.NO')
-          },
-          {
-            text: this.translateService.instant('GENERAL.YES'),
-            handler: () => this.store.dispatch(new DeleteMeasure(measure))
-          }
-        ]
-      })
-      .then(alert => alert.present());
+  canPublish(measure: Measure | MeasureSeries): boolean {
+    switch (measure.type) {
+      case MeasureType.Measure:
+        return (
+          measure.accuracy !== undefined &&
+          measure.accuracy !== null &&
+          measure.accuracy < PositionAccuracyThreshold.No &&
+          measure.endAccuracy !== undefined &&
+          measure.endAccuracy !== null &&
+          measure.endAccuracy < PositionAccuracyThreshold.No
+        );
+      case MeasureType.MeasureSeries:
+        return measure.measures.some(
+          item =>
+            item.accuracy !== undefined &&
+            item.accuracy !== null &&
+            item.accuracy! < PositionAccuracyThreshold.No &&
+            item.endAccuracy !== undefined &&
+            item.endAccuracy !== null &&
+            item.endAccuracy! < PositionAccuracyThreshold.No
+        );
+    }
+  }
+
+  containsMeasureSeries(measures: (Measure | MeasureSeries)[]): boolean {
+    return measures.some(measure => measure.type === MeasureType.MeasureSeries);
+  }
+
+  delete(measure: Measure) {
+    this.alertService.show({
+      header: this.translateService.instant('HISTORY.TITLE'),
+      message: this.translateService.instant('HISTORY.DELETE.NOTICE'),
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: this.translateService.instant('GENERAL.NO')
+        },
+        {
+          text: this.translateService.instant('GENERAL.YES'),
+          handler: () => this.store.dispatch(new DeleteMeasure(measure))
+        }
+      ]
+    });
   }
 
   deleteAll() {
-    this.alertController
-      .create({
-        header: this.translateService.instant('HISTORY.TITLE'),
-        subHeader: this.translateService.instant('HISTORY.DELETE_ALL.TITLE'),
-        message: this.translateService.instant('HISTORY.DELETE_ALL.NOTICE'),
-        backdropDismiss: false,
-        buttons: [
-          {
-            text: this.translateService.instant('GENERAL.NO')
-          },
-          {
-            text: this.translateService.instant('GENERAL.YES'),
-            handler: () => this.store.dispatch(new DeleteAllMeasures())
-          }
-        ]
-      })
-      .then(alert => alert.present());
+    this.alertService.show({
+      header: this.translateService.instant('HISTORY.TITLE'),
+      subHeader: this.translateService.instant('HISTORY.DELETE_ALL.TITLE'),
+      message: this.translateService.instant('HISTORY.DELETE_ALL.NOTICE'),
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: this.translateService.instant('GENERAL.NO')
+        },
+        {
+          text: this.translateService.instant('GENERAL.YES'),
+          handler: () => this.store.dispatch(new DeleteAllMeasures())
+        }
+      ]
+    });
   }
 }

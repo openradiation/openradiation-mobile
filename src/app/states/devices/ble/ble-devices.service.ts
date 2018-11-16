@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BLE } from '@ionic-native/ble/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
-import { AlertController, Platform } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, ofActionSuccessful, Store } from '@ngxs/store';
 import { merge, Observable, timer } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { buffer, map, scan, skip, switchMap, takeUntil, tap, throttleTime } from 'rxjs/operators';
+import { AlertService } from '../../../services/alert.service';
 import { AbstractDevice, DeviceType } from '../abstract-device';
 import {
   BLEConnectionLost,
@@ -33,7 +34,7 @@ export class BLEDevicesService {
     private actions$: Actions,
     private store: Store,
     private diagnostic: Diagnostic,
-    private alertController: AlertController,
+    private alertService: AlertService,
     private translateService: TranslateService
   ) {
     this.actions$.pipe(ofActionDispatched(StartDiscoverBLEDevices)).subscribe(() => {
@@ -121,28 +122,28 @@ export class BLEDevicesService {
       this.store.dispatch(new StartDiscoverBLEDevices()).subscribe();
       this.diagnostic.registerBluetoothStateChangeHandler(() => {});
     });
-    this.alertController
-      .create({
-        header: this.translateService.instant('BLUETOOTH.BLE_DISABLED.TITLE'),
-        message: this.translateService.instant('BLUETOOTH.BLE_DISABLED.NOTICE'),
-        backdropDismiss: false,
-        buttons: [
-          {
-            text: this.translateService.instant('GENERAL.GO_TO_SETTINGS'),
-            handler: () => {
-              if (this.platform.is('ios')) {
-                this.diagnostic.switchToSettings();
-              } else {
-                this.diagnostic.switchToBluetoothSettings();
+    this.alertService
+      .show(
+        {
+          header: this.translateService.instant('BLUETOOTH.BLE_DISABLED.TITLE'),
+          message: this.translateService.instant('BLUETOOTH.BLE_DISABLED.NOTICE'),
+          backdropDismiss: false,
+          buttons: [
+            {
+              text: this.translateService.instant('GENERAL.GO_TO_SETTINGS'),
+              handler: () => {
+                if (this.platform.is('ios')) {
+                  this.diagnostic.switchToSettings();
+                } else {
+                  this.diagnostic.switchToBluetoothSettings();
+                }
+                return false;
               }
-              return false;
             }
-          }
-        ]
-      })
-      .then(alert => {
-        this.currentAlert = alert;
-        alert.present();
-      });
+          ]
+        },
+        false
+      )
+      .then(alert => (this.currentAlert = alert));
   }
 }
