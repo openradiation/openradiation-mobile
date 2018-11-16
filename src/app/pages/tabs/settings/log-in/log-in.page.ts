@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NavController, ToastController } from '@ionic/angular';
+import { ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { catchError, take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../../components/auto-unsubscribe/auto-unsubscribe.page';
+import { NavigationService } from '../../../../services/navigation.service';
 import { AbstractDevice } from '../../../../states/devices/abstract-device';
 import { DevicesState } from '../../../../states/devices/devices.state';
 import { ErrorResponse, ErrorResponseCode } from '../../../../states/measures/error-response';
@@ -35,7 +36,7 @@ export class LogInPage extends AutoUnsubscribePage {
   constructor(
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    private navController: NavController,
+    private navigationService: NavigationService,
     private store: Store,
     private formBuilder: FormBuilder,
     private toastController: ToastController,
@@ -107,6 +108,6 @@ export class LogInPage extends AutoUnsubscribePage {
   }
 
   goToSettings() {
-    this.navController.goBack();
+    this.navigationService.goBack();
   }
 }

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController } from '@ionic/angular';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
+import { NavigationService } from '../../../../services/navigation.service';
 import { DisableExpertMode, EnableExpertMode } from '../../../../states/measures/measures.action';
 import { MeasuresState } from '../../../../states/measures/measures.state';
 import { LogOut, SetLanguage } from '../../../../states/user/user.action';
@@ -22,7 +22,7 @@ export class SettingsPage {
   @Select(UserState.language)
   language$: Observable<string | undefined>;
 
-  constructor(private navController: NavController, private store: Store) {}
+  constructor(private navigationService: NavigationService, private store: Store) {}
 
   toggleExpertMode(enable: boolean) {
     if (enable) {
@@ -33,7 +33,7 @@ export class SettingsPage {
   }
 
   goToDevices() {
-    this.navController.navigateForward([
+    this.navigationService.navigateForward([
       'tabs',
       {
         outlets: {
@@ -44,7 +44,7 @@ export class SettingsPage {
   }
 
   goToMeasuresParam() {
-    this.navController.navigateForward([
+    this.navigationService.navigateForward([
       'tabs',
       {
         outlets: {
@@ -55,7 +55,7 @@ export class SettingsPage {
   }
 
   goToLogIn() {
-    this.navController.navigateForward([
+    this.navigationService.navigateForward([
       'tabs',
       {
         outlets: {

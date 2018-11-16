@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { NavController } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
+import { NavigationService } from '../../../services/navigation.service';
 import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
 import { MeasureSeriesParamsSelected, PositionAccuracyThreshold } from '../../../states/measures/measure';
@@ -29,7 +29,7 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
   constructor(
     protected router: Router,
     private store: Store,
-    private navController: NavController,
+    private navigationService: NavigationService,
     private actions$: Actions,
     private formBuilder: FormBuilder
   ) {
@@ -48,7 +48,7 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
     }
     this.subscriptions.push(
       this.actions$.pipe(ofActionSuccessful(CancelMeasure)).subscribe(() =>
-        this.navController.navigateRoot([
+        this.navigationService.navigateRoot([
           'tabs',
           {
             outlets: {
@@ -63,7 +63,7 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
       ),
       this.actions$
         .pipe(ofActionSuccessful(StartMeasure))
-        .subscribe(() => this.navController.navigateRoot(['measure', 'scan']))
+        .subscribe(() => this.navigationService.navigateRoot(['measure', 'scan']))
     );
   }
 

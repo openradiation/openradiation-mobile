@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
-import { NavController } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { SelectIconOption } from '../../../components/select-icon/select-icon-option';
+import { NavigationService } from '../../../services/navigation.service';
 import {
   MeasureEnvironment,
   MeasureSeries,
@@ -109,7 +109,7 @@ export class MeasureSeriesReportPage extends AutoUnsubscribePage {
     protected router: Router,
     private formBuilder: FormBuilder,
     private store: Store,
-    private navController: NavController,
+    private navigationService: NavigationService,
     private actions$: Actions
   ) {
     super(router);
@@ -145,20 +145,9 @@ export class MeasureSeriesReportPage extends AutoUnsubscribePage {
         this.activatedRoute.queryParams.pipe(take(1)).subscribe(queryParams => {
           this.measureSeriesReportForm = undefined;
           if (queryParams.goBackHistory) {
-            this.navController.navigateRoot([
-              'tabs',
-              {
-                outlets: {
-                  home: null,
-                  history: 'history',
-                  settings: null,
-                  map: null,
-                  other: null
-                }
-              }
-            ]);
+            this.navigationService.goBack();
           } else {
-            this.navController.navigateRoot([
+            this.navigationService.navigateRoot([
               'tabs',
               {
                 outlets: {

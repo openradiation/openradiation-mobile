@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { NavController, ToastController } from '@ionic/angular';
+import { ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, ofActionErrored, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { AlertService } from '../../../services/alert.service';
+import { NavigationService } from '../../../services/navigation.service';
 import { Measure, MeasureSeries, MeasureType, PositionAccuracyThreshold } from '../../../states/measures/measure';
 import {
   DeleteAllMeasures,
@@ -36,7 +37,7 @@ export class HistoryPage extends AutoUnsubscribePage {
     private translateService: TranslateService,
     private actions$: Actions,
     private toastController: ToastController,
-    private navController: NavController
+    private navigationService: NavigationService
   ) {
     super(router);
   }
@@ -62,7 +63,7 @@ export class HistoryPage extends AutoUnsubscribePage {
         .pipe(ofActionSuccessful(PublishMeasure))
         .subscribe(({ measure }: PublishMeasure) => (this.measureBeingSentMap[measure.id] = false)),
       this.actions$.pipe(ofActionSuccessful(ShowMeasure)).subscribe(action => {
-        this.navController.navigateRoot(
+        this.navigationService.navigateForward(
           ['measure', action.measure.type === MeasureType.Measure ? 'report' : 'report-series'],
           true,
           {

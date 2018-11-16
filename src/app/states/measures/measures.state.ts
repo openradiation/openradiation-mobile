@@ -258,7 +258,8 @@ export class MeasuresState {
       currentMeasure: undefined,
       measureReport: undefined,
       measureSeriesParams: undefined,
-      currentSeries: undefined
+      currentSeries: undefined,
+      measureSeriesReport: undefined
     });
   }
 

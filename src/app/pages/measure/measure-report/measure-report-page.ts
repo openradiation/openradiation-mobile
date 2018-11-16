@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
-import { NavController } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { SelectIconOption } from '../../../components/select-icon/select-icon-option';
+import { NavigationService } from '../../../services/navigation.service';
 import { DateService } from '../../../states/measures/date.service';
 import { Measure, MeasureEnvironment, PositionAccuracyThreshold } from '../../../states/measures/measure';
 import {
@@ -78,7 +78,7 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     protected router: Router,
     private formBuilder: FormBuilder,
     private store: Store,
-    private navController: NavController,
+    private navigationService: NavigationService,
     private actions$: Actions,
     private dateService: DateService
   ) {
@@ -87,27 +87,29 @@ export class MeasureReportPage extends AutoUnsubscribePage {
 
   pageEnter() {
     super.pageEnter();
-    this.store.dispatch(new StartMeasureReport()).subscribe(() => {
-      const { measureReport, currentMeasure } = this.store.selectSnapshot(
-        ({ measures }: { measures: MeasuresStateModel }) => measures
-      );
-      this.currentMeasure = currentMeasure;
-      this.reportScan = !this.currentMeasure!.manualReporting;
-      this.inputDisabled = this.reportScan || this.currentMeasure!.sent;
-      this.initMeasurementEnvironmentOptions(this.currentMeasure);
-      if (measureReport) {
-        this.measureReportForm = this.formBuilder.group({ ...measureReport.model, tags: [measureReport.model.tags] });
-        if (this.currentMeasure!.sent) {
-          this.measureReportForm.get('measurementEnvironment')!.disable();
-          this.measureReportForm.get('measurementHeight')!.disable();
-          this.measureReportForm.get('rain')!.disable();
-          this.measureReportForm.get('description')!.disable();
-          this.measureReportForm.get('tags')!.disable();
-          this.measureReportForm.get('enclosedObject')!.disable();
+    if (!this.measureReportForm) {
+      this.store.dispatch(new StartMeasureReport()).subscribe(() => {
+        const { measureReport, currentMeasure } = this.store.selectSnapshot(
+          ({ measures }: { measures: MeasuresStateModel }) => measures
+        );
+        this.currentMeasure = currentMeasure;
+        this.reportScan = !this.currentMeasure!.manualReporting;
+        this.inputDisabled = this.reportScan || this.currentMeasure!.sent;
+        this.initMeasurementEnvironmentOptions(this.currentMeasure);
+        if (measureReport) {
+          this.measureReportForm = this.formBuilder.group({ ...measureReport.model, tags: [measureReport.model.tags] });
+          if (this.currentMeasure!.sent) {
+            this.measureReportForm.get('measurementEnvironment')!.disable();
+            this.measureReportForm.get('measurementHeight')!.disable();
+            this.measureReportForm.get('rain')!.disable();
+            this.measureReportForm.get('description')!.disable();
+            this.measureReportForm.get('tags')!.disable();
+            this.measureReportForm.get('enclosedObject')!.disable();
+          }
         }
-      }
-      this.init();
-    });
+      });
+    }
+    this.init();
   }
 
   init() {
@@ -126,20 +128,9 @@ export class MeasureReportPage extends AutoUnsubscribePage {
         this.activatedRoute.queryParams.pipe(take(1)).subscribe(queryParams => {
           this.measureReportForm = undefined;
           if (queryParams.goBackHistory) {
-            this.navController.navigateRoot([
-              'tabs',
-              {
-                outlets: {
-                  home: null,
-                  history: 'history',
-                  settings: null,
-                  map: null,
-                  other: null
-                }
-              }
-            ]);
+            this.navigationService.goBack();
           } else {
-            this.navController.navigateRoot([
+            this.navigationService.navigateRoot([
               'tabs',
               {
                 outlets: {
@@ -173,7 +164,7 @@ export class MeasureReportPage extends AutoUnsubscribePage {
   }
 
   showMeasureSteps() {
-    this.navController.navigateForward(['measure', 'steps']);
+    this.navigationService.navigateForward(['measure', 'steps']);
   }
 
   initMeasurementEnvironmentOptions(currentMeasure: any) {
