@@ -1,7 +1,7 @@
 <ng-container *ngIf="currentMeasure$ | async as currentMeasure">
     <ng-container *ngIf="connectedDevice$ | async as connectedDevice">
         <app-header>
-            <app-gps-indicator *ngIf="currentMeasure.startTime" other
+            <app-gps-indicator *ngIf="currentMeasure.startTime" other [compact]="true"
                                [accuracy]="currentMeasure.accuracy"></app-gps-indicator>
         </app-header>
 
