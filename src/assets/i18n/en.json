@@ -185,12 +185,17 @@
       "TITLE": "Open Radiation"
     },
     "DENIED_ALWAYS": {
-      "NOTICE": "Phone geolocation is required to send measurement to OpenRadiation base. Please accept the permission.",
+      "NOTICE": {
+        "ANDROID": "Phone geolocation is required to send measurement to OpenRadiation base. Please accept the permission.",
+        "IOS": "Phone geolocation is required to send measurement to OpenRadiation base. Please accept the permission on \"Always\" mode."
+      },
       "TITLE": "Geolocation - Permission denied"
     },
     "GPS_DISABLED": {
-      "NOTICE_ANDROID": "Phone geolocation is required to send measurement to OpenRadiation base. Please enable GPS on \"High Accuracy\" mode.",
-      "NOTICE_IOS": "Phone geolocation is required to send measurement to OpenRadiation base",
+      "NOTICE": {
+        "ANDROID": "Phone geolocation is required to send measurement to OpenRadiation base. Please enable GPS on \"High Accuracy\" mode.",
+        "IOS": "Phone geolocation is required to send measurement to OpenRadiation base"
+      },
       "TITLE": "Geolocation - GPS disabled"
     }
   },
