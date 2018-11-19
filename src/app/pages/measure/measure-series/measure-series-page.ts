@@ -26,6 +26,8 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
   positionAccuracyThreshold = PositionAccuracyThreshold;
   measureSeriesParamsSelected = MeasureSeriesParamsSelected;
 
+  private paramSelected: MeasureSeriesParamsSelected;
+
   constructor(
     protected router: Router,
     private store: Store,
@@ -42,6 +44,7 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
       ({ measures }: { measures: MeasuresStateModel }) => measures
     );
     if (measureSeriesParams) {
+      this.paramSelected = measureSeriesParams.model.paramSelected;
       this.measureSeriesParamsForm = this.formBuilder.group({
         ...measureSeriesParams.model
       });
@@ -79,5 +82,15 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
 
   cancelMeasureSeries() {
     this.store.dispatch(new CancelMeasure());
+  }
+
+  onParamSelectedChange(value: Event) {
+    if (this.measureSeriesParamsForm) {
+      if (value.srcElement && value.srcElement.tagName.toLowerCase() === 'ion-radio-group') {
+        this.paramSelected = this.measureSeriesParamsForm.value.paramSelected;
+      } else {
+        this.measureSeriesParamsForm.get('paramSelected')!.setValue(this.paramSelected);
+      }
+    }
   }
 }
