@@ -87,13 +87,14 @@ export class PositionService {
         switch (status) {
           case this.diagnostic.permissionStatus.NOT_REQUESTED:
           case this.diagnostic.permissionStatus.DENIED:
-            return this.diagnostic.requestLocationAuthorization();
+            return this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.ALWAYS);
           default:
             return status;
         }
       })
       .then(status => {
         switch (status) {
+          case this.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
           case this.diagnostic.permissionStatus.DENIED_ALWAYS:
             this.onGPSDeniedAlways();
             break;
@@ -111,7 +112,9 @@ export class PositionService {
       .show(
         {
           header: this.translateService.instant('POSITION.DENIED_ALWAYS.TITLE'),
-          message: this.translateService.instant('POSITION.DENIED_ALWAYS.NOTICE'),
+          message: this.platform.is('ios')
+            ? this.translateService.instant('POSITION.DENIED_ALWAYS.NOTICE.IOS')
+            : this.translateService.instant('POSITION.DENIED_ALWAYS.NOTICE.ANDROID'),
           backdropDismiss: false,
           buttons: [
             {
@@ -155,8 +158,8 @@ export class PositionService {
         {
           header: this.translateService.instant('POSITION.GPS_DISABLED.TITLE'),
           message: this.platform.is('ios')
-            ? this.translateService.instant('POSITION.GPS_DISABLED.NOTICE_IOS')
-            : this.translateService.instant('POSITION.GPS_DISABLED.NOTICE_ANDROID'),
+            ? this.translateService.instant('POSITION.GPS_DISABLED.NOTICE.IOS')
+            : this.translateService.instant('POSITION.GPS_DISABLED.NOTICE.ANDROID'),
           backdropDismiss: false,
           buttons: [
             {

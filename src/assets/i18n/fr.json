@@ -186,12 +186,17 @@
       "TITLE": "Open Radiation"
     },
     "DENIED_ALWAYS": {
-      "NOTICE": "La position de l'appareil est nécessaire  pour l'envoi des mesures à la base OpenRadiation. Merci d'accepter la permission.",
+      "NOTICE": {
+        "ANDROID": "La position de l'appareil est nécessaire  pour l'envoi des mesures à la base OpenRadiation. Merci d'accepter la permission.",
+        "IOS": "La position de l'appareil est nécessaire  pour l'envoi des mesures à la base OpenRadiation. Merci d'accepter la permission en mode \"Toujours\"."
+      },
       "TITLE": "Position - Permission refusée"
     },
     "GPS_DISABLED": {
-      "NOTICE_ANDROID": "La position de l'appareil est nécessaire pour l'envoi des mesures à la base OpenRadiation. Merci d'activer le GPS en mode \"Haute Précision\".",
-      "NOTICE_IOS": "La position de l'appareil est nécessaire pour l'envoi des mesures à la base OpenRadiation.",
+      "NOTICE": {
+        "ANDROID": "La position de l'appareil est nécessaire pour l'envoi des mesures à la base OpenRadiation. Merci d'activer le GPS en mode \"Haute Précision\".",
+        "IOS": "La position de l'appareil est nécessaire pour l'envoi des mesures à la base OpenRadiation."
+      },
       "TITLE": "Position - GPS désactivé"
     }
   },
