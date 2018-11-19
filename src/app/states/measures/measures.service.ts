@@ -12,7 +12,6 @@ import { Measure, MeasureSeries, MeasureType, PositionAccuracyThreshold, Step } 
 import { MeasureApi } from './measure-api';
 import { AddMeasureScanStep, CancelMeasure, StopMeasureScan, UpdateMeasureScanTime } from './measures.action';
 import { PositionService } from './position.service';
-import { addUndefinedDefaults } from '@angular-devkit/core/src/json/schema/transforms';
 
 @Injectable({
   providedIn: 'root'

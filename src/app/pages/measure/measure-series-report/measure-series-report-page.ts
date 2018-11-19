@@ -9,11 +9,9 @@ import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-u
 import { SelectIconOption } from '../../../components/select-icon/select-icon-option';
 import { NavigationService } from '../../../services/navigation.service';
 import {
-  Measure,
   MeasureEnvironment,
   MeasureSeries,
   MeasureSeriesParamsSelected,
-  MeasureType,
   PositionAccuracyThreshold
 } from '../../../states/measures/measure';
 import {
