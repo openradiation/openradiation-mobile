@@ -22,8 +22,12 @@
                 </ng-template>
             </div>
             <div class="subtile"
-                 *ngIf="!canPublish"
-                 [innerHTML]="'HISTORY.MESSAGE_PREVENT_MEASURE_SENDING' | translate"></div>
+                 *ngIf="!canPublish">
+                <ng-container *ngIf="measure.type === measureType.Measure;else messageSending">
+                    {{'HISTORY.MESSAGE_PREVENT_MEASURE_SENDING' | translate}}
+                </ng-container>
+                <ng-template #messageSending>{{'HISTORY.MESSAGE_PREVENT_SERIES_SENDING' | translate}}</ng-template>
+            </div>
         </div>
     </ion-label>
     <div class="end-content">

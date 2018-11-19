@@ -54,7 +54,8 @@
       "PLURAL": "{{count}} measurements",
       "SINGULAR": "{{count}} measurement"
     },
-    "MESSAGE_PREVENT_MEASURE_SENDING": "Invalid measurement geolocation, it can not be sent.",
+    "MESSAGE_PREVENT_MEASURE_SENDING": "Invalid measurement geolocation, it can not be sent",
+    "MESSAGE_PREVENT_SERIES_SENDING": "No measure in the series can be sent",
     "MESSAGE_SPEED": "High speed, selection of a measurement environment is mandatory",
     "NO_MEASURE": "No saved<br>measurement",
     "SEND": {

@@ -55,6 +55,7 @@
       "SINGULAR": "{{count}} mesure"
     },
     "MESSAGE_PREVENT_MEASURE_SENDING": "Position de la mesure incorrecte, envoi impossible",
+    "MESSAGE_PREVENT_SERIES_SENDING": "Aucune mesure de la série ne peut être envoyée",
     "MESSAGE_SPEED": "Vitesse élevée, sélection d'un environnement de mesure obligatoire",
     "NO_MEASURE": "Aucune mesure<br>enregistrée",
     "SEND": {

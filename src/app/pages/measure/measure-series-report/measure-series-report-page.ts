@@ -9,9 +9,11 @@ import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-u
 import { SelectIconOption } from '../../../components/select-icon/select-icon-option';
 import { NavigationService } from '../../../services/navigation.service';
 import {
+  Measure,
   MeasureEnvironment,
   MeasureSeries,
   MeasureSeriesParamsSelected,
+  MeasureType,
   PositionAccuracyThreshold
 } from '../../../states/measures/measure';
 import {
@@ -162,6 +164,18 @@ export class MeasureSeriesReportPage extends AutoUnsubscribePage {
           }
         });
       })
+    );
+  }
+
+  canPublish(measureSeries: MeasureSeries): boolean {
+    return measureSeries.measures.some(
+      item =>
+        item.accuracy !== undefined &&
+        item.accuracy !== null &&
+        item.accuracy! < PositionAccuracyThreshold.No &&
+        item.endAccuracy !== undefined &&
+        item.endAccuracy !== null &&
+        item.endAccuracy! < PositionAccuracyThreshold.No
     );
   }
 
