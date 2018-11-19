@@ -43,17 +43,25 @@ export class PositionService {
         activitiesInterval: 10000,
         maxLocations: 1
       },
-      () => {
-        this.watchPosition();
-        this.requestAuthorization();
-      }
+      () => this.requestAuthorization()
     );
   }
 
   private watchPosition() {
     BackgroundGeolocation.getLocations(positions => {
-      this.store.dispatch(new PositionChanged(positions[0]));
+      if (positions[0]) {
+        this.store.dispatch(new PositionChanged(positions[0]));
+      } else {
+        BackgroundGeolocation.getCurrentLocation(
+          position => this.store.dispatch(new PositionChanged(position)),
+          undefined,
+          {
+            enableHighAccuracy: true
+          }
+        );
+      }
     });
+    BackgroundGeolocation.start();
     BackgroundGeolocation.on('location', position =>
       BackgroundGeolocation.startTask(taskKey => {
         this.store.dispatch(new PositionChanged(position));
@@ -134,7 +142,7 @@ export class PositionService {
       : this.diagnostic.isLocationEnabled();
     isLocationEnabled.then(enabled => {
       if (enabled) {
-        BackgroundGeolocation.start();
+        this.watchPosition();
       } else {
         this.onGPSDisabled();
       }
