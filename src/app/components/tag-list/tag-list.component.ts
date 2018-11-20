@@ -15,15 +15,18 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 })
 export class TagListComponent implements ControlValueAccessor {
   tagList: string[] | undefined;
+  displayTagList: string[] = [];
   currentTag = '';
+  isDisabled: boolean;
 
   @Input()
   title?: string;
 
-  // Function to call when the rating changes.
+  @Input()
+  hiddenTag?: string;
+
   private onChange = (option: any) => {};
 
-  // Function to call when the input is touched (when a star is clicked).
   private onTouched = () => {};
 
   registerOnChange(fn: (option: any) => void): void {
@@ -36,7 +39,12 @@ export class TagListComponent implements ControlValueAccessor {
 
   writeValue(tagList: any): void {
     this.tagList = tagList;
+    this.displayTagList = this.tagList ? this.tagList.filter(tag => tag !== this.hiddenTag) : [];
     this.onChange(this.tagList);
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.isDisabled = isDisabled;
   }
 
   deleteTag(index: number): void {

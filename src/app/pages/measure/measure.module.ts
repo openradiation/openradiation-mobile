@@ -6,6 +6,8 @@ import { IonicModule } from '@ionic/angular';
 import { MeasureReportPageModule } from './measure-report/measure-report.module';
 import { MeasureRoutingModule } from './measure-routing.module';
 import { MeasureScanPageModule } from './measure-scan/measure-scan.module';
+import { MeasureReportSeriesPageModule } from './measure-series-report/measure-series-report.module';
+import { MeasureSeriesPageModule } from './measure-series/measure-series.module';
 import { MeasureStepsPageModule } from './measure-steps/measure-steps.module';
 
 @NgModule({
@@ -14,7 +16,9 @@ import { MeasureStepsPageModule } from './measure-steps/measure-steps.module';
     CommonModule,
     FormsModule,
     MeasureRoutingModule,
+    MeasureSeriesPageModule,
     MeasureReportPageModule,
+    MeasureReportSeriesPageModule,
     MeasureScanPageModule,
     MeasureStepsPageModule
   ],

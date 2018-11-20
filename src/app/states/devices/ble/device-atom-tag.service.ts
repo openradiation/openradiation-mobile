@@ -1,30 +1,38 @@
 import { Injectable } from '@angular/core';
 import { BLE } from '@ionic-native/ble/ngx';
-import { Observable, of } from 'rxjs';
+import { Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { map } from 'rxjs/operators';
-import { Measure, Step } from '../measures/measure';
-import { DeviceType } from './abstract-device';
+import { Step } from '../../measures/measure';
+import { DeviceType } from '../abstract-device';
+import { AbstractBLEDeviceService } from './abstract-ble-device.service';
 import { DeviceAtomTag } from './device-atom-tag';
 
-// Todo add inheritance when angular issue fixed https://github.com/angular/angular/issues/24011
 @Injectable({
   providedIn: 'root'
 })
-export class DeviceAtomTagService /*extends AbstractDeviceService<DeviceAtomTag>*/ {
+export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag> {
   private firmwareService = '180a';
   private firmwareCharacteristic = '2a26';
   private service = '63462A4A-C28C-4FFD-87A4-2D23A1C72581';
   private settingsCharacteristic = 'ea50cfcd-ac4a-4a48-bf0e-879e548ae157';
+  private receiveCharacteristic = '70BC767E-7A1A-4304-81ED-14B9AF54F7BD';
 
-  constructor(protected ble: BLE) {}
+  constructor(protected store: Store, protected ble: BLE) {
+    super(store, ble);
+  }
+
+  protected convertHitsNumberPerSec(hitsNumberPerSec: number): number {
+    return (hitsNumberPerSec * 0.128 * 3600 - 40) / 1000;
+  }
 
   getDeviceInfo(device: DeviceAtomTag): Observable<Partial<DeviceAtomTag>> {
     return fromPromise(this.ble.read(device.sensorUUID, this.firmwareService, this.firmwareCharacteristic)).pipe(
       map(buffer => {
-        const firmwareVersion = new TextDecoder('utf8').decode(new Uint8Array(buffer));
+        const firmwareVersion = this.textDecoder.decode(new Uint8Array(buffer));
         return {
-          apparatusVersion: `${DeviceType.AtomTag} ${firmwareVersion}`
+          apparatusVersion: `${DeviceType.AtomTag} ${firmwareVersion.replace(/\0/g, '')}`
         };
       })
     );
@@ -54,19 +62,25 @@ export class DeviceAtomTagService /*extends AbstractDeviceService<DeviceAtomTag>
     return this.ble.write(device.sensorUUID, this.service, this.settingsCharacteristic, dataView.buffer);
   }
 
-  // TODO implement correct computation for AtomTag
-  computeRadiationValue(measure: Measure): number {
-    if (measure.endTime) {
-      const duration = (measure.endTime - measure.startTime) / 1000;
-      const TcNet = measure.hitsNumber / duration - 0.14;
-      return 0.000001 * TcNet ** 3 + 0.0025 * TcNet ** 2 + 0.39 * TcNet;
-    } else {
-      throw new Error('Incorrect measure : missing endTime');
-    }
+  startMeasureScan(device: DeviceAtomTag, stopSignal: Observable<any>): Observable<Step> {
+    stopSignal.subscribe(() => this.stopReceiveData(device));
+    return this.startReceiveData(device).pipe(map((buffer: ArrayBuffer) => this.decodeDataPackage(buffer)));
   }
 
-  // TODO implement start measure for AtomTag
-  startMeasureScan(device: DeviceAtomTag, stopSignal: Observable<any>): Observable<Step> {
-    return of();
+  private startReceiveData(device: DeviceAtomTag): Observable<any> {
+    return this.ble.startNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
+  }
+
+  private stopReceiveData(device: DeviceAtomTag) {
+    return this.ble.stopNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
+  }
+
+  protected decodeDataPackage(buffer: ArrayBuffer): Step {
+    const dataView = new DataView(buffer);
+    return {
+      ts: Date.now(),
+      hitsNumber: dataView.getUint16(9, true),
+      temperature: dataView.getUint8(12)
+    };
   }
 }

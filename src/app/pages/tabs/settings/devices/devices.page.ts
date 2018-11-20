@@ -1,16 +1,18 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
 import { Actions, ofActionDispatched, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { AutoUnsubscribePage } from '../../../../components/auto-unsubscribe/auto-unsubscribe.page';
+import { NavigationService } from '../../../../services/navigation.service';
 import { AbstractDevice } from '../../../../states/devices/abstract-device';
 import {
   ConnectDevice,
   DeviceConnectionLost,
   DisconnectDevice,
   EditDeviceParams,
-  StartDiscoverDevices,
+  StartDiscoverBLEDevices,
+  StartDiscoverUSBDevices,
   StopDiscoverDevices,
   UpdateDeviceInfo
 } from '../../../../states/devices/devices.action';
@@ -39,7 +41,8 @@ export class DevicesPage extends AutoUnsubscribePage {
     protected router: Router,
     private store: Store,
     private actions$: Actions,
-    private navController: NavController
+    private navigationService: NavigationService,
+    private platform: Platform
   ) {
     super(router);
   }
@@ -51,10 +54,13 @@ export class DevicesPage extends AutoUnsubscribePage {
         .pipe(ofActionDispatched(ConnectDevice))
         .subscribe(({ device }: ConnectDevice) => (this.connectingDevice = device)),
       this.actions$
-        .pipe(ofActionSuccessful(ConnectDevice, DeviceConnectionLost, DisconnectDevice))
+        .pipe(ofActionSuccessful(ConnectDevice, DeviceConnectionLost))
         .subscribe(() => (this.connectingDevice = undefined))
     );
-    this.store.dispatch(new StartDiscoverDevices()).subscribe();
+    this.store.dispatch(new StartDiscoverBLEDevices()).subscribe();
+    if (this.platform.is('android')) {
+      this.store.dispatch(new StartDiscoverUSBDevices()).subscribe();
+    }
   }
 
   pageLeave() {
@@ -73,7 +79,7 @@ export class DevicesPage extends AutoUnsubscribePage {
   editDeviceParams(event: Event, device: AbstractDevice) {
     event.stopPropagation();
     this.store.dispatch(new EditDeviceParams(device)).subscribe(() =>
-      this.navController.navigateForward([
+      this.navigationService.navigateForward([
         'tabs',
         {
           outlets: {
@@ -85,6 +91,6 @@ export class DevicesPage extends AutoUnsubscribePage {
   }
 
   goBack() {
-    this.navController.goBack();
+    this.navigationService.goBack();
   }
 }

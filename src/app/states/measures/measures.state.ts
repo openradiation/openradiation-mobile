@@ -1,11 +1,20 @@
 import { Device } from '@ionic-native/device/ngx';
-import { Geoposition } from '@ionic-native/geolocation';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { Location } from 'cordova-plugin-mauron85-background-geolocation';
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import * as uuid from 'uuid';
+import { AbstractDevice } from '../devices/abstract-device';
 import { DateService } from './date.service';
-import { Measure, MeasureReport, PositionAccuracyThreshold } from './measure';
+import {
+  Measure,
+  MeasureReport,
+  MeasureSeries,
+  MeasureSeriesParams,
+  MeasureSeriesParamsSelected,
+  MeasureSeriesReport,
+  MeasureType,
+  PositionAccuracyThreshold
+} from './measure';
 import {
   AddMeasureScanStep,
   CancelMeasure,
@@ -17,27 +26,44 @@ import {
   EnableExpertMode,
   PositionChanged,
   PublishMeasure,
+  ShowMeasure,
   StartManualMeasure,
   StartMeasure,
   StartMeasureReport,
   StartMeasureScan,
-  StartWatchPosition,
+  StartMeasureSeriesParams,
+  StartMeasureSeriesReport,
+  StartNextMeasureSeries,
   StopMeasure,
   StopMeasureReport,
   StopMeasureScan,
-  StopWatchPosition,
+  StopMeasureSeries,
+  StopMeasureSeriesParams,
+  StopMeasureSeriesReport,
   UpdateMeasureScanTime
 } from './measures.action';
 import { MeasuresService } from './measures.service';
 import { PositionService } from './position.service';
 
 export interface MeasuresStateModel {
-  measures: Measure[];
-  currentPosition?: Geoposition;
-  isWatchingPosition: boolean;
+  measures: (Measure | MeasureSeries)[];
+  currentPosition?: Location;
   currentMeasure?: Measure;
+  currentSeries?: MeasureSeries;
   measureReport?: {
     model: MeasureReport;
+    dirty: boolean;
+    status: string;
+    errors: any;
+  };
+  measureSeriesParams?: {
+    model: MeasureSeriesParams;
+    dirty: boolean;
+    status: string;
+    errors: any;
+  };
+  measureSeriesReport?: {
+    model: MeasureSeriesReport;
     dirty: boolean;
     status: string;
     errors: any;
@@ -52,7 +78,6 @@ export interface MeasuresStateModel {
   name: 'measures',
   defaults: {
     measures: [],
-    isWatchingPosition: false,
     params: {
       expertMode: false,
       autoPublish: false
@@ -68,88 +93,69 @@ export class MeasuresState {
   ) {}
 
   @Selector()
-  static expertMode(state: MeasuresStateModel): boolean {
-    return state.params.expertMode;
+  static expertMode({ params }: MeasuresStateModel): boolean {
+    return params.expertMode;
   }
 
   @Selector()
-  static autoPublish(state: MeasuresStateModel): boolean {
-    return state.params.autoPublish;
+  static autoPublish({ params }: MeasuresStateModel): boolean {
+    return params.autoPublish;
   }
 
   @Selector()
-  static currentPosition(state: MeasuresStateModel): Geoposition | undefined {
-    return state.currentPosition;
+  static currentPosition({ currentPosition }: MeasuresStateModel): Location | undefined {
+    return currentPosition;
   }
 
   @Selector()
-  static positionAccuracy(state: MeasuresStateModel): number {
-    return state.currentPosition ? state.currentPosition.coords.accuracy : PositionAccuracyThreshold.No;
+  static positionAccuracy({ currentPosition }: MeasuresStateModel): number {
+    return currentPosition ? currentPosition.accuracy : PositionAccuracyThreshold.No;
   }
 
   @Selector()
-  static isWatchingPosition(state: MeasuresStateModel): boolean {
-    return state.isWatchingPosition;
+  static currentMeasure({ currentMeasure }: MeasuresStateModel): Measure | undefined {
+    return currentMeasure;
   }
 
   @Selector()
-  static currentMeasure(state: MeasuresStateModel): Measure | undefined {
-    return state.currentMeasure;
+  static currentSeries({ currentSeries }: MeasuresStateModel): MeasureSeries | undefined {
+    return currentSeries;
   }
 
   @Selector()
-  static measures(state: MeasuresStateModel): Measure[] {
-    return state.measures;
+  static measures({ measures }: MeasuresStateModel): (Measure | MeasureSeries)[] {
+    return measures;
   }
 
   @Action(EnableExpertMode)
   enableExpertMode({ getState, patchState }: StateContext<MeasuresStateModel>) {
-    const state = getState();
+    const { params } = getState();
     patchState({
-      params: { ...state.params, expertMode: true }
+      params: { ...params, expertMode: true }
     });
   }
 
   @Action(DisableExpertMode)
   disableExpertMode({ getState, patchState }: StateContext<MeasuresStateModel>) {
-    const state = getState();
+    const { params } = getState();
     patchState({
-      params: { ...state.params, expertMode: false }
+      params: { ...params, expertMode: false }
     });
   }
 
   @Action(EnableAutoPublish)
   enableAutoPublish({ getState, patchState }: StateContext<MeasuresStateModel>) {
-    const state = getState();
+    const { params } = getState();
     patchState({
-      params: { ...state.params, autoPublish: true }
+      params: { ...params, autoPublish: true }
     });
   }
 
   @Action(DisableAutoPublish)
   disableAutoPublish({ getState, patchState }: StateContext<MeasuresStateModel>) {
-    const state = getState();
+    const { params } = getState();
     patchState({
-      params: { ...state.params, autoPublish: false }
-    });
-  }
-
-  @Action(StartWatchPosition)
-  startWatchPosition({ patchState }: StateContext<MeasuresStateModel>) {
-    return this.positionService.startWatchPosition().pipe(
-      tap(position =>
-        patchState({
-          currentPosition: position,
-          isWatchingPosition: true
-        })
-      )
-    );
-  }
-
-  @Action(StopWatchPosition)
-  stopDiscoverDevices({ patchState }: StateContext<MeasuresStateModel>) {
-    patchState({
-      isWatchingPosition: false
+      params: { ...params, autoPublish: false }
     });
   }
 
@@ -171,76 +177,77 @@ export class MeasuresState {
         this.device.uuid,
         this.device.platform,
         this.device.version,
-        this.device.model,
-        uuid.v4()
+        this.device.model
       )
     });
   }
 
   @Action(StartManualMeasure)
   startManualMeasure({ getState, patchState }: StateContext<MeasuresStateModel>) {
-    const state = getState();
-    if (state.currentPosition) {
-      patchState({
-        currentMeasure: {
-          ...new Measure(
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            this.device.uuid,
-            this.device.platform,
-            this.device.version,
-            this.device.model,
-            uuid.v4(),
-            true
-          ),
-          latitude: state.currentPosition!.coords.latitude,
-          longitude: state.currentPosition!.coords.longitude,
-          accuracy: state.currentPosition!.coords.accuracy,
-          endLatitude: state.currentPosition!.coords.latitude,
-          endLongitude: state.currentPosition!.coords.longitude,
-          endAccuracy: state.currentPosition!.coords.accuracy,
-          startTime: Date.now()
-        }
-      });
-    } else {
-      patchState({
-        currentMeasure: {
-          ...new Measure(
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            this.device.uuid,
-            this.device.platform,
-            this.device.version,
-            this.device.model,
-            uuid.v4(),
-            true
-          ),
-          startTime: Date.now()
-        }
-      });
-    }
+    const { currentPosition } = getState();
+    let currentMeasure = {
+      ...new Measure(
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        this.device.uuid,
+        this.device.platform,
+        this.device.version,
+        this.device.model,
+        true
+      ),
+      startTime: Date.now()
+    };
+    currentMeasure = Measure.updateStartPosition(currentMeasure, currentPosition);
+    currentMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
+    patchState({
+      currentMeasure
+    });
   }
 
   @Action(StopMeasure)
   stopMeasure({ getState, patchState, dispatch }: StateContext<MeasuresStateModel>) {
-    const state = getState();
-    if (state.currentMeasure) {
-      const measure = { ...state.currentMeasure, steps: undefined };
-      patchState({
-        measures: [...state.measures, measure],
-        currentMeasure: undefined
-      });
-      if (
-        state.params.autoPublish &&
-        (measure.accuracy &&
-          measure.accuracy < PositionAccuracyThreshold.Inaccurate &&
-          (measure.endAccuracy && measure.endAccuracy < PositionAccuracyThreshold.Inaccurate))
-      ) {
-        dispatch(new PublishMeasure(measure));
+    const { currentMeasure, measures, params } = getState();
+    if (currentMeasure) {
+      const patch: Partial<MeasuresStateModel> = { currentMeasure: undefined };
+      if (currentMeasure.sent) {
+        patchState(patch);
+      } else {
+        const measure = { ...currentMeasure, steps: undefined };
+        const measureIndex = measures.findIndex(historyMeasure => historyMeasure.id === measure.id);
+        if (measureIndex > -1) {
+          patch.measures = [...measures.slice(0, measureIndex), measure, ...measures.slice(measureIndex + 1)];
+        } else {
+          patch.measures = [...measures, measure];
+        }
+        patchState(patch);
+        if (params.autoPublish) {
+          dispatch(new PublishMeasure(measure));
+        }
+      }
+    }
+  }
+
+  @Action(StopMeasureSeries)
+  stopMeasureSeries({ getState, patchState, dispatch }: StateContext<MeasuresStateModel>) {
+    const { currentSeries, measures, params } = getState();
+    if (currentSeries) {
+      const patch: Partial<MeasuresStateModel> = { currentSeries: undefined };
+      if (currentSeries.sent) {
+        patchState(patch);
+      } else {
+        const series = { ...currentSeries };
+        const measureIndex = measures.findIndex(historyMeasure => historyMeasure.id === series.id);
+        if (measureIndex > -1) {
+          patch.measures = [...measures.slice(0, measureIndex), series, ...measures.slice(measureIndex + 1)];
+        } else {
+          patch.measures = [...measures, series];
+        }
+        patchState(patch);
+        if (params.autoPublish) {
+          dispatch(new PublishMeasure(series));
+        }
       }
     }
   }
@@ -249,150 +256,234 @@ export class MeasuresState {
   cancelMeasure({ patchState }: StateContext<MeasuresStateModel>) {
     patchState({
       currentMeasure: undefined,
-      measureReport: undefined
+      measureReport: undefined,
+      measureSeriesParams: undefined,
+      currentSeries: undefined,
+      measureSeriesReport: undefined
     });
   }
 
-  @Action(AddMeasureScanStep)
-  addMeasureScanStep({ getState, patchState }: StateContext<MeasuresStateModel>, { step, device }: AddMeasureScanStep) {
-    const state = getState();
-    if (state.currentMeasure && state.currentMeasure.steps) {
-      const currentMeasure = { ...state.currentMeasure, steps: [...state.currentMeasure.steps, step] };
-      currentMeasure.endTime = step.ts;
-      currentMeasure.hitsNumber += step.hitsNumber;
-      currentMeasure.value = this.measuresService.computeRadiationValue(currentMeasure, device);
-      currentMeasure.temperature =
-        currentMeasure.steps
-          .map(currentMeasureStep => currentMeasureStep.temperature)
-          .reduce((acc, current) => acc + current) / currentMeasure.steps.length;
+  @Action(StartMeasureSeriesParams)
+  startMeasureSeries({ patchState }: StateContext<MeasuresStateModel>) {
+    const model: MeasureSeriesParams = {
+      seriesDurationLimit: 24,
+      measureHitsLimit: 100,
+      measureDurationLimit: 5,
+      paramSelected: MeasureSeriesParamsSelected.measureDurationLimit
+    };
+    patchState({
+      measureSeriesParams: {
+        model,
+        dirty: false,
+        status: '',
+        errors: {}
+      }
+    });
+  }
+
+  @Action(StopMeasureSeriesParams)
+  stopMeasureSeriesParam({ getState, patchState }: StateContext<MeasuresStateModel>) {
+    const { measureSeriesParams } = getState();
+    if (measureSeriesParams) {
       patchState({
-        currentMeasure
+        measureSeriesParams: undefined,
+        currentSeries: new MeasureSeries({
+          ...measureSeriesParams.model,
+          measureDurationLimit: measureSeriesParams.model.measureDurationLimit * 60 * 1000,
+          seriesDurationLimit: measureSeriesParams.model.seriesDurationLimit * 60 * 60 * 1000
+        })
       });
     }
   }
 
+  @Action(AddMeasureScanStep)
+  addMeasureScanStep(
+    { getState, patchState, dispatch }: StateContext<MeasuresStateModel>,
+    { step, device }: AddMeasureScanStep
+  ) {
+    const { currentMeasure, currentSeries } = getState();
+    if (currentMeasure && currentMeasure.steps) {
+      const newCurrentMeasure = {
+        ...currentMeasure,
+        endTime: step.ts,
+        hitsNumber: currentMeasure.hitsNumber! + step.hitsNumber,
+        steps: [...currentMeasure.steps, step]
+      };
+      newCurrentMeasure.value = this.measuresService.computeRadiationValue(newCurrentMeasure, device);
+      if (newCurrentMeasure.steps[0] && newCurrentMeasure.steps[0].temperature !== undefined) {
+        newCurrentMeasure.temperature =
+          newCurrentMeasure.steps
+            .map(currentMeasureStep => currentMeasureStep.temperature!)
+            .reduce((acc, current) => acc + current) / newCurrentMeasure.steps.length;
+      }
+      patchState({
+        currentMeasure: newCurrentMeasure
+      });
+      if (currentSeries && this.shouldStopMeasureSeriesCurrentScan(device, currentSeries, newCurrentMeasure, step.ts)) {
+        return dispatch(new StartNextMeasureSeries(device));
+      }
+    }
+    return of(null);
+  }
+
   @Action(UpdateMeasureScanTime)
-  updateMeasureScanTime({ getState, patchState }: StateContext<MeasuresStateModel>, { device }: UpdateMeasureScanTime) {
-    const state = getState();
-    if (state.currentMeasure) {
+  updateMeasureScanTime(
+    { getState, patchState, dispatch }: StateContext<MeasuresStateModel>,
+    { device }: UpdateMeasureScanTime
+  ) {
+    const { currentMeasure, currentSeries } = getState();
+    if (currentMeasure) {
+      const currentTime = Date.now();
       patchState({
         currentMeasure: {
-          ...state.currentMeasure,
-          endTime: Date.now(),
-          value: this.measuresService.computeRadiationValue(state.currentMeasure, device)
+          ...currentMeasure,
+          endTime: currentTime,
+          value: this.measuresService.computeRadiationValue(currentMeasure, device)
         }
       });
+      if (
+        currentSeries &&
+        this.shouldStopMeasureSeriesCurrentScan(device, currentSeries, currentMeasure, currentTime)
+      ) {
+        return dispatch(new StartNextMeasureSeries(device));
+      }
+    }
+    return of(null);
+  }
+
+  private shouldStopMeasureSeriesCurrentScan(
+    device: AbstractDevice,
+    measureSeries: MeasureSeries,
+    measure: Measure,
+    currentTime: number
+  ): boolean {
+    switch (measureSeries.params.paramSelected) {
+      case MeasureSeriesParamsSelected.measureDurationLimit:
+        return (
+          currentTime - measure.startTime > measureSeries.params.measureDurationLimit &&
+          measure.hitsNumber !== undefined &&
+          measure.hitsNumber > device.hitsAccuracyThreshold.accurate
+        );
+      case MeasureSeriesParamsSelected.measureHitsLimit:
+        return measure.hitsNumber !== undefined && measure.hitsNumber > measureSeries.params.measureHitsLimit;
     }
   }
 
   @Action(StartMeasureScan)
   startMeasureScan({ getState, patchState }: StateContext<MeasuresStateModel>, { device }: StartMeasureScan) {
-    const state = getState();
-    if (state.currentMeasure) {
-      if (state.currentPosition) {
-        return this.measuresService.startMeasureScan(device).pipe(
-          tap(() => {
-            patchState({
-              currentMeasure: {
-                ...state.currentMeasure!,
-                startTime: Date.now(),
-                endTime: Date.now(),
-                latitude: state.currentPosition!.coords.latitude,
-                longitude: state.currentPosition!.coords.longitude,
-                accuracy: state.currentPosition!.coords.accuracy,
-                altitude: state.currentPosition!.coords.altitude,
-                altitudeAccuracy: state.currentPosition!.coords.altitudeAccuracy
-              }
-            });
-          })
-        );
-      } else {
-        return this.measuresService.startMeasureScan(device).pipe(
-          tap(() => {
-            patchState({
-              currentMeasure: {
-                ...state.currentMeasure!,
-                startTime: Date.now(),
-                endTime: Date.now()
-              }
-            });
-          })
-        );
-      }
+    const { currentMeasure, currentSeries, currentPosition } = getState();
+    if (currentMeasure) {
+      return this.measuresService.startMeasureScan(device).pipe(
+        tap(() => {
+          const currentTime = Date.now();
+          const patch: Partial<MeasuresStateModel> = {};
+          if (currentSeries) {
+            patch.currentSeries = {
+              ...currentSeries,
+              startTime: currentTime,
+              endTime: currentTime
+            };
+          }
+          patch.currentMeasure = Measure.updateStartPosition(
+            {
+              ...currentMeasure,
+              startTime: currentTime,
+              endTime: currentTime
+            },
+            currentPosition
+          );
+          patchState(patch);
+        })
+      );
     } else {
-      return of();
+      return of(null);
     }
   }
 
   @Action(StopMeasureScan)
-  stopMeasureScan({ getState, patchState }: StateContext<MeasuresStateModel>) {
-    const state = getState();
-    if (state.currentMeasure) {
-      if (state.currentMeasure.accuracy && state.currentMeasure.accuracy < PositionAccuracyThreshold.Inaccurate) {
-        patchState({
-          currentMeasure: {
-            ...state.currentMeasure,
-            endLatitude: state.currentPosition!.coords.latitude,
-            endLongitude: state.currentPosition!.coords.longitude,
-            endAccuracy: state.currentPosition!.coords.accuracy,
-            endAltitude: state.currentPosition!.coords.altitude,
-            endAltitudeAccuracy: state.currentPosition!.coords.altitudeAccuracy
-          }
-        });
+  stopMeasureScan({ getState, patchState }: StateContext<MeasuresStateModel>, { device }: StopMeasureScan) {
+    const { currentMeasure, currentSeries, currentPosition } = getState();
+    if (currentMeasure) {
+      let patch: Partial<MeasuresStateModel>;
+      const updatedMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
+      if (currentSeries) {
+        patch = { currentMeasure: undefined };
+        if (updatedMeasure.hitsNumber! >= device.hitsAccuracyThreshold.accurate) {
+          patch.currentSeries = MeasureSeries.addMeasureToSeries(currentSeries, updatedMeasure);
+        }
       } else {
-        patchState({
-          currentMeasure: {
-            ...state.currentMeasure
-          }
-        });
+        patch = { currentMeasure: updatedMeasure };
       }
+      patchState(patch);
+    }
+  }
+
+  @Action(StartNextMeasureSeries)
+  startNextMeasureSeries(
+    { getState, patchState, dispatch }: StateContext<MeasuresStateModel>,
+    { device }: StartNextMeasureSeries
+  ) {
+    const { currentMeasure, currentSeries, currentPosition } = getState();
+    if (currentMeasure && currentSeries) {
+      if (currentMeasure.endTime! - currentSeries.startTime > currentSeries.params.seriesDurationLimit) {
+        return dispatch(new StopMeasureScan(device));
+      } else {
+        const updatedMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
+        const currentTime = Date.now();
+        const newMeasure = Measure.updateStartPosition(
+          {
+            ...new Measure(
+              currentMeasure.apparatusId,
+              currentMeasure.apparatusVersion,
+              currentMeasure.apparatusSensorType,
+              currentMeasure.apparatusTubeType,
+              this.device.uuid,
+              this.device.platform,
+              this.device.version,
+              this.device.model
+            ),
+            startTime: currentTime,
+            endTime: currentTime
+          },
+          currentPosition
+        );
+        patchState({
+          currentMeasure: newMeasure,
+          currentSeries: MeasureSeries.addMeasureToSeries(currentSeries, updatedMeasure)
+        });
+        return of(null);
+      }
+    } else {
+      return of(null);
     }
   }
 
   @Action(StartMeasureReport)
   startMeasureReport({ getState, patchState }: StateContext<MeasuresStateModel>) {
-    const state = getState();
-    if (state.currentMeasure) {
-      let model: MeasureReport = {
-        latitude: undefined,
-        longitude: undefined,
-        endLatitude: undefined,
-        endLongitude: undefined,
-        date: this.dateService.toISOString(state.currentMeasure.startTime),
-        startTime: this.dateService.toISOString(state.currentMeasure.startTime),
-        duration: undefined,
-        temperature: undefined,
-        hitsNumber: undefined,
-        value: undefined,
-        measurementHeight: undefined,
-        description: undefined,
-        tags: undefined,
-        measurementEnvironment: undefined,
-        rain: undefined
+    const { currentMeasure } = getState();
+    if (currentMeasure) {
+      const startTimeIOSString = this.dateService.toISOString(currentMeasure.startTime);
+      const model: MeasureReport = {
+        latitude: currentMeasure.latitude ? Number(currentMeasure.latitude.toFixed(7)) : undefined,
+        longitude: currentMeasure.longitude ? Number(currentMeasure.longitude.toFixed(7)) : undefined,
+        endLatitude: currentMeasure.endLatitude ? Number(currentMeasure.endLatitude.toFixed(7)) : undefined,
+        endLongitude: currentMeasure.endLongitude ? Number(currentMeasure.endLongitude.toFixed(7)) : undefined,
+        date: startTimeIOSString,
+        startTime: startTimeIOSString,
+        duration: currentMeasure.endTime
+          ? this.dateService.toISODuration(currentMeasure.endTime - currentMeasure.startTime)
+          : undefined,
+        temperature:
+          currentMeasure.temperature !== undefined ? Number(currentMeasure.temperature.toFixed(2)) : undefined,
+        hitsNumber: currentMeasure.hitsNumber,
+        value: currentMeasure.value !== undefined ? Number(currentMeasure.value.toFixed(3)) : undefined,
+        measurementHeight: currentMeasure.measurementHeight,
+        description: currentMeasure.description,
+        tags: currentMeasure.tags,
+        measurementEnvironment: currentMeasure.measurementEnvironment,
+        rain: currentMeasure.rain,
+        enclosedObject: currentMeasure.enclosedObject
       };
-      if (
-        state.currentMeasure.latitude &&
-        state.currentMeasure.longitude &&
-        state.currentMeasure.endLatitude &&
-        state.currentMeasure.endLongitude
-      ) {
-        model = {
-          ...model,
-          latitude: Number(state.currentMeasure.latitude.toFixed(7)),
-          longitude: Number(state.currentMeasure.longitude.toFixed(7)),
-          endLatitude: Number(state.currentMeasure.endLatitude.toFixed(7)),
-          endLongitude: Number(state.currentMeasure.endLongitude.toFixed(7))
-        };
-      }
-      if (!state.currentMeasure.manualReporting) {
-        model = {
-          ...model,
-          duration: this.dateService.toISODuration(state.currentMeasure.endTime! - state.currentMeasure.startTime),
-          temperature: Number(state.currentMeasure.temperature!.toFixed(2)),
-          hitsNumber: state.currentMeasure.hitsNumber,
-          value: Number(state.currentMeasure.value.toFixed(3))
-        };
-      }
       patchState({
         measureReport: {
           model,
@@ -404,34 +495,102 @@ export class MeasuresState {
     }
   }
 
+  @Action(StartMeasureSeriesReport)
+  StartMeasureSeriesReport({ getState, patchState }: StateContext<MeasuresStateModel>) {
+    const { currentSeries } = getState();
+    if (currentSeries) {
+      const startTimeIOSString = this.dateService.toISOString(currentSeries.startTime!);
+      const model: MeasureSeriesReport = {
+        seriesNumbersMeasures: currentSeries.measures.length,
+        measureDurationLimit: this.dateService.toISODuration(currentSeries.params.measureDurationLimit),
+        measureHitsLimit: currentSeries.params.measureHitsLimit,
+        date: startTimeIOSString,
+        startTime: startTimeIOSString,
+        duration: currentSeries.endTime
+          ? this.dateService.toISODuration(currentSeries.endTime - currentSeries.startTime!)
+          : undefined,
+        hitsNumberAverage: Number(
+          (
+            currentSeries.measures.reduce((acc, measure) => acc + measure.hitsNumber!, 0) /
+            currentSeries.measures.length
+          ).toFixed(1)
+        ),
+        valueAverage: Number(
+          (
+            currentSeries.measures.reduce((acc, measure) => acc + measure.value, 0) / currentSeries.measures.length
+          ).toFixed(3)
+        ),
+        measurementHeight: currentSeries.measures[0].measurementHeight,
+        description: currentSeries.measures[0].description,
+        tags: currentSeries.measures[0].tags,
+        measurementEnvironment: currentSeries.measures[0].measurementEnvironment,
+        rain: currentSeries.measures[0].rain
+      };
+      patchState({
+        measureSeriesReport: {
+          model,
+          dirty: false,
+          status: '',
+          errors: {}
+        }
+      });
+    }
+  }
+
   @Action(StopMeasureReport)
   stopMeasureReport({ getState, patchState }: StateContext<MeasuresStateModel>) {
-    const state = getState();
-    if (state.currentMeasure && state.measureReport) {
-      let currentMeasure: Measure = {
-        ...state.currentMeasure,
-        measurementHeight: state.measureReport.model.measurementHeight!,
-        measurementEnvironment: state.measureReport.model.measurementEnvironment!,
-        rain: state.measureReport.model.rain!,
-        description: state.measureReport.model.description,
-        tags: state.measureReport.model.tags
+    const { currentMeasure, measureReport } = getState();
+    if (currentMeasure && measureReport) {
+      let updatedCurrentMeasure: Measure = {
+        ...currentMeasure,
+        measurementHeight: measureReport.model.measurementHeight,
+        measurementEnvironment: measureReport.model.measurementEnvironment,
+        rain: measureReport.model.rain,
+        description: measureReport.model.description,
+        tags: measureReport.model.tags,
+        enclosedObject: measureReport.model.enclosedObject
       };
-      if (state.currentMeasure.manualReporting) {
-        const durationDate = new Date(state.measureReport.model.duration!);
-        currentMeasure = {
-          ...state.currentMeasure,
-          temperature: state.measureReport.model.temperature!,
-          value: state.measureReport.model.value!,
-          hitsNumber: state.measureReport.model.hitsNumber!,
-          endTime: state.currentMeasure.startTime + (durationDate.getMinutes() * 60 + durationDate.getSeconds()) * 1000,
-          measurementHeight: state.measureReport.model.measurementHeight!,
-          measurementEnvironment: state.measureReport.model.measurementEnvironment!,
-          rain: state.measureReport.model.rain!
+      if (currentMeasure.manualReporting) {
+        updatedCurrentMeasure = {
+          ...updatedCurrentMeasure,
+          temperature: measureReport.model.temperature,
+          value: measureReport.model.value!,
+          hitsNumber: measureReport.model.hitsNumber
         };
+        if (measureReport.model.duration !== undefined) {
+          const durationDate = new Date(measureReport.model.duration);
+          updatedCurrentMeasure = {
+            ...updatedCurrentMeasure,
+            endTime:
+              currentMeasure.startTime +
+              (durationDate.getHours() * 60 * 60 + durationDate.getMinutes() * 60 + durationDate.getSeconds()) * 1000
+          };
+        }
       }
       patchState({
         measureReport: undefined,
-        currentMeasure
+        currentMeasure: updatedCurrentMeasure
+      });
+    }
+  }
+
+  @Action(StopMeasureSeriesReport)
+  stopMeasureSeriesReport({ getState, patchState }: StateContext<MeasuresStateModel>) {
+    const { currentSeries, measureSeriesReport } = getState();
+    if (currentSeries && measureSeriesReport) {
+      patchState({
+        measureSeriesReport: undefined,
+        currentSeries: {
+          ...currentSeries,
+          measures: currentSeries.measures.map(measure => ({
+            ...measure,
+            measurementHeight: measureSeriesReport.model.measurementHeight,
+            measurementEnvironment: measureSeriesReport.model.measurementEnvironment,
+            rain: measureSeriesReport.model.rain,
+            description: measureSeriesReport.model.description,
+            tags: measureSeriesReport.model.tags
+          }))
+        }
       });
     }
   }
@@ -439,35 +598,30 @@ export class MeasuresState {
   @Action(PublishMeasure)
   publishMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, { measure }: PublishMeasure) {
     if (!measure.sent) {
-      const state = getState();
-      const index = state.measures.findIndex(stateMeasure => stateMeasure.reportUuid === measure.reportUuid);
+      let { measures } = getState();
+      const index = measures.findIndex(stateMeasure => stateMeasure.id === measure.id);
       if (index !== -1) {
         return this.measuresService.publishMeasure(measure).pipe(
           tap(() => {
-            const measures = [...state.measures];
-            measures.splice(index, 1);
+            measures = getState().measures;
             patchState({
-              measures: [
-                ...state.measures.slice(0, index),
-                { ...measure, sent: true },
-                ...state.measures.slice(index + 1)
-              ]
+              measures: [...measures.slice(0, index), { ...measure, sent: true }, ...measures.slice(index + 1)]
             });
           })
         );
       }
     }
-    return of();
+    return of(null);
   }
 
   @Action(DeleteMeasure)
   deleteMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, { measure }: DeleteMeasure) {
     if (!measure.sent) {
-      const state = getState();
-      const index = state.measures.findIndex(stateMeasure => stateMeasure.reportUuid === measure.reportUuid);
+      const { measures } = getState();
+      const index = measures.findIndex(stateMeasure => stateMeasure.id === measure.id);
       if (index !== -1) {
         patchState({
-          measures: [...state.measures.slice(0, index), ...state.measures.slice(index + 1)]
+          measures: [...measures.slice(0, index), ...measures.slice(index + 1)]
         });
       }
     }
@@ -478,5 +632,18 @@ export class MeasuresState {
     patchState({
       measures: []
     });
+  }
+
+  @Action(ShowMeasure)
+  showMeasure({ patchState }: StateContext<MeasuresStateModel>, { measure }: PublishMeasure) {
+    if (measure.type === MeasureType.Measure) {
+      patchState({
+        currentMeasure: { ...measure }
+      });
+    } else {
+      patchState({
+        currentSeries: { ...measure }
+      });
+    }
   }
 }

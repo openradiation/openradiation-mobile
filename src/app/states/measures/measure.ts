@@ -1,15 +1,31 @@
+import { Location } from 'cordova-plugin-mauron85-background-geolocation';
+import * as uuid from 'uuid';
 import { environment } from '../../../environments/environment';
+import { ApparatusSensorType } from '../devices/abstract-device';
 
-export class Measure {
+export abstract class AbstractMeasure {
+  abstract readonly type: MeasureType;
+  startTime: number;
+  endTime?: number;
+  sent = false;
+
+  constructor(public id: string) {}
+}
+
+export enum MeasureType {
+  Measure = 'Measure',
+  MeasureSeries = 'MeasureSeries'
+}
+
+export class Measure extends AbstractMeasure {
+  readonly type = MeasureType.Measure;
   apparatusId?: string;
   apparatusVersion?: string;
-  apparatusSensorType?: string;
+  apparatusSensorType?: ApparatusSensorType;
   apparatusTubeType?: string;
   temperature?: number;
   value: number;
-  hitsNumber = 0;
-  startTime: number;
-  endTime?: number;
+  hitsNumber?: number;
   latitude?: number;
   longitude?: number;
   accuracy?: number;
@@ -33,21 +49,21 @@ export class Measure {
   enclosedObject?: string;
   measurementEnvironment?: MeasureEnvironment;
   rain?: boolean;
-  sent = false;
   steps?: Step[] = [];
 
   constructor(
     apparatusId: string | undefined,
     apparatusVersion: string | undefined,
-    apparatusSensorType: string | undefined,
+    apparatusSensorType: ApparatusSensorType | undefined,
     apparatusTubeType: string | undefined,
     deviceUuid: string,
     devicePlatform: string,
     deviceVersion: string,
     deviceModel: string,
-    reportUuid: string,
-    manualReporting = false
+    manualReporting = false,
+    reportUuid = uuid.v4()
   ) {
+    super(reportUuid);
     this.apparatusId = apparatusId;
     this.apparatusVersion = apparatusVersion;
     this.apparatusSensorType = apparatusSensorType;
@@ -62,14 +78,45 @@ export class Measure {
     this.organisationReporting = environment.APP_NAME_VERSION;
     this.accuracy = PositionAccuracyThreshold.No;
     this.endAccuracy = PositionAccuracyThreshold.No;
+    this.hitsNumber = this.manualReporting ? undefined : 0;
+  }
+
+  static updateStartPosition(measure: Measure, position?: Location): Measure {
+    if (position) {
+      return {
+        ...measure,
+        latitude: position.latitude,
+        longitude: position.longitude,
+        accuracy: position.accuracy,
+        altitude: position.altitude
+        // altitudeAccuracy: position.altitudeAccuracy
+      };
+    } else {
+      return { ...measure };
+    }
+  }
+
+  static updateEndPosition(measure: Measure, position?: Location): Measure {
+    if (position) {
+      return {
+        ...measure,
+        endLatitude: position.latitude,
+        endLongitude: position.longitude,
+        endAccuracy: position.accuracy,
+        endAltitude: position.altitude
+        // endAltitudeAccuracy: position.altitudeAccuracy
+      };
+    } else {
+      return { ...measure };
+    }
   }
 }
 
 export interface Step {
   ts: number;
   hitsNumber: number;
-  voltage: number;
-  temperature: number;
+  voltage?: number;
+  temperature?: number;
 }
 
 export enum PositionAccuracyThreshold {
@@ -94,14 +141,6 @@ export enum HitsAccuracy {
   Accurate = 'accurate'
 }
 
-export enum HitsAccuracyThreshold {
-  Start = 0,
-  Bad = 4,
-  Medium = 15,
-  Good = 30,
-  Accurate = 50
-}
-
 export enum MeasureEnvironment {
   Countryside = 'countryside',
   City = 'city',
@@ -123,7 +162,61 @@ export interface MeasureReport {
   value: number | undefined;
   measurementHeight: number | undefined;
   description: string | undefined;
+  enclosedObject: string | undefined;
   tags: string[] | undefined;
   measurementEnvironment: MeasureEnvironment | undefined;
   rain: boolean | undefined;
+}
+
+export interface MeasureSeriesParams {
+  seriesDurationLimit: number;
+  measureHitsLimit: number;
+  measureDurationLimit: number;
+  paramSelected: MeasureSeriesParamsSelected;
+}
+
+export enum MeasureSeriesParamsSelected {
+  measureHitsLimit,
+  measureDurationLimit
+}
+
+export interface MeasureSeriesReport {
+  seriesNumbersMeasures: number | undefined;
+  measureDurationLimit: string | undefined;
+  measureHitsLimit: number | undefined;
+  date: string | undefined;
+  startTime: string | undefined;
+  duration: string | undefined;
+  hitsNumberAverage: number | undefined;
+  valueAverage: number | undefined;
+  measurementHeight: number | undefined;
+  description: string | undefined;
+  tags: string[] | undefined;
+  measurementEnvironment: MeasureEnvironment | undefined;
+  rain: boolean | undefined;
+}
+
+export class MeasureSeries extends AbstractMeasure {
+  readonly type = MeasureType.MeasureSeries;
+  measures: Measure[] = [];
+
+  constructor(
+    public params: MeasureSeriesParams,
+    public seriesUuid = `series_${uuid
+      .v4()
+      .replace(/-/g, '')
+      .slice(-18)}`
+  ) {
+    super(seriesUuid);
+  }
+
+  static addMeasureToSeries(measureSeries: MeasureSeries, measure: Measure) {
+    measure.tags = [measureSeries.seriesUuid];
+    measure.steps = undefined;
+    return {
+      ...measureSeries,
+      endTime: measure.endTime,
+      measures: [...measureSeries.measures, measure]
+    };
+  }
 }

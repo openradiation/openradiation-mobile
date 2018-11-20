@@ -1,16 +1,12 @@
 import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
-import {
-  AbstractDevice,
-  DeviceParams,
-  DeviceParamsModel,
-  DeviceParamType,
-  DeviceType,
-  RawDevice
-} from './abstract-device';
+import { ApparatusSensorType, DeviceType } from '../abstract-device';
+import { DeviceParams, DeviceParamsModel, DeviceParamType } from '../device-params';
+import { AbstractBLEDevice, RawBLEDevice } from './abstract-ble-device';
 
-export class DeviceAtomTag extends AbstractDevice {
+export class DeviceAtomTag extends AbstractBLEDevice {
   readonly deviceType = DeviceType.AtomTag;
-  apparatusSensorType = 'Geiger';
+  apparatusVersion: string = DeviceType.AtomTag;
+  apparatusSensorType = ApparatusSensorType.Geiger;
   apparatusTubeType = 'SBM-20';
 
   params: DeviceParams = {
@@ -28,9 +24,8 @@ export class DeviceAtomTag extends AbstractDevice {
     }
   };
 
-  constructor(rawDevice: RawDevice) {
+  constructor(rawDevice: RawBLEDevice) {
     super(rawDevice);
-    this.apparatusVersion = DeviceType.AtomTag;
     if (rawDevice.advertising instanceof ArrayBuffer) {
       const data = new Uint8Array(rawDevice.advertising);
       this.batteryLevel = data[28];

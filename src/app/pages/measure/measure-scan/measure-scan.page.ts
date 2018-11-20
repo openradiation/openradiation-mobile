@@ -1,26 +1,15 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
+import { NavigationService } from '../../../services/navigation.service';
 import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
-import {
-  HitsAccuracy,
-  HitsAccuracyThreshold,
-  Measure,
-  PositionAccuracyThreshold
-} from '../../../states/measures/measure';
-import {
-  CancelMeasure,
-  PositionChanged,
-  StartMeasureScan,
-  StartWatchPosition,
-  StopMeasureScan,
-  StopWatchPosition
-} from '../../../states/measures/measures.action';
+import { HitsAccuracy, Measure, MeasureSeries, PositionAccuracyThreshold } from '../../../states/measures/measure';
+import { CancelMeasure, StartMeasureScan, StopMeasureScan } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
 
 @Component({
@@ -32,21 +21,32 @@ export class MeasureScanPage extends AutoUnsubscribePage {
   @Select(MeasuresState.currentMeasure)
   currentMeasure$: Observable<Measure | undefined>;
 
+  @Select(MeasuresState.currentSeries)
+  currentSeries$: Observable<MeasureSeries | undefined>;
+
   @Select(DevicesState.connectedDevice)
   connectedDevice$: Observable<AbstractDevice | undefined>;
 
   hitsAccuracy: HitsAccuracy = HitsAccuracy.Start;
-  hitsAccuracyThreshold = HitsAccuracyThreshold;
   hitsAccuracyWidth = 0;
 
   positionAccuracyThreshold = PositionAccuracyThreshold;
+
+  canEndMeasureScan = false;
+  isMeasureSeries = false;
+
+  currentSeriesMessageMapping = {
+    '=0': _('MEASURE_SERIES.MESSAGE_SCAN.NONE'),
+    '=1': _('MEASURE_SERIES.MESSAGE_SCAN.SINGULAR'),
+    other: _('MEASURE_SERIES.MESSAGE_SCAN.PLURAL')
+  };
 
   url = '/measure/scan';
 
   constructor(
     protected router: Router,
     private store: Store,
-    private navController: NavController,
+    private navigationService: NavigationService,
     private actions$: Actions
   ) {
     super(router);
@@ -54,64 +54,65 @@ export class MeasureScanPage extends AutoUnsubscribePage {
 
   pageEnter() {
     super.pageEnter();
-    this.subscriptions.push(
-      this.currentMeasure$.subscribe(measure => this.updateHitsAccuracy(measure)),
-      this.actions$.pipe(ofActionSuccessful(StopMeasureScan)).subscribe(() =>
-        this.navController.navigateForward(['measure', 'report'], true, {
-          queryParams: { reportScan: true }
-        })
-      )
-    );
+    this.currentSeries$.pipe(take(1)).subscribe(currentSeries => {
+      this.isMeasureSeries = currentSeries !== undefined;
+    });
     this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
       if (connectedDevice) {
+        this.subscriptions.push(
+          this.currentMeasure$.subscribe(measure => this.updateHitsAccuracy(connectedDevice, measure)),
+          this.currentSeries$.subscribe(currentSeries => {
+            if (currentSeries && currentSeries.measures.length > 1) {
+              this.canEndMeasureScan = true;
+            }
+          }),
+          this.actions$.pipe(ofActionSuccessful(StopMeasureScan)).subscribe(() => {
+            this.navigationService.navigateRoot(['measure', this.isMeasureSeries ? 'report-series' : 'report']);
+          }),
+          this.actions$.pipe(ofActionSuccessful(CancelMeasure)).subscribe(() =>
+            this.navigationService.navigateRoot([
+              'tabs',
+              {
+                outlets: {
+                  home: 'home',
+                  history: null,
+                  settings: null,
+                  map: null,
+                  other: null
+                }
+              }
+            ])
+          )
+        );
         this.store.dispatch(new StartMeasureScan(connectedDevice)).subscribe();
       }
     });
-    this.actions$.pipe(ofActionSuccessful(CancelMeasure)).subscribe(() =>
-      this.navController.navigateRoot([
-        'tabs',
-        {
-          outlets: {
-            home: 'home',
-            history: null,
-            settings: null,
-            map: null,
-            other: null
-          }
-        }
-      ])
-    );
   }
 
-  updateHitsAccuracy(measure?: Measure) {
-    if (measure) {
-      if (measure.hitsNumber >= HitsAccuracyThreshold.Accurate) {
+  updateHitsAccuracy(device: AbstractDevice, measure?: Measure) {
+    if (measure && measure.hitsNumber !== undefined) {
+      if (measure.hitsNumber >= device.hitsAccuracyThreshold.accurate) {
+        this.canEndMeasureScan = true;
         this.hitsAccuracy = HitsAccuracy.Accurate;
-      } else if (measure.hitsNumber >= HitsAccuracyThreshold.Good) {
+      } else if (measure.hitsNumber >= device.hitsAccuracyThreshold.good) {
         this.hitsAccuracy = HitsAccuracy.Good;
-      } else if (measure.hitsNumber >= HitsAccuracyThreshold.Medium) {
+      } else if (measure.hitsNumber >= device.hitsAccuracyThreshold.medium) {
         this.hitsAccuracy = HitsAccuracy.Medium;
-      } else if (measure.hitsNumber >= HitsAccuracyThreshold.Bad) {
+      } else if (measure.hitsNumber >= device.hitsAccuracyThreshold.bad) {
         this.hitsAccuracy = HitsAccuracy.Bad;
       } else {
         this.hitsAccuracy = HitsAccuracy.Start;
       }
-      this.hitsAccuracyWidth = Math.min((measure.hitsNumber / HitsAccuracyThreshold.Accurate) * 100, 100);
+      this.hitsAccuracyWidth = Math.min((measure.hitsNumber / device.hitsAccuracyThreshold.accurate) * 100, 100);
     }
   }
 
-  stopScan(measure?: Measure) {
-    if (measure && measure.accuracy && measure.accuracy < PositionAccuracyThreshold.Inaccurate) {
-      this.store.dispatch(new StartWatchPosition());
-      this.subscriptions.push(
-        this.actions$.pipe(ofActionSuccessful(PositionChanged)).subscribe(() => {
-          this.store.dispatch(new StopMeasureScan());
-          this.store.dispatch(new StopWatchPosition());
-        })
-      );
-    } else {
-      this.store.dispatch(new StopMeasureScan());
-    }
+  stopScan() {
+    this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
+      if (connectedDevice) {
+        this.store.dispatch(new StopMeasureScan(connectedDevice)).subscribe();
+      }
+    });
   }
 
   cancelMeasure() {

@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { NavController } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
+import { NavigationService } from '../../../services/navigation.service';
 import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
-import { StartMeasure, StartWatchPosition, StopWatchPosition } from '../../../states/measures/measures.action';
+import { StartMeasure } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
 
 @Component({
@@ -29,7 +29,7 @@ export class HomePage extends AutoUnsubscribePage {
     protected router: Router,
     private store: Store,
     private actions$: Actions,
-    private navController: NavController
+    private navigationService: NavigationService
   ) {
     super(router);
 
@@ -38,21 +38,15 @@ export class HomePage extends AutoUnsubscribePage {
 
   pageEnter() {
     super.pageEnter();
-    this.store.dispatch(new StartWatchPosition());
     this.subscriptions.push(
       this.actions$
         .pipe(ofActionSuccessful(StartMeasure))
-        .subscribe(() => this.navController.navigateRoot(['measure', 'scan']))
+        .subscribe(() => this.navigationService.navigateRoot(['measure', 'scan']))
     );
   }
 
-  pageLeave() {
-    super.pageLeave();
-    this.store.dispatch(new StopWatchPosition());
-  }
-
   goToDevices() {
-    this.navController.navigateForward([
+    this.navigationService.navigateForward([
       'tabs',
       {
         outlets: {
@@ -66,7 +60,6 @@ export class HomePage extends AutoUnsubscribePage {
   startMeasure() {
     this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
       if (connectedDevice) {
-        this.store.dispatch(new StopWatchPosition());
         this.store.dispatch(new StartMeasure(connectedDevice));
       }
     });

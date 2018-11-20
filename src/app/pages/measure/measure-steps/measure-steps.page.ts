@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
-import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
+import { NavigationService } from '../../../services/navigation.service';
 import { Measure } from '../../../states/measures/measure';
 import { MeasuresState } from '../../../states/measures/measures.state';
 
@@ -17,13 +17,13 @@ export class MeasureStepsPage {
   currentMeasure$: Observable<Measure | undefined>;
 
   constructor(
-    private navController: NavController,
+    private navigationService: NavigationService,
     private socialSharing: SocialSharing,
     private translateService: TranslateService
   ) {}
 
   goBack() {
-    this.navController.goBack();
+    this.navigationService.goBack();
   }
 
   shareSteps(measure: Measure) {

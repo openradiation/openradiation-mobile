@@ -1,54 +1,31 @@
+import { DeviceParams, DeviceParamsModel } from './device-params';
+
 export abstract class AbstractDevice {
   abstract readonly deviceType: DeviceType;
   apparatusVersion: string;
-  apparatusId: string;
+  apparatusId?: string;
   sensorUUID: string;
-  apparatusSensorType: string;
-  apparatusTubeType: string;
+  apparatusSensorType: ApparatusSensorType;
+  apparatusTubeType?: string;
   params?: DeviceParams;
   paramsModel?: DeviceParamsModel;
   batteryLevel?: number;
+  hitsAccuracyThreshold = {
+    bad: 4,
+    medium: 15,
+    good: 30,
+    accurate: 50
+  };
+}
 
-  constructor(rawDevice: RawDevice) {
-    this.sensorUUID = rawDevice.id;
-  }
+export enum ApparatusSensorType {
+  Geiger = 'geiger',
+  Photodiode = 'photodiode'
 }
 
 export enum DeviceType {
   OGKit = 'OG-KIT1',
-  AtomTag = 'AtomTag'
+  AtomTag = 'AtomTag',
+  SafeCast = 'bGeigieBLE',
+  PocketGeiger = 'Pocket Geiger Type 6'
 }
-
-export interface RawDevice {
-  name: string;
-  id: string;
-  advertising: ArrayBuffer | { kCBAdvDataManufacturerData: ArrayBuffer };
-  rssi: number;
-  characteristics?: {
-    characteristic: string;
-    properties: string[];
-    descriptors: any[];
-    service: string;
-  }[];
-}
-
-export interface DeviceParams {
-  [K: string]: DeviceParamValue;
-}
-
-export interface DeviceParamsModel {
-  [K: string]: DeviceParamModel;
-}
-
-export interface DeviceParamModel {
-  label: string;
-  type: DeviceParamType;
-}
-
-export enum DeviceParamType {
-  String,
-  Boolean,
-  Number
-}
-
-export type DeviceParamValue = string | boolean | number;

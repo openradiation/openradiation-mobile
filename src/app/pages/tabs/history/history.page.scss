@@ -1,8 +1,8 @@
 ion-content {
   --padding-top: 10px;
-  --padding-end: 10px;
+  --padding-end: 0px;
   --padding-bottom: 10px;
-  --padding-start: 10px;
+  --padding-start: 0px;
 }
 
 .empty-list {
@@ -16,52 +16,4 @@ ion-content {
   font-weight: 200;
   font-size: 20px;
   text-align: center;
-}
-
-ion-item {
-  --inner-padding-end: 0;
-  --padding-start: 8px;
-
-  ion-label {
-    .label-container {
-      display: flex;
-      justify-content: center;
-      color: white;
-      text-align: center;
-      flex-direction: column;
-
-      .title {
-        display: flex;
-        align-items: center;
-        font-size: 14px;
-      }
-
-      .subtile {
-        font-size: 10px;
-        white-space: normal;
-        text-align: left;
-        padding-left: 4px;
-        font-style: italic;
-      }
-    }
-
-    .date {
-      width: 130px;
-    }
-
-    .value {
-      margin-left: 20px;
-    }
-  }
-
-  .state,
-  .spinner {
-    padding-right: 18px;
-  }
-
-  .inner-button {
-    z-index: 10;
-    --padding-start: 10px;
-    --padding-end: 10px;
-  }
 }

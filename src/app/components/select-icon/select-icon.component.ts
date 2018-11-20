@@ -16,6 +16,7 @@ import { SelectIconOption } from './select-icon-option';
 })
 export class SelectIconComponent implements ControlValueAccessor {
   selectedOption: SelectIconOption | undefined;
+  isDisabled: boolean;
 
   @Input()
   title?: string;
@@ -23,10 +24,11 @@ export class SelectIconComponent implements ControlValueAccessor {
   @Input()
   options: SelectIconOption[];
 
-  // Function to call when the rating changes.
+  @Input()
+  required?: boolean;
+
   private onChange = (option: any) => {};
 
-  // Function to call when the input is touched (when a star is clicked).
   private onTouched = () => {};
 
   registerOnChange(fn: (option: any) => void): void {
@@ -37,8 +39,13 @@ export class SelectIconComponent implements ControlValueAccessor {
     this.onTouched = fn;
   }
 
-  writeValue(option: SelectIconOption): void {
-    this.selectedOption = this.selectedOption === option ? undefined : option;
+  writeValue(value: any): void {
+    const selectedOption = this.options.find(option => option.value === value);
+    this.selectedOption = this.selectedOption === selectedOption ? undefined : selectedOption;
     this.onChange(this.selectedOption ? this.selectedOption.value : undefined);
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.isDisabled = isDisabled;
   }
 }

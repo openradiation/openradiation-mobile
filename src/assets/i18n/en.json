@@ -1,16 +1,16 @@
 {
   "ABOUT": {
     "MEASURE": {
-      "NOTICE": null,
-      "TITLE": "Radioactivity measure"
+      "NOTICE": "The OpenRadiation application, connected to the OpenRadiation sensor via Bluetooth (see compatible sensors on <a target=\"_blank\" href=\"https://www.openradiation.org\">www.openradiation.org</a>, can be used to measure radioactivity as well as contribute to a citizen science project, by helping to create the OpenRadiation collaborative base, and improve the knowledge of radioactivity in the environment. We suggest that you create a user account at <a target=\"_blank\" href=\"https://www.openradiation.org/user/register\">www.openradiation.org</a>, and then configure this account in the application and activate automatic measurement publications (under the settings menu).",
+      "TITLE": "Radioactivity measurement"
     },
     "MEASURES_HOW_TO": {
-      "NOTICE": null,
-      "TITLE": "How to measure ?"
+      "NOTICE": "Turn on your sensor, start the application, and connect the sensor via Bluetooth. OpenRadiation is a data base aiming to map environmental radioactivity. To ensure that the data received is homogeneous, comparable and as representative as possible, your measurements published on OpenRadiation must ideally be taken outdoors, if possible at a distance from housing, and with the sensor at a height of approximately 1 m above the ground. The longer the measurement, the more precise the measurement and hence the statistics: an indicator reflects the reliability of the measurement as you take it. After completing the measurement, you can qualify the local environment (indoors, in a plane, on a road, in a rural area, in town) and enter additional information before publishing the data. This information can be used to appraise the reliability of the measurement more precisely.",
+      "TITLE": "How can you take measurements?"
     },
     "OPENRADIATION_PROJECT": {
-      "NOTICE": null,
-      "TITLE": "OpenRadiation project"
+      "NOTICE": "OpenRadiation is a collaborative project with the following partners: IFFO-RME - training network in major educational risks -, IRSN - public expert in research and expertise on nuclear and radiological risks -, Planète Sciences – association contributing to the scientific and technical culture of young people - and SORBONNE UNIVERSITE and the fablab PMClab in particular.<br/>Find out more at:  <a target=\"_blank\" href=\"https://www.openradiation.org/en/about-us\">www.openradiation.org/en/about-us</a>.",
+      "TITLE": "The OpenRadiation project"
     },
     "TITLE": "About"
   },
@@ -23,10 +23,11 @@
   "GENERAL": {
     "ADD_TAG": "Add tag",
     "AVAILABLE": "Available",
+    "BACK": "Back",
     "CANCEL": "Cancel",
     "CLICK_HERE": "Click here",
     "CONNECTED": "Connected",
-    "CONNEXION_ERROR": "Connexion error: {message}",
+    "CONNEXION_ERROR": "Connection error: {{message}}",
     "DATE": "Date",
     "END": "End",
     "GOOD": "Good",
@@ -43,19 +44,25 @@
   },
   "HISTORY": {
     "DELETE": {
-      "NOTICE": "Are you sure you wish to delete this measure ?"
+      "NOTICE": "Are you sure you wish to delete this measurement?"
     },
     "DELETE_ALL": {
-      "NOTICE": null,
-      "TITLE": "Are you sure you wish to delete all measures ?"
-    },
-    "MESSAGE_PREVENT_MEASURE_SENDING": "Invalid measurement position, it can not be sent.",
-    "NO_MEASURE": "No saved<br>measure",
-    "SEND": {
       "NOTICE": "By deleting your measurements, you clean your entire history but you do not delete the published data from the OpenRadiation base.",
-      "TITLE": "Are you sure you wish to send this measure ?"
+      "TITLE": "Are you sure you wish to delete all measurements?"
     },
-    "SEND_ERROR": "Could not send measure, please check your connection.",
+    "MEASURE_SERIES": {
+      "PLURAL": "{{count}} measurements",
+      "SINGULAR": "{{count}} measurement"
+    },
+    "MESSAGE_PREVENT_MEASURE_SENDING": "Invalid measurement geolocation, it can not be sent",
+    "MESSAGE_PREVENT_SERIES_SENDING": "No measure in the series can be sent",
+    "MESSAGE_SPEED": "High speed, selection of a measurement environment is mandatory",
+    "NO_MEASURE": "No saved<br>measurement",
+    "SEND": {
+      "NOTICE": "By sending this measurement, you accept that all data corresponding to this measurement (including your GPS position, your user name etc.) will be published in the OpenRadiation base.",
+      "TITLE": "Are you sure you wish to send this measurement?"
+    },
+    "SEND_ERROR": "Could not send measurement, please check your connection.",
     "SENT": "Sent",
     "TITLE": "History"
   },
@@ -71,28 +78,28 @@
   },
   "LEGAL_NOTICE": {
     "EDITOR": {
-      "NOTICE": null,
-      "TITLE": "Editor"
+      "NOTICE": "The OpenRadiation application was mainly developed by IRSN, Sorbonne Université, Agoralogie and ITLink. Do not hesitate to pass on any comments you may wish to make on this application. The application code is published as an <a target=\"_blank\" href=\"https://www.openradiation.org/en/developers\">open source code</a>.<br>Check out comprehensive legal texts and contact information at <a target=\"_blank\" href=\"https://www.openradiation.org/en/legal-notice\">www.openradiation.org/en/legal-notice</a>.<br><br>Current version : {{APP_NAME_VERSION}}.",
+      "TITLE": "Publisher"
     },
     "MEASURES_PRECAUTIONS": {
-      "NOTICE": null,
-      "TITLE": "Precautions regarding measures"
+      "NOTICE": "The OpenRadiation base is a citizen data base created using unprocessed unfiltered values. OpenRadiation partners cannot be held liable for the values shown and the consequences of any interpretation or use of these values. In addition, the measurements taken with the OpenRadiation application correspond to environmental measurements taken at a given point in time and in specific conditions. These measurements are not necessarily representative of your long-term exposure to ionising radiation.",
+      "TITLE": "Precautions for measurements"
     },
     "TERMS_OF_USE": {
-      "NOTICE": null,
+      "NOTICE": "You are considered to participate in the OpenRadiation collaborative data base if you publish measurements using the smartphone application, either automatically or manually.<br>The purpose of the OpenRadiation project is to create a collaborative data base on ambient radioactivity levels, therefore all users of the mobile application explicitly accept to share the data recorded, whether published automatically or manually.<br>The entire OpenRadiation data base is published under the <a target=\"_blank\" href=\"https://www.openradiation.org/en/terms-use#odc_odbl\">ODC-ODbL (Open Database License)</a>. Most of the data submitted is used to create the OpenRadiation data base.<br>You agree to comply with current legislation, particularly copyright. Using the OpenRadiation data base implies compliance with ethical rules (no insults, respect for privacy, etc.).<br>OpenRadiation reserves the right to delete any content reported and which fails to comply with the above instructions, without need for a warning.<br>You can find full details of the conditions of use at the following website address: <a target=\"_blank\" href=\"https://www.openradiation.org/en/terms-use\">www.openradiation.org/en/terms-use</a>.",
       "TITLE": "Terms of use"
     },
-    "TITLE": "Legal notice"
+    "TITLE": "Legal text"
   },
   "LOG_IN": {
-    "LOGGED_AS": "Logged as",
+    "LOGGED_AS": "Identified as ",
     "LOG_OUT": "Log out",
     "NOTICE": {
-      "PART1": null,
-      "PART2": null,
-      "PART3": null
+      "PART1": "If you have a user account at <a target=\"_blank\" href=\"https://www.openradiation.org\">www.openradiation.org</a>, you can enter your account identifiers (user name and password) here. You can then associate your published measurements with your user account: in this way, you will be able to find all of your measurements easily via <a target=\"_blank\" href=\"https://www.openradiation.org\">www.openradiation.org</a>.",
+      "PART2": "You can also add tags, or a description, to your measurement. Furthermore, by publishing measurements after logging in, you boost the reliability of the OpenRadiation collaborative data base.",
+      "PART3": "If you have not already done so, we suggest that you create an account at <a target=\"_blank\" href=\"https://www.openradiation.org/en/user/register\">www.openradiation.org</a>, and then configure your account here (synchronization ~5 min)."
     },
-    "NOT_LOGGED": "Not logged",
+    "NOT_LOGGED": "Unidentified",
     "PASSWORD": "Password",
     "TITLE": "Log in",
     "USERNAME": "Username",
@@ -100,15 +107,15 @@
     "WRONG_CREDENTIALS": "Wrong credentials"
   },
   "MAP": {
-    "NO_CONNECTION": "No connexion available to display the map"
+    "NO_CONNECTION": "No connection available to display the map"
   },
   "MEASURES": {
-    "AUTO_PUBLISH": "Auto publish measures",
-    "AUTO_PUBLISH_TITLE": "Auto publish",
+    "AUTO_PUBLISH": "Auto publications",
     "AUTO_PUBLISH_NOTICE": {
-      "PART1": null,
-      "PART2": null
+      "PART1": "If you activate automatic measurement publications, your measurements and the associated data will be automatically sent to the OpenRadiation collaborative base, and published under a <a target=\"_blank\" href=\"https://www.openradiation.org/en/terms-use#odc_odbl\">ODC-ODbL (Open Database License)</a>.",
+      "PART2": "The data transmitted include the data you enter, and information on the model and identifier for the model and/or the telephone used, your user name, and the GPS position at the time of the measurement (see details at <a target=\"_blank\" href=\"https://www.openradiation.org/en/terms-use\">www.openradiation.org/en/terms-use</a>)."
     },
+    "AUTO_PUBLISH_TITLE": "Auto publications",
     "DESCRIPTION": "Description",
     "DOSE_RATE": "Dose rate",
     "DOSE_RATE_UNIT": "μSv/h",
@@ -119,28 +126,28 @@
       "INSIDE": "Inside",
       "ON_THE_ROAD": "On the road",
       "PLANE": "Plane",
-      "TITLE": "Measure environment"
+      "TITLE": "Measurement environment"
     },
     "EXPERT": "Expert",
     "EXPERT_MODE": "Expert mode",
-    "FIABILITY": "Fiability",
-    "HITS_NUMBER": "Nb. hits",
-    "HITS_PER_MIN": "Nb. hits/min",
-    "INIT": "Initialisation",
-    "MEASURE": "Measure",
-    "MEASURE_START": "Measure start",
-    "ONGOING": "Ongoing measure",
-    "REPPORT_LATITUDE": "Latitude",
-    "REPPORT_LONGITUDE": "Longitude",
+    "FIABILITY": "Reliability",
+    "HITS_NUMBER": "No. of counts",
+    "HITS_PER_MIN": "No. of counts/min.",
+    "INIT": "Start-up",
+    "MEASURE": "Measurement",
+    "MEASURE_START": "Measurement start",
+    "ONGOING": "Measurement in progress",
+    "REPORT_LATITUDE": "Latitude",
+    "REPORT_LONGITUDE": "Longitude",
     "SENSOR_POSITION": {
-      "1_METER_HIGH": "1 meter high",
-      "FLOOR": "Au sol",
+      "1_METER_HIGH": "1 m above the ground",
+      "FLOOR": "On the ground",
       "TITLE": "Sensor position"
     },
     "SENSOR_TEMPERATURE": "Sensor temperature",
     "TAG_LIST": "Tag list",
     "TEMPERATURE": "T° (°C)",
-    "TITLE": "Measure",
+    "TITLE": "Measurement",
     "VOLTAGE": "Voltage (V)",
     "WEATHER": {
       "NO_RAIN": "No rain",
@@ -149,36 +156,72 @@
     }
   },
   "MEASURE_MANUAL": {
-    "ALERT": "You need to log in in order to make a manual measure.",
-    "TITLE": "Manual measure"
+    "ALERT": "You must be logged in before you can fill out a manual measurement report.",
+    "TITLE": "Manual input"
+  },
+  "MEASURE_SERIES": {
+    "ALERT": "You must be logged in before you can start a measurement series.",
+    "HITS_NUMBER": "Minimum no. of counts",
+    "MEASURES_DURATION": "Minimum duration",
+    "MEASURES_TITLE": "Measurements",
+    "MESSAGE_SCAN": {
+      "NONE": "First measurement in progress",
+      "PLURAL": "{{count}} measurements taken since {{duration}}",
+      "SINGULAR": "One measurement taken since {{duration}}"
+    },
+    "REPORT": {
+      "FIRST_MEASURE-TIME": "Beginning of the first measurement",
+      "HITS_AVERAGE": "Average hits number",
+      "MEASURE_NUMBER": "Number of measurements",
+      "SERIES_DURATION": "Total duration of measurements",
+      "VALUE_AVERAGE": "Average measures"
+    },
+    "SERIES_DURATION": "Measurement series duration",
+    "SERIES_TITLE": "Series",
+    "TITLE": "Measurement series"
   },
   "POSITION": {
+    "BACKGROUND": {
+      "TEXT": "Measurements location tracking",
+      "TITLE": "Open Radiation"
+    },
     "DENIED_ALWAYS": {
-      "NOTICE": "Phone position is required for for sending measure to OpenRadiation database. Please accept the permission.",
-      "TITLE": "Position - Permission denied"
+      "NOTICE": {
+        "ANDROID": "Phone geolocation is required to send measurement to OpenRadiation base. Please accept the permission.",
+        "IOS": "Phone geolocation is required to send measurement to OpenRadiation base. Please accept the permission on \"Always\" mode."
+      },
+      "TITLE": "Geolocation - Permission denied"
     },
     "GPS_DISABLED": {
-      "NOTICE_ANDROID": "Phone position is required for sending measure to OpenRadiation database. Please enable GPS on \"High Accuracy\" mode.",
-      "NOTICE_IOS": "Phone position is required for sending measure to OpenRadiation database",
-      "TITLE": "Position - GPS disabled"
+      "NOTICE": {
+        "ANDROID": "Phone geolocation is required to send measurement to OpenRadiation base. Please enable GPS on \"High Accuracy\" mode.",
+        "IOS": "Phone geolocation is required to send measurement to OpenRadiation base"
+      },
+      "TITLE": "Geolocation - GPS disabled"
     }
   },
   "SENSORS": {
     "CONNECTION_LOST": "Connection lost with the sensor",
     "DETAILS": "Details",
-    "LIST": "Sensors list",
+    "LIST": "List of sensors",
     "PARAM": {
       "AUDIO_HITS": "Audio signal on hits",
       "VIBRATION_HITS": "Vibration on hits",
       "VISUAL_HITS": "Visual signal on hits"
     },
-    "SEARCH": "Looking for sensors",
+    "SEARCH": "Scanning for sensors",
     "TITLE": "Sensors",
     "TUBE_TYPE": "Tube type: ",
     "TYPE": "Sensor type: ",
-    "VERSION": "Version: "
+    "VERSION": "Identifier: "
   },
   "SETTINGS": {
     "TITLE": "Settings"
+  },
+  "USB": {
+    "USB_PERMISSION": {
+      "NOTICE": "You need to accept the permission in order to use the USB sensor.",
+      "TITLE": "USB - Permission denied"
+    }
   }
 }

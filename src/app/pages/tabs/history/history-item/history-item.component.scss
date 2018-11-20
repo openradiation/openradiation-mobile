@@ -1,0 +1,62 @@
+ion-item {
+  --inner-padding-end: 0;
+  --padding-start: 0px;
+
+  ion-label {
+    .label-container {
+      display: flex;
+      color: white;
+      flex-direction: column;
+
+      .title {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        justify-content: space-between;
+
+        .date {
+          width: 130px;
+        }
+      }
+
+      .subtile {
+        font-size: 10px;
+        white-space: normal;
+        text-align: left;
+        font-style: italic;
+      }
+    }
+  }
+
+  .start-content {
+    width: 36px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    &.small {
+      width: 16px;
+    }
+  }
+
+  .end-content {
+    width: 80px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding-right: 8px;
+  }
+
+  .inner-button {
+    z-index: 10;
+    --padding-start: 6px;
+    --padding-end: 6px;
+  }
+}
+
+.series-detail {
+  margin: -16px 0 12px;
+  ion-item {
+    height: 30px;
+  }
+}

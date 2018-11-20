@@ -1,30 +1,28 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
-import { interval, Observable } from 'rxjs';
-import { shareReplay, take, takeUntil, tap } from 'rxjs/operators';
+import { forkJoin, interval, Observable, of } from 'rxjs';
+import { filter, shareReplay, take, takeUntil, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { AbstractDevice, DeviceType } from '../devices/abstract-device';
-import { DeviceAtomTag } from '../devices/device-atom-tag';
-import { DeviceAtomTagService } from '../devices/device-atom-tag.service';
-import { DeviceOGKit } from '../devices/device-og-kit';
-import { DeviceOGKitService } from '../devices/device-og-kit.service';
+import { AbstractDevice, ApparatusSensorType } from '../devices/abstract-device';
 import { DeviceConnectionLost } from '../devices/devices.action';
+import { DevicesService } from '../devices/devices.service';
 import { UserStateModel } from '../user/user.state';
-import { Measure, PositionAccuracyThreshold, Step } from './measure';
-import { ApparatusSensorType, MeasureApi } from './measure-api';
+import { Measure, MeasureSeries, MeasureType, PositionAccuracyThreshold, Step } from './measure';
+import { MeasureApi } from './measure-api';
 import { AddMeasureScanStep, CancelMeasure, StopMeasureScan, UpdateMeasureScanTime } from './measures.action';
+import { PositionService } from './position.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MeasuresService {
   constructor(
-    private deviceOGKitService: DeviceOGKitService,
-    private deviceAtomTagService: DeviceAtomTagService,
     private store: Store,
     private actions$: Actions,
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private devicesService: DevicesService,
+    private positionService: PositionService
   ) {}
 
   startMeasureScan(device: AbstractDevice): Observable<any> {
@@ -42,59 +40,56 @@ export class MeasuresService {
       take(1),
       tap(() =>
         interval(1000)
-          .pipe(takeUntil(stopSignal))
-          .subscribe(() => this.store.dispatch(new UpdateMeasureScanTime(device)))
+          .pipe(
+            takeUntil(stopSignal),
+            filter(() => !this.positionService.isAcquiringPosition)
+          )
+          .subscribe(() => this.store.dispatch(new UpdateMeasureScanTime(device)).subscribe())
       )
     );
   }
 
   private detectHits(device: AbstractDevice, stopSignal: Observable<any>): Observable<Step> {
-    let detectHits: Observable<Step>;
-    switch (device.deviceType) {
-      case DeviceType.OGKit:
-        detectHits = this.deviceOGKitService.startMeasureScan(<DeviceOGKit>device, stopSignal);
-        break;
-      case DeviceType.AtomTag:
-        detectHits = this.deviceAtomTagService.startMeasureScan(<DeviceAtomTag>device, stopSignal);
-        break;
-    }
-    detectHits = detectHits!.pipe(
-      takeUntil(stopSignal),
-      shareReplay()
-    );
-    detectHits.subscribe(step => this.store.dispatch(new AddMeasureScanStep(step, device)));
+    const detectHits = this.devicesService
+      .service(device)
+      .startMeasureScan(device, stopSignal)
+      .pipe(
+        takeUntil(stopSignal),
+        filter(() => !this.positionService.isAcquiringPosition),
+        shareReplay()
+      );
+    detectHits.subscribe(step => this.store.dispatch(new AddMeasureScanStep(step, device)).subscribe());
     return detectHits;
   }
 
   computeRadiationValue(measure: Measure, device: AbstractDevice): number {
-    switch (device.deviceType) {
-      case DeviceType.OGKit:
-        return this.deviceOGKitService.computeRadiationValue(measure);
-      case DeviceType.AtomTag:
-        return this.deviceAtomTagService.computeRadiationValue(measure);
+    return this.devicesService.service(device).computeRadiationValue(measure);
+  }
+
+  publishMeasure(measure: Measure | MeasureSeries): Observable<any> {
+    switch (measure.type) {
+      case MeasureType.Measure: {
+        return this.postMeasure(measure);
+      }
+      case MeasureType.MeasureSeries: {
+        return forkJoin(measure.measures.map(subMeasure => this.postMeasure(subMeasure)));
+      }
     }
   }
 
-  publishMeasure(measure: Measure): Observable<any> {
-    let apparatusSensorType: ApparatusSensorType | undefined;
+  private postMeasure(measure: Measure): Observable<any> {
     if (
       measure.accuracy &&
-      measure.accuracy < PositionAccuracyThreshold.Inaccurate &&
-      (measure.endAccuracy && measure.endAccuracy < PositionAccuracyThreshold.Inaccurate)
+      measure.accuracy < PositionAccuracyThreshold.No &&
+      measure.endAccuracy &&
+      measure.endAccuracy < PositionAccuracyThreshold.No
     ) {
-      if (measure.apparatusSensorType) {
-        if (measure.apparatusSensorType.toLowerCase().includes(ApparatusSensorType.Geiger)) {
-          apparatusSensorType = ApparatusSensorType.Geiger;
-        } else if (measure.apparatusSensorType.toLowerCase().includes(ApparatusSensorType.Photodiode)) {
-          apparatusSensorType = ApparatusSensorType.Photodiode;
-        }
-      }
       const payload: MeasureApi = {
         apiKey: environment.API_KEY,
         data: {
           apparatusId: measure.apparatusId,
           apparatusVersion: measure.apparatusVersion,
-          apparatusSensorType: apparatusSensorType,
+          apparatusSensorType: this.formatApparatusSensorType(measure.apparatusSensorType),
           apparatusTubeType: measure.apparatusTubeType,
           temperature: measure.temperature ? Math.round(measure.temperature) : undefined,
           value: measure.value,
@@ -131,7 +126,18 @@ export class MeasuresService {
       };
       return this.httpClient.post(environment.API_URI, payload);
     } else {
-      throw new Error('missing Lat and long in measure');
+      return of(null);
     }
+  }
+
+  private formatApparatusSensorType(apparatusSensorType?: string): ApparatusSensorType | undefined {
+    if (apparatusSensorType !== undefined) {
+      if (apparatusSensorType.includes(ApparatusSensorType.Geiger)) {
+        return ApparatusSensorType.Geiger;
+      } else if (apparatusSensorType.includes(ApparatusSensorType.Photodiode)) {
+        return ApparatusSensorType.Photodiode;
+      }
+    }
+    return undefined;
   }
 }

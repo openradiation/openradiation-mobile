@@ -1,18 +1,16 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { Diagnostic } from '@ionic-native/diagnostic/ngx';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { Router } from '@angular/router';
 import { Network } from '@ionic-native/network/ngx';
 import { Platform } from '@ionic/angular';
-import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
+import { Select } from '@ngxs/store';
+import { Location } from 'cordova-plugin-mauron85-background-geolocation';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { UserState } from '../../../states/user/user.state';
-import { PositionChanged, StartWatchPosition, StopWatchPosition } from '../../../states/measures/measures.action';
-import { MeasuresStateModel } from '../../../states/measures/measures.state';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
-import { Router } from '@angular/router';
+import { MeasuresState } from '../../../states/measures/measures.state';
+import { UserState } from '../../../states/user/user.state';
 
 /**
  * Constants from cordova-plugin-network-information to get network types
@@ -27,6 +25,8 @@ declare var Connection: any;
 export class MapPage extends AutoUnsubscribePage {
   @Select(UserState.language)
   language$: Observable<string | undefined>;
+  @Select(MeasuresState.currentPosition)
+  currentPosition$: Observable<Location | undefined>;
 
   iframeURL: SafeResourceUrl;
   isLoading = false;
@@ -38,12 +38,8 @@ export class MapPage extends AutoUnsubscribePage {
   constructor(
     protected router: Router,
     private domSanitizer: DomSanitizer,
-    private geolocation: Geolocation,
-    private diagnostic: Diagnostic,
     private platform: Platform,
     private network: Network,
-    private store: Store,
-    private actions$: Actions,
     private changeDetectorRef: ChangeDetectorRef
   ) {
     super(router);
@@ -70,25 +66,23 @@ export class MapPage extends AutoUnsubscribePage {
   }
 
   private loadMap() {
-    this.isLoading = true;
-    // TODO: put the language in the url when the API will be fixed
-    let url = `${environment.IN_APP_BROWSER_URI.base}/${environment.IN_APP_BROWSER_URI.suffix}`;
-    this.store.dispatch(new StartWatchPosition());
-    this.subscriptions.push(
-      this.actions$.pipe(ofActionSuccessful(PositionChanged)).subscribe(() => {
-        const position = this.store.selectSnapshot(
-          ({ measures }: { measures: MeasuresStateModel }) => measures.currentPosition!.coords
-        );
-        const lat = position.latitude.toFixed(7);
-        const long = position.longitude.toFixed(7);
-        const zoom = 12;
-        url += `/${zoom}/${lat}/${long}`;
-        this.store.dispatch(new StopWatchPosition());
-        this.iframeURL = this.domSanitizer.bypassSecurityTrustResourceUrl(url);
-        this.changeDetectorRef.markForCheck();
-      })
-    );
-    this.iframeURL = this.domSanitizer.bypassSecurityTrustResourceUrl(url);
+    this.language$.subscribe(language => {
+      this.isLoading = true;
+      let url = `${environment.IN_APP_BROWSER_URI.base}${
+        language === 'fr' || language === 'en' ? '/' + language : ''
+      }/${environment.IN_APP_BROWSER_URI.suffix}`;
+      this.iframeURL = this.domSanitizer.bypassSecurityTrustResourceUrl(url);
+      this.currentPosition$.pipe(take(1)).subscribe(currentPosition => {
+        if (currentPosition) {
+          const lat = currentPosition.latitude.toFixed(7);
+          const long = currentPosition.longitude.toFixed(7);
+          const zoom = 12;
+          url += `/${zoom}/${lat}/${long}`;
+          this.iframeURL = this.domSanitizer.bypassSecurityTrustResourceUrl(url);
+          this.changeDetectorRef.markForCheck();
+        }
+      });
+    });
   }
 
   mapLoaded() {
@@ -102,6 +96,5 @@ export class MapPage extends AutoUnsubscribePage {
   pageLeave() {
     super.pageLeave();
     this.isLoading = false;
-    this.store.dispatch(new StopWatchPosition());
   }
 }

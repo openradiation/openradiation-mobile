@@ -5,15 +5,19 @@ import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { AccordionComponent } from './accordion/accordion.component';
 import { CategoryLabelComponent } from './category-label/category-label.component';
-import { DurationPipe } from './duration/duration.pipe';
 import { GpsIndicatorComponent } from './gps-indicator/gps-indicator.component';
 import { HeaderComponent } from './header/header.component';
+import { PhotoComponent } from './photo/photo.component';
+import { DosePipe } from './pipes/dose/dose.pipe';
+import { DurationPipe } from './pipes/duration/duration.pipe';
+import { HitNumberPerMinPipe } from './pipes/hit-number-per-min/hit-number-per-min.pipe';
+import { HitNumberPipe } from './pipes/hit-number/hit-number.pipe';
 import { RoundButtonComponent } from './round-button/round-button.component';
 import { SelectIconComponent } from './select-icon/select-icon.component';
 import { TagListComponent } from './tag-list/tag-list.component';
 
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule.forRoot(), TranslateModule],
+  imports: [CommonModule, FormsModule, IonicModule, TranslateModule],
   declarations: [
     HeaderComponent,
     CategoryLabelComponent,
@@ -21,8 +25,12 @@ import { TagListComponent } from './tag-list/tag-list.component';
     RoundButtonComponent,
     GpsIndicatorComponent,
     DurationPipe,
+    HitNumberPerMinPipe,
+    HitNumberPipe,
+    DosePipe,
     SelectIconComponent,
-    TagListComponent
+    TagListComponent,
+    PhotoComponent
   ],
   exports: [
     HeaderComponent,
@@ -31,8 +39,12 @@ import { TagListComponent } from './tag-list/tag-list.component';
     RoundButtonComponent,
     GpsIndicatorComponent,
     DurationPipe,
+    HitNumberPerMinPipe,
+    HitNumberPipe,
+    DosePipe,
     SelectIconComponent,
-    TagListComponent
+    TagListComponent,
+    PhotoComponent
   ],
   entryComponents: []
 })

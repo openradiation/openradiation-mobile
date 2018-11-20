@@ -1,3 +1,5 @@
+import { ApparatusSensorType } from '../devices/abstract-device';
+
 export interface MeasureApi {
   apiKey: string;
   data: {
@@ -37,9 +39,4 @@ export interface MeasureApi {
     measurementEnvironment?: string;
     rain?: boolean;
   };
-}
-
-export enum ApparatusSensorType {
-  Geiger = 'geiger',
-  Photodiode = 'photodiode'
 }
