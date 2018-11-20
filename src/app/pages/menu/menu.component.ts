@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { MenuController, NavController } from '@ionic/angular';
+import { MenuController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
 import { AlertService } from '../../services/alert.service';
+import { NavigationService } from '../../services/navigation.service';
 import { AbstractDevice } from '../../states/devices/abstract-device';
 import { DevicesState } from '../../states/devices/devices.state';
 import { StartManualMeasure, StartMeasureSeriesParams } from '../../states/measures/measures.action';
@@ -30,7 +31,7 @@ export class MenuComponent {
   constructor(
     private menuController: MenuController,
     private router: Router,
-    private navController: NavController,
+    private navigationService: NavigationService,
     private store: Store,
     private actions$: Actions,
     private alertService: AlertService,
@@ -42,10 +43,10 @@ export class MenuComponent {
     });
     this.actions$
       .pipe(ofActionSuccessful(StartManualMeasure))
-      .subscribe(() => this.navController.navigateRoot(['measure', 'report'], true));
+      .subscribe(() => this.navigationService.navigateRoot(['measure', 'report']));
     this.actions$
       .pipe(ofActionSuccessful(StartMeasureSeriesParams))
-      .subscribe(() => this.navController.navigateRoot(['measure', 'series'], true));
+      .subscribe(() => this.navigationService.navigateRoot(['measure', 'series']));
     this.canStartMeasure = this.connectedDevice$.pipe(map(connectedDevice => connectedDevice !== undefined));
   }
 
@@ -97,7 +98,7 @@ export class MenuComponent {
         {
           text: this.translateService.instant('LOG_IN.TITLE'),
           handler: () =>
-            this.navController.navigateForward(
+            this.navigationService.navigateForward(
               [
                 'tabs',
                 {

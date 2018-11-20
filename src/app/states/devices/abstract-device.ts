@@ -10,6 +10,12 @@ export abstract class AbstractDevice {
   params?: DeviceParams;
   paramsModel?: DeviceParamsModel;
   batteryLevel?: number;
+  hitsAccuracyThreshold = {
+    bad: 4,
+    medium: 15,
+    good: 30,
+    accurate: 50
+  };
 }
 
 export enum ApparatusSensorType {

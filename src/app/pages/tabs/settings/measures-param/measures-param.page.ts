@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController } from '@ionic/angular';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
+import { NavigationService } from '../../../../services/navigation.service';
 import { DisableAutoPublish, EnableAutoPublish } from '../../../../states/measures/measures.action';
 import { MeasuresState } from '../../../../states/measures/measures.state';
 
@@ -14,7 +14,7 @@ export class MeasuresParamPage {
   @Select(MeasuresState.autoPublish)
   autoPublish$: Observable<boolean>;
 
-  constructor(private navController: NavController, private store: Store) {}
+  constructor(private navigationService: NavigationService, private store: Store) {}
 
   toggleAutoPublish(enable: boolean) {
     if (enable) {
@@ -25,6 +25,6 @@ export class MeasuresParamPage {
   }
 
   goBack() {
-    this.navController.goBack();
+    this.navigationService.goBack();
   }
 }

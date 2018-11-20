@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { NavController } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
+import { NavigationService } from '../../../services/navigation.service';
 import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
 import { StartMeasure } from '../../../states/measures/measures.action';
@@ -29,7 +29,7 @@ export class HomePage extends AutoUnsubscribePage {
     protected router: Router,
     private store: Store,
     private actions$: Actions,
-    private navController: NavController
+    private navigationService: NavigationService
   ) {
     super(router);
 
@@ -41,12 +41,12 @@ export class HomePage extends AutoUnsubscribePage {
     this.subscriptions.push(
       this.actions$
         .pipe(ofActionSuccessful(StartMeasure))
-        .subscribe(() => this.navController.navigateRoot(['measure', 'scan']))
+        .subscribe(() => this.navigationService.navigateRoot(['measure', 'scan']))
     );
   }
 
   goToDevices() {
-    this.navController.navigateForward([
+    this.navigationService.navigateForward([
       'tabs',
       {
         outlets: {

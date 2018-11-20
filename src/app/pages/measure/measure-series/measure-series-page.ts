@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { NavController } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
+import { NavigationService } from '../../../services/navigation.service';
 import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
 import { MeasureSeriesParamsSelected, PositionAccuracyThreshold } from '../../../states/measures/measure';
@@ -26,10 +26,12 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
   positionAccuracyThreshold = PositionAccuracyThreshold;
   measureSeriesParamsSelected = MeasureSeriesParamsSelected;
 
+  private paramSelected: MeasureSeriesParamsSelected;
+
   constructor(
     protected router: Router,
     private store: Store,
-    private navController: NavController,
+    private navigationService: NavigationService,
     private actions$: Actions,
     private formBuilder: FormBuilder
   ) {
@@ -42,13 +44,14 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
       ({ measures }: { measures: MeasuresStateModel }) => measures
     );
     if (measureSeriesParams) {
+      this.paramSelected = measureSeriesParams.model.paramSelected;
       this.measureSeriesParamsForm = this.formBuilder.group({
         ...measureSeriesParams.model
       });
     }
     this.subscriptions.push(
       this.actions$.pipe(ofActionSuccessful(CancelMeasure)).subscribe(() =>
-        this.navController.navigateRoot([
+        this.navigationService.navigateRoot([
           'tabs',
           {
             outlets: {
@@ -63,7 +66,7 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
       ),
       this.actions$
         .pipe(ofActionSuccessful(StartMeasure))
-        .subscribe(() => this.navController.navigateRoot(['measure', 'scan']))
+        .subscribe(() => this.navigationService.navigateRoot(['measure', 'scan']))
     );
   }
 
@@ -79,5 +82,15 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
 
   cancelMeasureSeries() {
     this.store.dispatch(new CancelMeasure());
+  }
+
+  onParamSelectedChange(value: Event) {
+    if (this.measureSeriesParamsForm) {
+      if (value.srcElement && value.srcElement.tagName.toLowerCase() === 'ion-radio-group') {
+        this.paramSelected = this.measureSeriesParamsForm.value.paramSelected;
+      } else {
+        this.measureSeriesParamsForm.get('paramSelected')!.setValue(this.paramSelected);
+      }
+    }
   }
 }

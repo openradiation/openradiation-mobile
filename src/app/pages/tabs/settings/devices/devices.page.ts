@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { NavController, Platform } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
 import { Actions, ofActionDispatched, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { AutoUnsubscribePage } from '../../../../components/auto-unsubscribe/auto-unsubscribe.page';
+import { NavigationService } from '../../../../services/navigation.service';
 import { AbstractDevice } from '../../../../states/devices/abstract-device';
 import {
   ConnectDevice,
@@ -40,7 +41,7 @@ export class DevicesPage extends AutoUnsubscribePage {
     protected router: Router,
     private store: Store,
     private actions$: Actions,
-    private navController: NavController,
+    private navigationService: NavigationService,
     private platform: Platform
   ) {
     super(router);
@@ -78,7 +79,7 @@ export class DevicesPage extends AutoUnsubscribePage {
   editDeviceParams(event: Event, device: AbstractDevice) {
     event.stopPropagation();
     this.store.dispatch(new EditDeviceParams(device)).subscribe(() =>
-      this.navController.navigateForward([
+      this.navigationService.navigateForward([
         'tabs',
         {
           outlets: {
@@ -90,6 +91,6 @@ export class DevicesPage extends AutoUnsubscribePage {
   }
 
   goBack() {
-    this.navController.goBack();
+    this.navigationService.goBack();
   }
 }

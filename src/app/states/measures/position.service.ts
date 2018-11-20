@@ -43,17 +43,25 @@ export class PositionService {
         activitiesInterval: 10000,
         maxLocations: 1
       },
-      () => {
-        this.watchPosition();
-        this.requestAuthorization();
-      }
+      () => this.requestAuthorization()
     );
   }
 
   private watchPosition() {
     BackgroundGeolocation.getLocations(positions => {
-      this.store.dispatch(new PositionChanged(positions[0]));
+      if (positions[0]) {
+        this.store.dispatch(new PositionChanged(positions[0]));
+      } else {
+        BackgroundGeolocation.getCurrentLocation(
+          position => this.store.dispatch(new PositionChanged(position)),
+          undefined,
+          {
+            enableHighAccuracy: true
+          }
+        );
+      }
     });
+    BackgroundGeolocation.start();
     BackgroundGeolocation.on('location', position =>
       BackgroundGeolocation.startTask(taskKey => {
         this.store.dispatch(new PositionChanged(position));
@@ -79,13 +87,14 @@ export class PositionService {
         switch (status) {
           case this.diagnostic.permissionStatus.NOT_REQUESTED:
           case this.diagnostic.permissionStatus.DENIED:
-            return this.diagnostic.requestLocationAuthorization();
+            return this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.ALWAYS);
           default:
             return status;
         }
       })
       .then(status => {
         switch (status) {
+          case this.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
           case this.diagnostic.permissionStatus.DENIED_ALWAYS:
             this.onGPSDeniedAlways();
             break;
@@ -103,7 +112,9 @@ export class PositionService {
       .show(
         {
           header: this.translateService.instant('POSITION.DENIED_ALWAYS.TITLE'),
-          message: this.translateService.instant('POSITION.DENIED_ALWAYS.NOTICE'),
+          message: this.platform.is('ios')
+            ? this.translateService.instant('POSITION.DENIED_ALWAYS.NOTICE.IOS')
+            : this.translateService.instant('POSITION.DENIED_ALWAYS.NOTICE.ANDROID'),
           backdropDismiss: false,
           buttons: [
             {
@@ -134,7 +145,7 @@ export class PositionService {
       : this.diagnostic.isLocationEnabled();
     isLocationEnabled.then(enabled => {
       if (enabled) {
-        BackgroundGeolocation.start();
+        this.watchPosition();
       } else {
         this.onGPSDisabled();
       }
@@ -147,8 +158,8 @@ export class PositionService {
         {
           header: this.translateService.instant('POSITION.GPS_DISABLED.TITLE'),
           message: this.platform.is('ios')
-            ? this.translateService.instant('POSITION.GPS_DISABLED.NOTICE_IOS')
-            : this.translateService.instant('POSITION.GPS_DISABLED.NOTICE_ANDROID'),
+            ? this.translateService.instant('POSITION.GPS_DISABLED.NOTICE.IOS')
+            : this.translateService.instant('POSITION.GPS_DISABLED.NOTICE.ANDROID'),
           backdropDismiss: false,
           buttons: [
             {

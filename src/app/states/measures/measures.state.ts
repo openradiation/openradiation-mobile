@@ -3,9 +3,9 @@ import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { Location } from 'cordova-plugin-mauron85-background-geolocation';
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { AbstractDevice } from '../devices/abstract-device';
 import { DateService } from './date.service';
 import {
-  HitsAccuracyThreshold,
   Measure,
   MeasureReport,
   MeasureSeries,
@@ -258,7 +258,8 @@ export class MeasuresState {
       currentMeasure: undefined,
       measureReport: undefined,
       measureSeriesParams: undefined,
-      currentSeries: undefined
+      currentSeries: undefined,
+      measureSeriesReport: undefined
     });
   }
 
@@ -318,8 +319,8 @@ export class MeasuresState {
       patchState({
         currentMeasure: newCurrentMeasure
       });
-      if (currentSeries && this.shouldStopMeasureSeriesCurrentScan(currentSeries, newCurrentMeasure, step.ts)) {
-        return dispatch(new StartNextMeasureSeries());
+      if (currentSeries && this.shouldStopMeasureSeriesCurrentScan(device, currentSeries, newCurrentMeasure, step.ts)) {
+        return dispatch(new StartNextMeasureSeries(device));
       }
     }
     return of(null);
@@ -340,14 +341,18 @@ export class MeasuresState {
           value: this.measuresService.computeRadiationValue(currentMeasure, device)
         }
       });
-      if (currentSeries && this.shouldStopMeasureSeriesCurrentScan(currentSeries, currentMeasure, currentTime)) {
-        return dispatch(new StartNextMeasureSeries());
+      if (
+        currentSeries &&
+        this.shouldStopMeasureSeriesCurrentScan(device, currentSeries, currentMeasure, currentTime)
+      ) {
+        return dispatch(new StartNextMeasureSeries(device));
       }
     }
     return of(null);
   }
 
   private shouldStopMeasureSeriesCurrentScan(
+    device: AbstractDevice,
     measureSeries: MeasureSeries,
     measure: Measure,
     currentTime: number
@@ -357,7 +362,7 @@ export class MeasuresState {
         return (
           currentTime - measure.startTime > measureSeries.params.measureDurationLimit &&
           measure.hitsNumber !== undefined &&
-          measure.hitsNumber > HitsAccuracyThreshold.Accurate
+          measure.hitsNumber > device.hitsAccuracyThreshold.accurate
         );
       case MeasureSeriesParamsSelected.measureHitsLimit:
         return measure.hitsNumber !== undefined && measure.hitsNumber > measureSeries.params.measureHitsLimit;
@@ -396,14 +401,14 @@ export class MeasuresState {
   }
 
   @Action(StopMeasureScan)
-  stopMeasureScan({ getState, patchState }: StateContext<MeasuresStateModel>) {
+  stopMeasureScan({ getState, patchState }: StateContext<MeasuresStateModel>, { device }: StopMeasureScan) {
     const { currentMeasure, currentSeries, currentPosition } = getState();
     if (currentMeasure) {
       let patch: Partial<MeasuresStateModel>;
       const updatedMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
       if (currentSeries) {
         patch = { currentMeasure: undefined };
-        if (updatedMeasure.hitsNumber! >= HitsAccuracyThreshold.Accurate) {
+        if (updatedMeasure.hitsNumber! >= device.hitsAccuracyThreshold.accurate) {
           patch.currentSeries = MeasureSeries.addMeasureToSeries(currentSeries, updatedMeasure);
         }
       } else {
@@ -414,11 +419,14 @@ export class MeasuresState {
   }
 
   @Action(StartNextMeasureSeries)
-  startNextMeasureSeries({ getState, patchState, dispatch }: StateContext<MeasuresStateModel>) {
+  startNextMeasureSeries(
+    { getState, patchState, dispatch }: StateContext<MeasuresStateModel>,
+    { device }: StartNextMeasureSeries
+  ) {
     const { currentMeasure, currentSeries, currentPosition } = getState();
     if (currentMeasure && currentSeries) {
       if (currentMeasure.endTime! - currentSeries.startTime > currentSeries.params.seriesDurationLimit) {
-        return dispatch(new StopMeasureScan());
+        return dispatch(new StopMeasureScan(device));
       } else {
         const updatedMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
         const currentTime = Date.now();
