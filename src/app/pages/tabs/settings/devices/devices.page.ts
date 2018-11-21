@@ -26,8 +26,10 @@ import { DevicesState } from '../../../../states/devices/devices.state';
 export class DevicesPage extends AutoUnsubscribePage {
   @Select(DevicesState.availableDevices)
   availableDevices$: Observable<AbstractDevice[]>;
+  availableDevices: AbstractDevice[] = [];
   @Select(DevicesState.knownDevices)
   knownDevices$: Observable<AbstractDevice[]>;
+  knownDevices: AbstractDevice[] = [];
   @Select(DevicesState.isScanning)
   isScanning$: Observable<boolean>;
   @Select(DevicesState.connectedDevice)
@@ -55,7 +57,9 @@ export class DevicesPage extends AutoUnsubscribePage {
         .subscribe(({ device }: ConnectDevice) => (this.connectingDevice = device)),
       this.actions$
         .pipe(ofActionSuccessful(ConnectDevice, DeviceConnectionLost))
-        .subscribe(() => (this.connectingDevice = undefined))
+        .subscribe(() => (this.connectingDevice = undefined)),
+      this.availableDevices$.subscribe(availableDevices => (this.availableDevices = availableDevices)),
+      this.knownDevices$.subscribe(knownDevices => (this.knownDevices = knownDevices))
     );
     this.store.dispatch(new StartDiscoverBLEDevices()).subscribe();
     if (this.platform.is('android')) {
