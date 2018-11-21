@@ -27,7 +27,7 @@ import { MenuComponent } from './pages/menu/menu.component';
 import { DevicesState } from './states/devices/devices.state';
 import { MeasuresState } from './states/measures/measures.state';
 import { UserState } from './states/user/user.state';
-
+import { SQLite } from '@ionic-native/sqlite/ngx';
 @NgModule({
   declarations: [AppComponent, MenuComponent],
   entryComponents: [],
@@ -64,7 +64,8 @@ import { UserState } from './states/user/user.state';
     SocialSharing,
     Camera,
     BLE,
-    Serial
+    Serial,
+    SQLite
   ],
   bootstrap: [AppComponent]
 })

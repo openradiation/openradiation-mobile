@@ -1,6 +1,6 @@
 import { Action, NgxsOnInit, Selector, State, StateContext } from '@ngxs/store';
 import { tap } from 'rxjs/operators';
-import { LogIn, LogOut, SetLanguage } from './user.action';
+import { RetrieveV1User, LogIn, LogOut, SetLanguage } from './user.action';
 import { UserService } from './user.service';
 
 export interface UserStateModel {
@@ -28,6 +28,7 @@ export class UserState implements NgxsOnInit {
 
   ngxsOnInit({ dispatch }: StateContext<UserStateModel>) {
     dispatch(new SetLanguage());
+    dispatch(new RetrieveV1User());
   }
 
   @Action(LogIn)
@@ -54,5 +55,12 @@ export class UserState implements NgxsOnInit {
   setLanguage({ getState, patchState }: StateContext<UserStateModel>, { language }: SetLanguage) {
     language = language || getState().language || this.userService.getDefaultLanguage();
     return this.userService.setLanguage(language).pipe(tap(() => patchState({ language })));
+  }
+
+  @Action(RetrieveV1User)
+  retrieveV1User({ patchState }: StateContext<UserStateModel>) {
+    this.userService.retrieveV1User().pipe();
+    // this.userService.retrieveV1User().then(value => console.log(value));
+    // then(tap(result => console.log('stateData', result)));
   }
 }
