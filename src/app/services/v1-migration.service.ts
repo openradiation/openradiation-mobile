@@ -91,6 +91,27 @@ export class V1MigrationService {
     this.sqLiteTestInsertUser('connexion', 1, '');
     this.sqLiteTestInsertUser('login', 1, 'user1');
     this.sqLiteTestInsertUser('mdp', 1, '123456789');
+    this.sqLiteTestInsertMeasure(
+      'aa6f1d08-d87e-45e4-8511-d0d0aa04fc3f',
+      'android',
+      '6.0',
+      'E5603',
+      '2018-11-19T15:18:37.371Z',
+      '??', // ??
+      28,
+      66,
+      1.62959753729484,
+      true,
+      '48.1317742',
+      '-1.6217496',
+      '800',
+      '43', // ??
+      '800', // ??
+      'city', // ??
+      1,
+      'tag1', // ??
+      'description test'
+    );
   }
 
   sqLiteTestInsertUser(paramName: string, active: number, text: string) {
@@ -139,7 +160,27 @@ export class V1MigrationService {
     });
   }
 
-  sqLiteTestInsertMeasure(reportUuid: string, devicePlatform: string, deviceVersion: string, deviceModel: string) {
+  sqLiteTestInsertMeasure(
+    reportUuid: string,
+    devicePlatform: string,
+    deviceVersion: string,
+    deviceModel: string,
+    startTime: any,
+    duration: any,
+    temperature: number,
+    nbHit: number,
+    value: number,
+    manualReport: boolean,
+    long: string,
+    lat: string,
+    accuracy: string,
+    altitude: string,
+    altitudeAccuracy: string,
+    env: string,
+    position: number,
+    tags: string,
+    notes: string
+  ) {
     const apparatusInfos = 'undefined","undefined","undefined","undefined","undefined","';
     const db = sqlitePlugin.openDatabase('Database', '1.0', 'OpenRadiation', -1);
     db.transaction((txn: any) => {
@@ -158,7 +199,39 @@ export class V1MigrationService {
           '","' +
           deviceVersion +
           '","' +
-          deviceModel,
+          deviceModel +
+          '","' +
+          startTime +
+          '","' +
+          duration +
+          '","' +
+          temperature +
+          '","' +
+          nbHit +
+          '","' +
+          value +
+          '","' +
+          manualReport +
+          '","' +
+          long +
+          '","' +
+          lat +
+          '","' +
+          accuracy +
+          '","' +
+          altitude +
+          '","' +
+          altitudeAccuracy +
+          '","' +
+          env +
+          '","' +
+          position +
+          '","' +
+          tags +
+          '","' +
+          notes +
+          '","' +
+          '0);',
         [],
         (t: any, insert: any) => {
           console.log('insert ok', insert);
