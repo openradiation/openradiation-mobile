@@ -9,8 +9,7 @@ import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
 import { StartMeasure } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
-
-declare var sqlitePlugin: any;
+import { V1MigrationService } from '../../../services/v1-migration.service';
 
 @Component({
   selector: 'app-page-home',
@@ -31,7 +30,8 @@ export class HomePage extends AutoUnsubscribePage {
     protected router: Router,
     private store: Store,
     private actions$: Actions,
-    private navigationService: NavigationService
+    private navigationService: NavigationService,
+    private v1MigrationService: V1MigrationService
   ) {
     super(router);
 
@@ -59,94 +59,15 @@ export class HomePage extends AutoUnsubscribePage {
     ]);
   }
 
-  sqLiteTest() {
-    const db = sqlitePlugin.openDatabase('Database', '1.0', 'OpenRadiation', -1);
-    db.transaction((txn: any) => {
-      txn.executeSql(
-        'CREATE TABLE IF NOT EXISTS "params" ' +
-          ' ("id" INTEGER PRIMARY KEY AUTOINCREMENT , ' +
-          '  "paramName" VARCHAR,' +
-          '  "active" BOOLEAN not null default 0,' +
-          '  "libre" TEXT);',
-        [],
-        (tx: any, res: any) => {
-          console.log('create ok', res);
-        },
-        (tx: any, res: any) => {
-          console.error('create fail', res);
-        }
-      );
-    });
-    this.sqLiteTestInsert('connexion', 1, '');
-    this.sqLiteTestInsert('login', 1, 'loginUser');
-    this.sqLiteTestInsert('mdp', 1, 'azerty');
-    //this.sqLiteTestSelect();
-  }
-
-  sqLiteTestInsert(paramName: string, active: number, text: string) {
-    const db = sqlitePlugin.openDatabase('Database', '1.0', 'OpenRadiation', -1);
-    db.transaction((txn: any) => {
-      txn.executeSql('SELECT * FROM "params" WHERE paramName="' + paramName + '";', [], (tx: any, res: any) => {
-        if (res.rows.length <= 0) {
-          tx.executeSql(
-            'INSERT INTO "params" ' +
-              '(paramName, active, libre) VALUES("' +
-              paramName +
-              '",' +
-              active +
-              ',"' +
-              text +
-              '");',
-            [],
-            (t: any, insert: any) => {
-              console.log('insert ok', insert);
-            },
-            (t: any, insert: any) => {
-              console.error('insert fail', insert);
-            }
-          );
-        }
-      });
-    });
-  }
-
-  sqLiteTestSelect() {
-    const db = sqlitePlugin.openDatabase('Database', '1.0', 'OpenRadiation', -1);
-    db.transaction((txn: any) => {
-      txn.executeSql(
-        'SELECT * FROM "params";',
-        [],
-        (tx: any, res: any) => {
-          console.log('select ok', res);
-        },
-        (tx: any, res: any) => {
-          console.error('select fail', res);
-        }
-      );
-    });
-  }
-
-  sqLiteTestDelete() {
-    const db = sqlitePlugin.openDatabase('Database', '1.0', 'OpenRadiation', -1);
-    db.transaction((txn: any) => {
-      txn.executeSql(
-        'DELETE FROM "params"',
-        [],
-        function(tx: any, res: any) {
-          console.log('Success', res);
-        },
-        function(tx: any, error: any) {
-          console.error('Error: ' + error.message);
-        }
-      );
-    });
-  }
-
   startMeasure() {
     this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
       if (connectedDevice) {
         this.store.dispatch(new StartMeasure(connectedDevice));
       }
     });
+  }
+
+  sqLiteTest() {
+    this.v1MigrationService.sqLiteTest();
   }
 }

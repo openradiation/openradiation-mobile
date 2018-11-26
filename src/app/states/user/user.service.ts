@@ -1,19 +1,16 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { SQLite, SQLiteObject } from '@ionic-native/sqlite/ngx';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { ErrorResponse, ErrorResponseCode } from '../measures/error-response';
 
-declare var sqlitePlugin: any;
-
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  constructor(private httpClient: HttpClient, private translateService: TranslateService, private sqlite: SQLite) {
+  constructor(private httpClient: HttpClient, private translateService: TranslateService) {
     this.translateService.setDefaultLang('fr');
   }
 
@@ -54,24 +51,5 @@ export class UserService {
 
   getDefaultLanguage(): string {
     return this.translateService.getBrowserLang();
-  }
-
-  retrieveV1User(): Observable<any> {
-    const db = sqlitePlugin.openDatabase('Database', '1.0', 'OpenRadiation', -1);
-    db.transaction((txn: any) => {
-      return txn.executeSql(
-        'SELECT * FROM "params";',
-        [],
-        (tx: any, res: any) => {
-          console.log('select ok', res);
-          return res;
-        },
-        (tx: any, res: any) => {
-          console.error('select fail', res);
-        }
-      );
-    });
-    console.log(db);
-    return db;
   }
 }

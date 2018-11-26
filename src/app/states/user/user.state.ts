@@ -1,20 +1,24 @@
 import { Action, NgxsOnInit, Selector, State, StateContext } from '@ngxs/store';
 import { tap } from 'rxjs/operators';
-import { RetrieveV1User, LogIn, LogOut, SetLanguage } from './user.action';
+import { LogIn, LogOut, RetrieveV1User, SetLanguage } from './user.action';
 import { UserService } from './user.service';
+import { V1MigrationService } from '../../services/v1-migration.service';
 
 export interface UserStateModel {
   login?: string;
   password?: string;
   language?: string;
+  retrieveV1UserCheck: boolean;
 }
 
 @State<UserStateModel>({
   name: 'user',
-  defaults: {}
+  defaults: {
+    retrieveV1UserCheck: false
+  }
 })
 export class UserState implements NgxsOnInit {
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private v1MigrationService: V1MigrationService) {}
 
   @Selector()
   static login({ login }: UserStateModel): string | undefined {
@@ -26,9 +30,12 @@ export class UserState implements NgxsOnInit {
     return language;
   }
 
-  ngxsOnInit({ dispatch }: StateContext<UserStateModel>) {
+  ngxsOnInit({ dispatch, getState }: StateContext<UserStateModel>) {
+    const { retrieveV1UserCheck } = getState();
     dispatch(new SetLanguage());
-    dispatch(new RetrieveV1User());
+    if (!retrieveV1UserCheck) {
+      dispatch(new RetrieveV1User());
+    }
   }
 
   @Action(LogIn)
@@ -36,8 +43,8 @@ export class UserState implements NgxsOnInit {
     return this.userService.logIn(login, password).pipe(
       tap(() =>
         patchState({
-          login: login,
-          password: password
+          login,
+          password
         })
       )
     );
@@ -59,8 +66,19 @@ export class UserState implements NgxsOnInit {
 
   @Action(RetrieveV1User)
   retrieveV1User({ patchState }: StateContext<UserStateModel>) {
-    this.userService.retrieveV1User().pipe();
-    // this.userService.retrieveV1User().then(value => console.log(value));
-    // then(tap(result => console.log('stateData', result)));
+    this.v1MigrationService
+      .retrieveUser()
+      .then(({ login, password }) => {
+        patchState({
+          login,
+          password,
+          retrieveV1UserCheck: true
+        });
+      })
+      .catch(() => {
+        patchState({
+          retrieveV1UserCheck: true
+        });
+      });
   }
 }
