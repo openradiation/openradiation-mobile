@@ -1,6 +1,7 @@
 import { UserStateModel } from '../states/user/user.state';
 import { Injectable } from '@angular/core';
 import { MeasuresStateModel } from '../states/measures/measures.state';
+import { Measure, MeasureType } from '../states/measures/measure';
 
 declare var sqlitePlugin: any;
 
@@ -38,7 +39,14 @@ export class V1MigrationService {
           'SELECT * FROM measures',
           [],
           (tx: any, res: any) => {
-            resolve(res);
+            const measures: Measure[] = [];
+            if (res.rows.length > 0) {
+              for (let i = 0; i < res.rows.length; i++) {
+                measures[i] = this.transformMeasureToV2(res.rows.item(i));
+                // measures[i] = res.rows.item(i);
+              }
+            }
+            resolve({ measures });
           },
           (tx: any, res: any) => {
             reject(res);
@@ -46,6 +54,24 @@ export class V1MigrationService {
         );
       });
     });
+  }
+
+  transformMeasureToV2(item: any): Measure {
+    return {
+      type: MeasureType.Measure,
+      apparatusId: item.apparatusId,
+      apparatusVersion: item.apparatusVersion,
+      apparatusSensorType: item.apparatusSensorType,
+      apparatusTubeType: item.apparatusTubeType,
+      temperature: item.temperature,
+      value: item.radiation,
+      reportUuid: item.reportUUID,
+      manualReporting: item.manualReporting,
+      id: item.reportUUID,
+      startTime: item.tsStart,
+      endTime: item.tsEnd,
+      sent: item.sent
+    };
   }
 
   sqLiteTest() {
@@ -110,7 +136,7 @@ export class V1MigrationService {
     this.sqLiteTestInsertUser('login', 1, 'user1');
     this.sqLiteTestInsertUser('mdp', 1, '123456789');
     // this.sqLiteTestInsertMeasure(
-    //   'aa6f1d08-d87e-45e4-8511-d0d0aa04fc3f',
+    //   'aa6iod08-d87e-45e4-8511-d0d0aa04fc3f',
     //   'C781B485-9273-4C03-B9A5-662837852B2D',
     //   'android',
     //   '6.0',
@@ -120,8 +146,8 @@ export class V1MigrationService {
     //   101, // ??
     //   28,
     //   66,
-    //   1.62959753729484,
-    //   true,
+    //   1.12959753729484,
+    //   false,
     //   '48.1317742',
     //   '-1.6217496',
     //   800,
@@ -281,7 +307,7 @@ export class V1MigrationService {
           '","' +
           notes +
           '","' +
-          '0");',
+          '1");',
         [],
         (t: any, insert: any) => {
           console.log('insert ok', insert);
