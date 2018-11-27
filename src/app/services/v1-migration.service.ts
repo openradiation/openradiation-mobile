@@ -1,5 +1,6 @@
 import { UserStateModel } from '../states/user/user.state';
 import { Injectable } from '@angular/core';
+import { MeasuresStateModel } from '../states/measures/measures.state';
 
 declare var sqlitePlugin: any;
 
@@ -21,6 +22,23 @@ export class V1MigrationService {
               }
             }
             resolve({ login: items.login, password: items.mdp });
+          },
+          (tx: any, res: any) => {
+            reject(res);
+          }
+        );
+      });
+    });
+  }
+
+  retrieveMeasures(): Promise<Partial<MeasuresStateModel>> {
+    return new Promise((resolve, reject) => {
+      sqlitePlugin.openDatabase('Database', '1.0', 'OpenRadiation', -1).transaction((txn: any) => {
+        txn.executeSql(
+          'SELECT * FROM measures',
+          [],
+          (tx: any, res: any) => {
+            resolve(res);
           },
           (tx: any, res: any) => {
             reject(res);
@@ -91,27 +109,53 @@ export class V1MigrationService {
     this.sqLiteTestInsertUser('connexion', 1, '');
     this.sqLiteTestInsertUser('login', 1, 'user1');
     this.sqLiteTestInsertUser('mdp', 1, '123456789');
-    this.sqLiteTestInsertMeasure(
-      'aa6f1d08-d87e-45e4-8511-d0d0aa04fc3f',
-      'android',
-      '6.0',
-      'E5603',
-      '2018-11-19T15:18:37.371Z',
-      '??', // ??
-      28,
-      66,
-      1.62959753729484,
-      true,
-      '48.1317742',
-      '-1.6217496',
-      '800',
-      '43', // ??
-      '800', // ??
-      'city', // ??
-      1,
-      'tag1', // ??
-      'description test'
-    );
+    // this.sqLiteTestInsertMeasure(
+    //   'aa6f1d08-d87e-45e4-8511-d0d0aa04fc3f',
+    //   'C781B485-9273-4C03-B9A5-662837852B2D',
+    //   'android',
+    //   '6.0',
+    //   'E5603',
+    //   1543314838, // ??
+    //   1543314939, // ??
+    //   101, // ??
+    //   28,
+    //   66,
+    //   1.62959753729484,
+    //   true,
+    //   '48.1317742',
+    //   '-1.6217496',
+    //   800,
+    //   43,
+    //   800,
+    //   'city',
+    //   1,
+    //   'tag1 tag2,tag3',
+    //   'description test'
+    // );
+    // this.sqLiteTestInsertMeasure(
+    //   '2de5a321-b94a-48ae-948f-590374137cb7',
+    //   'C781B485-9273-4C03-B9A5-662837852B2D',
+    //   'android',
+    //   '6.0',
+    //   'E5603',
+    //   1543314838, // ??
+    //   1543314939, // ??
+    //   101, // ??
+    //   28,
+    //   166,
+    //   1.82959753729484,
+    //   true,
+    //   '48.1317742',
+    //   '-1.6217496',
+    //   800,
+    //   43,
+    //   800,
+    //   'city',
+    //   1,
+    //   'tag1 tag2,tag3',
+    //   'description test'
+    // );
+    this.sqLiteTestSelect();
   }
 
   sqLiteTestInsertUser(paramName: string, active: number, text: string) {
@@ -162,26 +206,28 @@ export class V1MigrationService {
 
   sqLiteTestInsertMeasure(
     reportUuid: string,
+    deviceUuid: string,
     devicePlatform: string,
     deviceVersion: string,
     deviceModel: string,
-    startTime: any,
-    duration: any,
+    startTime: number,
+    endTime: number,
+    duration: number,
     temperature: number,
     nbHit: number,
     value: number,
     manualReport: boolean,
     long: string,
     lat: string,
-    accuracy: string,
-    altitude: string,
-    altitudeAccuracy: string,
+    accuracy: number,
+    altitude: number,
+    altitudeAccuracy: number,
     env: string,
     position: number,
     tags: string,
     notes: string
   ) {
-    const apparatusInfos = 'undefined","undefined","undefined","undefined","undefined","';
+    const apparatusInfos = 'undefined","000107","OG-KIT1","geiger","SBM-20","';
     const db = sqlitePlugin.openDatabase('Database', '1.0', 'OpenRadiation', -1);
     db.transaction((txn: any) => {
       txn.executeSql(
@@ -195,6 +241,8 @@ export class V1MigrationService {
           apparatusInfos +
           reportUuid +
           '","' +
+          deviceUuid +
+          '","' +
           devicePlatform +
           '","' +
           deviceVersion +
@@ -202,6 +250,8 @@ export class V1MigrationService {
           deviceModel +
           '","' +
           startTime +
+          '","' +
+          endTime +
           '","' +
           duration +
           '","' +
@@ -231,13 +281,29 @@ export class V1MigrationService {
           '","' +
           notes +
           '","' +
-          '0);',
+          '0");',
         [],
         (t: any, insert: any) => {
           console.log('insert ok', insert);
         },
         (t: any, insert: any) => {
           console.error('insert fail', insert);
+        }
+      );
+    });
+  }
+
+  sqLiteTestSelect() {
+    const db = sqlitePlugin.openDatabase('Database', '1.0', 'OpenRadiation', -1);
+    db.transaction((txn: any) => {
+      txn.executeSql(
+        'SELECT * FROM "measures";',
+        [],
+        (tx: any, res: any) => {
+          console.log('select ok', res);
+        },
+        (tx: any, res: any) => {
+          console.error('select fail', res);
         }
       );
     });

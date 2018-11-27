@@ -1,6 +1,6 @@
 import { Action, NgxsOnInit, Selector, State, StateContext } from '@ngxs/store';
 import { tap } from 'rxjs/operators';
-import { LogIn, LogOut, RetrieveV1User, SetLanguage } from './user.action';
+import { LogIn, LogOut, RetrieveV1Measures, RetrieveV1User, SetLanguage } from './user.action';
 import { UserService } from './user.service';
 import { V1MigrationService } from '../../services/v1-migration.service';
 
@@ -36,6 +36,7 @@ export class UserState implements NgxsOnInit {
     if (!retrieveV1UserCheck) {
       dispatch(new RetrieveV1User());
     }
+    dispatch(new RetrieveV1Measures());
   }
 
   @Action(LogIn)
@@ -74,6 +75,20 @@ export class UserState implements NgxsOnInit {
           password,
           retrieveV1UserCheck: true
         });
+      })
+      .catch(() => {
+        patchState({
+          retrieveV1UserCheck: true
+        });
+      });
+  }
+
+  @Action(RetrieveV1Measures)
+  retrieveV1Measures({ patchState }: StateContext<UserStateModel>) {
+    this.v1MigrationService
+      .retrieveMeasures()
+      .then(measures => {
+        console.log('array measures', measures);
       })
       .catch(() => {
         patchState({

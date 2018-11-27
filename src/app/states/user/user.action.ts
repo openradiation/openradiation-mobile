@@ -15,3 +15,7 @@ export class SetLanguage {
 export class RetrieveV1User {
   static readonly type = '[User] Retrieve V1 user';
 }
+
+export class RetrieveV1Measures {
+  static readonly type = '[User] Retrieve V1 user';
+}
