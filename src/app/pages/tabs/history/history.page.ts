@@ -26,7 +26,6 @@ export class HistoryPage extends AutoUnsubscribePage {
   measures$: Observable<(Measure | MeasureSeries)[]>;
 
   measureBeingSentMap: { [K: string]: boolean } = {};
-  positionAccuracyThreshold = PositionAccuracyThreshold;
 
   url = '/tabs/(history:history)';
 

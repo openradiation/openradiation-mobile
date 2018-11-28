@@ -36,7 +36,6 @@ export class MeasureSeriesReportPage extends AutoUnsubscribePage {
   measureSeriesReportForm?: FormGroup;
   reportScan = true;
 
-  positionAccuracyThreshold = PositionAccuracyThreshold;
   measureSeriesParamsSelected = MeasureSeriesParamsSelected;
 
   url = '/measure/report-series';

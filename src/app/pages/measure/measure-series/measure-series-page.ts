@@ -8,7 +8,7 @@ import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-u
 import { NavigationService } from '../../../services/navigation.service';
 import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
-import { MeasureSeriesParamsSelected, PositionAccuracyThreshold } from '../../../states/measures/measure';
+import { MeasureSeriesParamsSelected } from '../../../states/measures/measure';
 import { CancelMeasure, StartMeasure, StopMeasureSeriesParams } from '../../../states/measures/measures.action';
 import { MeasuresStateModel } from '../../../states/measures/measures.state';
 
@@ -23,7 +23,6 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
 
   measureSeriesParamsForm?: FormGroup;
   url = '/measure/series';
-  positionAccuracyThreshold = PositionAccuracyThreshold;
   measureSeriesParamsSelected = MeasureSeriesParamsSelected;
 
   private paramSelected: MeasureSeriesParamsSelected;
