@@ -50,17 +50,16 @@
   }
 
   .title {
-    font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
-    font-weight: 200;
-    font-size: 16px;
-    color: white;
-    width: 100%;
-    margin: 16px 10px;
-  }
-
-  .title-radio {
-    @extend .title;
-    padding-left: 56px;
+    --padding-start: 8px;
+    ion-label {
+      font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+      font-weight: 200;
+      font-size: 14px;
+      color: white;
+      width: 100%;
+      margin: 8px 0;
+      white-space: normal;
+    }
   }
 
   .range {
@@ -74,7 +73,7 @@
   }
 
   ion-radio {
-    margin-top: -25px;
+    margin-top: 6px;
     --color: white;
     --color-checked: #{$second-color};
   }

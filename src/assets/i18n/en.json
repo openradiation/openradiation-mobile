@@ -32,7 +32,22 @@
     "END": "End",
     "GOOD": "Good",
     "GO_TO_SETTINGS": "Go to settings",
+    "HITS": {
+      "NONE": "{{count}} hits",
+      "PLURAL": "{{count}} hits",
+      "SINGULAR": "{{count}} hit"
+    },
+    "HOUR": {
+      "NONE": "{{count}} hours",
+      "PLURAL": "{{count}} hours",
+      "SINGULAR": "{{count}} hour"
+    },
     "INACCURATE": "Inaccurate",
+    "MINUTE": {
+      "NONE": "{{count}} minutes",
+      "PLURAL": "{{count}} minutes",
+      "SINGULAR": "{{count}} minute"
+    },
     "NO": "No",
     "OK": "Ok",
     "POOR": "Poor",
@@ -172,12 +187,13 @@
     "ALERT": "You must be logged in before you can start a measurement series.",
     "HITS_NUMBER": "Minimum no. of counts",
     "MEASURES_DURATION": "Minimum duration",
-    "MEASURES_TITLE": "Measurements",
+    "MEASURE_LIMIT": "Each measurement will end automatically after",
     "MESSAGE_SCAN": {
       "NONE": "First measurement in progress",
       "PLURAL": "{{count}} measurements taken since {{duration}}",
       "SINGULAR": "One measurement taken since {{duration}}"
     },
+    "NOTICE": "You can take automatic measurements. Thank you for doing these measurements in a homogenous environment, since you will have to qualify this environment for all measurements and not for each one.",
     "REPORT": {
       "FIRST_MEASURE-TIME": "Beginning of the first measurement",
       "HITS_AVERAGE": "Average hits number",
@@ -185,8 +201,8 @@
       "SERIES_DURATION": "Total duration of measurements",
       "VALUE_AVERAGE": "Average measures"
     },
-    "SERIES_DURATION": "Measurement series duration",
-    "SERIES_TITLE": "Series",
+    "SERIES_LIMIT": "The next measurement will start automatically, for a maximum of",
+    "STOP": "You can stop the measurements at any time.",
     "TITLE": "Measurement series"
   },
   "POSITION": {

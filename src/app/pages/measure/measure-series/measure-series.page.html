@@ -5,36 +5,50 @@
         <ion-content>
             <div class="content">
                 <form class="form" [formGroup]="measureSeriesParamsForm" ngxsForm="measures.measureSeriesParams">
-                    <app-category-label>
-                        {{'MEASURE_SERIES.SERIES_TITLE' | translate}}
-                    </app-category-label>
-                    <ion-label class="title">{{'MEASURE_SERIES.SERIES_DURATION' | translate}}</ion-label>
-                    <ion-item>
-                        <ion-label position="fixed">{{measureSeriesParamsForm?.value.seriesDurationLimit}}:00'</ion-label>
-                        <ion-range class="range" formControlName="seriesDurationLimit" required min="1" max="24"
-                                   step="1" snaps="true"></ion-range>
+                    <ion-item class="title">
+                        <ion-label>{{'MEASURE_SERIES.NOTICE' | translate}}</ion-label>
                     </ion-item>
-                    <app-category-label>
-                        {{'MEASURE_SERIES.MEASURES_TITLE' | translate}}
-                    </app-category-label>
+                    <ion-item class="title">
+                        <ion-label>{{'MEASURE_SERIES.MEASURE_LIMIT' | translate}}</ion-label>
+                    </ion-item>
                     <ion-radio-group formControlName="paramSelected" (ionChange)="onParamSelectedChange($event)">
-                        <ion-label class="title-radio">{{'MEASURE_SERIES.MEASURES_DURATION' | translate}}</ion-label>
                         <ion-item>
-                            <ion-label position="fixed">{{measureSeriesParamsForm?.value.measureDurationLimit}}'00''</ion-label>
-                            <ion-radio slot="start" [value]="measureSeriesParamsSelected.measureDurationLimit"  mode="md"></ion-radio>
+                            <ion-label position="fixed">
+                                {{measureSeriesParamsForm?.value.measureDurationLimit | i18nPlural : minuteMessageMapping
+                              | translate : { count: measureSeriesParamsForm?.value.measureDurationLimit } }}
+                            </ion-label>
+                            <ion-radio slot="start" [value]="measureSeriesParamsSelected.measureDurationLimit"
+                                       mode="md"></ion-radio>
                             <ion-range class="range" formControlName="measureDurationLimit" required min="5" max="60"
                                        step="5"
                                        snaps="true"></ion-range>
                         </ion-item>
-                        <ion-label class="title-radio">{{'MEASURE_SERIES.HITS_NUMBER' | translate}}</ion-label>
                         <ion-item>
-                            <ion-label position="fixed">{{measureSeriesParamsForm?.value.measureHitsLimit}}</ion-label>
-                            <ion-radio slot="start" [value]="measureSeriesParamsSelected.measureHitsLimit"  mode="md"></ion-radio>
+                            <ion-label position="fixed">
+                                {{measureSeriesParamsForm?.value.measureHitsLimit | i18nPlural : hitsMessageMapping
+                              | translate : { count: measureSeriesParamsForm?.value.measureHitsLimit } }}
+                            </ion-label>
+                            <ion-radio slot="start" [value]="measureSeriesParamsSelected.measureHitsLimit"
+                                       mode="md"></ion-radio>
                             <ion-range class="range" formControlName="measureHitsLimit" required min="50" max="1000"
                                        step="50"
                                        snaps="true"></ion-range>
                         </ion-item>
                     </ion-radio-group>
+                    <ion-item class="title">
+                        <ion-label>{{'MEASURE_SERIES.SERIES_LIMIT' | translate}}</ion-label>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label position="fixed">
+                            {{measureSeriesParamsForm?.value.seriesDurationLimit | i18nPlural : hourMessageMapping
+                          | translate : { count: measureSeriesParamsForm?.value.seriesDurationLimit } }}
+                        </ion-label>
+                        <ion-range class="range" formControlName="seriesDurationLimit" required min="1" max="24"
+                                   step="1" snaps="true"></ion-range>
+                    </ion-item>
+                    <ion-item class="title">
+                        <ion-label>{{'MEASURE_SERIES.STOP' | translate}}</ion-label>
+                    </ion-item>
                 </form>
                 <div class="bottom-buttons">
                     <app-round-button [disabled]="!measureSeriesParamsForm.valid"
@@ -45,7 +59,7 @@
                     <div class="side-buttons">
                         <ion-button fill="clear" class="flat-button cancel" (click)="cancelMeasureSeries()">
                             {{'GENERAL.CANCEL'
-                            | translate}}
+                          | translate}}
                         </ion-button>
                     </div>
                 </div>

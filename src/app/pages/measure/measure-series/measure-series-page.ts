@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -24,6 +25,24 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
   measureSeriesParamsForm?: FormGroup;
   url = '/measure/series';
   measureSeriesParamsSelected = MeasureSeriesParamsSelected;
+
+  minuteMessageMapping = {
+    '=0': <string>_('GENERAL.MINUTE.NONE'),
+    '=1': <string>_('GENERAL.MINUTE.SINGULAR'),
+    other: <string>_('GENERAL.MINUTE.PLURAL')
+  };
+
+  hourMessageMapping = {
+    '=0': <string>_('GENERAL.HOUR.NONE'),
+    '=1': <string>_('GENERAL.HOUR.SINGULAR'),
+    other: <string>_('GENERAL.HOUR.PLURAL')
+  };
+
+  hitsMessageMapping = {
+    '=0': <string>_('GENERAL.HITS.NONE'),
+    '=1': <string>_('GENERAL.HITS.SINGULAR'),
+    other: <string>_('GENERAL.HITS.PLURAL')
+  };
 
   private paramSelected: MeasureSeriesParamsSelected;
 

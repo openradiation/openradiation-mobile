@@ -32,7 +32,22 @@
     "END": "Fin",
     "GOOD": "Bon",
     "GO_TO_SETTINGS": "Accéder aux paramètres",
+    "HITS": {
+      "NONE": "{{count}} coup",
+      "PLURAL": "{{count}} coups",
+      "SINGULAR": "{{count}} coup"
+    },
+    "HOUR": {
+      "NONE": "{{count}} heure",
+      "PLURAL": "{{count}} heures",
+      "SINGULAR": "{{count}} heure"
+    },
     "INACCURATE": "Imprécis",
+    "MINUTE": {
+      "NONE": "{{count}} minute",
+      "PLURAL": "{{count}} minutes",
+      "SINGULAR": "{{count}} minute"
+    },
     "NO": "Non",
     "OK": "Ok",
     "POOR": "Moyen",
@@ -172,12 +187,13 @@
     "ALERT": "Vous devez vous identifier pour pouvoir commencer une série de mesure.",
     "HITS_NUMBER": "Nb coups minimun",
     "MEASURES_DURATION": "Durée minimale",
-    "MEASURES_TITLE": "Mesures",
+    "MEASURE_LIMIT": "Chaque mesure se terminera automatiquement après",
     "MESSAGE_SCAN": {
       "NONE": "Première mesure en cours",
       "PLURAL": "{{count}} mesures prises depuis {{duration}}",
       "SINGULAR": "Une mesure prise depuis {{duration}}"
     },
+    "NOTICE": "Vous pouvez prendre des mesures automatiques. Merci de faire ces mesures dans un environnement homogène, car vous devrez ensuite qualifier l’environnement de l’ensemble des mesures et non de chaque mesure.",
     "REPORT": {
       "FIRST_MEASURE-TIME": "Début de la première mesure",
       "HITS_AVERAGE": "Moyenne Nb coups",
@@ -185,8 +201,8 @@
       "SERIES_DURATION": "Durée totale des mesures",
       "VALUE_AVERAGE": "Moyenne des mesures"
     },
-    "SERIES_DURATION": "Durée de la série de mesures",
-    "SERIES_TITLE": "Série",
+    "SERIES_LIMIT": "La mesure suivante démarrera automatiquement, pendant une durée maximale de",
+    "STOP": "Vous pourrez arrêter les mesures à tout moment.",
     "TITLE": "Série de mesures"
   },
   "POSITION": {
