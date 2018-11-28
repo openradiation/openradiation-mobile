@@ -14,14 +14,13 @@
   }
   .text {
     padding-top: 10px;
-    margin: 15px;
-    margin-top: 0;
+    margin: 0 15px 15px;
     font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
     font-size: 12px;
     text-align: justify;
     border-top: 1px solid #66ceff;
     transition: all ease 200ms;
-    max-height: 400px;
+    max-height: 500px;
   }
 }
 
