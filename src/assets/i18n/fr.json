@@ -50,6 +50,9 @@
       "NOTICE": "En supprimant vos mesures, vous nettoyez tout votre historique mais vous ne supprimez pas les données déjà publiées de la base OpenRadiation.",
       "TITLE": "Êtes-vous sûr de vouloir supprimer toutes les mesures ?"
     },
+    "DELETE_SERIES": {
+      "NOTICE": "Êtes-vous sûr(e) de vouloir supprimer cette série de mesure ?"
+    },
     "MEASURE_SERIES": {
       "PLURAL": "{{count}} mesures",
       "SINGULAR": "{{count}} mesure"
@@ -62,8 +65,13 @@
       "NOTICE": "En envoyant cette mesure, vous acceptez que l'ensemble des données correspondant à cette mesure (dont votre position GPS, votre pseudo, etc) soit publié dans la base OpenRadiation.",
       "TITLE": "Êtes-vous sûr(e) de vouloir envoyer cette mesure ?"
     },
-    "SEND_ERROR": "Impossible d'envoyer la mesure, veuillez vérifier votre connexion.",
+    "SEND_ERROR": "Impossible d'envoyer, veuillez vérifier votre connexion.",
+    "SEND_SERIES": {
+      "NOTICE": "En envoyant cette mesure, vous acceptez que l'ensemble des données correspondant à cette série de mesure (dont votre position GPS, votre pseudo, etc) soit publié dans la base OpenRadiation.",
+      "TITLE": "Êtes-vous sûr(e) de vouloir envoyer cette série de mesure ?"
+    },
     "SENT": "Publiée",
+    "SENT_SERIES": "Publiées",
     "TITLE": "Historique"
   },
   "HOME": {
@@ -126,7 +134,8 @@
       "INSIDE": "À l'intérieur",
       "ON_THE_ROAD": "Sur la route",
       "PLANE": "En avion",
-      "TITLE": "Environnement de la mesure"
+      "TITLE": "Environnement de la mesure",
+      "TITLE_SERIES": "Environnement des mesures"
     },
     "EXPERT": "Expert",
     "EXPERT_MODE": "Mode expert",

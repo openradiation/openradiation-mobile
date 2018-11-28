@@ -34,7 +34,12 @@
     </ion-label>
     <div class="end-content">
         <ng-container *ngIf="measure.sent; else measureNotSent">
-            {{'HISTORY.SENT' | translate}}
+            <ng-container *ngIf="measure.type === measureType.Measure; else measureSeriesSent">
+                {{'HISTORY.SENT' | translate}}
+            </ng-container>
+            <ng-template #measureSeriesSent>
+                {{'HISTORY.SENT_SERIES' | translate}}
+            </ng-template>
         </ng-container>
         <ng-template #measureNotSent>
             <ng-container *ngIf="measureBeingSent; else measureNotBeingSent">

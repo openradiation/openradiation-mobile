@@ -50,6 +50,9 @@
       "NOTICE": "By deleting your measurements, you clean your entire history but you do not delete the published data from the OpenRadiation base.",
       "TITLE": "Are you sure you wish to delete all measurements?"
     },
+    "DELETE_SERIES": {
+      "NOTICE": "Are you sure you wish to delete this measurement series?"
+    },
     "MEASURE_SERIES": {
       "PLURAL": "{{count}} measurements",
       "SINGULAR": "{{count}} measurement"
@@ -62,8 +65,13 @@
       "NOTICE": "By sending this measurement, you accept that all data corresponding to this measurement (including your GPS position, your user name etc.) will be published in the OpenRadiation base.",
       "TITLE": "Are you sure you wish to send this measurement?"
     },
-    "SEND_ERROR": "Could not send measurement, please check your connection.",
+    "SEND_ERROR": "Could not send, please check your connection.",
+    "SEND_SERIES": {
+      "NOTICE": "By sending this measurement, you accept that all data corresponding to this measurement series (including your GPS position, your user name etc.) will be published in the OpenRadiation base.",
+      "TITLE": "Are you sure you wish to send this measurement series?"
+    },
     "SENT": "Sent",
+    "SENT_SERIES": "Sent",
     "TITLE": "History"
   },
   "HOME": {
@@ -126,7 +134,8 @@
       "INSIDE": "Inside",
       "ON_THE_ROAD": "On the road",
       "PLANE": "Plane",
-      "TITLE": "Measurement environment"
+      "TITLE": "Measurement environment",
+      "TITLE_SERIES": "Measurements environment"
     },
     "EXPERT": "Expert",
     "EXPERT_MODE": "Expert mode",
