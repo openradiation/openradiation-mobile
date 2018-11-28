@@ -1,9 +1,11 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
+    "module": "es2015",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -12,13 +14,17 @@
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "target": "es5",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
     "lib": [
-      "es2017",
+      "es2018",
       "dom"
     ]
   },
   "angularCompilerOptions": {
-    "strictInjectionParameters": true,
-    "fullTemplateTypeCheck": true
+    "strictInjectionParameters": true
+    // TODO enable this again when it's fixed : https://github.com/ionic-team/ionic/issues/16492
+    //"fullTemplateTypeCheck": true
   }
 }

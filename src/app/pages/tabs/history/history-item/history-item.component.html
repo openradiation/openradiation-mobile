@@ -56,7 +56,7 @@
         </ng-template>
     </div>
 </ion-item>
-<ion-list class="series-detail" *ngIf="showSeriesDetail">
+<ion-list class="series-detail" *ngIf="measure.type === measureType.MeasureSeries && showSeriesDetail">
     <ion-item *ngFor="let measureSeriesDetail of measure.measures">
         <div class="start-content"></div>
         <ion-label class="test">

@@ -36,9 +36,9 @@ export class MeasureScanPage extends AutoUnsubscribePage {
   isMeasureSeries = false;
 
   currentSeriesMessageMapping = {
-    '=0': _('MEASURE_SERIES.MESSAGE_SCAN.NONE'),
-    '=1': _('MEASURE_SERIES.MESSAGE_SCAN.SINGULAR'),
-    other: _('MEASURE_SERIES.MESSAGE_SCAN.PLURAL')
+    '=0': <string>_('MEASURE_SERIES.MESSAGE_SCAN.NONE'),
+    '=1': <string>_('MEASURE_SERIES.MESSAGE_SCAN.SINGULAR'),
+    other: <string>_('MEASURE_SERIES.MESSAGE_SCAN.PLURAL')
   };
 
   url = '/measure/scan';
