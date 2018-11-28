@@ -26,6 +26,7 @@ import {
   EnableExpertMode,
   PositionChanged,
   PublishMeasure,
+  RetrieveV1Measures,
   ShowMeasure,
   StartManualMeasure,
   StartMeasure,
@@ -44,6 +45,7 @@ import {
 } from './measures.action';
 import { MeasuresService } from './measures.service';
 import { PositionService } from './position.service';
+import { V1MigrationService } from '../../services/v1-migration.service';
 
 export interface MeasuresStateModel {
   measures: (Measure | MeasureSeries)[];
@@ -72,11 +74,13 @@ export interface MeasuresStateModel {
     expertMode: boolean;
     autoPublish: boolean;
   };
+  retrieveV1MeasuresCheck: boolean;
 }
 
 @State<MeasuresStateModel>({
   name: 'measures',
   defaults: {
+    retrieveV1MeasuresCheck: false,
     measures: [],
     params: {
       expertMode: false,
@@ -89,7 +93,8 @@ export class MeasuresState {
     private positionService: PositionService,
     private device: Device,
     private measuresService: MeasuresService,
-    private dateService: DateService
+    private dateService: DateService,
+    private v1MigrationService: V1MigrationService
   ) {}
 
   @Selector()
@@ -645,5 +650,22 @@ export class MeasuresState {
         currentSeries: { ...measure }
       });
     }
+  }
+
+  @Action(RetrieveV1Measures)
+  retrieveV1Measures({ patchState }: StateContext<MeasuresStateModel>) {
+    this.v1MigrationService
+      .retrieveMeasures()
+      .then(measures => {
+        patchState({
+          measures,
+          retrieveV1MeasuresCheck: true
+        });
+      })
+      .catch(() => {
+        patchState({
+          retrieveV1MeasuresCheck: true
+        });
+      });
   }
 }

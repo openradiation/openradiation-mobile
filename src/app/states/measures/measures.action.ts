@@ -111,3 +111,7 @@ export class ShowMeasure {
   static readonly type = '[Measures] Show measure detail';
   constructor(public measure: Measure | MeasureSeries) {}
 }
+
+export class RetrieveV1Measures {
+  static readonly type = '[User] Retrieve V1 user';
+}
