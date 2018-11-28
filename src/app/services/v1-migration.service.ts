@@ -1,6 +1,5 @@
 import { UserStateModel } from '../states/user/user.state';
 import { Injectable } from '@angular/core';
-import { MeasuresStateModel } from '../states/measures/measures.state';
 import { Measure, MeasureSeries, MeasureType } from '../states/measures/measure';
 
 declare var sqlitePlugin: any;
