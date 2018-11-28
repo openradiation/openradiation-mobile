@@ -193,6 +193,7 @@
       "PLURAL": "{{count}} measurements taken since {{duration}}",
       "SINGULAR": "One measurement taken since {{duration}}"
     },
+    "MESSAGE_SCAN_PARAM": "{{measureLimit}} auto. measurements for a max. duration of {{seriesLimit}}",
     "NOTICE": "You can take automatic measurements. Thank you for doing these measurements in a homogenous environment, since you will have to qualify this environment for all measurements and not for each one.",
     "REPORT": {
       "FIRST_MEASURE-TIME": "Beginning of the first measurement",

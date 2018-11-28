@@ -8,7 +8,13 @@ import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-u
 import { NavigationService } from '../../../services/navigation.service';
 import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
-import { HitsAccuracy, Measure, MeasureSeries, PositionAccuracyThreshold } from '../../../states/measures/measure';
+import {
+  HitsAccuracy,
+  Measure,
+  MeasureSeries,
+  MeasureSeriesParamsSelected,
+  PositionAccuracyThreshold
+} from '../../../states/measures/measure';
 import { CancelMeasure, StartMeasureScan, StopMeasureScan } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
 
@@ -31,6 +37,7 @@ export class MeasureScanPage extends AutoUnsubscribePage {
   hitsAccuracyWidth = 0;
 
   positionAccuracyThreshold = PositionAccuracyThreshold;
+  measureSeriesParamsSelected = MeasureSeriesParamsSelected;
 
   canEndMeasureScan = false;
   isMeasureSeries = false;
@@ -39,6 +46,24 @@ export class MeasureScanPage extends AutoUnsubscribePage {
     '=0': <string>_('MEASURE_SERIES.MESSAGE_SCAN.NONE'),
     '=1': <string>_('MEASURE_SERIES.MESSAGE_SCAN.SINGULAR'),
     other: <string>_('MEASURE_SERIES.MESSAGE_SCAN.PLURAL')
+  };
+
+  minuteMessageMapping = {
+    '=0': <string>_('GENERAL.MINUTE.NONE'),
+    '=1': <string>_('GENERAL.MINUTE.SINGULAR'),
+    other: <string>_('GENERAL.MINUTE.PLURAL')
+  };
+
+  hourMessageMapping = {
+    '=0': <string>_('GENERAL.HOUR.NONE'),
+    '=1': <string>_('GENERAL.HOUR.SINGULAR'),
+    other: <string>_('GENERAL.HOUR.PLURAL')
+  };
+
+  hitsMessageMapping = {
+    '=0': <string>_('GENERAL.HITS.NONE'),
+    '=1': <string>_('GENERAL.HITS.SINGULAR'),
+    other: <string>_('GENERAL.HITS.PLURAL')
   };
 
   url = '/measure/scan';

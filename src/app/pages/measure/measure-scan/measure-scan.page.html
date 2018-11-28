@@ -34,7 +34,7 @@
                             <ng-container
                                     *ngIf="currentMeasure.temperature && currentMeasure.steps && currentMeasure.steps.length > 0; else measureScanNotStarted">
                                 {{currentMeasure.steps[currentMeasure.steps.length - 1].temperature | number :
-                                '1.2-2'}}<span class="temperature-unit"> °C</span>
+                              '1.2-2'}}<span class="temperature-unit"> °C</span>
                             </ng-container>
                         </div>
                         <div class="icon">
@@ -72,9 +72,7 @@
                             <ng-container
                                     *ngIf="currentMeasure.endTime && currentMeasure.startTime && currentMeasure.endTime > currentMeasure.startTime; else measureScanNotStarted">
                                 {{(currentMeasure.hitsNumber / (currentMeasure.endTime - currentMeasure.startTime)) *
-                                1000 *
-                                60 |
-                                hitNumberPerMin}}
+                            1000 * 60 | hitNumberPerMin}}
                             </ng-container>
                         </div>
                     </div>
@@ -121,12 +119,36 @@
                         <img src="assets/img/bg-radiation.png">
                     </div>
                 </div>
-                <div class="message" *ngIf="currentSeries$ | async as currentSeries">
-                    <div class="message-series">
-                        {{currentSeries.measures.length | i18nPlural : currentSeriesMessageMapping | translate : {count:
-                        currentSeries.measures.length, duration: currentSeries.startTime | date: 'HH:mm\'\'\'ss"'} }}
+                <ng-container *ngIf="currentSeries$ | async as currentSeries">
+                    <div class="message">
+                        <div class="message-series">
+                            {{currentSeries.measures.length | i18nPlural : currentSeriesMessageMapping | translate : {
+                          count: currentSeries.measures.length,
+                          duration: currentSeries.startTime | date: 'HH:mm\'\'\'ss"'
+                        } }}
+                        </div>
                     </div>
-                </div>
+                    <div class="message">
+                        <div class="message-series" [ngSwitch]="currentSeries.params.paramSelected">
+                            <ng-container *ngSwitchCase="measureSeriesParamsSelected.measureDurationLimit">
+                                {{'MEASURE_SERIES.MESSAGE_SCAN_PARAM' | translate: {
+                              measureLimit: currentSeries?.params.measureDurationLimit / 60000 | i18nPlural : minuteMessageMapping
+                                | translate : { count: currentSeries?.params.measureDurationLimit / 60000 },
+                              seriesLimit: (currentSeries.params.seriesDurationLimit / 3600000 | i18nPlural : hourMessageMapping
+                                | translate : { count: currentSeries.params.seriesDurationLimit / 3600000 })
+                            } }}
+                            </ng-container>
+                            <ng-container *ngSwitchCase="measureSeriesParamsSelected.measureHitsLimit">
+                                {{'MEASURE_SERIES.MESSAGE_SCAN_PARAM' | translate: {
+                              measureLimit: currentSeries?.params.measureHitsLimit | i18nPlural : hitsMessageMapping
+                                | translate : { count: currentSeries?.params.measureHitsLimit },
+                              seriesLimit: (currentSeries.params.seriesDurationLimit / 3600000 | i18nPlural : hourMessageMapping
+                                | translate : { count: currentSeries.params.seriesDurationLimit / 3600000 })
+                            } }}
+                            </ng-container>
+                        </div>
+                    </div>
+                </ng-container>
                 <div class="bottom-buttons">
                     <app-round-button [disabled]="!canEndMeasureScan"
                                       [srcOn]="'assets/img/button-on.png'"
@@ -135,9 +157,8 @@
                         {{'GENERAL.END' | translate}}
                     </app-round-button>
                     <div class="side-buttons">
-                        <ion-button fill="clear" class="flat-button cancel" (click)="cancelMeasure()">{{'GENERAL.CANCEL'
-                            |
-                            translate}}
+                        <ion-button fill="clear" class="flat-button cancel" (click)="cancelMeasure()">
+                            {{'GENERAL.CANCEL' | translate}}
                         </ion-button>
                     </div>
                 </div>
