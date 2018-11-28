@@ -36,8 +36,8 @@ export class UserState implements NgxsOnInit {
     dispatch(new SetLanguage());
     if (!retrieveV1UserCheck) {
       dispatch(new RetrieveV1User());
+      dispatch(new RetrieveV1Measures());
     }
-    dispatch(new RetrieveV1Measures());
   }
 
   @Action(LogIn)
