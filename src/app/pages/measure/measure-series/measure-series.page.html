@@ -30,8 +30,8 @@
                         <ion-item>
                             <ion-label position="fixed">{{measureSeriesParamsForm?.value.measureHitsLimit}}</ion-label>
                             <ion-radio slot="start" [value]="measureSeriesParamsSelected.measureHitsLimit"  mode="md"></ion-radio>
-                            <ion-range class="range" formControlName="measureHitsLimit" required min="100" max="1000"
-                                       step="100"
+                            <ion-range class="range" formControlName="measureHitsLimit" required min="50" max="1000"
+                                       step="50"
                                        snaps="true"></ion-range>
                         </ion-item>
                     </ion-radio-group>

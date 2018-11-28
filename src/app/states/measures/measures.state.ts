@@ -267,7 +267,7 @@ export class MeasuresState {
   startMeasureSeries({ patchState }: StateContext<MeasuresStateModel>) {
     const model: MeasureSeriesParams = {
       seriesDurationLimit: 24,
-      measureHitsLimit: 100,
+      measureHitsLimit: 50,
       measureDurationLimit: 5,
       paramSelected: MeasureSeriesParamsSelected.measureDurationLimit
     };
