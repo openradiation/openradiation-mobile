@@ -17,9 +17,6 @@
             <ion-button class="device-button" fill="clear" (click)="goToDevices()">
                 {{'HOME.NO_SENSORS' | translate}}<br>{{'GENERAL.CLICK_HERE' | translate}}
             </ion-button>
-            <ion-button class="device-button" fill="clear" (click)="sqLiteTest()">
-                SqLite Test
-            </ion-button>
         </ng-template>
         <app-round-button [disabled]="!(canStartMeasure | async)"
                           [srcOn]="'assets/img/button-start-measure-on.png'"

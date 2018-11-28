@@ -66,8 +66,4 @@ export class HomePage extends AutoUnsubscribePage {
       }
     });
   }
-
-  sqLiteTest() {
-    this.v1MigrationService.sqLiteTest();
-  }
 }
