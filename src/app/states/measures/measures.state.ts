@@ -124,7 +124,7 @@ export class MeasuresState {
 
   @Selector()
   static measures({ measures }: MeasuresStateModel): (Measure | MeasureSeries)[] {
-    return measures;
+    return measures.sort((a, b) => b.startTime - a.startTime);
   }
 
   @Action(EnableExpertMode)
