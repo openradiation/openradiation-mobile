@@ -97,7 +97,7 @@
     <plugin name="cordova-plugin-screen-orientation" spec="3.0.1" />
     <plugin name="cordova-plugin-x-socialsharing" spec="5.4.1" />
     <plugin name="cordova-plugin-camera" spec="4.0.3" />
-    <plugin name="cordova-plugin-mauron85-background-geolocation" spec="3.0.0-alpha.47">
+    <plugin name="cordova-plugin-mauron85-background-geolocation" spec="3.0.0-alpha.48">
         <variable name="GOOGLE_PLAY_SERVICES_VERSION" value="11+" />
         <variable name="ANDROID_SUPPORT_LIBRARY_VERSION" value="26+" />
         <variable name="ICON" value="@mipmap/icon" />
@@ -110,6 +110,6 @@
         <variable name="MOTION_USAGE_DESCRIPTION" value="This app requires motion detection" />
     </plugin>
     <plugin name="cordovarduino" spec="0.0.10" />
-    <engine name="android" spec="7.1.1" />
     <engine name="ios" spec="4.5.5" />
+    <engine name="android" spec="~7.1.1" />
 </widget>
