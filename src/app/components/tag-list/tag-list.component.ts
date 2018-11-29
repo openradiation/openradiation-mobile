@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
@@ -16,6 +16,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 export class TagListComponent implements ControlValueAccessor {
   tagList: string[] | undefined;
   displayTagList: string[] = [];
+  displayedProposedTagList?: string[];
   currentTag = '';
   isDisabled: boolean;
 
@@ -24,6 +25,15 @@ export class TagListComponent implements ControlValueAccessor {
 
   @Input()
   hiddenTag?: string;
+
+  @Input()
+  proposedTagList?: string[];
+
+  @Input()
+  proposedTagListTitle?: string;
+
+  @Output()
+  tagAdded: EventEmitter<string> = new EventEmitter();
 
   private onChange = (option: any) => {};
 
@@ -40,6 +50,7 @@ export class TagListComponent implements ControlValueAccessor {
   writeValue(tagList: any): void {
     this.tagList = tagList;
     this.displayTagList = this.tagList ? this.tagList.filter(tag => tag !== this.hiddenTag) : [];
+    this.updateDisplayedProposedTagList();
     this.onChange(this.tagList);
   }
 
@@ -48,20 +59,34 @@ export class TagListComponent implements ControlValueAccessor {
   }
 
   deleteTag(index: number): void {
-    if (this.tagList) {
+    if (this.tagList && !this.isDisabled) {
       this.tagList.splice(index, 1);
       this.writeValue(this.tagList);
     }
   }
 
-  addTag(): void {
+  addCurrentTag(): void {
     if (this.currentTag) {
-      if (!this.tagList) {
-        this.tagList = [];
-      }
-      this.tagList.push(this.currentTag);
+      this.addTag(this.currentTag);
       this.currentTag = '';
-      this.writeValue(this.tagList);
     }
+  }
+
+  addTag(tag: string): void {
+    if (!this.tagList) {
+      this.tagList = [];
+    }
+    this.tagList = [...this.tagList, tag];
+    this.writeValue(this.tagList);
+    this.tagAdded.emit(tag);
+  }
+
+  updateDisplayedProposedTagList() {
+    this.displayedProposedTagList = this.proposedTagList
+      ? this.proposedTagList.filter(
+          proposedTag =>
+            !this.tagList || (this.tagList.every(tag => tag !== proposedTag) && proposedTag.startsWith(this.currentTag))
+        )
+      : undefined;
   }
 }

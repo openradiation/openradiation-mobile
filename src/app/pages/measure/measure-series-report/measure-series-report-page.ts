@@ -15,12 +15,13 @@ import {
   PositionAccuracyThreshold
 } from '../../../states/measures/measure';
 import {
+  AddRecentTag,
   CancelMeasure,
   StartMeasureSeriesReport,
   StopMeasureSeries,
   StopMeasureSeriesReport
 } from '../../../states/measures/measures.action';
-import { MeasuresStateModel } from '../../../states/measures/measures.state';
+import { MeasuresState, MeasuresStateModel } from '../../../states/measures/measures.state';
 import { UserState } from '../../../states/user/user.state';
 
 @Component({
@@ -31,6 +32,9 @@ import { UserState } from '../../../states/user/user.state';
 export class MeasureSeriesReportPage extends AutoUnsubscribePage {
   @Select(UserState.login)
   login$: Observable<string | undefined>;
+
+  @Select(MeasuresState.recentTags)
+  recentTags$: Observable<string>;
 
   currentSeries?: MeasureSeries;
   measureSeriesReportForm?: FormGroup;
@@ -187,5 +191,9 @@ export class MeasureSeriesReportPage extends AutoUnsubscribePage {
 
   cancelSeries() {
     this.store.dispatch(new CancelMeasure());
+  }
+
+  tagAdded(tag: string) {
+    this.store.dispatch(new AddRecentTag(tag));
   }
 }

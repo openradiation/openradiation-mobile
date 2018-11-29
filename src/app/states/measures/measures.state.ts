@@ -17,6 +17,7 @@ import {
 } from './measure';
 import {
   AddMeasureScanStep,
+  AddRecentTag,
   CancelMeasure,
   DeleteAllMeasures,
   DeleteMeasure,
@@ -50,6 +51,7 @@ export interface MeasuresStateModel {
   currentPosition?: Location;
   currentMeasure?: Measure;
   currentSeries?: MeasureSeries;
+  recentTags: string[];
   measureReport?: {
     model: MeasureReport;
     dirty: boolean;
@@ -78,6 +80,7 @@ export interface MeasuresStateModel {
   name: 'measures',
   defaults: {
     measures: [],
+    recentTags: [],
     params: {
       expertMode: false,
       autoPublish: false
@@ -125,6 +128,11 @@ export class MeasuresState {
   @Selector()
   static measures({ measures }: MeasuresStateModel): (Measure | MeasureSeries)[] {
     return measures.sort((a, b) => b.startTime - a.startTime);
+  }
+
+  @Selector()
+  static recentTags({ recentTags }: MeasuresStateModel): string[] {
+    return recentTags;
   }
 
   @Action(EnableExpertMode)
@@ -645,5 +653,15 @@ export class MeasuresState {
         currentSeries: { ...measure }
       });
     }
+  }
+
+  @Action(AddRecentTag)
+  addRecentTag({ getState, patchState }: StateContext<MeasuresStateModel>, { tag }: AddRecentTag) {
+    const { recentTags } = getState();
+    const index = recentTags.indexOf(tag);
+    patchState({
+      recentTags:
+        index === -1 ? [tag, ...recentTags] : [tag, ...recentTags.slice(0, index), ...recentTags.slice(index + 1)]
+    });
   }
 }

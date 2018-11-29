@@ -170,6 +170,7 @@
     },
     "SENSOR_TEMPERATURE": "Température capteur",
     "TAG_LIST": "Liste des tags",
+    "TAG_LIST_RECENT": "Tags récents",
     "TEMPERATURE": "T° (°C)",
     "TITLE": "Mesure",
     "VOLTAGE": "Tension (V)",

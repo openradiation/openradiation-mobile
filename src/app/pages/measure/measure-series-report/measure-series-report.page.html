@@ -100,7 +100,9 @@
                         </ion-list>
                         <div class="tags">
                             <app-tag-list formControlName="tags" [hiddenTag]="currentSeries?.id"
-                                          [title]="'MEASURES.TAG_LIST' | translate">
+                                          (tagAdded)="tagAdded($event)" [proposedTagList]="recentTags$ | async"
+                                          [title]="'MEASURES.TAG_LIST' | translate"
+                                          [proposedTagListTitle]="'MEASURES.TAG_LIST_RECENT' | translate">
                             </app-tag-list>
                         </div>
                     </ng-container>
