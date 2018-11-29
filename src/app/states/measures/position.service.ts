@@ -68,6 +68,21 @@ export class PositionService {
         BackgroundGeolocation.endTask(taskKey);
       })
     );
+
+    this.platform.pause.subscribe(() => {
+      this.store.selectSnapshot(({ measures }) => {
+        if (!measures.currentMeasure && !measures.currentSeries) {
+          BackgroundGeolocation.stop();
+        }
+      });
+    });
+    this.platform.resume.subscribe(() => {
+      BackgroundGeolocation.checkStatus(status => {
+        if (!status.isRunning) {
+          BackgroundGeolocation.start();
+        }
+      });
+    });
   }
 
   private requestAuthorization() {
