@@ -30,6 +30,9 @@ export class MeasureScanPage extends AutoUnsubscribePage {
   @Select(MeasuresState.currentSeries)
   currentSeries$: Observable<MeasureSeries | undefined>;
 
+  @Select(MeasuresState.canEndCurrentScan)
+  canEndCurrentScan$: Observable<boolean>;
+
   @Select(DevicesState.connectedDevice)
   connectedDevice$: Observable<AbstractDevice | undefined>;
 
@@ -39,7 +42,6 @@ export class MeasureScanPage extends AutoUnsubscribePage {
   positionAccuracyThreshold = PositionAccuracyThreshold;
   measureSeriesParamsSelected = MeasureSeriesParamsSelected;
 
-  canEndMeasureScan = false;
   isMeasureSeries = false;
 
   currentSeriesMessageMapping = {
@@ -86,11 +88,6 @@ export class MeasureScanPage extends AutoUnsubscribePage {
       if (connectedDevice) {
         this.subscriptions.push(
           this.currentMeasure$.subscribe(measure => this.updateHitsAccuracy(connectedDevice, measure)),
-          this.currentSeries$.subscribe(currentSeries => {
-            if (currentSeries && currentSeries.measures.length > 1) {
-              this.canEndMeasureScan = true;
-            }
-          }),
           this.actions$.pipe(ofActionSuccessful(StopMeasureScan)).subscribe(() => {
             this.navigationService.navigateRoot(['measure', this.isMeasureSeries ? 'report-series' : 'report']);
           }),
@@ -117,7 +114,6 @@ export class MeasureScanPage extends AutoUnsubscribePage {
   updateHitsAccuracy(device: AbstractDevice, measure?: Measure) {
     if (measure && measure.hitsNumber !== undefined) {
       if (measure.hitsNumber >= device.hitsAccuracyThreshold.accurate) {
-        this.canEndMeasureScan = true;
         this.hitsAccuracy = HitsAccuracy.Accurate;
       } else if (measure.hitsNumber >= device.hitsAccuracyThreshold.good) {
         this.hitsAccuracy = HitsAccuracy.Good;

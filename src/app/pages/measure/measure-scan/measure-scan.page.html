@@ -150,7 +150,7 @@
                     </div>
                 </ng-container>
                 <div class="bottom-buttons">
-                    <app-round-button [disabled]="!canEndMeasureScan"
+                    <app-round-button [disabled]="!(canEndCurrentScan$ | async)"
                                       [srcOn]="'assets/img/button-on.png'"
                                       [srcOff]="'assets/img/button-off.png'"
                                       (click)="stopScan()">

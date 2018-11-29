@@ -51,6 +51,7 @@ export interface MeasuresStateModel {
   currentPosition?: Location;
   currentMeasure?: Measure;
   currentSeries?: MeasureSeries;
+  canEndCurrentScan: boolean;
   recentTags: string[];
   measureReport?: {
     model: MeasureReport;
@@ -81,6 +82,7 @@ export interface MeasuresStateModel {
   defaults: {
     measures: [],
     recentTags: [],
+    canEndCurrentScan: false,
     params: {
       expertMode: false,
       autoPublish: false
@@ -133,6 +135,11 @@ export class MeasuresState {
   @Selector()
   static recentTags({ recentTags }: MeasuresStateModel): string[] {
     return recentTags;
+  }
+
+  @Selector()
+  static canEndCurrentScan({ canEndCurrentScan }: MeasuresStateModel): boolean {
+    return canEndCurrentScan;
   }
 
   @Action(EnableExpertMode)
@@ -267,7 +274,8 @@ export class MeasuresState {
       measureReport: undefined,
       measureSeriesParams: undefined,
       currentSeries: undefined,
-      measureSeriesReport: undefined
+      measureSeriesReport: undefined,
+      canEndCurrentScan: false
     });
   }
 
@@ -324,9 +332,11 @@ export class MeasuresState {
             .map(currentMeasureStep => currentMeasureStep.temperature!)
             .reduce((acc, current) => acc + current) / newCurrentMeasure.steps.length;
       }
-      patchState({
-        currentMeasure: newCurrentMeasure
-      });
+      const patch: Partial<MeasuresStateModel> = { currentMeasure: newCurrentMeasure };
+      if (newCurrentMeasure.hitsNumber > device.hitsAccuracyThreshold.accurate) {
+        patch.canEndCurrentScan = true;
+      }
+      patchState(patch);
       if (currentSeries && this.shouldStopMeasureSeriesCurrentScan(device, currentSeries, newCurrentMeasure, step.ts)) {
         return dispatch(new StartNextMeasureSeries(device));
       }
@@ -412,15 +422,17 @@ export class MeasuresState {
   stopMeasureScan({ getState, patchState }: StateContext<MeasuresStateModel>, { device }: StopMeasureScan) {
     const { currentMeasure, currentSeries, currentPosition } = getState();
     if (currentMeasure) {
-      let patch: Partial<MeasuresStateModel>;
+      const patch: Partial<MeasuresStateModel> = {
+        canEndCurrentScan: false
+      };
       const updatedMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
       if (currentSeries) {
-        patch = { currentMeasure: undefined };
+        patch.currentMeasure = undefined;
         if (updatedMeasure.hitsNumber! >= device.hitsAccuracyThreshold.accurate) {
           patch.currentSeries = MeasureSeries.addMeasureToSeries(currentSeries, updatedMeasure);
         }
       } else {
-        patch = { currentMeasure: updatedMeasure };
+        patch.currentMeasure = updatedMeasure;
       }
       patchState(patch);
     }

@@ -7,6 +7,7 @@ import { Location } from 'cordova-plugin-mauron85-background-geolocation';
 import { take } from 'rxjs/operators';
 import { AlertService } from '../../services/alert.service';
 import { PositionChanged } from './measures.action';
+import { MeasuresStateModel } from './measures.state';
 
 /**
  * Constants from cordova-plugin-mauron85-background-geolocation
@@ -70,11 +71,12 @@ export class PositionService {
     );
 
     this.platform.pause.subscribe(() => {
-      this.store.selectSnapshot(({ measures }) => {
-        if (!measures.currentMeasure && !measures.currentSeries) {
-          BackgroundGeolocation.stop();
-        }
-      });
+      const onGoingMeasuresScan = this.store.selectSnapshot(
+        ({ measures }: { measures: MeasuresStateModel }) => measures.currentMeasure || measures.currentSeries
+      );
+      if (!onGoingMeasuresScan) {
+        BackgroundGeolocation.stop();
+      }
     });
     this.platform.resume.subscribe(() => {
       BackgroundGeolocation.checkStatus(status => {
