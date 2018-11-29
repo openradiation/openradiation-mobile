@@ -69,6 +69,7 @@ export class TagListComponent implements ControlValueAccessor {
     if (this.currentTag) {
       this.addTag(this.currentTag);
       this.currentTag = '';
+      this.updateDisplayedProposedTagList();
     }
   }
 
@@ -83,10 +84,13 @@ export class TagListComponent implements ControlValueAccessor {
 
   updateDisplayedProposedTagList() {
     this.displayedProposedTagList = this.proposedTagList
-      ? this.proposedTagList.filter(
-          proposedTag =>
-            !this.tagList || (this.tagList.every(tag => tag !== proposedTag) && proposedTag.startsWith(this.currentTag))
-        )
+      ? this.proposedTagList
+          .filter(
+            proposedTag =>
+              (!this.tagList || this.tagList.every(tag => tag !== proposedTag)) &&
+              proposedTag.startsWith(this.currentTag)
+          )
+          .slice(0, 6)
       : undefined;
   }
 }
