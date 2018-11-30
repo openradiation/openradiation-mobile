@@ -23,8 +23,7 @@
     ]
   },
   "angularCompilerOptions": {
-    "strictInjectionParameters": true
-    // TODO enable this again when it's fixed : https://github.com/ionic-team/ionic/issues/16492
-    //"fullTemplateTypeCheck": true
+    "strictInjectionParameters": true,
+    "fullTemplateTypeCheck": true
   }
 }
