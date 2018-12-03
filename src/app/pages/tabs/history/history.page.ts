@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { AlertService } from '../../../services/alert.service';
 import { NavigationService } from '../../../services/navigation.service';
-import { Measure, MeasureSeries, MeasureType, PositionAccuracyThreshold } from '../../../states/measures/measure';
+import { Measure, MeasureSeries, MeasureType } from '../../../states/measures/measure';
 import {
   DeleteAllMeasures,
   DeleteMeasure,
@@ -26,7 +26,6 @@ export class HistoryPage extends AutoUnsubscribePage {
   measures$: Observable<(Measure | MeasureSeries)[]>;
 
   measureBeingSentMap: { [K: string]: boolean } = {};
-  positionAccuracyThreshold = PositionAccuracyThreshold;
 
   url = '/tabs/(history:history)';
 
@@ -99,35 +98,7 @@ export class HistoryPage extends AutoUnsubscribePage {
   }
 
   canPublish(measure: Measure | MeasureSeries): boolean {
-    switch (measure.type) {
-      case MeasureType.Measure:
-        if (measure.organisationReporting === 'OpenRadiation app 1.0.0') {
-          return (
-            measure.accuracy !== undefined &&
-            measure.accuracy !== null &&
-            measure.accuracy < PositionAccuracyThreshold.No
-          );
-        } else {
-          return (
-            measure.accuracy !== undefined &&
-            measure.accuracy !== null &&
-            measure.accuracy < PositionAccuracyThreshold.No &&
-            measure.endAccuracy !== undefined &&
-            measure.endAccuracy !== null &&
-            measure.endAccuracy < PositionAccuracyThreshold.No
-          );
-        }
-      case MeasureType.MeasureSeries:
-        return measure.measures.some(
-          item =>
-            item.accuracy !== undefined &&
-            item.accuracy !== null &&
-            item.accuracy! < PositionAccuracyThreshold.No &&
-            item.endAccuracy !== undefined &&
-            item.endAccuracy !== null &&
-            item.endAccuracy! < PositionAccuracyThreshold.No
-        );
-    }
+    return MeasuresState.canPublishMeasure(measure);
   }
 
   containsMeasureSeries(measures: (Measure | MeasureSeries)[]): boolean {

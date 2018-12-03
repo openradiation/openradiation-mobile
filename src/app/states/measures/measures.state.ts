@@ -331,7 +331,10 @@ export class MeasuresState implements NgxsOnInit {
       patchState({
         currentMeasure: newCurrentMeasure
       });
-      if (currentSeries && this.shouldStopMeasureSeriesCurrentScan(device, currentSeries, newCurrentMeasure, step.ts)) {
+      if (
+        currentSeries &&
+        MeasuresState.shouldStopMeasureSeriesCurrentScan(device, currentSeries, newCurrentMeasure, step.ts)
+      ) {
         return dispatch(new StartNextMeasureSeries(device));
       }
     }
@@ -355,7 +358,7 @@ export class MeasuresState implements NgxsOnInit {
       });
       if (
         currentSeries &&
-        this.shouldStopMeasureSeriesCurrentScan(device, currentSeries, currentMeasure, currentTime)
+        MeasuresState.shouldStopMeasureSeriesCurrentScan(device, currentSeries, currentMeasure, currentTime)
       ) {
         return dispatch(new StartNextMeasureSeries(device));
       }
@@ -363,7 +366,7 @@ export class MeasuresState implements NgxsOnInit {
     return of(null);
   }
 
-  private shouldStopMeasureSeriesCurrentScan(
+  private static shouldStopMeasureSeriesCurrentScan(
     device: AbstractDevice,
     measureSeries: MeasureSeries,
     measure: Measure,
@@ -378,6 +381,38 @@ export class MeasuresState implements NgxsOnInit {
         );
       case MeasureSeriesParamsSelected.measureHitsLimit:
         return measure.hitsNumber !== undefined && measure.hitsNumber > measureSeries.params.measureHitsLimit;
+    }
+  }
+
+  static canPublishMeasure(measure: Measure | MeasureSeries): boolean {
+    switch (measure.type) {
+      case MeasureType.Measure:
+        if (measure.organisationReporting === 'OpenRadiation app 1.0.0') {
+          return (
+            measure.accuracy !== undefined &&
+            measure.accuracy !== null &&
+            measure.accuracy < PositionAccuracyThreshold.No
+          );
+        } else {
+          return (
+            measure.accuracy !== undefined &&
+            measure.accuracy !== null &&
+            measure.accuracy < PositionAccuracyThreshold.No &&
+            measure.endAccuracy !== undefined &&
+            measure.endAccuracy !== null &&
+            measure.endAccuracy < PositionAccuracyThreshold.No
+          );
+        }
+      case MeasureType.MeasureSeries:
+        return measure.measures.some(
+          item =>
+            item.accuracy !== undefined &&
+            item.accuracy !== null &&
+            item.accuracy! < PositionAccuracyThreshold.No &&
+            item.endAccuracy !== undefined &&
+            item.endAccuracy !== null &&
+            item.endAccuracy! < PositionAccuracyThreshold.No
+        );
     }
   }
 

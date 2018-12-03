@@ -8,9 +8,10 @@ import { AbstractDevice, ApparatusSensorType } from '../devices/abstract-device'
 import { DeviceConnectionLost } from '../devices/devices.action';
 import { DevicesService } from '../devices/devices.service';
 import { UserStateModel } from '../user/user.state';
-import { Measure, MeasureSeries, MeasureType, PositionAccuracyThreshold, Step } from './measure';
+import { Measure, MeasureSeries, MeasureType, Step } from './measure';
 import { MeasureApi } from './measure-api';
 import { AddMeasureScanStep, CancelMeasure, StopMeasureScan, UpdateMeasureScanTime } from './measures.action';
+import { MeasuresState } from './measures.state';
 import { PositionService } from './position.service';
 
 @Injectable({
@@ -78,18 +79,13 @@ export class MeasuresService {
   }
 
   private postMeasure(measure: Measure): Observable<any> {
-    if (
-      measure.accuracy &&
-      measure.accuracy < PositionAccuracyThreshold.No &&
-      measure.endAccuracy &&
-      measure.endAccuracy < PositionAccuracyThreshold.No
-    ) {
+    if (MeasuresState.canPublishMeasure(measure)) {
       const payload: MeasureApi = {
         apiKey: environment.API_KEY,
         data: {
           apparatusId: measure.apparatusId,
           apparatusVersion: measure.apparatusVersion,
-          apparatusSensorType: this.formatApparatusSensorType(measure.apparatusSensorType),
+          apparatusSensorType: MeasuresService.formatApparatusSensorType(measure.apparatusSensorType),
           apparatusTubeType: measure.apparatusTubeType,
           temperature: measure.temperature ? Math.round(measure.temperature) : undefined,
           value: measure.value,
@@ -130,7 +126,7 @@ export class MeasuresService {
     }
   }
 
-  private formatApparatusSensorType(apparatusSensorType?: string): ApparatusSensorType | undefined {
+  private static formatApparatusSensorType(apparatusSensorType?: string): ApparatusSensorType | undefined {
     if (apparatusSensorType !== undefined) {
       if (apparatusSensorType.includes(ApparatusSensorType.Geiger)) {
         return ApparatusSensorType.Geiger;
