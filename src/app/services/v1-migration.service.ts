@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Platform } from '@ionic/angular';
 import { Measure, MeasureSeries, MeasureType, V1OrganisationReporting } from '../states/measures/measure';
 import { UserStateModel } from '../states/user/user.state';
 
@@ -8,50 +9,60 @@ declare var sqlitePlugin: any;
   providedIn: 'root'
 })
 export class V1MigrationService {
+  constructor(private platform: Platform) {}
+
   retrieveUser(): Promise<Partial<UserStateModel>> {
-    return new Promise((resolve, reject) => {
-      sqlitePlugin.openDatabase('Database', '1.0', 'OpenRadiation', -1).transaction((txn: any) => {
-        txn.executeSql(
-          'SELECT paramName, libre FROM params WHERE paramName="login" OR paramName="mdp"',
-          [],
-          (tx: any, res: any) => {
-            const items: any = {};
-            if (res.rows.length > 0) {
-              for (let i = 0; i < res.rows.length; i++) {
-                items[res.rows.item(i).paramName] = res.rows.item(i).libre;
+    return this.platform.ready().then(
+      () =>
+        new Promise((resolve, reject) => {
+          sqlitePlugin.openDatabase('Database', '1.0', 'OpenRadiation', -1).transaction((txn: any) => {
+            txn.executeSql(
+              'SELECT paramName, libre FROM params WHERE paramName="login" OR paramName="mdp"',
+              [],
+              (tx: any, res: any) => {
+                const items: any = {};
+                if (res.rows.length > 0) {
+                  for (let i = 0; i < res.rows.length; i++) {
+                    items[res.rows.item(i).paramName] = res.rows.item(i).libre;
+                  }
+                }
+                console.log('retrieve user', items);
+                resolve({ login: items.login, password: items.mdp });
+              },
+              (tx: any, res: any) => {
+                reject(res);
               }
-            }
-            resolve({ login: items.login, password: items.mdp });
-          },
-          (tx: any, res: any) => {
-            reject(res);
-          }
-        );
-      });
-    });
+            );
+          });
+        })
+    );
   }
 
   retrieveMeasures(): Promise<(Measure | MeasureSeries)[]> {
-    return new Promise((resolve, reject) => {
-      sqlitePlugin.openDatabase('Database', '1.0', 'OpenRadiation', -1).transaction((txn: any) => {
-        txn.executeSql(
-          'SELECT * FROM measures',
-          [],
-          (tx: any, res: any) => {
-            const measures: Measure[] = [];
-            if (res.rows.length > 0) {
-              for (let i = 0; i < res.rows.length; i++) {
-                measures[i] = V1MigrationService.transformMeasureToV2(res.rows.item(i));
+    return this.platform.ready().then(
+      () =>
+        new Promise<(Measure | MeasureSeries)[]>((resolve, reject) => {
+          sqlitePlugin.openDatabase('Database', '1.0', 'OpenRadiation', -1).transaction((txn: any) => {
+            txn.executeSql(
+              'SELECT * FROM measures',
+              [],
+              (tx: any, res: any) => {
+                const measures: Measure[] = [];
+                if (res.rows.length > 0) {
+                  for (let i = 0; i < res.rows.length; i++) {
+                    measures[i] = V1MigrationService.transformMeasureToV2(res.rows.item(i));
+                  }
+                }
+                console.log('retrieve measures', measures);
+                resolve(measures);
+              },
+              (tx: any, res: any) => {
+                reject(res);
               }
-            }
-            resolve(measures);
-          },
-          (tx: any, res: any) => {
-            reject(res);
-          }
-        );
-      });
-    });
+            );
+          });
+        })
+    );
   }
 
   private static transformMeasureToV2(item: any): Measure {

@@ -9,7 +9,6 @@ import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
 import { StartMeasure } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
-import { V1MigrationService } from '../../../services/v1-migration.service';
 
 @Component({
   selector: 'app-page-home',
@@ -30,8 +29,7 @@ export class HomePage extends AutoUnsubscribePage {
     protected router: Router,
     private store: Store,
     private actions$: Actions,
-    private navigationService: NavigationService,
-    private v1MigrationService: V1MigrationService
+    private navigationService: NavigationService
   ) {
     super(router);
 
