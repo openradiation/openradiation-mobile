@@ -8,7 +8,12 @@ import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-u
 import { AlertService } from '../../../services/alert.service';
 import { NavigationService } from '../../../services/navigation.service';
 import { Measure, MeasureSeries, MeasureType, PositionAccuracyThreshold } from '../../../states/measures/measure';
-import { DeleteAllMeasures, DeleteMeasure, PublishMeasure, ShowMeasure } from '../../../states/measures/measures.action';
+import {
+  DeleteAllMeasures,
+  DeleteMeasure,
+  PublishMeasure,
+  ShowMeasure
+} from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
 
 @Component({

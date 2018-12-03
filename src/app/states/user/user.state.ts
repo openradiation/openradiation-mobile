@@ -1,21 +1,20 @@
 import { Action, NgxsOnInit, Selector, State, StateContext } from '@ngxs/store';
 import { tap } from 'rxjs/operators';
+import { V1MigrationService } from '../../services/v1-migration.service';
 import { LogIn, LogOut, RetrieveV1User, SetLanguage } from './user.action';
 import { UserService } from './user.service';
-import { V1MigrationService } from '../../services/v1-migration.service';
-import { RetrieveV1Measures } from '../measures/measures.action';
 
 export interface UserStateModel {
   login?: string;
   password?: string;
   language?: string;
-  retrieveV1UserCheck: boolean;
+  v1UserRetrieved: boolean;
 }
 
 @State<UserStateModel>({
   name: 'user',
   defaults: {
-    retrieveV1UserCheck: false
+    v1UserRetrieved: false
   }
 })
 export class UserState implements NgxsOnInit {
@@ -32,11 +31,10 @@ export class UserState implements NgxsOnInit {
   }
 
   ngxsOnInit({ dispatch, getState }: StateContext<UserStateModel>) {
-    const { retrieveV1UserCheck } = getState();
+    const { v1UserRetrieved } = getState();
     dispatch(new SetLanguage());
-    if (!retrieveV1UserCheck) {
+    if (!v1UserRetrieved) {
       dispatch(new RetrieveV1User());
-      dispatch(new RetrieveV1Measures());
     }
   }
 
@@ -68,18 +66,18 @@ export class UserState implements NgxsOnInit {
 
   @Action(RetrieveV1User)
   retrieveV1User({ patchState }: StateContext<UserStateModel>) {
-    this.v1MigrationService
+    return this.v1MigrationService
       .retrieveUser()
       .then(({ login, password }) => {
         patchState({
           login,
           password,
-          retrieveV1UserCheck: true
+          v1UserRetrieved: true
         });
       })
       .catch(() => {
         patchState({
-          retrieveV1UserCheck: true
+          v1UserRetrieved: true
         });
       });
   }

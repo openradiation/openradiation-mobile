@@ -113,5 +113,5 @@ export class ShowMeasure {
 }
 
 export class RetrieveV1Measures {
-  static readonly type = '[User] Retrieve V1 user';
+  static readonly type = '[User] Retrieve V1 measures';
 }
