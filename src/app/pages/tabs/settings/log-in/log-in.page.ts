@@ -58,7 +58,7 @@ export class LogInPage extends AutoUnsubscribePage {
     this.subscriptions.push(
       this.actions$.pipe(ofActionSuccessful(LogIn)).subscribe(() => {
         if (!this.redirectAfterLogin) {
-          this.goToSettings();
+          this.goBack();
         }
       })
     );
@@ -107,7 +107,7 @@ export class LogInPage extends AutoUnsubscribePage {
       });
   }
 
-  goToSettings() {
+  goBack() {
     this.navigationService.goBack();
   }
 }

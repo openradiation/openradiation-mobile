@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -8,7 +9,7 @@ import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-u
 import { NavigationService } from '../../../services/navigation.service';
 import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
-import { MeasureSeriesParamsSelected, PositionAccuracyThreshold } from '../../../states/measures/measure';
+import { MeasureSeriesParamsSelected } from '../../../states/measures/measure';
 import { CancelMeasure, StartMeasure, StopMeasureSeriesParams } from '../../../states/measures/measures.action';
 import { MeasuresStateModel } from '../../../states/measures/measures.state';
 
@@ -23,8 +24,25 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
 
   measureSeriesParamsForm?: FormGroup;
   url = '/measure/series';
-  positionAccuracyThreshold = PositionAccuracyThreshold;
   measureSeriesParamsSelected = MeasureSeriesParamsSelected;
+
+  minuteMessageMapping = {
+    '=0': <string>_('GENERAL.MINUTE.NONE'),
+    '=1': <string>_('GENERAL.MINUTE.SINGULAR'),
+    other: <string>_('GENERAL.MINUTE.PLURAL')
+  };
+
+  hourMessageMapping = {
+    '=0': <string>_('GENERAL.HOUR.NONE'),
+    '=1': <string>_('GENERAL.HOUR.SINGULAR'),
+    other: <string>_('GENERAL.HOUR.PLURAL')
+  };
+
+  hitsMessageMapping = {
+    '=0': <string>_('GENERAL.HITS.NONE'),
+    '=1': <string>_('GENERAL.HITS.SINGULAR'),
+    other: <string>_('GENERAL.HITS.PLURAL')
+  };
 
   private paramSelected: MeasureSeriesParamsSelected;
 

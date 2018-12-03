@@ -11,6 +11,7 @@ import { UserStateModel } from '../user/user.state';
 import { Measure, MeasureSeries, MeasureType, Step } from './measure';
 import { MeasureApi } from './measure-api';
 import { AddMeasureScanStep, CancelMeasure, StopMeasureScan, UpdateMeasureScanTime } from './measures.action';
+import { MeasuresStateModel } from './measures.state';
 import { MeasuresState } from './measures.state';
 import { PositionService } from './position.service';
 
@@ -36,7 +37,16 @@ export class MeasuresService {
         ofActionSuccessful(DeviceConnectionLost),
         take(1)
       )
-      .subscribe(() => this.store.dispatch(new CancelMeasure()));
+      .subscribe(() => {
+        const canEndCurrentScan = this.store.selectSnapshot(
+          ({ measures }: { measures: MeasuresStateModel }) => measures.canEndCurrentScan
+        );
+        if (canEndCurrentScan) {
+          this.store.dispatch(new StopMeasureScan(device));
+        } else {
+          this.store.dispatch(new CancelMeasure());
+        }
+      });
     return this.detectHits(device, stopSignal).pipe(
       take(1),
       tap(() =>

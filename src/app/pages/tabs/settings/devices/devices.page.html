@@ -22,7 +22,7 @@
                 <img src="assets/img/icon-config.png">
             </ion-button>
         </ion-item>
-        <ion-item *ngFor="let availableDevice of availableDevices$ | async" class="clickable-device" button
+        <ion-item *ngFor="let availableDevice of availableDevices" class="clickable-device" button
                   detail="false"
                   (click)="connectDevice(availableDevice)">
             <ion-label>
@@ -42,7 +42,7 @@
                 <img src="assets/img/icon-config.png">
             </ion-button>
         </ion-item>
-        <ion-item *ngFor="let knownDevice of knownDevices$ | async" detail="false">
+        <ion-item *ngFor="let knownDevice of knownDevices" detail="false">
             <ion-label>
                 {{knownDevice.apparatusVersion}}<br>{{knownDevice.apparatusId}}
             </ion-label>

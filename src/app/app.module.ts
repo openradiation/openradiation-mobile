@@ -38,7 +38,7 @@ import { UserState } from './states/user/user.state';
     NgxsModule.forRoot([DevicesState, MeasuresState, UserState]),
     NgxsFormPluginModule.forRoot(),
     NgxsStoragePluginModule.forRoot({
-      key: ['devices.knownDevices', 'measures.measures', 'measures.params', 'measures.v1MeasuresRetrieved', 'user']
+      key: ['devices.knownDevices', 'measures.measures', 'measures.params', 'measures.recentTags', 'measures.v1MeasuresRetrieved', 'user']
     }),
     NgxsLoggerPluginModule.forRoot({
       disabled: environment.production

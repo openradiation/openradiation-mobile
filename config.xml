@@ -89,7 +89,7 @@
     <plugin name="cordova-plugin-ble-central" spec="1.2.2">
         <variable name="BLUETOOTH_USAGE_DESCRIPTION" value="L'activation du bluetooth est nécessaire pour se connecter aux capteurs. Merci d'accepter la permission." />
     </plugin>
-    <plugin name="cordova-plugin-ionic-webview" spec="2.2.0" />
+    <plugin name="cordova-plugin-ionic-webview" spec="2.2.5" />
     <plugin name="cordova-plugin-statusbar" spec="2.4.2" />
     <plugin name="cordova.plugins.diagnostic" spec="4.0.10" />
     <plugin name="cordova-plugin-network-information" spec="2.0.1" />
@@ -97,7 +97,7 @@
     <plugin name="cordova-plugin-screen-orientation" spec="3.0.1" />
     <plugin name="cordova-plugin-x-socialsharing" spec="5.4.1" />
     <plugin name="cordova-plugin-camera" spec="4.0.3" />
-    <plugin name="cordova-plugin-mauron85-background-geolocation" spec="3.0.0-alpha.47">
+    <plugin name="cordova-plugin-mauron85-background-geolocation" spec="3.0.0-alpha.48">
         <variable name="GOOGLE_PLAY_SERVICES_VERSION" value="11+" />
         <variable name="ANDROID_SUPPORT_LIBRARY_VERSION" value="26+" />
         <variable name="ICON" value="@mipmap/icon" />

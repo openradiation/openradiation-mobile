@@ -81,8 +81,14 @@ export class HistoryPage extends AutoUnsubscribePage {
     if (this.canPublish(measure)) {
       this.alertService.show({
         header: this.translateService.instant('HISTORY.TITLE'),
-        subHeader: this.translateService.instant('HISTORY.SEND.TITLE'),
-        message: this.translateService.instant('HISTORY.SEND.NOTICE'),
+        subHeader:
+          measure.type === MeasureType.Measure
+            ? this.translateService.instant('HISTORY.SEND.TITLE')
+            : this.translateService.instant('HISTORY.SEND_SERIES.TITLE'),
+        message:
+          measure.type === MeasureType.Measure
+            ? this.translateService.instant('HISTORY.SEND.NOTICE')
+            : this.translateService.instant('HISTORY.SEND_SERIES.NOTICE'),
         backdropDismiss: false,
         buttons: [
           {
@@ -105,10 +111,13 @@ export class HistoryPage extends AutoUnsubscribePage {
     return measures.some(measure => measure.type === MeasureType.MeasureSeries);
   }
 
-  delete(measure: Measure) {
+  delete(measure: Measure | MeasureSeries) {
     this.alertService.show({
       header: this.translateService.instant('HISTORY.TITLE'),
-      message: this.translateService.instant('HISTORY.DELETE.NOTICE'),
+      message:
+        measure.type === MeasureType.Measure
+          ? this.translateService.instant('HISTORY.DELETE.NOTICE')
+          : this.translateService.instant('HISTORY.DELETE_SERIES.NOTICE'),
       backdropDismiss: false,
       buttons: [
         {

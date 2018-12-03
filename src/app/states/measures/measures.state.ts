@@ -19,6 +19,7 @@ import {
 } from './measure';
 import {
   AddMeasureScanStep,
+  AddRecentTag,
   CancelMeasure,
   DeleteAllMeasures,
   DeleteMeasure,
@@ -53,6 +54,8 @@ export interface MeasuresStateModel {
   currentPosition?: Location;
   currentMeasure?: Measure;
   currentSeries?: MeasureSeries;
+  canEndCurrentScan: boolean;
+  recentTags: string[];
   measureReport?: {
     model: MeasureReport;
     dirty: boolean;
@@ -83,6 +86,8 @@ export interface MeasuresStateModel {
   defaults: {
     v1MeasuresRetrieved: false,
     measures: [],
+    recentTags: [],
+    canEndCurrentScan: false,
     params: {
       expertMode: false,
       autoPublish: false
@@ -130,7 +135,17 @@ export class MeasuresState implements NgxsOnInit {
 
   @Selector()
   static measures({ measures }: MeasuresStateModel): (Measure | MeasureSeries)[] {
-    return measures;
+    return measures.sort((a, b) => b.startTime - a.startTime);
+  }
+
+  @Selector()
+  static recentTags({ recentTags }: MeasuresStateModel): string[] {
+    return recentTags;
+  }
+
+  @Selector()
+  static canEndCurrentScan({ canEndCurrentScan }: MeasuresStateModel): boolean {
+    return canEndCurrentScan;
   }
 
   ngxsOnInit({ dispatch, getState }: StateContext<MeasuresStateModel>) {
@@ -272,7 +287,8 @@ export class MeasuresState implements NgxsOnInit {
       measureReport: undefined,
       measureSeriesParams: undefined,
       currentSeries: undefined,
-      measureSeriesReport: undefined
+      measureSeriesReport: undefined,
+      canEndCurrentScan: false
     });
   }
 
@@ -280,7 +296,7 @@ export class MeasuresState implements NgxsOnInit {
   startMeasureSeries({ patchState }: StateContext<MeasuresStateModel>) {
     const model: MeasureSeriesParams = {
       seriesDurationLimit: 24,
-      measureHitsLimit: 100,
+      measureHitsLimit: 50,
       measureDurationLimit: 5,
       paramSelected: MeasureSeriesParamsSelected.measureDurationLimit
     };
@@ -329,9 +345,11 @@ export class MeasuresState implements NgxsOnInit {
             .map(currentMeasureStep => currentMeasureStep.temperature!)
             .reduce((acc, current) => acc + current) / newCurrentMeasure.steps.length;
       }
-      patchState({
-        currentMeasure: newCurrentMeasure
-      });
+      const patch: Partial<MeasuresStateModel> = { currentMeasure: newCurrentMeasure };
+      if (newCurrentMeasure.hitsNumber > device.hitsAccuracyThreshold.accurate) {
+        patch.canEndCurrentScan = true;
+      }
+      patchState(patch);
       if (
         currentSeries &&
         MeasuresState.shouldStopMeasureSeriesCurrentScan(device, currentSeries, newCurrentMeasure, step.ts)
@@ -452,15 +470,17 @@ export class MeasuresState implements NgxsOnInit {
   stopMeasureScan({ getState, patchState }: StateContext<MeasuresStateModel>, { device }: StopMeasureScan) {
     const { currentMeasure, currentSeries, currentPosition } = getState();
     if (currentMeasure) {
-      let patch: Partial<MeasuresStateModel>;
+      const patch: Partial<MeasuresStateModel> = {
+        canEndCurrentScan: false
+      };
       const updatedMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
       if (currentSeries) {
-        patch = { currentMeasure: undefined };
+        patch.currentMeasure = undefined;
         if (updatedMeasure.hitsNumber! >= device.hitsAccuracyThreshold.accurate) {
           patch.currentSeries = MeasureSeries.addMeasureToSeries(currentSeries, updatedMeasure);
         }
       } else {
-        patch = { currentMeasure: updatedMeasure };
+        patch.currentMeasure = updatedMeasure;
       }
       patchState(patch);
     }
@@ -693,6 +713,16 @@ export class MeasuresState implements NgxsOnInit {
         currentSeries: { ...measure }
       });
     }
+  }
+
+  @Action(AddRecentTag)
+  addRecentTag({ getState, patchState }: StateContext<MeasuresStateModel>, { tag }: AddRecentTag) {
+    const { recentTags } = getState();
+    const index = recentTags.indexOf(tag);
+    patchState({
+      recentTags:
+        index === -1 ? [tag, ...recentTags] : [tag, ...recentTags.slice(0, index), ...recentTags.slice(index + 1)]
+    });
   }
 
   @Action(RetrieveV1Measures)

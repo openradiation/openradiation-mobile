@@ -1,11 +1,11 @@
 {
   "ABOUT": {
     "MEASURE": {
-      "NOTICE": "L’application OpenRadiation, connectée en Bluetooth avec le capteur OpenRadiation (voir les capteurs compatibles sur <a target=\"_blank\" href=\"https://www.openradiation.org\">www.openradiation.org</a>), vous permet de mesurer la radioactivité, mais aussi de participer à un projet de science citoyenne, en contribuant à la constitution de la base collaborative OpenRadiation, pour une meilleure connaissance de la radioactivité dans l’environnement. Nous vous invitons ainsi à créer un compte utilisateur sur <a target=\"_blank\" href=\"https://www.openradiation.org/user/register\">www.openradiation.org</a>, puis à paramétrer ce compte dans l’application et à activer la publication automatique des mesures (menu paramètres).",
+      "NOTICE": "L’application OpenRadiation, connectée avec un capteur compatible (voir les capteurs compatibles sur <a target=\"_blank\" href=\"https://www.openradiation.org\">www.openradiation.org</a>), vous permet de mesurer la radioactivité, mais aussi de participer à un projet de science citoyenne, en contribuant à la constitution de la base collaborative OpenRadiation, pour une meilleure connaissance de la radioactivité dans l’environnement. Nous vous invitons ainsi à créer un compte utilisateur sur <a target=\"_blank\" href=\"https://www.openradiation.org/user/register\">www.openradiation.org</a>, puis à paramétrer ce compte dans l’application et à activer la publication automatique des mesures (menu paramètres).",
       "TITLE": "Mesure de la radioactivité"
     },
     "MEASURES_HOW_TO": {
-      "NOTICE": "Allumez votre capteur, démarrez l’application, puis connectez-la en Bluetooth au capteur. OpenRadiation est une base de données dont l’objectif est de cartographier la radioactivité dans l’environnement. Afin que les données soient homogènes, comparables et les plus représentatives possible, les mesures que vous publiez sur OpenRadiation doivent idéalement être prises en extérieur, si possible éloignées d’une habitation, et en positionnant le capteur à environ 1 mètre du sol. Plus la durée de la mesure est longue, meilleure est la statistique et plus la mesure est précise : un indicateur vous permet d’apprécier la fiabilité de la mesure en direct. Une fois la mesure réalisée, vous pouvez qualifier l’environnement dans lequel elle a été prise (à l’intérieur, dans un avion, sur une route, à la campagne, en ville) et donner des indications supplémentaires avant de la publier. Ces indications permettront d’apprécier plus finement la fiabilité de la mesure.",
+      "NOTICE": "Allumez votre capteur, démarrez l’application, puis connectez-la au capteur. OpenRadiation est une base de données dont l’objectif est de cartographier la radioactivité dans l’environnement. Afin que les données soient homogènes, comparables et les plus représentatives possible, les mesures que vous publiez sur OpenRadiation doivent idéalement être prises en extérieur, si possible éloignées d’une habitation, et en positionnant le capteur à environ 1 mètre du sol. Plus la durée de la mesure est longue, meilleure est la statistique et plus la mesure est précise : un indicateur vous permet d’apprécier la fiabilité de la mesure en direct. Une fois la mesure réalisée, vous pouvez qualifier l’environnement dans lequel elle a été prise (à l’intérieur, dans un avion, sur une route, à la campagne, en ville) et donner des indications supplémentaires avant de la publier. Ces indications permettront d’apprécier plus finement la fiabilité de la mesure.",
       "TITLE": "Comment prendre des mesures ?"
     },
     "OPENRADIATION_PROJECT": {
@@ -32,7 +32,22 @@
     "END": "Fin",
     "GOOD": "Bon",
     "GO_TO_SETTINGS": "Accéder aux paramètres",
+    "HITS": {
+      "NONE": "{{count}} coup",
+      "PLURAL": "{{count}} coups",
+      "SINGULAR": "{{count}} coup"
+    },
+    "HOUR": {
+      "NONE": "{{count}} heure",
+      "PLURAL": "{{count}} heures",
+      "SINGULAR": "{{count}} heure"
+    },
     "INACCURATE": "Imprécis",
+    "MINUTE": {
+      "NONE": "{{count}} minute",
+      "PLURAL": "{{count}} minutes",
+      "SINGULAR": "{{count}} minute"
+    },
     "NO": "Non",
     "OK": "Ok",
     "POOR": "Moyen",
@@ -50,6 +65,9 @@
       "NOTICE": "En supprimant vos mesures, vous nettoyez tout votre historique mais vous ne supprimez pas les données déjà publiées de la base OpenRadiation.",
       "TITLE": "Êtes-vous sûr de vouloir supprimer toutes les mesures ?"
     },
+    "DELETE_SERIES": {
+      "NOTICE": "Êtes-vous sûr(e) de vouloir supprimer cette série de mesure ?"
+    },
     "MEASURE_SERIES": {
       "PLURAL": "{{count}} mesures",
       "SINGULAR": "{{count}} mesure"
@@ -62,8 +80,13 @@
       "NOTICE": "En envoyant cette mesure, vous acceptez que l'ensemble des données correspondant à cette mesure (dont votre position GPS, votre pseudo, etc) soit publié dans la base OpenRadiation.",
       "TITLE": "Êtes-vous sûr(e) de vouloir envoyer cette mesure ?"
     },
-    "SEND_ERROR": "Impossible d'envoyer la mesure, veuillez vérifier votre connexion.",
+    "SEND_ERROR": "Impossible d'envoyer, veuillez vérifier votre connexion.",
+    "SEND_SERIES": {
+      "NOTICE": "En envoyant cette mesure, vous acceptez que l'ensemble des données correspondant à cette série de mesure (dont votre position GPS, votre pseudo, etc) soit publié dans la base OpenRadiation.",
+      "TITLE": "Êtes-vous sûr(e) de vouloir envoyer cette série de mesure ?"
+    },
     "SENT": "Publiée",
+    "SENT_SERIES": "Publiées",
     "TITLE": "Historique"
   },
   "HOME": {
@@ -126,7 +149,8 @@
       "INSIDE": "À l'intérieur",
       "ON_THE_ROAD": "Sur la route",
       "PLANE": "En avion",
-      "TITLE": "Environnement de la mesure"
+      "TITLE": "Environnement de la mesure",
+      "TITLE_SERIES": "Environnement des mesures"
     },
     "EXPERT": "Expert",
     "EXPERT_MODE": "Mode expert",
@@ -146,6 +170,7 @@
     },
     "SENSOR_TEMPERATURE": "Température capteur",
     "TAG_LIST": "Liste des tags",
+    "TAG_LIST_RECENT": "Tags récents",
     "TEMPERATURE": "T° (°C)",
     "TITLE": "Mesure",
     "VOLTAGE": "Tension (V)",
@@ -163,12 +188,14 @@
     "ALERT": "Vous devez vous identifier pour pouvoir commencer une série de mesure.",
     "HITS_NUMBER": "Nb coups minimun",
     "MEASURES_DURATION": "Durée minimale",
-    "MEASURES_TITLE": "Mesures",
+    "MEASURE_LIMIT": "Chaque mesure se terminera automatiquement après",
     "MESSAGE_SCAN": {
       "NONE": "Première mesure en cours",
       "PLURAL": "{{count}} mesures prises depuis {{duration}}",
       "SINGULAR": "Une mesure prise depuis {{duration}}"
     },
+    "MESSAGE_SCAN_PARAM": "Mesures auto. de {{measureLimit}} pour une durée max. de {{seriesLimit}}",
+    "NOTICE": "Vous pouvez prendre des mesures automatiques. Merci de faire ces mesures dans un environnement homogène, car vous devrez ensuite qualifier l’environnement de l’ensemble des mesures et non de chaque mesure.",
     "REPORT": {
       "FIRST_MEASURE-TIME": "Début de la première mesure",
       "HITS_AVERAGE": "Moyenne Nb coups",
@@ -176,8 +203,8 @@
       "SERIES_DURATION": "Durée totale des mesures",
       "VALUE_AVERAGE": "Moyenne des mesures"
     },
-    "SERIES_DURATION": "Durée de la série de mesures",
-    "SERIES_TITLE": "Série",
+    "SERIES_LIMIT": "La mesure suivante démarrera automatiquement, pendant une durée maximale de",
+    "STOP": "Vous pourrez arrêter les mesures à tout moment.",
     "TITLE": "Série de mesures"
   },
   "POSITION": {

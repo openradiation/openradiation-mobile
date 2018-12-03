@@ -24,7 +24,6 @@ import { Tabs } from './tabs.component';
     CommonModule,
     FormsModule,
     TabsRoutingModule,
-    // TODO switch to lazyloading in tabs once it's fixed => https://github.com/ionic-team/ionic/issues/14566
     HomePageModule,
     HistoryPageModule,
     MapPageModule,

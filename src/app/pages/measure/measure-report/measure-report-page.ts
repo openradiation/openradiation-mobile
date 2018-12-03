@@ -11,6 +11,7 @@ import { NavigationService } from '../../../services/navigation.service';
 import { DateService } from '../../../states/measures/date.service';
 import { Measure, MeasureEnvironment, PositionAccuracyThreshold } from '../../../states/measures/measure';
 import {
+  AddRecentTag,
   CancelMeasure,
   StartMeasureReport,
   StopMeasure,
@@ -30,6 +31,9 @@ export class MeasureReportPage extends AutoUnsubscribePage {
 
   @Select(UserState.login)
   login$: Observable<string | undefined>;
+
+  @Select(MeasuresState.recentTags)
+  recentTags$: Observable<string>;
 
   currentMeasure?: Measure;
   measureReportForm?: FormGroup;
@@ -217,6 +221,10 @@ export class MeasureReportPage extends AutoUnsubscribePage {
         value: MeasureEnvironment.Plane
       }
     ];
+  }
+
+  tagAdded(tag: string) {
+    this.store.dispatch(new AddRecentTag(tag));
   }
 
   static checkPositionChangeSpeed(lat: number, long: number, endLat: number, endLong: number, duration: number) {

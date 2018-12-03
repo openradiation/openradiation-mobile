@@ -31,7 +31,6 @@ export class ConnectDevice {
 
 export class DisconnectDevice {
   static readonly type = '[Devices] Disconnect device';
-  constructor() {}
 }
 
 export class DeviceConnectionLost {
@@ -50,7 +49,6 @@ export class EditDeviceParams {
 
 export class SaveDeviceParams {
   static readonly type = '[Devices] Save device params';
-  constructor() {}
 }
 
 export class UpdateDevice {
