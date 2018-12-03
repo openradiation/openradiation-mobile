@@ -3,7 +3,7 @@ import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
-import { Location } from 'cordova-plugin-mauron85-background-geolocation';
+import { Location, ServiceStatus } from 'cordova-plugin-mauron85-background-geolocation';
 import { take } from 'rxjs/operators';
 import { AlertService } from '../../services/alert.service';
 import { PositionChanged } from './measures.action';
@@ -79,7 +79,7 @@ export class PositionService {
       }
     });
     this.platform.resume.subscribe(() => {
-      BackgroundGeolocation.checkStatus(status => {
+      BackgroundGeolocation.checkStatus((status: ServiceStatus) => {
         if (!status.isRunning) {
           BackgroundGeolocation.start();
         }
