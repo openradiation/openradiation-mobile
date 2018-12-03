@@ -1,6 +1,6 @@
-import { UserStateModel } from '../states/user/user.state';
 import { Injectable } from '@angular/core';
-import { Measure, MeasureSeries, MeasureType } from '../states/measures/measure';
+import { Measure, MeasureSeries, MeasureType, V1OrganisationReporting } from '../states/measures/measure';
+import { UserStateModel } from '../states/user/user.state';
 
 declare var sqlitePlugin: any;
 
@@ -41,7 +41,7 @@ export class V1MigrationService {
             const measures: Measure[] = [];
             if (res.rows.length > 0) {
               for (let i = 0; i < res.rows.length; i++) {
-                measures[i] = this.transformMeasureToV2(res.rows.item(i));
+                measures[i] = V1MigrationService.transformMeasureToV2(res.rows.item(i));
               }
             }
             resolve(measures);
@@ -54,7 +54,7 @@ export class V1MigrationService {
     });
   }
 
-  transformMeasureToV2(item: any): Measure {
+  private static transformMeasureToV2(item: any): Measure {
     return {
       type: MeasureType.Measure,
       apparatusId: item.apparatusId,
@@ -75,7 +75,7 @@ export class V1MigrationService {
       deviceModel: item.deviceModel,
       reportUuid: item.reportUUID,
       manualReporting: item.manualReporting !== 'false',
-      organisationReporting: 'OpenRadiation app 1.0.0',
+      organisationReporting: V1OrganisationReporting,
       description: item.notes,
       measurementHeight: item.position,
       tags: item.tags.toString().split(/[\s,]+/),

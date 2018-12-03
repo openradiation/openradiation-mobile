@@ -14,7 +14,8 @@ import {
   MeasureSeriesParamsSelected,
   MeasureSeriesReport,
   MeasureType,
-  PositionAccuracyThreshold
+  PositionAccuracyThreshold,
+  V1OrganisationReporting
 } from './measure';
 import {
   AddMeasureScanStep,
@@ -387,7 +388,7 @@ export class MeasuresState implements NgxsOnInit {
   static canPublishMeasure(measure: Measure | MeasureSeries): boolean {
     switch (measure.type) {
       case MeasureType.Measure:
-        if (measure.organisationReporting === 'OpenRadiation app 1.0.0') {
+        if (measure.organisationReporting === V1OrganisationReporting) {
           return (
             measure.accuracy !== undefined &&
             measure.accuracy !== null &&
