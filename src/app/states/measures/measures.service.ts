@@ -11,8 +11,7 @@ import { UserStateModel } from '../user/user.state';
 import { Measure, MeasureSeries, MeasureType, Step } from './measure';
 import { MeasureApi } from './measure-api';
 import { AddMeasureScanStep, CancelMeasure, StopMeasureScan, UpdateMeasureScanTime } from './measures.action';
-import { MeasuresStateModel } from './measures.state';
-import { MeasuresState } from './measures.state';
+import { MeasuresState, MeasuresStateModel } from './measures.state';
 import { PositionService } from './position.service';
 
 @Injectable({
