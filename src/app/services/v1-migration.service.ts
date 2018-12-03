@@ -12,7 +12,7 @@ export class V1MigrationService {
     return new Promise((resolve, reject) => {
       sqlitePlugin.openDatabase('Database', '1.0', 'OpenRadiation', -1).transaction((txn: any) => {
         txn.executeSql(
-          'SELECT paramName, libre FROM params WHERE paramName="login" OR paramName="mdq"',
+          'SELECT paramName, libre FROM params WHERE paramName="login" OR paramName="mdp"',
           [],
           (tx: any, res: any) => {
             const items: any = {};
