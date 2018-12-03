@@ -55,7 +55,8 @@ export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
   }
 
   protected convertHitsNumberPerSec(hitsNumberPerSec: number): number {
-    return 0.000001 * hitsNumberPerSec ** 3 + 0.0025 * hitsNumberPerSec ** 2 + 0.39 * hitsNumberPerSec;
+    const TcNet = hitsNumberPerSec - 0.14;
+    return 0.000001 * TcNet ** 3 + 0.0025 * TcNet ** 2 + 0.39 * TcNet;
   }
 
   getDeviceInfo(device: DeviceOGKit): Observable<Partial<DeviceOGKit>> {

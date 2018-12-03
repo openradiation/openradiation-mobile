@@ -111,3 +111,8 @@ export class ShowMeasure {
   static readonly type = '[Measures] Show measure detail';
   constructor(public measure: Measure | MeasureSeries) {}
 }
+
+export class AddRecentTag {
+  static readonly type = '[Measures] Add recent tag';
+  constructor(public tag: string) {}
+}

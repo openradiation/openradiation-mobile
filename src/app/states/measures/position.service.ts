@@ -3,15 +3,16 @@ import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
-import { BackgroundGeolocationPlugin } from 'cordova-plugin-mauron85-background-geolocation';
+import { Location } from 'cordova-plugin-mauron85-background-geolocation';
 import { take } from 'rxjs/operators';
 import { AlertService } from '../../services/alert.service';
 import { PositionChanged } from './measures.action';
+import { MeasuresStateModel } from './measures.state';
 
 /**
  * Constants from cordova-plugin-mauron85-background-geolocation
  */
-declare const BackgroundGeolocation: BackgroundGeolocationPlugin;
+declare const BackgroundGeolocation: any;
 
 @Injectable({
   providedIn: 'root'
@@ -48,12 +49,12 @@ export class PositionService {
   }
 
   private watchPosition() {
-    BackgroundGeolocation.getLocations(positions => {
+    BackgroundGeolocation.getLocations((positions: Location[]) => {
       if (positions[0]) {
         this.store.dispatch(new PositionChanged(positions[0]));
       } else {
         BackgroundGeolocation.getCurrentLocation(
-          position => this.store.dispatch(new PositionChanged(position)),
+          (position: Location) => this.store.dispatch(new PositionChanged(position)),
           undefined,
           {
             enableHighAccuracy: true
@@ -62,12 +63,28 @@ export class PositionService {
       }
     });
     BackgroundGeolocation.start();
-    BackgroundGeolocation.on('location', position =>
-      BackgroundGeolocation.startTask(taskKey => {
+    BackgroundGeolocation.on('location', (position: Location) =>
+      BackgroundGeolocation.startTask((taskKey: number) => {
         this.store.dispatch(new PositionChanged(position));
         BackgroundGeolocation.endTask(taskKey);
       })
     );
+
+    this.platform.pause.subscribe(() => {
+      const onGoingMeasuresScan = this.store.selectSnapshot(
+        ({ measures }: { measures: MeasuresStateModel }) => measures.currentMeasure || measures.currentSeries
+      );
+      if (!onGoingMeasuresScan) {
+        BackgroundGeolocation.stop();
+      }
+    });
+    this.platform.resume.subscribe(() => {
+      BackgroundGeolocation.checkStatus(status => {
+        if (!status.isRunning) {
+          BackgroundGeolocation.start();
+        }
+      });
+    });
   }
 
   private requestAuthorization() {
@@ -77,11 +94,10 @@ export class PositionService {
     }
     this.diagnostic
       .getLocationAuthorizationStatus()
-      .then(
-        status =>
-          this.platform.is('ios') && status === this.diagnostic.permissionStatus.DENIED
-            ? this.diagnostic.permissionStatus.DENIED_ALWAYS
-            : status
+      .then(status =>
+        this.platform.is('ios') && status === this.diagnostic.permissionStatus.DENIED
+          ? this.diagnostic.permissionStatus.DENIED_ALWAYS
+          : status
       )
       .then(status => {
         switch (status) {

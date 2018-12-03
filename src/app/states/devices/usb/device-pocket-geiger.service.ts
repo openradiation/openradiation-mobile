@@ -13,6 +13,8 @@ import { DevicePocketGeiger } from './device-pocket-geiger';
 export class DevicePocketGeigerService extends AbstractUSBDeviceService<DevicePocketGeiger> {
   private SEND_GET_HITS = 'S\n';
   private RECEIVE_GET_HITS = '>';
+  private NOISE_REJECT_DURATION = 200;
+  private noiseTimeout = 0;
 
   constructor(protected store: Store, protected serial: Serial, protected actions$: Actions) {
     super(store, serial, actions$);
@@ -35,6 +37,7 @@ export class DevicePocketGeigerService extends AbstractUSBDeviceService<DevicePo
     return this.serial.registerReadCallback().pipe(
       takeUntil(stopSignal),
       filter((buffer: any): buffer is ArrayBuffer => buffer instanceof ArrayBuffer),
+      filter(() => this.noiseTimeout < Date.now()),
       map((buffer: ArrayBuffer) => this.decodeDataPackage(buffer)),
       startWith({ ts: Date.now(), hitsNumber: 0 }),
       filter((step: Step | null): step is Step => step !== null)
@@ -44,12 +47,18 @@ export class DevicePocketGeigerService extends AbstractUSBDeviceService<DevicePo
   protected decodeDataPackage(buffer: ArrayBuffer): Step | null {
     const data = this.textDecoder.decode(buffer);
     if (data[0] === this.RECEIVE_GET_HITS) {
-      const hitsNumber = Number(data.slice(1).split(',')[0]);
-      if (hitsNumber) {
-        return {
-          ts: Date.now(),
-          hitsNumber
-        };
+      const dataPackage = data.slice(1).split(',');
+      const hitsNumber = Number(dataPackage[0]);
+      const noise = Number(dataPackage[1]);
+      if (noise) {
+        this.noiseTimeout = Date.now() + this.NOISE_REJECT_DURATION;
+      } else {
+        if (hitsNumber) {
+          return {
+            ts: Date.now(),
+            hitsNumber
+          };
+        }
       }
     }
     return null;

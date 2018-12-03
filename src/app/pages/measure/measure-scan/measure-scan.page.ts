@@ -8,7 +8,13 @@ import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-u
 import { NavigationService } from '../../../services/navigation.service';
 import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
-import { HitsAccuracy, Measure, MeasureSeries, PositionAccuracyThreshold } from '../../../states/measures/measure';
+import {
+  HitsAccuracy,
+  Measure,
+  MeasureSeries,
+  MeasureSeriesParamsSelected,
+  PositionAccuracyThreshold
+} from '../../../states/measures/measure';
 import { CancelMeasure, StartMeasureScan, StopMeasureScan } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
 
@@ -24,6 +30,9 @@ export class MeasureScanPage extends AutoUnsubscribePage {
   @Select(MeasuresState.currentSeries)
   currentSeries$: Observable<MeasureSeries | undefined>;
 
+  @Select(MeasuresState.canEndCurrentScan)
+  canEndCurrentScan$: Observable<boolean>;
+
   @Select(DevicesState.connectedDevice)
   connectedDevice$: Observable<AbstractDevice | undefined>;
 
@@ -31,14 +40,32 @@ export class MeasureScanPage extends AutoUnsubscribePage {
   hitsAccuracyWidth = 0;
 
   positionAccuracyThreshold = PositionAccuracyThreshold;
+  measureSeriesParamsSelected = MeasureSeriesParamsSelected;
 
-  canEndMeasureScan = false;
   isMeasureSeries = false;
 
   currentSeriesMessageMapping = {
-    '=0': _('MEASURE_SERIES.MESSAGE_SCAN.NONE'),
-    '=1': _('MEASURE_SERIES.MESSAGE_SCAN.SINGULAR'),
-    other: _('MEASURE_SERIES.MESSAGE_SCAN.PLURAL')
+    '=0': <string>_('MEASURE_SERIES.MESSAGE_SCAN.NONE'),
+    '=1': <string>_('MEASURE_SERIES.MESSAGE_SCAN.SINGULAR'),
+    other: <string>_('MEASURE_SERIES.MESSAGE_SCAN.PLURAL')
+  };
+
+  minuteMessageMapping = {
+    '=0': <string>_('GENERAL.MINUTE.NONE'),
+    '=1': <string>_('GENERAL.MINUTE.SINGULAR'),
+    other: <string>_('GENERAL.MINUTE.PLURAL')
+  };
+
+  hourMessageMapping = {
+    '=0': <string>_('GENERAL.HOUR.NONE'),
+    '=1': <string>_('GENERAL.HOUR.SINGULAR'),
+    other: <string>_('GENERAL.HOUR.PLURAL')
+  };
+
+  hitsMessageMapping = {
+    '=0': <string>_('GENERAL.HITS.NONE'),
+    '=1': <string>_('GENERAL.HITS.SINGULAR'),
+    other: <string>_('GENERAL.HITS.PLURAL')
   };
 
   url = '/measure/scan';
@@ -61,11 +88,6 @@ export class MeasureScanPage extends AutoUnsubscribePage {
       if (connectedDevice) {
         this.subscriptions.push(
           this.currentMeasure$.subscribe(measure => this.updateHitsAccuracy(connectedDevice, measure)),
-          this.currentSeries$.subscribe(currentSeries => {
-            if (currentSeries && currentSeries.measures.length > 1) {
-              this.canEndMeasureScan = true;
-            }
-          }),
           this.actions$.pipe(ofActionSuccessful(StopMeasureScan)).subscribe(() => {
             this.navigationService.navigateRoot(['measure', this.isMeasureSeries ? 'report-series' : 'report']);
           }),
@@ -92,7 +114,6 @@ export class MeasureScanPage extends AutoUnsubscribePage {
   updateHitsAccuracy(device: AbstractDevice, measure?: Measure) {
     if (measure && measure.hitsNumber !== undefined) {
       if (measure.hitsNumber >= device.hitsAccuracyThreshold.accurate) {
-        this.canEndMeasureScan = true;
         this.hitsAccuracy = HitsAccuracy.Accurate;
       } else if (measure.hitsNumber >= device.hitsAccuracyThreshold.good) {
         this.hitsAccuracy = HitsAccuracy.Good;

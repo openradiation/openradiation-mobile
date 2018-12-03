@@ -27,8 +27,8 @@ export class HistoryItemComponent implements OnInit {
   showSeriesDetail = false;
   measureType = MeasureType;
   measureSeriesMessageMapping = {
-    '=1': _('HISTORY.MEASURE_SERIES.SINGULAR'),
-    other: _('HISTORY.MEASURE_SERIES.PLURAL')
+    '=1': <string>_('HISTORY.MEASURE_SERIES.SINGULAR'),
+    other: <string>_('HISTORY.MEASURE_SERIES.PLURAL')
   };
 
   constructor() {}
