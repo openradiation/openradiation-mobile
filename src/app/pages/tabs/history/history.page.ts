@@ -8,12 +8,7 @@ import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-u
 import { AlertService } from '../../../services/alert.service';
 import { NavigationService } from '../../../services/navigation.service';
 import { Measure, MeasureSeries, MeasureType, PositionAccuracyThreshold } from '../../../states/measures/measure';
-import {
-  DeleteAllMeasures,
-  DeleteMeasure,
-  PublishMeasure,
-  ShowMeasure
-} from '../../../states/measures/measures.action';
+import { DeleteAllMeasures, DeleteMeasure, PublishMeasure, ShowMeasure } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
 
 @Component({
@@ -101,14 +96,22 @@ export class HistoryPage extends AutoUnsubscribePage {
   canPublish(measure: Measure | MeasureSeries): boolean {
     switch (measure.type) {
       case MeasureType.Measure:
-        return (
-          measure.accuracy !== undefined &&
-          measure.accuracy !== null &&
-          measure.accuracy < PositionAccuracyThreshold.No &&
-          measure.endAccuracy !== undefined &&
-          measure.endAccuracy !== null &&
-          measure.endAccuracy < PositionAccuracyThreshold.No
-        );
+        if (measure.organisationReporting === 'OpenRadiation app 1.0.0') {
+          return (
+            measure.accuracy !== undefined &&
+            measure.accuracy !== null &&
+            measure.accuracy < PositionAccuracyThreshold.No
+          );
+        } else {
+          return (
+            measure.accuracy !== undefined &&
+            measure.accuracy !== null &&
+            measure.accuracy < PositionAccuracyThreshold.No &&
+            measure.endAccuracy !== undefined &&
+            measure.endAccuracy !== null &&
+            measure.endAccuracy < PositionAccuracyThreshold.No
+          );
+        }
       case MeasureType.MeasureSeries:
         return measure.measures.some(
           item =>
