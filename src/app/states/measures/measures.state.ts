@@ -1,8 +1,9 @@
 import { Device } from '@ionic-native/device/ngx';
-import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { Action, NgxsOnInit, Selector, State, StateContext } from '@ngxs/store';
 import { Location } from 'cordova-plugin-mauron85-background-geolocation';
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { V1MigrationService } from '../../services/v1-migration.service';
 import { AbstractDevice } from '../devices/abstract-device';
 import { DateService } from './date.service';
 import {
@@ -13,7 +14,8 @@ import {
   MeasureSeriesParamsSelected,
   MeasureSeriesReport,
   MeasureType,
-  PositionAccuracyThreshold
+  PositionAccuracyThreshold,
+  V1OrganisationReporting
 } from './measure';
 import {
   AddMeasureScanStep,
@@ -27,6 +29,7 @@ import {
   EnableExpertMode,
   PositionChanged,
   PublishMeasure,
+  RetrieveV1Measures,
   ShowMeasure,
   StartManualMeasure,
   StartMeasure,
@@ -75,11 +78,13 @@ export interface MeasuresStateModel {
     expertMode: boolean;
     autoPublish: boolean;
   };
+  v1MeasuresRetrieved: boolean;
 }
 
 @State<MeasuresStateModel>({
   name: 'measures',
   defaults: {
+    v1MeasuresRetrieved: false,
     measures: [],
     recentTags: [],
     canEndCurrentScan: false,
@@ -89,12 +94,13 @@ export interface MeasuresStateModel {
     }
   }
 })
-export class MeasuresState {
+export class MeasuresState implements NgxsOnInit {
   constructor(
     private positionService: PositionService,
     private device: Device,
     private measuresService: MeasuresService,
-    private dateService: DateService
+    private dateService: DateService,
+    private v1MigrationService: V1MigrationService
   ) {}
 
   @Selector()
@@ -140,6 +146,13 @@ export class MeasuresState {
   @Selector()
   static canEndCurrentScan({ canEndCurrentScan }: MeasuresStateModel): boolean {
     return canEndCurrentScan;
+  }
+
+  ngxsOnInit({ dispatch, getState }: StateContext<MeasuresStateModel>) {
+    const { v1MeasuresRetrieved } = getState();
+    if (!v1MeasuresRetrieved) {
+      dispatch(new RetrieveV1Measures());
+    }
   }
 
   @Action(EnableExpertMode)
@@ -337,7 +350,10 @@ export class MeasuresState {
         patch.canEndCurrentScan = true;
       }
       patchState(patch);
-      if (currentSeries && this.shouldStopMeasureSeriesCurrentScan(device, currentSeries, newCurrentMeasure, step.ts)) {
+      if (
+        currentSeries &&
+        MeasuresState.shouldStopMeasureSeriesCurrentScan(device, currentSeries, newCurrentMeasure, step.ts)
+      ) {
         return dispatch(new StartNextMeasureSeries(device));
       }
     }
@@ -361,7 +377,7 @@ export class MeasuresState {
       });
       if (
         currentSeries &&
-        this.shouldStopMeasureSeriesCurrentScan(device, currentSeries, currentMeasure, currentTime)
+        MeasuresState.shouldStopMeasureSeriesCurrentScan(device, currentSeries, currentMeasure, currentTime)
       ) {
         return dispatch(new StartNextMeasureSeries(device));
       }
@@ -369,7 +385,7 @@ export class MeasuresState {
     return of(null);
   }
 
-  private shouldStopMeasureSeriesCurrentScan(
+  private static shouldStopMeasureSeriesCurrentScan(
     device: AbstractDevice,
     measureSeries: MeasureSeries,
     measure: Measure,
@@ -384,6 +400,38 @@ export class MeasuresState {
         );
       case MeasureSeriesParamsSelected.measureHitsLimit:
         return measure.hitsNumber !== undefined && measure.hitsNumber > measureSeries.params.measureHitsLimit;
+    }
+  }
+
+  static canPublishMeasure(measure: Measure | MeasureSeries): boolean {
+    switch (measure.type) {
+      case MeasureType.Measure:
+        if (measure.organisationReporting === V1OrganisationReporting) {
+          return (
+            measure.accuracy !== undefined &&
+            measure.accuracy !== null &&
+            measure.accuracy < PositionAccuracyThreshold.No
+          );
+        } else {
+          return (
+            measure.accuracy !== undefined &&
+            measure.accuracy !== null &&
+            measure.accuracy < PositionAccuracyThreshold.No &&
+            measure.endAccuracy !== undefined &&
+            measure.endAccuracy !== null &&
+            measure.endAccuracy < PositionAccuracyThreshold.No
+          );
+        }
+      case MeasureType.MeasureSeries:
+        return measure.measures.some(
+          item =>
+            item.accuracy !== undefined &&
+            item.accuracy !== null &&
+            item.accuracy! < PositionAccuracyThreshold.No &&
+            item.endAccuracy !== undefined &&
+            item.endAccuracy !== null &&
+            item.endAccuracy! < PositionAccuracyThreshold.No
+        );
     }
   }
 
@@ -675,5 +723,22 @@ export class MeasuresState {
       recentTags:
         index === -1 ? [tag, ...recentTags] : [tag, ...recentTags.slice(0, index), ...recentTags.slice(index + 1)]
     });
+  }
+
+  @Action(RetrieveV1Measures)
+  retrieveV1Measures({ patchState }: StateContext<MeasuresStateModel>) {
+    return this.v1MigrationService
+      .retrieveMeasures()
+      .then(measures => {
+        patchState({
+          measures,
+          v1MeasuresRetrieved: true
+        });
+      })
+      .catch(() => {
+        patchState({
+          v1MeasuresRetrieved: true
+        });
+      });
   }
 }

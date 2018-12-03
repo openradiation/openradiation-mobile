@@ -65,6 +65,7 @@
     "cordova-plugin-network-information": "^2.0.1",
     "cordova-plugin-screen-orientation": "^3.0.1",
     "cordova-plugin-splashscreen": "^5.0.2",
+    "cordova-plugin-sqlite-2": "^1.0.5",
     "cordova-plugin-statusbar": "^2.4.2",
     "cordova-plugin-whitelist": "^1.3.3",
     "cordova-plugin-x-socialsharing": "^5.4.3",
@@ -140,7 +141,8 @@
         "ALWAYS_USAGE_DESCRIPTION": "La position de l'appareil est nécessaire au bon fonctionnement de l'application. Merci d'accepter la permission.",
         "MOTION_USAGE_DESCRIPTION": "La détection du déplacement de l'appareil est nécessaire au bon fonctionnement de l'application. Merci d'accepter la permission."
       },
-      "cordovarduino": {}
+      "cordovarduino": {},
+      "cordova-plugin-sqlite-2": {}
     },
     "platforms": [
       "android",
