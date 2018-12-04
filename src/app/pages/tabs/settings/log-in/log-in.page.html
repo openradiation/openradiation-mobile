@@ -1,11 +1,11 @@
 <app-header [backButton]="true" (back)="goBack()">{{'LOG_IN.TITLE' | translate}}</app-header>
 
 <ion-content>
-    <div class="notice" [innerHTML]="'LOG_IN.NOTICE.PART1' | translate">
+    <div class="notice" [innerHTML]="'LOG_IN.NOTICE.PART1' | translate | sanitizeHtml">
     </div>
-    <div class="notice" [innerHTML]="'LOG_IN.NOTICE.PART2' | translate">
+    <div class="notice" [innerHTML]="'LOG_IN.NOTICE.PART2' | translate | sanitizeHtml">
     </div>
-    <div class="notice" [innerHTML]="'LOG_IN.NOTICE.PART3' | translate">
+    <div class="notice" [innerHTML]="'LOG_IN.NOTICE.PART3' | translate | sanitizeHtml">
     </div>
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <ion-list>

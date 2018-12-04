@@ -1,7 +1,7 @@
 {
   "ABOUT": {
     "MEASURE": {
-      "NOTICE": "The OpenRadiation application, connected with a compatible sensor (see compatible sensors on <a target=\"_blank\" href=\"https://www.openradiation.org\">www.openradiation.org</a>, can be used to measure radioactivity as well as contribute to a citizen science project, by helping to create the OpenRadiation collaborative base, and improve the knowledge of radioactivity in the environment. We suggest that you create a user account at <a target=\"_blank\" href=\"https://www.openradiation.org/user/register\">www.openradiation.org</a>, and then configure this account in the application and activate automatic measurement publications (under the settings menu).",
+      "NOTICE": "The OpenRadiation application, connected with a compatible sensor (see compatible sensors on <a onclick=\"window.open('https://www.openradiation.org', '_system')\">www.openradiation.org</a>, can be used to measure radioactivity as well as contribute to a citizen science project, by helping to create the OpenRadiation collaborative base, and improve the knowledge of radioactivity in the environment. We suggest that you create a user account at <a onclick=\"window.open('https://www.openradiation.org/en/user/register', '_system')\">www.openradiation.org</a>, and then configure this account in the application and activate automatic measurement publications (under the settings menu).",
       "TITLE": "Radioactivity measurement"
     },
     "MEASURES_HOW_TO": {
@@ -9,7 +9,7 @@
       "TITLE": "How can you take measurements?"
     },
     "OPENRADIATION_PROJECT": {
-      "NOTICE": "OpenRadiation is a collaborative project with the following partners: IFFO-RME - training network in major educational risks -, IRSN - public expert in research and expertise on nuclear and radiological risks -, Planète Sciences – association contributing to the scientific and technical culture of young people - and SORBONNE UNIVERSITE and the fablab PMClab in particular.<br/>Find out more at:  <a target=\"_blank\" href=\"https://www.openradiation.org/en/about-us\">www.openradiation.org/en/about-us</a>.",
+      "NOTICE": "OpenRadiation is a collaborative project with the following partners: IFFO-RME - training network in major educational risks -, IRSN - public expert in research and expertise on nuclear and radiological risks -, Planète Sciences – association contributing to the scientific and technical culture of young people - and SORBONNE UNIVERSITE and the fablab PMClab in particular.<br/>Find out more at:  <a onclick=\"window.open('https://www.openradiation.org/en/about-us', '_system')\">www.openradiation.org/en/about-us</a>.",
       "TITLE": "The OpenRadiation project"
     },
     "TITLE": "About"
@@ -101,7 +101,7 @@
   },
   "LEGAL_NOTICE": {
     "EDITOR": {
-      "NOTICE": "The OpenRadiation application was mainly developed by IRSN, Sorbonne Université, Agoralogie and ITLink. Do not hesitate to pass on any comments you may wish to make on this application. The application code is published as an <a target=\"_blank\" href=\"https://www.openradiation.org/en/developers\">open source code</a>.<br>Check out comprehensive legal texts and contact information at <a target=\"_blank\" href=\"https://www.openradiation.org/en/legal-notice\">www.openradiation.org/en/legal-notice</a>.<br><br>Current version : {{APP_NAME_VERSION}}.",
+      "NOTICE": "The OpenRadiation application was mainly developed by IRSN, Sorbonne Université, Agoralogie and ITLink. Do not hesitate to pass on any comments you may wish to make on this application. The application code is published as an <a onclick=\"window.open('https://www.openradiation.org/en/developers', '_system')\">open source code</a>.<br>Check out comprehensive legal texts and contact information at <a onclick=\"window.open('https://www.openradiation.org/en/legal-notice', '_system')\">www.openradiation.org/en/legal-notice</a>.<br><br>Current version : {{APP_NAME_VERSION}}.",
       "TITLE": "Publisher"
     },
     "MEASURES_PRECAUTIONS": {
@@ -109,7 +109,7 @@
       "TITLE": "Precautions for measurements"
     },
     "TERMS_OF_USE": {
-      "NOTICE": "You are considered to participate in the OpenRadiation collaborative data base if you publish measurements using the smartphone application, either automatically or manually.<br>The purpose of the OpenRadiation project is to create a collaborative data base on ambient radioactivity levels, therefore all users of the mobile application explicitly accept to share the data recorded, whether published automatically or manually.<br>The entire OpenRadiation data base is published under the <a target=\"_blank\" href=\"https://www.openradiation.org/en/terms-use#odc_odbl\">ODC-ODbL (Open Database License)</a>. Most of the data submitted is used to create the OpenRadiation data base.<br>You agree to comply with current legislation, particularly copyright. Using the OpenRadiation data base implies compliance with ethical rules (no insults, respect for privacy, etc.).<br>OpenRadiation reserves the right to delete any content reported and which fails to comply with the above instructions, without need for a warning.<br>You can find full details of the conditions of use at the following website address: <a target=\"_blank\" href=\"https://www.openradiation.org/en/terms-use\">www.openradiation.org/en/terms-use</a>.",
+      "NOTICE": "You are considered to participate in the OpenRadiation collaborative data base if you publish measurements using the smartphone application, either automatically or manually.<br>The purpose of the OpenRadiation project is to create a collaborative data base on ambient radioactivity levels, therefore all users of the mobile application explicitly accept to share the data recorded, whether published automatically or manually.<br>The entire OpenRadiation data base is published under the <a onclick=\"window.open('https://www.openradiation.org/en/terms-use#odc_odbl', '_system')\">ODC-ODbL (Open Database License)</a>. Most of the data submitted is used to create the OpenRadiation data base.<br>You agree to comply with current legislation, particularly copyright. Using the OpenRadiation data base implies compliance with ethical rules (no insults, respect for privacy, etc.).<br>OpenRadiation reserves the right to delete any content reported and which fails to comply with the above instructions, without need for a warning.<br>You can find full details of the conditions of use at the following website address: <a onclick=\"window.open('https://www.openradiation.org/en/terms-use', '_system')\">www.openradiation.org/en/terms-use</a>.",
       "TITLE": "Terms of use"
     },
     "TITLE": "Legal text"
@@ -118,9 +118,9 @@
     "LOGGED_AS": "Identified as ",
     "LOG_OUT": "Log out",
     "NOTICE": {
-      "PART1": "If you have a user account at <a target=\"_blank\" href=\"https://www.openradiation.org\">www.openradiation.org</a>, you can enter your account identifiers (user name and password) here. You can then associate your published measurements with your user account: in this way, you will be able to find all of your measurements easily via <a target=\"_blank\" href=\"https://www.openradiation.org\">www.openradiation.org</a>.",
+      "PART1": "If you have a user account at <a onclick=\"window.open('https://www.openradiation.org', '_system')\">www.openradiation.org</a>, you can enter your account identifiers (user name and password) here. You can then associate your published measurements with your user account: in this way, you will be able to find all of your measurements easily via <a onclick=\"window.open('https://www.openradiation.org', '_system')\">www.openradiation.org</a>.",
       "PART2": "You can also add tags, or a description, to your measurement. Furthermore, by publishing measurements after logging in, you boost the reliability of the OpenRadiation collaborative data base.",
-      "PART3": "If you have not already done so, we suggest that you create an account at <a target=\"_blank\" href=\"https://www.openradiation.org/en/user/register\">www.openradiation.org</a>, and then configure your account here (synchronization ~5 min)."
+      "PART3": "If you have not already done so, we suggest that you create an account at <a onclick=\"window.open('https://www.openradiation.org/en/user/register', '_system')\">www.openradiation.org</a>, and then configure your account here (synchronization ~5 min)."
     },
     "NOT_LOGGED": "Unidentified",
     "PASSWORD": "Password",
@@ -135,8 +135,8 @@
   "MEASURES": {
     "AUTO_PUBLISH": "Auto publications",
     "AUTO_PUBLISH_NOTICE": {
-      "PART1": "If you activate automatic measurement publications, your measurements and the associated data will be automatically sent to the OpenRadiation collaborative base, and published under a <a target=\"_blank\" href=\"https://www.openradiation.org/en/terms-use#odc_odbl\">ODC-ODbL (Open Database License)</a>.",
-      "PART2": "The data transmitted include the data you enter, and information on the model and identifier for the model and/or the telephone used, your user name, and the GPS position at the time of the measurement (see details at <a target=\"_blank\" href=\"https://www.openradiation.org/en/terms-use\">www.openradiation.org/en/terms-use</a>)."
+      "PART1": "If you activate automatic measurement publications, your measurements and the associated data will be automatically sent to the OpenRadiation collaborative base, and published under a <a onclick=\"window.open('https://www.openradiation.org/en/terms-use#odc_odbl', '_system')\">ODC-ODbL (Open Database License)</a>.",
+      "PART2": "The data transmitted include the data you enter, and information on the model and identifier for the model and/or the telephone used, your user name, and the GPS position at the time of the measurement (see details at <a onclick=\"window.open('https://www.openradiation.org/en/terms-use', '_system')\">www.openradiation.org/en/terms-use</a>)."
     },
     "AUTO_PUBLISH_TITLE": "Auto publications",
     "DESCRIPTION": "Description",
