@@ -52,6 +52,7 @@
 
   .form {
     padding: 10px 0;
+    width: 100%;
   }
 
   .position {
@@ -96,7 +97,7 @@
           padding: 0 8px;
         }
         ion-input {
-          --padding-top: 4px;
+          --padding-top: 6px;
           --padding-bottom: 4px;
         }
         ion-datetime {
@@ -138,6 +139,10 @@
 
       ion-input {
         text-align: right;
+        --padding-end: 8px;
+      }
+      ion-datetime {
+        padding-right: 8px;
       }
     }
   }

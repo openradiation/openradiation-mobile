@@ -1,8 +1,9 @@
 import { Device } from '@ionic-native/device/ngx';
-import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { Action, NgxsOnInit, Selector, State, StateContext } from '@ngxs/store';
 import { Location } from 'cordova-plugin-mauron85-background-geolocation';
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { V1MigrationService } from '../../services/v1-migration.service';
 import { AbstractDevice } from '../devices/abstract-device';
 import { DateService } from './date.service';
 import {
@@ -13,10 +14,12 @@ import {
   MeasureSeriesParamsSelected,
   MeasureSeriesReport,
   MeasureType,
-  PositionAccuracyThreshold
+  PositionAccuracyThreshold,
+  V1OrganisationReporting
 } from './measure';
 import {
   AddMeasureScanStep,
+  AddRecentTag,
   CancelMeasure,
   DeleteAllMeasures,
   DeleteMeasure,
@@ -26,6 +29,7 @@ import {
   EnableExpertMode,
   PositionChanged,
   PublishMeasure,
+  RetrieveV1Measures,
   ShowMeasure,
   StartManualMeasure,
   StartMeasure,
@@ -39,8 +43,7 @@ import {
   StopMeasureScan,
   StopMeasureSeries,
   StopMeasureSeriesParams,
-  StopMeasureSeriesReport,
-  UpdateMeasureScanTime
+  StopMeasureSeriesReport
 } from './measures.action';
 import { MeasuresService } from './measures.service';
 import { PositionService } from './position.service';
@@ -50,6 +53,8 @@ export interface MeasuresStateModel {
   currentPosition?: Location;
   currentMeasure?: Measure;
   currentSeries?: MeasureSeries;
+  canEndCurrentScan: boolean;
+  recentTags: string[];
   measureReport?: {
     model: MeasureReport;
     dirty: boolean;
@@ -72,24 +77,29 @@ export interface MeasuresStateModel {
     expertMode: boolean;
     autoPublish: boolean;
   };
+  v1MeasuresRetrieved: boolean;
 }
 
 @State<MeasuresStateModel>({
   name: 'measures',
   defaults: {
+    v1MeasuresRetrieved: false,
     measures: [],
+    recentTags: [],
+    canEndCurrentScan: false,
     params: {
       expertMode: false,
       autoPublish: false
     }
   }
 })
-export class MeasuresState {
+export class MeasuresState implements NgxsOnInit {
   constructor(
     private positionService: PositionService,
     private device: Device,
     private measuresService: MeasuresService,
-    private dateService: DateService
+    private dateService: DateService,
+    private v1MigrationService: V1MigrationService
   ) {}
 
   @Selector()
@@ -124,7 +134,24 @@ export class MeasuresState {
 
   @Selector()
   static measures({ measures }: MeasuresStateModel): (Measure | MeasureSeries)[] {
-    return measures;
+    return measures.sort((a, b) => b.startTime - a.startTime);
+  }
+
+  @Selector()
+  static recentTags({ recentTags }: MeasuresStateModel): string[] {
+    return recentTags;
+  }
+
+  @Selector()
+  static canEndCurrentScan({ canEndCurrentScan }: MeasuresStateModel): boolean {
+    return canEndCurrentScan;
+  }
+
+  ngxsOnInit({ dispatch, getState }: StateContext<MeasuresStateModel>) {
+    const { v1MeasuresRetrieved } = getState();
+    if (!v1MeasuresRetrieved) {
+      dispatch(new RetrieveV1Measures());
+    }
   }
 
   @Action(EnableExpertMode)
@@ -259,7 +286,8 @@ export class MeasuresState {
       measureReport: undefined,
       measureSeriesParams: undefined,
       currentSeries: undefined,
-      measureSeriesReport: undefined
+      measureSeriesReport: undefined,
+      canEndCurrentScan: false
     });
   }
 
@@ -267,7 +295,7 @@ export class MeasuresState {
   startMeasureSeries({ patchState }: StateContext<MeasuresStateModel>) {
     const model: MeasureSeriesParams = {
       seriesDurationLimit: 24,
-      measureHitsLimit: 100,
+      measureHitsLimit: 50,
       measureDurationLimit: 5,
       paramSelected: MeasureSeriesParamsSelected.measureDurationLimit
     };
@@ -309,6 +337,9 @@ export class MeasuresState {
         hitsNumber: currentMeasure.hitsNumber! + step.hitsNumber,
         steps: [...currentMeasure.steps, step]
       };
+      if (!newCurrentMeasure.startTime) {
+        newCurrentMeasure.startTime = step.ts - device.hitsPeriod;
+      }
       newCurrentMeasure.value = this.measuresService.computeRadiationValue(newCurrentMeasure, device);
       if (newCurrentMeasure.steps[0] && newCurrentMeasure.steps[0].temperature !== undefined) {
         newCurrentMeasure.temperature =
@@ -316,34 +347,14 @@ export class MeasuresState {
             .map(currentMeasureStep => currentMeasureStep.temperature!)
             .reduce((acc, current) => acc + current) / newCurrentMeasure.steps.length;
       }
-      patchState({
-        currentMeasure: newCurrentMeasure
-      });
-      if (currentSeries && this.shouldStopMeasureSeriesCurrentScan(device, currentSeries, newCurrentMeasure, step.ts)) {
-        return dispatch(new StartNextMeasureSeries(device));
+      const patch: Partial<MeasuresStateModel> = { currentMeasure: newCurrentMeasure };
+      if (newCurrentMeasure.hitsNumber > device.hitsAccuracyThreshold.accurate) {
+        patch.canEndCurrentScan = true;
       }
-    }
-    return of(null);
-  }
-
-  @Action(UpdateMeasureScanTime)
-  updateMeasureScanTime(
-    { getState, patchState, dispatch }: StateContext<MeasuresStateModel>,
-    { device }: UpdateMeasureScanTime
-  ) {
-    const { currentMeasure, currentSeries } = getState();
-    if (currentMeasure) {
-      const currentTime = Date.now();
-      patchState({
-        currentMeasure: {
-          ...currentMeasure,
-          endTime: currentTime,
-          value: this.measuresService.computeRadiationValue(currentMeasure, device)
-        }
-      });
+      patchState(patch);
       if (
         currentSeries &&
-        this.shouldStopMeasureSeriesCurrentScan(device, currentSeries, currentMeasure, currentTime)
+        MeasuresState.shouldStopMeasureSeriesCurrentScan(device, currentSeries, newCurrentMeasure, step.ts)
       ) {
         return dispatch(new StartNextMeasureSeries(device));
       }
@@ -351,7 +362,7 @@ export class MeasuresState {
     return of(null);
   }
 
-  private shouldStopMeasureSeriesCurrentScan(
+  private static shouldStopMeasureSeriesCurrentScan(
     device: AbstractDevice,
     measureSeries: MeasureSeries,
     measure: Measure,
@@ -369,29 +380,52 @@ export class MeasuresState {
     }
   }
 
+  static canPublishMeasure(measure: Measure | MeasureSeries): boolean {
+    switch (measure.type) {
+      case MeasureType.Measure:
+        if (measure.organisationReporting === V1OrganisationReporting) {
+          return (
+            measure.accuracy !== undefined &&
+            measure.accuracy !== null &&
+            measure.accuracy < PositionAccuracyThreshold.No
+          );
+        } else {
+          return (
+            measure.accuracy !== undefined &&
+            measure.accuracy !== null &&
+            measure.accuracy < PositionAccuracyThreshold.No &&
+            measure.endAccuracy !== undefined &&
+            measure.endAccuracy !== null &&
+            measure.endAccuracy < PositionAccuracyThreshold.No
+          );
+        }
+      case MeasureType.MeasureSeries:
+        return measure.measures.some(
+          item =>
+            item.accuracy !== undefined &&
+            item.accuracy !== null &&
+            item.accuracy! < PositionAccuracyThreshold.No &&
+            item.endAccuracy !== undefined &&
+            item.endAccuracy !== null &&
+            item.endAccuracy! < PositionAccuracyThreshold.No
+        );
+    }
+  }
+
   @Action(StartMeasureScan)
   startMeasureScan({ getState, patchState }: StateContext<MeasuresStateModel>, { device }: StartMeasureScan) {
     const { currentMeasure, currentSeries, currentPosition } = getState();
     if (currentMeasure) {
       return this.measuresService.startMeasureScan(device).pipe(
         tap(() => {
-          const currentTime = Date.now();
           const patch: Partial<MeasuresStateModel> = {};
           if (currentSeries) {
             patch.currentSeries = {
               ...currentSeries,
-              startTime: currentTime,
-              endTime: currentTime
+              startTime: Date.now()
             };
           }
-          patch.currentMeasure = Measure.updateStartPosition(
-            {
-              ...currentMeasure,
-              startTime: currentTime,
-              endTime: currentTime
-            },
-            currentPosition
-          );
+          patch.currentMeasure = Measure.updateStartPosition(getState().currentMeasure!, currentPosition);
           patchState(patch);
         })
       );
@@ -404,15 +438,17 @@ export class MeasuresState {
   stopMeasureScan({ getState, patchState }: StateContext<MeasuresStateModel>, { device }: StopMeasureScan) {
     const { currentMeasure, currentSeries, currentPosition } = getState();
     if (currentMeasure) {
-      let patch: Partial<MeasuresStateModel>;
+      const patch: Partial<MeasuresStateModel> = {
+        canEndCurrentScan: false
+      };
       const updatedMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
       if (currentSeries) {
-        patch = { currentMeasure: undefined };
+        patch.currentMeasure = undefined;
         if (updatedMeasure.hitsNumber! >= device.hitsAccuracyThreshold.accurate) {
           patch.currentSeries = MeasureSeries.addMeasureToSeries(currentSeries, updatedMeasure);
         }
       } else {
-        patch = { currentMeasure: updatedMeasure };
+        patch.currentMeasure = updatedMeasure;
       }
       patchState(patch);
     }
@@ -429,22 +465,17 @@ export class MeasuresState {
         return dispatch(new StopMeasureScan(device));
       } else {
         const updatedMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
-        const currentTime = Date.now();
         const newMeasure = Measure.updateStartPosition(
-          {
-            ...new Measure(
-              currentMeasure.apparatusId,
-              currentMeasure.apparatusVersion,
-              currentMeasure.apparatusSensorType,
-              currentMeasure.apparatusTubeType,
-              this.device.uuid,
-              this.device.platform,
-              this.device.version,
-              this.device.model
-            ),
-            startTime: currentTime,
-            endTime: currentTime
-          },
+          new Measure(
+            currentMeasure.apparatusId,
+            currentMeasure.apparatusVersion,
+            currentMeasure.apparatusSensorType,
+            currentMeasure.apparatusTubeType,
+            this.device.uuid,
+            this.device.platform,
+            this.device.version,
+            this.device.model
+          ),
           currentPosition
         );
         patchState({
@@ -645,5 +676,32 @@ export class MeasuresState {
         currentSeries: { ...measure }
       });
     }
+  }
+
+  @Action(AddRecentTag)
+  addRecentTag({ getState, patchState }: StateContext<MeasuresStateModel>, { tag }: AddRecentTag) {
+    const { recentTags } = getState();
+    const index = recentTags.indexOf(tag);
+    patchState({
+      recentTags:
+        index === -1 ? [tag, ...recentTags] : [tag, ...recentTags.slice(0, index), ...recentTags.slice(index + 1)]
+    });
+  }
+
+  @Action(RetrieveV1Measures)
+  retrieveV1Measures({ patchState }: StateContext<MeasuresStateModel>) {
+    return this.v1MigrationService
+      .retrieveMeasures()
+      .then(measures => {
+        patchState({
+          measures,
+          v1MeasuresRetrieved: true
+        });
+      })
+      .catch(() => {
+        patchState({
+          v1MeasuresRetrieved: true
+        });
+      });
   }
 }

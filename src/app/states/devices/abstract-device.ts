@@ -16,6 +16,7 @@ export abstract class AbstractDevice {
     good: 30,
     accurate: 50
   };
+  abstract hitsPeriod: number;
 }
 
 export enum ApparatusSensorType {

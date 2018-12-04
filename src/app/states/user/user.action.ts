@@ -11,3 +11,7 @@ export class SetLanguage {
   static readonly type = '[User] Set language';
   constructor(public language?: string) {}
 }
+
+export class RetrieveV1User {
+  static readonly type = '[User] Retrieve V1 user';
+}

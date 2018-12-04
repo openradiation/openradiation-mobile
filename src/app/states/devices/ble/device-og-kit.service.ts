@@ -13,9 +13,9 @@ import { DeviceOGKit } from './device-og-kit';
   providedIn: 'root'
 })
 export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
-  private service = '2220';
+  protected service = '2220';
+  protected receiveCharacteristic = '2221';
   private sendCharacteristic = '2222';
-  private receiveCharacteristic = '2221';
 
   private SEND_GET_INFO = 0x12;
   private RECEIVE_SENSOR_TYPE = 3;
@@ -55,7 +55,8 @@ export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
   }
 
   protected convertHitsNumberPerSec(hitsNumberPerSec: number): number {
-    return 0.000001 * hitsNumberPerSec ** 3 + 0.0025 * hitsNumberPerSec ** 2 + 0.39 * hitsNumberPerSec;
+    const TcNet = hitsNumberPerSec - 0.14;
+    return 0.000001 * TcNet ** 3 + 0.0025 * TcNet ** 2 + 0.39 * TcNet;
   }
 
   getDeviceInfo(device: DeviceOGKit): Observable<Partial<DeviceOGKit>> {
@@ -112,22 +113,10 @@ export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
     }
   }
 
-  private setTubeVoltageOff(device: DeviceOGKit) {
-    this.sendData(device, [this.SEND_SET_VOLTAGE, 0x00, 0x00, 0x00, 0x00]);
-  }
-
   private sendData(device: DeviceOGKit, data: number[]): Promise<any> {
     return this.ble.write(device.sensorUUID, this.service, this.sendCharacteristic, <ArrayBuffer>(
       new Uint8Array(data).buffer
     ));
-  }
-
-  private startReceiveData(device: DeviceOGKit): Observable<any> {
-    return this.ble.startNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
-  }
-
-  private stopReceiveData(device: DeviceOGKit) {
-    return this.ble.stopNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
   }
 
   private decodeStringArray(array: Uint8Array): string {

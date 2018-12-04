@@ -55,12 +55,14 @@
                             </ion-item>
                             <ion-item class="has-suffix long-label" [ngClass]="{'custom-disabled': inputDisabled}">
                                 <ion-label position="fixed">{{'MEASURES.SENSOR_TEMPERATURE' | translate}}</ion-label>
-                                <ion-input formControlName="temperature" type="number" [placeholder]="inputDisabled ? '-' : '0'"></ion-input>
+                                <ion-input formControlName="temperature" type="number"
+                                           [placeholder]="inputDisabled ? '-' : '0'"></ion-input>
                                 <span class="unit">°C</span>
                             </ion-item>
                             <ion-item [ngClass]="{'custom-disabled': inputDisabled}">
                                 <ion-label position="fixed">{{'MEASURES.HITS_NUMBER' | translate}}</ion-label>
-                                <ion-input formControlName="hitsNumber" type="number" [placeholder]="inputDisabled ? '-' : '0'"></ion-input>
+                                <ion-input formControlName="hitsNumber" type="number"
+                                           [placeholder]="inputDisabled ? '-' : '0'"></ion-input>
                             </ion-item>
                             <ion-item class="has-suffix"
                                       [ngClass]="{'custom-disabled': inputDisabled}">
@@ -98,7 +100,9 @@
                         </ion-list>
                         <div class="tags">
                             <app-tag-list formControlName="tags"
-                                          [title]="'MEASURES.TAG_LIST' | translate">
+                                          (tagAdded)="tagAdded($event)" [proposedTagList]="recentTags$ | async"
+                                          [title]="'MEASURES.TAG_LIST' | translate"
+                                          [proposedTagListTitle]="'MEASURES.TAG_LIST_RECENT' | translate">
                             </app-tag-list>
                         </div>
                         <div class="photo">

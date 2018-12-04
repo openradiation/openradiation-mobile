@@ -6,6 +6,7 @@ import { AbstractBLEDevice, RawBLEDevice } from './abstract-ble-device';
 export class DeviceOGKit extends AbstractBLEDevice {
   readonly deviceType = DeviceType.OGKit;
   apparatusVersion = DeviceType.OGKit;
+  hitsPeriod = 1000;
 
   params: DeviceParams = {
     audioHits: true,

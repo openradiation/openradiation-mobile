@@ -53,11 +53,6 @@ export class AddMeasureScanStep {
   constructor(public step: Step, public device: AbstractDevice) {}
 }
 
-export class UpdateMeasureScanTime {
-  static readonly type = '[Measures] Update measure scan time';
-  constructor(public device: AbstractDevice) {}
-}
-
 export class StartMeasureScan {
   static readonly type = '[Measures] Start measure radiation scan';
   constructor(public device: AbstractDevice) {}
@@ -110,4 +105,13 @@ export class DeleteAllMeasures {
 export class ShowMeasure {
   static readonly type = '[Measures] Show measure detail';
   constructor(public measure: Measure | MeasureSeries) {}
+}
+
+export class AddRecentTag {
+  static readonly type = '[Measures] Add recent tag';
+  constructor(public tag: string) {}
+}
+
+export class RetrieveV1Measures {
+  static readonly type = '[User] Retrieve V1 measures';
 }

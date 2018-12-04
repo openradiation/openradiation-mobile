@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { AlertService } from '../../../services/alert.service';
 import { NavigationService } from '../../../services/navigation.service';
-import { Measure, MeasureSeries, MeasureType, PositionAccuracyThreshold } from '../../../states/measures/measure';
+import { Measure, MeasureSeries, MeasureType } from '../../../states/measures/measure';
 import {
   DeleteAllMeasures,
   DeleteMeasure,
@@ -26,7 +26,6 @@ export class HistoryPage extends AutoUnsubscribePage {
   measures$: Observable<(Measure | MeasureSeries)[]>;
 
   measureBeingSentMap: { [K: string]: boolean } = {};
-  positionAccuracyThreshold = PositionAccuracyThreshold;
 
   url = '/tabs/(history:history)';
 
@@ -82,8 +81,14 @@ export class HistoryPage extends AutoUnsubscribePage {
     if (this.canPublish(measure)) {
       this.alertService.show({
         header: this.translateService.instant('HISTORY.TITLE'),
-        subHeader: this.translateService.instant('HISTORY.SEND.TITLE'),
-        message: this.translateService.instant('HISTORY.SEND.NOTICE'),
+        subHeader:
+          measure.type === MeasureType.Measure
+            ? this.translateService.instant('HISTORY.SEND.TITLE')
+            : this.translateService.instant('HISTORY.SEND_SERIES.TITLE'),
+        message:
+          measure.type === MeasureType.Measure
+            ? this.translateService.instant('HISTORY.SEND.NOTICE')
+            : this.translateService.instant('HISTORY.SEND_SERIES.NOTICE'),
         backdropDismiss: false,
         buttons: [
           {
@@ -99,37 +104,20 @@ export class HistoryPage extends AutoUnsubscribePage {
   }
 
   canPublish(measure: Measure | MeasureSeries): boolean {
-    switch (measure.type) {
-      case MeasureType.Measure:
-        return (
-          measure.accuracy !== undefined &&
-          measure.accuracy !== null &&
-          measure.accuracy < PositionAccuracyThreshold.No &&
-          measure.endAccuracy !== undefined &&
-          measure.endAccuracy !== null &&
-          measure.endAccuracy < PositionAccuracyThreshold.No
-        );
-      case MeasureType.MeasureSeries:
-        return measure.measures.some(
-          item =>
-            item.accuracy !== undefined &&
-            item.accuracy !== null &&
-            item.accuracy! < PositionAccuracyThreshold.No &&
-            item.endAccuracy !== undefined &&
-            item.endAccuracy !== null &&
-            item.endAccuracy! < PositionAccuracyThreshold.No
-        );
-    }
+    return MeasuresState.canPublishMeasure(measure);
   }
 
   containsMeasureSeries(measures: (Measure | MeasureSeries)[]): boolean {
     return measures.some(measure => measure.type === MeasureType.MeasureSeries);
   }
 
-  delete(measure: Measure) {
+  delete(measure: Measure | MeasureSeries) {
     this.alertService.show({
       header: this.translateService.instant('HISTORY.TITLE'),
-      message: this.translateService.instant('HISTORY.DELETE.NOTICE'),
+      message:
+        measure.type === MeasureType.Measure
+          ? this.translateService.instant('HISTORY.DELETE.NOTICE')
+          : this.translateService.instant('HISTORY.DELETE_SERIES.NOTICE'),
       backdropDismiss: false,
       buttons: [
         {

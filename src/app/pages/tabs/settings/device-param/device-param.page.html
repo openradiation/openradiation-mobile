@@ -1,4 +1,4 @@
-<ng-container *ngIf="editedDevice$ | async as editedDevice">
+<ng-container *ngIf="editedDevice">
     <app-header [backButton]="true" (back)="goBack()">{{editedDevice.apparatusVersion}}</app-header>
     <ion-content>
         <ion-list>

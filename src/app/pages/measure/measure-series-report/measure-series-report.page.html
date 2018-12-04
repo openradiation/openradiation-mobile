@@ -76,7 +76,7 @@
                         <app-select-icon [options]="measurementEnvironmentOptions"
                                          formControlName="measurementEnvironment"
                                          [required]="true"
-                                         [title]="'MEASURES.ENVIRONMENT.TITLE' | translate">
+                                         [title]="'MEASURES.ENVIRONMENT.TITLE_SERIES' | translate">
                         </app-select-icon>
                     </div>
                     <div class="options">
@@ -100,7 +100,9 @@
                         </ion-list>
                         <div class="tags">
                             <app-tag-list formControlName="tags" [hiddenTag]="currentSeries?.id"
-                                          [title]="'MEASURES.TAG_LIST' | translate">
+                                          (tagAdded)="tagAdded($event)" [proposedTagList]="recentTags$ | async"
+                                          [title]="'MEASURES.TAG_LIST' | translate"
+                                          [proposedTagListTitle]="'MEASURES.TAG_LIST_RECENT' | translate">
                             </app-tag-list>
                         </div>
                     </ng-container>

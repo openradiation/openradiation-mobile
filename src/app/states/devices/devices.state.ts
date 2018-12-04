@@ -270,11 +270,7 @@ export class DevicesState {
     }
     const deviceIndex = knownDevices.findIndex(knownDevice => knownDevice.sensorUUID === device.sensorUUID);
     if (deviceIndex > -1) {
-      patch.knownDevices = [
-        ...knownDevices.slice(0, Math.max(deviceIndex - 1, 0)),
-        device,
-        ...knownDevices.slice(deviceIndex + 1)
-      ];
+      patch.knownDevices = [...knownDevices.slice(0, deviceIndex), device, ...knownDevices.slice(deviceIndex + 1)];
     } else {
       patch.knownDevices = [...knownDevices, device];
     }

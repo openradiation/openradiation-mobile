@@ -1,9 +1,9 @@
 <app-header [backButton]="true" (back)="goBack()">{{'MEASURES.AUTO_PUBLISH_TITLE' | translate}}</app-header>
 
 <ion-content>
-    <div class="notice" [innerHTML]="'MEASURES.AUTO_PUBLISH_NOTICE.PART1' | translate">
+    <div class="notice" [innerHTML]="'MEASURES.AUTO_PUBLISH_NOTICE.PART1' | translate | sanitizeHtml">
     </div>
-    <div class="notice" [innerHTML]="'MEASURES.AUTO_PUBLISH_NOTICE.PART2' | translate">
+    <div class="notice" [innerHTML]="'MEASURES.AUTO_PUBLISH_NOTICE.PART2' | translate | sanitizeHtml">
     </div>
     <ion-list>
         <ion-item class="no-padding">

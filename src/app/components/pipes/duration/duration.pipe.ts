@@ -9,7 +9,7 @@ export class DurationPipe implements PipeTransform {
     const minuteConstant = 1000 * 60;
     const hours = Math.floor(value / hourConstant);
     const minutes = Math.floor((value % hourConstant) / minuteConstant);
-    const seconds = Math.round((value % minuteConstant) / 1000);
+    const seconds = Math.floor((value % minuteConstant) / 1000);
     if (hours >= 1) {
       return `${this.formatNumber(hours)}:${this.formatNumber(minutes)}'`;
     } else {

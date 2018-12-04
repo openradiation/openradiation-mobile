@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
+import { Platform } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { SelectIconOption } from '../../../components/select-icon/select-icon-option';
@@ -15,12 +16,13 @@ import {
   PositionAccuracyThreshold
 } from '../../../states/measures/measure';
 import {
+  AddRecentTag,
   CancelMeasure,
   StartMeasureSeriesReport,
   StopMeasureSeries,
   StopMeasureSeriesReport
 } from '../../../states/measures/measures.action';
-import { MeasuresStateModel } from '../../../states/measures/measures.state';
+import { MeasuresState, MeasuresStateModel } from '../../../states/measures/measures.state';
 import { UserState } from '../../../states/user/user.state';
 
 @Component({
@@ -32,11 +34,13 @@ export class MeasureSeriesReportPage extends AutoUnsubscribePage {
   @Select(UserState.login)
   login$: Observable<string | undefined>;
 
+  @Select(MeasuresState.recentTags)
+  recentTags$: Observable<string>;
+
   currentSeries?: MeasureSeries;
   measureSeriesReportForm?: FormGroup;
   reportScan = true;
 
-  positionAccuracyThreshold = PositionAccuracyThreshold;
   measureSeriesParamsSelected = MeasureSeriesParamsSelected;
 
   url = '/measure/report-series';
@@ -110,7 +114,8 @@ export class MeasureSeriesReportPage extends AutoUnsubscribePage {
     private formBuilder: FormBuilder,
     private store: Store,
     private navigationService: NavigationService,
-    private actions$: Actions
+    private actions$: Actions,
+    private platform: Platform
   ) {
     super(router);
   }
@@ -161,7 +166,11 @@ export class MeasureSeriesReportPage extends AutoUnsubscribePage {
             ]);
           }
         });
-      })
+      }),
+      // TODO remove forced type once it's fixed https://github.com/ionic-team/ionic/issues/16535
+      <Subscription>(<unknown>this.platform.backButton.subscribeWithPriority(9999, () => {
+        this.cancelSeries();
+      }))
     );
   }
 
@@ -188,5 +197,9 @@ export class MeasureSeriesReportPage extends AutoUnsubscribePage {
 
   cancelSeries() {
     this.store.dispatch(new CancelMeasure());
+  }
+
+  tagAdded(tag: string) {
+    this.store.dispatch(new AddRecentTag(tag));
   }
 }

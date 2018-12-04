@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AlertController, Platform } from '@ionic/angular';
 import { AlertOptions } from '@ionic/core';
+import { Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +13,9 @@ export class AlertService {
     return this.alertController.create(options).then(alert => {
       alert.present();
       const hardwareCallback = canCloseWithBackButton ? () => alert.dismiss() : () => {};
+      // TODO remove forced type once it's fixed https://github.com/ionic-team/ionic/issues/16535
       const backButtonSubscription = this.platform.backButton.subscribeWithPriority(9999, hardwareCallback);
-      alert.onDidDismiss().then(() => backButtonSubscription.unsubscribe());
+      alert.onDidDismiss().then(() => (<Subscription>(<unknown>backButtonSubscription)).unsubscribe());
       return alert;
     });
   }

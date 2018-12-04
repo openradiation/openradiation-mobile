@@ -8,6 +8,7 @@ export class DeviceAtomTag extends AbstractBLEDevice {
   apparatusVersion: string = DeviceType.AtomTag;
   apparatusSensorType = ApparatusSensorType.Geiger;
   apparatusTubeType = 'SBM-20';
+  hitsPeriod = 2000;
 
   params: DeviceParams = {
     audioHits: true,
