@@ -53,11 +53,6 @@ export class AddMeasureScanStep {
   constructor(public step: Step, public device: AbstractDevice) {}
 }
 
-export class UpdateMeasureScanTime {
-  static readonly type = '[Measures] Update measure scan time';
-  constructor(public device: AbstractDevice) {}
-}
-
 export class StartMeasureScan {
   static readonly type = '[Measures] Start measure radiation scan';
   constructor(public device: AbstractDevice) {}

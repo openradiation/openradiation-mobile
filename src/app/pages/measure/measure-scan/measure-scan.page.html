@@ -106,7 +106,7 @@
                     </ng-container>
                     <ng-template #hitsAccuracyBadOrStart>
                         <div class="start">
-                            <ng-container *ngIf="currentMeasure.startTime; else measureInit">
+                            <ng-container *ngIf="currentMeasure.startTime || (currentSeries$ | async)?.measures.length > 1; else measureInit">
                                 {{'MEASURES.ONGOING' | translate}}
                             </ng-container>
                             <ng-template #measureInit>
