@@ -185,7 +185,8 @@
     "TITLE": "Manual input"
   },
   "MEASURE_SERIES": {
-    "ALERT": "You must be logged in before you can start a measurement series.",
+    "ALERT_LOG_IN": "You must be logged in before you can fill out a manual measurement report.",
+    "ALERT_SENSOR": "You must connect a sensor before you can fill out a manual measurement report.",
     "HITS_NUMBER": "Minimum no. of counts",
     "MEASURES_DURATION": "Minimum duration",
     "MEASURE_LIMIT": "Each measurement will end automatically after",
@@ -228,6 +229,7 @@
     }
   },
   "SENSORS": {
+    "ALERT_TITLE": "Connect a sensor",
     "CONNECTION_LOST": "Connection lost with the sensor",
     "DETAILS": "Details",
     "LIST": "List of sensors",

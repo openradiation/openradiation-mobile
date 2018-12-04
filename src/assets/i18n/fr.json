@@ -185,7 +185,8 @@
     "TITLE": "Saisie manuelle"
   },
   "MEASURE_SERIES": {
-    "ALERT": "Vous devez vous identifier pour pouvoir commencer une série de mesure.",
+    "ALERT_LOG_IN": "Vous devez vous identifier pour pouvoir commencer une série de mesure.",
+    "ALERT_SENSOR": "Vous devez connecter un capteur pour pouvoir commencer une série de mesure.",
     "HITS_NUMBER": "Nb coups minimun",
     "MEASURES_DURATION": "Durée minimale",
     "MEASURE_LIMIT": "Chaque mesure se terminera automatiquement après",
@@ -228,6 +229,7 @@
     }
   },
   "SENSORS": {
+    "ALERT_TITLE": "Connecter un capteur",
     "CONNECTION_LOST": "Connexion avec le capteur perdue",
     "DETAILS": "Infos",
     "LIST": "Liste des capteurs",
