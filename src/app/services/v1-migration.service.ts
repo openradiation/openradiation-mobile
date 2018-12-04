@@ -26,7 +26,6 @@ export class V1MigrationService {
                     items[res.rows.item(i).paramName] = res.rows.item(i).libre;
                   }
                 }
-                console.log('retrieve user', items);
                 resolve({ login: items.login, password: items.mdp });
               },
               (tx: any, res: any) => {
@@ -53,7 +52,6 @@ export class V1MigrationService {
                     measures[i] = V1MigrationService.transformMeasureToV2(res.rows.item(i));
                   }
                 }
-                console.log('retrieve measures', measures);
                 resolve(measures);
               },
               (tx: any, res: any) => {
