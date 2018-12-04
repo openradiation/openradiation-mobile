@@ -4,7 +4,7 @@ import { MenuController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { filter, map, take } from 'rxjs/operators';
+import { filter, take } from 'rxjs/operators';
 import { AlertService } from '../../services/alert.service';
 import { NavigationService } from '../../services/navigation.service';
 import { AbstractDevice } from '../../states/devices/abstract-device';
@@ -25,7 +25,6 @@ export class MenuComponent {
   @Select(DevicesState.connectedDevice)
   connectedDevice$: Observable<AbstractDevice | undefined>;
 
-  canStartMeasure: Observable<boolean>;
   currentUrl: string;
 
   constructor(
@@ -47,7 +46,6 @@ export class MenuComponent {
     this.actions$
       .pipe(ofActionSuccessful(StartMeasureSeriesParams))
       .subscribe(() => this.navigationService.navigateRoot(['measure', 'series']));
-    this.canStartMeasure = this.connectedDevice$.pipe(map(connectedDevice => connectedDevice !== undefined));
   }
 
   closeMenu() {
@@ -56,15 +54,17 @@ export class MenuComponent {
 
   startMeasureSeries() {
     this.closeMenu();
-    this.login$.pipe(take(1)).subscribe(login => {
-      if (login !== undefined) {
-        this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
-          if (connectedDevice) {
+    this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
+      if (connectedDevice) {
+        this.login$.pipe(take(1)).subscribe(login => {
+          if (login !== undefined) {
             this.store.dispatch(new StartMeasureSeriesParams());
+          } else {
+            this.goToLogin(RedirectAfterLogin.MeasureSeries);
           }
         });
       } else {
-        this.goToLogin(RedirectAfterLogin.MeasureSeries);
+        this.goToDevices();
       }
     });
   }
@@ -89,7 +89,7 @@ export class MenuComponent {
       message:
         redirectAfterLogin === RedirectAfterLogin.ManualMeasure
           ? this.translateService.instant('MEASURE_MANUAL.ALERT')
-          : this.translateService.instant('MEASURE_SERIES.ALERT'),
+          : this.translateService.instant('MEASURE_SERIES.ALERT_LOG_IN'),
       backdropDismiss: false,
       buttons: [
         {
@@ -113,6 +113,38 @@ export class MenuComponent {
               ],
               true,
               { queryParams: { redirectAfterLogin: redirectAfterLogin } }
+            )
+        }
+      ]
+    });
+  }
+
+  private goToDevices() {
+    this.alertService.show({
+      header: this.translateService.instant('MEASURE_SERIES.TITLE'),
+      message: this.translateService.instant('MEASURE_SERIES.ALERT_SENSOR'),
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: this.translateService.instant('GENERAL.CANCEL')
+        },
+        {
+          text: this.translateService.instant('SENSORS.ALERT_TITLE'),
+          handler: () =>
+            this.navigationService.navigateForward(
+              [
+                'tabs',
+                {
+                  outlets: {
+                    settings: 'devices',
+                    home: null,
+                    history: null,
+                    map: null,
+                    other: null
+                  }
+                }
+              ],
+              true
             )
         }
       ]

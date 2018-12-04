@@ -12,6 +12,7 @@ import { DosePipe } from './pipes/dose/dose.pipe';
 import { DurationPipe } from './pipes/duration/duration.pipe';
 import { HitNumberPerMinPipe } from './pipes/hit-number-per-min/hit-number-per-min.pipe';
 import { HitNumberPipe } from './pipes/hit-number/hit-number.pipe';
+import { SanitizeHtmlPipe } from './pipes/sanitize-html/sanitize-html.pipe';
 import { RoundButtonComponent } from './round-button/round-button.component';
 import { SelectIconComponent } from './select-icon/select-icon.component';
 import { TagListComponent } from './tag-list/tag-list.component';
@@ -30,7 +31,8 @@ import { TagListComponent } from './tag-list/tag-list.component';
     DosePipe,
     SelectIconComponent,
     TagListComponent,
-    PhotoComponent
+    PhotoComponent,
+    SanitizeHtmlPipe
   ],
   exports: [
     HeaderComponent,
@@ -44,7 +46,8 @@ import { TagListComponent } from './tag-list/tag-list.component';
     DosePipe,
     SelectIconComponent,
     TagListComponent,
-    PhotoComponent
+    PhotoComponent,
+    SanitizeHtmlPipe
   ],
   entryComponents: []
 })

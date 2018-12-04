@@ -6,6 +6,7 @@ export class DeviceSafeCast extends AbstractBLEDevice {
   apparatusVersion: string = DeviceType.SafeCast;
   apparatusSensorType = ApparatusSensorType.Geiger;
   apparatusTubeType = 'LND 7317 pancake';
+  hitsPeriod = 5000;
 
   constructor(rawDevice: RawBLEDevice) {
     super(rawDevice);

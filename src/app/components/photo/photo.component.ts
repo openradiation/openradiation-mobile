@@ -55,7 +55,8 @@ export class PhotoComponent implements ControlValueAccessor {
       mediaType: this.camera.MediaType.PICTURE,
       sourceType: this.camera.PictureSourceType.CAMERA,
       targetWidth: 600,
-      targetHeight: 800
+      targetHeight: 800,
+      correctOrientation: true
     };
     this.addPhoto(options);
   }

@@ -1,6 +1,6 @@
 {
   "name": "open-radiation",
-  "version": "2.0.2",
+  "version": "2.0.4",
   "author": "OpenRadiation",
   "homepage": "https://www.openradiation.org/",
   "description": "Les citoyens mesurent la radioactivité.",
@@ -19,7 +19,7 @@
     "compodoc:serve": "compodoc -p src/tsconfig.app.json --disableLifeCycleHooks -s -w",
     "prettier": "prettier --write \"src/**/*.ts\" \"src/**/*.scss\" \"src/**/*.md\"",
     "extract": "ngx-translate-extract --input ./src --output ./src/assets/i18n/en.json ./src/assets/i18n/fr.json --clean --sort --format namespaced-json --format-indentation \"  \" --marker _",
-    "pluggin:add": "ionic cordova plugin add"
+    "plugin:add": "ionic cordova plugin add"
   },
   "license": "Apache-2.0",
   "dependencies": {
@@ -59,6 +59,7 @@
     "cordova-plugin-camera": "^4.0.3",
     "cordova-plugin-compat": "^1.2.0",
     "cordova-plugin-device": "^2.0.2",
+    "cordova-plugin-inappbrowser": "3.0.0",
     "cordova-plugin-ionic-keyboard": "^2.1.3",
     "cordova-plugin-ionic-webview": "^2.2.5",
     "cordova-plugin-mauron85-background-geolocation": "^3.0.0-alpha.48",
@@ -142,7 +143,8 @@
         "MOTION_USAGE_DESCRIPTION": "La détection du déplacement de l'appareil est nécessaire au bon fonctionnement de l'application. Merci d'accepter la permission."
       },
       "cordovarduino": {},
-      "cordova-plugin-sqlite-2": {}
+      "cordova-plugin-sqlite-2": {},
+      "cordova-plugin-inappbrowser": {}
     },
     "platforms": [
       "android",

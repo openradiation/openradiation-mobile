@@ -3,9 +3,10 @@ import { BLE } from '@ionic-native/ble/ngx';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { Step } from '../../measures/measure';
 import { DeviceType } from '../abstract-device';
+import { DeviceConnectionLost } from '../devices.action';
 import { AbstractBLEDeviceService } from './abstract-ble-device.service';
 import { DeviceAtomTag } from './device-atom-tag';
 
@@ -13,11 +14,11 @@ import { DeviceAtomTag } from './device-atom-tag';
   providedIn: 'root'
 })
 export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag> {
+  protected service = '63462A4A-C28C-4FFD-87A4-2D23A1C72581';
+  protected receiveCharacteristic = '70BC767E-7A1A-4304-81ED-14B9AF54F7BD';
   private firmwareService = '180a';
   private firmwareCharacteristic = '2a26';
-  private service = '63462A4A-C28C-4FFD-87A4-2D23A1C72581';
   private settingsCharacteristic = 'ea50cfcd-ac4a-4a48-bf0e-879e548ae157';
-  private receiveCharacteristic = '70BC767E-7A1A-4304-81ED-14B9AF54F7BD';
 
   constructor(protected store: Store, protected ble: BLE) {
     super(store, ble);
@@ -64,15 +65,14 @@ export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag
 
   startMeasureScan(device: DeviceAtomTag, stopSignal: Observable<any>): Observable<Step> {
     stopSignal.subscribe(() => this.stopReceiveData(device));
-    return this.startReceiveData(device).pipe(map((buffer: ArrayBuffer) => this.decodeDataPackage(buffer)));
-  }
-
-  private startReceiveData(device: DeviceAtomTag): Observable<any> {
-    return this.ble.startNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
-  }
-
-  private stopReceiveData(device: DeviceAtomTag) {
-    return this.ble.stopNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
+    return this.startReceiveData(device).pipe(
+      map((buffer: ArrayBuffer) => this.decodeDataPackage(buffer)),
+      catchError(err => {
+        this.disconnectDevice(device).subscribe();
+        setTimeout(() => this.store.dispatch(new DeviceConnectionLost()), 1000);
+        throw err;
+      })
+    );
   }
 
   protected decodeDataPackage(buffer: ArrayBuffer): Step {

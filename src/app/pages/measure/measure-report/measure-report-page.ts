@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
+import { Platform } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { SelectIconOption } from '../../../components/select-icon/select-icon-option';
@@ -84,7 +85,8 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     private store: Store,
     private navigationService: NavigationService,
     private actions$: Actions,
-    private dateService: DateService
+    private dateService: DateService,
+    private platform: Platform
   ) {
     super(router);
   }
@@ -148,7 +150,11 @@ export class MeasureReportPage extends AutoUnsubscribePage {
             ]);
           }
         });
-      })
+      }),
+      // TODO remove forced type once it's fixed https://github.com/ionic-team/ionic/issues/16535
+      <Subscription>(<unknown>this.platform.backButton.subscribeWithPriority(9999, () => {
+        this.cancelMeasure();
+      }))
     );
   }
 

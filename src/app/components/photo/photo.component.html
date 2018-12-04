@@ -4,12 +4,12 @@
 <div class="photo">
     <ng-container *ngIf="!photo; else showPicture">
         <ion-button (click)="openCamera()" *ngIf="!isDisabled"
-                    class="flat-button photo-button" fill="clear">
-            <img class="button-icon" [src]="'assets/img/icon-photo.png'">
+                    class="photo-button" fill="clear">
+            <img [src]="'assets/img/icon-photo.png'">
         </ion-button>
         <ion-button (click)="openGallery()" *ngIf="!isDisabled"
-                    class="flat-button photo-button" fill="clear">
-            <img class="button-icon" [src]="'assets/img/icon-gallery.png'">
+                    class="photo-button" fill="clear">
+            <img [src]="'assets/img/icon-gallery.png'">
         </ion-button>
     </ng-container>
     <ng-template #showPicture>

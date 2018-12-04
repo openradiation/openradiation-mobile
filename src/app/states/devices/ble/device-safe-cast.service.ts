@@ -11,8 +11,8 @@ import { DeviceSafeCast } from './device-safe-cast';
   providedIn: 'root'
 })
 export class DeviceSafeCastService extends AbstractBLEDeviceService<DeviceSafeCast> {
-  private service = 'ef080d8c-c3be-41ff-bd3f-05a5f4795d7f';
-  private receiveCharacteristic = 'a1e8f5b1-696b-4e4c-87c6-69dfe0b0093b';
+  protected service = 'ef080d8c-c3be-41ff-bd3f-05a5f4795d7f';
+  protected receiveCharacteristic = 'a1e8f5b1-696b-4e4c-87c6-69dfe0b0093b';
 
   constructor(protected store: Store, protected ble: BLE) {
     super(store, ble);
@@ -43,14 +43,6 @@ export class DeviceSafeCastService extends AbstractBLEDeviceService<DeviceSafeCa
       tap(() => (readingBufferSequence = false)),
       map(buffers => this.decodeDataPackage(buffers))
     );
-  }
-
-  private startReceiveData(device: DeviceSafeCast): Observable<any> {
-    return this.ble.startNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
-  }
-
-  private stopReceiveData(device: DeviceSafeCast) {
-    return this.ble.stopNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
   }
 
   protected decodeDataPackage(buffers: ArrayBuffer[]): Step {

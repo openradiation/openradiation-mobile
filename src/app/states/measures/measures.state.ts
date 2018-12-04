@@ -43,8 +43,7 @@ import {
   StopMeasureScan,
   StopMeasureSeries,
   StopMeasureSeriesParams,
-  StopMeasureSeriesReport,
-  UpdateMeasureScanTime
+  StopMeasureSeriesReport
 } from './measures.action';
 import { MeasuresService } from './measures.service';
 import { PositionService } from './position.service';
@@ -338,6 +337,9 @@ export class MeasuresState implements NgxsOnInit {
         hitsNumber: currentMeasure.hitsNumber! + step.hitsNumber,
         steps: [...currentMeasure.steps, step]
       };
+      if (!newCurrentMeasure.startTime) {
+        newCurrentMeasure.startTime = step.ts - device.hitsPeriod;
+      }
       newCurrentMeasure.value = this.measuresService.computeRadiationValue(newCurrentMeasure, device);
       if (newCurrentMeasure.steps[0] && newCurrentMeasure.steps[0].temperature !== undefined) {
         newCurrentMeasure.temperature =
@@ -353,31 +355,6 @@ export class MeasuresState implements NgxsOnInit {
       if (
         currentSeries &&
         MeasuresState.shouldStopMeasureSeriesCurrentScan(device, currentSeries, newCurrentMeasure, step.ts)
-      ) {
-        return dispatch(new StartNextMeasureSeries(device));
-      }
-    }
-    return of(null);
-  }
-
-  @Action(UpdateMeasureScanTime)
-  updateMeasureScanTime(
-    { getState, patchState, dispatch }: StateContext<MeasuresStateModel>,
-    { device }: UpdateMeasureScanTime
-  ) {
-    const { currentMeasure, currentSeries } = getState();
-    if (currentMeasure) {
-      const currentTime = Date.now();
-      patchState({
-        currentMeasure: {
-          ...currentMeasure,
-          endTime: currentTime,
-          value: this.measuresService.computeRadiationValue(currentMeasure, device)
-        }
-      });
-      if (
-        currentSeries &&
-        MeasuresState.shouldStopMeasureSeriesCurrentScan(device, currentSeries, currentMeasure, currentTime)
       ) {
         return dispatch(new StartNextMeasureSeries(device));
       }
@@ -441,23 +418,14 @@ export class MeasuresState implements NgxsOnInit {
     if (currentMeasure) {
       return this.measuresService.startMeasureScan(device).pipe(
         tap(() => {
-          const currentTime = Date.now();
           const patch: Partial<MeasuresStateModel> = {};
           if (currentSeries) {
             patch.currentSeries = {
               ...currentSeries,
-              startTime: currentTime,
-              endTime: currentTime
+              startTime: Date.now()
             };
           }
-          patch.currentMeasure = Measure.updateStartPosition(
-            {
-              ...currentMeasure,
-              startTime: currentTime,
-              endTime: currentTime
-            },
-            currentPosition
-          );
+          patch.currentMeasure = Measure.updateStartPosition(getState().currentMeasure!, currentPosition);
           patchState(patch);
         })
       );
@@ -497,22 +465,17 @@ export class MeasuresState implements NgxsOnInit {
         return dispatch(new StopMeasureScan(device));
       } else {
         const updatedMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
-        const currentTime = Date.now();
         const newMeasure = Measure.updateStartPosition(
-          {
-            ...new Measure(
-              currentMeasure.apparatusId,
-              currentMeasure.apparatusVersion,
-              currentMeasure.apparatusSensorType,
-              currentMeasure.apparatusTubeType,
-              this.device.uuid,
-              this.device.platform,
-              this.device.version,
-              this.device.model
-            ),
-            startTime: currentTime,
-            endTime: currentTime
-          },
+          new Measure(
+            currentMeasure.apparatusId,
+            currentMeasure.apparatusVersion,
+            currentMeasure.apparatusSensorType,
+            currentMeasure.apparatusTubeType,
+            this.device.uuid,
+            this.device.platform,
+            this.device.version,
+            this.device.model
+          ),
           currentPosition
         );
         patchState({

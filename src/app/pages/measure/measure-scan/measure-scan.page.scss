@@ -107,6 +107,11 @@
             width: 100%;
             padding: 8px;
           }
+          @media (min-width: 650px) {
+            img {
+              width: 55%;
+            }
+          }
         }
       }
     }
@@ -204,6 +209,10 @@
       display: flex;
       align-items: center;
       animation: moving-background 6s linear infinite;
+
+      img {
+        min-width: 100%;
+      }
     }
 
     @keyframes moving-background {
