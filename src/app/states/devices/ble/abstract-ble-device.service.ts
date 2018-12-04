@@ -8,6 +8,9 @@ import { DeviceConnectionLost } from '../devices.action';
 import { AbstractBLEDevice } from './abstract-ble-device';
 
 export abstract class AbstractBLEDeviceService<T extends AbstractBLEDevice> extends AbstractDeviceService<T> {
+  protected abstract service: string;
+  protected abstract receiveCharacteristic: string;
+
   constructor(protected store: Store, protected ble: BLE) {
     super(store);
   }
@@ -23,5 +26,15 @@ export abstract class AbstractBLEDeviceService<T extends AbstractBLEDevice> exte
 
   disconnectDevice(device: T): Observable<any> {
     return fromPromise(this.ble.disconnect(device.sensorUUID));
+  }
+
+  protected startReceiveData(device: T): Observable<any> {
+    console.log('startReceiveData');
+    return this.ble.startNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
+  }
+
+  protected stopReceiveData(device: T) {
+    console.log('stopReceiveData');
+    return this.ble.stopNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
   }
 }
