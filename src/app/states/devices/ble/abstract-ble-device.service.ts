@@ -29,12 +29,10 @@ export abstract class AbstractBLEDeviceService<T extends AbstractBLEDevice> exte
   }
 
   protected startReceiveData(device: T): Observable<any> {
-    console.log('startReceiveData');
     return this.ble.startNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
   }
 
   protected stopReceiveData(device: T) {
-    console.log('stopReceiveData');
     return this.ble.stopNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
   }
 }
