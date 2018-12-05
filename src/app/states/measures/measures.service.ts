@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { forkJoin, Observable, of } from 'rxjs';
-import { filter, shareReplay, take, takeUntil } from 'rxjs/operators';
+import { shareReplay, take, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { AbstractDevice, ApparatusSensorType } from '../devices/abstract-device';
 import { DeviceConnectionLost } from '../devices/devices.action';
@@ -12,7 +12,6 @@ import { Measure, MeasureSeries, MeasureType, Step } from './measure';
 import { MeasureApi } from './measure-api';
 import { AddMeasureScanStep, CancelMeasure, StopMeasureScan } from './measures.action';
 import { MeasuresState, MeasuresStateModel } from './measures.state';
-import { PositionService } from './position.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,8 +21,7 @@ export class MeasuresService {
     private store: Store,
     private actions$: Actions,
     private httpClient: HttpClient,
-    private devicesService: DevicesService,
-    private positionService: PositionService
+    private devicesService: DevicesService
   ) {}
 
   startMeasureScan(device: AbstractDevice): Observable<any> {
@@ -55,7 +53,6 @@ export class MeasuresService {
       .startMeasureScan(device, stopSignal)
       .pipe(
         takeUntil(stopSignal),
-        filter(() => !this.positionService.isAcquiringPosition),
         shareReplay()
       );
     detectHits.subscribe(step => this.store.dispatch(new AddMeasureScanStep(step, device)).subscribe());
