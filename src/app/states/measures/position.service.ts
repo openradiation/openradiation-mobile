@@ -19,7 +19,6 @@ declare const BackgroundGeolocation: any;
 })
 export class PositionService {
   private currentAlert?: any;
-  isAcquiringPosition = false;
 
   constructor(
     private diagnostic: Diagnostic,
