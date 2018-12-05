@@ -82,7 +82,7 @@
     },
     "SEND_ERROR": "Impossible d'envoyer, veuillez vérifier votre connexion.",
     "SEND_SERIES": {
-      "NOTICE": "En envoyant cette mesure, vous acceptez que l'ensemble des données correspondant à cette série de mesure (dont votre position GPS, votre pseudo, etc) soit publié dans la base OpenRadiation.",
+      "NOTICE": "En envoyant ces mesures, vous acceptez que l'ensemble des données correspondant à cette série de mesure (dont votre position GPS, votre pseudo, etc) soit publié dans la base OpenRadiation.",
       "TITLE": "Êtes-vous sûr(e) de vouloir envoyer cette série de mesure ?"
     },
     "SENT": "Publiée",

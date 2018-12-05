@@ -23,7 +23,7 @@ export class V1MigrationService {
                 const items: any = {};
                 if (res.rows.length > 0) {
                   for (let i = 0; i < res.rows.length; i++) {
-                    items[res.rows.item(i).paramName] = res.rows.item(i).libre;
+                    items[res.rows.item(i).paramName] = V1MigrationService.parseV1Data(res.rows.item(i).libre);
                   }
                 }
                 resolve({ login: items.login, password: items.mdp });
@@ -66,33 +66,37 @@ export class V1MigrationService {
   private static transformMeasureToV2(item: any): Measure {
     return {
       type: MeasureType.Measure,
-      apparatusId: item.apparatusId,
-      apparatusVersion: item.apparatusVersion,
-      apparatusSensorType: item.apparatusSensorType,
-      apparatusTubeType: item.apparatusTubeType,
-      temperature: item.temperature,
-      value: item.radiation,
-      hitsNumber: item.nbHits,
-      latitude: parseFloat(item.latitude),
-      longitude: parseFloat(item.longitude),
-      accuracy: parseFloat(item.accuracy),
-      altitude: parseFloat(item.altitude),
-      altitudeAccuracy: parseFloat(item.altitudeAccuracy),
-      deviceUuid: item.deviceUUID,
-      devicePlatform: item.devicePlatform,
-      deviceVersion: item.deviceVersion,
-      deviceModel: item.deviceModel,
-      reportUuid: item.reportUUID,
+      apparatusId: V1MigrationService.parseV1Data(item.apparatusId),
+      apparatusVersion: V1MigrationService.parseV1Data(item.apparatusVersion),
+      apparatusSensorType: V1MigrationService.parseV1Data(item.apparatusSensorType),
+      apparatusTubeType: V1MigrationService.parseV1Data(item.apparatusTubeType),
+      temperature: V1MigrationService.parseV1Data(item.temperature),
+      value: V1MigrationService.parseV1Data(item.radiation),
+      hitsNumber: V1MigrationService.parseV1Data(item.nbHits),
+      latitude: V1MigrationService.parseV1Data(parseFloat(item.latitude)),
+      longitude: V1MigrationService.parseV1Data(parseFloat(item.longitude)),
+      accuracy: V1MigrationService.parseV1Data(parseFloat(item.accuracy)),
+      altitude: V1MigrationService.parseV1Data(parseFloat(item.altitude)),
+      altitudeAccuracy: V1MigrationService.parseV1Data(parseFloat(item.altitudeAccuracy)),
+      deviceUuid: V1MigrationService.parseV1Data(item.deviceUUID),
+      devicePlatform: V1MigrationService.parseV1Data(item.devicePlatform),
+      deviceVersion: V1MigrationService.parseV1Data(item.deviceVersion),
+      deviceModel: V1MigrationService.parseV1Data(item.deviceModel),
+      reportUuid: V1MigrationService.parseV1Data(item.reportUUID),
       manualReporting: item.manualReporting !== 'false',
       organisationReporting: V1OrganisationReporting,
-      description: item.notes,
-      measurementHeight: item.position,
-      tags: item.tags.toString().split(/[\s,]+/),
-      measurementEnvironment: item.environment,
-      id: item.reportUUID,
-      startTime: item.tsStart * 1000,
-      endTime: item.tsStart * 1000 + item.duration * 1000,
+      description: V1MigrationService.parseV1Data(item.notes),
+      measurementHeight: V1MigrationService.parseV1Data(item.position),
+      tags: item.tags ? (<string>item.tags).split(/[\s,]+/) : undefined,
+      measurementEnvironment: V1MigrationService.parseV1Data(item.environment),
+      id: V1MigrationService.parseV1Data(item.reportUUID),
+      startTime: V1MigrationService.parseV1Data(item.tsStart * 1000),
+      endTime: V1MigrationService.parseV1Data(item.tsStart * 1000 + item.duration * 1000),
       sent: item.sent !== 0
     };
+  }
+
+  private static parseV1Data(data: any): any {
+    return data === 0 || (data && data !== 'undefined') ? data : undefined;
   }
 }
