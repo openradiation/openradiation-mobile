@@ -87,7 +87,7 @@ export class V1MigrationService {
       organisationReporting: V1OrganisationReporting,
       description: item.notes,
       measurementHeight: item.position,
-      tags: item.tags.toString().split(/[\s,]+/),
+      tags: item.tags ? (<string>item.tags).split(/[\s,]+/) : undefined,
       measurementEnvironment: item.environment,
       id: item.reportUUID,
       startTime: item.tsStart * 1000,
