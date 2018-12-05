@@ -1,7 +1,7 @@
 {
   "ABOUT": {
     "MEASURE": {
-      "NOTICE": "The OpenRadiation application, connected with a compatible sensor (see compatible sensors on <a onclick=\"window.open('https://www.openradiation.org', '_system')\">www.openradiation.org</a>, can be used to measure radioactivity as well as contribute to a citizen science project, by helping to create the OpenRadiation collaborative base, and improve the knowledge of radioactivity in the environment. We suggest that you create a user account at <a onclick=\"window.open('https://www.openradiation.org/en/user/register', '_system')\">www.openradiation.org</a>, and then configure this account in the application and activate automatic measurement publications (under the settings menu).",
+      "NOTICE": "The OpenRadiation application, connected with a compatible sensor (see compatible sensors on <a onclick=\"window.open('https://www.openradiation.org', '_system')\">www.openradiation.org</a>), can be used to measure radioactivity as well as contribute to a citizen science project, by helping to create the OpenRadiation collaborative base, and improve the knowledge of radioactivity in the environment. We suggest that you create a user account at <a onclick=\"window.open('https://www.openradiation.org/en/user/register', '_system')\">www.openradiation.org</a>, and then configure this account in the application and activate automatic measurement publications (under the settings menu).",
       "TITLE": "Radioactivity measurement"
     },
     "MEASURES_HOW_TO": {
@@ -82,7 +82,7 @@
     },
     "SEND_ERROR": "Could not send, please check your connection.",
     "SEND_SERIES": {
-      "NOTICE": "By sending this measurement, you accept that all data corresponding to this measurement series (including your GPS position, your user name etc.) will be published in the OpenRadiation base.",
+      "NOTICE": "By sending theses measurements, you accept that all data corresponding to this measurement series (including your GPS position, your user name etc.) will be published in the OpenRadiation base.",
       "TITLE": "Are you sure you wish to send this measurement series?"
     },
     "SENT": "Sent",
@@ -202,7 +202,7 @@
       "HITS_AVERAGE": "Average hits number",
       "MEASURE_NUMBER": "Number of measurements",
       "SERIES_DURATION": "Total duration of measurements",
-      "VALUE_AVERAGE": "Average measures"
+      "VALUE_AVERAGE": "Average of measurements"
     },
     "SERIES_LIMIT": "The next measurement will start automatically, for a maximum of",
     "STOP": "You can stop the measurements at any time.",
