@@ -83,14 +83,15 @@ export class TagListComponent implements ControlValueAccessor {
   }
 
   updateDisplayedProposedTagList() {
-    this.displayedProposedTagList = this.proposedTagList
-      ? this.proposedTagList
-          .filter(
-            proposedTag =>
-              (!this.tagList || this.tagList.every(tag => tag !== proposedTag)) &&
-              proposedTag.startsWith(this.currentTag)
-          )
-          .slice(0, 6)
-      : undefined;
+    this.displayedProposedTagList =
+      this.proposedTagList && this.currentTag
+        ? this.proposedTagList
+            .filter(
+              proposedTag =>
+                (!this.tagList || this.tagList.every(tag => tag !== proposedTag)) &&
+                proposedTag.startsWith(this.currentTag)
+            )
+            .slice(0, 6)
+        : undefined;
   }
 }

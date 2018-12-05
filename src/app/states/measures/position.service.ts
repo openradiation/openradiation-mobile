@@ -94,11 +94,10 @@ export class PositionService {
     }
     this.diagnostic
       .getLocationAuthorizationStatus()
-      .then(
-        status =>
-          this.platform.is('ios') && status === this.diagnostic.permissionStatus.DENIED
-            ? this.diagnostic.permissionStatus.DENIED_ALWAYS
-            : status
+      .then(status =>
+        this.platform.is('ios') && status === this.diagnostic.permissionStatus.DENIED
+          ? this.diagnostic.permissionStatus.DENIED_ALWAYS
+          : status
       )
       .then(status => {
         switch (status) {
