@@ -69,7 +69,7 @@ export class V1MigrationService {
       type: MeasureType.Measure,
       apparatusId: V1MigrationService.parseV1Data(item.apparatusId),
       apparatusVersion: V1MigrationService.parseV1Data(item.apparatusVersion),
-      apparatusSensorType: V1MigrationService.parseV1Data(item.apparatusSensorType) || ApparatusSensorType.Geiger,
+      apparatusSensorType: ApparatusSensorType.Geiger,
       apparatusTubeType: V1MigrationService.parseV1Data(item.apparatusTubeType),
       temperature: V1MigrationService.parseV1Data(item.temperature),
       value: V1MigrationService.parseV1Data(item.radiation),
