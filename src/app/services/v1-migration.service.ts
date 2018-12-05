@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Platform } from '@ionic/angular';
+import { ApparatusSensorType } from '../states/devices/abstract-device';
 import { Measure, MeasureSeries, MeasureType, V1OrganisationReporting } from '../states/measures/measure';
 import { UserStateModel } from '../states/user/user.state';
 
@@ -68,7 +69,7 @@ export class V1MigrationService {
       type: MeasureType.Measure,
       apparatusId: V1MigrationService.parseV1Data(item.apparatusId),
       apparatusVersion: V1MigrationService.parseV1Data(item.apparatusVersion),
-      apparatusSensorType: V1MigrationService.parseV1Data(item.apparatusSensorType),
+      apparatusSensorType: V1MigrationService.parseV1Data(item.apparatusSensorType) || ApparatusSensorType.Geiger,
       apparatusTubeType: V1MigrationService.parseV1Data(item.apparatusTubeType),
       temperature: V1MigrationService.parseV1Data(item.temperature),
       value: V1MigrationService.parseV1Data(item.radiation),
