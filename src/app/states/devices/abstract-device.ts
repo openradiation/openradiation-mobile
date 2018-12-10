@@ -25,6 +25,7 @@ export enum ApparatusSensorType {
 }
 
 export enum DeviceType {
+  Mock = 'Mock',
   OGKit = 'OG-KIT1',
   AtomTag = 'AtomTag',
   SafeCast = 'bGeigieBLE',

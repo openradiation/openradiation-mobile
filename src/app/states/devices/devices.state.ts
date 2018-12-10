@@ -1,9 +1,11 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
 import { concatMap, map, tap } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 import { AbstractDevice } from './abstract-device';
 import { AbstractBLEDevice } from './ble/abstract-ble-device';
 import { BLEDevicesService } from './ble/ble-devices.service';
+import { DeviceMock } from './device-mock';
 import { DeviceParams } from './device-params';
 import {
   BLEConnectionLost,
@@ -99,8 +101,11 @@ export class DevicesState {
   }
 
   @Action(StartDiscoverBLEDevices, { cancelUncompleted: true })
-  startDiscoverBLEDevices({ patchState }: StateContext<DevicesStateModel>) {
-    return this.bleDevicesService.startDiscoverDevices().pipe(
+  startDiscoverBLEDevices({ patchState, dispatch }: StateContext<DevicesStateModel>) {
+    return (environment.mockDevice
+      ? dispatch(new BLEDevicesDiscovered([new DeviceMock()]))
+      : this.bleDevicesService.startDiscoverDevices()
+    ).pipe(
       tap(() =>
         patchState({
           isScanning: true
@@ -111,13 +116,15 @@ export class DevicesState {
 
   @Action(StartDiscoverUSBDevices, { cancelUncompleted: true })
   startDiscoverUSBDevices({ patchState }: StateContext<DevicesStateModel>) {
-    return this.usbDevicesService.startDiscoverDevices().pipe(
-      tap(() =>
-        patchState({
-          isScanning: true
-        })
-      )
-    );
+    return environment.mockDevice
+      ? of(null)
+      : this.usbDevicesService.startDiscoverDevices().pipe(
+          tap(() =>
+            patchState({
+              isScanning: true
+            })
+          )
+        );
   }
 
   @Action(StopDiscoverDevices)

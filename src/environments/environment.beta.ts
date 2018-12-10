@@ -6,5 +6,6 @@ export const environment = {
   IN_APP_BROWSER_URI: {
     base: 'https://request.open-radiation.net',
     suffix: 'openradiation'
-  }
+  },
+  mockDevice: false
 };
