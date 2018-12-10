@@ -94,6 +94,14 @@
                   "maximumError": "5mb"
                 }
               ]
+            },
+            "mockDevice": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.mock-device.ts"
+                }
+              ]
             }
           }
         },
@@ -105,6 +113,12 @@
           "configurations": {
             "production": {
               "browserTarget": "app:build:production"
+            },
+            "beta": {
+              "browserTarget": "app:build:beta"
+            },
+            "mockDevice": {
+              "browserTarget": "app:build:mockDevice"
             }
           }
         },
@@ -161,6 +175,9 @@
             },
             "beta": {
               "browserTarget": "app:build:beta"
+            },
+            "mockDevice": {
+              "browserTarget": "app:build:mockDevice"
             }
           }
         },

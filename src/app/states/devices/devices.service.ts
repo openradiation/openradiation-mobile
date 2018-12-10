@@ -7,6 +7,7 @@ import { AbstractDeviceService } from './abstract-device.service';
 import { DeviceAtomTagService } from './ble/device-atom-tag.service';
 import { DeviceOGKitService } from './ble/device-og-kit.service';
 import { DeviceSafeCastService } from './ble/device-safe-cast.service';
+import { DeviceMockService } from './device-mock.service';
 import { DeviceConnectionLost } from './devices.action';
 import { DevicePocketGeigerService } from './usb/device-pocket-geiger.service';
 
@@ -20,12 +21,14 @@ export class DevicesService {
     private actions$: Actions,
     private toastController: ToastController,
     private translateService: TranslateService,
+    private deviceMockService: DeviceMockService,
     private deviceOGKitService: DeviceOGKitService,
     private deviceAtomTagService: DeviceAtomTagService,
     private deviceSafeCastService: DeviceSafeCastService,
     private devicePocketGeigerService: DevicePocketGeigerService
   ) {
     this.services = {
+      [DeviceType.Mock]: this.deviceMockService,
       [DeviceType.OGKit]: this.deviceOGKitService,
       [DeviceType.AtomTag]: this.deviceAtomTagService,
       [DeviceType.SafeCast]: this.deviceSafeCastService,
