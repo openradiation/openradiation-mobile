@@ -5,8 +5,9 @@ export class DeviceRium extends AbstractUSBDevice {
   readonly deviceType = DeviceType.Rium;
   apparatusVersion: string = DeviceType.Rium;
   apparatusSensorType = ApparatusSensorType.Geiger;
-  readonly pid = '9220';
-  readonly vid = '1003';
+  apparatusTubeType = 'J305γβ';
+  readonly pid = '2404';
+  readonly vid = '03eb';
   readonly baudRate = 115200;
   readonly dataBits = 8;
   hitsPeriod = 2000;

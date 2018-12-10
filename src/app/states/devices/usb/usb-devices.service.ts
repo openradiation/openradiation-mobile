@@ -10,6 +10,7 @@ import { AlertService } from '../../../services/alert.service';
 import { StartDiscoverUSBDevices, StopDiscoverDevices, USBDevicesDiscovered } from '../devices.action';
 import { AbstractUSBDevice } from './abstract-usb-device';
 import { DevicePocketGeiger } from './device-pocket-geiger';
+import { DeviceRium } from './device-rium';
 
 @Injectable({
   providedIn: 'root'
@@ -39,7 +40,7 @@ export class USBDevicesService {
   }
 
   private discoverDevices() {
-    const usbDevices: AbstractUSBDevice[] = [new DevicePocketGeiger()];
+    const usbDevices: AbstractUSBDevice[] = [new DevicePocketGeiger(), new DeviceRium()];
     interval(1000)
       .pipe(
         takeUntil(this.actions$.pipe(ofActionDispatched(StopDiscoverDevices, StartDiscoverUSBDevices))),
