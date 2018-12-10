@@ -7,7 +7,7 @@ export class DeviceMock extends AbstractDevice {
   apparatusVersion = DeviceType.Mock;
   apparatusSensorType = ApparatusSensorType.Geiger;
   hitsPeriod = 1000;
-  sensorUuid = DeviceType.Mock;
+  sensorUUID = DeviceType.Mock;
 
   params: DeviceParams = {
     audioHits: true,
