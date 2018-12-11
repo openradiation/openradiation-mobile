@@ -9,6 +9,10 @@
                      *ngIf="!canPublish(currentSeries)">
                     <div class="message-style">{{'HISTORY.MESSAGE_PREVENT_SERIES_SENDING' | translate}}</div>
                 </div>
+                <div class="message"
+                     *ngIf="positionChangeSpeedOverLimit">
+                    <div class="message-style">{{'HISTORY.MESSAGE_SPEED' | translate}}</div>
+                </div>
                 <form class="form" [formGroup]="measureSeriesReportForm" ngxsForm="measures.measureSeriesReport">
                     <ion-list>
                         <ion-item class="custom-disabled">
