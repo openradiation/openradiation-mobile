@@ -1,4 +1,4 @@
-<ng-container *ngIf="measureSeriesReportForm">
+<ng-container *ngIf="measureReportForm">
     <ng-container *ngIf="currentSeries as currentSeries">
         <app-header>
         </app-header>
@@ -13,7 +13,7 @@
                      *ngIf="positionChangeSpeedOverLimit">
                     <div class="message-style">{{'HISTORY.MESSAGE_SPEED' | translate}}</div>
                 </div>
-                <form class="form" [formGroup]="measureSeriesReportForm" ngxsForm="measures.measureSeriesReport">
+                <form class="form" [formGroup]="measureReportForm" ngxsForm="measures.measureSeriesReport">
                     <ion-list>
                         <ion-item class="custom-disabled">
                             <ion-label class="value">{{'MEASURE_SERIES.REPORT.MEASURE_NUMBER' | translate}}</ion-label>
@@ -112,14 +112,14 @@
                     </ng-container>
                 </form>
                 <div class="bottom-buttons">
-                    <app-round-button [disabled]="!measureSeriesReportForm.valid  || currentSeries.sent"
+                    <app-round-button [disabled]="!measureReportForm.valid  || currentSeries.sent"
                                       [srcOn]="'assets/img/button-on.png'"
                                       [srcOff]="'assets/img/button-off.png'"
                                       (click)="stopReport()">
                         {{'GENERAL.OK' | translate}}
                     </app-round-button>
                     <div class="side-buttons">
-                        <ion-button fill="clear" class="flat-button cancel" (click)="cancelSeries()">
+                        <ion-button fill="clear" class="flat-button cancel" (click)="cancelMeasure()">
                             <ng-container *ngIf="!currentSeries.sent; else backButton">
                                 {{'GENERAL.CANCEL' | translate}}
                             </ng-container>
