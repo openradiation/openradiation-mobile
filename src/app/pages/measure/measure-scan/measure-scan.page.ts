@@ -112,19 +112,19 @@ export class MeasureScanPage extends AutoUnsubscribePage {
   }
 
   updateHitsAccuracy(device: AbstractDevice, measure?: Measure) {
-    if (measure && measure.hitsNumber !== undefined) {
-      if (measure.hitsNumber >= device.hitsAccuracyThreshold.accurate) {
+    if (measure && measure.hitsAccuracy !== undefined) {
+      if (measure.hitsAccuracy >= device.hitsAccuracyThreshold.accurate) {
         this.hitsAccuracy = HitsAccuracy.Accurate;
-      } else if (measure.hitsNumber >= device.hitsAccuracyThreshold.good) {
+      } else if (measure.hitsAccuracy >= device.hitsAccuracyThreshold.good) {
         this.hitsAccuracy = HitsAccuracy.Good;
-      } else if (measure.hitsNumber >= device.hitsAccuracyThreshold.medium) {
+      } else if (measure.hitsAccuracy >= device.hitsAccuracyThreshold.medium) {
         this.hitsAccuracy = HitsAccuracy.Medium;
-      } else if (measure.hitsNumber >= device.hitsAccuracyThreshold.bad) {
+      } else if (measure.hitsAccuracy >= device.hitsAccuracyThreshold.bad) {
         this.hitsAccuracy = HitsAccuracy.Bad;
       } else {
         this.hitsAccuracy = HitsAccuracy.Start;
       }
-      this.hitsAccuracyWidth = Math.min((measure.hitsNumber / device.hitsAccuracyThreshold.accurate) * 100, 100);
+      this.hitsAccuracyWidth = Math.min((measure.hitsAccuracy / device.hitsAccuracyThreshold.accurate) * 100, 100);
     }
   }
 

@@ -93,7 +93,8 @@ export class V1MigrationService {
       id: V1MigrationService.parseV1Data(item.reportUUID),
       startTime: V1MigrationService.parseV1Data(item.tsStart * 1000),
       endTime: V1MigrationService.parseV1Data(item.tsStart * 1000 + item.duration * 1000),
-      sent: item.sent !== 0
+      sent: item.sent !== 0,
+      hitsAccuracy: V1MigrationService.parseV1Data(item.nbHits)
     };
   }
 
