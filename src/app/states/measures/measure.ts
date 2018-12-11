@@ -52,6 +52,7 @@ export class Measure extends AbstractMeasure {
   measurementEnvironment?: MeasureEnvironment;
   rain?: boolean;
   steps?: Step[] = [];
+  hitsAccuracy?: number;
 
   constructor(
     apparatusId: string | undefined,
@@ -80,7 +81,7 @@ export class Measure extends AbstractMeasure {
     this.organisationReporting = environment.APP_NAME_VERSION;
     this.accuracy = PositionAccuracyThreshold.No;
     this.endAccuracy = PositionAccuracyThreshold.No;
-    this.hitsNumber = this.manualReporting ? undefined : 0;
+    this.hitsAccuracy = this.manualReporting ? undefined : 0;
   }
 
   static updateStartPosition(measure: Measure, position?: Location): Measure {
@@ -116,7 +117,9 @@ export class Measure extends AbstractMeasure {
 
 export interface Step {
   ts: number;
-  hitsNumber: number;
+  hitsNumber?: number;
+  hitsAccuracy?: number;
+  value?: number;
   voltage?: number;
   temperature?: number;
 }
