@@ -1,6 +1,6 @@
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { _ } from '@biesbjerg/ngx-translate-extract';
+import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
 import { Platform } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable, Subscription } from 'rxjs';
@@ -14,7 +14,7 @@ import {
   MeasureEnvironment,
   PositionAccuracyThreshold
 } from '../../../states/measures/measure';
-import { AddRecentTag, CancelMeasure, StopMeasureSeries } from '../../../states/measures/measures.action';
+import { AddRecentTag, CancelMeasure, StopMeasure, StopMeasureSeries } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
 import { UserState } from '../../../states/user/user.state';
 
@@ -74,7 +74,7 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
 
   init() {
     this.subscriptions.push(
-      this.actions$.pipe(ofActionSuccessful(StopMeasureSeries, CancelMeasure)).subscribe(() => {
+      this.actions$.pipe(ofActionSuccessful(StopMeasureSeries, CancelMeasure, StopMeasure)).subscribe(() => {
         this.activatedRoute.queryParams.pipe(take(1)).subscribe(queryParams => {
           this.measureReportForm = undefined;
           if (queryParams.goBackHistory) {
