@@ -47,6 +47,21 @@ App built with method 1 & 2 will send measure to the test API (safe to use for t
 
 Don't forget to increase the app version number if you want to upload your build to the playstore.
 
+If you are behind a proxy, before you run npm command : 
+
+- Download manually https://services.gradle.org/distributions/gradle-4.1-all.zip then `SET CORDOVA_ANDROID_GRADLE_DISTRIBUTION_URL=C\:/path_to_.../gradle-4.1-all.zip` (on windows)
+(Rq : This env variable is in the ..\platforms\android\cordova\lib\builders\GradleBuilder.js file)
+- Add this configuration in the gradle.properties file of the project, where the build.gradle file is (PROJECT\platforms\android directory
+  
+  systemProp.http.proxyHost=
+  systemProp.http.proxyPort=
+  systemProp.http.proxyUser=
+  systemProp.http.proxyPassword=
+  systemProp.https.proxyHost=
+  systemProp.https.proxyPort=
+  systemProp.https.proxyUser=
+  systemProp.https.proxyPassword=
+
 ### Upload on Playstore
 
 Follow the [official guide](https://support.google.com/googleplay/android-developer/answer/7159011) to upload the app to the Playstore (for both beta closed release and prod release).
