@@ -33,8 +33,8 @@ Then you need to update the Android sdk and tools with the [SDK Manager](https:/
 
 Your `PATH` environment variable should contain (example for Windows 10 standard installation) :
 
-- C:\Users\<username>\AppData\Local\Android\sdk\tools
-- C:\Users\<username>\AppData\Local\Android\sdk\platform-tools
+- C:\Users\\<username>\AppData\Local\Android\sdk\tools
+- C:\Users\\<username>\AppData\Local\Android\sdk\platform-tools
 - C:\Program Files (x86)\Common Files\Oracle\Java\javapath
 
 ### Build
@@ -52,6 +52,7 @@ If you are behind a proxy, before you run npm command :
 - Download manually https://services.gradle.org/distributions/gradle-4.1-all.zip then `SET CORDOVA_ANDROID_GRADLE_DISTRIBUTION_URL=C\:/path_to_.../gradle-4.1-all.zip` (on windows)
 (Rq : This env variable is in the ..\platforms\android\cordova\lib\builders\GradleBuilder.js file)
 - Add this configuration in the gradle.properties file of the project, where the build.gradle file is (PROJECT\platforms\android directory)
+
 
     systemProp.http.proxyHost=
     systemProp.http.proxyPort=
