@@ -53,14 +53,14 @@ If you are behind a proxy, before you run npm command :
 (Rq : This env variable is in the ..\platforms\android\cordova\lib\builders\GradleBuilder.js file)
 - Add this configuration in the gradle.properties file of the project, where the build.gradle file is (PROJECT\platforms\android directory
   
-  systemProp.http.proxyHost=
-  systemProp.http.proxyPort=
-  systemProp.http.proxyUser=
-  systemProp.http.proxyPassword=
-  systemProp.https.proxyHost=
-  systemProp.https.proxyPort=
-  systemProp.https.proxyUser=
-  systemProp.https.proxyPassword=
+    systemProp.http.proxyHost=
+    systemProp.http.proxyPort=
+    systemProp.http.proxyUser=
+    systemProp.http.proxyPassword=
+    systemProp.https.proxyHost=
+    systemProp.https.proxyPort=
+    systemProp.https.proxyUser=
+    systemProp.https.proxyPassword=
 
 ### Upload on Playstore
 
