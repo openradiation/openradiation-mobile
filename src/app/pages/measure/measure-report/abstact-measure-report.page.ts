@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
 import { Platform } from '@ionic/angular';
@@ -9,42 +8,26 @@ import { take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { SelectIconOption } from '../../../components/select-icon/select-icon-option';
 import { NavigationService } from '../../../services/navigation.service';
-import { DateService } from '../../../states/measures/date.service';
-import { Measure, MeasureEnvironment, PositionAccuracyThreshold } from '../../../states/measures/measure';
 import {
-  AddRecentTag,
-  CancelMeasure,
-  StartMeasureReport,
-  StopMeasure,
-  StopMeasureReport
-} from '../../../states/measures/measures.action';
-import { MeasuresState, MeasuresStateModel } from '../../../states/measures/measures.state';
+  AbstractMeasure,
+  Measure,
+  MeasureEnvironment,
+  PositionAccuracyThreshold
+} from '../../../states/measures/measure';
+import { AddRecentTag, CancelMeasure, StopMeasure, StopMeasureSeries } from '../../../states/measures/measures.action';
+import { MeasuresState } from '../../../states/measures/measures.state';
 import { UserState } from '../../../states/user/user.state';
 
-@Component({
-  selector: 'app-measure-report',
-  templateUrl: './measure-report.page.html',
-  styleUrls: ['./measure-report.page.scss']
-})
-export class MeasureReportPage extends AutoUnsubscribePage {
-  @Select(MeasuresState.expertMode)
-  expertMode$: Observable<boolean>;
-
+export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> extends AutoUnsubscribePage {
   @Select(UserState.login)
   login$: Observable<string | undefined>;
 
   @Select(MeasuresState.recentTags)
   recentTags$: Observable<string>;
 
-  currentMeasure?: Measure;
   measureReportForm?: FormGroup;
   reportScan = true;
-  inputDisabled = false;
   positionChangeSpeedOverLimit = false;
-
-  positionAccuracyThreshold = PositionAccuracyThreshold;
-
-  url = '/measure/report';
 
   measurementEnvironmentOptions: SelectIconOption[];
 
@@ -78,59 +61,20 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     }
   ];
 
-  constructor(
-    protected activatedRoute: ActivatedRoute,
+  protected constructor(
     protected router: Router,
-    private formBuilder: FormBuilder,
-    private store: Store,
-    private navigationService: NavigationService,
-    private actions$: Actions,
-    private dateService: DateService,
-    private platform: Platform
+    protected store: Store,
+    protected activatedRoute: ActivatedRoute,
+    protected navigationService: NavigationService,
+    protected actions$: Actions,
+    protected platform: Platform
   ) {
     super(router);
   }
 
-  pageEnter() {
-    super.pageEnter();
-    if (!this.measureReportForm) {
-      this.store.dispatch(new StartMeasureReport()).subscribe(() => {
-        const { measureReport, currentMeasure } = this.store.selectSnapshot(
-          ({ measures }: { measures: MeasuresStateModel }) => measures
-        );
-        this.currentMeasure = currentMeasure;
-        this.reportScan = !this.currentMeasure!.manualReporting;
-        this.inputDisabled = this.reportScan || this.currentMeasure!.sent;
-        this.initMeasurementEnvironmentOptions(this.currentMeasure);
-        if (measureReport) {
-          this.measureReportForm = this.formBuilder.group({ ...measureReport.model, tags: [measureReport.model.tags] });
-          if (this.currentMeasure!.sent) {
-            this.measureReportForm.get('measurementEnvironment')!.disable();
-            this.measureReportForm.get('measurementHeight')!.disable();
-            this.measureReportForm.get('rain')!.disable();
-            this.measureReportForm.get('description')!.disable();
-            this.measureReportForm.get('tags')!.disable();
-            this.measureReportForm.get('enclosedObject')!.disable();
-          }
-        }
-      });
-    }
-    this.init();
-  }
-
   init() {
     this.subscriptions.push(
-      this.measureReportForm!.valueChanges.subscribe(value => {
-        if (typeof value.duration !== 'string' && value.duration) {
-          this.measureReportForm!.get('duration')!.setValue(
-            this.dateService.toISODuration(
-              (value.duration.hour.value * 60 * 60 + value.duration.minute.value * 60 + value.duration.second.value) *
-                1000
-            )
-          );
-        }
-      }),
-      this.actions$.pipe(ofActionSuccessful(StopMeasure, CancelMeasure)).subscribe(() => {
+      this.actions$.pipe(ofActionSuccessful(StopMeasureSeries, CancelMeasure, StopMeasure)).subscribe(() => {
         this.activatedRoute.queryParams.pipe(take(1)).subscribe(queryParams => {
           this.measureReportForm = undefined;
           if (queryParams.goBackHistory) {
@@ -158,40 +102,11 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     );
   }
 
-  stopReport() {
-    if (this.measureReportForm!.valid) {
-      this.subscriptions.push(
-        this.actions$.pipe(ofActionSuccessful(StopMeasureReport)).subscribe(() => {
-          this.store.dispatch(new StopMeasure());
-        })
-      );
-      this.store.dispatch(new StopMeasureReport());
-    }
-  }
-
   cancelMeasure() {
     this.store.dispatch(new CancelMeasure());
   }
 
-  showMeasureSteps() {
-    this.navigationService.navigateForward(['measure', 'steps']);
-  }
-
-  initMeasurementEnvironmentOptions(currentMeasure: any) {
-    const lat = currentMeasure!.latitude;
-    const long = currentMeasure!.longitude;
-    const endLat = currentMeasure!.endLatitude;
-    const endLong = currentMeasure!.endLongitude;
-    const duration = (currentMeasure!.endTime! + 5000 - currentMeasure!.startTime) / 60000;
-    if (lat !== undefined && long !== undefined && endLat !== undefined && endLong !== undefined && duration > 0) {
-      this.positionChangeSpeedOverLimit = MeasureReportPage.checkPositionChangeSpeed(
-        lat,
-        long,
-        endLat,
-        endLong,
-        duration
-      );
-    }
+  protected updateMeasurementEnvironmentOptions() {
     this.measurementEnvironmentOptions = [
       {
         iconOn: 'assets/img/icon-countryside-on.png',
@@ -229,13 +144,28 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     ];
   }
 
-  tagAdded(tag: string) {
-    this.store.dispatch(new AddRecentTag(tag));
+  protected static hasPositionChanged(measure: Measure): boolean {
+    const lat = measure!.latitude;
+    const long = measure!.longitude;
+    const endLat = measure!.endLatitude;
+    const endLong = measure!.endLongitude;
+    const duration = (measure!.endTime! + 5000 - measure!.startTime) / 60000;
+    if (lat !== undefined && long !== undefined && endLat !== undefined && endLong !== undefined && duration > 0) {
+      return AbstractMeasureReportPage.checkPositionChangeSpeed(lat, long, endLat, endLong, duration);
+    } else {
+      return false;
+    }
   }
 
-  static checkPositionChangeSpeed(lat: number, long: number, endLat: number, endLong: number, duration: number) {
+  private static checkPositionChangeSpeed(
+    lat: number,
+    long: number,
+    endLat: number,
+    endLong: number,
+    duration: number
+  ): boolean {
     let speed;
-    const distance = MeasureReportPage.getDistance(lat, long, endLat, endLong);
+    const distance = AbstractMeasureReportPage.getDistance(lat, long, endLat, endLong);
     if (distance > 0) {
       speed = (distance * 60) / duration;
     } else {
@@ -244,7 +174,7 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     return speed > 25;
   }
 
-  static getDistance(lat1: number, lng1: number, lat2: number, lng2: number) {
+  private static getDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {
     const earth_radius = 6378137;
     const rlo1 = (Math.PI * lng1) / 180;
     const rla1 = (Math.PI * lat1) / 180;
@@ -256,4 +186,23 @@ export class MeasureReportPage extends AutoUnsubscribePage {
     const d = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return (earth_radius * d) / 1000;
   }
+
+  tagAdded(tag: string) {
+    this.store.dispatch(new AddRecentTag(tag));
+  }
+
+  abstract canPublish(measure: T): boolean;
+
+  protected static canPublishSingleMeasure(measure: Measure): boolean {
+    return (
+      measure.accuracy !== undefined &&
+      measure.accuracy !== null &&
+      measure.accuracy < PositionAccuracyThreshold.No &&
+      measure.endAccuracy !== undefined &&
+      measure.endAccuracy !== null &&
+      measure.endAccuracy < PositionAccuracyThreshold.No
+    );
+  }
+
+  protected abstract initMeasurementEnvironmentOptions(measure: T): void;
 }

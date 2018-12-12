@@ -7,5 +7,5 @@ export const environment = {
     base: 'https://request.open-radiation.net',
     suffix: 'openradiation'
   },
-  mockDevice: true
+  mockDevice: false
 };
