@@ -25,7 +25,10 @@ export abstract class AbstractUSBDeviceService<T extends AbstractUSBDevice> exte
       })
     ).pipe(
       concatMap(() => this.saveDeviceParams(device)),
-      catchError(() => this.store.dispatch(new DeviceConnectionLost())),
+      catchError(err => {
+        this.store.dispatch(new DeviceConnectionLost());
+        throw err;
+      }),
       tap(() => this.watchDeviceConnection(device))
     );
   }
