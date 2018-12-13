@@ -17,6 +17,8 @@ If you want to build your app for a real device (Android or iOS), you also need 
 You can test the app in your browser by starting a local server with the following command `npm run start`.
 Most of app features won't be available thought since it requires real device hardware like bluetooth.
 
+A fake sensor will be available to simulate measurements.
+
 ## Android
 
 ### Requirements

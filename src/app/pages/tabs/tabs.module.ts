@@ -5,7 +5,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { TabsRoutingModule } from './tabs-routing.module';
 
-import { MeasureReportPageModule } from '../measure/measure-report/measure-report.module';
+import { MeasureReportPageModule } from '../measure/measure-report/measure-report/measure-report.module';
 import { AboutPageModule } from './about/about.module';
 import { HistoryPageModule } from './history/history.module';
 import { HomePageModule } from './home/home.module';

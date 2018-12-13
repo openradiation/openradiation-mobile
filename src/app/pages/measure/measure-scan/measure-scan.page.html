@@ -12,7 +12,7 @@
                     <div class="message-style">{{'HISTORY.MESSAGE_PREVENT_MEASURE_SENDING' | translate}}</div>
                 </div>
                 <div class="category top">
-                    <ng-template #measureScanNotStarted>
+                    <ng-template #valueNotAvailable>
                         -
                     </ng-template>
                     <div class="item">
@@ -20,7 +20,7 @@
                             {{'MEASURES.MEASURE_START' | translate}}
                         </div>
                         <div class="value">
-                            <ng-container *ngIf="currentMeasure.startTime; else measureScanNotStarted">
+                            <ng-container *ngIf="currentMeasure.startTime; else valueNotAvailable">
                                 {{currentMeasure.startTime | date: 'HH:mm\'\'\'ss"'}}
                             </ng-container>
                         </div>
@@ -32,7 +32,7 @@
                         </div>
                         <div class="value">
                             <ng-container
-                                    *ngIf="currentMeasure.temperature && currentMeasure.steps && currentMeasure.steps.length > 0; else measureScanNotStarted">
+                                    *ngIf="currentMeasure.temperature && currentMeasure.steps && currentMeasure.steps.length > 0; else valueNotAvailable">
                                 {{currentMeasure.steps[currentMeasure.steps.length - 1].temperature | number :
                               '1.2-2'}}<span class="temperature-unit"> °C</span>
                             </ng-container>
@@ -58,7 +58,8 @@
                             {{'MEASURES.HITS_NUMBER' | translate}}
                         </div>
                         <div class="value">
-                            <ng-container *ngIf="currentMeasure.startTime; else measureScanNotStarted">
+                            <ng-container
+                                    *ngIf="currentMeasure.hitsNumber || currentMeasure.hitsNumber === 0; else valueNotAvailable">
                                 {{currentMeasure.hitsNumber | hitNumber}}
                             </ng-container>
                         </div>
@@ -70,7 +71,8 @@
                         </div>
                         <div class="value">
                             <ng-container
-                                    *ngIf="currentMeasure.endTime && currentMeasure.startTime && currentMeasure.endTime > currentMeasure.startTime; else measureScanNotStarted">
+                                    *ngIf="(currentMeasure.hitsNumber || currentMeasure.hitsNumber === 0)
+                                    && currentMeasure.endTime && currentMeasure.startTime && currentMeasure.endTime > currentMeasure.startTime; else valueNotAvailable">
                                 {{(currentMeasure.hitsNumber / (currentMeasure.endTime - currentMeasure.startTime)) *
                             1000 * 60 | hitNumberPerMin}}
                             </ng-container>
@@ -82,7 +84,7 @@
                         </div>
                         <div class="value">
                             <ng-container
-                                    *ngIf="currentMeasure.endTime && currentMeasure.startTime; else measureScanNotStarted">
+                                    *ngIf="currentMeasure.endTime && currentMeasure.startTime; else valueNotAvailable">
                                 {{(currentMeasure.endTime - currentMeasure.startTime) | duration}}
                             </ng-container>
                         </div>
@@ -93,7 +95,7 @@
                 </div>
                 <div class="radiation">
                     <ng-container
-                            *ngIf="currentMeasure.hitsNumber >= connectedDevice.hitsAccuracyThreshold.medium; else hitsAccuracyBadOrStart">
+                            *ngIf="currentMeasure.hitsAccuracy >= connectedDevice.hitsAccuracyThreshold.medium; else hitsAccuracyBadOrStart">
                         <div class="label">
                             {{'MEASURES.DOSE_RATE' | translate | uppercase}}
                         </div>
@@ -106,7 +108,8 @@
                     </ng-container>
                     <ng-template #hitsAccuracyBadOrStart>
                         <div class="start">
-                            <ng-container *ngIf="currentMeasure.startTime || (currentSeries$ | async)?.measures.length > 1; else measureInit">
+                            <ng-container
+                                    *ngIf="currentMeasure.startTime || (currentSeries$ | async)?.measures.length > 1; else measureInit">
                                 {{'MEASURES.ONGOING' | translate}}
                             </ng-container>
                             <ng-template #measureInit>
