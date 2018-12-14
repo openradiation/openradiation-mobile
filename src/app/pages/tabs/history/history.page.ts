@@ -28,7 +28,7 @@ export class HistoryPage extends AutoUnsubscribePage {
 
   measureBeingSentMap: { [K: string]: boolean } = {};
 
-  url = '/tabs/(history:history)';
+  url = '/tabs/history';
 
   constructor(
     protected router: Router,

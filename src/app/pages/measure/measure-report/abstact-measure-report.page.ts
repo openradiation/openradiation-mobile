@@ -80,18 +80,7 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
           if (queryParams.goBackHistory) {
             this.navigationService.goBack();
           } else {
-            this.navigationService.navigateRoot([
-              'tabs',
-              {
-                outlets: {
-                  home: 'home',
-                  history: null,
-                  settings: null,
-                  map: null,
-                  other: null
-                }
-              }
-            ]);
+            this.navigationService.navigateRoot(['tabs', 'home']);
           }
         });
       }),

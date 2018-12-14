@@ -33,36 +33,15 @@ export class SettingsPage {
   }
 
   goToDevices() {
-    this.navigationService.navigateForward([
-      'tabs',
-      {
-        outlets: {
-          settings: 'devices'
-        }
-      }
-    ]);
+    this.navigationService.navigateForward(['tabs', 'settings', 'devices']);
   }
 
   goToMeasuresParam() {
-    this.navigationService.navigateForward([
-      'tabs',
-      {
-        outlets: {
-          settings: 'measures-param'
-        }
-      }
-    ]);
+    this.navigationService.navigateForward(['tabs', 'settings', 'measures-param']);
   }
 
   goToLogIn() {
-    this.navigationService.navigateForward([
-      'tabs',
-      {
-        outlets: {
-          settings: 'log-in'
-        }
-      }
-    ]);
+    this.navigationService.navigateForward(['tabs', 'settings', 'log-in']);
   }
 
   logOut() {

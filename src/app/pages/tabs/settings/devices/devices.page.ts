@@ -37,7 +37,7 @@ export class DevicesPage extends AutoUnsubscribePage {
 
   connectingDevice: AbstractDevice | undefined;
 
-  url = '/tabs/(settings:devices)';
+  url = '/tabs/settings/devices';
 
   constructor(
     protected router: Router,
@@ -82,16 +82,9 @@ export class DevicesPage extends AutoUnsubscribePage {
 
   editDeviceParams(event: Event, device: AbstractDevice) {
     event.stopPropagation();
-    this.store.dispatch(new EditDeviceParams(device)).subscribe(() =>
-      this.navigationService.navigateForward([
-        'tabs',
-        {
-          outlets: {
-            settings: 'device-param'
-          }
-        }
-      ])
-    );
+    this.store
+      .dispatch(new EditDeviceParams(device))
+      .subscribe(() => this.navigationService.navigateForward(['tabs', 'settings', 'device-param']));
   }
 
   goBack() {
