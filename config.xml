@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="org.openradiation" version="2.0.9" xmlns="http://www.w3.org/ns/widgets">
+<widget id="org.openradiation" version="2.0.10" xmlns="http://www.w3.org/ns/widgets">
     <name>OpenRadiation</name>
     <description>Les citoyens mesurent la radioactivité.</description>
     <author email="contact@openradiation.org" href="https://www.openradiation.org/">OpenRadiation</author>
@@ -106,8 +106,8 @@
         <variable name="ACCOUNT_LABEL" value="@string/app_name" />
         <variable name="ACCOUNT_TYPE" value="$PACKAGE_NAME.account" />
         <variable name="CONTENT_AUTHORITY" value="$PACKAGE_NAME" />
-        <variable name="ALWAYS_USAGE_DESCRIPTION" value="This app always requires location tracking" />
-        <variable name="MOTION_USAGE_DESCRIPTION" value="This app requires motion detection" />
+        <variable name="ALWAYS_USAGE_DESCRIPTION" value="La position de l'appareil est nécessaire  pour l'envoi des mesures à la base OpenRadiation. Merci d'accepter la permission." />
+        <variable name="MOTION_USAGE_DESCRIPTION" value="La détection du déplacement de l'appareil est nécessaire pour améliorer la précision de la localisation des mesures. Merci d'accepter la permission." />
     </plugin>
     <plugin name="cordovarduino" spec="0.0.10" />
     <plugin name="cordova-plugin-sqlite-2" spec="1.0.5" />
