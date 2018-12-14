@@ -143,8 +143,8 @@
         "ACCOUNT_LABEL": "@string/app_name",
         "ACCOUNT_TYPE": "$PACKAGE_NAME.account",
         "CONTENT_AUTHORITY": "$PACKAGE_NAME",
-        "ALWAYS_USAGE_DESCRIPTION": "La position de l'appareil est nécessaire au bon fonctionnement de l'application. Merci d'accepter la permission.",
-        "MOTION_USAGE_DESCRIPTION": "La détection du déplacement de l'appareil est nécessaire au bon fonctionnement de l'application. Merci d'accepter la permission."
+        "ALWAYS_USAGE_DESCRIPTION": "La position de l'appareil est nécessaire pour l'envoi des mesures à la base OpenRadiation. Merci d'accepter la permission.",
+        "MOTION_USAGE_DESCRIPTION": "La détection du déplacement de l'appareil est nécessaire pour améliorer la précision de la localisation des mesures. Merci d'accepter la permission."
       },
       "cordovarduino": {},
       "cordova-plugin-sqlite-2": {},
