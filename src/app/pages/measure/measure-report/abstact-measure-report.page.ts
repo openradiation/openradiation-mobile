@@ -95,10 +95,9 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
           }
         });
       }),
-      // TODO remove forced type once it's fixed https://github.com/ionic-team/ionic/issues/16535
-      <Subscription>(<unknown>this.platform.backButton.subscribeWithPriority(9999, () => {
+      this.platform.backButton.subscribeWithPriority(9999, () => {
         this.cancelMeasure();
-      }))
+      })
     );
   }
 
