@@ -31,7 +31,8 @@ export class LogInPage extends AutoUnsubscribePage {
   loginForm: FormGroup;
   connecting = false;
   redirectAfterLogin: RedirectAfterLogin;
-  url = '/tabs/(settings:log-in)';
+
+  url = '/tabs/settings/log-in';
 
   constructor(
     protected activatedRoute: ActivatedRoute,

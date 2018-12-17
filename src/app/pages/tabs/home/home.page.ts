@@ -23,7 +23,7 @@ export class HomePage extends AutoUnsubscribePage {
 
   canStartMeasure: Observable<boolean>;
 
-  url = '/tabs/(home:home)';
+  url = '/tabs/home';
 
   constructor(
     protected router: Router,
@@ -46,15 +46,7 @@ export class HomePage extends AutoUnsubscribePage {
   }
 
   goToDevices() {
-    this.navigationService.navigateForward([
-      'tabs',
-      {
-        outlets: {
-          settings: 'devices',
-          home: null
-        }
-      }
-    ]);
+    this.navigationService.navigateForward(['tabs', 'settings', 'devices']);
   }
 
   startMeasure() {

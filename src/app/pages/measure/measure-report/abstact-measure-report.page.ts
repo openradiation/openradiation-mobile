@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
 import { Platform } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { SelectIconOption } from '../../../components/select-icon/select-icon-option';
@@ -73,33 +73,24 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
   }
 
   init() {
-    this.subscriptions.push(
-      this.actions$.pipe(ofActionSuccessful(StopMeasureSeries, CancelMeasure, StopMeasure)).subscribe(() => {
-        this.activatedRoute.queryParams.pipe(take(1)).subscribe(queryParams => {
-          this.measureReportForm = undefined;
-          if (queryParams.goBackHistory) {
+    this.activatedRoute.queryParams.pipe(take(1)).subscribe(queryParams => {
+      if (queryParams.goBackHistory) {
+        this.subscriptions.push(
+          this.actions$.pipe(ofActionSuccessful(StopMeasureSeries, CancelMeasure, StopMeasure)).subscribe(() => {
+            this.measureReportForm = undefined;
             this.navigationService.goBack();
-          } else {
-            this.navigationService.navigateRoot([
-              'tabs',
-              {
-                outlets: {
-                  home: 'home',
-                  history: null,
-                  settings: null,
-                  map: null,
-                  other: null
-                }
-              }
-            ]);
-          }
-        });
-      }),
-      // TODO remove forced type once it's fixed https://github.com/ionic-team/ionic/issues/16535
-      <Subscription>(<unknown>this.platform.backButton.subscribeWithPriority(9999, () => {
-        this.cancelMeasure();
-      }))
-    );
+          }),
+          this.platform.backButton.subscribeWithPriority(9999, () => this.cancelMeasure())
+        );
+      } else {
+        this.subscriptions.push(
+          this.actions$.pipe(ofActionSuccessful(StopMeasureSeries, CancelMeasure, StopMeasure)).subscribe(() => {
+            this.measureReportForm = undefined;
+            this.navigationService.navigateRoot(['tabs', 'home']);
+          })
+        );
+      }
+    });
   }
 
   cancelMeasure() {

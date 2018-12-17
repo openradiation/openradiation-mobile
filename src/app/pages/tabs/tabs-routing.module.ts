@@ -1,16 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AboutPage } from './about/about.page';
-import { HistoryPage } from './history/history.page';
-import { HomePage } from './home/home.page';
-import { LegalNoticePage } from './legal-notice/legal-notice.page';
-import { MapPage } from './map/map.page';
-import { DeviceParamPage } from './settings/device-param/device-param.page';
-import { DevicesPage } from './settings/devices/devices.page';
-import { LogInPage } from './settings/log-in/log-in.page';
-import { MeasuresParamPage } from './settings/measures-param/measures-param.page';
-import { SettingsPage } from './settings/settings/settings.page';
 import { Tabs } from './tabs.component';
+import { TabsGuard } from './tabs.guard';
 
 const routes: Routes = [
   {
@@ -19,59 +10,78 @@ const routes: Routes = [
     children: [
       {
         path: 'home',
-        outlet: 'home',
-        component: HomePage
+        children: [
+          {
+            path: '',
+            loadChildren: './home/home.module#HomePageModule'
+          }
+        ]
       },
       {
         path: 'history',
-        outlet: 'history',
-        component: HistoryPage
+        children: [
+          {
+            path: '',
+            loadChildren: './history/history.module#HistoryPageModule'
+          }
+        ]
       },
       {
         path: 'settings',
-        outlet: 'settings',
-        component: SettingsPage
-      },
-      {
-        path: 'devices',
-        outlet: 'settings',
-        component: DevicesPage
-      },
-      {
-        path: 'device-param',
-        outlet: 'settings',
-        component: DeviceParamPage
-      },
-      {
-        path: 'measures-param',
-        outlet: 'settings',
-        component: MeasuresParamPage
-      },
-      {
-        path: 'log-in',
-        outlet: 'settings',
-        component: LogInPage
+        children: [
+          {
+            path: '',
+            loadChildren: './settings/settings/settings.module#SettingsPageModule'
+          },
+          {
+            path: 'devices',
+            loadChildren: './settings/devices/devices.module#DevicesPageModule'
+          },
+          {
+            path: 'device-param',
+            loadChildren: './settings/device-param/device-param.module#DeviceParamPageModule'
+          },
+          {
+            path: 'measures-param',
+            loadChildren: './settings/measures-param/measures-param.module#MeasuresParamPageModule'
+          },
+          {
+            path: 'log-in',
+            loadChildren: './settings/log-in/log-in.module#LogInPageModule'
+          }
+        ]
       },
       {
         path: 'map',
-        outlet: 'map',
-        component: MapPage
+        children: [
+          {
+            path: '',
+            loadChildren: './map/map.module#MapPageModule'
+          }
+        ]
       },
       {
-        path: 'legal-notice',
-        outlet: 'other',
-        component: LegalNoticePage
-      },
-      {
-        path: 'about',
-        outlet: 'other',
-        component: AboutPage
+        path: 'other',
+        canActivateChild: [TabsGuard],
+        children: [
+          {
+            path: ''
+          },
+          {
+            path: 'legal-notice',
+            loadChildren: './legal-notice/legal-notice.module#LegalNoticePageModule'
+          },
+          {
+            path: 'about',
+            loadChildren: './about/about.module#AboutPageModule'
+          }
+        ]
       }
     ]
   },
   {
     path: '',
-    redirectTo: '/tabs/(home:home)',
+    redirectTo: '/tabs/home',
     pathMatch: 'full'
   }
 ];

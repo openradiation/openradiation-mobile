@@ -29,14 +29,13 @@ ion-content {
       font-size: 18px;
       font-weight: 200;
       border-radius: 5px;
-      --height: auto;
-      --width: 100%;
+      height: auto;
+      margin: 0;
+      min-height: 30px;
       --padding-top: 4px;
       --padding-end: 4px;
       --padding-bottom: 4px;
       --padding-start: 4px;
-      --margin-end: auto;
-      --margin-start: auto;
     }
     .connected-device-header {
       background-color: $base-color;

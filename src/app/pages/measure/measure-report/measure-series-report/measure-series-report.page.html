@@ -23,7 +23,7 @@
                         <ion-item class="custom-disabled"
                                   *ngIf="currentSeries.params.paramSelected === measureSeriesParamsSelected.measureDurationLimit">
                             <ion-label class="value">{{'MEASURE_SERIES.MEASURES_DURATION' | translate}}</ion-label>
-                            <ion-datetime class="values" display-format="-"
+                            <ion-datetime class="values" display-format="HH:mm'ss''"
                                           formControlName="measureDurationLimit"
                                           required
                                           [cancelText]="'GENERAL.CANCEL' | translate"
@@ -46,14 +46,14 @@
                         <ion-item class="custom-disabled">
                             <ion-label class="value">{{'MEASURE_SERIES.REPORT.FIRST_MEASURE-TIME' | translate}}
                             </ion-label>
-                            <ion-datetime class="values" display-format="-" formControlName="startTime"
+                            <ion-datetime class="values" display-format="HH:mm'ss''" formControlName="startTime"
                                           required
                                           [cancelText]="'GENERAL.CANCEL' | translate"
                                           [doneText]="'GENERAL.SUBMIT' | translate"></ion-datetime>
                         </ion-item>
                         <ion-item class="custom-disabled">
                             <ion-label class="value">{{'MEASURE_SERIES.REPORT.SERIES_DURATION' | translate}}</ion-label>
-                            <ion-datetime class="values" display-format="-" formControlName="duration" required
+                            <ion-datetime class="values" display-format="HH:mm'ss''" formControlName="duration" required
                                           [cancelText]="'GENERAL.CANCEL' | translate"
                                           [doneText]="'GENERAL.SUBMIT' | translate"></ion-datetime>
                         </ion-item>

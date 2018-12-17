@@ -33,7 +33,7 @@ export class MapPage extends AutoUnsubscribePage {
   connectionAvailable = true;
   private iframeLoads = 0;
 
-  url = '/tabs/(map:map)';
+  url = '/tabs/map';
 
   constructor(
     protected router: Router,

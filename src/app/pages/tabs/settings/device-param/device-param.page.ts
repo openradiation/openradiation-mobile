@@ -21,7 +21,7 @@ export class DeviceParamPage extends AutoUnsubscribePage {
   editedDeviceForm: FormGroup;
   paramsModel: [string, DeviceParamModel][] = [];
 
-  url = '/tabs/(settings:device-param)';
+  url = '/tabs/settings/device-param';
 
   constructor(
     protected router: Router,
