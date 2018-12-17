@@ -10,14 +10,12 @@
                 {{'MEASURE_MANUAL.TITLE' | translate}}
             </ion-label>
         </ion-item>
-        <ion-item detail (click)="closeMenu()" routerLink="tabs/about"
-                  [ngClass]="{'active' : currentUrl === '/tabs/other/about'}">
+        <ion-item detail (click)="closeMenu()" routerLink="/tabs/other/about" routerLinkActive="active">
             <ion-label>
                 {{'ABOUT.TITLE' | translate}}
             </ion-label>
         </ion-item>
-        <ion-item detail (click)="closeMenu()" routerLink="tabs/legal-notice"
-                  [ngClass]="{'active' : currentUrl === '/tabs/other/legal-notice'}">
+        <ion-item detail (click)="closeMenu()" routerLink="/tabs/other/legal-notice" routerLinkActive="active">
             <ion-label>
                 {{'LEGAL_NOTICE.TITLE' | translate}}
             </ion-label>

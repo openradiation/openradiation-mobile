@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { Tabs } from './tabs.component';
+import { TabsGuard } from './tabs.guard';
 
 const routes: Routes = [
   {
@@ -61,7 +62,11 @@ const routes: Routes = [
       },
       {
         path: 'other',
+        canActivateChild: [TabsGuard],
         children: [
+          {
+            path: ''
+          },
           {
             path: 'legal-notice',
             loadChildren: './legal-notice/legal-notice.module#LegalNoticePageModule'
