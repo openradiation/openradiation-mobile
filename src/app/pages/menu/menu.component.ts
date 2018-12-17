@@ -38,7 +38,7 @@ export class MenuComponent {
   ) {
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
       this.currentUrl = event.url;
-      this.menuController.enable(this.currentUrl === '/' || this.currentUrl.includes('/tabs/('));
+      this.menuController.enable(this.currentUrl === '/' || this.currentUrl.includes('/tabs/'));
     });
     this.actions$
       .pipe(ofActionSuccessful(StartManualMeasure))
@@ -50,6 +50,16 @@ export class MenuComponent {
 
   closeMenu() {
     this.menuController.close();
+  }
+
+  goToAbout() {
+    this.closeMenu();
+    this.navigationService.navigateForward(['tabs', 'other', 'about']);
+  }
+
+  goToLegalNotice() {
+    this.closeMenu();
+    this.navigationService.navigateForward(['tabs', 'other', 'legal-notice']);
   }
 
   startMeasureSeries() {
@@ -98,22 +108,9 @@ export class MenuComponent {
         {
           text: this.translateService.instant('LOG_IN.TITLE'),
           handler: () =>
-            this.navigationService.navigateForward(
-              [
-                'tabs',
-                {
-                  outlets: {
-                    settings: 'log-in',
-                    home: null,
-                    history: null,
-                    map: null,
-                    other: null
-                  }
-                }
-              ],
-              true,
-              { queryParams: { redirectAfterLogin: redirectAfterLogin } }
-            )
+            this.navigationService.navigateForward(['tabs', 'settings', 'log-in'], true, {
+              queryParams: { redirectAfterLogin: redirectAfterLogin }
+            })
         }
       ]
     });
@@ -130,22 +127,7 @@ export class MenuComponent {
         },
         {
           text: this.translateService.instant('SENSORS.ALERT_TITLE'),
-          handler: () =>
-            this.navigationService.navigateForward(
-              [
-                'tabs',
-                {
-                  outlets: {
-                    settings: 'devices',
-                    home: null,
-                    history: null,
-                    map: null,
-                    other: null
-                  }
-                }
-              ],
-              true
-            )
+          handler: () => this.navigationService.navigateForward(['tabs', 'settings', 'devices'], true)
         }
       ]
     });

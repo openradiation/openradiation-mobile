@@ -68,20 +68,9 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
       });
     }
     this.subscriptions.push(
-      this.actions$.pipe(ofActionSuccessful(CancelMeasure)).subscribe(() =>
-        this.navigationService.navigateRoot([
-          'tabs',
-          {
-            outlets: {
-              home: 'home',
-              history: null,
-              settings: null,
-              map: null,
-              other: null
-            }
-          }
-        ])
-      ),
+      this.actions$
+        .pipe(ofActionSuccessful(CancelMeasure))
+        .subscribe(() => this.navigationService.navigateRoot(['tabs', 'home'])),
       this.actions$
         .pipe(ofActionSuccessful(StartMeasure))
         .subscribe(() => this.navigationService.navigateRoot(['measure', 'scan']))
