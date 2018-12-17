@@ -1,7 +1,7 @@
 {
   "ABOUT": {
     "MEASURE": {
-      "NOTICE": "The OpenRadiation application, connected with a compatible sensor (see compatible sensors on <a onclick=\"window.open('https://www.openradiation.org', '_system')\">www.openradiation.org</a>), can be used to measure radioactivity as well as contribute to a citizen science project, by helping to create the OpenRadiation collaborative base, and improve the knowledge of radioactivity in the environment. We suggest that you create a user account at <a onclick=\"window.open('https://www.openradiation.org/en/user/register', '_system')\">www.openradiation.org</a>, and then configure this account in the application and activate automatic measurement publications (under the settings menu).",
+      "NOTICE": "The OpenRadiation application, connected with a compatible sensor (see compatible sensors on <a onclick=\"window.open('https://www.openradiation.org/en/how-can-you-acquire-sensor', '_system')\">www.openradiation.org</a>), can be used to measure radioactivity as well as contribute to a citizen science project, by helping to create the OpenRadiation collaborative base, and improve the knowledge of radioactivity in the environment. We suggest that you create a user account at <a onclick=\"window.open('https://www.openradiation.org/en/user/register', '_system')\">www.openradiation.org</a>, and then configure this account in the application and activate automatic measurement publications (under the settings menu).",
       "TITLE": "Radioactivity measurement"
     },
     "MEASURES_HOW_TO": {
