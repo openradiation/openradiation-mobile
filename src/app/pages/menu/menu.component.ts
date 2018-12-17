@@ -52,6 +52,16 @@ export class MenuComponent {
     this.menuController.close();
   }
 
+  goToAbout() {
+    this.closeMenu();
+    this.navigationService.navigateForward(['tabs', 'other', 'about']);
+  }
+
+  goToLegalNotice() {
+    this.closeMenu();
+    this.navigationService.navigateForward(['tabs', 'other', 'legal-notice']);
+  }
+
   startMeasureSeries() {
     this.closeMenu();
     this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
