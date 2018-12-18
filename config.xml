@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="org.openradiation" version="2.0.11" xmlns="http://www.w3.org/ns/widgets">
+<widget id="org.openradiation" version="2.0.12" xmlns="http://www.w3.org/ns/widgets">
     <name>OpenRadiation</name>
     <description>Les citoyens mesurent la radioactivité.</description>
     <author email="contact@openradiation.org" href="https://www.openradiation.org/">OpenRadiation</author>
