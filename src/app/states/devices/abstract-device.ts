@@ -19,6 +19,10 @@ export abstract class AbstractDevice {
   abstract hitsPeriod: number;
 }
 
+export interface RawDevice {
+  name: string;
+}
+
 export enum ApparatusSensorType {
   Geiger = 'geiger',
   Photodiode = 'photodiode'

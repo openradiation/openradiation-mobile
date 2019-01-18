@@ -15,15 +15,15 @@ import {
   StartDiscoverBLEDevices,
   StopDiscoverDevices
 } from '../devices.action';
-import { RawBLEDevice } from './abstract-ble-device';
-import { DeviceAtomTag } from './device-atom-tag';
-import { DeviceOGKit } from './device-og-kit';
-import { DeviceSafeCast } from './device-safe-cast';
+import { DevicesService } from '../devices.service';
+import { AbstractBLEDevice, RawBLEDevice } from './abstract-ble-device';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BLEDevicesService {
+  private devices = [DeviceType.OGKit, DeviceType.AtomTag, DeviceType.SafeCast];
+
   private currentAlert?: any;
   private scanDuration = 3;
   private scanPeriod = 5000;
@@ -35,7 +35,8 @@ export class BLEDevicesService {
     private store: Store,
     private diagnostic: Diagnostic,
     private alertService: AlertService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private devicesService: DevicesService
   ) {
     this.actions$.pipe(ofActionDispatched(StartDiscoverBLEDevices)).subscribe(() => {
       if (this.currentAlert) {
@@ -99,18 +100,14 @@ export class BLEDevicesService {
         map((rawDevices: RawBLEDevice[]) =>
           rawDevices
             .sort((a, b) => b.rssi - a.rssi)
-            .map<AbstractDevice | null>(rawDevice => {
-              if (rawDevice.name) {
-                if (rawDevice.name.includes(DeviceType.OGKit)) {
-                  return new DeviceOGKit(rawDevice);
-                } else if (rawDevice.name.includes(DeviceType.AtomTag)) {
-                  return new DeviceAtomTag(rawDevice);
-                } else if (rawDevice.name.includes(DeviceType.SafeCast)) {
-                  return new DeviceSafeCast(rawDevice);
-                }
-              }
-              return null;
-            })
+            .map<AbstractDevice | null>(
+              rawDevice =>
+                (rawDevice.name &&
+                  this.devices
+                    .map(deviceType => this.devicesService.buildDevice(deviceType, rawDevice))
+                    .filter((device: AbstractDevice | null): device is AbstractBLEDevice => device !== null)[0]) ||
+                null
+            )
             .filter((device): device is AbstractDevice => device !== null)
         )
       )

@@ -3,6 +3,7 @@ import { Store } from '@ngxs/store';
 import { interval, Observable, of } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
 import { Step } from '../measures/measure';
+import { DeviceType, RawDevice } from './abstract-device';
 import { AbstractDeviceService } from './abstract-device.service';
 import { DeviceMock } from './device-mock';
 
@@ -49,5 +50,12 @@ export class DeviceMockService extends AbstractDeviceService<DeviceMock> {
       ts: Date.now(),
       temperature: 25 + (0.5 - Math.random()) * 2
     };
+  }
+
+  buildDevice(rawDevice: RawDevice): DeviceMock | null {
+    if (rawDevice.name.includes(DeviceType.Mock)) {
+      return new DeviceMock();
+    }
+    return null;
   }
 }

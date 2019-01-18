@@ -12,6 +12,8 @@ export abstract class AbstractUSBDeviceService<T extends AbstractUSBDevice> exte
     super(store);
   }
 
+  abstract buildDevice(): T;
+
   connectDevice(device: T): Observable<any> {
     return fromPromise(
       this.serial.open({

@@ -3,7 +3,6 @@ import { AbstractBLEDevice, RawBLEDevice } from './abstract-ble-device';
 
 export class DeviceSafeCast extends AbstractBLEDevice {
   readonly deviceType = DeviceType.SafeCast;
-  apparatusVersion: string = DeviceType.SafeCast;
   apparatusSensorType = ApparatusSensorType.Geiger;
   apparatusTubeType = 'LND 7317 pancake';
   hitsPeriod = 5000;
