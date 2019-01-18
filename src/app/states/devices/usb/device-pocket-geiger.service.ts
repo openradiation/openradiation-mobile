@@ -63,4 +63,8 @@ export class DevicePocketGeigerService extends AbstractUSBDeviceService<DevicePo
     }
     return null;
   }
+
+  buildDevice(): DevicePocketGeiger {
+    return new DevicePocketGeiger();
+  }
 }

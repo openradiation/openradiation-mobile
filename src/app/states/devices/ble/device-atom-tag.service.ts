@@ -7,6 +7,7 @@ import { catchError, map } from 'rxjs/operators';
 import { Step } from '../../measures/measure';
 import { DeviceType } from '../abstract-device';
 import { DeviceConnectionLost } from '../devices.action';
+import { RawBLEDevice } from './abstract-ble-device';
 import { AbstractBLEDeviceService } from './abstract-ble-device.service';
 import { DeviceAtomTag } from './device-atom-tag';
 
@@ -82,5 +83,12 @@ export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag
       hitsNumber: dataView.getUint16(9, true),
       temperature: dataView.getUint8(12)
     };
+  }
+
+  buildDevice(rawBLEDevice: RawBLEDevice): DeviceAtomTag | null {
+    if (rawBLEDevice.name.includes(DeviceType.AtomTag)) {
+      return new DeviceAtomTag(rawBLEDevice);
+    }
+    return null;
   }
 }

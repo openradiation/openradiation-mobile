@@ -3,7 +3,8 @@
 Every part will have an example with a new "Toto" sensor.
 
 ## Sensor type
-File => ``src/app/states/devices/abstract-device.ts``
+
+File => `src/app/states/devices/abstract-device.ts`
 
 Each sensor need to have a corresponding enum, which string value needs to be unique.
 It is used to identify the sensor type when passing a sensor object to any service in the application.
@@ -11,6 +12,7 @@ It is used to identify the sensor type when passing a sensor object to any servi
 For BLE sensors, the value **needs** to be a sub-string of the name advertised by the device.
 
 ### example
+
 ```typescript
 export enum DeviceType {
   Mock = 'Mock',
@@ -23,23 +25,25 @@ export enum DeviceType {
 ```
 
 ## Sensor class
-File => ``src/app/states/devices/<connection-type>/device-<sensor-type>.ts``
+
+File => `src/app/states/devices/<connection-type>/device-<sensor-type>.ts`
 
 This class will represent this sensor type and all its parameters and characteristics.
 
 They can either be statically set (all sensors of this type all will have the same values) or dynamically computed (the constructor receives the advertising BLE datas).
 
-Some inherited values from base class like ``hitsAccuracyThreshold`` can also be overridden in the sensor class.
+Some inherited values from base class like `hitsAccuracyThreshold` can also be overridden in the sensor class.
 
 ### example
-For a BLE sensor the file would be ``src/app/states/devices/ble/device-toto.ts``
+
+For a BLE sensor the file would be `src/app/states/devices/ble/device-toto.ts`
+
 ```typescript
 import { ApparatusSensorType, DeviceType } from '../abstract-device';
 import { AbstractBLEDevice, RawBLEDevice } from './abstract-ble-device';
 
 export class DeviceToto extends AbstractBLEDevice {
   readonly deviceType = DeviceType.Toto;
-  apparatusVersion: string = DeviceType.Toto;
   apparatusSensorType = ApparatusSensorType.Geiger;
   apparatusTubeType = 'TotoTube';
   hitsPeriod = 1000;
@@ -57,38 +61,37 @@ export class DeviceToto extends AbstractBLEDevice {
 After creating the sensor class, you need to tell where and when it should be instantiated.
 
 ### BLE device
-File => ``src/app/states/ble/ble-devices.service.ts``
 
-You need to edit the file around line 104 like this:
+File => `src/app/states/ble/ble-devices.service.ts`
+
+You need to edit the file around line 25 like this:
+
 ```typescript
-if (rawDevice.name.includes(DeviceType.OGKit)) {
-  return new DeviceOGKit(rawDevice);
-} else if (rawDevice.name.includes(DeviceType.AtomTag)) {
-  return new DeviceAtomTag(rawDevice);
-} else if (rawDevice.name.includes(DeviceType.SafeCast)) {
-  return new DeviceSafeCast(rawDevice);
-} else if (rawDevice.name.includes(DeviceType.Toto)) {
-  return new DeviceToto(rawDevice);
-}
+private devices = [DeviceType.OGKit, DeviceType.AtomTag, DeviceType.SafeCast, DeviceType.Toto];
 ```
 
 ### USB device
-File => ``src/app/states/usb/usb-devices.service.ts``
 
-You need to edit the file around line 42 like this:
+File => `src/app/states/usb/usb-devices.service.ts`
+
+You need to edit the file around line 19 like this:
+
 ```typescript
-const usbDevices: AbstractUSBDevice[] = [new DevicePocketGeiger(), new DeviceToto()];
+private devices = [DeviceType.PocketGeiger, DeviceType.Toto];
 ```
 
 ## Sensor service
-File => ``src/app/states/devices/<connection-type>/device-<sensor-type>.service.ts``
+
+File => `src/app/states/devices/<connection-type>/device-<sensor-type>.service.ts`
 
 The sensor need a service to handle the communication between the application and the physical device.
 
 Once you've implemented this service, you need to attach it to the global devices service so it can be used automatically throughout the application.
 
 ### Example
-For a BLE sensor the file would be ``src/app/states/devices/ble/device-toto.service.ts``
+
+For a BLE sensor the file would be `src/app/states/devices/ble/device-toto.service.ts`
+
 ```typescript
 import { Injectable } from '@angular/core';
 import { BLE } from '@ionic-native/ble/ngx';
@@ -147,10 +150,18 @@ export class DeviceTotoService extends AbstractBLEDeviceService<DeviceToto> {
       hitsNumber: Number(data[4])
     };
   }
+
+  buildDevice(rawBLEDevice: RawBLEDevice): DeviceToto | null {
+    if (rawBLEDevice.name.includes(DeviceType.Toto)) {
+      return new DeviceToto(rawBLEDevice);
+    }
+    return null;
+  }
 }
 ```
 
-Around line 20 in ``src/app/states/devices/devices.services.ts``
+Around line 20 in `src/app/states/devices/devices.services.ts`
+
 ```typescript
 constructor(
     private actions$: Actions,

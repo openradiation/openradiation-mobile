@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionSuccessful } from '@ngxs/store';
-import { AbstractDevice, DeviceType } from './abstract-device';
+import { AbstractDevice, DeviceType, RawDevice } from './abstract-device';
 import { AbstractDeviceService } from './abstract-device.service';
 import { DeviceAtomTagService } from './ble/device-atom-tag.service';
 import { DeviceOGKitService } from './ble/device-og-kit.service';
@@ -48,5 +48,9 @@ export class DevicesService {
 
   service(device: AbstractDevice): AbstractDeviceService<AbstractDevice> {
     return this.services[device.deviceType];
+  }
+
+  buildDevice(deviceType: DeviceType, rawDevice?: RawDevice): AbstractDevice | null {
+    return this.services[deviceType].buildDevice(rawDevice);
   }
 }

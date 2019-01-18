@@ -5,7 +5,6 @@ import { AbstractBLEDevice, RawBLEDevice } from './abstract-ble-device';
 
 export class DeviceOGKit extends AbstractBLEDevice {
   readonly deviceType = DeviceType.OGKit;
-  apparatusVersion = DeviceType.OGKit;
   hitsPeriod = 1000;
 
   params: DeviceParams = {
@@ -25,6 +24,7 @@ export class DeviceOGKit extends AbstractBLEDevice {
 
   constructor(rawDevice: RawBLEDevice) {
     super(rawDevice);
+    this.apparatusVersion = rawDevice.name;
     const manufacturerData =
       rawDevice.advertising instanceof ArrayBuffer
         ? new Uint8Array(rawDevice.advertising).slice(23, 29)
