@@ -143,7 +143,11 @@ export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
   }
 
   buildDevice(rawBLEDevice: RawBLEDevice): DeviceOGKit | null {
-    if (rawBLEDevice.name.includes(DeviceType.OGKit)) {
+    if (
+      rawBLEDevice.name.includes(DeviceType.OGKit) ||
+      rawBLEDevice.name.includes('Openg') ||
+      rawBLEDevice.name.includes('OpenG')
+    ) {
       return new DeviceOGKit(rawBLEDevice);
     }
     return null;
