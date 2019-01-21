@@ -25,10 +25,15 @@ export class DeviceOGKit extends AbstractBLEDevice {
   constructor(rawDevice: RawBLEDevice) {
     super(rawDevice);
     this.apparatusVersion = rawDevice.name;
-    const manufacturerData =
-      rawDevice.advertising instanceof ArrayBuffer
-        ? new Uint8Array(rawDevice.advertising).slice(23, 29)
-        : new Uint8Array(rawDevice.advertising.kCBAdvDataManufacturerData);
-    this.apparatusId = new TextDecoder('utf8').decode(manufacturerData).replace(/\0/g, '');
+    let advertising: Uint8Array;
+    if (rawDevice.advertising instanceof ArrayBuffer) {
+      const manufacturerData = new Uint8Array(rawDevice.advertising);
+      const index = manufacturerData.indexOf(0xff);
+      advertising = manufacturerData.slice(index + 3, index + manufacturerData[index - 1]);
+    } else {
+      advertising = new Uint8Array(rawDevice.advertising.kCBAdvDataManufacturerData);
+    }
+
+    this.apparatusId = new TextDecoder('utf8').decode(advertising).replace(/\0/g, '');
   }
 }
