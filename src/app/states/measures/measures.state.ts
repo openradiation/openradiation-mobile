@@ -14,8 +14,7 @@ import {
   MeasureSeriesParamsSelected,
   MeasureSeriesReport,
   MeasureType,
-  PositionAccuracyThreshold,
-  V1OrganisationReporting
+  PositionAccuracyThreshold
 } from './measure';
 import {
   AddMeasureScanStep,
@@ -334,13 +333,21 @@ export class MeasuresState implements NgxsOnInit {
       const newCurrentMeasure = {
         ...currentMeasure,
         endTime: step.ts,
-        hitsNumber: currentMeasure.hitsNumber! + step.hitsNumber,
         steps: [...currentMeasure.steps, step]
       };
-      if (!newCurrentMeasure.startTime) {
+      if (newCurrentMeasure.startTime === undefined) {
         newCurrentMeasure.startTime = step.ts - device.hitsPeriod;
       }
-      newCurrentMeasure.value = this.measuresService.computeRadiationValue(newCurrentMeasure, device);
+      if (step.hitsNumber !== undefined) {
+        newCurrentMeasure.hitsNumber = currentMeasure.hitsNumber
+          ? currentMeasure.hitsNumber + step.hitsNumber
+          : step.hitsNumber;
+        newCurrentMeasure.hitsAccuracy = newCurrentMeasure.hitsNumber;
+        newCurrentMeasure.value = this.measuresService.computeRadiationValue(newCurrentMeasure, device);
+      } else if (step.hitsAccuracy !== undefined && step.value !== undefined) {
+        newCurrentMeasure.hitsAccuracy = step.hitsAccuracy;
+        newCurrentMeasure.value = step.value;
+      }
       if (newCurrentMeasure.steps[0] && newCurrentMeasure.steps[0].temperature !== undefined) {
         newCurrentMeasure.temperature =
           newCurrentMeasure.steps
@@ -348,7 +355,10 @@ export class MeasuresState implements NgxsOnInit {
             .reduce((acc, current) => acc + current) / newCurrentMeasure.steps.length;
       }
       const patch: Partial<MeasuresStateModel> = { currentMeasure: newCurrentMeasure };
-      if (newCurrentMeasure.hitsNumber > device.hitsAccuracyThreshold.accurate) {
+      if (
+        newCurrentMeasure.hitsAccuracy !== undefined &&
+        newCurrentMeasure.hitsAccuracy >= device.hitsAccuracyThreshold.accurate
+      ) {
         patch.canEndCurrentScan = true;
       }
       patchState(patch);
@@ -372,43 +382,11 @@ export class MeasuresState implements NgxsOnInit {
       case MeasureSeriesParamsSelected.measureDurationLimit:
         return (
           currentTime - measure.startTime > measureSeries.params.measureDurationLimit &&
-          measure.hitsNumber !== undefined &&
-          measure.hitsNumber > device.hitsAccuracyThreshold.accurate
+          measure.hitsAccuracy !== undefined &&
+          measure.hitsAccuracy > device.hitsAccuracyThreshold.accurate
         );
       case MeasureSeriesParamsSelected.measureHitsLimit:
-        return measure.hitsNumber !== undefined && measure.hitsNumber > measureSeries.params.measureHitsLimit;
-    }
-  }
-
-  static canPublishMeasure(measure: Measure | MeasureSeries): boolean {
-    switch (measure.type) {
-      case MeasureType.Measure:
-        if (measure.organisationReporting === V1OrganisationReporting) {
-          return (
-            measure.accuracy !== undefined &&
-            measure.accuracy !== null &&
-            measure.accuracy < PositionAccuracyThreshold.No
-          );
-        } else {
-          return (
-            measure.accuracy !== undefined &&
-            measure.accuracy !== null &&
-            measure.accuracy < PositionAccuracyThreshold.No &&
-            measure.endAccuracy !== undefined &&
-            measure.endAccuracy !== null &&
-            measure.endAccuracy < PositionAccuracyThreshold.No
-          );
-        }
-      case MeasureType.MeasureSeries:
-        return measure.measures.some(
-          item =>
-            item.accuracy !== undefined &&
-            item.accuracy !== null &&
-            item.accuracy! < PositionAccuracyThreshold.No &&
-            item.endAccuracy !== undefined &&
-            item.endAccuracy !== null &&
-            item.endAccuracy! < PositionAccuracyThreshold.No
-        );
+        return measure.hitsAccuracy !== undefined && measure.hitsAccuracy > measureSeries.params.measureHitsLimit;
     }
   }
 
@@ -444,7 +422,10 @@ export class MeasuresState implements NgxsOnInit {
       const updatedMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
       if (currentSeries) {
         patch.currentMeasure = undefined;
-        if (updatedMeasure.hitsNumber! >= device.hitsAccuracyThreshold.accurate) {
+        if (
+          updatedMeasure.hitsAccuracy !== undefined &&
+          updatedMeasure.hitsAccuracy >= device.hitsAccuracyThreshold.accurate
+        ) {
           patch.currentSeries = MeasureSeries.addMeasureToSeries(currentSeries, updatedMeasure);
         }
       } else {
@@ -540,12 +521,15 @@ export class MeasuresState implements NgxsOnInit {
         duration: currentSeries.endTime
           ? this.dateService.toISODuration(currentSeries.endTime - currentSeries.startTime!)
           : undefined,
-        hitsNumberAverage: Number(
-          (
-            currentSeries.measures.reduce((acc, measure) => acc + measure.hitsNumber!, 0) /
-            currentSeries.measures.length
-          ).toFixed(1)
-        ),
+        hitsNumberAverage:
+          currentSeries.measures.length > 0 && currentSeries.measures[0].hitsNumber !== undefined
+            ? Number(
+                (
+                  currentSeries.measures.reduce((acc, measure) => acc + measure.hitsNumber!, 0) /
+                  currentSeries.measures.length
+                ).toFixed(1)
+              )
+            : undefined,
         valueAverage: Number(
           (
             currentSeries.measures.reduce((acc, measure) => acc + measure.value, 0) / currentSeries.measures.length

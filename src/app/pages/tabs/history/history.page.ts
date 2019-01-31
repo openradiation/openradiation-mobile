@@ -14,6 +14,7 @@ import {
   PublishMeasure,
   ShowMeasure
 } from '../../../states/measures/measures.action';
+import { MeasuresService } from '../../../states/measures/measures.service';
 import { MeasuresState } from '../../../states/measures/measures.state';
 
 @Component({
@@ -27,7 +28,7 @@ export class HistoryPage extends AutoUnsubscribePage {
 
   measureBeingSentMap: { [K: string]: boolean } = {};
 
-  url = '/tabs/(history:history)';
+  url = '/tabs/history';
 
   constructor(
     protected router: Router,
@@ -104,7 +105,7 @@ export class HistoryPage extends AutoUnsubscribePage {
   }
 
   canPublish(measure: Measure | MeasureSeries): boolean {
-    return MeasuresState.canPublishMeasure(measure);
+    return MeasuresService.canPublishMeasure(measure);
   }
 
   containsMeasureSeries(measures: (Measure | MeasureSeries)[]): boolean {

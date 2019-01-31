@@ -5,7 +5,7 @@ import { fromPromise } from 'rxjs/internal-compatibility';
 import { catchError, concatMap, shareReplay, take } from 'rxjs/operators';
 import { AbstractDeviceService } from '../abstract-device.service';
 import { DeviceConnectionLost } from '../devices.action';
-import { AbstractBLEDevice } from './abstract-ble-device';
+import { AbstractBLEDevice, RawBLEDevice } from './abstract-ble-device';
 
 export abstract class AbstractBLEDeviceService<T extends AbstractBLEDevice> extends AbstractDeviceService<T> {
   protected abstract service: string;
@@ -14,6 +14,8 @@ export abstract class AbstractBLEDeviceService<T extends AbstractBLEDevice> exte
   constructor(protected store: Store, protected ble: BLE) {
     super(store);
   }
+
+  abstract buildDevice(rawBLEDevice: RawBLEDevice): T | null;
 
   connectDevice(device: T): Observable<any> {
     const connection = this.ble.connect(device.sensorUUID).pipe(

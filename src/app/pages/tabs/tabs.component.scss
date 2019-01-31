@@ -5,9 +5,3 @@ ion-tabs {
   --ion-tab-bar-color-activated: #{$second-color};
   --ion-color-primary: #{$second-color};
 }
-
-.ios .keyboard-open {
-  :host {
-    margin-bottom: -50px;
-  }
-}

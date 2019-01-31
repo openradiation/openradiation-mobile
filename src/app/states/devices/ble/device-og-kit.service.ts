@@ -5,7 +5,8 @@ import { Observable } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { filter, map, scan, shareReplay, take, tap } from 'rxjs/operators';
 import { Step } from '../../measures/measure';
-import { ApparatusSensorType } from '../abstract-device';
+import { ApparatusSensorType, DeviceType } from '../abstract-device';
+import { RawBLEDevice } from './abstract-ble-device';
 import { AbstractBLEDeviceService } from './abstract-ble-device.service';
 import { DeviceOGKit } from './device-og-kit';
 
@@ -139,5 +140,12 @@ export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
     } else {
       return null;
     }
+  }
+
+  buildDevice(rawBLEDevice: RawBLEDevice): DeviceOGKit | null {
+    if (rawBLEDevice.name.toUpperCase().startsWith('OG') || rawBLEDevice.name.toUpperCase().includes('OPENG')) {
+      return new DeviceOGKit(rawBLEDevice);
+    }
+    return null;
   }
 }

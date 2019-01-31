@@ -19,12 +19,17 @@ export abstract class AbstractDevice {
   abstract hitsPeriod: number;
 }
 
+export interface RawDevice {
+  name: string;
+}
+
 export enum ApparatusSensorType {
   Geiger = 'geiger',
   Photodiode = 'photodiode'
 }
 
 export enum DeviceType {
+  Mock = 'Mock',
   OGKit = 'OG-KIT1',
   AtomTag = 'AtomTag',
   SafeCast = 'bGeigieBLE',

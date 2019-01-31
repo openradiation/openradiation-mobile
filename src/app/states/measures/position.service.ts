@@ -3,7 +3,7 @@ import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
-import { Location, ServiceStatus } from 'cordova-plugin-mauron85-background-geolocation';
+import { BackgroundGeolocationPlugin } from 'cordova-plugin-mauron85-background-geolocation';
 import { take } from 'rxjs/operators';
 import { AlertService } from '../../services/alert.service';
 import { PositionChanged } from './measures.action';
@@ -12,14 +12,13 @@ import { MeasuresStateModel } from './measures.state';
 /**
  * Constants from cordova-plugin-mauron85-background-geolocation
  */
-declare const BackgroundGeolocation: any;
+declare const BackgroundGeolocation: BackgroundGeolocationPlugin;
 
 @Injectable({
   providedIn: 'root'
 })
 export class PositionService {
   private currentAlert?: any;
-  isAcquiringPosition = false;
 
   constructor(
     private diagnostic: Diagnostic,
@@ -49,12 +48,12 @@ export class PositionService {
   }
 
   private watchPosition() {
-    BackgroundGeolocation.getLocations((positions: Location[]) => {
+    BackgroundGeolocation.getLocations(positions => {
       if (positions[0]) {
         this.store.dispatch(new PositionChanged(positions[0]));
       } else {
         BackgroundGeolocation.getCurrentLocation(
-          (position: Location) => this.store.dispatch(new PositionChanged(position)),
+          position => this.store.dispatch(new PositionChanged(position)),
           undefined,
           {
             enableHighAccuracy: true
@@ -63,7 +62,7 @@ export class PositionService {
       }
     });
     BackgroundGeolocation.start();
-    BackgroundGeolocation.on('location', (position: Location) =>
+    BackgroundGeolocation.on('location', position =>
       BackgroundGeolocation.startTask((taskKey: number) => {
         this.store.dispatch(new PositionChanged(position));
         BackgroundGeolocation.endTask(taskKey);
@@ -79,7 +78,7 @@ export class PositionService {
       }
     });
     this.platform.resume.subscribe(() => {
-      BackgroundGeolocation.checkStatus((status: ServiceStatus) => {
+      BackgroundGeolocation.checkStatus(status => {
         if (!status.isRunning) {
           BackgroundGeolocation.start();
         }

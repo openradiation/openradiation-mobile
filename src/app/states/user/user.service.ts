@@ -11,7 +11,7 @@ import { ErrorResponse, ErrorResponseCode } from '../measures/error-response';
 })
 export class UserService {
   constructor(private httpClient: HttpClient, private translateService: TranslateService) {
-    this.translateService.setDefaultLang('fr');
+    this.translateService.setDefaultLang('en');
   }
 
   logIn(login: string, password: string): Observable<any> {

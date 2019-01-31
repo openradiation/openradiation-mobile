@@ -69,7 +69,7 @@ export class V1MigrationService {
       type: MeasureType.Measure,
       apparatusId: V1MigrationService.parseV1Data(item.apparatusId),
       apparatusVersion: V1MigrationService.parseV1Data(item.apparatusVersion),
-      apparatusSensorType: V1MigrationService.parseV1Data(item.apparatusSensorType) || ApparatusSensorType.Geiger,
+      apparatusSensorType: ApparatusSensorType.Geiger,
       apparatusTubeType: V1MigrationService.parseV1Data(item.apparatusTubeType),
       temperature: V1MigrationService.parseV1Data(item.temperature),
       value: V1MigrationService.parseV1Data(item.radiation),
@@ -93,7 +93,8 @@ export class V1MigrationService {
       id: V1MigrationService.parseV1Data(item.reportUUID),
       startTime: V1MigrationService.parseV1Data(item.tsStart * 1000),
       endTime: V1MigrationService.parseV1Data(item.tsStart * 1000 + item.duration * 1000),
-      sent: item.sent !== 0
+      sent: item.sent !== 0,
+      hitsAccuracy: V1MigrationService.parseV1Data(item.nbHits)
     };
   }
 

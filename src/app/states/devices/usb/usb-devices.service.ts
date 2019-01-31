@@ -7,15 +7,17 @@ import { forkJoin, interval, Observable, of } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { concatMap, takeUntil, takeWhile } from 'rxjs/operators';
 import { AlertService } from '../../../services/alert.service';
+import { AbstractDevice, DeviceType } from '../abstract-device';
 import { StartDiscoverUSBDevices, StopDiscoverDevices, USBDevicesDiscovered } from '../devices.action';
+import { DevicesService } from '../devices.service';
 import { AbstractUSBDevice } from './abstract-usb-device';
-import { DevicePocketGeiger } from './device-pocket-geiger';
-import { DeviceRium } from './device-rium';
 
 @Injectable({
   providedIn: 'root'
 })
 export class USBDevicesService {
+  private devices = [DeviceType.PocketGeiger];
+
   private currentAlert?: any;
 
   constructor(
@@ -24,7 +26,8 @@ export class USBDevicesService {
     private translateService: TranslateService,
     private alertService: AlertService,
     private platform: Platform,
-    private actions$: Actions
+    private actions$: Actions,
+    private devicesService: DevicesService
   ) {
     this.actions$.pipe(ofActionDispatched(StartDiscoverUSBDevices)).subscribe(() => {
       if (this.currentAlert) {
@@ -40,26 +43,28 @@ export class USBDevicesService {
   }
 
   private discoverDevices() {
-    const usbDevices: AbstractUSBDevice[] = [new DevicePocketGeiger(), new DeviceRium()];
     interval(1000)
       .pipe(
         takeUntil(this.actions$.pipe(ofActionDispatched(StopDiscoverDevices, StartDiscoverUSBDevices))),
         takeWhile(() => this.currentAlert === undefined),
         concatMap(() =>
           forkJoin(
-            usbDevices.map(device =>
-              fromPromise(
-                this.serial
-                  .requestPermission({ vid: device.vid, pid: device.pid, driver: device.driver })
-                  .then(() => [device])
-                  .catch(err => {
-                    if (err === 'Permission to connect to the device was denied!') {
-                      this.onUSBError();
-                    }
-                    return [];
-                  })
+            this.devices
+              .map(deviceType => this.devicesService.buildDevice(deviceType))
+              .filter((device: AbstractDevice | null): device is AbstractUSBDevice => device !== null)
+              .map(device =>
+                fromPromise(
+                  this.serial
+                    .requestPermission({ vid: device.vid, pid: device.pid, driver: device.driver })
+                    .then(() => [device])
+                    .catch(err => {
+                      if (err === 'Permission to connect to the device was denied!') {
+                        this.onUSBError();
+                      }
+                      return [];
+                    })
+                )
               )
-            )
           )
         )
       )

@@ -17,6 +17,8 @@ If you want to build your app for a real device (Android or iOS), you also need 
 You can test the app in your browser by starting a local server with the following command `npm run start`.
 Most of app features won't be available thought since it requires real device hardware like bluetooth.
 
+A fake sensor will be available to simulate measurements.
+
 ## Android
 
 ### Requirements
@@ -33,8 +35,8 @@ Then you need to update the Android sdk and tools with the [SDK Manager](https:/
 
 Your `PATH` environment variable should contain (example for Windows 10 standard installation) :
 
-- C:\Users\<username>\AppData\Local\Android\sdk\tools
-- C:\Users\<username>\AppData\Local\Android\sdk\platform-tools
+- C:\Users\\<username>\AppData\Local\Android\sdk\tools
+- C:\Users\\<username>\AppData\Local\Android\sdk\platform-tools
 - C:\Program Files (x86)\Common Files\Oracle\Java\javapath
 
 ### Build
@@ -46,6 +48,22 @@ Your `PATH` environment variable should contain (example for Windows 10 standard
 App built with method 1 & 2 will send measure to the test API (safe to use for tests).
 
 Don't forget to increase the app version number if you want to upload your build to the playstore.
+
+If you are behind a proxy, before you run npm command :
+
+- Download manually https://services.gradle.org/distributions/gradle-4.1-all.zip then `SET CORDOVA_ANDROID_GRADLE_DISTRIBUTION_URL=C\:/path_to_.../gradle-4.1-all.zip` (on windows)
+  (Rq : This env variable is in the ..\platforms\android\cordova\lib\builders\GradleBuilder.js file)
+- Add this configuration in the gradle.properties file of the project, where the build.gradle file is (PROJECT\platforms\android directory)
+
+
+    systemProp.http.proxyHost=
+    systemProp.http.proxyPort=
+    systemProp.http.proxyUser=
+    systemProp.http.proxyPassword=
+    systemProp.https.proxyHost=
+    systemProp.https.proxyPort=
+    systemProp.https.proxyUser=
+    systemProp.https.proxyPassword=
 
 ### Upload on Playstore
 

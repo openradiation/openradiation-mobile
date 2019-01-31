@@ -1,4 +1,4 @@
-<ng-container *ngIf="measureSeriesReportForm">
+<ng-container *ngIf="measureReportForm">
     <ng-container *ngIf="currentSeries as currentSeries">
         <app-header>
         </app-header>
@@ -9,12 +9,16 @@
                      *ngIf="!canPublish(currentSeries)">
                     <div class="message-style">{{'HISTORY.MESSAGE_PREVENT_SERIES_SENDING' | translate}}</div>
                 </div>
-                <form class="form" [formGroup]="measureSeriesReportForm" ngxsForm="measures.measureSeriesReport">
+                <div class="message"
+                     *ngIf="positionChangeSpeedOverLimit">
+                    <div class="message-style">{{'HISTORY.MESSAGE_SPEED' | translate}}</div>
+                </div>
+                <form class="form" [formGroup]="measureReportForm" ngxsForm="measures.measureSeriesReport">
                     <ion-list>
                         <ion-item class="custom-disabled">
                             <ion-label class="value">{{'MEASURE_SERIES.REPORT.MEASURE_NUMBER' | translate}}</ion-label>
                             <ion-input type="number" formControlName="seriesNumbersMeasures"
-                                       placeholder="0"></ion-input>
+                                       placeholder="-"></ion-input>
                         </ion-item>
                         <ion-item class="custom-disabled"
                                   *ngIf="currentSeries.params.paramSelected === measureSeriesParamsSelected.measureDurationLimit">
@@ -28,7 +32,7 @@
                         <ion-item class="custom-disabled"
                                   *ngIf="currentSeries.params.paramSelected === measureSeriesParamsSelected.measureHitsLimit">
                             <ion-label class="value">{{'MEASURE_SERIES.HITS_NUMBER' | translate}}</ion-label>
-                            <ion-input formControlName="measureHitsLimit" type="number" placeholder="0"></ion-input>
+                            <ion-input formControlName="measureHitsLimit" type="number" placeholder="-"></ion-input>
                         </ion-item>
                     </ion-list>
                     <div class="separator"></div>
@@ -60,14 +64,14 @@
                                 <ion-label position="fixed">{{'MEASURE_SERIES.REPORT.HITS_AVERAGE' | translate}}
                                 </ion-label>
                                 <ion-input formControlName="hitsNumberAverage" type="number"
-                                           placeholder="0"></ion-input>
+                                           placeholder="-"></ion-input>
                             </ion-item>
                             <ion-item class="has-suffix"
                                       [ngClass]="'custom-disabled'">
                                 <ion-label position="fixed">{{'MEASURE_SERIES.REPORT.VALUE_AVERAGE' | translate}}<span
                                         *ngIf="!reportScan"> *</span></ion-label>
                                 <ion-input formControlName="valueAverage" required type="number"
-                                           placeholder="0.000"></ion-input>
+                                           placeholder="-"></ion-input>
                                 <span class="unit">{{'MEASURES.DOSE_RATE_UNIT' | translate}}</span>
                             </ion-item>
                         </ion-list>
@@ -81,11 +85,11 @@
                     </div>
                     <div class="options">
                         <app-select-icon [options]="measurementHeightOptions" formControlName="measurementHeight"
-                                         [required]="true"
+                                         [required]="false"
                                          [title]="'MEASURES.SENSOR_POSITION.TITLE' | translate">
                         </app-select-icon>
                         <app-select-icon [options]="rainOptions" formControlName="rain"
-                                         [required]="true"
+                                         [required]="false"
                                          [title]="'MEASURES.WEATHER.TITLE' | translate">
                         </app-select-icon>
                     </div>
@@ -108,14 +112,14 @@
                     </ng-container>
                 </form>
                 <div class="bottom-buttons">
-                    <app-round-button [disabled]="!measureSeriesReportForm.valid  || currentSeries.sent"
+                    <app-round-button [disabled]="!measureReportForm.valid  || currentSeries.sent"
                                       [srcOn]="'assets/img/button-on.png'"
                                       [srcOff]="'assets/img/button-off.png'"
                                       (click)="stopReport()">
                         {{'GENERAL.OK' | translate}}
                     </app-round-button>
                     <div class="side-buttons">
-                        <ion-button fill="clear" class="flat-button cancel" (click)="cancelSeries()">
+                        <ion-button fill="clear" class="flat-button cancel" (click)="cancelMeasure()">
                             <ng-container *ngIf="!currentSeries.sent; else backButton">
                                 {{'GENERAL.CANCEL' | translate}}
                             </ng-container>

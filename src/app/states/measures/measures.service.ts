@@ -2,17 +2,23 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { forkJoin, Observable, of } from 'rxjs';
-import { filter, shareReplay, take, takeUntil } from 'rxjs/operators';
+import { shareReplay, take, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { AbstractDevice, ApparatusSensorType } from '../devices/abstract-device';
 import { DeviceConnectionLost } from '../devices/devices.action';
 import { DevicesService } from '../devices/devices.service';
 import { UserStateModel } from '../user/user.state';
-import { Measure, MeasureSeries, MeasureType, Step } from './measure';
+import {
+  Measure,
+  MeasureSeries,
+  MeasureType,
+  PositionAccuracyThreshold,
+  Step,
+  V1OrganisationReporting
+} from './measure';
 import { MeasureApi } from './measure-api';
 import { AddMeasureScanStep, CancelMeasure, StopMeasureScan } from './measures.action';
-import { MeasuresState, MeasuresStateModel } from './measures.state';
-import { PositionService } from './position.service';
+import { MeasuresStateModel } from './measures.state';
 
 @Injectable({
   providedIn: 'root'
@@ -22,8 +28,7 @@ export class MeasuresService {
     private store: Store,
     private actions$: Actions,
     private httpClient: HttpClient,
-    private devicesService: DevicesService,
-    private positionService: PositionService
+    private devicesService: DevicesService
   ) {}
 
   startMeasureScan(device: AbstractDevice): Observable<any> {
@@ -55,7 +60,6 @@ export class MeasuresService {
       .startMeasureScan(device, stopSignal)
       .pipe(
         takeUntil(stopSignal),
-        filter(() => !this.positionService.isAcquiringPosition),
         shareReplay()
       );
     detectHits.subscribe(step => this.store.dispatch(new AddMeasureScanStep(step, device)).subscribe());
@@ -78,7 +82,7 @@ export class MeasuresService {
   }
 
   private postMeasure(measure: Measure): Observable<any> {
-    if (MeasuresState.canPublishMeasure(measure)) {
+    if (MeasuresService.canPublishMeasure(measure)) {
       const payload: MeasureApi = {
         apiKey: environment.API_KEY,
         data: {
@@ -134,5 +138,37 @@ export class MeasuresService {
       }
     }
     return undefined;
+  }
+
+  static canPublishMeasure(measure: Measure | MeasureSeries): boolean {
+    switch (measure.type) {
+      case MeasureType.Measure:
+        if (measure.organisationReporting === V1OrganisationReporting) {
+          return (
+            measure.accuracy !== undefined &&
+            measure.accuracy !== null &&
+            measure.accuracy < PositionAccuracyThreshold.No
+          );
+        } else {
+          return (
+            measure.accuracy !== undefined &&
+            measure.accuracy !== null &&
+            measure.accuracy < PositionAccuracyThreshold.No &&
+            measure.endAccuracy !== undefined &&
+            measure.endAccuracy !== null &&
+            measure.endAccuracy < PositionAccuracyThreshold.No
+          );
+        }
+      case MeasureType.MeasureSeries:
+        return measure.measures.some(
+          item =>
+            item.accuracy !== undefined &&
+            item.accuracy !== null &&
+            item.accuracy! < PositionAccuracyThreshold.No &&
+            item.endAccuracy !== undefined &&
+            item.endAccuracy !== null &&
+            item.endAccuracy! < PositionAccuracyThreshold.No
+        );
+    }
   }
 }

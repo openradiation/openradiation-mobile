@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionSuccessful } from '@ngxs/store';
-import { AbstractDevice, DeviceType } from './abstract-device';
+import { AbstractDevice, DeviceType, RawDevice } from './abstract-device';
 import { AbstractDeviceService } from './abstract-device.service';
 import { DeviceAtomTagService } from './ble/device-atom-tag.service';
 import { DeviceOGKitService } from './ble/device-og-kit.service';
 import { DeviceSafeCastService } from './ble/device-safe-cast.service';
+import { DeviceMockService } from './device-mock.service';
 import { DeviceConnectionLost } from './devices.action';
 import { DevicePocketGeigerService } from './usb/device-pocket-geiger.service';
 import { DeviceRiumService } from './usb/device-rium.service';
@@ -21,6 +22,7 @@ export class DevicesService {
     private actions$: Actions,
     private toastController: ToastController,
     private translateService: TranslateService,
+    private deviceMockService: DeviceMockService,
     private deviceOGKitService: DeviceOGKitService,
     private deviceAtomTagService: DeviceAtomTagService,
     private deviceSafeCastService: DeviceSafeCastService,
@@ -28,6 +30,7 @@ export class DevicesService {
     private deviceRiumService: DeviceRiumService
   ) {
     this.services = {
+      [DeviceType.Mock]: this.deviceMockService,
       [DeviceType.OGKit]: this.deviceOGKitService,
       [DeviceType.AtomTag]: this.deviceAtomTagService,
       [DeviceType.SafeCast]: this.deviceSafeCastService,
@@ -48,5 +51,9 @@ export class DevicesService {
 
   service(device: AbstractDevice): AbstractDeviceService<AbstractDevice> {
     return this.services[device.deviceType];
+  }
+
+  buildDevice(deviceType: DeviceType, rawDevice?: RawDevice): AbstractDevice | null {
+    return this.services[deviceType].buildDevice(rawDevice);
   }
 }

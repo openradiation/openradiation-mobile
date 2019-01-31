@@ -5,7 +5,6 @@ import { AbstractBLEDevice, RawBLEDevice } from './abstract-ble-device';
 
 export class DeviceOGKit extends AbstractBLEDevice {
   readonly deviceType = DeviceType.OGKit;
-  apparatusVersion = DeviceType.OGKit;
   hitsPeriod = 1000;
 
   params: DeviceParams = {
@@ -25,10 +24,16 @@ export class DeviceOGKit extends AbstractBLEDevice {
 
   constructor(rawDevice: RawBLEDevice) {
     super(rawDevice);
-    const manufacturerData =
-      rawDevice.advertising instanceof ArrayBuffer
-        ? new Uint8Array(rawDevice.advertising).slice(23, 29)
-        : new Uint8Array(rawDevice.advertising.kCBAdvDataManufacturerData);
-    this.apparatusId = new TextDecoder('utf8').decode(manufacturerData).replace(/\0/g, '');
+    this.apparatusVersion = rawDevice.name;
+    let advertising: Uint8Array;
+    if (rawDevice.advertising instanceof ArrayBuffer) {
+      const manufacturerData = new Uint8Array(rawDevice.advertising);
+      const index = manufacturerData.indexOf(0xff);
+      advertising = manufacturerData.slice(index + 3, index + manufacturerData[index - 1]);
+    } else {
+      advertising = new Uint8Array(rawDevice.advertising.kCBAdvDataManufacturerData);
+    }
+
+    this.apparatusId = new TextDecoder('utf8').decode(advertising).replace(/\0/g, '');
   }
 }

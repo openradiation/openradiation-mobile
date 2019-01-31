@@ -1,12 +1,14 @@
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { Measure, Step } from '../measures/measure';
-import { AbstractDevice } from './abstract-device';
+import { AbstractDevice, RawDevice } from './abstract-device';
 
 export abstract class AbstractDeviceService<T extends AbstractDevice> {
   protected textDecoder = new TextDecoder('utf8');
 
   constructor(protected store: Store) {}
+
+  abstract buildDevice(rawDevice?: RawDevice): T | null;
 
   abstract getDeviceInfo(device: T): Observable<Partial<T>>;
 

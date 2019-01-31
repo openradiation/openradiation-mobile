@@ -1,4 +1,4 @@
-import { AbstractDevice } from '../abstract-device';
+import { AbstractDevice, RawDevice } from '../abstract-device';
 
 export abstract class AbstractBLEDevice extends AbstractDevice {
   constructor(rawDevice: RawBLEDevice) {
@@ -7,8 +7,7 @@ export abstract class AbstractBLEDevice extends AbstractDevice {
   }
 }
 
-export interface RawBLEDevice {
-  name: string;
+export interface RawBLEDevice extends RawDevice {
   id: string;
   advertising: ArrayBuffer | { kCBAdvDataManufacturerData: ArrayBuffer };
   rssi: number;
