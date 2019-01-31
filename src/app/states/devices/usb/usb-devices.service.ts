@@ -16,7 +16,7 @@ import { AbstractUSBDevice } from './abstract-usb-device';
   providedIn: 'root'
 })
 export class USBDevicesService {
-  private devices = [DeviceType.PocketGeiger];
+  private devices = [DeviceType.PocketGeiger, DeviceType.Rium];
 
   private currentAlert?: any;
 
