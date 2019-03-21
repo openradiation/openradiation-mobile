@@ -56,7 +56,7 @@
     "@ngxs/storage-plugin": "~3.4.3",
     "@ngxs/store": "~3.4.3",
     "@types/uuid": "^3.4.3",
-    "cordova-android": "8.0.0",
+    "cordova-android": "7.1.1",
     "cordova-ios": "5.0.0",
     "cordova-plugin-ble-central": "^1.2.2",
     "cordova-plugin-camera": "^4.0.3",
@@ -127,7 +127,7 @@
       },
       "cordova-plugin-statusbar": {},
       "cordova.plugins.diagnostic": {
-        "ANDROID_SUPPORT_VERSION": "28.+"
+        "ANDROID_SUPPORT_VERSION": "26.+"
       },
       "cordova-plugin-network-information": {},
       "cordova-plugin-screen-orientation": {},

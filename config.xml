@@ -91,7 +91,9 @@
     </plugin>
     <plugin name="cordova-plugin-ionic-webview" spec="3.0.0" />
     <plugin name="cordova-plugin-statusbar" spec="2.4.2" />
-    <plugin name="cordova.plugins.diagnostic" spec="4.0.12" />
+    <plugin name="cordova.plugins.diagnostic" spec="4.0.12">
+        <variable name="ANDROID_SUPPORT_VERSION" value="26+" />
+    </plugin>
     <plugin name="cordova-plugin-network-information" spec="2.0.1" />
     <plugin name="cordova-plugin-device" spec="2.0.2" />
     <plugin name="cordova-plugin-screen-orientation" spec="3.0.1" />
@@ -106,12 +108,12 @@
         <variable name="ACCOUNT_LABEL" value="@string/app_name" />
         <variable name="ACCOUNT_TYPE" value="$PACKAGE_NAME.account" />
         <variable name="CONTENT_AUTHORITY" value="$PACKAGE_NAME" />
-        <variable name="ALWAYS_USAGE_DESCRIPTION" value="La position de l'appareil est nécessaire  pour l'envoi des mesures à la base OpenRadiation. Merci d'accepter la permission." />
+        <variable name="ALWAYS_USAGE_DESCRIPTION" value="La position de l'appareil est nécessaire pour l'envoi des mesures à la base OpenRadiation. Merci d'accepter la permission." />
         <variable name="MOTION_USAGE_DESCRIPTION" value="La détection du déplacement de l'appareil est nécessaire pour améliorer la précision de la localisation des mesures. Merci d'accepter la permission." />
     </plugin>
     <plugin name="cordovarduino" spec="0.0.10" />
     <plugin name="cordova-plugin-sqlite-2" spec="1.0.5" />
     <plugin name="cordova-plugin-inappbrowser" spec="3.0.0" />
-    <engine name="android" spec="8.0.0" />
+    <engine name="android" spec="7.1.1" />
     <engine name="ios" spec="5.0.0" />
 </widget>
