@@ -27,7 +27,7 @@
               },
               {
                 "glob": "**/*.svg",
-                "input": "node_modules/@ionic/angular/dist/ionic/svg",
+                "input": "node_modules/ionicons/dist/ionicons/svg",
                 "output": "./svg"
               },
               {
@@ -44,7 +44,8 @@
                 "input": "src/global.scss"
               }
             ],
-            "scripts": []
+            "scripts": [],
+            "es5BrowserSupport": true
           },
           "configurations": {
             "production": {
@@ -102,6 +103,9 @@
                   "with": "src/environments/environment.mock-device.ts"
                 }
               ]
+            },
+            "ci": {
+              "progress": false
             }
           }
         },
@@ -119,6 +123,9 @@
             },
             "mockDevice": {
               "browserTarget": "app:build:mockDevice"
+            },
+            "ci": {
+              "progress": false
             }
           }
         },
@@ -154,6 +161,12 @@
                 "output": "/svg"
               }
             ]
+          },
+          "configurations": {
+            "ci": {
+              "progress": false,
+              "watch": false
+            }
           }
         },
         "lint": {
@@ -205,6 +218,11 @@
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
             "devServerTarget": "app:serve"
+          },
+          "configurations": {
+            "ci": {
+              "devServerTarget": "app:serve:ci"
+            }
           }
         },
         "lint": {
