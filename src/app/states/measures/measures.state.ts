@@ -1,6 +1,6 @@
 import { Device } from '@ionic-native/device/ngx';
+import { Location } from '@mauron85/cordova-plugin-background-geolocation';
 import { Action, NgxsOnInit, Selector, State, StateContext } from '@ngxs/store';
-import { Location } from 'cordova-plugin-mauron85-background-geolocation';
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { V1MigrationService } from '../../services/v1-migration.service';
