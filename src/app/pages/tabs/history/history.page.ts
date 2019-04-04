@@ -65,8 +65,8 @@ export class HistoryPage extends AutoUnsubscribePage {
       this.actions$.pipe(ofActionSuccessful(ShowMeasure)).subscribe(action => {
         this.navigationService.navigateForward(
           ['measure', action.measure.type === MeasureType.Measure ? 'report' : 'report-series'],
+          true,
           {
-            animated: true,
             queryParams: { goBackHistory: true }
           }
         );
