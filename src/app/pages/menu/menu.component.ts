@@ -108,8 +108,7 @@ export class MenuComponent {
         {
           text: this.translateService.instant('LOG_IN.TITLE'),
           handler: () =>
-            this.navigationService.navigateForward(['tabs', 'settings', 'log-in'], {
-              animated: true,
+            this.navigationService.navigateForward(['tabs', 'settings', 'log-in'], true, {
               queryParams: { redirectAfterLogin: redirectAfterLogin }
             })
         }
@@ -128,7 +127,7 @@ export class MenuComponent {
         },
         {
           text: this.translateService.instant('SENSORS.ALERT_TITLE'),
-          handler: () => this.navigationService.navigateForward(['tabs', 'settings', 'devices'], { animated: true })
+          handler: () => this.navigationService.navigateForward(['tabs', 'settings', 'devices'], true)
         }
       ]
     });
