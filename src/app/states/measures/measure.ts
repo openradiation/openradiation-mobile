@@ -1,4 +1,4 @@
-import { Location } from 'cordova-plugin-mauron85-background-geolocation';
+import { Location } from '@mauron85/cordova-plugin-background-geolocation';
 import * as uuid from 'uuid';
 import { environment } from '../../../environments/environment';
 import { ApparatusSensorType } from '../devices/abstract-device';
