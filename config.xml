@@ -114,6 +114,7 @@
     <plugin name="cordovarduino" spec="0.0.10" />
     <plugin name="cordova-plugin-sqlite-2" spec="1.0.5" />
     <plugin name="cordova-plugin-inappbrowser" spec="3.0.0" />
+    <plugin name="cordova-plugin-usb-serial" spec="./cordova-plugin-usb-serial" />
     <engine name="android" spec="8.0.0" />
     <engine name="ios" spec="5.0.0" />
 </widget>

@@ -12,6 +12,11 @@ import { StartDiscoverUSBDevices, StopDiscoverDevices, USBDevicesDiscovered } fr
 import { DevicesService } from '../devices.service';
 import { AbstractUSBDevice } from './abstract-usb-device';
 
+/**
+ * Constants from cordova-plugin-usb-serial
+ */
+declare const UsbSerial: any;
+
 @Injectable({
   providedIn: 'root'
 })
