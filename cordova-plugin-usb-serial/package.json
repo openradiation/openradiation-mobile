@@ -14,5 +14,6 @@
     "usb",
     "serial"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "types": "./types/index.d.ts"
 }

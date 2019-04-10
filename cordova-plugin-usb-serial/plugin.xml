@@ -10,7 +10,7 @@
     <keywords>cordova,usb,serial</keywords>
 
     <!-- js module -->
-    <js-module src="www/serial.js" name="UsbSerial">
+    <js-module src="www/usb-serial.js" name="UsbSerial">
         <clobbers target="UsbSerial" />
     </js-module>
 

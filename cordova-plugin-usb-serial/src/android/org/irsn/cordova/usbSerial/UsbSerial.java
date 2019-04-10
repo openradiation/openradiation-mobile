@@ -1,11 +1,5 @@
 package org.irsn.cordova.usbSerial;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.PluginResult;
@@ -13,16 +7,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.usb.UsbDevice;
-import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
 import android.util.Base64;
 import android.util.Log;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 
 /**
@@ -32,25 +28,21 @@ public class UsbSerial extends CordovaPlugin {
     // logging tag
     private final String TAG = UsbSerial.class.getSimpleName();
     // actions definitions
-    private static final String ACTION_REQUEST_PERMISSION = "requestPermission";
-    private static final String ACTION_OPEN = "openSerial";
-    private static final String ACTION_READ = "readSerial";
-    private static final String ACTION_WRITE = "writeSerial";
-    private static final String ACTION_WRITE_HEX = "writeSerialHex";
-    private static final String ACTION_CLOSE = "closeSerial";
-    private static final String ACTION_READ_CALLBACK = "registerReadCallback";
+    private static final String ACTION_ON_DEVICE_ATTACHED = "onDeviceAttached";
 
     private static final String ACTION_USB_ATTACHED = "android.hardware.usb.action.USB_DEVICE_ATTACHED";
     private static final String ACTION_USB_DETACHED = "android.hardware.usb.action.USB_DEVICE_DETACHED";
 
-    private boolean serialPortConnected;
+    private UsbManager usbManager;
 
-    // callback that will be used to send back data to the cordova app
     private CallbackContext readCallback;
+    private CallbackContext deviceAttachedCallback;
+    private JSONArray deviceWhiteList;
 
     /**
      * Overridden execute method
-     * @param action the string representation of the action to execute
+     *
+     * @param action          the string representation of the action to execute
      * @param args
      * @param callbackContext the cordova {@link CallbackContext}
      * @return true if the action exists, false otherwise
@@ -61,42 +53,9 @@ public class UsbSerial extends CordovaPlugin {
         Log.d(TAG, "Action: " + action);
         JSONObject arg_object = args.optJSONObject(0);
         // request permission
-        if (ACTION_REQUEST_PERMISSION.equals(action)) {
-            JSONObject opts = arg_object.has("opts")? arg_object.getJSONObject("opts") : new JSONObject();
-            requestPermission(opts, callbackContext);
-            return true;
-        }
-        // open serial port
-        else if (ACTION_OPEN.equals(action)) {
-            JSONObject opts = arg_object.has("opts")? arg_object.getJSONObject("opts") : new JSONObject();
-            openSerial(opts, callbackContext);
-            return true;
-        }
-        // write to the serial port
-        else if (ACTION_WRITE.equals(action)) {
-            String data = arg_object.getString("data");
-            writeSerial(data, callbackContext);
-            return true;
-        }
-        // write hex to the serial port
-        else if (ACTION_WRITE_HEX.equals(action)) {
-            String data = arg_object.getString("data");
-            writeSerialHex(data, callbackContext);
-            return true;
-        }
-        // read on the serial port
-        else if (ACTION_READ.equals(action)) {
-            readSerial(callbackContext);
-            return true;
-        }
-        // close the serial port
-        else if (ACTION_CLOSE.equals(action)) {
-            closeSerial(callbackContext);
-            return true;
-        }
-        // Register read callback
-        else if (ACTION_READ_CALLBACK.equals(action)) {
-            registerReadCallback(callbackContext);
+        if (ACTION_ON_DEVICE_ATTACHED.equals(action)) {
+            JSONArray whiteList = arg_object.has("whiteList") ? arg_object.getJSONArray("whiteList") : null;
+            onDeviceAttached(whiteList, callbackContext);
             return true;
         }
         // the action doesn't exist
@@ -109,14 +68,10 @@ public class UsbSerial extends CordovaPlugin {
             switch (intent.getAction()) {
                 case ACTION_USB_ATTACHED:
                     Log.d(TAG, "usb attached");
-                    if (!serialPortConnected) {
-                    }
+                    findDevice();
                     break;
                 case ACTION_USB_DETACHED:
                     Log.d(TAG, "usb dettached");
-                    if (serialPortConnected) {
-                    }
-                    serialPortConnected = false;
                     break;
                 default:
                     Log.e(TAG, "Unknown action");
@@ -133,50 +88,60 @@ public class UsbSerial extends CordovaPlugin {
     }
 
     /**
-     * Request permission the the user for the app to use the USB/serial port
-     * @param callbackContext the cordova {@link CallbackContext}
+     * Register a callback that will be called when a usb device is attached to the phone
+     * A whitelist can be provided to filter which devices will trigger the callback
      */
-    private void requestPermission(final JSONObject opts, final CallbackContext callbackContext) {
+    private void onDeviceAttached(final JSONArray whiteList, final CallbackContext callbackContext) {
         cordova.getThreadPool().execute(() -> {
+            deviceWhiteList = whiteList;
+            deviceAttachedCallback = callbackContext;
+            findDevice();
         });
     }
 
-    /**
-     * Open the serial port from Cordova
-     * @param opts a {@link JSONObject} containing the connection paramters
-     * @param callbackContext the cordova {@link CallbackContext}
-     */
-    private void openSerial(final JSONObject opts, final CallbackContext callbackContext) {
-        cordova.getThreadPool().execute(() -> {
-        });
-    }
+    private void findDevice() {
+        if (deviceAttachedCallback != null) {
+            HashMap<String, UsbDevice> usbDevices = usbManager.getDeviceList();
 
-    /**
-     * Write on the serial port
-     * @param data the {@link String} representation of the data to be written on the port
-     * @param callbackContext the cordova {@link CallbackContext}
-     */
-    private void writeSerial(final String data, final CallbackContext callbackContext) {
-        cordova.getThreadPool().execute(() -> {
-        });
-    }
+            for (Map.Entry<String, UsbDevice> entry : usbDevices.entrySet()) {
+                UsbDevice device = entry.getValue();
+                int deviceVID = device.getVendorId();
+                int devicePID = device.getProductId();
+                if (deviceWhiteList == null) {
+                    LinkedHashMap<String, Integer> deviceAttached = new LinkedHashMap<>();
+                    deviceAttached.put("pid", devicePID);
+                    deviceAttached.put("vid", deviceVID);
+                    deviceAttachedCallback.sendPluginResult(new PluginResult(PluginResult.Status.OK, new JSONObject(deviceAttached)));
+                    break;
+                } else {
+                    for (int i = 0; i < deviceWhiteList.length(); i++) {
+                        try {
+                            JSONObject authorizedDevice = deviceWhiteList.getJSONObject(i);
+                            Object o_vid = authorizedDevice.opt("vid"); //can be an integer Number or a hex String
+                            Object o_pid = authorizedDevice.opt("pid"); //can be an integer Number or a hex String
+                            int vid = o_vid instanceof Number ? ((Number) o_vid).intValue() : Integer.parseInt((String) o_vid,16);
+                            int pid = o_pid instanceof Number ? ((Number) o_pid).intValue() : Integer.parseInt((String) o_pid,16);
+                            if(deviceVID == vid && devicePID == pid) {
+                                LinkedHashMap<String, Object> deviceAttached = new LinkedHashMap<>();
+                                deviceAttached.put("pid", o_pid);
+                                deviceAttached.put("vid", o_vid);
+                                deviceAttachedCallback.sendPluginResult(new PluginResult(PluginResult.Status.OK, new JSONObject(deviceAttached)));
+                                break;
+                            }
+                        } catch (JSONException e) {
+                        }
+                    }
+                }
 
-    /**
-     * Write hex on the serial port
-     * @param data the {@link String} representation of the data to be written on the port as hexadecimal string
-     *             e.g. "ff55aaeeef000233"
-     * @param callbackContext the cordova {@link CallbackContext}
-     */
-    private void writeSerialHex(final String data, final CallbackContext callbackContext) {
-        cordova.getThreadPool().execute(() -> {
-        });
+            }
+        }
     }
 
     /**
      * Convert a given string of hexadecimal numbers
      * into a byte[] array where every 2 hex chars get packed into
      * a single byte.
-     *
+     * <p>
      * E.g. "ffaa55" results in a 3 byte long byte array
      *
      * @param s
@@ -187,13 +152,14 @@ public class UsbSerial extends CordovaPlugin {
         byte[] data = new byte[len / 2];
         for (int i = 0; i < len; i += 2) {
             data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-                    + Character.digit(s.charAt(i+1), 16));
+                    + Character.digit(s.charAt(i + 1), 16));
         }
         return data;
     }
 
     /**
      * Read on the serial port
+     *
      * @param callbackContext the {@link CallbackContext}
      */
     private void readSerial(final CallbackContext callbackContext) {
@@ -203,6 +169,7 @@ public class UsbSerial extends CordovaPlugin {
 
     /**
      * Close the serial port
+     *
      * @param callbackContext the cordova {@link CallbackContext}
      */
     private void closeSerial(final CallbackContext callbackContext) {
@@ -212,10 +179,11 @@ public class UsbSerial extends CordovaPlugin {
 
     /**
      * Dispatch read data to javascript
+     *
      * @param data the array of bytes to dispatch
      */
     private void updateReceivedData(byte[] data) {
-        if( readCallback != null ) {
+        if (readCallback != null) {
             PluginResult result = new PluginResult(PluginResult.Status.OK, data);
             result.setKeepCallback(true);
             readCallback.sendPluginResult(result);
@@ -224,10 +192,10 @@ public class UsbSerial extends CordovaPlugin {
 
     /**
      * Register callback for read data
+     *
      * @param callbackContext the cordova {@link CallbackContext}
      */
     private void registerReadCallback(final CallbackContext callbackContext) {
-        Log.d(TAG, "Registering callback");
         cordova.getThreadPool().execute(() -> {
             Log.d(TAG, "Registering Read Callback");
             readCallback = callbackContext;
@@ -242,12 +210,13 @@ public class UsbSerial extends CordovaPlugin {
 
     @Override
     public void pluginInitialize() {
-        serialPortConnected = false;
         setFilter();
+        usbManager = (UsbManager) cordova.getContext().getSystemService(Context.USB_SERVICE);
     }
 
     /**
      * Paused activity handler
+     *
      * @see org.apache.cordova.CordovaPlugin#onPause(boolean)
      */
     @Override
@@ -257,6 +226,7 @@ public class UsbSerial extends CordovaPlugin {
 
     /**
      * Resumed activity handler
+     *
      * @see org.apache.cordova.CordovaPlugin#onResume(boolean)
      */
     @Override
@@ -266,6 +236,7 @@ public class UsbSerial extends CordovaPlugin {
 
     /**
      * Destroy activity handler
+     *
      * @see org.apache.cordova.CordovaPlugin#onDestroy()
      */
     @Override
@@ -274,21 +245,23 @@ public class UsbSerial extends CordovaPlugin {
 
     /**
      * Utility method to add some properties to a {@link JSONObject}
-     * @param obj the json object where to add the new property
-     * @param key property key
+     *
+     * @param obj   the json object where to add the new property
+     * @param key   property key
      * @param value value of the property
      */
     private void addProperty(JSONObject obj, String key, Object value) {
         try {
             obj.put(key, value);
+        } catch (JSONException e) {
         }
-        catch (JSONException e){}
     }
 
     /**
      * Utility method to add some properties to a {@link JSONObject}
-     * @param obj the json object where to add the new property
-     * @param key property key
+     *
+     * @param obj   the json object where to add the new property
+     * @param key   property key
      * @param bytes the array of byte to add as value to the {@link JSONObject}
      */
     private void addPropertyBytes(JSONObject obj, String key, byte[] bytes) {

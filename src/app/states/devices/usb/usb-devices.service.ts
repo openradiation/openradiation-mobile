@@ -6,6 +6,7 @@ import { Actions, ofActionDispatched, Store } from '@ngxs/store';
 import { forkJoin, interval, Observable, of } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { concatMap, takeUntil, takeWhile } from 'rxjs/operators';
+import { UsbSerial } from '../../../../../cordova-plugin-usb-serial';
 import { AlertService } from '../../../services/alert.service';
 import { AbstractDevice, DeviceType } from '../abstract-device';
 import { StartDiscoverUSBDevices, StopDiscoverDevices, USBDevicesDiscovered } from '../devices.action';
@@ -13,9 +14,9 @@ import { DevicesService } from '../devices.service';
 import { AbstractUSBDevice } from './abstract-usb-device';
 
 /**
- * Constants from cordova-plugin-usb-serial
+ * Constant from cordova-plugin-usb-serial
  */
-declare const UsbSerial: any;
+declare const UsbSerial: UsbSerial;
 
 @Injectable({
   providedIn: 'root'
@@ -48,7 +49,18 @@ export class USBDevicesService {
   }
 
   private discoverDevices() {
-    interval(1000)
+    const whiteList = this.devices
+      .map(deviceType => this.devicesService.buildDevice(deviceType))
+      .filter((device: AbstractDevice | null): device is AbstractUSBDevice => device !== null);
+    UsbSerial.onDeviceAttached(whiteList, device => {
+      const deviceAttached = whiteList.find(
+        whiteListDevice => whiteListDevice.vid === device.vid && whiteListDevice.pid === device.pid
+      );
+      if (deviceAttached) {
+        this.store.dispatch(new USBDevicesDiscovered([deviceAttached]));
+      }
+    });
+    /*interval(1000)
       .pipe(
         takeUntil(this.actions$.pipe(ofActionDispatched(StopDiscoverDevices, StartDiscoverUSBDevices))),
         takeWhile(() => this.currentAlert === undefined),
@@ -75,7 +87,7 @@ export class USBDevicesService {
       )
       .subscribe(devices =>
         this.store.dispatch(new USBDevicesDiscovered((<AbstractUSBDevice[]>[]).concat(...devices)))
-      );
+      );*/
   }
 
   private onUSBError() {

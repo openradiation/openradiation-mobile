@@ -10,7 +10,7 @@ import { PositionChanged } from './measures.action';
 import { MeasuresStateModel } from './measures.state';
 
 /**
- * Constants from @mauron85/cordova-plugin-background-geolocation
+ * Constant from @mauron85/cordova-plugin-background-geolocation
  */
 declare const BackgroundGeolocation: BackgroundGeolocationPlugin;
 
