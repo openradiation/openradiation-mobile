@@ -137,53 +137,57 @@ public class UsbSerial extends CordovaPlugin {
     }
 
     private void listDevicesAttached() {
-        if (deviceAttachedCallback != null && deviceWhiteList != null) {
-            HashMap<String, UsbDevice> usbDevices = usbManager.getDeviceList();
-            JSONArray devicesAttached = new JSONArray();
-            for (Map.Entry<String, UsbDevice> entry : usbDevices.entrySet()) {
-                UsbDevice device = entry.getValue();
-                int deviceVID = device.getVendorId();
-                int devicePID = device.getProductId();
-                if (deviceWhiteList.length() == 0) {
-                    LinkedHashMap<String, Integer> deviceAttached = new LinkedHashMap<>();
-                    deviceAttached.put("pid", devicePID);
-                    deviceAttached.put("vid", deviceVID);
-                    devicesAttached.put(new JSONObject(deviceAttached));
-                    break;
-                } else {
-                    for (int i = 0; i < deviceWhiteList.length(); i++) {
-                        try {
-                            JSONObject authorizedDevice = deviceWhiteList.getJSONObject(i);
-                            Object o_vid = authorizedDevice.opt("vid"); //can be an integer Number or a hex String
-                            Object o_pid = authorizedDevice.opt("pid"); //can be an integer Number or a hex String
-                            int vid = o_vid instanceof Number ? ((Number) o_vid).intValue() : Integer.parseInt((String) o_vid, 16);
-                            int pid = o_pid instanceof Number ? ((Number) o_pid).intValue() : Integer.parseInt((String) o_pid, 16);
-                            if (deviceVID == vid && devicePID == pid) {
-                                LinkedHashMap<String, Object> deviceAttached = new LinkedHashMap<>();
-                                deviceAttached.put("pid", o_pid);
-                                deviceAttached.put("vid", o_vid);
-                                devicesAttached.put(new JSONObject(deviceAttached));
-                                break;
+        cordova.getThreadPool().execute(() -> {
+            if (deviceAttachedCallback != null && deviceWhiteList != null) {
+                HashMap<String, UsbDevice> usbDevices = usbManager.getDeviceList();
+                JSONArray devicesAttached = new JSONArray();
+                for (Map.Entry<String, UsbDevice> entry : usbDevices.entrySet()) {
+                    UsbDevice device = entry.getValue();
+                    int deviceVID = device.getVendorId();
+                    int devicePID = device.getProductId();
+                    if (deviceWhiteList.length() == 0) {
+                        LinkedHashMap<String, Integer> deviceAttached = new LinkedHashMap<>();
+                        deviceAttached.put("pid", devicePID);
+                        deviceAttached.put("vid", deviceVID);
+                        devicesAttached.put(new JSONObject(deviceAttached));
+                        break;
+                    } else {
+                        for (int i = 0; i < deviceWhiteList.length(); i++) {
+                            try {
+                                JSONObject authorizedDevice = deviceWhiteList.getJSONObject(i);
+                                Object o_vid = authorizedDevice.opt("vid"); //can be an integer Number or a hex String
+                                Object o_pid = authorizedDevice.opt("pid"); //can be an integer Number or a hex String
+                                int vid = o_vid instanceof Number ? ((Number) o_vid).intValue() : Integer.parseInt((String) o_vid, 16);
+                                int pid = o_pid instanceof Number ? ((Number) o_pid).intValue() : Integer.parseInt((String) o_pid, 16);
+                                if (deviceVID == vid && devicePID == pid) {
+                                    LinkedHashMap<String, Object> deviceAttached = new LinkedHashMap<>();
+                                    deviceAttached.put("pid", o_pid);
+                                    deviceAttached.put("vid", o_vid);
+                                    devicesAttached.put(new JSONObject(deviceAttached));
+                                    break;
+                                }
+                            } catch (JSONException e) {
+                                deviceAttachedCallbackError("invalid parameters");
                             }
-                        } catch (JSONException e) {
-                            deviceAttachedCallbackError("invalid parameters");
                         }
                     }
-                }
 
+                }
+                PluginResult result = new PluginResult(PluginResult.Status.OK, devicesAttached);
+                result.setKeepCallback(true);
+                deviceAttachedCallback.sendPluginResult(result);
             }
-            PluginResult result = new PluginResult(PluginResult.Status.OK, devicesAttached);
-            result.setKeepCallback(true);
-            deviceAttachedCallback.sendPluginResult(result);
-        }
+        });
     }
 
     private void deviceAttachedCallbackError(String error) {
-        if (deviceAttachedCallback != null) {
-            deviceAttachedCallback.error(error);
-        }
-        deviceAttachedCallback = null;
-        deviceWhiteList = null;
+        cordova.getThreadPool().execute(() -> {
+            if (deviceAttachedCallback != null) {
+                deviceAttachedCallback.error(error);
+            }
+            deviceAttachedCallback = null;
+            deviceWhiteList = null;
+        });
     }
 
     private void requestPermission(final JSONObject device, final JSONObject connectionConfig, final CallbackContext callbackContext) {
@@ -213,52 +217,58 @@ public class UsbSerial extends CordovaPlugin {
     }
 
     private void connect() {
-        if (device != null && connectionConfig != null) {
-            try {
-                int baudRate = connectionConfig.getInt("baudRate");
-                int dataBits = connectionConfig.getInt("dataBits");
+        cordova.getThreadPool().execute(() -> {
+            if (device != null && connectionConfig != null) {
+                try {
+                    int baudRate = connectionConfig.getInt("baudRate");
+                    int dataBits = connectionConfig.getInt("dataBits");
 
-                UsbDeviceConnection usbConnection = usbManager.openDevice(device);
-                serialPort = UsbSerialDevice.createUsbSerialDevice(UsbSerialDevice.CDC, device, usbConnection, 0);
-                serialPort.open();
-                serialPort.setBaudRate(baudRate);
-                serialPort.setDataBits(dataBits);
-                serialPort.setStopBits(UsbSerialInterface.STOP_BITS_1);
-                serialPort.setParity(UsbSerialInterface.PARITY_NONE);
-                PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, "connected");
-                pluginResult.setKeepCallback(true);
-                connectCallback.sendPluginResult(pluginResult);
-            } catch (JSONException e) {
-                connectionCallbackError("invalid parameters");
+                    UsbDeviceConnection usbConnection = usbManager.openDevice(device);
+                    serialPort = UsbSerialDevice.createUsbSerialDevice(UsbSerialDevice.CDC, device, usbConnection, 0);
+                    serialPort.open();
+                    serialPort.setBaudRate(baudRate);
+                    serialPort.setDataBits(dataBits);
+                    serialPort.setStopBits(UsbSerialInterface.STOP_BITS_1);
+                    serialPort.setParity(UsbSerialInterface.PARITY_NONE);
+                    PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, "connected");
+                    pluginResult.setKeepCallback(true);
+                    connectCallback.sendPluginResult(pluginResult);
+                } catch (JSONException e) {
+                    connectionCallbackError("invalid parameters");
+                }
             }
-        }
+        });
     }
 
     private void connectionCallbackError(String error) {
-        if (connectCallback != null) {
-            connectCallback.error(error);
-        }
-        connectCallback = null;
-        connectionConfig = null;
-        device = null;
-        if(serialPort != null && serialPort.isOpen()) {
-            serialPort.close();
-        }
-        serialPort = null;
+        cordova.getThreadPool().execute(() -> {
+            if (connectCallback != null) {
+                connectCallback.error(error);
+            }
+            connectCallback = null;
+            connectionConfig = null;
+            device = null;
+            if (serialPort != null && serialPort.isOpen()) {
+                serialPort.close();
+            }
+            serialPort = null;
+        });
     }
 
     private void disconnect(final CallbackContext callbackContext) {
-        if (connectCallback != null) {
-            connectCallback.success("disconnected");
-        }
-        connectCallback = null;
-        connectionConfig = null;
-        device = null;
-        if(serialPort != null && serialPort.isOpen()) {
-            serialPort.close();
-        }
-        serialPort = null;
-        callbackContext.success("device disconnected");
+        cordova.getThreadPool().execute(() -> {
+            if (connectCallback != null) {
+                connectCallback.success("disconnected");
+            }
+            connectCallback = null;
+            connectionConfig = null;
+            device = null;
+            if (serialPort != null && serialPort.isOpen()) {
+                serialPort.close();
+            }
+            serialPort = null;
+            callbackContext.success("device disconnected");
+        });
     }
 
     /**
