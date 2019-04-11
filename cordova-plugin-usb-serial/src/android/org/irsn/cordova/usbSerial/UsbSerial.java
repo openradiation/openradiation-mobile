@@ -52,10 +52,10 @@ public class UsbSerial extends CordovaPlugin {
     public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
         Log.d(TAG, "Action: " + action);
         JSONObject arg_object = args.optJSONObject(0);
-        // request permission
         if (ACTION_ON_DEVICE_ATTACHED.equals(action)) {
             JSONArray whiteList = arg_object.has("whiteList") ? arg_object.getJSONArray("whiteList") : null;
-            onDeviceAttached(whiteList, callbackContext);
+            boolean cancelCallback = arg_object.getBoolean("cancelCallback");
+            onDeviceAttached(whiteList, cancelCallback ? null : callbackContext);
             return true;
         }
         // the action doesn't exist
@@ -68,10 +68,11 @@ public class UsbSerial extends CordovaPlugin {
             switch (intent.getAction()) {
                 case ACTION_USB_ATTACHED:
                     Log.d(TAG, "usb attached");
-                    findDevice();
+                    listDevicesAttached();
                     break;
                 case ACTION_USB_DETACHED:
                     Log.d(TAG, "usb dettached");
+                    listDevicesAttached();
                     break;
                 default:
                     Log.e(TAG, "Unknown action");
@@ -95,23 +96,23 @@ public class UsbSerial extends CordovaPlugin {
         cordova.getThreadPool().execute(() -> {
             deviceWhiteList = whiteList;
             deviceAttachedCallback = callbackContext;
-            findDevice();
+            listDevicesAttached();
         });
     }
 
-    private void findDevice() {
-        if (deviceAttachedCallback != null) {
+    private void listDevicesAttached() {
+        if (deviceAttachedCallback != null && deviceWhiteList == null) {
             HashMap<String, UsbDevice> usbDevices = usbManager.getDeviceList();
-
+            JSONArray devicesAttached = new JSONArray();
             for (Map.Entry<String, UsbDevice> entry : usbDevices.entrySet()) {
                 UsbDevice device = entry.getValue();
                 int deviceVID = device.getVendorId();
                 int devicePID = device.getProductId();
-                if (deviceWhiteList == null) {
+                if (deviceWhiteList.length() == 0) {
                     LinkedHashMap<String, Integer> deviceAttached = new LinkedHashMap<>();
                     deviceAttached.put("pid", devicePID);
                     deviceAttached.put("vid", deviceVID);
-                    deviceAttachedCallback.sendPluginResult(new PluginResult(PluginResult.Status.OK, new JSONObject(deviceAttached)));
+                    devicesAttached.put(new JSONObject(deviceAttached));
                     break;
                 } else {
                     for (int i = 0; i < deviceWhiteList.length(); i++) {
@@ -125,7 +126,7 @@ public class UsbSerial extends CordovaPlugin {
                                 LinkedHashMap<String, Object> deviceAttached = new LinkedHashMap<>();
                                 deviceAttached.put("pid", o_pid);
                                 deviceAttached.put("vid", o_vid);
-                                deviceAttachedCallback.sendPluginResult(new PluginResult(PluginResult.Status.OK, new JSONObject(deviceAttached)));
+                                devicesAttached.put(new JSONObject(deviceAttached));
                                 break;
                             }
                         } catch (JSONException e) {
@@ -134,6 +135,9 @@ public class UsbSerial extends CordovaPlugin {
                 }
 
             }
+            PluginResult result = new PluginResult(PluginResult.Status.OK, devicesAttached);
+            result.setKeepCallback(true);
+            deviceAttachedCallback.sendPluginResult(result);
         }
     }
 

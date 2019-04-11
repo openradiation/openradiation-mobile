@@ -5,7 +5,7 @@ var UsbSerial = {
           () => {},
           'UsbSerial',
           'onDeviceAttached',
-          [{'whiteList': whiteList}]
+          [{'whiteList': whiteList, 'cancelCallback': successCallback === null}]
         )
     }
 };

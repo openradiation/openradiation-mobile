@@ -41,6 +41,9 @@ export class USBDevicesService {
         this.currentAlert = undefined;
       }
     });
+    this.actions$.pipe(ofActionDispatched(StopDiscoverDevices)).subscribe(() => {
+      UsbSerial.onDeviceAttached([], null);
+    });
   }
 
   startDiscoverDevices(): Observable<any> {
@@ -52,13 +55,13 @@ export class USBDevicesService {
     const whiteList = this.devices
       .map(deviceType => this.devicesService.buildDevice(deviceType))
       .filter((device: AbstractDevice | null): device is AbstractUSBDevice => device !== null);
-    UsbSerial.onDeviceAttached(whiteList, device => {
-      const deviceAttached = whiteList.find(
-        whiteListDevice => whiteListDevice.vid === device.vid && whiteListDevice.pid === device.pid
+    UsbSerial.onDeviceAttached(whiteList, devicesAttached => {
+      const devices = whiteList.filter(whiteListDevice =>
+        devicesAttached.find(
+          deviceAttached => whiteListDevice.vid === deviceAttached.vid && whiteListDevice.pid === deviceAttached.pid
+        )
       );
-      if (deviceAttached) {
-        this.store.dispatch(new USBDevicesDiscovered([deviceAttached]));
-      }
+      this.store.dispatch(new USBDevicesDiscovered(devices));
     });
     /*interval(1000)
       .pipe(
