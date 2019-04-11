@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -34,16 +35,23 @@ public class UsbSerial extends CordovaPlugin {
     // actions definitions
     private static final String ACTION_ON_DEVICE_ATTACHED = "onDeviceAttached";
     private static final String ACTION_CONNECT = "connect";
+    private static final String ACTION_DISCONNECT = "disconnect";
 
     private static final String ACTION_USB_ATTACHED = "android.hardware.usb.action.USB_DEVICE_ATTACHED";
     private static final String ACTION_USB_DETACHED = "android.hardware.usb.action.USB_DEVICE_DETACHED";
+    private static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
 
     private UsbManager usbManager;
 
     private CallbackContext readCallback;
+
     private CallbackContext deviceAttachedCallback;
-    private CallbackContext connectCallback;
     private JSONArray deviceWhiteList;
+
+    private CallbackContext connectCallback;
+    private JSONObject connectionConfig;
+    private UsbDevice device;
+    private UsbSerialDevice serialPort;
 
     /**
      * Overridden execute method
@@ -67,7 +75,10 @@ public class UsbSerial extends CordovaPlugin {
             case ACTION_CONNECT:
                 JSONObject device = arg_object.has("device") ? arg_object.getJSONObject("device") : null;
                 JSONObject connectionConfig = arg_object.has("connectionConfig") ? arg_object.getJSONObject("connectionConfig") : null;
-                connect(device, connectionConfig,callbackContext);
+                requestPermission(device, connectionConfig, callbackContext);
+                return true;
+            case ACTION_DISCONNECT:
+                disconnect(callbackContext);
                 return true;
             default:
                 return false;
@@ -90,6 +101,14 @@ public class UsbSerial extends CordovaPlugin {
                         connectCallback = null;
                     }
                     break;
+                case ACTION_USB_PERMISSION:
+                    Log.d(TAG, "usb permission");
+                    boolean granted = intent.getExtras().getBoolean(UsbManager.EXTRA_PERMISSION_GRANTED);
+                    if (granted) {
+                        connect();
+                    } else {
+                        connectionCallbackError("permission refused");
+                    }
                 default:
                     Log.e(TAG, "Unknown action");
                     break;
@@ -101,6 +120,7 @@ public class UsbSerial extends CordovaPlugin {
         IntentFilter filter = new IntentFilter();
         filter.addAction(ACTION_USB_DETACHED);
         filter.addAction(ACTION_USB_ATTACHED);
+        filter.addAction(ACTION_USB_PERMISSION);
         cordova.getContext().registerReceiver(usbReceiver, filter);
     }
 
@@ -146,7 +166,7 @@ public class UsbSerial extends CordovaPlugin {
                                 break;
                             }
                         } catch (JSONException e) {
-                            deviceAttachedCallback.error("invalid parameters");
+                            deviceAttachedCallbackError("invalid parameters");
                         }
                     }
                 }
@@ -158,40 +178,87 @@ public class UsbSerial extends CordovaPlugin {
         }
     }
 
-    private void connect(final JSONObject device, final JSONObject connectionConfig, final CallbackContext callbackContext) {
+    private void deviceAttachedCallbackError(String error) {
+        if (deviceAttachedCallback != null) {
+            deviceAttachedCallback.error(error);
+        }
+        deviceAttachedCallback = null;
+        deviceWhiteList = null;
+    }
+
+    private void requestPermission(final JSONObject device, final JSONObject connectionConfig, final CallbackContext callbackContext) {
         cordova.getThreadPool().execute(() -> {
             connectCallback = callbackContext;
+            this.connectionConfig = connectionConfig;
             Object o_vid = device.opt("vid"); //can be an integer Number or a hex String
             Object o_pid = device.opt("pid"); //can be an integer Number or a hex String
             int vid = o_vid instanceof Number ? ((Number) o_vid).intValue() : Integer.parseInt((String) o_vid, 16);
             int pid = o_pid instanceof Number ? ((Number) o_pid).intValue() : Integer.parseInt((String) o_pid, 16);
-            UsbDevice deviceToConnect = null;
+            this.device = null;
             HashMap<String, UsbDevice> usbDevices = usbManager.getDeviceList();
             for (Map.Entry<String, UsbDevice> entry : usbDevices.entrySet()) {
                 UsbDevice attachedDevice = entry.getValue();
-                if(attachedDevice.getVendorId() == vid && attachedDevice.getProductId() == pid) {
-                    deviceToConnect = attachedDevice;
+                if (attachedDevice.getVendorId() == vid && attachedDevice.getProductId() == pid) {
+                    this.device = attachedDevice;
                     break;
                 }
             }
-            if(deviceToConnect == null) {
-                connectCallback.error("device not found");
+            if (this.device == null) {
+                connectionCallbackError("device not found");
             } else {
-                try {
-                    int baudRate = connectionConfig.getInt("baudRate");
-                    int dataBits =  connectionConfig.getInt("dataBits");
-                    UsbDeviceConnection usbConnection = usbManager.openDevice(deviceToConnect);
-                    UsbSerialDevice serialPort = UsbSerialDevice.createUsbSerialDevice(UsbSerialDevice.CDC, deviceToConnect, usbConnection, 0);
-                    serialPort.open();
-                    serialPort.setBaudRate(baudRate);
-                    serialPort.setDataBits(dataBits);
-                    serialPort.setStopBits(UsbSerialInterface.STOP_BITS_1);
-                    serialPort.setParity(UsbSerialInterface.PARITY_NONE);
-                } catch (JSONException e) {
-                    deviceAttachedCallback.error("invalid parameters");
-                }
+                PendingIntent mPendingIntent = PendingIntent.getBroadcast(cordova.getContext(), 0, new Intent(ACTION_USB_PERMISSION), 0);
+                usbManager.requestPermission(this.device, mPendingIntent);
             }
         });
+    }
+
+    private void connect() {
+        if (device != null && connectionConfig != null) {
+            try {
+                int baudRate = connectionConfig.getInt("baudRate");
+                int dataBits = connectionConfig.getInt("dataBits");
+
+                UsbDeviceConnection usbConnection = usbManager.openDevice(device);
+                serialPort = UsbSerialDevice.createUsbSerialDevice(UsbSerialDevice.CDC, device, usbConnection, 0);
+                serialPort.open();
+                serialPort.setBaudRate(baudRate);
+                serialPort.setDataBits(dataBits);
+                serialPort.setStopBits(UsbSerialInterface.STOP_BITS_1);
+                serialPort.setParity(UsbSerialInterface.PARITY_NONE);
+                PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, "connected");
+                pluginResult.setKeepCallback(true);
+                connectCallback.sendPluginResult(pluginResult);
+            } catch (JSONException e) {
+                connectionCallbackError("invalid parameters");
+            }
+        }
+    }
+
+    private void connectionCallbackError(String error) {
+        if (connectCallback != null) {
+            connectCallback.error(error);
+        }
+        connectCallback = null;
+        connectionConfig = null;
+        device = null;
+        if(serialPort != null && serialPort.isOpen()) {
+            serialPort.close();
+        }
+        serialPort = null;
+    }
+
+    private void disconnect(final CallbackContext callbackContext) {
+        if (connectCallback != null) {
+            connectCallback.success("disconnected");
+        }
+        connectCallback = null;
+        connectionConfig = null;
+        device = null;
+        if(serialPort != null && serialPort.isOpen()) {
+            serialPort.close();
+        }
+        serialPort = null;
+        callbackContext.success("device disconnected");
     }
 
     /**

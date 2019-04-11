@@ -2,7 +2,7 @@ var UsbSerial = {
     onDeviceAttached: function(whiteList, successCallback) {
         cordova.exec(
           successCallback,
-          () => {},
+          null,
           'UsbSerial',
           'onDeviceAttached',
           [{whiteList, cancelCallback: successCallback === null}]
@@ -15,6 +15,14 @@ var UsbSerial = {
           'UsbSerial',
           'connect',
           [{device, connectionConfig}]
+        )
+    },
+    disconnect: function(successCallback, errorCallback) {
+        cordova.exec(
+          successCallback,
+          errorCallback,
+          'UsbSerial',
+          'disconnect'
         )
     }
 };

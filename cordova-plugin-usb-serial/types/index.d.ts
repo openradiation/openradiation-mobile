@@ -16,4 +16,5 @@ export interface UsbSerial {
     successCallback: (status: string) => void,
     errorCallback: (err: any) => void
   ) => void;
+  disconnect: (successCallback: () => void, errorCallback: (err: any) => void) => void;
 }

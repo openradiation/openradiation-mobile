@@ -2,7 +2,6 @@ import { Serial } from '@ionic-native/serial/ngx';
 import { Actions, Store } from '@ngxs/store';
 import { UsbSerial } from 'cordova-plugin-usb-serial';
 import { Observable, Observer } from 'rxjs';
-import { fromPromise } from 'rxjs/internal-compatibility';
 import { catchError, concatMap, shareReplay, take } from 'rxjs/operators';
 import { AbstractDeviceService } from '../abstract-device.service';
 import { DeviceConnectionLost } from '../devices.action';
@@ -21,7 +20,7 @@ export abstract class AbstractUSBDeviceService<T extends AbstractUSBDevice> exte
   abstract buildDevice(): T;
 
   connectDevice(device: T): Observable<any> {
-    const connection = Observable.create((observer: Observer<any>) => {
+    const connection = Observable.create((observer: Observer<any>) =>
       UsbSerial.connect(
         { vid: device.vid, pid: device.pid },
         {
@@ -38,8 +37,8 @@ export abstract class AbstractUSBDeviceService<T extends AbstractUSBDevice> exte
           }
         },
         err => observer.error(err)
-      );
-    }).pipe(
+      )
+    ).pipe(
       concatMap(() => this.saveDeviceParams(device)),
       shareReplay()
     );
@@ -48,6 +47,14 @@ export abstract class AbstractUSBDeviceService<T extends AbstractUSBDevice> exte
   }
 
   disconnectDevice(device: T): Observable<any> {
-    return fromPromise(this.serial.close());
+    return Observable.create((observer: Observer<any>) =>
+      UsbSerial.disconnect(
+        () => {
+          observer.next(null);
+          observer.complete();
+        },
+        err => observer.error(err)
+      )
+    );
   }
 }
