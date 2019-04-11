@@ -12,9 +12,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.usb.UsbDevice;
+import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
 import android.util.Base64;
 import android.util.Log;
+
+import com.felhr.usbserial.UsbSerialDevice;
+import com.felhr.usbserial.UsbSerialInterface;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -29,6 +33,7 @@ public class UsbSerial extends CordovaPlugin {
     private final String TAG = UsbSerial.class.getSimpleName();
     // actions definitions
     private static final String ACTION_ON_DEVICE_ATTACHED = "onDeviceAttached";
+    private static final String ACTION_CONNECT = "connect";
 
     private static final String ACTION_USB_ATTACHED = "android.hardware.usb.action.USB_DEVICE_ATTACHED";
     private static final String ACTION_USB_DETACHED = "android.hardware.usb.action.USB_DEVICE_DETACHED";
@@ -37,6 +42,7 @@ public class UsbSerial extends CordovaPlugin {
 
     private CallbackContext readCallback;
     private CallbackContext deviceAttachedCallback;
+    private CallbackContext connectCallback;
     private JSONArray deviceWhiteList;
 
     /**
@@ -52,14 +58,20 @@ public class UsbSerial extends CordovaPlugin {
     public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
         Log.d(TAG, "Action: " + action);
         JSONObject arg_object = args.optJSONObject(0);
-        if (ACTION_ON_DEVICE_ATTACHED.equals(action)) {
-            JSONArray whiteList = arg_object.has("whiteList") ? arg_object.getJSONArray("whiteList") : null;
-            boolean cancelCallback = arg_object.getBoolean("cancelCallback");
-            onDeviceAttached(whiteList, cancelCallback ? null : callbackContext);
-            return true;
+        switch (action) {
+            case ACTION_ON_DEVICE_ATTACHED:
+                JSONArray whiteList = arg_object.has("whiteList") ? arg_object.getJSONArray("whiteList") : null;
+                boolean cancelCallback = arg_object.getBoolean("cancelCallback");
+                onDeviceAttached(whiteList, cancelCallback ? null : callbackContext);
+                return true;
+            case ACTION_CONNECT:
+                JSONObject device = arg_object.has("device") ? arg_object.getJSONObject("device") : null;
+                JSONObject connectionConfig = arg_object.has("connectionConfig") ? arg_object.getJSONObject("connectionConfig") : null;
+                connect(device, connectionConfig,callbackContext);
+                return true;
+            default:
+                return false;
         }
-        // the action doesn't exist
-        return false;
     }
 
     private final BroadcastReceiver usbReceiver = new BroadcastReceiver() {
@@ -71,8 +83,12 @@ public class UsbSerial extends CordovaPlugin {
                     listDevicesAttached();
                     break;
                 case ACTION_USB_DETACHED:
-                    Log.d(TAG, "usb dettached");
+                    Log.d(TAG, "usb detached");
                     listDevicesAttached();
+                    if(connectCallback != null) {
+                        connectCallback.error("usb detached");
+                        connectCallback = null;
+                    }
                     break;
                 default:
                     Log.e(TAG, "Unknown action");
@@ -101,7 +117,7 @@ public class UsbSerial extends CordovaPlugin {
     }
 
     private void listDevicesAttached() {
-        if (deviceAttachedCallback != null && deviceWhiteList == null) {
+        if (deviceAttachedCallback != null && deviceWhiteList != null) {
             HashMap<String, UsbDevice> usbDevices = usbManager.getDeviceList();
             JSONArray devicesAttached = new JSONArray();
             for (Map.Entry<String, UsbDevice> entry : usbDevices.entrySet()) {
@@ -120,9 +136,9 @@ public class UsbSerial extends CordovaPlugin {
                             JSONObject authorizedDevice = deviceWhiteList.getJSONObject(i);
                             Object o_vid = authorizedDevice.opt("vid"); //can be an integer Number or a hex String
                             Object o_pid = authorizedDevice.opt("pid"); //can be an integer Number or a hex String
-                            int vid = o_vid instanceof Number ? ((Number) o_vid).intValue() : Integer.parseInt((String) o_vid,16);
-                            int pid = o_pid instanceof Number ? ((Number) o_pid).intValue() : Integer.parseInt((String) o_pid,16);
-                            if(deviceVID == vid && devicePID == pid) {
+                            int vid = o_vid instanceof Number ? ((Number) o_vid).intValue() : Integer.parseInt((String) o_vid, 16);
+                            int pid = o_pid instanceof Number ? ((Number) o_pid).intValue() : Integer.parseInt((String) o_pid, 16);
+                            if (deviceVID == vid && devicePID == pid) {
                                 LinkedHashMap<String, Object> deviceAttached = new LinkedHashMap<>();
                                 deviceAttached.put("pid", o_pid);
                                 deviceAttached.put("vid", o_vid);
@@ -130,6 +146,7 @@ public class UsbSerial extends CordovaPlugin {
                                 break;
                             }
                         } catch (JSONException e) {
+                            deviceAttachedCallback.error("invalid parameters");
                         }
                     }
                 }
@@ -139,6 +156,42 @@ public class UsbSerial extends CordovaPlugin {
             result.setKeepCallback(true);
             deviceAttachedCallback.sendPluginResult(result);
         }
+    }
+
+    private void connect(final JSONObject device, final JSONObject connectionConfig, final CallbackContext callbackContext) {
+        cordova.getThreadPool().execute(() -> {
+            connectCallback = callbackContext;
+            Object o_vid = device.opt("vid"); //can be an integer Number or a hex String
+            Object o_pid = device.opt("pid"); //can be an integer Number or a hex String
+            int vid = o_vid instanceof Number ? ((Number) o_vid).intValue() : Integer.parseInt((String) o_vid, 16);
+            int pid = o_pid instanceof Number ? ((Number) o_pid).intValue() : Integer.parseInt((String) o_pid, 16);
+            UsbDevice deviceToConnect = null;
+            HashMap<String, UsbDevice> usbDevices = usbManager.getDeviceList();
+            for (Map.Entry<String, UsbDevice> entry : usbDevices.entrySet()) {
+                UsbDevice attachedDevice = entry.getValue();
+                if(attachedDevice.getVendorId() == vid && attachedDevice.getProductId() == pid) {
+                    deviceToConnect = attachedDevice;
+                    break;
+                }
+            }
+            if(deviceToConnect == null) {
+                connectCallback.error("device not found");
+            } else {
+                try {
+                    int baudRate = connectionConfig.getInt("baudRate");
+                    int dataBits =  connectionConfig.getInt("dataBits");
+                    UsbDeviceConnection usbConnection = usbManager.openDevice(deviceToConnect);
+                    UsbSerialDevice serialPort = UsbSerialDevice.createUsbSerialDevice(UsbSerialDevice.CDC, deviceToConnect, usbConnection, 0);
+                    serialPort.open();
+                    serialPort.setBaudRate(baudRate);
+                    serialPort.setDataBits(dataBits);
+                    serialPort.setStopBits(UsbSerialInterface.STOP_BITS_1);
+                    serialPort.setParity(UsbSerialInterface.PARITY_NONE);
+                } catch (JSONException e) {
+                    deviceAttachedCallback.error("invalid parameters");
+                }
+            }
+        });
     }
 
     /**
@@ -159,26 +212,6 @@ public class UsbSerial extends CordovaPlugin {
                     + Character.digit(s.charAt(i + 1), 16));
         }
         return data;
-    }
-
-    /**
-     * Read on the serial port
-     *
-     * @param callbackContext the {@link CallbackContext}
-     */
-    private void readSerial(final CallbackContext callbackContext) {
-        cordova.getThreadPool().execute(() -> {
-        });
-    }
-
-    /**
-     * Close the serial port
-     *
-     * @param callbackContext the cordova {@link CallbackContext}
-     */
-    private void closeSerial(final CallbackContext callbackContext) {
-        cordova.getThreadPool().execute(() -> {
-        });
     }
 
     /**
