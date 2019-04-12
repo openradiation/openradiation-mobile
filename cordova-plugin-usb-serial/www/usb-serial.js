@@ -24,6 +24,23 @@ var UsbSerial = {
           'UsbSerial',
           'disconnect'
         )
+    },
+    onDataReceived: function(successCallback, errorCallback) {
+        cordova.exec(
+          successCallback,
+          errorCallback,
+          'UsbSerial',
+          'onDataReceived'
+        )
+    },
+    write: function(data) {
+        cordova.exec(
+          null,
+          null,
+          'UsbSerial',
+          'write',
+          [{data}]
+        )
     }
 };
 module.exports = UsbSerial;

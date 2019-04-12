@@ -36,6 +36,8 @@ public class UsbSerial extends CordovaPlugin {
     private static final String ACTION_ON_DEVICE_ATTACHED = "onDeviceAttached";
     private static final String ACTION_CONNECT = "connect";
     private static final String ACTION_DISCONNECT = "disconnect";
+    private static final String ACTION_ON_DATA_RECEIVED = "onDataReceived";
+    private static final String ACTION_WRITE = "write";
 
     private static final String ACTION_USB_ATTACHED = "android.hardware.usb.action.USB_DEVICE_ATTACHED";
     private static final String ACTION_USB_DETACHED = "android.hardware.usb.action.USB_DEVICE_DETACHED";
@@ -52,6 +54,15 @@ public class UsbSerial extends CordovaPlugin {
     private JSONObject connectionConfig;
     private UsbDevice device;
     private UsbSerialDevice serialPort;
+
+    private UsbSerialInterface.UsbReadCallback mCallback = new UsbSerialInterface.UsbReadCallback() {
+
+        @Override
+        public void onReceivedData(byte[] arg0) {
+            updateReceivedData(arg0);
+        }
+
+    };
 
     /**
      * Overridden execute method
@@ -80,6 +91,13 @@ public class UsbSerial extends CordovaPlugin {
             case ACTION_DISCONNECT:
                 disconnect(callbackContext);
                 return true;
+            case ACTION_ON_DATA_RECEIVED:
+                onDataReceived(callbackContext);
+                return true;
+            case ACTION_WRITE:
+                String data = arg_object.has("data") ? arg_object.getString("data") : null;
+                write(data);
+                return true;
             default:
                 return false;
         }
@@ -96,7 +114,7 @@ public class UsbSerial extends CordovaPlugin {
                 case ACTION_USB_DETACHED:
                     Log.d(TAG, "usb detached");
                     listDevicesAttached();
-                    if(connectCallback != null) {
+                    if (connectCallback != null) {
                         connectCallback.error("usb detached");
                         connectCallback = null;
                     }
@@ -109,6 +127,7 @@ public class UsbSerial extends CordovaPlugin {
                     } else {
                         connectionCallbackError("permission refused");
                     }
+                    break;
                 default:
                     Log.e(TAG, "Unknown action");
                     break;
@@ -230,6 +249,7 @@ public class UsbSerial extends CordovaPlugin {
                     serialPort.setDataBits(dataBits);
                     serialPort.setStopBits(UsbSerialInterface.STOP_BITS_1);
                     serialPort.setParity(UsbSerialInterface.PARITY_NONE);
+                    serialPort.read(mCallback);
                     PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, "connected");
                     pluginResult.setKeepCallback(true);
                     connectCallback.sendPluginResult(pluginResult);
@@ -252,6 +272,7 @@ public class UsbSerial extends CordovaPlugin {
                 serialPort.close();
             }
             serialPort = null;
+            readCallback = null;
         });
     }
 
@@ -268,27 +289,8 @@ public class UsbSerial extends CordovaPlugin {
             }
             serialPort = null;
             callbackContext.success("device disconnected");
+            readCallback = null;
         });
-    }
-
-    /**
-     * Convert a given string of hexadecimal numbers
-     * into a byte[] array where every 2 hex chars get packed into
-     * a single byte.
-     * <p>
-     * E.g. "ffaa55" results in a 3 byte long byte array
-     *
-     * @param s
-     * @return
-     */
-    private byte[] hexStringToByteArray(String s) {
-        int len = s.length();
-        byte[] data = new byte[len / 2];
-        for (int i = 0; i < len; i += 2) {
-            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-                    + Character.digit(s.charAt(i + 1), 16));
-        }
-        return data;
     }
 
     /**
@@ -297,11 +299,13 @@ public class UsbSerial extends CordovaPlugin {
      * @param data the array of bytes to dispatch
      */
     private void updateReceivedData(byte[] data) {
-        if (readCallback != null) {
-            PluginResult result = new PluginResult(PluginResult.Status.OK, data);
-            result.setKeepCallback(true);
-            readCallback.sendPluginResult(result);
-        }
+        cordova.getThreadPool().execute(() -> {
+            if (readCallback != null) {
+                PluginResult result = new PluginResult(PluginResult.Status.OK, data);
+                result.setKeepCallback(true);
+                readCallback.sendPluginResult(result);
+            }
+        });
     }
 
     /**
@@ -309,16 +313,18 @@ public class UsbSerial extends CordovaPlugin {
      *
      * @param callbackContext the cordova {@link CallbackContext}
      */
-    private void registerReadCallback(final CallbackContext callbackContext) {
+    private void onDataReceived(final CallbackContext callbackContext) {
         cordova.getThreadPool().execute(() -> {
-            Log.d(TAG, "Registering Read Callback");
             readCallback = callbackContext;
-            JSONObject returnObj = new JSONObject();
-            addProperty(returnObj, "registerReadCallback", "true");
-            // Keep the callback
-            PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, returnObj);
-            pluginResult.setKeepCallback(true);
-            callbackContext.sendPluginResult(pluginResult);
+        });
+    }
+
+    private void write(String data) {
+        cordova.getThreadPool().execute(() -> {
+            if (serialPort != null) {
+                byte[] buffer = data.getBytes();
+                serialPort.write(buffer);
+            }
         });
     }
 
@@ -357,29 +363,5 @@ public class UsbSerial extends CordovaPlugin {
     public void onDestroy() {
     }
 
-    /**
-     * Utility method to add some properties to a {@link JSONObject}
-     *
-     * @param obj   the json object where to add the new property
-     * @param key   property key
-     * @param value value of the property
-     */
-    private void addProperty(JSONObject obj, String key, Object value) {
-        try {
-            obj.put(key, value);
-        } catch (JSONException e) {
-        }
-    }
 
-    /**
-     * Utility method to add some properties to a {@link JSONObject}
-     *
-     * @param obj   the json object where to add the new property
-     * @param key   property key
-     * @param bytes the array of byte to add as value to the {@link JSONObject}
-     */
-    private void addPropertyBytes(JSONObject obj, String key, byte[] bytes) {
-        String string = Base64.encodeToString(bytes, Base64.NO_WRAP);
-        this.addProperty(obj, key, string);
-    }
 }

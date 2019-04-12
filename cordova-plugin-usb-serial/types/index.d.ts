@@ -17,4 +17,6 @@ export interface UsbSerial {
     errorCallback: (err: any) => void
   ) => void;
   disconnect: (successCallback: () => void, errorCallback: (err: any) => void) => void;
+  onDataReceived: (successCallback: (data: ArrayBuffer) => void, errorCallback: (err: any) => void) => void;
+  write: (data: string) => void;
 }

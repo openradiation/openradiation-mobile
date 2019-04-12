@@ -1,4 +1,3 @@
-import { Serial } from '@ionic-native/serial/ngx';
 import { Actions, Store } from '@ngxs/store';
 import { UsbSerial } from 'cordova-plugin-usb-serial';
 import { Observable, Observer } from 'rxjs';
@@ -13,7 +12,7 @@ import { AbstractUSBDevice } from './abstract-usb-device';
 declare const UsbSerial: UsbSerial;
 
 export abstract class AbstractUSBDeviceService<T extends AbstractUSBDevice> extends AbstractDeviceService<T> {
-  constructor(protected store: Store, protected serial: Serial, protected actions$: Actions) {
+  constructor(protected store: Store, protected actions$: Actions) {
     super(store);
   }
 
