@@ -243,7 +243,7 @@ public class UsbSerial extends CordovaPlugin {
                     int dataBits = connectionConfig.getInt("dataBits");
 
                     UsbDeviceConnection usbConnection = usbManager.openDevice(device);
-                    serialPort = UsbSerialDevice.createUsbSerialDevice(UsbSerialDevice.CDC, device, usbConnection, 0);
+                    serialPort = UsbSerialDevice.createUsbSerialDevice(device, usbConnection);
                     serialPort.open();
                     serialPort.setBaudRate(baudRate);
                     serialPort.setDataBits(dataBits);

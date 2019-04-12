@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, Store } from '@ngxs/store';
 import { UsbSerial } from 'cordova-plugin-usb-serial';
 import { Observable, Observer, of } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter, map, takeUntil } from 'rxjs/operators';
 import { Step } from '../../measures/measure';
 import { AbstractUSBDeviceService } from './abstract-usb-device.service';
 import { DeviceRium } from './device-rium';
@@ -22,7 +22,7 @@ export class DeviceRiumService extends AbstractUSBDeviceService<DeviceRium> {
 
   protected convertHitsNumberPerSec(hitsNumberPerSec: number): number {
     // TODO fix conversion factor
-    return (hitsNumberPerSec * 60) / 53.032;
+    return (hitsNumberPerSec * 60) / 500;
   }
 
   getDeviceInfo(device: DeviceRium): Observable<Partial<DeviceRium>> {
@@ -44,14 +44,14 @@ export class DeviceRiumService extends AbstractUSBDeviceService<DeviceRium> {
   }
 
   protected decodeDataPackage(buffer: ArrayBuffer): Step | null {
-    /*const data = this.textDecoder.decode(buffer);
-    console.log('data', data);
-    const dataPackage = data.slice(1).split('-');*/
-    const hitsNumber = 1;
-    if (hitsNumber) {
+    if (buffer.byteLength === 12) {
+      const dataView = new DataView(buffer);
+      const hitsNumber = dataView.getInt16(6);
+      const temperature = dataView.getInt16(10) / 10;
       return {
         ts: Date.now(),
-        hitsNumber
+        hitsNumber,
+        temperature
       };
     }
     return null;
