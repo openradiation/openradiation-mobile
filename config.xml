@@ -111,9 +111,9 @@
         <variable name="ALWAYS_USAGE_DESCRIPTION" value="La position de l'appareil est nécessaire pour l'envoi des mesures à la base OpenRadiation. Merci d'accepter la permission." />
         <variable name="MOTION_USAGE_DESCRIPTION" value="La détection du déplacement de l'appareil est nécessaire pour améliorer la précision de la localisation des mesures. Merci d'accepter la permission." />
     </plugin>
-    <plugin name="cordovarduino" spec="0.0.10" />
     <plugin name="cordova-plugin-sqlite-2" spec="1.0.5" />
     <plugin name="cordova-plugin-inappbrowser" spec="3.0.0" />
+    <plugin name="cordova-plugin-usb-serial" spec="./cordova-plugin-usb-serial" />
     <engine name="android" spec="8.0.0" />
     <engine name="ios" spec="5.0.0" />
 </widget>
