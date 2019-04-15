@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Platform } from '@ionic/angular';
+import { BackgroundGeolocationPlugin } from '@mauron85/cordova-plugin-background-geolocation';
 import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
-import { BackgroundGeolocationPlugin } from 'cordova-plugin-mauron85-background-geolocation';
 import { take } from 'rxjs/operators';
 import { AlertService } from '../../services/alert.service';
 import { PositionChanged } from './measures.action';
 import { MeasuresStateModel } from './measures.state';
 
 /**
- * Constants from cordova-plugin-mauron85-background-geolocation
+ * Constant from @mauron85/cordova-plugin-background-geolocation
  */
 declare const BackgroundGeolocation: BackgroundGeolocationPlugin;
 
@@ -40,28 +40,14 @@ export class PositionService {
         notificationIconColor: '#045cb8',
         interval: 10000,
         fastestInterval: 5000,
-        activitiesInterval: 10000,
-        maxLocations: 1
+        activitiesInterval: 10000
       },
       () => this.requestAuthorization()
     );
   }
 
   private watchPosition() {
-    BackgroundGeolocation.getLocations(positions => {
-      if (positions[0]) {
-        this.store.dispatch(new PositionChanged(positions[0]));
-      } else {
-        BackgroundGeolocation.getCurrentLocation(
-          position => this.store.dispatch(new PositionChanged(position)),
-          undefined,
-          {
-            enableHighAccuracy: true
-          }
-        );
-      }
-    });
-    BackgroundGeolocation.start();
+    this.startWatchPosition();
     BackgroundGeolocation.on('location', position =>
       BackgroundGeolocation.startTask((taskKey: number) => {
         this.store.dispatch(new PositionChanged(position));
@@ -77,12 +63,22 @@ export class PositionService {
         BackgroundGeolocation.stop();
       }
     });
-    this.platform.resume.subscribe(() => {
-      BackgroundGeolocation.checkStatus(status => {
-        if (!status.isRunning) {
-          BackgroundGeolocation.start();
-        }
-      });
+    this.platform.resume.subscribe(() => this.startWatchPosition());
+  }
+
+  private startWatchPosition() {
+    this.store.dispatch(new PositionChanged(undefined));
+    BackgroundGeolocation.getCurrentLocation(
+      position => this.store.dispatch(new PositionChanged(position)),
+      undefined,
+      {
+        enableHighAccuracy: true
+      }
+    );
+    BackgroundGeolocation.checkStatus(status => {
+      if (!status.isRunning) {
+        BackgroundGeolocation.start();
+      }
     });
   }
 

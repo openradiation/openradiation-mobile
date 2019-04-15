@@ -1,4 +1,4 @@
-import { Location } from 'cordova-plugin-mauron85-background-geolocation';
+import { Location } from '@mauron85/cordova-plugin-background-geolocation';
 import { AbstractDevice } from '../devices/abstract-device';
 import { Measure, MeasureSeries, Step } from './measure';
 

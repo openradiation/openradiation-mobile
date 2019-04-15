@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="cordova-plugin-usb-serial"
+    version="0.0.1">
+    <name>UsbSerial</name>
+    <description>Cordova plugin to communicate with the android USB serial port</description>
+    <license>MIT</license>
+    <keywords>cordova,usb,serial</keywords>
+
+    <!-- js module -->
+    <js-module src="www/usb-serial.js" name="UsbSerial">
+        <clobbers target="UsbSerial" />
+    </js-module>
+
+    <!-- android -->
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="UsbSerial">
+                <param name="android-package" value="org.irsn.cordova.usbSerial.UsbSerial"/>
+            </feature>
+        </config-file>
+        <framework src="src/android/dependencies.gradle" custom="true" type="gradleReference"/>
+        <framework src="src/android/build.gradle" custom="true" type="gradleReference"/>
+        <source-file src="src/android/org/irsn/cordova/usbSerial/UsbSerial.java" target-dir="src/org/irsn/cordova/usbSerial" />
+    </platform>
+</plugin>
