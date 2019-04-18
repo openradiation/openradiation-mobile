@@ -1,32 +1,29 @@
 <app-header [backButton]="true" (back)="goBack()">{{'LOG_IN.TITLE' | translate}}</app-header>
 
 <ion-content>
-    <div class="notice" [innerHTML]="'LOG_IN.NOTICE.PART1' | translate | sanitizeHtml">
+  <div class="notice" [innerHTML]="'LOG_IN.NOTICE.PART1' | translate | sanitizeHtml"></div>
+  <div class="notice" [innerHTML]="'LOG_IN.NOTICE.PART2' | translate | sanitizeHtml"></div>
+  <div class="notice" [innerHTML]="'LOG_IN.NOTICE.PART3' | translate | sanitizeHtml"></div>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <ion-list>
+      <ion-item>
+        <ion-label position="floating">{{'LOG_IN.USERNAME' | translate}}</ion-label>
+        <ion-input formControlName="login" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">{{'LOG_IN.PASSWORD' | translate}}</ion-label>
+        <ion-input type="password" formControlName="password" required></ion-input>
+      </ion-item>
+    </ion-list>
+    <div class="submit">
+      <ion-button fill="clear" class="flat-button" type="submit" [disabled]="!loginForm.valid">
+        <ng-container *ngIf="connecting; else notConnecting">
+          <ion-spinner></ion-spinner>
+        </ng-container>
+        <ng-template #notConnecting>
+          {{'LOG_IN.TITLE' | translate}}
+        </ng-template>
+      </ion-button>
     </div>
-    <div class="notice" [innerHTML]="'LOG_IN.NOTICE.PART2' | translate | sanitizeHtml">
-    </div>
-    <div class="notice" [innerHTML]="'LOG_IN.NOTICE.PART3' | translate | sanitizeHtml">
-    </div>
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <ion-list>
-            <ion-item>
-                <ion-label position="floating">{{'LOG_IN.USERNAME' | translate}}</ion-label>
-                <ion-input formControlName="login" required></ion-input>
-            </ion-item>
-            <ion-item>
-                <ion-label position="floating">{{'LOG_IN.PASSWORD' | translate}}</ion-label>
-                <ion-input type="password" formControlName="password" required></ion-input>
-            </ion-item>
-        </ion-list>
-        <div class="submit">
-            <ion-button fill="clear" class="flat-button" type="submit" [disabled]="!loginForm.valid">
-                <ng-container *ngIf="connecting; else notConnecting">
-                    <ion-spinner></ion-spinner>
-                </ng-container>
-                <ng-template #notConnecting>
-                    {{'LOG_IN.TITLE' | translate}}
-                </ng-template>
-            </ion-button>
-        </div>
-    </form>
+  </form>
 </ion-content>

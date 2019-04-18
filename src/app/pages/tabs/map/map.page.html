@@ -1,15 +1,15 @@
 <ion-content>
-    <div class="content">
-        <ng-container *ngIf="connectionAvailable; else noConnectionAvailable">
-            <div class="spinner-container" *ngIf="isLoading">
-                <ion-spinner></ion-spinner>
-            </div>
-            <iframe [src]="iframeURL" (load)="mapLoaded()"></iframe>
-        </ng-container>
-        <ng-template #noConnectionAvailable>
-            <app-category-label>
-                {{'MAP.NO_CONNECTION' | translate}}
-            </app-category-label>
-        </ng-template>
-    </div>
+  <div class="content">
+    <ng-container *ngIf="connectionAvailable; else noConnectionAvailable">
+      <div class="spinner-container" *ngIf="isLoading">
+        <ion-spinner></ion-spinner>
+      </div>
+      <iframe [src]="iframeURL" (load)="mapLoaded()"></iframe>
+    </ng-container>
+    <ng-template #noConnectionAvailable>
+      <app-category-label>
+        {{'MAP.NO_CONNECTION' | translate}}
+      </app-category-label>
+    </ng-template>
+  </div>
 </ion-content>

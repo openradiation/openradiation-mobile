@@ -1,39 +1,43 @@
 <ng-container *ngIf="editedDevice">
-    <app-header [backButton]="true" (back)="goBack()">{{editedDevice.apparatusVersion}}</app-header>
-    <ion-content>
-        <ion-list>
-            <app-category-label>{{'SENSORS.DETAILS' | translate}}</app-category-label>
-            <ion-item>
-                {{'SENSORS.VERSION' | translate}}{{editedDevice.apparatusId}}
+  <app-header [backButton]="true" (back)="goBack()">{{editedDevice.apparatusVersion}}</app-header>
+  <ion-content>
+    <ion-list>
+      <app-category-label>{{'SENSORS.DETAILS' | translate}}</app-category-label>
+      <ion-item>
+        {{'SENSORS.VERSION' | translate}}{{editedDevice.apparatusId}}
+      </ion-item>
+      <ion-item>
+        {{'SENSORS.TYPE' | translate}}{{editedDevice.apparatusSensorType}}
+      </ion-item>
+      <ion-item>
+        {{'SENSORS.TUBE_TYPE' | translate}}{{editedDevice.apparatusTubeType}}
+      </ion-item>
+    </ion-list>
+    <form
+      *ngIf="paramsModel && editedDeviceForm"
+      [formGroup]="editedDeviceForm"
+      novalidate
+      ngxsForm="devices.editedDeviceForm"
+    >
+      <ion-list>
+        <app-category-label>{{'SETTINGS.TITLE' | translate}}</app-category-label>
+        <ng-container *ngFor="let paramModel of paramsModel">
+          <ng-container [ngSwitch]="paramModel[1].type">
+            <ion-item *ngSwitchCase="deviceParamType.String">
+              <ion-label position="floating">{{paramModel[1].label | translate}}</ion-label>
+              <ion-input [formControlName]="paramModel[0]"></ion-input>
             </ion-item>
-            <ion-item>
-                {{'SENSORS.TYPE' | translate}}{{editedDevice.apparatusSensorType}}
+            <ion-item class="no-padding" *ngSwitchCase="deviceParamType.Boolean">
+              <ion-label>{{paramModel[1].label | translate}}</ion-label>
+              <ion-toggle [formControlName]="paramModel[0]"></ion-toggle>
             </ion-item>
-            <ion-item>
-                {{'SENSORS.TUBE_TYPE' | translate}}{{editedDevice.apparatusTubeType}}
+            <ion-item *ngSwitchCase="deviceParamType.Number">
+              <ion-label position="floating">{{paramModel[1].label | translate}}</ion-label>
+              <ion-input [formControlName]="paramModel[0]"></ion-input>
             </ion-item>
-        </ion-list>
-        <form *ngIf="paramsModel && editedDeviceForm" [formGroup]="editedDeviceForm" novalidate
-              ngxsForm="devices.editedDeviceForm">
-            <ion-list>
-                <app-category-label>{{'SETTINGS.TITLE' | translate}}</app-category-label>
-                <ng-container *ngFor="let paramModel of paramsModel">
-                    <ng-container [ngSwitch]="paramModel[1].type">
-                        <ion-item *ngSwitchCase="deviceParamType.String">
-                            <ion-label position="floating">{{paramModel[1].label | translate}}</ion-label>
-                            <ion-input [formControlName]="paramModel[0]"></ion-input>
-                        </ion-item>
-                        <ion-item class="no-padding" *ngSwitchCase="deviceParamType.Boolean">
-                            <ion-label>{{paramModel[1].label | translate}}</ion-label>
-                            <ion-toggle [formControlName]="paramModel[0]"></ion-toggle>
-                        </ion-item>
-                        <ion-item *ngSwitchCase="deviceParamType.Number">
-                            <ion-label position="floating">{{paramModel[1].label | translate}}</ion-label>
-                            <ion-input [formControlName]="paramModel[0]"></ion-input>
-                        </ion-item>
-                    </ng-container>
-                </ng-container>
-            </ion-list>
-        </form>
-    </ion-content>
+          </ng-container>
+        </ng-container>
+      </ion-list>
+    </form>
+  </ion-content>
 </ng-container>

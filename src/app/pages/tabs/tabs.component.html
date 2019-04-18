@@ -1,27 +1,23 @@
 <ion-tabs>
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button tab="home">
+      <ion-icon name="md-icon-home"></ion-icon>
+    </ion-tab-button>
 
-    <ion-tab-bar slot="bottom">
+    <ion-tab-button tab="history">
+      <ion-icon name="md-icon-history"></ion-icon>
+    </ion-tab-button>
 
-        <ion-tab-button tab="home">
-            <ion-icon name="md-icon-home"></ion-icon>
-        </ion-tab-button>
+    <ion-tab-button tab="settings">
+      <ion-icon name="md-icon-settings"></ion-icon>
+    </ion-tab-button>
 
-        <ion-tab-button tab="history">
-            <ion-icon name="md-icon-history"></ion-icon>
-        </ion-tab-button>
+    <ion-tab-button tab="map">
+      <ion-icon name="md-icon-map"></ion-icon>
+    </ion-tab-button>
 
-        <ion-tab-button tab="settings">
-            <ion-icon name="md-icon-settings"></ion-icon>
-        </ion-tab-button>
-
-        <ion-tab-button tab="map">
-            <ion-icon name="md-icon-map"></ion-icon>
-        </ion-tab-button>
-
-        <ion-tab-button tab="other" (click)="openMenu()">
-            <ion-icon name="md-icon-more"></ion-icon>
-        </ion-tab-button>
-
-    </ion-tab-bar>
-
+    <ion-tab-button tab="other" (click)="openMenu()">
+      <ion-icon name="md-icon-more"></ion-icon>
+    </ion-tab-button>
+  </ion-tab-bar>
 </ion-tabs>

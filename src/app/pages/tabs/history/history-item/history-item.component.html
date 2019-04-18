@@ -1,81 +1,84 @@
 <ion-item (click)="showDetailClick()" button detail="false" *ngIf="measure as measure">
-    <div class="start-content" [ngClass]="{'small': !showArrowDetail}">
-        <ion-button class="inner-button" *ngIf="measure.type === measureType.MeasureSeries && showArrowDetail"
-                    (click)="toggleSeriesDetail($event)"
-                    fill="clear">
-            <ion-icon [name]="showSeriesDetail ? 'arrow-dropdown' : 'arrow-dropright'" mode="md"
-                      size="large"></ion-icon>
-        </ion-button>
-    </div>
-    <ion-label>
-        <div class="label-container">
-            <div class="title">
-                <div class="date">
-                    {{measure.startTime | date : 'dd/MM/yyyy HH:mm\'\'\'ss"'}}
-                </div>
-                <div>
-                    <ng-container *ngIf="measure.type === measureType.Measure; else measureSeries">
-                        {{measure.value | dose}} {{'MEASURES.DOSE_RATE_UNIT' | translate}}
-                    </ng-container>
-                    <ng-template #measureSeries>
-                        {{measure.measures.length | i18nPlural : measureSeriesMessageMapping | translate :
-                      { count: measure.measures.length } }}
-                    </ng-template>
-                </div>
-            </div>
-            <div class="subtile"
-                 *ngIf="!canPublish">
-                <ng-container *ngIf="measure.type === measureType.Measure;else messageSending">
-                    {{'HISTORY.MESSAGE_PREVENT_MEASURE_SENDING' | translate}}
-                </ng-container>
-                <ng-template #messageSending>{{'HISTORY.MESSAGE_PREVENT_SERIES_SENDING' | translate}}</ng-template>
-            </div>
+  <div class="start-content" [ngClass]="{ small: !showArrowDetail }">
+    <ion-button
+      class="inner-button"
+      *ngIf="measure.type === measureType.MeasureSeries && showArrowDetail"
+      (click)="toggleSeriesDetail($event)"
+      fill="clear"
+    >
+      <ion-icon [name]="showSeriesDetail ? 'arrow-dropdown' : 'arrow-dropright'" mode="md" size="large"></ion-icon>
+    </ion-button>
+  </div>
+  <ion-label>
+    <div class="label-container">
+      <div class="title">
+        <div class="date">
+          {{ measure.startTime | date: "dd/MM/yyyy HH:mm'''ss\"" }}
         </div>
-    </ion-label>
-    <div class="end-content">
-        <ng-container *ngIf="measure.sent; else measureNotSent">
-            <ng-container *ngIf="measure.type === measureType.Measure; else measureSeriesSent">
-                {{'HISTORY.SENT' | translate}}
-            </ng-container>
-            <ng-template #measureSeriesSent>
-                {{'HISTORY.SENT_SERIES' | translate}}
-            </ng-template>
+        <div>
+          <ng-container *ngIf="measure.type === measureType.Measure; else measureSeries">
+            {{ measure.value | dose }} {{ 'MEASURES.DOSE_RATE_UNIT' | translate }}
+          </ng-container>
+          <ng-template #measureSeries>
+            {{
+              measure.measures.length
+                | i18nPlural: measureSeriesMessageMapping
+                | translate: { count: measure.measures.length }
+            }}
+          </ng-template>
+        </div>
+      </div>
+      <div class="subtile" *ngIf="!canPublish">
+        <ng-container *ngIf="measure.type === measureType.Measure; else messageSending">
+          {{ 'HISTORY.MESSAGE_PREVENT_MEASURE_SENDING' | translate }}
         </ng-container>
-        <ng-template #measureNotSent>
-            <ng-container *ngIf="measureBeingSent; else measureNotBeingSent">
-                <ion-spinner></ion-spinner>
-            </ng-container>
-            <ng-template #measureNotBeingSent>
-                <ion-button class="inner-button" fill="clear"
-                            size="default"
-                            [disabled]="!canPublish"
-                            (click)="publishClick($event)">
-                    <img src="assets/img/icon-publish.png">
-                </ion-button>
-                <ion-button class="inner-button" fill="clear"
-                            size="default"
-                            (click)="deleteClick($event)">
-                    <img src="assets/img/icon-delete.png">
-                </ion-button>
-            </ng-template>
-        </ng-template>
+        <ng-template #messageSending>{{ 'HISTORY.MESSAGE_PREVENT_SERIES_SENDING' | translate }}</ng-template>
+      </div>
     </div>
+  </ion-label>
+  <div class="end-content">
+    <ng-container *ngIf="measure.sent; else measureNotSent">
+      <ng-container *ngIf="measure.type === measureType.Measure; else measureSeriesSent">
+        {{ 'HISTORY.SENT' | translate }}
+      </ng-container>
+      <ng-template #measureSeriesSent>
+        {{ 'HISTORY.SENT_SERIES' | translate }}
+      </ng-template>
+    </ng-container>
+    <ng-template #measureNotSent>
+      <ng-container *ngIf="measureBeingSent; else measureNotBeingSent">
+        <ion-spinner></ion-spinner>
+      </ng-container>
+      <ng-template #measureNotBeingSent>
+        <ion-button
+          class="inner-button"
+          fill="clear"
+          size="default"
+          [disabled]="!canPublish"
+          (click)="publishClick($event)"
+        >
+          <img src="assets/img/icon-publish.png" />
+        </ion-button>
+        <ion-button class="inner-button" fill="clear" size="default" (click)="deleteClick($event)">
+          <img src="assets/img/icon-delete.png" />
+        </ion-button>
+      </ng-template>
+    </ng-template>
+  </div>
 </ion-item>
 <ion-list class="series-detail" *ngIf="measure.type === measureType.MeasureSeries && showSeriesDetail">
-    <ion-item *ngFor="let measureSeriesDetail of measure.measures">
-        <div class="start-content"></div>
-        <ion-label class="test">
-            <div class="label-container">
-                <div class="title">
-                    <div class="date">
-                        {{measureSeriesDetail.startTime | date : 'dd/MM/yyyy HH:mm\'\'\'ss"'}}
-                    </div>
-                    <div>
-                        {{measureSeriesDetail.value | dose}} {{'MEASURES.DOSE_RATE_UNIT' | translate}}
-                    </div>
-                </div>
-            </div>
-        </ion-label>
-        <div class="end-content"></div>
-    </ion-item>
+  <ion-item *ngFor="let measureSeriesDetail of measure.measures">
+    <div class="start-content"></div>
+    <ion-label class="test">
+      <div class="label-container">
+        <div class="title">
+          <div class="date">
+            {{ measureSeriesDetail.startTime | date: "dd/MM/yyyy HH:mm'''ss\"" }}
+          </div>
+          <div>{{ measureSeriesDetail.value | dose }} {{ 'MEASURES.DOSE_RATE_UNIT' | translate }}</div>
+        </div>
+      </div>
+    </ion-label>
+    <div class="end-content"></div>
+  </ion-item>
 </ion-list>

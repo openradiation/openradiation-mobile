@@ -1,13 +1,21 @@
 <app-header>{{'ABOUT.TITLE' | translate}}</app-header>
 
 <ion-content>
-    <app-accordion [title]="'ABOUT.MEASURE.TITLE' | translate" [opened]="panelOpened === 1" (open)="panelOpened = 1">
-        <div class="notice" [innerHTML]="'ABOUT.MEASURE.NOTICE' | translate  | sanitizeHtml"></div>
-    </app-accordion>
-    <app-accordion [title]="'ABOUT.MEASURES_HOW_TO.TITLE' | translate" [opened]="panelOpened === 2" (open)="panelOpened = 2">
-        <div class="notice" [innerHTML]="'ABOUT.MEASURES_HOW_TO.NOTICE' | translate | sanitizeHtml"></div>
-    </app-accordion>
-    <app-accordion [title]="'ABOUT.OPENRADIATION_PROJECT.TITLE' | translate" [opened]="panelOpened === 3" (open)="panelOpened = 3">
-        <div class="notice" [innerHTML]="'ABOUT.OPENRADIATION_PROJECT.NOTICE' | translate | sanitizeHtml"></div>
-    </app-accordion>
+  <app-accordion [title]="'ABOUT.MEASURE.TITLE' | translate" [opened]="panelOpened === 1" (open)="panelOpened = 1">
+    <div class="notice" [innerHTML]="'ABOUT.MEASURE.NOTICE' | translate  | sanitizeHtml"></div>
+  </app-accordion>
+  <app-accordion
+    [title]="'ABOUT.MEASURES_HOW_TO.TITLE' | translate"
+    [opened]="panelOpened === 2"
+    (open)="panelOpened = 2"
+  >
+    <div class="notice" [innerHTML]="'ABOUT.MEASURES_HOW_TO.NOTICE' | translate | sanitizeHtml"></div>
+  </app-accordion>
+  <app-accordion
+    [title]="'ABOUT.OPENRADIATION_PROJECT.TITLE' | translate"
+    [opened]="panelOpened === 3"
+    (open)="panelOpened = 3"
+  >
+    <div class="notice" [innerHTML]="'ABOUT.OPENRADIATION_PROJECT.NOTICE' | translate | sanitizeHtml"></div>
+  </app-accordion>
 </ion-content>

@@ -1,58 +1,74 @@
 <app-header [backButton]="true" (back)="goBack()">{{'SENSORS.TITLE' | translate}}</app-header>
 
 <ion-content>
-    <ion-list>
-        <app-category-label *ngIf="isScanning$ | async">
-            <span class="loading">{{'SENSORS.SEARCH' | translate}}</span>
-        </app-category-label>
-        <ion-item *ngIf="connectedDevice$ | async as connectedDevice" class="clickable-device" button detail="false"
-                  (click)="disconnectDevice()">
-            <ion-label>
-                {{connectedDevice.apparatusVersion}}<br>{{connectedDevice.apparatusId}}
-            </ion-label>
-            <span class="state connected">
-                {{'GENERAL.CONNECTED' | translate}}
-                <div class="battery-icon" *ngIf="connectedDevice.batteryLevel !== undefined">
-                    <ion-icon name="battery-full" mode="ios"></ion-icon>{{connectedDevice.batteryLevel}}%
-                </div>
-            </span>
-            <ion-button *ngIf="connectedDevice.params && connectedDevice.paramsModel" class="inner-button" fill="clear"
-                        size="default"
-                        (click)="editDeviceParams($event, connectedDevice)">
-                <img src="assets/img/icon-config.png">
-            </ion-button>
-        </ion-item>
-        <ion-item *ngFor="let availableDevice of availableDevices" class="clickable-device" button
-                  detail="false"
-                  (click)="connectDevice(availableDevice)">
-            <ion-label>
-                {{availableDevice.apparatusVersion}}<br>{{availableDevice.apparatusId}}
-            </ion-label>
-            <ion-spinner
-                    *ngIf="connectingDevice && connectingDevice?.sensorUUID === availableDevice.sensorUUID"></ion-spinner>
-            <span class="state" *ngIf="connectingDevice?.sensorUUID !== availableDevice.sensorUUID">
-                {{'GENERAL.AVAILABLE' | translate}}
-                <div class="battery-icon" *ngIf="availableDevice.batteryLevel">
-                    <ion-icon name="battery-full" mode="ios"></ion-icon>{{availableDevice.batteryLevel}}%
-                </div>
-            </span>
-            <ion-button *ngIf="availableDevice.params && availableDevice.paramsModel" class="inner-button" fill="clear"
-                        size="default"
-                        (click)="editDeviceParams($event, availableDevice)">
-                <img src="assets/img/icon-config.png">
-            </ion-button>
-        </ion-item>
-        <ion-item *ngFor="let knownDevice of knownDevices" detail="false">
-            <ion-label>
-                {{knownDevice.apparatusVersion}}<br>{{knownDevice.apparatusId}}
-            </ion-label>
-            <span class="state">
-                {{'GENERAL.UNAVAILABLE' | translate}}
-            </span>
-            <ion-button *ngIf="knownDevice.params && knownDevice.paramsModel" fill="clear" size="default"
-                        (click)="editDeviceParams($event, knownDevice)">
-                <img src="assets/img/icon-config.png">
-            </ion-button>
-        </ion-item>
-    </ion-list>
+  <ion-list>
+    <app-category-label *ngIf="isScanning$ | async">
+      <span class="loading">{{'SENSORS.SEARCH' | translate}}</span>
+    </app-category-label>
+    <ion-item
+      *ngIf="connectedDevice$ | async as connectedDevice"
+      class="clickable-device"
+      button
+      detail="false"
+      (click)="disconnectDevice()"
+    >
+      <ion-label> {{connectedDevice.apparatusVersion}}<br />{{connectedDevice.apparatusId}} </ion-label>
+      <span class="state connected">
+        {{'GENERAL.CONNECTED' | translate}}
+        <div class="battery-icon" *ngIf="connectedDevice.batteryLevel !== undefined">
+          <ion-icon name="battery-full" mode="ios"></ion-icon>{{connectedDevice.batteryLevel}}%
+        </div>
+      </span>
+      <ion-button
+        *ngIf="connectedDevice.params && connectedDevice.paramsModel"
+        class="inner-button"
+        fill="clear"
+        size="default"
+        (click)="editDeviceParams($event, connectedDevice)"
+      >
+        <img src="assets/img/icon-config.png" />
+      </ion-button>
+    </ion-item>
+    <ion-item
+      *ngFor="let availableDevice of availableDevices"
+      class="clickable-device"
+      button
+      detail="false"
+      (click)="connectDevice(availableDevice)"
+    >
+      <ion-label> {{availableDevice.apparatusVersion}}<br />{{availableDevice.apparatusId}} </ion-label>
+      <ion-spinner
+        *ngIf="connectingDevice && connectingDevice?.sensorUUID === availableDevice.sensorUUID"
+      ></ion-spinner>
+      <span class="state" *ngIf="connectingDevice?.sensorUUID !== availableDevice.sensorUUID">
+        {{'GENERAL.AVAILABLE' | translate}}
+        <div class="battery-icon" *ngIf="availableDevice.batteryLevel">
+          <ion-icon name="battery-full" mode="ios"></ion-icon>{{availableDevice.batteryLevel}}%
+        </div>
+      </span>
+      <ion-button
+        *ngIf="availableDevice.params && availableDevice.paramsModel"
+        class="inner-button"
+        fill="clear"
+        size="default"
+        (click)="editDeviceParams($event, availableDevice)"
+      >
+        <img src="assets/img/icon-config.png" />
+      </ion-button>
+    </ion-item>
+    <ion-item *ngFor="let knownDevice of knownDevices" detail="false">
+      <ion-label> {{knownDevice.apparatusVersion}}<br />{{knownDevice.apparatusId}} </ion-label>
+      <span class="state">
+        {{'GENERAL.UNAVAILABLE' | translate}}
+      </span>
+      <ion-button
+        *ngIf="knownDevice.params && knownDevice.paramsModel"
+        fill="clear"
+        size="default"
+        (click)="editDeviceParams($event, knownDevice)"
+      >
+        <img src="assets/img/icon-config.png" />
+      </ion-button>
+    </ion-item>
+  </ion-list>
 </ion-content>

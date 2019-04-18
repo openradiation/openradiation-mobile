@@ -1,14 +1,16 @@
-<div class="title" *ngIf="title">
-    {{title}}<span *ngIf="required"> *</span>
-</div>
-<div class="list" [ngClass]="{disabled: isDisabled}">
-    <div class="item" *ngFor="let option of options" (click)="writeValue(option.value)"
-         [ngClass]="{'item-disabled': option.disabled}">
-        <div>
-            <img [src]="option === selectedOption ? option.iconOn : option.iconOff">
-        </div>
-        <div class="label" [ngClass]="{'selected': option === selectedOption}">
-            {{option.label | translate}}
-        </div>
+<div class="title" *ngIf="title">{{ title }}<span *ngIf="required"> *</span></div>
+<div class="list" [ngClass]="{ disabled: isDisabled }">
+  <div
+    class="item"
+    *ngFor="let option of options"
+    (click)="writeValue(option.value)"
+    [ngClass]="{ 'item-disabled': option.disabled }"
+  >
+    <div>
+      <img [src]="option === selectedOption ? option.iconOn : option.iconOff" />
     </div>
+    <div class="label" [ngClass]="{ selected: option === selectedOption }">
+      {{ option.label | translate }}
+    </div>
+  </div>
 </div>

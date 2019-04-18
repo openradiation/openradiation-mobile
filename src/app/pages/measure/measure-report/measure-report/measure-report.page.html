@@ -1,140 +1,173 @@
 <ng-container *ngIf="measureReportForm">
-    <ng-container *ngIf="currentMeasure as currentMeasure">
-        <app-header>
-        </app-header>
+  <ng-container *ngIf="currentMeasure as currentMeasure">
+    <app-header> </app-header>
 
-        <ion-content>
-            <div class="content">
-                <div class="message"
-                     *ngIf="!canPublish(currentMeasure)">
-                    <div class="message-style">{{'HISTORY.MESSAGE_PREVENT_MEASURE_SENDING' | translate}}</div>
-                </div>
-                <div class="message"
-                     *ngIf="positionChangeSpeedOverLimit">
-                    <div class="message-style">{{'HISTORY.MESSAGE_SPEED' | translate}}</div>
-                </div>
-                <form class="form" [formGroup]="measureReportForm" ngxsForm="measures.measureReport">
-                    <div class="position">
-                        <ion-list>
-                            <ion-item class="custom-disabled">
-                                <ion-label class="value">{{'MEASURES.REPORT_LATITUDE' | translate}}</ion-label>
-                                <ion-input class="values" formControlName="latitude" type="number"></ion-input>
-                            </ion-item>
-                            <ion-item class="custom-disabled">
-                                <ion-label class="value">{{'MEASURES.REPORT_LONGITUDE' | translate}}</ion-label>
-                                <ion-input class="values" formControlName="longitude" type="number"></ion-input>
-                            </ion-item>
-                        </ion-list>
-                        <app-gps-indicator [accuracy]="currentMeasure.accuracy" [compact]="true"></app-gps-indicator>
-                    </div>
-                    <div class="separator"></div>
-                    <ion-list>
-                        <ion-item class="custom-disabled">
-                            <ion-label class="value">{{'GENERAL.DATE' | translate}}</ion-label>
-                            <ion-datetime class="values" display-format="DD/MM/YYYY" formControlName="date" required
-                                          [cancelText]="'GENERAL.CANCEL' | translate"
-                                          [doneText]="'GENERAL.SUBMIT' | translate"></ion-datetime>
-                        </ion-item>
-                        <ion-item class="custom-disabled">
-                            <ion-label class="value">{{'MEASURES.MEASURE_START' | translate}}</ion-label>
-                            <ion-datetime class="values" display-format="HH:mm'ss''" formControlName="startTime"
-                                          required
-                                          [cancelText]="'GENERAL.CANCEL' | translate"
-                                          [doneText]="'GENERAL.SUBMIT' | translate"></ion-datetime>
-                        </ion-item>
-                    </ion-list>
-                    <div class="measure">
-                        <ion-list>
-                            <ion-item [ngClass]="{'custom-disabled': inputDisabled}">
-                                <ion-label position="fixed">{{'MEASURES.DURATION' | translate}}</ion-label>
-                                <ion-datetime display-format="HH:mm'ss''" pickerFormat="HH mm ss"
-                                              formControlName="duration"
-                                              [cancelText]="'GENERAL.CANCEL' | translate"
-                                              [doneText]="'GENERAL.SUBMIT' | translate"
-                                              [placeholder]="inputDisabled ? '-' : '00\'00\'\''"></ion-datetime>
-                            </ion-item>
-                            <ion-item class="has-suffix long-label" [ngClass]="{'custom-disabled': inputDisabled}">
-                                <ion-label position="fixed">{{'MEASURES.SENSOR_TEMPERATURE' | translate}}</ion-label>
-                                <ion-input formControlName="temperature" type="number"
-                                           [placeholder]="inputDisabled ? '-' : '0'"></ion-input>
-                                <span class="unit">°C</span>
-                            </ion-item>
-                            <ion-item [ngClass]="{'custom-disabled': inputDisabled}">
-                                <ion-label position="fixed">{{'MEASURES.HITS_NUMBER' | translate}}</ion-label>
-                                <ion-input formControlName="hitsNumber" type="number"
-                                           [placeholder]="inputDisabled ? '-' : '0'"></ion-input>
-                            </ion-item>
-                            <ion-item class="has-suffix"
-                                      [ngClass]="{'custom-disabled': inputDisabled}">
-                                <ion-label position="fixed">{{'MEASURES.TITLE' | translate}}<span
-                                        *ngIf="!reportScan"> *</span></ion-label>
-                                <ion-input formControlName="value" required type="number"
-                                           [placeholder]="inputDisabled ? '-' : '0.000'"></ion-input>
-                                <span class="unit">{{'MEASURES.DOSE_RATE_UNIT' | translate}}</span>
-                            </ion-item>
-                        </ion-list>
-                    </div>
-                    <div class="environment">
-                        <app-select-icon [options]="measurementEnvironmentOptions"
-                                         formControlName="measurementEnvironment"
-                                         [title]="'MEASURES.ENVIRONMENT.TITLE' | translate"
-                                         [required]="positionChangeSpeedOverLimit">
-                        </app-select-icon>
-                    </div>
-                    <div class="options">
-                        <app-select-icon [options]="measurementHeightOptions" formControlName="measurementHeight"
-                                         [title]="'MEASURES.SENSOR_POSITION.TITLE' | translate">
-                        </app-select-icon>
-                        <app-select-icon [options]="rainOptions" formControlName="rain"
-                                         [title]="'MEASURES.WEATHER.TITLE' | translate">
-                        </app-select-icon>
-                    </div>
-                    <ng-container *ngIf="login$ | async">
-                        <div class="separator"></div>
-                        <ion-list>
-                            <ion-item class="description">
-                                <ion-textarea formControlName="description" rows="5"
-                                              [placeholder]="'MEASURES.DESCRIPTION' | translate">
-                                </ion-textarea>
-                            </ion-item>
-                        </ion-list>
-                        <div class="tags">
-                            <app-tag-list formControlName="tags"
-                                          (tagAdded)="tagAdded($event)" [proposedTagList]="recentTags$ | async"
-                                          [title]="'MEASURES.TAG_LIST' | translate"
-                                          [proposedTagListTitle]="'MEASURES.TAG_LIST_RECENT' | translate">
-                            </app-tag-list>
-                        </div>
-                        <div class="photo">
-                            <app-photo formControlName="enclosedObject" [title]="'Photo'">
-                            </app-photo>
-                        </div>
-                    </ng-container>
-                </form>
-                <div class="bottom-buttons">
-                    <app-round-button [disabled]="!measureReportForm.valid || currentMeasure.sent"
-                                      [srcOn]="'assets/img/button-on.png'"
-                                      [srcOff]="'assets/img/button-off.png'"
-                                      (click)="stopReport()">
-                        {{'GENERAL.OK' | translate}}
-                    </app-round-button>
-                    <div class="side-buttons">
-                        <ion-button fill="clear" class="flat-button cancel" (click)="cancelMeasure()">
-                            <ng-container *ngIf="!currentMeasure.sent; else backButton">
-                                {{'GENERAL.CANCEL' | translate}}
-                            </ng-container>
-                            <ng-template #backButton>
-                                {{'GENERAL.BACK' | translate}}
-                            </ng-template>
-                        </ion-button>
-                        <ion-button
-                                *ngIf="!currentMeasure.manualReporting && currentMeasure.steps && expertMode$ | async"
-                                fill="clear" class="flat-button expert" (click)="showMeasureSteps()">
-                            {{'MEASURES.EXPERT' | translate}}
-                        </ion-button>
-                    </div>
-                </div>
+    <ion-content>
+      <div class="content">
+        <div class="message" *ngIf="!canPublish(currentMeasure)">
+          <div class="message-style">{{'HISTORY.MESSAGE_PREVENT_MEASURE_SENDING' | translate}}</div>
+        </div>
+        <div class="message" *ngIf="positionChangeSpeedOverLimit">
+          <div class="message-style">{{'HISTORY.MESSAGE_SPEED' | translate}}</div>
+        </div>
+        <form class="form" [formGroup]="measureReportForm" ngxsForm="measures.measureReport">
+          <div class="position">
+            <ion-list>
+              <ion-item class="custom-disabled">
+                <ion-label class="value">{{'MEASURES.REPORT_LATITUDE' | translate}}</ion-label>
+                <ion-input class="values" formControlName="latitude" type="number"></ion-input>
+              </ion-item>
+              <ion-item class="custom-disabled">
+                <ion-label class="value">{{'MEASURES.REPORT_LONGITUDE' | translate}}</ion-label>
+                <ion-input class="values" formControlName="longitude" type="number"></ion-input>
+              </ion-item>
+            </ion-list>
+            <app-gps-indicator [accuracy]="currentMeasure.accuracy" [compact]="true"></app-gps-indicator>
+          </div>
+          <div class="separator"></div>
+          <ion-list>
+            <ion-item class="custom-disabled">
+              <ion-label class="value">{{'GENERAL.DATE' | translate}}</ion-label>
+              <ion-datetime
+                class="values"
+                display-format="DD/MM/YYYY"
+                formControlName="date"
+                required
+                [cancelText]="'GENERAL.CANCEL' | translate"
+                [doneText]="'GENERAL.SUBMIT' | translate"
+              ></ion-datetime>
+            </ion-item>
+            <ion-item class="custom-disabled">
+              <ion-label class="value">{{'MEASURES.MEASURE_START' | translate}}</ion-label>
+              <ion-datetime
+                class="values"
+                display-format="HH:mm'ss''"
+                formControlName="startTime"
+                required
+                [cancelText]="'GENERAL.CANCEL' | translate"
+                [doneText]="'GENERAL.SUBMIT' | translate"
+              ></ion-datetime>
+            </ion-item>
+          </ion-list>
+          <div class="measure">
+            <ion-list>
+              <ion-item [ngClass]="{'custom-disabled': inputDisabled}">
+                <ion-label position="fixed">{{'MEASURES.DURATION' | translate}}</ion-label>
+                <ion-datetime
+                  display-format="HH:mm'ss''"
+                  pickerFormat="HH mm ss"
+                  formControlName="duration"
+                  [cancelText]="'GENERAL.CANCEL' | translate"
+                  [doneText]="'GENERAL.SUBMIT' | translate"
+                  [placeholder]="inputDisabled ? '-' : '00\'00\'\''"
+                ></ion-datetime>
+              </ion-item>
+              <ion-item class="has-suffix long-label" [ngClass]="{'custom-disabled': inputDisabled}">
+                <ion-label position="fixed">{{'MEASURES.SENSOR_TEMPERATURE' | translate}}</ion-label>
+                <ion-input
+                  formControlName="temperature"
+                  type="number"
+                  [placeholder]="inputDisabled ? '-' : '0'"
+                ></ion-input>
+                <span class="unit">°C</span>
+              </ion-item>
+              <ion-item [ngClass]="{'custom-disabled': inputDisabled}">
+                <ion-label position="fixed">{{'MEASURES.HITS_NUMBER' | translate}}</ion-label>
+                <ion-input
+                  formControlName="hitsNumber"
+                  type="number"
+                  [placeholder]="inputDisabled ? '-' : '0'"
+                ></ion-input>
+              </ion-item>
+              <ion-item class="has-suffix" [ngClass]="{'custom-disabled': inputDisabled}">
+                <ion-label position="fixed"
+                  >{{'MEASURES.TITLE' | translate}}<span *ngIf="!reportScan"> *</span></ion-label
+                >
+                <ion-input
+                  formControlName="value"
+                  required
+                  type="number"
+                  [placeholder]="inputDisabled ? '-' : '0.000'"
+                ></ion-input>
+                <span class="unit">{{'MEASURES.DOSE_RATE_UNIT' | translate}}</span>
+              </ion-item>
+            </ion-list>
+          </div>
+          <div class="environment">
+            <app-select-icon
+              [options]="measurementEnvironmentOptions"
+              formControlName="measurementEnvironment"
+              [title]="'MEASURES.ENVIRONMENT.TITLE' | translate"
+              [required]="positionChangeSpeedOverLimit"
+            >
+            </app-select-icon>
+          </div>
+          <div class="options">
+            <app-select-icon
+              [options]="measurementHeightOptions"
+              formControlName="measurementHeight"
+              [title]="'MEASURES.SENSOR_POSITION.TITLE' | translate"
+            >
+            </app-select-icon>
+            <app-select-icon
+              [options]="rainOptions"
+              formControlName="rain"
+              [title]="'MEASURES.WEATHER.TITLE' | translate"
+            >
+            </app-select-icon>
+          </div>
+          <ng-container *ngIf="login$ | async">
+            <div class="separator"></div>
+            <ion-list>
+              <ion-item class="description">
+                <ion-textarea formControlName="description" rows="5" [placeholder]="'MEASURES.DESCRIPTION' | translate">
+                </ion-textarea>
+              </ion-item>
+            </ion-list>
+            <div class="tags">
+              <app-tag-list
+                formControlName="tags"
+                (tagAdded)="tagAdded($event)"
+                [proposedTagList]="recentTags$ | async"
+                [title]="'MEASURES.TAG_LIST' | translate"
+                [proposedTagListTitle]="'MEASURES.TAG_LIST_RECENT' | translate"
+              >
+              </app-tag-list>
             </div>
-        </ion-content>
-    </ng-container>
+            <div class="photo">
+              <app-photo formControlName="enclosedObject" [title]="'Photo'"> </app-photo>
+            </div>
+          </ng-container>
+        </form>
+        <div class="bottom-buttons">
+          <app-round-button
+            [disabled]="!measureReportForm.valid || currentMeasure.sent"
+            [srcOn]="'assets/img/button-on.png'"
+            [srcOff]="'assets/img/button-off.png'"
+            (click)="stopReport()"
+          >
+            {{'GENERAL.OK' | translate}}
+          </app-round-button>
+          <div class="side-buttons">
+            <ion-button fill="clear" class="flat-button cancel" (click)="cancelMeasure()">
+              <ng-container *ngIf="!currentMeasure.sent; else backButton">
+                {{'GENERAL.CANCEL' | translate}}
+              </ng-container>
+              <ng-template #backButton>
+                {{'GENERAL.BACK' | translate}}
+              </ng-template>
+            </ion-button>
+            <ion-button
+              *ngIf="!currentMeasure.manualReporting && currentMeasure.steps && expertMode$ | async"
+              fill="clear"
+              class="flat-button expert"
+              (click)="showMeasureSteps()"
+            >
+              {{'MEASURES.EXPERT' | translate}}
+            </ion-button>
+          </div>
+        </div>
+      </div>
+    </ion-content>
+  </ng-container>
 </ng-container>

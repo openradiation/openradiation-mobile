@@ -1,45 +1,48 @@
 <ng-container *ngIf="(currentMeasure$ | async) as currentMeasure">
-    <ng-container *ngIf="currentMeasure.steps as steps">
-        <app-header [backButton]="true" (back)="goBack()" [shareButton]="true" (share)="shareSteps(currentMeasure)">
-            {{'MEASURES.TITLE' | translate}}
-        </app-header>
+  <ng-container *ngIf="currentMeasure.steps as steps">
+    <app-header [backButton]="true" (back)="goBack()" [shareButton]="true" (share)="shareSteps(currentMeasure)">
+      {{'MEASURES.TITLE' | translate}}
+    </app-header>
 
-        <ion-content>
-            <ion-list>
-                <app-category-label>{{'MEASURES.EXPERT_MODE' | translate}} ({{currentMeasure.startTime | date: 'dd/MM/yyyy'}})</app-category-label>
-                <ion-item>
-                    <div class="header">
-                        <div class="date">
-                            {{'GENERAL.TIMESTAMP' | translate}}
-                        </div>
-                        <div class="hitsNumber">
-                            {{'MEASURES.HITS_NUMBER' | translate}}
-                        </div>
-                        <div class="voltage">
-                            {{'MEASURES.VOLTAGE' | translate}}
-                        </div>
-                        <div class="temperature">
-                            {{'MEASURES.TEMPERATURE' | translate}}
-                        </div>
-                    </div>
-                </ion-item>
-                <ion-item *ngFor="let step of steps">
-                    <div class="value">
-                        <div class="date">
-                            {{step.ts | date: 'HH:mm\'\'\'ss"'}}
-                        </div>
-                        <div class="hitsNumber">
-                            {{step.hitsNumber}}
-                        </div>
-                        <div class="voltage">
-                            {{step.voltage | number : '1.2-2'}}
-                        </div>
-                        <div class="temperature">
-                            {{step.temperature | number : '1.2-2'}}
-                        </div>
-                    </div>
-                </ion-item>
-            </ion-list>
-        </ion-content>
-    </ng-container>
+    <ion-content>
+      <ion-list>
+        <app-category-label
+          >{{'MEASURES.EXPERT_MODE' | translate}} ({{currentMeasure.startTime | date:
+          'dd/MM/yyyy'}})</app-category-label
+        >
+        <ion-item>
+          <div class="header">
+            <div class="date">
+              {{'GENERAL.TIMESTAMP' | translate}}
+            </div>
+            <div class="hitsNumber">
+              {{'MEASURES.HITS_NUMBER' | translate}}
+            </div>
+            <div class="voltage">
+              {{'MEASURES.VOLTAGE' | translate}}
+            </div>
+            <div class="temperature">
+              {{'MEASURES.TEMPERATURE' | translate}}
+            </div>
+          </div>
+        </ion-item>
+        <ion-item *ngFor="let step of steps">
+          <div class="value">
+            <div class="date">
+              {{step.ts | date: 'HH:mm\'\'\'ss"'}}
+            </div>
+            <div class="hitsNumber">
+              {{step.hitsNumber}}
+            </div>
+            <div class="voltage">
+              {{step.voltage | number : '1.2-2'}}
+            </div>
+            <div class="temperature">
+              {{step.temperature | number : '1.2-2'}}
+            </div>
+          </div>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ng-container>
 </ng-container>

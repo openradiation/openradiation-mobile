@@ -1,18 +1,21 @@
 <ng-container *ngIf="measures$ | async as measures">
-    <app-header [deleteButton]="measures.length > 0" (delete)="deleteAll()">{{'HISTORY.TITLE' | translate}}</app-header>
+  <app-header [deleteButton]="measures.length > 0" (delete)="deleteAll()">{{'HISTORY.TITLE' | translate}}</app-header>
 
-    <ion-content>
-        <div class="empty-list" *ngIf="measures.length <= 0" [innerHTML]="'HISTORY.NO_MEASURE' | translate">
-        </div>
-        <ion-list>
-                <app-history-item [measure]="measure"
-                                  [canPublish]="canPublish(measure)"
-                                  [measureBeingSent]="measureBeingSentMap[measure.id]"
-                                  [showArrowDetail]="containsMeasureSeries(measures)"
-                                  (publish)="publish(measure)"
-                                  (delete)="delete(measure)"
-                                  *ngFor="let measure of measures" button detail="false"
-                                  (showDetail)="showDetail(measure)"></app-history-item>
-        </ion-list>
-    </ion-content>
+  <ion-content>
+    <div class="empty-list" *ngIf="measures.length <= 0" [innerHTML]="'HISTORY.NO_MEASURE' | translate"></div>
+    <ion-list>
+      <app-history-item
+        [measure]="measure"
+        [canPublish]="canPublish(measure)"
+        [measureBeingSent]="measureBeingSentMap[measure.id]"
+        [showArrowDetail]="containsMeasureSeries(measures)"
+        (publish)="publish(measure)"
+        (delete)="delete(measure)"
+        *ngFor="let measure of measures"
+        button
+        detail="false"
+        (showDetail)="showDetail(measure)"
+      ></app-history-item>
+    </ion-list>
+  </ion-content>
 </ng-container>

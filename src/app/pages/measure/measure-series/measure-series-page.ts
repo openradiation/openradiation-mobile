@@ -91,7 +91,7 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
     this.store.dispatch(new CancelMeasure());
   }
 
-  onParamSelectedChange(value: Event) {
+  onParamSelectedChange(value: CustomEvent) {
     if (this.measureSeriesParamsForm) {
       if (value.srcElement && value.srcElement.tagName.toLowerCase() === 'ion-radio-group') {
         this.paramSelected = this.measureSeriesParamsForm.value.paramSelected;

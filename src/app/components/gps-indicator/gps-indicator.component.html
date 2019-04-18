@@ -1,8 +1,11 @@
 <div class="gps-indicator" [ngClass]="positionAccuracy">
-    GPS<ng-container *ngIf="compact; else notCompact"><br></ng-container><ng-template #notCompact> : </ng-template><ng-container [ngSwitch]="positionAccuracy">
-    <ng-container *ngSwitchCase="positionAccuracyEnum.No">{{'GENERAL.NO' | translate | lowercase}}</ng-container>
-    <ng-container *ngSwitchCase="positionAccuracyEnum.Inaccurate">{{'GENERAL.INACCURATE' | translate | lowercase}}</ng-container>
-    <ng-container *ngSwitchCase="positionAccuracyEnum.Poor">{{'GENERAL.POOR' | translate | lowercase}}</ng-container>
-    <ng-container *ngSwitchCase="positionAccuracyEnum.Good">{{'GENERAL.GOOD' | translate | lowercase}}</ng-container>
-</ng-container>
+  GPS<ng-container *ngIf="compact; else notCompact"><br /></ng-container><ng-template #notCompact> : </ng-template
+  ><ng-container [ngSwitch]="positionAccuracy">
+    <ng-container *ngSwitchCase="positionAccuracyEnum.No">{{ 'GENERAL.NO' | translate | lowercase }}</ng-container>
+    <ng-container *ngSwitchCase="positionAccuracyEnum.Inaccurate">{{
+      'GENERAL.INACCURATE' | translate | lowercase
+    }}</ng-container>
+    <ng-container *ngSwitchCase="positionAccuracyEnum.Poor">{{ 'GENERAL.POOR' | translate | lowercase }}</ng-container>
+    <ng-container *ngSwitchCase="positionAccuracyEnum.Good">{{ 'GENERAL.GOOD' | translate | lowercase }}</ng-container>
+  </ng-container>
 </div>
