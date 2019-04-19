@@ -1,23 +1,21 @@
 <div class="title" *ngIf="title && (!isDisabled || photo)">
-    {{title}}
+  {{ title }}
 </div>
 <div class="photo">
-    <ng-container *ngIf="!photo; else showPicture">
-        <ion-button (click)="openCamera()" *ngIf="!isDisabled"
-                    class="photo-button" fill="clear">
-            <img [src]="'assets/img/icon-photo.png'">
-        </ion-button>
-        <ion-button (click)="openGallery()" *ngIf="!isDisabled"
-                    class="photo-button" fill="clear">
-            <img [src]="'assets/img/icon-gallery.png'">
-        </ion-button>
-    </ng-container>
-    <ng-template #showPicture>
-        <div class="overlay">
-            <ion-img [src]="photo"></ion-img>
-            <ion-button *ngIf="!isDisabled" class="icon" (click)="deletePhoto()" fill="clear">
-                <ion-icon class="cross" slot="icon-only" name="close"></ion-icon>
-            </ion-button>
-        </div>
-    </ng-template>
+  <ng-container *ngIf="!photo; else showPicture">
+    <ion-button (click)="openCamera()" *ngIf="!isDisabled" class="photo-button" fill="clear">
+      <img [src]="'assets/img/icon-photo.png'" />
+    </ion-button>
+    <ion-button (click)="openGallery()" *ngIf="!isDisabled" class="photo-button" fill="clear">
+      <img [src]="'assets/img/icon-gallery.png'" />
+    </ion-button>
+  </ng-container>
+  <ng-template #showPicture>
+    <div class="overlay">
+      <ion-img [src]="photo"></ion-img>
+      <ion-button *ngIf="!isDisabled" class="icon" (click)="deletePhoto()" fill="clear">
+        <ion-icon class="cross" slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </div>
+  </ng-template>
 </div>

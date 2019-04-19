@@ -1,29 +1,33 @@
 <div class="title" *ngIf="title && (!isDisabled || displayTagList.length > 0)">
-    {{title}}
+  {{ title }}
 </div>
-<div class="tag-list" [ngClass]="{disabled: isDisabled}">
-    <ion-chip *ngFor="let tag of displayTagList; index as index" (click)="deleteTag(index)">
-        <ion-label>{{tag}}</ion-label>
-        <ion-icon name="close-circle" *ngIf="!isDisabled" fill="clear" color="light"></ion-icon>
-    </ion-chip>
+<div class="tag-list" [ngClass]="{ disabled: isDisabled }">
+  <ion-chip *ngFor="let tag of displayTagList; index as index" (click)="deleteTag(index)">
+    <ion-label>{{ tag }}</ion-label>
+    <ion-icon name="close-circle" *ngIf="!isDisabled" fill="clear" color="light"></ion-icon>
+  </ion-chip>
 </div>
 <div class="add-tag" *ngIf="!isDisabled">
-    <ion-item>
-        <ion-input [(ngModel)]="currentTag" (ngModelChange)="updateDisplayedProposedTagList()" [placeholder]="'GENERAL.ADD_TAG' | translate"></ion-input>
-        <ion-button fill="clear" [disabled]="currentTag === ''" (click)="addCurrentTag()">
-            <ion-icon slot="icon-only" name="add"></ion-icon>
-        </ion-button>
-    </ion-item>
-    <ng-container *ngIf="displayedProposedTagList && displayedProposedTagList?.length > 0">
-        <div class="separator"></div>
-        <div class="tag-list">
-            <div class="title">
-                {{proposedTagListTitle}}
-            </div>
-            <ion-chip *ngFor="let tag of displayedProposedTagList" (click)="addTag(tag)">
-                <ion-label>{{tag}}</ion-label>
-                <ion-icon name="add-circle" fill="clear" color="light"></ion-icon>
-            </ion-chip>
-        </div>
-    </ng-container>
+  <ion-item>
+    <ion-input
+      [(ngModel)]="currentTag"
+      (ngModelChange)="updateDisplayedProposedTagList()"
+      [placeholder]="'GENERAL.ADD_TAG' | translate"
+    ></ion-input>
+    <ion-button fill="clear" [disabled]="currentTag === ''" (click)="addCurrentTag()">
+      <ion-icon slot="icon-only" name="add"></ion-icon>
+    </ion-button>
+  </ion-item>
+  <ng-container *ngIf="displayedProposedTagList && displayedProposedTagList?.length > 0">
+    <div class="separator"></div>
+    <div class="tag-list">
+      <div class="title">
+        {{ proposedTagListTitle }}
+      </div>
+      <ion-chip *ngFor="let tag of displayedProposedTagList" (click)="addTag(tag)">
+        <ion-label>{{ tag }}</ion-label>
+        <ion-icon name="add-circle" fill="clear" color="light"></ion-icon>
+      </ion-chip>
+    </div>
+  </ng-container>
 </div>

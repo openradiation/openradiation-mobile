@@ -1,8 +1,13 @@
-<ion-button class="round-button" fill="clear" [disabled]="disabled" [ngStyle]="{'pointer-events': disabled ? 'none' : 'auto'}"
-            (click)="onClick($event)">
-    <img [src]="srcOn" [hidden]="disabled">
-    <img [src]="srcOff" [hidden]="!disabled">
-    <div class="content">
-        <ng-content></ng-content>
-    </div>
+<ion-button
+  class="round-button"
+  fill="clear"
+  [disabled]="disabled"
+  [ngStyle]="{ 'pointer-events': disabled ? 'none' : 'auto' }"
+  (click)="onClick($event)"
+>
+  <img [src]="srcOn" [hidden]="disabled" />
+  <img [src]="srcOff" [hidden]="!disabled" />
+  <div class="content">
+    <ng-content></ng-content>
+  </div>
 </ion-button>

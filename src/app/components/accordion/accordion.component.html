@@ -1,9 +1,9 @@
-<div class="container" [ngClass]="{'closed': !opened}">
-    <div class="title" (click)="open.emit()">
-        <ion-ripple-effect *ngIf="!opened"></ion-ripple-effect>
-        {{title}}
-    </div>
-    <div class="text">
-        <ng-content></ng-content>
-    </div>
+<div class="container" [ngClass]="{ closed: !opened }">
+  <div class="title" (click)="open.emit()">
+    <ion-ripple-effect *ngIf="!opened"></ion-ripple-effect>
+    {{ title }}
+  </div>
+  <div class="text">
+    <ng-content></ng-content>
+  </div>
 </div>

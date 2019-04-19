@@ -1,27 +1,29 @@
 <ion-content>
-    <div class="content">
-        <div class="logo">
-            <img src="assets/img/logo.png">
-        </div>
-        <div class="subtitle">
-            {{'HOME.TITLE' | translate}}
-        </div>
-        <app-gps-indicator [accuracy]="positionAccuracy$ | async"></app-gps-indicator>
-        <ng-container *ngIf="connectedDevice$ | async as connectedDevice; else noConnectedDevice">
-            <div class="connected-device-header">{{'HOME.CONNECTED_SENSOR' | translate}}</div>
-            <ion-button class="connected-device-button" fill="clear" (click)="goToDevices()">
-                {{connectedDevice.apparatusVersion}}
-            </ion-button>
-        </ng-container>
-        <ng-template #noConnectedDevice>
-            <ion-button class="device-button" fill="clear" (click)="goToDevices()">
-                {{'HOME.NO_SENSORS' | translate}}<br>{{'GENERAL.CLICK_HERE' | translate}}
-            </ion-button>
-        </ng-template>
-        <app-round-button [disabled]="!(canStartMeasure | async)"
-                          [srcOn]="'assets/img/button-start-measure-on.png'"
-                          [srcOff]="'assets/img/button-start-measure-off.png'"
-                          (click)="startMeasure()">
-        </app-round-button>
+  <div class="content">
+    <div class="logo">
+      <img src="assets/img/logo.png" />
     </div>
+    <div class="subtitle">
+      {{'HOME.TITLE' | translate}}
+    </div>
+    <app-gps-indicator [accuracy]="positionAccuracy$ | async"></app-gps-indicator>
+    <ng-container *ngIf="connectedDevice$ | async as connectedDevice; else noConnectedDevice">
+      <div class="connected-device-header">{{'HOME.CONNECTED_SENSOR' | translate}}</div>
+      <ion-button class="connected-device-button" fill="clear" (click)="goToDevices()">
+        {{connectedDevice.apparatusVersion}}
+      </ion-button>
+    </ng-container>
+    <ng-template #noConnectedDevice>
+      <ion-button class="device-button" fill="clear" (click)="goToDevices()">
+        {{'HOME.NO_SENSORS' | translate}}<br />{{'GENERAL.CLICK_HERE' | translate}}
+      </ion-button>
+    </ng-template>
+    <app-round-button
+      [disabled]="!(canStartMeasure | async)"
+      [srcOn]="'assets/img/button-start-measure-on.png'"
+      [srcOff]="'assets/img/button-start-measure-off.png'"
+      (click)="startMeasure()"
+    >
+    </app-round-button>
+  </div>
 </ion-content>
