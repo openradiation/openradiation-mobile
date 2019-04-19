@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, Store } from '@ngxs/store';
 import { UsbSerial } from 'cordova-plugin-usb-serial';
 import { Observable, Observer, of } from 'rxjs';
-import { filter, map, takeUntil } from 'rxjs/operators';
+import { filter, map, take, takeUntil } from 'rxjs/operators';
 import { Step } from '../../measures/measure';
 import { AbstractUSBDeviceService } from './abstract-usb-device.service';
 import { DeviceRium } from './device-rium';
@@ -26,7 +26,22 @@ export class DeviceRiumService extends AbstractUSBDeviceService<DeviceRium> {
   }
 
   getDeviceInfo(device: DeviceRium): Observable<Partial<DeviceRium>> {
-    return of({});
+    return Observable.create((observer: Observer<ArrayBuffer>) => {
+      UsbSerial.onDataReceived(data => observer.next(data), err => observer.error(err));
+    }).pipe(
+      map((buffer: ArrayBuffer) => {
+        if (buffer.byteLength === 12) {
+          const dataView = new DataView(buffer);
+          return {
+            apparatusId: dataView.getUint32(2, false).toString()
+          };
+        } else {
+          return null;
+        }
+      }),
+      filter((update: Partial<DeviceRium> | null): update is Partial<DeviceRium> => update !== null),
+      take(1)
+    );
   }
 
   saveDeviceParams(device: DeviceRium): Observable<any> {

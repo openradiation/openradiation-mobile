@@ -51,6 +51,7 @@ export class HomePage extends AutoUnsubscribePage {
 
   startMeasure() {
     this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
+      console.log(connectedDevice);
       if (connectedDevice) {
         this.store.dispatch(new StartMeasure(connectedDevice));
       }
