@@ -41,6 +41,13 @@ export class MeasureScanPage extends AutoUnsubscribePage {
 
   positionAccuracyThreshold = PositionAccuracyThreshold;
   measureSeriesParamsSelected = MeasureSeriesParamsSelected;
+  barPlot = {
+    data: [{ y: [10, 15, 13, 17], type: 'bar' }],
+    layout: {
+      title: 'Simple Bar Plot',
+      width: window.innerWidth
+    }
+  };
 
   isMeasureSeries = false;
 
@@ -86,6 +93,9 @@ export class MeasureScanPage extends AutoUnsubscribePage {
     });
     this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
       if (connectedDevice) {
+        this.currentSeries$.subscribe(currentSeries => {
+          this.updateGraph(currentSeries);
+        });
         this.subscriptions.push(
           this.currentMeasure$.subscribe(measure => this.updateHitsAccuracy(connectedDevice, measure)),
           this.actions$.pipe(ofActionSuccessful(StopMeasureScan)).subscribe(() => {
@@ -115,6 +125,10 @@ export class MeasureScanPage extends AutoUnsubscribePage {
       }
       this.hitsAccuracyWidth = Math.min((measure.hitsAccuracy / device.hitsAccuracyThreshold.accurate) * 100, 100);
     }
+  }
+
+  updateGraph(currentSeries?: MeasureSeries) {
+    console.log('grph', currentSeries);
   }
 
   stopScan() {

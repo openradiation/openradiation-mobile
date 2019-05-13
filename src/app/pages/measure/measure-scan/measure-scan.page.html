@@ -162,6 +162,9 @@
               </ng-container>
             </div>
           </div>
+          <div class="graph">
+            <plotly-plot [data]="barPlot.data" [layout]="barPlot.layout"></plotly-plot>
+          </div>
         </ng-container>
         <div class="bottom-buttons">
           <app-round-button
