@@ -162,8 +162,8 @@
               </ng-container>
             </div>
           </div>
-          <div class="graph">
-            <plotly-plot [data]="barPlot.data" [layout]="barPlot.layout"></plotly-plot>
+          <div class="graph-zone">
+            <plotly-plot [data]="barPlot.data" [layout]="barPlot.layout" [config]="barPlot.frames"></plotly-plot>
           </div>
         </ng-container>
         <div class="bottom-buttons">

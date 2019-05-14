@@ -18,6 +18,9 @@ import {
 import { CancelMeasure, StartMeasureScan, StopMeasureScan } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
 
+import { Plotly } from 'angular-plotly.js/src/app/shared/plotly.interface';
+import Figure = Plotly.Figure;
+
 @Component({
   selector: 'app-measure-scan',
   templateUrl: './measure-scan.page.html',
@@ -41,12 +44,37 @@ export class MeasureScanPage extends AutoUnsubscribePage {
 
   positionAccuracyThreshold = PositionAccuracyThreshold;
   measureSeriesParamsSelected = MeasureSeriesParamsSelected;
-  barPlot = {
-    data: [{ y: [10, 15, 13, 17], type: 'bar' }],
+  barPlot: Figure = {
+    data: [{ y: [], width: [], type: 'bar' }],
     layout: {
-      title: 'Simple Bar Plot',
-      width: window.innerWidth
-    }
+      showlegend: false,
+      dragmode: false,
+      width: window.innerWidth,
+      height: window.innerHeight * (1 - 0.7),
+      bargap: 0,
+      plot_bgcolor: '#3c1d7c',
+      paper_bgcolor: '#3c1d7c',
+      xaxis: {
+        linecolor: '#ffffff',
+        gridcolor: 'rgba(255,255,255,0.3)',
+        zeroline: false
+      },
+      yaxis: {
+        linecolor: '#ffffff',
+        gridcolor: 'rgba(255,255,255,0.3)',
+        zeroline: false
+      },
+      font: {
+        color: '#ffffff'
+      },
+      margin: {
+        l: 30,
+        r: 20,
+        t: 20,
+        b: 50
+      }
+    },
+    frames: { displayModeBar: false, locale: 'fr' }
   };
 
   isMeasureSeries = false;
@@ -128,7 +156,28 @@ export class MeasureScanPage extends AutoUnsubscribePage {
   }
 
   updateGraph(currentSeries?: MeasureSeries) {
-    console.log('grph', currentSeries);
+    if (currentSeries) {
+      const valuesAxis = currentSeries.measures.map(measure => measure.value.toFixed(3));
+      const width = currentSeries.measures.map(measure => measure.endTime! - measure.startTime);
+      const timeAxis = currentSeries.measures.map(measure =>
+        new Date((measure.startTime + measure.endTime!) / 2).toISOString()
+      );
+      const color = currentSeries.measures.map((measure, i) => (i % 2 === 0 ? '#81cfed' : '#00a0dd'));
+      console.log('color', color);
+      this.barPlot.data = [
+        {
+          x: timeAxis,
+          y: valuesAxis,
+          width: width,
+          hovertemplate: '%{y} μSv/h',
+          hoverinfo: 'x+y',
+          type: 'bar',
+          marker: {
+            color: color
+          }
+        }
+      ];
+    }
   }
 
   stopScan() {
