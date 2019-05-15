@@ -144,6 +144,14 @@
               currentSeries.measures.length, duration: currentSeries.startTime | date: 'HH:mm\'\'\'ss"' } }}
             </div>
           </div>
+          <div class="message" *ngIf="currentSeries.measures.length !== 0">
+            <div class="message-series">
+              {{'MEASURE_SERIES.LAST_MEASURE_VALUE' | translate: { lastMeasure:
+              currentSeries.measures[currentSeries.measures.length - 1].value | number : '1.3-3' } }}<span>
+                {{'MEASURES.DOSE_RATE_UNIT' | translate}}</span
+              >
+            </div>
+          </div>
           <div class="message">
             <div class="message-series" [ngSwitch]="currentSeries.params.paramSelected">
               <ng-container *ngSwitchCase="measureSeriesParamsSelected.measureDurationLimit">

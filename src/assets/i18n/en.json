@@ -188,6 +188,7 @@
     "ALERT_LOG_IN": "You must be logged in before you can fill out a manual measurement report.",
     "ALERT_SENSOR": "You must connect a sensor before you can fill out a manual measurement report.",
     "HITS_NUMBER": "Minimum no. of counts",
+    "LAST_MEASURE_VALUE": "Last measurement value : {{lastMeasure}}",
     "MEASURES_DURATION": "Minimum duration",
     "MEASURE_LIMIT": "Each measurement will end automatically after",
     "MESSAGE_SCAN": {
@@ -246,11 +247,5 @@
   },
   "SETTINGS": {
     "TITLE": "Settings"
-  },
-  "USB": {
-    "USB_PERMISSION": {
-      "NOTICE": "You need to accept the permission in order to use the USB sensor.",
-      "TITLE": "USB - Permission denied"
-    }
   }
 }
