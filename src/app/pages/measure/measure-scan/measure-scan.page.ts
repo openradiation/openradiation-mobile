@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
-import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -18,11 +17,6 @@ import {
 } from '../../../states/measures/measure';
 import { CancelMeasure, StartMeasureScan, StopMeasureScan } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
-
-import { Plotly } from 'angular-plotly.js/src/app/shared/plotly.interface';
-import Figure = Plotly.Figure;
-import * as PlotlyFR from 'plotly.js/lib/locales/fr.js';
-import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
   selector: 'app-measure-scan',
@@ -47,40 +41,6 @@ export class MeasureScanPage extends AutoUnsubscribePage {
 
   positionAccuracyThreshold = PositionAccuracyThreshold;
   measureSeriesParamsSelected = MeasureSeriesParamsSelected;
-  barPlot: Figure = {
-    data: [],
-    layout: {
-      showlegend: false,
-      dragmode: false,
-      width: window.innerWidth,
-      height: window.innerHeight * (1 - 0.7),
-      bargap: 0,
-      plot_bgcolor: '#3c1d7c',
-      paper_bgcolor: '#3c1d7c',
-      xaxis: {
-        linecolor: '#ffffff',
-        gridcolor: 'rgba(255,255,255,0.3)',
-        type: 'date',
-        fixedrange: true
-      },
-      yaxis: {
-        linecolor: '#ffffff',
-        gridcolor: 'rgba(255,255,255,0.3)',
-        rangemode: 'nonnegative',
-        fixedrange: true
-      },
-      font: {
-        color: '#ffffff'
-      },
-      margin: {
-        l: 30,
-        r: 20,
-        t: 20,
-        b: 50
-      }
-    },
-    frames: { displayModeBar: false, locale: 'fr' }
-  };
 
   isMeasureSeries = false;
 
@@ -114,12 +74,9 @@ export class MeasureScanPage extends AutoUnsubscribePage {
     protected router: Router,
     private store: Store,
     private navigationService: NavigationService,
-    private actions$: Actions,
-    private translateService: TranslateService,
-    private plotlyService: PlotlyService
+    private actions$: Actions
   ) {
     super(router);
-    this.plotlyService.getPlotly().register(PlotlyFR);
   }
 
   pageEnter() {
@@ -129,9 +86,6 @@ export class MeasureScanPage extends AutoUnsubscribePage {
     });
     this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
       if (connectedDevice) {
-        this.currentSeries$.subscribe(currentSeries => {
-          this.updateGraph(currentSeries);
-        });
         this.subscriptions.push(
           this.currentMeasure$.subscribe(measure => this.updateHitsAccuracy(connectedDevice, measure)),
           this.actions$.pipe(ofActionSuccessful(StopMeasureScan)).subscribe(() => {
@@ -160,45 +114,6 @@ export class MeasureScanPage extends AutoUnsubscribePage {
         this.hitsAccuracy = HitsAccuracy.Start;
       }
       this.hitsAccuracyWidth = Math.min((measure.hitsAccuracy / device.hitsAccuracyThreshold.accurate) * 100, 100);
-    }
-  }
-
-  updateGraph(currentSeries?: MeasureSeries) {
-    if (currentSeries) {
-      const x = currentSeries.measures.map(measure => new Date((measure.startTime + measure.endTime!) / 2));
-      const y = currentSeries.measures.map(measure => measure.value.toFixed(3));
-      const width = currentSeries.measures.map(measure => measure.endTime! - measure.startTime);
-      const color = currentSeries.measures.map((measure, i) => (i % 2 === 0 ? '#81cfed' : '#00a0dd'));
-      this.barPlot.data = [
-        {
-          x,
-          y,
-          width,
-          hovertemplate: `%{y} ${this.translateService.instant('MEASURES.DOSE_RATE_UNIT')}<extra></extra>`,
-          type: 'bar',
-          marker: {
-            color
-          }
-        }
-      ];
-      this.barPlot.layout = {
-        ...this.barPlot.layout,
-        xaxis: {
-          ...this.barPlot.layout.xaxis,
-          range:
-            currentSeries.measures.length > 0
-              ? [
-                  new Date(currentSeries.measures[0].startTime),
-                  new Date(currentSeries.measures[currentSeries.measures.length - 1].endTime!)
-                ]
-              : [new Date(), new Date(new Date().getTime() + 60000)]
-        },
-        yaxis: {
-          ...this.barPlot.layout.yaxis,
-          autorange: currentSeries.measures.length > 0,
-          range: currentSeries.measures.length > 0 ? null : [0, 1]
-        }
-      };
     }
   }
 
