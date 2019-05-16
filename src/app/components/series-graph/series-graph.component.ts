@@ -2,14 +2,14 @@ import { Component, Input, OnChanges } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { MeasureSeries } from '../../states/measures/measure';
 
+import Figure = Plotly.Figure;
+import { Select } from '@ngxs/store';
 import { PlotlyService } from 'angular-plotly.js';
 import { Plotly } from 'angular-plotly.js/src/app/shared/plotly.interface';
 import * as PlotlyFR from 'plotly.js/lib/locales/fr.js';
-import Figure = Plotly.Figure;
-import { Select } from '@ngxs/store';
-import { UserState } from '../../states/user/user.state';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { UserState } from '../../states/user/user.state';
 
 @Component({
   selector: 'app-series-graph',
