@@ -165,9 +165,7 @@ export class MeasureScanPage extends AutoUnsubscribePage {
 
   updateGraph(currentSeries?: MeasureSeries) {
     if (currentSeries) {
-      const x = currentSeries.measures.map(measure =>
-        new Date((measure.startTime + measure.endTime!) / 2).toISOString()
-      );
+      const x = currentSeries.measures.map(measure => new Date((measure.startTime + measure.endTime!) / 2));
       const y = currentSeries.measures.map(measure => measure.value.toFixed(3));
       const width = currentSeries.measures.map(measure => measure.endTime! - measure.startTime);
       const color = currentSeries.measures.map((measure, i) => (i % 2 === 0 ? '#81cfed' : '#00a0dd'));
@@ -190,10 +188,10 @@ export class MeasureScanPage extends AutoUnsubscribePage {
           range:
             currentSeries.measures.length > 0
               ? [
-                  new Date(currentSeries.measures[0].startTime).toISOString(),
-                  new Date(currentSeries.measures[currentSeries.measures.length - 1].endTime!).toISOString()
+                  new Date(currentSeries.measures[0].startTime),
+                  new Date(currentSeries.measures[currentSeries.measures.length - 1].endTime!)
                 ]
-              : [new Date().toISOString(), new Date(new Date().getTime() + 60000).toISOString()]
+              : [new Date(), new Date(new Date().getTime() + 60000)]
         },
         yaxis: {
           ...this.barPlot.layout.yaxis,
