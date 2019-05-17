@@ -46,6 +46,10 @@ const routes: Routes = [
             loadChildren: './settings/measures-param/measures-param.module#MeasuresParamPageModule'
           },
           {
+            path: 'plane-mode',
+            loadChildren: './settings/plane-mode/plane-mode.module#PlaneModePageModule'
+          },
+          {
             path: 'log-in',
             loadChildren: './settings/log-in/log-in.module#LogInPageModule'
           }

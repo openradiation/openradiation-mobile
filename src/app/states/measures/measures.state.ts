@@ -24,8 +24,10 @@ import {
   DeleteMeasure,
   DisableAutoPublish,
   DisableExpertMode,
+  DisablePlaneMode,
   EnableAutoPublish,
   EnableExpertMode,
+  EnablePLaneMode,
   PositionChanged,
   PublishMeasure,
   RetrieveV1Measures,
@@ -75,6 +77,7 @@ export interface MeasuresStateModel {
   params: {
     expertMode: boolean;
     autoPublish: boolean;
+    planeMode: boolean;
   };
   v1MeasuresRetrieved: boolean;
 }
@@ -88,7 +91,8 @@ export interface MeasuresStateModel {
     canEndCurrentScan: false,
     params: {
       expertMode: false,
-      autoPublish: false
+      autoPublish: false,
+      planeMode: false
     }
   }
 })
@@ -109,6 +113,11 @@ export class MeasuresState implements NgxsOnInit {
   @Selector()
   static autoPublish({ params }: MeasuresStateModel): boolean {
     return params.autoPublish;
+  }
+
+  @Selector()
+  static planeMode({ params }: MeasuresStateModel): boolean {
+    return params.planeMode;
   }
 
   @Selector()
@@ -182,6 +191,22 @@ export class MeasuresState implements NgxsOnInit {
     const { params } = getState();
     patchState({
       params: { ...params, autoPublish: false }
+    });
+  }
+
+  @Action(EnablePLaneMode)
+  enablePlaneMode({ getState, patchState }: StateContext<MeasuresStateModel>) {
+    const { params } = getState();
+    patchState({
+      params: { ...params, planeMode: true }
+    });
+  }
+
+  @Action(DisablePlaneMode)
+  disablePlaneMode({ getState, patchState }: StateContext<MeasuresStateModel>) {
+    const { params } = getState();
+    patchState({
+      params: { ...params, planeMode: false }
     });
   }
 

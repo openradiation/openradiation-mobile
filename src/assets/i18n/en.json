@@ -161,6 +161,12 @@
     "MEASURE": "Measurement",
     "MEASURE_START": "Measurement start",
     "ONGOING": "Measurement in progress",
+    "PLANE_MODE": "Plane mode",
+    "PLANE_MODE_NOTICE": {
+      "PART1": "",
+      "PART2": "",
+      "PART3": "More on <a onclick=\"window.open('https://www.google.fr', '_system')\">link to a COSMIC project educational page</a>"
+    },
     "REPORT_LATITUDE": "Latitude",
     "REPORT_LONGITUDE": "Longitude",
     "SENSOR_POSITION": {
