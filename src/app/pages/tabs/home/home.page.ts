@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { Location } from '@mauron85/cordova-plugin-background-geolocation';
+import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
+import { AlertService } from '../../../services/alert.service';
 import { NavigationService } from '../../../services/navigation.service';
 import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
@@ -22,6 +25,8 @@ export class HomePage extends AutoUnsubscribePage {
   positionAccuracy$: Observable<number>;
   @Select(MeasuresState.planeMode)
   planeMode$: Observable<boolean>;
+  @Select(MeasuresState.currentPosition)
+  currentPosition$: Observable<Location>;
 
   canStartMeasure: Observable<boolean>;
 
@@ -31,6 +36,8 @@ export class HomePage extends AutoUnsubscribePage {
     protected router: Router,
     private store: Store,
     private actions$: Actions,
+    private alertService: AlertService,
+    private translateService: TranslateService,
     private navigationService: NavigationService
   ) {
     super(router);
@@ -43,7 +50,16 @@ export class HomePage extends AutoUnsubscribePage {
     this.subscriptions.push(
       this.actions$
         .pipe(ofActionSuccessful(StartMeasure))
-        .subscribe(() => this.navigationService.navigateRoot(['measure', 'scan']))
+        .subscribe(() => this.navigationService.navigateRoot(['measure', 'scan'])),
+      this.planeMode$.pipe(take(1)).subscribe(planeMode => {
+        if (planeMode === false) {
+          this.currentPosition$.subscribe(position => {
+            if (position.altitude > 6000) {
+              this.showElevatedAltitudeMessage();
+            }
+          });
+        }
+      })
     );
   }
 
@@ -51,8 +67,25 @@ export class HomePage extends AutoUnsubscribePage {
     this.navigationService.navigateForward(['tabs', 'settings', 'devices']);
   }
 
+  showElevatedAltitudeMessage() {
+    this.alertService.show({
+      header: this.translateService.instant('HOME.ELEVATED_ALTITUDE'),
+      message: this.translateService.instant('HOME.ELEVATED_ALTITUDE_MESSAGE'),
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: this.translateService.instant('GENERAL.CANCEL')
+        },
+        {
+          text: this.translateService.instant('HOME.SWITCH_PLANE_MODE'),
+          handler: () => this.goToPlaneMode()
+        }
+      ]
+    });
+  }
+
   goToPlaneMode() {
-    this.navigationService.navigateForward(['tabs', 'settings', 'plane-mode']);
+    this.navigationService.navigateForward(['tabs', 'settings', 'plane-mode'], { animated: true });
   }
 
   startMeasure() {

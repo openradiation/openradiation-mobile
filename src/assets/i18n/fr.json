@@ -93,8 +93,11 @@
   },
   "HOME": {
     "CONNECTED_SENSOR": "Capteur connecté",
+    "ELEVATED_ALTITUDE": "Altitude importante détectée",
+    "ELEVATED_ALTITUDE_MESSAGE": "Si vous êtes en avion, merci de choisir le mode de mesure avion.",
     "MEASURE_MODE": "Mode de mesure",
     "NO_SENSORS": "Pas de capteur",
+    "SWITCH_PLANE_MODE": "Activer le mode avion",
     "TITLE": "mesurer la radioactivité"
   },
   "LANGUAGE": {
