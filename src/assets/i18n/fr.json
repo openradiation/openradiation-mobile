@@ -30,6 +30,7 @@
     "CONNEXION_ERROR": "Connexion impossible : {{message}}",
     "DATE": "Date",
     "END": "Fin",
+    "ENVIRONMENT": "Environement",
     "GOOD": "Bon",
     "GO_TO_SETTINGS": "Accéder aux paramètres",
     "HITS": {
@@ -50,6 +51,7 @@
     },
     "NO": "Non",
     "OK": "Ok",
+    "PLANE": "Avion",
     "POOR": "Moyen",
     "SHARE": "Partager",
     "SUBMIT": "Valider",
@@ -91,6 +93,7 @@
   },
   "HOME": {
     "CONNECTED_SENSOR": "Capteur connecté",
+    "MEASURE_MODE": "Mode de mesure",
     "NO_SENSORS": "Pas de capteur",
     "TITLE": "mesurer la radioactivité"
   },

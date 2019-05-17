@@ -9,6 +9,7 @@ ion-content {
     height: 100%;
     .logo {
       width: 66%;
+      margin-top: 20px;
       img {
         width: 100%;
       }
@@ -30,13 +31,16 @@ ion-content {
       font-weight: 200;
       border-radius: 5px;
       height: auto;
-      margin: 0;
-      min-height: 30px;
+      margin: 0 0 10px 0;
+      min-height: 60px;
       --padding-top: 4px;
       --padding-end: 4px;
       --padding-bottom: 4px;
       --padding-start: 4px;
       --color-focused: white;
+      --color-activated: white;
+      --background-focused: transparent;
+      --background-activated: transparent;
     }
     .connected-device-header {
       background-color: $base-color;
@@ -46,17 +50,25 @@ ion-content {
       font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
       font-size: 18px;
       font-weight: 200;
+      margin: 0 0 0 0;
       padding: 4px;
       height: 30px;
       line-height: 30px;
       text-align: center;
+      --color-focused: white;
+      --color-activated: white;
+      --background-focused: transparent;
+      --background-activated: transparent;
     }
     .connected-device-button {
       @extend .device-button;
+      margin: 0 0 10px 0;
       border-radius: 0 0 5px 5px;
+      min-height: 30px;
     }
     app-round-button {
       margin: auto 0;
+      width: 70%;
     }
   }
 }

@@ -8,7 +8,9 @@
     </div>
     <app-gps-indicator [accuracy]="positionAccuracy$ | async"></app-gps-indicator>
     <ng-container *ngIf="connectedDevice$ | async as connectedDevice; else noConnectedDevice">
-      <div class="connected-device-header">{{'HOME.CONNECTED_SENSOR' | translate}}</div>
+      <ion-button class="connected-device-header" fill="clear" (click)="goToDevices()">
+        {{'HOME.CONNECTED_SENSOR' | translate}}
+      </ion-button>
       <ion-button class="connected-device-button" fill="clear" (click)="goToDevices()">
         {{connectedDevice.apparatusVersion}}
       </ion-button>
@@ -16,6 +18,22 @@
     <ng-template #noConnectedDevice>
       <ion-button class="device-button" fill="clear" (click)="goToDevices()">
         {{'HOME.NO_SENSORS' | translate}}<br />{{'GENERAL.CLICK_HERE' | translate}}
+      </ion-button>
+    </ng-template>
+    <ng-container *ngIf="planeMode$ | async; else planeModeFalse">
+      <ion-button class="connected-device-header" fill="clear" (click)="goToPlaneMode()">
+        {{'HOME.MEASURE_MODE' | translate}}
+      </ion-button>
+      <ion-button class="connected-device-button" fill="clear" (click)="goToPlaneMode()">
+       {{'GENERAL.PLANE' | translate }}
+      </ion-button>
+    </ng-container>
+    <ng-template #planeModeFalse>
+      <ion-button class="connected-device-header" fill="clear" (click)="goToPlaneMode()">
+        {{'HOME.MEASURE_MODE' | translate}}
+      </ion-button>
+      <ion-button class="connected-device-button" fill="clear" (click)="goToPlaneMode()">
+        {{'GENERAL.ENVIRONMENT' | translate }}
       </ion-button>
     </ng-template>
     <app-round-button

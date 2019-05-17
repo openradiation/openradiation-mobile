@@ -20,6 +20,8 @@ export class HomePage extends AutoUnsubscribePage {
   connectedDevice$: Observable<AbstractDevice | undefined>;
   @Select(MeasuresState.positionAccuracy)
   positionAccuracy$: Observable<number>;
+  @Select(MeasuresState.planeMode)
+  planeMode$: Observable<boolean>;
 
   canStartMeasure: Observable<boolean>;
 
@@ -47,6 +49,10 @@ export class HomePage extends AutoUnsubscribePage {
 
   goToDevices() {
     this.navigationService.navigateForward(['tabs', 'settings', 'devices']);
+  }
+
+  goToPlaneMode() {
+    this.navigationService.navigateForward(['tabs', 'settings', 'plane-mode']);
   }
 
   startMeasure() {
