@@ -6,7 +6,7 @@ import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { NavigationService } from '../../../../services/navigation.service';
 import { DateService } from '../../../../states/measures/date.service';
-import { Measure } from '../../../../states/measures/measure';
+import { Measure, MeasureEnvironment } from '../../../../states/measures/measure';
 import { StartMeasureReport, StopMeasure, StopMeasureReport } from '../../../../states/measures/measures.action';
 import { MeasuresState, MeasuresStateModel } from '../../../../states/measures/measures.state';
 import { AbstractMeasureReportPage } from '../abstact-measure-report.page';
@@ -21,6 +21,7 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
   expertMode$: Observable<boolean>;
 
   currentMeasure?: Measure;
+  planeMode: boolean;
   inputDisabled = false;
 
   url = '/measure/report';
@@ -46,18 +47,28 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
           ({ measures }: { measures: MeasuresStateModel }) => measures
         );
         this.currentMeasure = currentMeasure;
-        this.reportScan = !this.currentMeasure!.manualReporting;
-        this.inputDisabled = this.reportScan || this.currentMeasure!.sent;
-        this.initMeasurementEnvironmentOptions(this.currentMeasure!);
-        if (measureReport) {
-          this.measureReportForm = this.formBuilder.group({ ...measureReport.model, tags: [measureReport.model.tags] });
-          if (this.currentMeasure!.sent) {
-            this.measureReportForm.get('measurementEnvironment')!.disable();
-            this.measureReportForm.get('measurementHeight')!.disable();
-            this.measureReportForm.get('rain')!.disable();
-            this.measureReportForm.get('description')!.disable();
-            this.measureReportForm.get('tags')!.disable();
-            this.measureReportForm.get('enclosedObject')!.disable();
+        if (this.currentMeasure) {
+          this.reportScan = !this.currentMeasure.manualReporting;
+          this.inputDisabled = this.reportScan || this.currentMeasure.sent;
+          this.initMeasurementEnvironmentOptions(this.currentMeasure);
+          if (measureReport) {
+            this.measureReportForm = this.formBuilder.group({
+              ...measureReport.model,
+              tags: [measureReport.model.tags]
+            });
+            this.planeMode = measureReport.model.measurementEnvironment === MeasureEnvironment.Plane;
+            this.positionChangeAltitudeOverLimit = AbstractMeasureReportPage.positionChangeAltitudeOverLimit(
+              this.currentMeasure,
+              measureReport.model.measurementEnvironment!
+            );
+            if (this.currentMeasure.sent) {
+              this.measureReportForm.get('measurementEnvironment')!.disable();
+              this.measureReportForm.get('measurementHeight')!.disable();
+              this.measureReportForm.get('rain')!.disable();
+              this.measureReportForm.get('description')!.disable();
+              this.measureReportForm.get('tags')!.disable();
+              this.measureReportForm.get('enclosedObject')!.disable();
+            }
           }
         }
       });

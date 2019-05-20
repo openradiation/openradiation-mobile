@@ -154,7 +154,6 @@
       "COUNTRYSIDE": "À la campagne",
       "INSIDE": "À l'intérieur",
       "ON_THE_ROAD": "Sur la route",
-      "PLANE": "En avion",
       "TITLE": "Environnement de la mesure",
       "TITLE_SERIES": "Environnement des mesures"
     },
@@ -166,6 +165,7 @@
     "INIT": "Initialisation",
     "MEASURE": "Mesure",
     "MEASURE_START": "Début de la mesure",
+    "MESSAGE_ALTITUDE": "Altitude importante détectée : si vous êtes en avion, merci de recommencer cette mesure en choisissant au préalable le mode de mesure avion",
     "ONGOING": "Mesure en cours",
     "PLANE_MODE": "Mode avion",
     "PLANE_MODE_NOTICE": {
@@ -203,6 +203,7 @@
     "LAST_MEASURE_VALUE": "Dernière valeur mesurée : {{lastMeasure}}",
     "MEASURES_DURATION": "Durée minimale",
     "MEASURE_LIMIT": "Chaque mesure se terminera automatiquement après",
+    "MESSAGE_ALTITUDE": "Altitude importante détectée : si vous êtes en avion, merci de recommencer ces mesures en choisissant au préalable le mode de mesure avion",
     "MESSAGE_SCAN": {
       "NONE": "Première mesure en cours",
       "PLURAL": "{{count}} mesures prises depuis {{duration}}",

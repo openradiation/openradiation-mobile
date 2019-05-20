@@ -28,6 +28,7 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
   measureReportForm?: FormGroup;
   reportScan = true;
   positionChangeSpeedOverLimit = false;
+  positionChangeAltitudeOverLimit = false;
 
   measurementEnvironmentOptions: SelectIconOption[];
 
@@ -125,12 +126,6 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
         iconOff: 'assets/img/icon-ontheroad-off.png',
         label: <string>_('MEASURES.ENVIRONMENT.ON_THE_ROAD'),
         value: MeasureEnvironment.OnTheRoad
-      },
-      {
-        iconOn: 'assets/img/icon-plane-on.png',
-        iconOff: 'assets/img/icon-plane-off.png',
-        label: <string>_('MEASURES.ENVIRONMENT.PLANE'),
-        value: MeasureEnvironment.Plane
       }
     ];
   }
@@ -193,6 +188,10 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
       measure.endAccuracy !== null &&
       measure.endAccuracy < PositionAccuracyThreshold.No
     );
+  }
+
+  protected static positionChangeAltitudeOverLimit(measure: Measure, environment: MeasureEnvironment): boolean {
+    return environment !== MeasureEnvironment.Plane && measure.altitude! > 6000;
   }
 
   protected abstract initMeasurementEnvironmentOptions(measure: T): void;

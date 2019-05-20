@@ -154,7 +154,6 @@
       "COUNTRYSIDE": "Countryside",
       "INSIDE": "Inside",
       "ON_THE_ROAD": "On the road",
-      "PLANE": "Plane",
       "TITLE": "Measurement environment",
       "TITLE_SERIES": "Measurements environment"
     },
@@ -166,6 +165,7 @@
     "INIT": "Start-up",
     "MEASURE": "Measurement",
     "MEASURE_START": "Measurement start",
+    "MESSAGE_ALTITUDE": "Significant altitude detected: if you are on a plane, please repeat this measurement by choosing the plane mode first",
     "ONGOING": "Measurement in progress",
     "PLANE_MODE": "Plane mode",
     "PLANE_MODE_NOTICE": {
@@ -203,6 +203,7 @@
     "LAST_MEASURE_VALUE": "Last measurement value : {{lastMeasure}}",
     "MEASURES_DURATION": "Minimum duration",
     "MEASURE_LIMIT": "Each measurement will end automatically after",
+    "MESSAGE_ALTITUDE": "Significant altitude detected: if you are on a plane, please repeat these measurements by choosing the plane mode first",
     "MESSAGE_SCAN": {
       "NONE": "First measurement in progress",
       "PLURAL": "{{count}} measurements taken since {{duration}}",

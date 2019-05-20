@@ -4,7 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { NavigationService } from '../../../../services/navigation.service';
-import { MeasureSeries, MeasureSeriesParamsSelected } from '../../../../states/measures/measure';
+import {
+  MeasureEnvironment,
+  MeasureSeries,
+  MeasureSeriesParamsSelected,
+  MeasureSeriesReport
+} from '../../../../states/measures/measure';
 import {
   StartMeasureSeriesReport,
   StopMeasureSeries,
@@ -20,6 +25,7 @@ import { AbstractMeasureReportPage } from '../abstact-measure-report.page';
 })
 export class MeasureSeriesReportPage extends AbstractMeasureReportPage<MeasureSeries> {
   currentSeries?: MeasureSeries;
+  planeMode: boolean;
   measureSeriesParamsSelected = MeasureSeriesParamsSelected;
 
   url = '/measure/report-series';
@@ -43,26 +49,43 @@ export class MeasureSeriesReportPage extends AbstractMeasureReportPage<MeasureSe
         ({ measures }: { measures: MeasuresStateModel }) => measures
       );
       this.currentSeries = currentSeries;
-      this.initMeasurementEnvironmentOptions(this.currentSeries!);
-      if (measureSeriesReport) {
-        this.measureReportForm = this.formBuilder.group({
-          ...measureSeriesReport.model,
-          tags: [measureSeriesReport.model.tags]
-        });
-        if (this.currentSeries!.sent) {
-          this.measureReportForm.get('measurementEnvironment')!.disable();
-          this.measureReportForm.get('measurementHeight')!.disable();
-          this.measureReportForm.get('rain')!.disable();
-          this.measureReportForm.get('description')!.disable();
-          this.measureReportForm.get('tags')!.disable();
+      if (this.currentSeries) {
+        this.initMeasurementEnvironmentOptions(this.currentSeries);
+        this.planeMode = this.currentSeries.measures.some(
+          measure => measure.measurementEnvironment === MeasureEnvironment.Plane
+        );
+        if (measureSeriesReport) {
+          this.measureReportForm = this.formBuilder.group({
+            ...measureSeriesReport.model,
+            tags: [measureSeriesReport.model.tags]
+          });
+          if (measureSeriesReport.model.measurementEnvironment) {
+            this.positionChangeAltitudeOverLimit = this.initPositionChangeAltitudeOverLimit(
+              this.currentSeries,
+              measureSeriesReport.model.measurementEnvironment
+            );
+          }
+          if (this.currentSeries.sent) {
+            this.measureReportForm.get('measurementEnvironment')!.disable();
+            this.measureReportForm.get('measurementHeight')!.disable();
+            this.measureReportForm.get('rain')!.disable();
+            this.measureReportForm.get('description')!.disable();
+            this.measureReportForm.get('tags')!.disable();
+          }
         }
+        this.init();
       }
-      this.init();
     });
   }
 
   canPublish(measureSeries: MeasureSeries): boolean {
     return measureSeries.measures.some(measure => AbstractMeasureReportPage.canPublishSingleMeasure(measure));
+  }
+
+  initPositionChangeAltitudeOverLimit(measureSeries: MeasureSeries, environment: MeasureEnvironment): boolean {
+    return measureSeries.measures.some(measure =>
+      AbstractMeasureReportPage.positionChangeAltitudeOverLimit(measure, environment)
+    );
   }
 
   stopReport() {

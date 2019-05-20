@@ -8,6 +8,7 @@ import { AbstractDevice } from '../devices/abstract-device';
 import { DateService } from './date.service';
 import {
   Measure,
+  MeasureEnvironment,
   MeasureReport,
   MeasureSeries,
   MeasureSeriesParams,
@@ -439,12 +440,15 @@ export class MeasuresState implements NgxsOnInit {
 
   @Action(StopMeasureScan)
   stopMeasureScan({ getState, patchState }: StateContext<MeasuresStateModel>, { device }: StopMeasureScan) {
-    const { currentMeasure, currentSeries, currentPosition } = getState();
+    const { currentMeasure, currentSeries, currentPosition, params } = getState();
     if (currentMeasure) {
       const patch: Partial<MeasuresStateModel> = {
         canEndCurrentScan: false
       };
       const updatedMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
+      updatedMeasure.measurementEnvironment = params.planeMode
+        ? MeasureEnvironment.Plane
+        : currentMeasure.measurementEnvironment;
       if (currentSeries) {
         patch.currentMeasure = undefined;
         if (

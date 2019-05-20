@@ -10,6 +10,9 @@
         <div class="message" *ngIf="positionChangeSpeedOverLimit">
           <div class="message-style">{{'HISTORY.MESSAGE_SPEED' | translate}}</div>
         </div>
+        <div class="message" *ngIf="positionChangeAltitudeOverLimit">
+          <div class="message-style">{{'MEASURES.MESSAGE_ALTITUDE' | translate}}</div>
+        </div>
         <form class="form" [formGroup]="measureReportForm" ngxsForm="measures.measureReport">
           <div class="position">
             <ion-list>
@@ -93,29 +96,31 @@
               </ion-item>
             </ion-list>
           </div>
-          <div class="environment">
-            <app-select-icon
-              [options]="measurementEnvironmentOptions"
-              formControlName="measurementEnvironment"
-              [title]="'MEASURES.ENVIRONMENT.TITLE' | translate"
-              [required]="positionChangeSpeedOverLimit"
-            >
-            </app-select-icon>
-          </div>
-          <div class="options">
-            <app-select-icon
-              [options]="measurementHeightOptions"
-              formControlName="measurementHeight"
-              [title]="'MEASURES.SENSOR_POSITION.TITLE' | translate"
-            >
-            </app-select-icon>
-            <app-select-icon
-              [options]="rainOptions"
-              formControlName="rain"
-              [title]="'MEASURES.WEATHER.TITLE' | translate"
-            >
-            </app-select-icon>
-          </div>
+          <ng-container *ngIf="!planeMode">
+            <div class="environment">
+              <app-select-icon
+                [options]="measurementEnvironmentOptions"
+                formControlName="measurementEnvironment"
+                [title]="'MEASURES.ENVIRONMENT.TITLE' | translate"
+                [required]="positionChangeSpeedOverLimit"
+              >
+              </app-select-icon>
+            </div>
+            <div class="options">
+              <app-select-icon
+                [options]="measurementHeightOptions"
+                formControlName="measurementHeight"
+                [title]="'MEASURES.SENSOR_POSITION.TITLE' | translate"
+              >
+              </app-select-icon>
+              <app-select-icon
+                [options]="rainOptions"
+                formControlName="rain"
+                [title]="'MEASURES.WEATHER.TITLE' | translate"
+              >
+              </app-select-icon>
+            </div>
+          </ng-container>
           <ng-container *ngIf="login$ | async">
             <div class="separator"></div>
             <ion-list>
