@@ -160,6 +160,10 @@
     "EXPERT": "Expert",
     "EXPERT_MODE": "Expert mode",
     "FIABILITY": "Reliability",
+    "FLIGHT": {
+      "FLIGHT_NUMBER": "Flight number",
+      "SEAT_NUMBER": "Seat number"
+    },
     "HITS_NUMBER": "No. of counts",
     "HITS_PER_MIN": "No. of counts/min.",
     "INIT": "Start-up",
@@ -177,7 +181,9 @@
     "REPORT_LONGITUDE": "Longitude",
     "SENSOR_POSITION": {
       "1_METER_HIGH": "1 m above the ground",
+      "AIRCRAFT_SIDE": "Aircraft side",
       "FLOOR": "On the ground",
+      "NO_AIRCRAFT_SIDE": "Aisle side",
       "TITLE": "Sensor position"
     },
     "SENSOR_TEMPERATURE": "Sensor temperature",
@@ -188,8 +194,10 @@
     "VOLTAGE": "Voltage (V)",
     "WEATHER": {
       "NO_RAIN": "No rain",
+      "NO_STORM": "No storm",
       "RAIN": "Rain",
-      "TITLE": "Weather"
+      "STORM": "Storm",
+      "TITLE_RAIN": "Weather"
     }
   },
   "MEASURE_MANUAL": {

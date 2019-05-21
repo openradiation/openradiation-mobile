@@ -65,7 +65,7 @@
                   [placeholder]="inputDisabled ? '-' : '00\'00\'\''"
                 ></ion-datetime>
               </ion-item>
-              <ion-item class="has-suffix long-label" [ngClass]="{'custom-disabled': inputDisabled}">
+              <ion-item class="input-right has-suffix long-label" [ngClass]="{'custom-disabled': inputDisabled}">
                 <ion-label position="fixed">{{'MEASURES.SENSOR_TEMPERATURE' | translate}}</ion-label>
                 <ion-input
                   formControlName="temperature"
@@ -74,7 +74,7 @@
                 ></ion-input>
                 <span class="unit">°C</span>
               </ion-item>
-              <ion-item [ngClass]="{'custom-disabled': inputDisabled}">
+              <ion-item class="input-right" [ngClass]="{'custom-disabled': inputDisabled}">
                 <ion-label position="fixed">{{'MEASURES.HITS_NUMBER' | translate}}</ion-label>
                 <ion-input
                   formControlName="hitsNumber"
@@ -82,7 +82,7 @@
                   [placeholder]="inputDisabled ? '-' : '0'"
                 ></ion-input>
               </ion-item>
-              <ion-item class="has-suffix" [ngClass]="{'custom-disabled': inputDisabled}">
+              <ion-item class="input-right has-suffix" [ngClass]="{'custom-disabled': inputDisabled}">
                 <ion-label position="fixed"
                   >{{'MEASURES.TITLE' | translate}}<span *ngIf="!reportScan"> *</span></ion-label
                 >
@@ -96,7 +96,7 @@
               </ion-item>
             </ion-list>
           </div>
-          <ng-container *ngIf="!planeMode">
+          <ng-container *ngIf="!planeMode; else environmentMode">
             <div class="environment">
               <app-select-icon
                 [options]="measurementEnvironmentOptions"
@@ -116,11 +116,46 @@
               <app-select-icon
                 [options]="rainOptions"
                 formControlName="rain"
-                [title]="'MEASURES.WEATHER.TITLE' | translate"
+                [title]="'MEASURES.WEATHER.TITLE_RAIN' | translate"
               >
               </app-select-icon>
             </div>
           </ng-container>
+          <ng-template #environmentMode>
+            <div class="title">Informations de vol</div>
+            <ion-list>
+              <ion-item class="description">
+                <ion-input
+                  formControlName="flightNumber"
+                  maxlength="6"
+                  [placeholder]="'MEASURES.FLIGHT.FLIGHT_NUMBER' | translate"
+                >
+                </ion-input>
+              </ion-item>
+              <ion-item class="description">
+                <ion-input
+                  formControlName="seatNumber"
+                  maxlength="4"
+                  [placeholder]="'MEASURES.FLIGHT.SEAT_NUMBER' | translate"
+                >
+                </ion-input>
+              </ion-item>
+            </ion-list>
+            <div class="options">
+              <app-select-icon
+                [options]="stormOptions"
+                formControlName="storm"
+                [title]="'MEASURES.WEATHER.TITLE_RAIN' | translate"
+              >
+              </app-select-icon>
+              <app-select-icon
+                [options]="aircraftWindowOptions"
+                formControlName="aircraftWindow"
+                [title]="'MEASURES.SENSOR_POSITION.TITLE' | translate"
+              >
+              </app-select-icon>
+            </div>
+          </ng-template>
           <ng-container *ngIf="login$ | async">
             <div class="separator"></div>
             <ion-list>

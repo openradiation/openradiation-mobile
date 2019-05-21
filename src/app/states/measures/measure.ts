@@ -51,6 +51,10 @@ export class Measure extends AbstractMeasure {
   enclosedObject?: string;
   measurementEnvironment?: MeasureEnvironment;
   rain?: boolean;
+  storm?: boolean;
+  aircraftWindow?: boolean;
+  flightNumber?: string;
+  seatNumber?: string;
   steps?: Step[] = [];
   hitsAccuracy?: number;
 
@@ -171,6 +175,10 @@ export interface MeasureReport {
   tags: string[] | undefined;
   measurementEnvironment: MeasureEnvironment | undefined;
   rain: boolean | undefined;
+  storm: boolean | undefined;
+  aircraftWindow: boolean | undefined;
+  flightNumber: string | undefined;
+  seatNumber: string | undefined;
 }
 
 export interface MeasureSeriesParams {

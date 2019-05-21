@@ -62,6 +62,36 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
     }
   ];
 
+  stormOptions: SelectIconOption[] = [
+    {
+      iconOn: 'assets/img/icon-plane-on.png',
+      iconOff: 'assets/img/icon-plane-off.png',
+      label: <string>_('MEASURES.WEATHER.NO_STORM'),
+      value: false
+    },
+    {
+      iconOn: 'assets/img/icon-plane-on.png',
+      iconOff: 'assets/img/icon-plane-off.png',
+      label: <string>_('MEASURES.WEATHER.STORM'),
+      value: true
+    }
+  ];
+
+  aircraftWindowOptions: SelectIconOption[] = [
+    {
+      iconOn: 'assets/img/icon-plane-on.png',
+      iconOff: 'assets/img/icon-plane-off.png',
+      label: <string>_('MEASURES.SENSOR_POSITION.NO_AIRCRAFT_SIDE'),
+      value: false
+    },
+    {
+      iconOn: 'assets/img/icon-plane-on.png',
+      iconOff: 'assets/img/icon-plane-off.png',
+      label: <string>_('MEASURES.SENSOR_POSITION.AIRCRAFT_SIDE'),
+      value: true
+    }
+  ];
+
   protected constructor(
     protected router: Router,
     protected store: Store,

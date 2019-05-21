@@ -523,7 +523,11 @@ export class MeasuresState implements NgxsOnInit {
         tags: currentMeasure.tags,
         measurementEnvironment: currentMeasure.measurementEnvironment,
         rain: currentMeasure.rain,
-        enclosedObject: currentMeasure.enclosedObject
+        enclosedObject: currentMeasure.enclosedObject,
+        storm: currentMeasure.storm,
+        aircraftWindow: currentMeasure.aircraftWindow,
+        flightNumber: currentMeasure.flightNumber,
+        seatNumber: currentMeasure.seatNumber
       };
       patchState({
         measureReport: {
@@ -590,6 +594,10 @@ export class MeasuresState implements NgxsOnInit {
         measurementHeight: measureReport.model.measurementHeight,
         measurementEnvironment: measureReport.model.measurementEnvironment,
         rain: measureReport.model.rain,
+        storm: measureReport.model.storm,
+        flightNumber: measureReport.model.flightNumber,
+        seatNumber: measureReport.model.seatNumber,
+        aircraftWindow: measureReport.model.aircraftWindow,
         description: measureReport.model.description,
         tags: measureReport.model.tags,
         enclosedObject: measureReport.model.enclosedObject

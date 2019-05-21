@@ -160,6 +160,10 @@
     "EXPERT": "Expert",
     "EXPERT_MODE": "Mode expert",
     "FIABILITY": "Fiabilité",
+    "FLIGHT": {
+      "FLIGHT_NUMBER": "Numéro de vol",
+      "SEAT_NUMBER": "Numéro de siège"
+    },
     "HITS_NUMBER": "Nb coups",
     "HITS_PER_MIN": "Nb coups/min",
     "INIT": "Initialisation",
@@ -177,7 +181,9 @@
     "REPORT_LONGITUDE": "Longitude",
     "SENSOR_POSITION": {
       "1_METER_HIGH": "À 1 mètre du sol",
+      "AIRCRAFT_SIDE": "Hublot",
       "FLOOR": "Au sol",
+      "NO_AIRCRAFT_SIDE": "Couloir",
       "TITLE": "Position du capteur"
     },
     "SENSOR_TEMPERATURE": "Température capteur",
@@ -188,8 +194,10 @@
     "VOLTAGE": "Tension (V)",
     "WEATHER": {
       "NO_RAIN": "Pas de pluie",
+      "NO_STORM": "Pas d'orage",
       "RAIN": "Pluie",
-      "TITLE": "Météo"
+      "STORM": "Orage",
+      "TITLE_RAIN": "Météo"
     }
   },
   "MEASURE_MANUAL": {
