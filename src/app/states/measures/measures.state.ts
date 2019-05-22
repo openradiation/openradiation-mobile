@@ -236,8 +236,8 @@ export class MeasuresState implements NgxsOnInit {
 
   @Action(StartManualMeasure)
   startManualMeasure({ getState, patchState }: StateContext<MeasuresStateModel>) {
-    const { currentPosition } = getState();
-    let currentMeasure = {
+    const { currentPosition, params } = getState();
+    let currentMeasure: Measure = {
       ...new Measure(
         undefined,
         undefined,
@@ -249,7 +249,8 @@ export class MeasuresState implements NgxsOnInit {
         this.device.model,
         true
       ),
-      startTime: Date.now()
+      startTime: Date.now(),
+      measurementEnvironment: params.planeMode ? MeasureEnvironment.Plane : undefined
     };
     currentMeasure = Measure.updateStartPosition(currentMeasure, currentPosition);
     currentMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);

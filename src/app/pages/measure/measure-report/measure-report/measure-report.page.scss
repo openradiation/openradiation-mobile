@@ -133,6 +133,9 @@
         &.description {
           margin: 0;
           margin-top: 10px;
+          ion-label {
+            min-width: 165px;
+          }
         }
       }
       ion-label {
