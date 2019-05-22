@@ -30,7 +30,6 @@
     "CONNEXION_ERROR": "Connection error: {{message}}",
     "DATE": "Date",
     "END": "End",
-    "ENVIRONMENT": "Environment",
     "GOOD": "Good",
     "GO_TO_SETTINGS": "Go to settings",
     "HITS": {
@@ -51,8 +50,10 @@
     },
     "NO": "No",
     "OK": "Ok",
-    "PLANE": "Plane",
+    "ON_GROUND": "At ground level",
+    "ON_PLANE": "On board a plane",
     "POOR": "Poor",
+    "SEAT_POSITION": "Seat position",
     "SHARE": "Share",
     "SUBMIT": "Submit",
     "TIMESTAMP": "Timestamp",
@@ -171,19 +172,18 @@
     "MEASURE_START": "Measurement start",
     "MESSAGE_ALTITUDE": "Significant altitude detected: if you are on a plane, please repeat this measurement by choosing the plane mode first",
     "ONGOING": "Measurement in progress",
-    "PLANE_MODE": "Plane mode",
     "PLANE_MODE_NOTICE": {
-      "PART1": "",
-      "PART2": "",
-      "PART3": "More on <a onclick=\"window.open('https://www.google.fr', '_system')\">link to a COSMIC project educational page</a>"
+      "PART1": "Cosmic radiation is more important at high altitude, during flights, because they are less attenuated by the atmospheric layer.",
+      "PART2": "Activation of the 'on board a plane’ measurement mode makes it possible to take into account a specific calibration of the sensors for these radiations. On the other hand, if you take measurements at ground level, even in the mountains, choose the 'ground level' measurement mode.",
+      "PART3": "<a onclick=\"window.open('https://www.openradiation.org/en/cosmic-radiation', '_system')\">Learn more</a>"
     },
     "REPORT_LATITUDE": "Latitude",
     "REPORT_LONGITUDE": "Longitude",
     "SENSOR_POSITION": {
       "1_METER_HIGH": "1 m above the ground",
-      "AIRCRAFT_SIDE": "Aircraft side",
+      "AIRCRAFT_SIDE": "Window",
       "FLOOR": "On the ground",
-      "NO_AIRCRAFT_SIDE": "Aisle side",
+      "NO_AIRCRAFT_SIDE": "Aisle",
       "TITLE": "Sensor position"
     },
     "SENSOR_TEMPERATURE": "Sensor temperature",
@@ -196,7 +196,7 @@
       "NO_RAIN": "No rain",
       "NO_STORM": "No storm",
       "RAIN": "Rain",
-      "STORM": "Storm",
+      "STORM": "Storm crossing",
       "TITLE_RAIN": "Weather"
     }
   },

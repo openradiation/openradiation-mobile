@@ -1,4 +1,4 @@
-<app-header [backButton]="true" (back)="goBack()">{{'MEASURES.PLANE_MODE' | translate}}</app-header>
+<app-header [backButton]="true" (back)="goBack()">{{'HOME.MEASURE_MODE' | translate}}</app-header>
 
 <ion-content>
   <div class="notice" [innerHTML]="'MEASURES.PLANE_MODE_NOTICE.PART1' | translate | sanitizeHtml"></div>
@@ -7,7 +7,7 @@
   <div class="notice" [innerHTML]="'MEASURES.PLANE_MODE_NOTICE.PART3' | translate | sanitizeHtml"></div>
   <ion-list>
     <ion-item class="no-padding">
-      <ion-label> {{'MEASURES.PLANE_MODE' | translate}}</ion-label>
+      <ion-label>{{'GENERAL.ON_PLANE' | translate}}</ion-label>
       <ion-toggle [ngModel]="planeMode$ | async" (ngModelChange)="togglePlaneMode($event)"></ion-toggle>
     </ion-item>
   </ion-list>

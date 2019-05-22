@@ -30,7 +30,6 @@
     "CONNEXION_ERROR": "Connexion impossible : {{message}}",
     "DATE": "Date",
     "END": "Fin",
-    "ENVIRONMENT": "Environement",
     "GOOD": "Bon",
     "GO_TO_SETTINGS": "Accéder aux paramètres",
     "HITS": {
@@ -51,8 +50,10 @@
     },
     "NO": "Non",
     "OK": "Ok",
-    "PLANE": "Avion",
+    "ON_GROUND": "Au niveau du sol",
+    "ON_PLANE": "A bord d’avion",
     "POOR": "Moyen",
+    "SEAT_POSITION": "Position de siège",
     "SHARE": "Partager",
     "SUBMIT": "Valider",
     "TIMESTAMP": "Timestamp",
@@ -171,11 +172,10 @@
     "MEASURE_START": "Début de la mesure",
     "MESSAGE_ALTITUDE": "Altitude importante détectée : si vous êtes en avion, merci de recommencer cette mesure en choisissant au préalable le mode de mesure avion",
     "ONGOING": "Mesure en cours",
-    "PLANE_MODE": "Mode avion",
     "PLANE_MODE_NOTICE": {
       "PART1": "Les rayonnements cosmiques sont plus importants en haute altitude, lors des vols en avion, car ils sont moins atténués par la couche atmosphérique.",
       "PART2": "L’activation du mode de mesure avion permet de prendre en compte un étalonnage spécifique des capteurs pour le rayonnement cosmiques. Au contraire, si vous faites des mesures au niveau du sol, choisissez le mode de mesure dans l’environnement.",
-      "PART3": "En savoir plus <a onclick=\"window.open('https://www.google.fr', '_system')\">lien vers une page pédagogique sur le projet COSMIC</a>"
+      "PART3": "<a onclick=\"window.open('https://www.openradiation.org/fr/rayonnement-cosmique', '_system')\">En savoir plus</a>"
     },
     "REPORT_LATITUDE": "Latitude",
     "REPORT_LONGITUDE": "Longitude",
@@ -196,7 +196,7 @@
       "NO_RAIN": "Pas de pluie",
       "NO_STORM": "Pas d'orage",
       "RAIN": "Pluie",
-      "STORM": "Orage",
+      "STORM": "Traversée d’orage",
       "TITLE_RAIN": "Météo"
     }
   },

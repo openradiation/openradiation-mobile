@@ -68,6 +68,10 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
               this.measureReportForm.get('description')!.disable();
               this.measureReportForm.get('tags')!.disable();
               this.measureReportForm.get('enclosedObject')!.disable();
+              this.measureReportForm.get('storm')!.disable();
+              this.measureReportForm.get('aircraftWindow')!.disable();
+              this.measureReportForm.get('flightNumber')!.disable();
+              this.measureReportForm.get('seatNumber')!.disable();
             }
           }
         }

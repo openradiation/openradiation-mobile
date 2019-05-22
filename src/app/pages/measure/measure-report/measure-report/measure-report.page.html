@@ -94,6 +94,13 @@
                 ></ion-input>
                 <span class="unit">{{'MEASURES.DOSE_RATE_UNIT' | translate}}</span>
               </ion-item>
+              <ion-item class="custom-disabled">
+                <ion-label>{{'HOME.MEASURE_MODE' | translate}}</ion-label>
+                <ion-input
+                  value="{{!planeMode? ('GENERAL.ON_GROUND' | translate) : ('GENERAL.ON_PLANE' | translate)}}"
+                  type="text"
+                ></ion-input>
+              </ion-item>
             </ion-list>
           </div>
           <ng-container *ngIf="!planeMode; else environmentMode">
@@ -122,15 +129,16 @@
             </div>
           </ng-container>
           <ng-template #environmentMode>
-            <div class="title">Informations de vol</div>
+            <div class="title">{{'MEASURES.ENVIRONMENT.TITLE' | translate}}</div>
             <ion-list>
               <ion-item class="description">
                 <ion-label>{{'MEASURES.FLIGHT.FLIGHT_NUMBER' | translate}}</ion-label>
-                <ion-input formControlName="flightNumber" maxlength="6" [placeholder]="'AA-0000'"> </ion-input>
+                <ion-input formControlName="flightNumber" minlength="3" mask="SS0999" [placeholder]="'AA1(111)'">
+                </ion-input>
               </ion-item>
               <ion-item class="description">
                 <ion-label>{{'MEASURES.FLIGHT.SEAT_NUMBER' | translate}}</ion-label>
-                <ion-input formControlName="seatNumber" maxlength="4" [placeholder]="'A-000'"> </ion-input>
+                <ion-input formControlName="seatNumber" mask="099S" [placeholder]="'1(11)A'"> </ion-input>
               </ion-item>
             </ion-list>
             <div class="options">
@@ -143,7 +151,7 @@
               <app-select-icon
                 [options]="aircraftWindowOptions"
                 formControlName="aircraftWindow"
-                [title]="'MEASURES.SENSOR_POSITION.TITLE' | translate"
+                [title]="'GENERAL.SEAT_POSITION' | translate"
               >
               </app-select-icon>
             </div>

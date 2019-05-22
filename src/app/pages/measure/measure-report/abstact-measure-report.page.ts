@@ -70,8 +70,8 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
       value: false
     },
     {
-      iconOn: 'assets/img/icon-plane-on.png',
-      iconOff: 'assets/img/icon-plane-off.png',
+      iconOn: 'assets/img/icon-plane-storm-on.png',
+      iconOff: 'assets/img/icon-plane-storm-off.png',
       label: <string>_('MEASURES.WEATHER.STORM'),
       value: true
     }
@@ -79,14 +79,14 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
 
   aircraftWindowOptions: SelectIconOption[] = [
     {
-      iconOn: 'assets/img/icon-plane-on.png',
-      iconOff: 'assets/img/icon-plane-off.png',
+      iconOn: 'assets/img/icon-aisle-on.png',
+      iconOff: 'assets/img/icon-aisle-off.png',
       label: <string>_('MEASURES.SENSOR_POSITION.NO_AIRCRAFT_SIDE'),
       value: false
     },
     {
-      iconOn: 'assets/img/icon-plane-on.png',
-      iconOff: 'assets/img/icon-plane-off.png',
+      iconOn: 'assets/img/icon-window-on.png',
+      iconOff: 'assets/img/icon-window-off.png',
       label: <string>_('MEASURES.SENSOR_POSITION.AIRCRAFT_SIDE'),
       value: true
     }

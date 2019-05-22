@@ -219,9 +219,10 @@ export class MeasuresState implements NgxsOnInit {
   }
 
   @Action(StartMeasure)
-  startMeasure({ patchState }: StateContext<MeasuresStateModel>, { device }: StartMeasure) {
-    patchState({
-      currentMeasure: new Measure(
+  startMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, { device }: StartMeasure) {
+    const { params } = getState();
+    const currentMeasure: Measure = {
+      ...new Measure(
         device.apparatusId,
         device.apparatusVersion,
         device.apparatusSensorType,
@@ -230,7 +231,11 @@ export class MeasuresState implements NgxsOnInit {
         this.device.platform,
         this.device.version,
         this.device.model
-      )
+      ),
+      measurementEnvironment: params.planeMode ? MeasureEnvironment.Plane : undefined
+    };
+    patchState({
+      currentMeasure
     });
   }
 
@@ -447,9 +452,9 @@ export class MeasuresState implements NgxsOnInit {
         canEndCurrentScan: false
       };
       const updatedMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
-      updatedMeasure.measurementEnvironment = params.planeMode
-        ? MeasureEnvironment.Plane
-        : currentMeasure.measurementEnvironment;
+      // updatedMeasure.measurementEnvironment = params.planeMode
+      //   ? MeasureEnvironment.Plane
+      //   : currentMeasure.measurementEnvironment;
       if (currentSeries) {
         patch.currentMeasure = undefined;
         if (
@@ -527,8 +532,8 @@ export class MeasuresState implements NgxsOnInit {
         enclosedObject: currentMeasure.enclosedObject,
         storm: currentMeasure.storm,
         aircraftWindow: currentMeasure.aircraftWindow,
-        flightNumber: currentMeasure.flightNumber,
-        seatNumber: currentMeasure.seatNumber
+        flightNumber: currentMeasure.flightNumber ? currentMeasure.flightNumber.toUpperCase() : undefined,
+        seatNumber: currentMeasure.seatNumber ? currentMeasure.seatNumber.toUpperCase() : undefined
       };
       patchState({
         measureReport: {
