@@ -67,6 +67,20 @@
             <ion-label>{{'MEASURE_SERIES.STOP' | translate}}</ion-label>
           </ion-item>
         </form>
+        <ng-container *ngIf="planeMode$ | async; else planeModeFalse">
+          <ion-item class="title">
+            <ion-label
+              >{{'HOME.MEASURE_MODE' | translate}} : {{('GENERAL.ON_PLANE' | translate | lowercase) }}</ion-label
+            >
+          </ion-item>
+        </ng-container>
+        <ng-template #planeModeFalse>
+          <ion-item class="title">
+            <ion-label
+              >{{'HOME.MEASURE_MODE' | translate}} : {{('GENERAL.ON_GROUND' | translate | lowercase) }}</ion-label
+            >
+          </ion-item>
+        </ng-template>
         <div class="bottom-buttons">
           <app-round-button
             [disabled]="!measureSeriesParamsForm.valid"
