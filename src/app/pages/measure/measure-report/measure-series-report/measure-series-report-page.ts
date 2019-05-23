@@ -4,12 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { NavigationService } from '../../../../services/navigation.service';
-import {
-  MeasureEnvironment,
-  MeasureSeries,
-  MeasureSeriesParamsSelected,
-  MeasureSeriesReport
-} from '../../../../states/measures/measure';
+import { MeasureEnvironment, MeasureSeries, MeasureSeriesParamsSelected } from '../../../../states/measures/measure';
 import {
   StartMeasureSeriesReport,
   StopMeasureSeries,

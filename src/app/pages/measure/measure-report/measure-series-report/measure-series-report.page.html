@@ -92,9 +92,16 @@
                 <ion-input formControlName="valueAverage" required type="number" placeholder="-"></ion-input>
                 <span class="unit">{{'MEASURES.DOSE_RATE_UNIT' | translate}}</span>
               </ion-item>
+              <ion-item class="custom-disabled">
+                <ion-label>{{'HOME.MEASURE_MODE' | translate}}</ion-label>
+                <ion-input
+                  value="{{!planeMode? ('GENERAL.ON_GROUND' | translate) : ('GENERAL.ON_PLANE' | translate)}}"
+                  type="text"
+                ></ion-input>
+              </ion-item>
             </ion-list>
           </div>
-          <ng-container *ngIf="!planeMode">
+          <ng-container *ngIf="!planeMode; else environmentMode">
             <div class="environment">
               <app-select-icon
                 [options]="measurementEnvironmentOptions"
@@ -121,6 +128,34 @@
               </app-select-icon>
             </div>
           </ng-container>
+          <ng-template #environmentMode>
+            <div class="title">{{'MEASURES.ENVIRONMENT.TITLE' | translate}}</div>
+            <ion-list>
+              <ion-item class="description">
+                <ion-label>{{'MEASURES.FLIGHT.FLIGHT_NUMBER' | translate}}</ion-label>
+                <ion-input formControlName="flightNumber" minlength="3" mask="SS0999" [placeholder]="'AA1(111)'">
+                </ion-input>
+              </ion-item>
+              <ion-item class="description">
+                <ion-label>{{'MEASURES.FLIGHT.SEAT_NUMBER' | translate}}</ion-label>
+                <ion-input formControlName="seatNumber" mask="099S" [placeholder]="'1(11)A'"> </ion-input>
+              </ion-item>
+            </ion-list>
+            <div class="options">
+              <app-select-icon
+                [options]="stormOptions"
+                formControlName="storm"
+                [title]="'MEASURES.WEATHER.TITLE_RAIN' | translate"
+              >
+              </app-select-icon>
+              <app-select-icon
+                [options]="aircraftWindowOptions"
+                formControlName="aircraftWindow"
+                [title]="'GENERAL.SEAT_POSITION' | translate"
+              >
+              </app-select-icon>
+            </div>
+          </ng-template>
           <ng-container *ngIf="login$ | async">
             <div class="separator"></div>
             <ion-list>

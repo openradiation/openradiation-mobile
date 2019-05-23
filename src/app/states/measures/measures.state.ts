@@ -446,15 +446,12 @@ export class MeasuresState implements NgxsOnInit {
 
   @Action(StopMeasureScan)
   stopMeasureScan({ getState, patchState }: StateContext<MeasuresStateModel>, { device }: StopMeasureScan) {
-    const { currentMeasure, currentSeries, currentPosition, params } = getState();
+    const { currentMeasure, currentSeries, currentPosition } = getState();
     if (currentMeasure) {
       const patch: Partial<MeasuresStateModel> = {
         canEndCurrentScan: false
       };
       const updatedMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
-      // updatedMeasure.measurementEnvironment = params.planeMode
-      //   ? MeasureEnvironment.Plane
-      //   : currentMeasure.measurementEnvironment;
       if (currentSeries) {
         patch.currentMeasure = undefined;
         if (
@@ -532,8 +529,8 @@ export class MeasuresState implements NgxsOnInit {
         enclosedObject: currentMeasure.enclosedObject,
         storm: currentMeasure.storm,
         aircraftWindow: currentMeasure.aircraftWindow,
-        flightNumber: currentMeasure.flightNumber ? currentMeasure.flightNumber.toUpperCase() : undefined,
-        seatNumber: currentMeasure.seatNumber ? currentMeasure.seatNumber.toUpperCase() : undefined
+        flightNumber: currentMeasure.flightNumber,
+        seatNumber: currentMeasure.seatNumber
       };
       patchState({
         measureReport: {
@@ -578,7 +575,11 @@ export class MeasuresState implements NgxsOnInit {
         description: currentSeries.measures[0].description,
         tags: currentSeries.measures[0].tags,
         measurementEnvironment: currentSeries.measures[0].measurementEnvironment,
-        rain: currentSeries.measures[0].rain
+        rain: currentSeries.measures[0].rain,
+        storm: currentSeries.measures[0].storm,
+        aircraftWindow: currentSeries.measures[0].aircraftWindow,
+        flightNumber: currentSeries.measures[0].flightNumber,
+        seatNumber: currentSeries.measures[0].seatNumber
       };
       patchState({
         measureSeriesReport: {
@@ -601,8 +602,8 @@ export class MeasuresState implements NgxsOnInit {
         measurementEnvironment: measureReport.model.measurementEnvironment,
         rain: measureReport.model.rain,
         storm: measureReport.model.storm,
-        flightNumber: measureReport.model.flightNumber,
-        seatNumber: measureReport.model.seatNumber,
+        flightNumber: measureReport.model.flightNumber ? measureReport.model.flightNumber.toUpperCase() : undefined,
+        seatNumber: measureReport.model.seatNumber ? measureReport.model.seatNumber.toUpperCase() : undefined,
         aircraftWindow: measureReport.model.aircraftWindow,
         description: measureReport.model.description,
         tags: measureReport.model.tags,
@@ -646,7 +647,15 @@ export class MeasuresState implements NgxsOnInit {
             measurementEnvironment: measureSeriesReport.model.measurementEnvironment,
             rain: measureSeriesReport.model.rain,
             description: measureSeriesReport.model.description,
-            tags: measureSeriesReport.model.tags
+            tags: measureSeriesReport.model.tags,
+            storm: measureSeriesReport.model.storm,
+            aircraftWindow: measureSeriesReport.model.aircraftWindow,
+            flightNumber: measureSeriesReport.model.flightNumber
+              ? measureSeriesReport.model.flightNumber.toUpperCase()
+              : undefined,
+            seatNumber: measureSeriesReport.model.seatNumber
+              ? measureSeriesReport.model.seatNumber.toUpperCase()
+              : undefined
           }))
         }
       });

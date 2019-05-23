@@ -207,6 +207,10 @@ export interface MeasureSeriesReport {
   tags: string[] | undefined;
   measurementEnvironment: MeasureEnvironment | undefined;
   rain: boolean | undefined;
+  storm: boolean | undefined;
+  aircraftWindow: boolean | undefined;
+  flightNumber: string | undefined;
+  seatNumber: string | undefined;
 }
 
 export class MeasureSeries extends AbstractMeasure {
