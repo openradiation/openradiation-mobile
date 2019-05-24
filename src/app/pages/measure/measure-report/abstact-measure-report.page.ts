@@ -221,7 +221,7 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
   }
 
   protected static positionChangeAltitudeOverLimit(altitude: number | undefined): boolean {
-    return altitude !== undefined && altitude > 6;
+    return altitude !== undefined && altitude > 6000;
   }
 
   protected abstract initMeasurementEnvironmentOptions(measure: T): void;
