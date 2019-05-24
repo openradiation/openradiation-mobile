@@ -47,7 +47,6 @@ export class MeasureScanPage extends AutoUnsubscribePage {
   measureSeriesParamsSelected = MeasureSeriesParamsSelected;
 
   isMeasureSeries = false;
-  planeMode: boolean;
 
   currentSeriesMessageMapping = {
     '=0': <string>_('MEASURE_SERIES.MESSAGE_SCAN.NONE'),

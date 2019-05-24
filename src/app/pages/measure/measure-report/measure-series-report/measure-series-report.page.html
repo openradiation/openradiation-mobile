@@ -133,24 +133,33 @@
             <ion-list>
               <ion-item class="description">
                 <ion-label>{{'MEASURES.FLIGHT.FLIGHT_NUMBER' | translate}}</ion-label>
-                <ion-input formControlName="flightNumber" minlength="3" mask="SS0999" [placeholder]="'AA1(111)'">
+                <ion-input
+                  formControlName="flightNumber"
+                  minlength="3"
+                  mask="SS0999"
+                  [required]="false"
+                  [placeholder]="'AA1(111)'"
+                >
                 </ion-input>
               </ion-item>
               <ion-item class="description">
                 <ion-label>{{'MEASURES.FLIGHT.SEAT_NUMBER' | translate}}</ion-label>
-                <ion-input formControlName="seatNumber" mask="099S" [placeholder]="'1(11)A'"> </ion-input>
+                <ion-input formControlName="seatNumber" mask="099S" [required]="false" [placeholder]="'1(11)A'">
+                </ion-input>
               </ion-item>
             </ion-list>
             <div class="options">
               <app-select-icon
                 [options]="stormOptions"
                 formControlName="storm"
+                [required]="false"
                 [title]="'MEASURES.WEATHER.TITLE_RAIN' | translate"
               >
               </app-select-icon>
               <app-select-icon
                 [options]="aircraftWindowOptions"
                 formControlName="aircraftWindow"
+                [required]="false"
                 [title]="'GENERAL.SEAT_POSITION' | translate"
               >
               </app-select-icon>

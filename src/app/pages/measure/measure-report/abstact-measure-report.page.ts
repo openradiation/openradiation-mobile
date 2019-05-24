@@ -23,7 +23,7 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
   login$: Observable<string | undefined>;
 
   @Select(MeasuresState.recentTags)
-  recentTags$: Observable<string>;
+  recentTags$: Observable<string[]>;
 
   measureReportForm?: FormGroup;
   reportScan = true;
@@ -220,8 +220,11 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
     );
   }
 
-  protected static positionChangeAltitudeOverLimit(measure: Measure, environment: MeasureEnvironment): boolean {
-    return environment !== MeasureEnvironment.Plane && measure.altitude! > 6000;
+  protected static positionChangeAltitudeOverLimit(
+    altitude: number | undefined,
+    environment: MeasureEnvironment
+  ): boolean {
+    return environment !== MeasureEnvironment.Plane && altitude !== undefined && altitude > 6000;
   }
 
   protected abstract initMeasurementEnvironmentOptions(measure: T): void;

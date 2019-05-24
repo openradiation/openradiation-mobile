@@ -58,20 +58,23 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
             });
             this.planeMode = measureReport.model.measurementEnvironment === MeasureEnvironment.Plane;
             this.positionChangeAltitudeOverLimit = AbstractMeasureReportPage.positionChangeAltitudeOverLimit(
-              this.currentMeasure,
+              this.currentMeasure.altitude,
               measureReport.model.measurementEnvironment!
             );
             if (this.currentMeasure.sent) {
-              this.measureReportForm.get('measurementEnvironment')!.disable();
-              this.measureReportForm.get('measurementHeight')!.disable();
-              this.measureReportForm.get('rain')!.disable();
+              if (!this.planeMode) {
+                this.measureReportForm.get('measurementEnvironment')!.disable();
+                this.measureReportForm.get('measurementHeight')!.disable();
+                this.measureReportForm.get('rain')!.disable();
+              } else {
+                this.measureReportForm.get('storm')!.disable();
+                this.measureReportForm.get('aircraftWindow')!.disable();
+                this.measureReportForm.get('flightNumber')!.disable();
+                this.measureReportForm.get('seatNumber')!.disable();
+              }
               this.measureReportForm.get('description')!.disable();
               this.measureReportForm.get('tags')!.disable();
               this.measureReportForm.get('enclosedObject')!.disable();
-              this.measureReportForm.get('storm')!.disable();
-              this.measureReportForm.get('aircraftWindow')!.disable();
-              this.measureReportForm.get('flightNumber')!.disable();
-              this.measureReportForm.get('seatNumber')!.disable();
             }
           }
         }

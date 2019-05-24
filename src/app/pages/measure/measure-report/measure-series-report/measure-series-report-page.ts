@@ -54,16 +54,21 @@ export class MeasureSeriesReportPage extends AbstractMeasureReportPage<MeasureSe
             ...measureSeriesReport.model,
             tags: [measureSeriesReport.model.tags]
           });
-          if (measureSeriesReport.model.measurementEnvironment) {
-            this.positionChangeAltitudeOverLimit = this.initPositionChangeAltitudeOverLimit(
-              this.currentSeries,
-              measureSeriesReport.model.measurementEnvironment
-            );
-          }
+          this.positionChangeAltitudeOverLimit = this.initPositionChangeAltitudeOverLimit(
+            this.currentSeries,
+            measureSeriesReport.model.measurementEnvironment!
+          );
           if (this.currentSeries.sent) {
-            this.measureReportForm.get('measurementEnvironment')!.disable();
-            this.measureReportForm.get('measurementHeight')!.disable();
-            this.measureReportForm.get('rain')!.disable();
+            if (!this.planeMode) {
+              this.measureReportForm.get('measurementEnvironment')!.disable();
+              this.measureReportForm.get('measurementHeight')!.disable();
+              this.measureReportForm.get('rain')!.disable();
+            } else {
+              this.measureReportForm.get('storm')!.disable();
+              this.measureReportForm.get('aircraftWindow')!.disable();
+              this.measureReportForm.get('flightNumber')!.disable();
+              this.measureReportForm.get('seatNumber')!.disable();
+            }
             this.measureReportForm.get('description')!.disable();
             this.measureReportForm.get('tags')!.disable();
           }
@@ -79,7 +84,7 @@ export class MeasureSeriesReportPage extends AbstractMeasureReportPage<MeasureSe
 
   initPositionChangeAltitudeOverLimit(measureSeries: MeasureSeries, environment: MeasureEnvironment): boolean {
     return measureSeries.measures.some(measure =>
-      AbstractMeasureReportPage.positionChangeAltitudeOverLimit(measure, environment)
+      AbstractMeasureReportPage.positionChangeAltitudeOverLimit(measure.altitude, environment)
     );
   }
 
