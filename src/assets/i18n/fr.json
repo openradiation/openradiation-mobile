@@ -5,7 +5,7 @@
       "TITLE": "Mesure de la radioactivité"
     },
     "MEASURES_HOW_TO": {
-      "NOTICE": "Allumez votre capteur, démarrez l’application, puis connectez-la au capteur. OpenRadiation est une base de données dont l’objectif est de cartographier la radioactivité dans l’environnement. Afin que les données soient homogènes, comparables et les plus représentatives possible, les mesures que vous publiez sur OpenRadiation doivent idéalement être prises en extérieur, si possible éloignées d’une habitation, et en positionnant le capteur à environ 1 mètre du sol. Plus la durée de la mesure est longue, meilleure est la statistique et plus la mesure est précise : un indicateur vous permet d’apprécier la fiabilité de la mesure en direct. Une fois la mesure réalisée, vous pouvez qualifier l’environnement dans lequel elle a été prise (à l’intérieur, dans un avion, sur une route, à la campagne, en ville) et donner des indications supplémentaires avant de la publier. Ces indications permettront d’apprécier plus finement la fiabilité de la mesure.",
+      "NOTICE": "Démarrez l’application, recherchez les capteurs disponibles et connectez un capteur directement depuis l’application. OpenRadiation est une base de données dont l’objectif est de cartographier la radioactivité dans l’environnement. Sélectionnez le mode de mesure adéquat selon que vous faites des mesures au niveau du sol ou à bord d’avion. Afin que les données soient homogènes, comparables et les plus représentatives possible, les mesures prises au niveau du sol et publiées sur OpenRadiation doivent idéalement être prises en extérieur, si possible éloignées d’une habitation, et en positionnant le capteur à environ 1 mètre du sol. Plus la durée de la mesure est longue, meilleure est la statistique et plus la mesure est précise : un indicateur vous permet d’apprécier la fiabilité de la mesure en direct. Une fois la mesure réalisée, vous pouvez qualifier l’environnement dans lequel elle a été prise, au niveau du sol (à la campagne, en ville, …) ou à bord d’avion (numéro de vol), et donner des indications supplémentaires avant de la publier. Toutes ces indications permettront d’apprécier plus finement la fiabilité de la mesure et de consolider les données.",
       "TITLE": "Comment prendre des mesures ?"
     },
     "OPENRADIATION_PROJECT": {
@@ -95,7 +95,7 @@
   "HOME": {
     "CONNECTED_SENSOR": "Capteur connecté",
     "ELEVATED_ALTITUDE": "Altitude importante détectée",
-    "ELEVATED_ALTITUDE_MESSAGE": "Si vous êtes en avion, merci de choisir le mode de mesure avion.",
+    "ELEVATED_ALTITUDE_MESSAGE": "Conseil : si vous êtes en avion, merci de sélectionner le mode de mesure à bord d’avion .",
     "MEASURE_MODE": "Mode de mesure",
     "NO_SENSORS": "Pas de capteur",
     "SWITCH_PLANE_MODE": "Activer le mode avion",
@@ -170,7 +170,7 @@
     "INIT": "Initialisation",
     "MEASURE": "Mesure",
     "MEASURE_START": "Début de la mesure",
-    "MESSAGE_ALTITUDE": "Altitude importante détectée : si vous êtes en avion, merci de recommencer cette mesure en choisissant au préalable le mode de mesure avion",
+    "MESSAGE_ALTITUDE": "Conseil : altitude importante détectée, si la mesure a été faite en avion, vous auriez dû sélectionner le mode de mesure à bord d’avion",
     "ONGOING": "Mesure en cours",
     "PLANE_MODE_NOTICE": {
       "PART1": "Les rayonnements cosmiques sont plus importants en haute altitude, lors des vols en avion, car ils sont moins atténués par la couche atmosphérique.",
@@ -211,7 +211,7 @@
     "LAST_MEASURE_VALUE": "Dernière valeur mesurée : {{lastMeasure}}",
     "MEASURES_DURATION": "Durée minimale",
     "MEASURE_LIMIT": "Chaque mesure se terminera automatiquement après",
-    "MESSAGE_ALTITUDE": "Altitude importante détectée : si vous êtes en avion, merci de recommencer ces mesures en choisissant au préalable le mode de mesure avion",
+    "MESSAGE_ALTITUDE": "Conseil : altitude importante détectée, si cette série de mesures a été faite en avion, vous auriez dû sélectionner le mode de mesure à bord d’avion",
     "MESSAGE_SCAN": {
       "NONE": "Première mesure en cours",
       "PLURAL": "{{count}} mesures prises depuis {{duration}}",
