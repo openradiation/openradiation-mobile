@@ -45,7 +45,6 @@ export class MeasureSeriesReportPage extends AbstractMeasureReportPage<MeasureSe
       );
       this.currentSeries = currentSeries;
       if (this.currentSeries) {
-        this.initMeasurementEnvironmentOptions(this.currentSeries);
         this.planeMode = this.currentSeries.measures.some(
           measure => measure.measurementEnvironment === MeasureEnvironment.Plane
         );
@@ -54,10 +53,10 @@ export class MeasureSeriesReportPage extends AbstractMeasureReportPage<MeasureSe
             ...measureSeriesReport.model,
             tags: [measureSeriesReport.model.tags]
           });
-          this.positionChangeAltitudeOverLimit = this.initPositionChangeAltitudeOverLimit(
-            this.currentSeries,
-            measureSeriesReport.model.measurementEnvironment!
-          );
+          if (!this.planeMode) {
+            this.initPositionChangeAltitudeOverLimit(this.currentSeries);
+            this.initMeasurementEnvironmentOptions(this.currentSeries);
+          }
           if (this.currentSeries.sent) {
             if (!this.planeMode) {
               this.measureReportForm.get('measurementEnvironment')!.disable();
@@ -82,9 +81,9 @@ export class MeasureSeriesReportPage extends AbstractMeasureReportPage<MeasureSe
     return measureSeries.measures.some(measure => AbstractMeasureReportPage.canPublishSingleMeasure(measure));
   }
 
-  initPositionChangeAltitudeOverLimit(measureSeries: MeasureSeries, environment: MeasureEnvironment): boolean {
-    return measureSeries.measures.some(measure =>
-      AbstractMeasureReportPage.positionChangeAltitudeOverLimit(measure.altitude, environment)
+  initPositionChangeAltitudeOverLimit(measureSeries: MeasureSeries) {
+    this.positionChangeAltitudeOverLimit = measureSeries.measures.some(measure =>
+      AbstractMeasureReportPage.positionChangeAltitudeOverLimit(measure.altitude)
     );
   }
 

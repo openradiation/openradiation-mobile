@@ -50,17 +50,18 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
         if (this.currentMeasure) {
           this.reportScan = !this.currentMeasure.manualReporting;
           this.inputDisabled = this.reportScan || this.currentMeasure.sent;
-          this.initMeasurementEnvironmentOptions(this.currentMeasure);
           if (measureReport) {
             this.measureReportForm = this.formBuilder.group({
               ...measureReport.model,
               tags: [measureReport.model.tags]
             });
             this.planeMode = measureReport.model.measurementEnvironment === MeasureEnvironment.Plane;
-            this.positionChangeAltitudeOverLimit = AbstractMeasureReportPage.positionChangeAltitudeOverLimit(
-              this.currentMeasure.altitude,
-              measureReport.model.measurementEnvironment!
-            );
+            if (!this.planeMode) {
+              this.positionChangeAltitudeOverLimit = AbstractMeasureReportPage.positionChangeAltitudeOverLimit(
+                this.currentMeasure.altitude
+              );
+              this.initMeasurementEnvironmentOptions(this.currentMeasure);
+            }
             if (this.currentMeasure.sent) {
               if (!this.planeMode) {
                 this.measureReportForm.get('measurementEnvironment')!.disable();

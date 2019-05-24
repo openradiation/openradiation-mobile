@@ -220,11 +220,8 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
     );
   }
 
-  protected static positionChangeAltitudeOverLimit(
-    altitude: number | undefined,
-    environment: MeasureEnvironment
-  ): boolean {
-    return environment !== MeasureEnvironment.Plane && altitude !== undefined && altitude > 6000;
+  protected static positionChangeAltitudeOverLimit(altitude: number | undefined): boolean {
+    return altitude !== undefined && altitude > 6;
   }
 
   protected abstract initMeasurementEnvironmentOptions(measure: T): void;

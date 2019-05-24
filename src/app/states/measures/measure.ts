@@ -107,8 +107,8 @@ export class Measure extends AbstractMeasure {
     if (position) {
       return {
         ...measure,
-        endLatitude: position.latitude,
-        endLongitude: position.longitude,
+        endLatitude: 48.155037,
+        endLongitude: -1.49148,
         endAccuracy: position.accuracy,
         endAltitude: position.altitude
         // endAltitudeAccuracy: position.altitudeAccuracy
