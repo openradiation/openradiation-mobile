@@ -6,7 +6,7 @@ import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { NavigationService } from '../../../../services/navigation.service';
 import { DateService } from '../../../../states/measures/date.service';
-import { Measure, MeasureEnvironment } from '../../../../states/measures/measure';
+import { Measure, MeasureEnvironment, MeasureSeries } from '../../../../states/measures/measure';
 import { StartMeasureReport, StopMeasure, StopMeasureReport } from '../../../../states/measures/measures.action';
 import { MeasuresState, MeasuresStateModel } from '../../../../states/measures/measures.state';
 import { AbstractMeasureReportPage } from '../abstact-measure-report.page';
@@ -50,16 +50,14 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
         if (this.currentMeasure) {
           this.reportScan = !this.currentMeasure.manualReporting;
           this.inputDisabled = this.reportScan || this.currentMeasure.sent;
+          this.planeMode = this.currentMeasure.measurementEnvironment === MeasureEnvironment.Plane;
           if (measureReport) {
             this.measureReportForm = this.formBuilder.group({
               ...measureReport.model,
               tags: [measureReport.model.tags]
             });
-            this.planeMode = measureReport.model.measurementEnvironment === MeasureEnvironment.Plane;
             if (!this.planeMode) {
-              this.positionChangeAltitudeOverLimit = AbstractMeasureReportPage.positionChangeAltitudeOverLimit(
-                this.currentMeasure.altitude
-              );
+              this.initPositionChangeAltitudeOverLimit(this.currentMeasure);
               this.initMeasurementEnvironmentOptions(this.currentMeasure);
             }
             if (this.currentMeasure.sent) {
@@ -122,5 +120,9 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
   protected initMeasurementEnvironmentOptions(measure: Measure) {
     this.positionChangeSpeedOverLimit = AbstractMeasureReportPage.hasPositionChanged(measure);
     this.updateMeasurementEnvironmentOptions();
+  }
+
+  protected initPositionChangeAltitudeOverLimit(measure: Measure) {
+    this.positionChangeAltitudeOverLimit = AbstractMeasureReportPage.positionChangeAltitudeOverLimit(measure.altitude);
   }
 }

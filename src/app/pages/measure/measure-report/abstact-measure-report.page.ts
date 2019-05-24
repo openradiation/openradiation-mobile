@@ -225,4 +225,5 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
   }
 
   protected abstract initMeasurementEnvironmentOptions(measure: T): void;
+  protected abstract initPositionChangeAltitudeOverLimit(measure: T): void;
 }

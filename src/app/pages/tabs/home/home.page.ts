@@ -47,19 +47,21 @@ export class HomePage extends AutoUnsubscribePage {
 
   pageEnter() {
     super.pageEnter();
+    this.planeMode$.pipe(take(1)).subscribe(planeMode => {
+      if (planeMode === false) {
+        this.subscriptions.push(
+          this.currentPosition$.subscribe(position => {
+            if (position && position.altitude > 6000) {
+              this.showElevatedAltitudeMessage();
+            }
+          })
+        );
+      }
+    });
     this.subscriptions.push(
       this.actions$
         .pipe(ofActionSuccessful(StartMeasure))
-        .subscribe(() => this.navigationService.navigateRoot(['measure', 'scan'])),
-      this.planeMode$.pipe(take(1)).subscribe(planeMode => {
-        if (planeMode === false) {
-          this.currentPosition$.subscribe(position => {
-            if (position.altitude > 6000) {
-              this.showElevatedAltitudeMessage();
-            }
-          });
-        }
-      })
+        .subscribe(() => this.navigationService.navigateRoot(['measure', 'scan']))
     );
   }
 
