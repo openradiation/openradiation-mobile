@@ -120,7 +120,11 @@ export class MeasuresService {
           userId: this.store.selectSnapshot(({ user }: { user: UserStateModel }) => user.login),
           userPwd: this.store.selectSnapshot(({ user }: { user: UserStateModel }) => user.password),
           measurementEnvironment: measure.measurementEnvironment,
-          rain: measure.rain
+          rain: measure.rain,
+          flightNumber: measure.flightNumber,
+          seatNumber: measure.seatNumber,
+          storm: measure.storm,
+          windowSeat: measure.aircraftWindow
         }
       };
       return this.httpClient.post(environment.API_URI, payload);

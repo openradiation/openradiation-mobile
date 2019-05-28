@@ -38,5 +38,9 @@ export interface MeasureApi {
     userPwd?: string;
     measurementEnvironment?: string;
     rain?: boolean;
+    flightNumber?: string;
+    seatNumber?: string;
+    storm?: boolean;
+    windowSeat?: boolean;
   };
 }
