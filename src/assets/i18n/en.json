@@ -181,10 +181,10 @@
     "REPORT_LONGITUDE": "Longitude",
     "SENSOR_POSITION": {
       "1_METER_HIGH": "1 m above the ground",
-      "AIRCRAFT_SIDE": "Window",
       "FLOOR": "On the ground",
-      "NO_AIRCRAFT_SIDE": "Aisle",
-      "TITLE": "Sensor position"
+      "NO_WINDOW_SIDE": "Aisle",
+      "TITLE": "Sensor position",
+      "WINDOW_SIDE": "Window"
     },
     "SENSOR_TEMPERATURE": "Sensor temperature",
     "TAG_LIST": "Tag list",

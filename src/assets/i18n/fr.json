@@ -51,7 +51,7 @@
     "NO": "Non",
     "OK": "Ok",
     "ON_GROUND": "Au niveau du sol",
-    "ON_PLANE": "A bord d’avion",
+    "ON_PLANE": "À bord d’avion",
     "POOR": "Moyen",
     "SEAT_POSITION": "Position de siège",
     "SHARE": "Partager",
@@ -181,10 +181,10 @@
     "REPORT_LONGITUDE": "Longitude",
     "SENSOR_POSITION": {
       "1_METER_HIGH": "À 1 mètre du sol",
-      "AIRCRAFT_SIDE": "Hublot",
       "FLOOR": "Au sol",
-      "NO_AIRCRAFT_SIDE": "Couloir",
-      "TITLE": "Position du capteur"
+      "NO_WINDOW_SIDE": "Couloir",
+      "TITLE": "Position du capteur",
+      "WINDOW_SIDE": "Hublot"
     },
     "SENSOR_TEMPERATURE": "Température capteur",
     "TAG_LIST": "Liste des tags",

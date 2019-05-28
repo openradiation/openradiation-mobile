@@ -90,7 +90,6 @@ export class MapPage extends AutoUnsubscribePage {
             const dateMax = 100;
             url += `/all/all/${planeMode ? 'plane' : 'groundlevel'}/all/${valueMin}/${valueMax}/${dateMin}/${dateMax}`;
           }
-          console.log(url);
           this.iframeURL = this.domSanitizer.bypassSecurityTrustResourceUrl(url);
           this.changeDetectorRef.markForCheck();
         });

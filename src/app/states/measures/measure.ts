@@ -52,7 +52,7 @@ export class Measure extends AbstractMeasure {
   measurementEnvironment?: MeasureEnvironment;
   rain?: boolean;
   storm?: boolean;
-  aircraftWindow?: boolean;
+  windowSeat?: boolean;
   flightNumber?: string;
   seatNumber?: string;
   steps?: Step[] = [];
@@ -176,7 +176,7 @@ export interface MeasureReport {
   measurementEnvironment: MeasureEnvironment | undefined;
   rain: boolean | undefined;
   storm: boolean | undefined;
-  aircraftWindow: boolean | undefined;
+  windowSeat: boolean | undefined;
   flightNumber: string | undefined;
   seatNumber: string | undefined;
 }
@@ -208,7 +208,7 @@ export interface MeasureSeriesReport {
   measurementEnvironment: MeasureEnvironment | undefined;
   rain: boolean | undefined;
   storm: boolean | undefined;
-  aircraftWindow: boolean | undefined;
+  windowSeat: boolean | undefined;
   flightNumber: string | undefined;
   seatNumber: string | undefined;
 }

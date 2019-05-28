@@ -64,7 +64,7 @@ export class MeasureSeriesReportPage extends AbstractMeasureReportPage<MeasureSe
               this.measureReportForm.get('rain')!.disable();
             } else {
               this.measureReportForm.get('storm')!.disable();
-              this.measureReportForm.get('aircraftWindow')!.disable();
+              this.measureReportForm.get('windowSeat')!.disable();
               this.measureReportForm.get('flightNumber')!.disable();
               this.measureReportForm.get('seatNumber')!.disable();
             }

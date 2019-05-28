@@ -124,7 +124,7 @@ export class MeasuresService {
           flightNumber: measure.flightNumber,
           seatNumber: measure.seatNumber,
           storm: measure.storm,
-          windowSeat: measure.aircraftWindow
+          windowSeat: measure.windowSeat
         }
       };
       return this.httpClient.post(environment.API_URI, payload);

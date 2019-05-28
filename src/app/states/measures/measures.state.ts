@@ -528,7 +528,7 @@ export class MeasuresState implements NgxsOnInit {
         rain: currentMeasure.rain,
         enclosedObject: currentMeasure.enclosedObject,
         storm: currentMeasure.storm,
-        aircraftWindow: currentMeasure.aircraftWindow,
+        windowSeat: currentMeasure.windowSeat,
         flightNumber: currentMeasure.flightNumber,
         seatNumber: currentMeasure.seatNumber
       };
@@ -577,7 +577,7 @@ export class MeasuresState implements NgxsOnInit {
         measurementEnvironment: currentSeries.measures[0].measurementEnvironment,
         rain: currentSeries.measures[0].rain,
         storm: currentSeries.measures[0].storm,
-        aircraftWindow: currentSeries.measures[0].aircraftWindow,
+        windowSeat: currentSeries.measures[0].windowSeat,
         flightNumber: currentSeries.measures[0].flightNumber,
         seatNumber: currentSeries.measures[0].seatNumber
       };
@@ -604,7 +604,7 @@ export class MeasuresState implements NgxsOnInit {
         storm: measureReport.model.storm,
         flightNumber: measureReport.model.flightNumber ? measureReport.model.flightNumber.toUpperCase() : undefined,
         seatNumber: measureReport.model.seatNumber ? measureReport.model.seatNumber.toUpperCase() : undefined,
-        aircraftWindow: measureReport.model.aircraftWindow,
+        windowSeat: measureReport.model.windowSeat,
         description: measureReport.model.description,
         tags: measureReport.model.tags,
         enclosedObject: measureReport.model.enclosedObject
@@ -649,7 +649,7 @@ export class MeasuresState implements NgxsOnInit {
             description: measureSeriesReport.model.description,
             tags: measureSeriesReport.model.tags,
             storm: measureSeriesReport.model.storm,
-            aircraftWindow: measureSeriesReport.model.aircraftWindow,
+            windowSeat: measureSeriesReport.model.windowSeat,
             flightNumber: measureSeriesReport.model.flightNumber
               ? measureSeriesReport.model.flightNumber.toUpperCase()
               : undefined,

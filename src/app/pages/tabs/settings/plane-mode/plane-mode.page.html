@@ -7,7 +7,12 @@
   <div class="notice" [innerHTML]="'MEASURES.PLANE_MODE_NOTICE.PART3' | translate | sanitizeHtml"></div>
   <ion-list>
     <ion-item class="no-padding">
-      <ion-label>{{'GENERAL.ON_PLANE' | translate}}</ion-label>
+      <ng-container *ngIf="planeMode$ | async; else planeModeFalse">
+        <ion-label>{{'GENERAL.ON_PLANE' | translate }}</ion-label>
+      </ng-container>
+      <ng-template #planeModeFalse>
+        <ion-label>{{'GENERAL.ON_GROUND' | translate }}</ion-label>
+      </ng-template>
       <ion-toggle [ngModel]="planeMode$ | async" (ngModelChange)="togglePlaneMode($event)"></ion-toggle>
     </ion-item>
   </ion-list>

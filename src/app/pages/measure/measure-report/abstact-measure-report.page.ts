@@ -77,17 +77,17 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
     }
   ];
 
-  aircraftWindowOptions: SelectIconOption[] = [
+  windowSeatOptions: SelectIconOption[] = [
     {
       iconOn: 'assets/img/icon-aisle-on.png',
       iconOff: 'assets/img/icon-aisle-off.png',
-      label: <string>_('MEASURES.SENSOR_POSITION.NO_AIRCRAFT_SIDE'),
+      label: <string>_('MEASURES.SENSOR_POSITION.NO_WINDOW_SIDE'),
       value: false
     },
     {
       iconOn: 'assets/img/icon-window-on.png',
       iconOff: 'assets/img/icon-window-off.png',
-      label: <string>_('MEASURES.SENSOR_POSITION.AIRCRAFT_SIDE'),
+      label: <string>_('MEASURES.SENSOR_POSITION.WINDOW_SIDE'),
       value: true
     }
   ];
