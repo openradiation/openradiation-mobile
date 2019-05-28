@@ -20,9 +20,9 @@ export class DeviceRiumService extends AbstractUSBDeviceService<DeviceRium> {
     super(store, actions$);
   }
 
-  protected convertHitsNumberPerSec(hitsNumberPerSec: number): number {
+  protected convertHitsNumberPerSec(hitsNumberPerSec: number, planeMode: boolean): number {
     // TODO fix conversion factor
-    return (hitsNumberPerSec * 60) / 500;
+    return planeMode ? (hitsNumberPerSec * 60) / 500 : (hitsNumberPerSec * 60) / 500;
   }
 
   getDeviceInfo(device: DeviceRium): Observable<Partial<DeviceRium>> {

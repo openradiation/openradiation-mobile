@@ -16,17 +16,17 @@ export abstract class AbstractDeviceService<T extends AbstractDevice> {
 
   abstract startMeasureScan(device: T, stopSignal: Observable<any>): Observable<Step>;
 
-  computeRadiationValue(measure: Measure): number {
+  computeRadiationValue(measure: Measure, planeMode: boolean): number {
     if (measure.endTime && measure.hitsNumber !== undefined) {
       const duration = (measure.endTime - measure.startTime) / 1000;
       const hitsNumberPerSec = measure.hitsNumber / duration;
-      return this.convertHitsNumberPerSec(hitsNumberPerSec);
+      return this.convertHitsNumberPerSec(hitsNumberPerSec, planeMode);
     } else {
       throw new Error('Incorrect measure : missing endTime or hitsNumber');
     }
   }
 
-  protected abstract convertHitsNumberPerSec(hitsNumberPerSec: number): number;
+  protected abstract convertHitsNumberPerSec(hitsNumberPerSec: number, planeMode: boolean): number;
 
   abstract connectDevice(device: T): Observable<any>;
 

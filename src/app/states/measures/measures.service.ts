@@ -66,8 +66,8 @@ export class MeasuresService {
     return detectHits;
   }
 
-  computeRadiationValue(measure: Measure, device: AbstractDevice): number {
-    return this.devicesService.service(device).computeRadiationValue(measure);
+  computeRadiationValue(measure: Measure, device: AbstractDevice, planeMode: boolean): number {
+    return this.devicesService.service(device).computeRadiationValue(measure, planeMode);
   }
 
   publishMeasure(measure: Measure | MeasureSeries): Observable<any> {

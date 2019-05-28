@@ -360,7 +360,7 @@ export class MeasuresState implements NgxsOnInit {
     { getState, patchState, dispatch }: StateContext<MeasuresStateModel>,
     { step, device }: AddMeasureScanStep
   ) {
-    const { currentMeasure, currentSeries } = getState();
+    const { currentMeasure, currentSeries, params } = getState();
     if (currentMeasure && currentMeasure.steps) {
       const newCurrentMeasure = {
         ...currentMeasure,
@@ -375,7 +375,11 @@ export class MeasuresState implements NgxsOnInit {
           ? currentMeasure.hitsNumber + step.hitsNumber
           : step.hitsNumber;
         newCurrentMeasure.hitsAccuracy = newCurrentMeasure.hitsNumber;
-        newCurrentMeasure.value = this.measuresService.computeRadiationValue(newCurrentMeasure, device);
+        newCurrentMeasure.value = this.measuresService.computeRadiationValue(
+          newCurrentMeasure,
+          device,
+          params.planeMode
+        );
       } else if (step.hitsAccuracy !== undefined && step.value !== undefined) {
         newCurrentMeasure.hitsAccuracy = step.hitsAccuracy;
         newCurrentMeasure.value = step.value;

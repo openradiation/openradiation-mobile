@@ -25,8 +25,8 @@ export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag
     super(store, ble);
   }
 
-  protected convertHitsNumberPerSec(hitsNumberPerSec: number): number {
-    return (hitsNumberPerSec * 0.128 * 3600 - 40) / 1000;
+  protected convertHitsNumberPerSec(hitsNumberPerSec: number, planeMode: boolean): number {
+    return planeMode ? (hitsNumberPerSec * 0.128 * 3600 - 40) / 1000 : (hitsNumberPerSec * 0.128 * 3600 - 40) / 1000;
   }
 
   getDeviceInfo(device: DeviceAtomTag): Observable<Partial<DeviceAtomTag>> {
