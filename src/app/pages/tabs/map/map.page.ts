@@ -88,7 +88,7 @@ export class MapPage extends AutoUnsubscribePage {
             const valueMax = 100;
             const dateMin = 0;
             const dateMax = 100;
-            url += `/all/all${planeMode ? 'plane' : 'groundlevel'}/all/${valueMin}/${valueMax}/${dateMin}/${dateMax}`;
+            url += `/all/all/${planeMode ? 'plane' : 'groundlevel'}/all/${valueMin}/${valueMax}/${dateMin}/${dateMax}`;
           }
           console.log(url);
           this.iframeURL = this.domSanitizer.bypassSecurityTrustResourceUrl(url);
