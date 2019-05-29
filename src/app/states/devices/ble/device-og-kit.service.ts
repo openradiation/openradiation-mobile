@@ -14,6 +14,15 @@ import { DeviceOGKit } from './device-og-kit';
   providedIn: 'root'
 })
 export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
+  protected calibrationFunctions = {
+    planeMode: {
+      0: '0.000001 * (hitsNumberPerSec - 0.14) ** 3 + 0.0025 * (hitsNumberPerSec - 0.14) ** 2 + 0.39 * (hitsNumberPerSec - 0.14)'
+    },
+    groundLevel: {
+      0: '0.000001 * (hitsNumberPerSec - 0.14) ** 3 + 0.0025 * (hitsNumberPerSec - 0.14) ** 2 + 0.39 * (hitsNumberPerSec - 0.14)'
+    }
+  };
+
   protected service = '2220';
   protected receiveCharacteristic = '2221';
   private sendCharacteristic = '2222';
@@ -55,13 +64,13 @@ export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
     super(store, ble);
   }
 
-  protected convertHitsNumberPerSec(hitsNumberPerSec: number, planeMode: boolean): number {
-    const TcNet = hitsNumberPerSec - 0.14;
-    console.log(planeMode);
-    return planeMode
-      ? 0.000001 * TcNet ** 3 + 0.0025 * TcNet ** 2 + 0.39 * TcNet
-      : 0.000001 * TcNet ** 3 + 0.0025 * TcNet ** 2 + 0.39 * TcNet;
-  }
+  // protected convertHitsNumberPerSec(hitsNumberPerSec: number, planeMode: boolean): number {
+  //   const TcNet = hitsNumberPerSec - 0.14;
+  //   console.log(planeMode);
+  //   return planeMode
+  //     ? 0.000001 * (hitsNumberPerSec - 0.14) ** 3 + 0.0025 * (hitsNumberPerSec - 0.14) ** 2 + 0.39 * (hitsNumberPerSec - 0.14)
+  //     : 0.000001 * TcNet ** 3 + 0.0025 * TcNet ** 2 + 0.39 * TcNet;
+  // }
 
   getDeviceInfo(device: DeviceOGKit): Observable<Partial<DeviceOGKit>> {
     const startReceiveData = this.startReceiveData(device).pipe(shareReplay());

@@ -15,6 +15,15 @@ import { DeviceAtomTag } from './device-atom-tag';
   providedIn: 'root'
 })
 export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag> {
+  protected calibrationFunctions = {
+    planeMode: {
+      0: 'Math.max((hitsNumberPerSec * 0.128 * 3600 - 40) / 1000, 0)'
+    },
+    groundLevel: {
+      0: 'Math.max((hitsNumberPerSec * 0.128 * 3600 - 40) / 1000, 0)'
+    }
+  };
+
   protected service = '63462A4A-C28C-4FFD-87A4-2D23A1C72581';
   protected receiveCharacteristic = '70BC767E-7A1A-4304-81ED-14B9AF54F7BD';
   private firmwareService = '180a';
@@ -25,9 +34,11 @@ export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag
     super(store, ble);
   }
 
-  protected convertHitsNumberPerSec(hitsNumberPerSec: number, planeMode: boolean): number {
-    return planeMode ? (hitsNumberPerSec * 0.128 * 3600 - 40) / 1000 : (hitsNumberPerSec * 0.128 * 3600 - 40) / 1000;
-  }
+  // protected convertHitsNumberPerSec(hitsNumberPerSec: number, planeMode: boolean): number {
+  //   return planeMode
+  //     ? Math.max((hitsNumberPerSec * 0.128 * 3600 - 40) / 1000, 0)
+  //     : Math.max((hitsNumberPerSec * 0.128 * 3600 - 40) / 1000, 0);
+  // }
 
   getDeviceInfo(device: DeviceAtomTag): Observable<Partial<DeviceAtomTag>> {
     return fromPromise(this.ble.read(device.sensorUUID, this.firmwareService, this.firmwareCharacteristic)).pipe(

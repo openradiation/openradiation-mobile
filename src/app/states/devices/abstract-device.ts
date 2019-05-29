@@ -36,3 +36,8 @@ export enum DeviceType {
   PocketGeiger = 'Pocket Geiger Type 6',
   Rium = 'RiumGm'
 }
+
+export interface CalibrationFunctions {
+  0: string;
+  [key: number]: string;
+}
