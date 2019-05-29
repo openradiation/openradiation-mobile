@@ -57,6 +57,7 @@ export class Measure extends AbstractMeasure {
   seatNumber?: string;
   steps?: Step[] = [];
   hitsAccuracy?: number;
+  calibrationFunction?: string;
 
   constructor(
     apparatusId: string | undefined,

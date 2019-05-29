@@ -371,15 +371,17 @@ export class MeasuresState implements NgxsOnInit {
         newCurrentMeasure.startTime = step.ts - device.hitsPeriod;
       }
       if (step.hitsNumber !== undefined) {
-        newCurrentMeasure.hitsNumber = currentMeasure.hitsNumber
-          ? currentMeasure.hitsNumber + step.hitsNumber
-          : step.hitsNumber;
-        newCurrentMeasure.hitsAccuracy = newCurrentMeasure.hitsNumber;
-        newCurrentMeasure.value = this.measuresService.computeRadiationValue(
+        const [value, calibrationFunction] = this.measuresService.computeRadiationValue(
           newCurrentMeasure,
           device,
           params.planeMode
         );
+        newCurrentMeasure.hitsNumber = currentMeasure.hitsNumber
+          ? currentMeasure.hitsNumber + step.hitsNumber
+          : step.hitsNumber;
+        newCurrentMeasure.hitsAccuracy = newCurrentMeasure.hitsNumber;
+        newCurrentMeasure.value = value;
+        newCurrentMeasure.calibrationFunction = calibrationFunction;
       } else if (step.hitsAccuracy !== undefined && step.value !== undefined) {
         newCurrentMeasure.hitsAccuracy = step.hitsAccuracy;
         newCurrentMeasure.value = step.value;

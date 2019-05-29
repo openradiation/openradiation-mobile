@@ -42,5 +42,6 @@ export interface MeasureApi {
     seatNumber?: string;
     storm?: boolean;
     windowSeat?: boolean;
+    calibrationFunction?: string;
   };
 }

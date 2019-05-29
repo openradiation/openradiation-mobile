@@ -66,7 +66,7 @@ export class MeasuresService {
     return detectHits;
   }
 
-  computeRadiationValue(measure: Measure, device: AbstractDevice, planeMode: boolean): number {
+  computeRadiationValue(measure: Measure, device: AbstractDevice, planeMode: boolean): [number, string] {
     return this.devicesService.service(device).computeRadiationValue(measure, planeMode);
   }
 
@@ -124,7 +124,8 @@ export class MeasuresService {
           flightNumber: measure.flightNumber,
           seatNumber: measure.seatNumber,
           storm: measure.storm,
-          windowSeat: measure.windowSeat
+          windowSeat: measure.windowSeat,
+          calibrationFunction: measure.calibrationFunction
         }
       };
       return this.httpClient.post(environment.API_URI, payload);

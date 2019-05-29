@@ -22,7 +22,7 @@ export abstract class AbstractDeviceService<T extends AbstractDevice> {
 
   abstract startMeasureScan(device: T, stopSignal: Observable<any>): Observable<Step>;
 
-  computeRadiationValue(measure: Measure, planeMode: boolean): number {
+  computeRadiationValue(measure: Measure, planeMode: boolean): [number, string] {
     if (measure.endTime && measure.hitsNumber !== undefined) {
       const duration = (measure.endTime - measure.startTime) / 1000;
       const hitsNumberPerSec = measure.hitsNumber / duration;
@@ -32,16 +32,16 @@ export abstract class AbstractDeviceService<T extends AbstractDevice> {
     }
   }
 
-  protected convertHitsNumberPerSec(hitsNumberPerSec: number, planeMode: boolean): number {
+  protected convertHitsNumberPerSec(hitsNumberPerSec: number, planeMode: boolean): [number, string] {
     const calibrationFunction = this.getCalibrationFunction(
       hitsNumberPerSec,
       planeMode ? this.calibrationFunctions.planeMode : this.calibrationFunctions.groundLevel
     );
     if (calibrationFunction) {
       // tslint:disable-next-line:no-eval
-      return eval(calibrationFunction);
+      return [eval(calibrationFunction), calibrationFunction];
     } else {
-      return 0;
+      return [0, ''];
     }
   }
 
