@@ -13,10 +13,10 @@ import { DeviceMock } from './device-mock';
 export class DeviceMockService extends AbstractDeviceService<DeviceMock> {
   protected calibrationFunctions = {
     planeMode: {
-      0: '0.000001 * (hitsNumberPerSec - 0.14) ** 3 + 0.0025 * (hitsNumberPerSec - 0.14) ** 2 + 0.39 * (hitsNumberPerSec - 0.14)'
+      0: '0.000001 * (cps - 0.14) ^ 3 + 0.0025 * (cps - 0.14) ^ 2 + 0.39 * (cps - 0.14)'
     },
     groundLevel: {
-      0: '0.000001 * (hitsNumberPerSec - 0.14) ** 3 + 0.0025 * (hitsNumberPerSec - 0.14) ** 2 + 0.39 * (hitsNumberPerSec - 0.14)'
+      0: '0.000001 * (cps - 0.14) ^ 3 + 0.0025 * (cps - 0.14) ^ 2 + 0.39 * (cps - 0.14)'
     }
   };
 

@@ -17,10 +17,10 @@ import { DeviceAtomTag } from './device-atom-tag';
 export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag> {
   protected calibrationFunctions = {
     planeMode: {
-      0: 'Math.max((hitsNumberPerSec * 0.128 * 3600 - 40) / 1000, 0)'
+      0: 'max((cps * 0.128 * 3600 - 40) / 1000, 0)'
     },
     groundLevel: {
-      0: 'Math.max((hitsNumberPerSec * 0.128 * 3600 - 40) / 1000, 0)'
+      0: 'max((cps * 0.128 * 3600 - 40) / 1000, 0)'
     }
   };
 

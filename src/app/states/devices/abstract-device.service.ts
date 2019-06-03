@@ -38,8 +38,16 @@ export abstract class AbstractDeviceService<T extends AbstractDevice> {
       planeMode ? this.calibrationFunctions.planeMode : this.calibrationFunctions.groundLevel
     );
     if (calibrationFunction) {
-      // tslint:disable-next-line:no-eval
-      return [eval(calibrationFunction), calibrationFunction];
+      return [
+        // tslint:disable-next-line:no-eval
+        eval(
+          calibrationFunction
+            .replace(/cps/g, 'hitsNumberPerSec')
+            .replace(/\^/g, '**')
+            .replace(/max/g, 'Match.max')
+        ),
+        calibrationFunction
+      ];
     } else {
       return [0, ''];
     }
