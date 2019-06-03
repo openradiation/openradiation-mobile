@@ -44,7 +44,7 @@ export abstract class AbstractDeviceService<T extends AbstractDevice> {
           calibrationFunction
             .replace(/cps/g, 'hitsNumberPerSec')
             .replace(/\^/g, '**')
-            .replace(/max/g, 'Match.max')
+            .replace(/max/g, 'Math.max')
         ),
         calibrationFunction
       ];
