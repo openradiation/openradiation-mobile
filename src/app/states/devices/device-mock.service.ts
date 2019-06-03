@@ -24,11 +24,6 @@ export class DeviceMockService extends AbstractDeviceService<DeviceMock> {
     super(store);
   }
 
-  // protected convertHitsNumberPerSec(hitsNumberPerSec: number): number {
-  //   const TcNet = hitsNumberPerSec - 0.14;
-  //   return 0.000001 * TcNet ** 3 + 0.0025 * TcNet ** 2 + 0.39 * TcNet;
-  // }
-
   getDeviceInfo(device: DeviceMock): Observable<Partial<DeviceMock>> {
     return of({});
   }

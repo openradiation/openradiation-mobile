@@ -29,10 +29,6 @@ export class DeviceRiumService extends AbstractUSBDeviceService<DeviceRium> {
     super(store, actions$);
   }
 
-  // protected convertHitsNumberPerSec(hitsNumberPerSec: number, planeMode: boolean): number {
-  //   return planeMode ? (hitsNumberPerSec * 60) / 500 : (hitsNumberPerSec * 60) / 500;
-  // }
-
   getDeviceInfo(device: DeviceRium): Observable<Partial<DeviceRium>> {
     return Observable.create((observer: Observer<ArrayBuffer>) => {
       UsbSerial.onDataReceived(data => observer.next(data), err => observer.error(err));

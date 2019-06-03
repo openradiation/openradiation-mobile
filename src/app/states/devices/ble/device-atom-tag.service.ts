@@ -34,12 +34,6 @@ export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag
     super(store, ble);
   }
 
-  // protected convertHitsNumberPerSec(hitsNumberPerSec: number, planeMode: boolean): number {
-  //   return planeMode
-  //     ? Math.max((hitsNumberPerSec * 0.128 * 3600 - 40) / 1000, 0)
-  //     : Math.max((hitsNumberPerSec * 0.128 * 3600 - 40) / 1000, 0);
-  // }
-
   getDeviceInfo(device: DeviceAtomTag): Observable<Partial<DeviceAtomTag>> {
     return fromPromise(this.ble.read(device.sensorUUID, this.firmwareService, this.firmwareCharacteristic)).pipe(
       map(buffer => {

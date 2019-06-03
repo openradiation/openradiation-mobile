@@ -34,10 +34,6 @@ export class DevicePocketGeigerService extends AbstractUSBDeviceService<DevicePo
     super(store, actions$);
   }
 
-  // protected convertHitsNumberPerSec(hitsNumberPerSec: number, planeMode: boolean): number {
-  //   return planeMode ? (hitsNumberPerSec * 60) / 53.032 : (hitsNumberPerSec * 60) / 53.032;
-  // }
-
   getDeviceInfo(device: DevicePocketGeiger): Observable<Partial<DevicePocketGeiger>> {
     return of({});
   }

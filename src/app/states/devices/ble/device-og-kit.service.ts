@@ -64,14 +64,6 @@ export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
     super(store, ble);
   }
 
-  // protected convertHitsNumberPerSec(hitsNumberPerSec: number, planeMode: boolean): number {
-  //   const TcNet = hitsNumberPerSec - 0.14;
-  //   console.log(planeMode);
-  //   return planeMode
-  //     ? 0.000001 * (hitsNumberPerSec - 0.14) ** 3 + 0.0025 * (hitsNumberPerSec - 0.14) ** 2 + 0.39 * (hitsNumberPerSec - 0.14)
-  //     : 0.000001 * TcNet ** 3 + 0.0025 * TcNet ** 2 + 0.39 * TcNet;
-  // }
-
   getDeviceInfo(device: DeviceOGKit): Observable<Partial<DeviceOGKit>> {
     const startReceiveData = this.startReceiveData(device).pipe(shareReplay());
     startReceiveData.subscribe();

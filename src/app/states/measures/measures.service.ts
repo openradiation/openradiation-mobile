@@ -126,6 +126,8 @@ export class MeasuresService {
           storm: measure.storm,
           windowSeat: measure.windowSeat,
           calibrationFunction: measure.calibrationFunction
+            ? measure.calibrationFunction.split('hitsNumberPerSec').join('cps') // ToDo Change with the right value
+            : undefined
         }
       };
       return this.httpClient.post(environment.API_URI, payload);

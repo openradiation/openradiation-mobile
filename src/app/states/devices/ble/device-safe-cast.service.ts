@@ -29,10 +29,6 @@ export class DeviceSafeCastService extends AbstractBLEDeviceService<DeviceSafeCa
     super(store, ble);
   }
 
-  // protected convertHitsNumberPerSec(hitsNumberPerSec: number, planeMode: boolean): number {
-  //   return planeMode ? (hitsNumberPerSec * 60) / 334 : (hitsNumberPerSec * 60) / 334;
-  // }
-
   getDeviceInfo(device: DeviceSafeCast): Observable<Partial<DeviceSafeCast>> {
     return of({});
   }
