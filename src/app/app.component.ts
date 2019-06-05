@@ -1,11 +1,5 @@
 import { Component } from '@angular/core';
 
-import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { Platform } from '@ionic/angular';
-import { PositionService } from './states/measures/position.service';
-
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -14,26 +8,11 @@ import { PositionService } from './states/measures/position.service';
 export class AppComponent {
   keyboardOpen: boolean;
 
-  constructor(
-    private platform: Platform,
-    private splashScreen: SplashScreen,
-    private statusBar: StatusBar,
-    private screenOrientation: ScreenOrientation,
-    private positionService: PositionService
-  ) {
+  constructor() {
     this.initializeApp();
   }
 
   initializeApp() {
-    this.platform.ready().then(() => {
-      if (this.platform.is('cordova')) {
-        this.statusBar.overlaysWebView(true);
-        this.statusBar.styleLightContent();
-        this.splashScreen.hide();
-        this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
-        this.positionService.init();
-      }
-    });
     window.addEventListener('keyboardWillShow', () => (this.keyboardOpen = true));
     window.addEventListener('keyboardWillHide', () => (this.keyboardOpen = false));
   }

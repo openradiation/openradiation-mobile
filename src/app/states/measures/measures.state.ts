@@ -3,7 +3,6 @@ import { Location } from '@mauron85/cordova-plugin-background-geolocation';
 import { Action, NgxsOnInit, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { V1MigrationService } from '../../services/v1-migration.service';
 import { AbstractDevice } from '../devices/abstract-device';
 import { DateService } from './date.service';
 import {
@@ -28,7 +27,6 @@ import {
   EnableExpertMode,
   PositionChanged,
   PublishMeasure,
-  RetrieveV1Measures,
   ShowMeasure,
   StartManualMeasure,
   StartMeasure,
@@ -76,13 +74,11 @@ export interface MeasuresStateModel {
     expertMode: boolean;
     autoPublish: boolean;
   };
-  v1MeasuresRetrieved: boolean;
 }
 
 @State<MeasuresStateModel>({
   name: 'measures',
   defaults: {
-    v1MeasuresRetrieved: false,
     measures: [],
     recentTags: [],
     canEndCurrentScan: false,
@@ -92,13 +88,12 @@ export interface MeasuresStateModel {
     }
   }
 })
-export class MeasuresState implements NgxsOnInit {
+export class MeasuresState {
   constructor(
     private positionService: PositionService,
     private device: Device,
     private measuresService: MeasuresService,
-    private dateService: DateService,
-    private v1MigrationService: V1MigrationService
+    private dateService: DateService
   ) {}
 
   @Selector()
@@ -144,13 +139,6 @@ export class MeasuresState implements NgxsOnInit {
   @Selector()
   static canEndCurrentScan({ canEndCurrentScan }: MeasuresStateModel): boolean {
     return canEndCurrentScan;
-  }
-
-  ngxsOnInit({ dispatch, getState }: StateContext<MeasuresStateModel>) {
-    const { v1MeasuresRetrieved } = getState();
-    if (!v1MeasuresRetrieved) {
-      dispatch(new RetrieveV1Measures());
-    }
   }
 
   @Action(EnableExpertMode)
@@ -670,22 +658,5 @@ export class MeasuresState implements NgxsOnInit {
       recentTags:
         index === -1 ? [tag, ...recentTags] : [tag, ...recentTags.slice(0, index), ...recentTags.slice(index + 1)]
     });
-  }
-
-  @Action(RetrieveV1Measures)
-  retrieveV1Measures({ patchState }: StateContext<MeasuresStateModel>) {
-    return this.v1MigrationService
-      .retrieveMeasures()
-      .then(measures => {
-        patchState({
-          measures,
-          v1MeasuresRetrieved: true
-        });
-      })
-      .catch(() => {
-        patchState({
-          v1MeasuresRetrieved: true
-        });
-      });
   }
 }

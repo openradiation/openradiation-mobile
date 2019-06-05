@@ -1,24 +1,31 @@
+import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { Platform } from '@ionic/angular';
 import { Action, NgxsOnInit, Selector, State, StateContext } from '@ngxs/store';
 import { tap } from 'rxjs/operators';
-import { V1MigrationService } from '../../services/v1-migration.service';
-import { LogIn, LogOut, RetrieveV1User, SetLanguage } from './user.action';
+import { PositionService } from '../measures/position.service';
+import { LogIn, LogOut, SetLanguage } from './user.action';
 import { UserService } from './user.service';
 
 export interface UserStateModel {
   login?: string;
   password?: string;
   language?: string;
-  v1UserRetrieved: boolean;
 }
 
 @State<UserStateModel>({
-  name: 'user',
-  defaults: {
-    v1UserRetrieved: false
-  }
+  name: 'user'
 })
 export class UserState implements NgxsOnInit {
-  constructor(private userService: UserService, private v1MigrationService: V1MigrationService) {}
+  constructor(
+    private userService: UserService,
+    private platform: Platform,
+    private splashScreen: SplashScreen,
+    private statusBar: StatusBar,
+    private screenOrientation: ScreenOrientation,
+    private positionService: PositionService
+  ) {}
 
   @Selector()
   static login({ login }: UserStateModel): string | undefined {
@@ -31,11 +38,16 @@ export class UserState implements NgxsOnInit {
   }
 
   ngxsOnInit({ dispatch, getState }: StateContext<UserStateModel>) {
-    const { v1UserRetrieved } = getState();
+    this.platform.ready().then(() => {
+      if (this.platform.is('cordova')) {
+        this.statusBar.overlaysWebView(true);
+        this.statusBar.styleLightContent();
+        this.splashScreen.hide();
+        this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+        this.positionService.init();
+      }
+    });
     dispatch(new SetLanguage());
-    if (!v1UserRetrieved) {
-      dispatch(new RetrieveV1User());
-    }
   }
 
   @Action(LogIn)
@@ -62,23 +74,5 @@ export class UserState implements NgxsOnInit {
   setLanguage({ getState, patchState }: StateContext<UserStateModel>, { language }: SetLanguage) {
     language = language || getState().language || this.userService.getDefaultLanguage();
     return this.userService.setLanguage(language).pipe(tap(() => patchState({ language })));
-  }
-
-  @Action(RetrieveV1User)
-  retrieveV1User({ patchState }: StateContext<UserStateModel>) {
-    return this.v1MigrationService
-      .retrieveUser()
-      .then(({ login, password }) => {
-        patchState({
-          login,
-          password,
-          v1UserRetrieved: true
-        });
-      })
-      .catch(() => {
-        patchState({
-          v1UserRetrieved: true
-        });
-      });
   }
 }
