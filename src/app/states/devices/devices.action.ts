@@ -1,6 +1,13 @@
 import { AbstractDevice } from './abstract-device';
 import { AbstractBLEDevice } from './ble/abstract-ble-device';
 import { AbstractUSBDevice } from './usb/abstract-usb-device';
+import { UserStateModel } from '../user/user.state';
+import { DevicesStateModel } from './devices.state';
+
+export class InitDevices {
+  static readonly type = '[Devices] Init';
+  constructor(public knownDevices: AbstractDevice[]) {}
+}
 
 export class StartDiscoverBLEDevices {
   static readonly type = '[Devices] Start discover BLE devices';

@@ -1,11 +1,7 @@
-import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { Platform } from '@ionic/angular';
 import { Action, NgxsOnInit, Selector, State, StateContext } from '@ngxs/store';
 import { tap } from 'rxjs/operators';
-import { PositionService } from '../measures/position.service';
-import { LogIn, LogOut, SetLanguage } from './user.action';
+import { StorageService } from '../../services/storage.service';
+import { InitUser, LogIn, LogOut, SetLanguage } from './user.action';
 import { UserService } from './user.service';
 
 export interface UserStateModel {
@@ -18,14 +14,7 @@ export interface UserStateModel {
   name: 'user'
 })
 export class UserState implements NgxsOnInit {
-  constructor(
-    private userService: UserService,
-    private platform: Platform,
-    private splashScreen: SplashScreen,
-    private statusBar: StatusBar,
-    private screenOrientation: ScreenOrientation,
-    private positionService: PositionService
-  ) {}
+  constructor(private userService: UserService, private storageService: StorageService) {}
 
   @Selector()
   static login({ login }: UserStateModel): string | undefined {
@@ -37,17 +26,13 @@ export class UserState implements NgxsOnInit {
     return language;
   }
 
-  ngxsOnInit({ dispatch, getState }: StateContext<UserStateModel>) {
-    this.platform.ready().then(() => {
-      if (this.platform.is('cordova')) {
-        this.statusBar.overlaysWebView(true);
-        this.statusBar.styleLightContent();
-        this.splashScreen.hide();
-        this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
-        this.positionService.init();
-      }
-    });
-    dispatch(new SetLanguage());
+  ngxsOnInit({ dispatch, patchState }: StateContext<UserStateModel>) {
+    this.storageService.init();
+  }
+
+  @Action(InitUser)
+  initUser({ patchState }: StateContext<UserStateModel>, { user }: InitUser) {
+    patchState({ ...user });
   }
 
   @Action(LogIn)

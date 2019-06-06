@@ -16,7 +16,6 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { IonicStorageModule } from '@ionic/storage';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { NgxsAsyncStoragePluginModule } from '@ngxs-labs/async-storage-plugin';
 import { NgxsFormPluginModule } from '@ngxs/form-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsModule } from '@ngxs/store';
@@ -27,7 +26,6 @@ import { MenuComponent } from './pages/menu/menu.component';
 import { DevicesState } from './states/devices/devices.state';
 import { MeasuresState } from './states/measures/measures.state';
 import { UserState } from './states/user/user.state';
-import { StorageService } from './storage/Storage.service';
 
 @NgModule({
   declarations: [AppComponent, MenuComponent],
@@ -36,15 +34,12 @@ import { StorageService } from './storage/Storage.service';
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    NgxsFormPluginModule.forRoot(),
-    NgxsModule.forRoot([DevicesState, MeasuresState, UserState]),
-    NgxsAsyncStoragePluginModule.forRoot(StorageService, {
-      key: ['devices.knownDevices', 'measures.measures', 'measures.params', 'measures.recentTags', 'user']
-    }),
     IonicStorageModule.forRoot({
       name: 'ord-db',
       driverOrder: ['sqlite']
     }),
+    NgxsModule.forRoot([DevicesState, MeasuresState, UserState], { developmentMode: !environment.production }),
+    NgxsFormPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot({
       disabled: environment.production
     }),
