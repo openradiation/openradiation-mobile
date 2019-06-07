@@ -152,6 +152,11 @@ export enum MeasureEnvironment {
   Plane = 'plane'
 }
 
+export interface Params {
+  expertMode: boolean;
+  autoPublish: boolean;
+}
+
 export interface MeasureReport {
   latitude: number | undefined;
   longitude: number | undefined;

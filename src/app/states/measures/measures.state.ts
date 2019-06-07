@@ -3,18 +3,10 @@ import { Location } from '@mauron85/cordova-plugin-background-geolocation';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { Form } from '../../app.component';
 import { AbstractDevice } from '../devices/abstract-device';
 import { DateService } from './date.service';
-import {
-  Measure,
-  MeasureReport,
-  MeasureSeries,
-  MeasureSeriesParams,
-  MeasureSeriesParamsSelected,
-  MeasureSeriesReport,
-  MeasureType,
-  PositionAccuracyThreshold
-} from './measure';
+import { Measure, MeasureReport, MeasureSeries, MeasureSeriesParams, MeasureSeriesParamsSelected, MeasureSeriesReport, MeasureType, PositionAccuracyThreshold } from './measure';
 import {
   AddMeasureScanStep,
   AddRecentTag,
@@ -26,8 +18,6 @@ import {
   EnableAutoPublish,
   EnableExpertMode,
   InitMeasures,
-  InitParam,
-  InitRecentTags,
   PositionChanged,
   PublishMeasure,
   ShowMeasure,
@@ -55,24 +45,9 @@ export interface MeasuresStateModel {
   currentSeries?: MeasureSeries;
   canEndCurrentScan: boolean;
   recentTags: string[];
-  measureReport?: {
-    model: MeasureReport;
-    dirty: boolean;
-    status: string;
-    errors: any;
-  };
-  measureSeriesParams?: {
-    model: MeasureSeriesParams;
-    dirty: boolean;
-    status: string;
-    errors: any;
-  };
-  measureSeriesReport?: {
-    model: MeasureSeriesReport;
-    dirty: boolean;
-    status: string;
-    errors: any;
-  };
+  measureReport?: Form<MeasureReport>;
+  measureSeriesParams?: Form<MeasureSeriesParams>;
+  measureSeriesReport?: Form<MeasureSeriesReport>;
   params: {
     expertMode: boolean;
     autoPublish: boolean;
@@ -144,19 +119,9 @@ export class MeasuresState {
     return canEndCurrentScan;
   }
 
-  @Action(InitParam)
-  initUser({ patchState }: StateContext<MeasuresStateModel>, { params }: InitParam) {
-    patchState({ params });
-  }
-
   @Action(InitMeasures)
-  initMeasures({ patchState }: StateContext<MeasuresStateModel>, { measures }: InitMeasures) {
-    patchState({ measures });
-  }
-
-  @Action(InitRecentTags)
-  initRecentTags({ patchState }: StateContext<MeasuresStateModel>, { recentTags }: InitRecentTags) {
-    patchState({ recentTags });
+  initMeasures({ patchState }: StateContext<MeasuresStateModel>, { measures, params, recentTags }: InitMeasures) {
+    patchState({ measures, params, recentTags });
   }
 
   @Action(EnableExpertMode)

@@ -17,3 +17,10 @@ export class AppComponent {
     window.addEventListener('keyboardWillHide', () => (this.keyboardOpen = false));
   }
 }
+
+export interface Form<T> {
+  model: T;
+  dirty: boolean;
+  status: string;
+  errors: any;
+}

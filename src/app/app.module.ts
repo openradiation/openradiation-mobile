@@ -38,7 +38,7 @@ import { UserState } from './states/user/user.state';
       name: 'ord-db',
       driverOrder: ['sqlite']
     }),
-    NgxsModule.forRoot([DevicesState, MeasuresState, UserState], { developmentMode: !environment.production }),
+    NgxsModule.forRoot([DevicesState, MeasuresState, UserState]),
     NgxsFormPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot({
       disabled: environment.production

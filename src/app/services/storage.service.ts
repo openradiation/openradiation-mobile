@@ -5,13 +5,13 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Actions, Store } from '@ngxs/store';
-import { forkJoin, from, Observable } from 'rxjs';
-import { map, mapTo } from 'rxjs/operators';
+import { forkJoin, from, Observable, of } from 'rxjs';
+import { concatMap } from 'rxjs/operators';
 import { AbstractDevice } from '../states/devices/abstract-device';
 import { InitDevices } from '../states/devices/devices.action';
 import { DevicesStateModel } from '../states/devices/devices.state';
-import { Measure, MeasureSeries } from '../states/measures/measure';
-import { InitMeasures, InitParam, InitRecentTags } from '../states/measures/measures.action';
+import { Measure, MeasureSeries, Params } from '../states/measures/measure';
+import { InitMeasures } from '../states/measures/measures.action';
 import { MeasuresStateModel } from '../states/measures/measures.state';
 import { PositionService } from '../states/measures/position.service';
 import { InitUser, SetLanguage } from '../states/user/user.action';
@@ -38,52 +38,43 @@ export class StorageService {
     private statusBar: StatusBar,
     private positionService: PositionService,
     private screenOrientation: ScreenOrientation
-  ) {
-    this.store
-      .select(({ devices }: { devices: DevicesStateModel }) => devices.knownDevices)
-      .subscribe(knownDevices => this.saveKnownDevices(knownDevices));
-    this.store
-      .select(({ measures }: { measures: MeasuresStateModel }) => measures.measures)
-      .subscribe(measures => this.saveMeasures(measures));
-    this.store
-      .select(({ measures }: { measures: MeasuresStateModel }) => measures.params)
-      .subscribe(params => this.saveParams(params));
-    this.store
-      .select(({ measures }: { measures: MeasuresStateModel }) => measures.recentTags)
-      .subscribe(recentTags => this.saveRecentTags(recentTags));
-  }
+  ) {}
 
   init() {
     forkJoin(
       this.getKnownDevices().pipe(
-        map(knownDevices => {
-          this.store.dispatch(new InitDevices(knownDevices));
+        concatMap(knownDevices => {
+          return knownDevices ? this.store.dispatch(new InitDevices(knownDevices)) : of(null);
         })
       ),
-      this.getParams().pipe(
-        map(params => {
-          this.store.dispatch(new InitParam(params));
-        })
-      ),
-      this.getMeasures().pipe(
-        map(measures => {
-          this.store.dispatch(new InitMeasures(measures));
-        })
-      ),
-      this.getRecentTags().pipe(
-        map(recentTags => {
-          this.store.dispatch(new InitRecentTags(recentTags));
+      forkJoin(this.getMeasures(), this.getParams(), this.getRecentTags()).pipe(
+        concatMap(([measures, params, recentTags]) => {
+          return measures && params && recentTags
+            ? this.store.dispatch(new InitMeasures(measures, params, recentTags))
+            : of(null);
         })
       ),
       this.getUser().pipe(
-        map(user => {
-          this.store.dispatch(new InitUser(user));
+        concatMap(user => {
+          return user ? this.store.dispatch(new InitUser(user)) : of(null);
         })
       )
     )
-      .pipe(mapTo(this.store.dispatch(new SetLanguage())))
+      .pipe(concatMap(() => this.store.dispatch(new SetLanguage())))
       .subscribe(() => {
         this.store.select(({ user }: { user: UserStateModel }) => user).subscribe(user => this.saveUser(user));
+        this.store
+          .select(({ devices }: { devices: DevicesStateModel }) => devices.knownDevices)
+          .subscribe(knownDevices => this.saveKnownDevices(knownDevices));
+        this.store
+          .select(({ measures }: { measures: MeasuresStateModel }) => measures.measures)
+          .subscribe(measures => this.saveMeasures(measures));
+        this.store
+          .select(({ measures }: { measures: MeasuresStateModel }) => measures.params)
+          .subscribe(params => this.saveParams(params));
+        this.store
+          .select(({ measures }: { measures: MeasuresStateModel }) => measures.recentTags)
+          .subscribe(recentTags => this.saveRecentTags(recentTags));
         this.platform.ready().then(() => {
           if (this.platform.is('cordova')) {
             this.statusBar.overlaysWebView(true);
@@ -96,23 +87,23 @@ export class StorageService {
       });
   }
 
-  getUser(): Observable<UserStateModel> {
+  getUser(): Observable<UserStateModel | null> {
     return this.getFromDB(this.userKey);
   }
 
-  getKnownDevices(): Observable<AbstractDevice[]> {
+  getKnownDevices(): Observable<AbstractDevice[] | null> {
     return this.getFromDB(this.knownDevicesKey);
   }
 
-  getParams(): Observable<{ expertMode: boolean; autoPublish: boolean }> {
+  getParams(): Observable<Params | null> {
     return this.getFromDB(this.paramsKey);
   }
 
-  getMeasures(): Observable<(Measure | MeasureSeries)[]> {
+  getMeasures(): Observable<(Measure | MeasureSeries)[] | null> {
     return this.getFromDB(this.measuresKey);
   }
 
-  getRecentTags(): Observable<string[]> {
+  getRecentTags(): Observable<string[] | null> {
     return this.getFromDB(this.recentTagsKey);
   }
 
@@ -121,27 +112,22 @@ export class StorageService {
   }
 
   saveUser(user: UserStateModel) {
-    console.log('setUser', user);
     this.storage.set(this.userKey, this.formatToDB(user));
   }
 
   saveKnownDevices(knownDevices: AbstractDevice[]) {
-    console.log('setDevices', knownDevices);
     this.storage.set(this.knownDevicesKey, this.formatToDB(knownDevices));
   }
 
   saveParams(params: { expertMode: boolean; autoPublish: boolean }) {
-    console.log('setParams', params);
     this.storage.set(this.paramsKey, this.formatToDB(params));
   }
 
   saveMeasures(measures: (Measure | MeasureSeries)[]) {
-    console.log('setMeasures', measures);
     this.storage.set(this.measuresKey, this.formatToDB(measures));
   }
 
   saveRecentTags(recentTags: string[]) {
-    console.log('setRecentTags', recentTags);
     this.storage.set(this.recentTagsKey, this.formatToDB(recentTags));
   }
 

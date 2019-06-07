@@ -26,6 +26,7 @@ import {
 import { DevicesService } from './devices.service';
 import { AbstractUSBDevice } from './usb/abstract-usb-device';
 import { USBDevicesService } from './usb/usb-devices.service';
+import { Form } from '../../app.component';
 
 export interface DevicesStateModel {
   isScanning: boolean;
@@ -34,12 +35,7 @@ export interface DevicesStateModel {
   knownDevices: AbstractDevice[];
   connectedDevice?: AbstractDevice;
   editedDevice?: AbstractDevice;
-  editedDeviceForm?: {
-    model: DeviceParams;
-    dirty: boolean;
-    status: string;
-    errors: any;
-  };
+  editedDeviceForm?: Form<DeviceParams>;
 }
 
 @State<DevicesStateModel>({
