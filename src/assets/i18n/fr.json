@@ -174,7 +174,7 @@
     "ONGOING": "Mesure en cours",
     "PLANE_MODE_NOTICE": {
       "PART1": "Les rayonnements cosmiques sont plus importants en haute altitude, lors des vols en avion, car ils sont moins atténués par la couche atmosphérique.",
-      "PART2": "L’activation du mode de mesure avion permet de prendre en compte un étalonnage spécifique des capteurs pour le rayonnement cosmiques. Au contraire, si vous faites des mesures au niveau du sol, choisissez le mode de mesure dans l’environnement.",
+      "PART2": "L’activation du mode de mesure à bord d'avion permet de prendre en compte un étalonnage spécifique des capteurs pour le rayonnement cosmiques. Au contraire, si vous faites des mesures au sol (même à la montage), choisissez le mode de mesure au niveau du sol.",
       "PART3": "<a onclick=\"window.open('https://www.openradiation.org/fr/rayonnement-cosmique', '_system')\">En savoir plus</a>"
     },
     "REPORT_LATITUDE": "Latitude",
