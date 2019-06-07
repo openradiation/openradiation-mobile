@@ -1,10 +1,8 @@
 import { Device } from '@ionic-native/device/ngx';
-import { Storage } from '@ionic/storage';
 import { Location } from '@mauron85/cordova-plugin-background-geolocation';
-import { Action, NgxsOnInit, Selector, State, StateContext } from '@ngxs/store';
+import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { StorageService } from '../../services/storage.service';
 import { AbstractDevice } from '../devices/abstract-device';
 import { DateService } from './date.service';
 import {
@@ -27,6 +25,9 @@ import {
   DisableExpertMode,
   EnableAutoPublish,
   EnableExpertMode,
+  InitMeasures,
+  InitParam,
+  InitRecentTags,
   PositionChanged,
   PublishMeasure,
   ShowMeasure,
@@ -141,6 +142,21 @@ export class MeasuresState {
   @Selector()
   static canEndCurrentScan({ canEndCurrentScan }: MeasuresStateModel): boolean {
     return canEndCurrentScan;
+  }
+
+  @Action(InitParam)
+  initUser({ patchState }: StateContext<MeasuresStateModel>, { params }: InitParam) {
+    patchState({ params });
+  }
+
+  @Action(InitMeasures)
+  initMeasures({ patchState }: StateContext<MeasuresStateModel>, { measures }: InitMeasures) {
+    patchState({ measures });
+  }
+
+  @Action(InitRecentTags)
+  initRecentTags({ patchState }: StateContext<MeasuresStateModel>, { recentTags }: InitRecentTags) {
+    patchState({ recentTags });
   }
 
   @Action(EnableExpertMode)

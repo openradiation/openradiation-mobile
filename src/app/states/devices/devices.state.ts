@@ -1,5 +1,4 @@
-import { Storage } from '@ionic/storage';
-import { Action, Actions, NgxsOnInit, Selector, State, StateContext } from '@ngxs/store';
+import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
 import { concatMap, map, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
@@ -27,8 +26,6 @@ import {
 import { DevicesService } from './devices.service';
 import { AbstractUSBDevice } from './usb/abstract-usb-device';
 import { USBDevicesService } from './usb/usb-devices.service';
-import { InitUser } from '../user/user.action';
-import { UserStateModel } from '../user/user.state';
 
 export interface DevicesStateModel {
   isScanning: boolean;

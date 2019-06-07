@@ -2,6 +2,26 @@ import { Location } from '@mauron85/cordova-plugin-background-geolocation';
 import { AbstractDevice } from '../devices/abstract-device';
 import { Measure, MeasureSeries, Step } from './measure';
 
+export class InitParam {
+  static readonly type = '[Measure] Param init';
+  constructor(
+    public params: {
+      expertMode: boolean;
+      autoPublish: boolean;
+    }
+  ) {}
+}
+
+export class InitMeasures {
+  static readonly type = '[Measure] Measure init';
+  constructor(public measures: (Measure | MeasureSeries)[]) {}
+}
+
+export class InitRecentTags {
+  static readonly type = '[Measure] RecentTags init';
+  constructor(public recentTags: string[]) {}
+}
+
 export class EnableExpertMode {
   static readonly type = '[Measures] Enable expert mode';
 }

@@ -50,7 +50,6 @@
     "@mauron85/cordova-plugin-background-geolocation": "^3.0.3",
     "@ngx-translate/core": "~11.0.1",
     "@ngx-translate/http-loader": "~4.0.0",
-    "@ngxs-labs/async-storage-plugin": "0.0.1",
     "@ngxs/devtools-plugin": "~3.4.3",
     "@ngxs/form-plugin": "~3.4.3",
     "@ngxs/logger-plugin": "~3.4.3",
