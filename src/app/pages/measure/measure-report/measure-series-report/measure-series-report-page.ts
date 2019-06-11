@@ -23,6 +23,9 @@ export class MeasureSeriesReportPage extends AbstractMeasureReportPage<MeasureSe
   planeMode: boolean;
   measureSeriesParamsSelected = MeasureSeriesParamsSelected;
 
+  exampleFlightNumber = { message: ': AF179' };
+  exampleSeatNumber = { message: ': C15' };
+
   url = '/measure/report-series';
 
   constructor(
