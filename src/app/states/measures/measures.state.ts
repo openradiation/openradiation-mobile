@@ -6,7 +6,16 @@ import { tap } from 'rxjs/operators';
 import { Form } from '../../app.component';
 import { AbstractDevice } from '../devices/abstract-device';
 import { DateService } from './date.service';
-import { Measure, MeasureReport, MeasureSeries, MeasureSeriesParams, MeasureSeriesParamsSelected, MeasureSeriesReport, MeasureType, PositionAccuracyThreshold } from './measure';
+import {
+  Measure,
+  MeasureReport,
+  MeasureSeries,
+  MeasureSeriesParams,
+  MeasureSeriesParamsSelected,
+  MeasureSeriesReport,
+  MeasureType,
+  PositionAccuracyThreshold
+} from './measure';
 import {
   AddMeasureScanStep,
   AddRecentTag,
