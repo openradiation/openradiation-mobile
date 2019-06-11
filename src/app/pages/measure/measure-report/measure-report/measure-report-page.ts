@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { NavigationService } from '../../../../services/navigation.service';
 import { DateService } from '../../../../states/measures/date.service';
-import { Measure, MeasureEnvironment, MeasureSeries } from '../../../../states/measures/measure';
+import { Measure, MeasureEnvironment } from '../../../../states/measures/measure';
 import { StartMeasureReport, StopMeasure, StopMeasureReport } from '../../../../states/measures/measures.action';
 import { MeasuresState, MeasuresStateModel } from '../../../../states/measures/measures.state';
 import { AbstractMeasureReportPage } from '../abstact-measure-report.page';
@@ -19,6 +20,9 @@ import { AbstractMeasureReportPage } from '../abstact-measure-report.page';
 export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
   @Select(MeasuresState.expertMode)
   expertMode$: Observable<boolean>;
+
+  exampleFlightNumber = { value: ': AF179' };
+  exampleSeatNumber = { value: ': C15' };
 
   currentMeasure?: Measure;
   planeMode: boolean;

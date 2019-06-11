@@ -32,6 +32,7 @@ export abstract class AbstractDeviceService<T extends AbstractDevice> {
     }
   }
 
+  // Return an array with value and used calibration function (string)
   protected convertHitsNumberPerSec(hitsNumberPerSec: number, planeMode: boolean): [number, string] {
     const calibrationFunction = this.getCalibrationFunction(
       hitsNumberPerSec,

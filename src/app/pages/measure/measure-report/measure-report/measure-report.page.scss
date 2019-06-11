@@ -138,6 +138,11 @@
           }
           ion-input {
             text-transform: uppercase;
+            &.custom-input {
+              ::placeholder {
+                text-transform: lowercase !important;
+              }
+            }
           }
         }
       }

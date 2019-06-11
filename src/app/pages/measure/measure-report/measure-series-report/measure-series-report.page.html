@@ -95,13 +95,13 @@
               <ion-item class="custom-disabled">
                 <ion-label>{{'HOME.MEASURE_MODE' | translate}}</ion-label>
                 <ion-input
-                  value="{{!planeMode? ('GENERAL.ON_GROUND' | translate | lowercase) : ('GENERAL.ON_PLANE' | translate | lowercase)}}"
+                  value="{{planeMode? ('GENERAL.ON_PLANE' | translate | lowercase) : ('GENERAL.ON_GROUND' | translate | lowercase)}}"
                   type="text"
                 ></ion-input>
               </ion-item>
             </ion-list>
           </div>
-          <ng-container *ngIf="!planeMode; else environmentMode">
+          <ng-container *ngIf="!planeMode; else onBoardAPlane">
             <div class="environment">
               <app-select-icon
                 [options]="measurementEnvironmentOptions"
@@ -128,7 +128,7 @@
               </app-select-icon>
             </div>
           </ng-container>
-          <ng-template #environmentMode>
+          <ng-template #onBoardAPlane>
             <div class="title">{{'MEASURES.ENVIRONMENT.TITLE' | translate}}</div>
             <ion-list>
               <ion-item class="description">

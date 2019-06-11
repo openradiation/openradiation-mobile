@@ -97,13 +97,13 @@
               <ion-item class="custom-disabled">
                 <ion-label>{{'HOME.MEASURE_MODE' | translate}}</ion-label>
                 <ion-input
-                  value="{{!planeMode? ('GENERAL.ON_GROUND' | translate) : ('GENERAL.ON_PLANE' | translate)}}"
+                  value="{{planeMode? ('GENERAL.ON_PLANE' | translate) : ('GENERAL.ON_GROUND' | translate)}}"
                   type="text"
                 ></ion-input>
               </ion-item>
             </ion-list>
           </div>
-          <ng-container *ngIf="!planeMode; else environmentMode">
+          <ng-container *ngIf="!planeMode; else onBoardAPlane">
             <div class="environment">
               <app-select-icon
                 [options]="measurementEnvironmentOptions"
@@ -128,17 +128,17 @@
               </app-select-icon>
             </div>
           </ng-container>
-          <ng-template #environmentMode>
+          <ng-template #onBoardAPlane>
             <div class="title">{{'MEASURES.ENVIRONMENT.TITLE' | translate}}</div>
             <ion-list>
               <ion-item class="description">
                 <ion-label>{{'MEASURES.FLIGHT.FLIGHT_NUMBER' | translate}}</ion-label>
-                <ion-input formControlName="flightNumber" minlength="3" mask="AA0999" [placeholder]="('GENERAL.EXAMPLE' | translate) + ': AF179'">
+                <ion-input class="custom-input" formControlName="flightNumber" minlength="3" mask="AA0999" [placeholder]="'GENERAL.EXAMPLE' | translate:exampleFlightNumber ">
                 </ion-input>
               </ion-item>
               <ion-item class="description">
                 <ion-label>{{'MEASURES.FLIGHT.SEAT_NUMBER' | translate}}</ion-label>
-                <ion-input formControlName="seatNumber" maxlength="5" mask="AAAAA" [placeholder]="('GENERAL.EXAMPLE' | translate) + ': C15'">
+                <ion-input class="custom-input" formControlName="seatNumber" maxlength="5" mask="AAAAA" [placeholder]="'GENERAL.EXAMPLE' | translate:exampleSeatNumber ">
                 </ion-input>
               </ion-item>
             </ion-list>
