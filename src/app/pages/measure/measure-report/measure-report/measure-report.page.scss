@@ -131,18 +131,12 @@
           line-height: 26px;
         }
         &.description {
-          margin: 0;
-          margin-top: 10px;
+          margin: 10px 0 0;
           ion-label {
             min-width: 165px;
           }
           ion-input {
             text-transform: uppercase;
-            &.custom-input {
-              ::placeholder {
-                text-transform: lowercase !important;
-              }
-            }
           }
         }
       }

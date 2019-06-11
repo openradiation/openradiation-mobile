@@ -21,8 +21,8 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
   @Select(MeasuresState.expertMode)
   expertMode$: Observable<boolean>;
 
-  exampleFlightNumber = { value: ': AF179' };
-  exampleSeatNumber = { value: ': C15' };
+  exampleFlightNumber = { message: ': AF179' };
+  exampleSeatNumber = { message: ': C15' };
 
   currentMeasure?: Measure;
   planeMode: boolean;

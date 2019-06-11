@@ -30,7 +30,7 @@
     "CONNEXION_ERROR": "Connection error: {{message}}",
     "DATE": "Date",
     "END": "End",
-    "EXAMPLE": "Example",
+    "EXAMPLE": "Ex {{message}}",
     "GOOD": "Good",
     "GO_TO_SETTINGS": "Go to settings",
     "HITS": {

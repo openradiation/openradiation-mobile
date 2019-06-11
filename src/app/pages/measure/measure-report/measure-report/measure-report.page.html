@@ -133,12 +133,12 @@
             <ion-list>
               <ion-item class="description">
                 <ion-label>{{'MEASURES.FLIGHT.FLIGHT_NUMBER' | translate}}</ion-label>
-                <ion-input class="custom-input" formControlName="flightNumber" minlength="3" mask="AA0999" [placeholder]="'GENERAL.EXAMPLE' | translate:exampleFlightNumber ">
+                <ion-input formControlName="flightNumber" minlength="3" mask="AA0999" [placeholder]="'GENERAL.EXAMPLE' | translate:exampleFlightNumber ">
                 </ion-input>
               </ion-item>
               <ion-item class="description">
                 <ion-label>{{'MEASURES.FLIGHT.SEAT_NUMBER' | translate}}</ion-label>
-                <ion-input class="custom-input" formControlName="seatNumber" maxlength="5" mask="AAAAA" [placeholder]="'GENERAL.EXAMPLE' | translate:exampleSeatNumber ">
+                <ion-input formControlName="seatNumber" maxlength="5" mask="AAAAA" [placeholder]="'GENERAL.EXAMPLE' | translate:exampleSeatNumber ">
                 </ion-input>
               </ion-item>
             </ion-list>

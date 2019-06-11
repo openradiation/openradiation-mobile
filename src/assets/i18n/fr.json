@@ -30,7 +30,7 @@
     "CONNEXION_ERROR": "Connexion impossible : {{message}}",
     "DATE": "Date",
     "END": "Fin",
-    "EXAMPLE": "Exemple",
+    "EXAMPLE": "Ex {{message}}",
     "GOOD": "Bon",
     "GO_TO_SETTINGS": "Accéder aux paramètres",
     "HITS": {
