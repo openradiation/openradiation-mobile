@@ -14,6 +14,9 @@ ion-content {
         width: 100%;
       }
     }
+    .button-component {
+      width: 70%;
+    }
     .subtitle {
       color: $third-color;
       font-size: 20px;
@@ -23,48 +26,6 @@ ion-content {
     }
     app-gps-indicator {
       margin: 10px;
-    }
-    .device-button {
-      background-color: $second-color;
-      width: 70%;
-      font-size: 18px;
-      font-weight: 200;
-      border-radius: 5px;
-      height: auto;
-      margin: 0 0 10px 0;
-      min-height: 60px;
-      --padding-top: 4px;
-      --padding-end: 4px;
-      --padding-bottom: 4px;
-      --padding-start: 4px;
-      --color-focused: white;
-      --color-activated: white;
-      --background-focused: transparent;
-      --background-activated: transparent;
-    }
-    .connected-device-header {
-      background-color: $base-color;
-      width: 70%;
-      border-radius: 5px 5px 0 0;
-      color: white;
-      font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
-      font-size: 18px;
-      font-weight: 200;
-      margin: 0 0 0 0;
-      padding: 4px;
-      height: 30px;
-      line-height: 30px;
-      text-align: center;
-      --color-focused: white;
-      --color-activated: white;
-      --background-focused: transparent;
-      --background-activated: transparent;
-    }
-    .connected-device-button {
-      @extend .device-button;
-      margin: 0 0 10px 0;
-      border-radius: 0 0 5px 5px;
-      min-height: 30px;
     }
     app-round-button {
       margin: auto 0;
