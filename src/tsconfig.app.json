@@ -2,7 +2,12 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "outDir": "../out-tsc/app",
-    "baseUrl": "./"
+    "baseUrl": "./",
+    "paths": {
+      "plotly.js": [
+        "../node_modules/plotly.js/dist/plotly-basic.min.js"
+      ]
+    }
   },
   "exclude": [
     "test.ts",
