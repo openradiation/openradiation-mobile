@@ -21,7 +21,6 @@ export class PlaneModePage {
   }
 
   onParamSelectedChange(value: CustomEvent) {
-    console.log(value);
     if (value.detail && value.detail.value === true) {
       this.store.dispatch(new EnablePLaneMode());
     } else {
