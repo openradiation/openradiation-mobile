@@ -5,15 +5,22 @@
   <!-- TODO Voir avec le client pour le texte définitf-->
   <div class="notice" [innerHTML]="'MEASURES.PLANE_MODE_NOTICE.PART2' | translate | sanitizeHtml"></div>
   <div class="notice" [innerHTML]="'MEASURES.PLANE_MODE_NOTICE.PART3' | translate | sanitizeHtml"></div>
-  <ion-list>
-    <ion-item class="no-padding">
-      <ng-container *ngIf="planeMode$ | async; else groundLevel">
-        <ion-label>{{'GENERAL.ON_PLANE' | translate }}</ion-label>
-      </ng-container>
-      <ng-template #groundLevel>
-        <ion-label>{{'GENERAL.ON_GROUND' | translate }}</ion-label>
-      </ng-template>
-      <ion-toggle [ngModel]="planeMode$ | async" (ngModelChange)="togglePlaneMode($event)"></ion-toggle>
-    </ion-item>
-  </ion-list>
+
+  <ion-item class="radio">
+    <div>{{'HOME.MEASURE_MODE' | translate}}</div>
+    <ion-radio-group [value]="planeMode$ | async" (ionChange)="onParamSelectedChange($event)">
+      <ion-item>
+        <ion-label>
+          {{'GENERAL.ON_PLANE' | translate }}
+        </ion-label>
+        <ion-radio slot="start" [value]="true" mode="md"></ion-radio>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          {{'GENERAL.ON_GROUND' | translate }}
+        </ion-label>
+        <ion-radio slot="start" [value]="false" mode="md"></ion-radio>
+      </ion-item>
+    </ion-radio-group>
+  </ion-item>
 </ion-content>

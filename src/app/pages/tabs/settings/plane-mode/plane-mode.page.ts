@@ -16,15 +16,16 @@ export class PlaneModePage {
 
   constructor(private navigationService: NavigationService, private store: Store) {}
 
-  togglePlaneMode(enable: boolean) {
-    if (enable) {
+  goBack() {
+    this.navigationService.goBack();
+  }
+
+  onParamSelectedChange(value: CustomEvent) {
+    console.log(value);
+    if (value.detail && value.detail.value === true) {
       this.store.dispatch(new EnablePLaneMode());
     } else {
       this.store.dispatch(new DisablePlaneMode());
     }
-  }
-
-  goBack() {
-    this.navigationService.goBack();
   }
 }
