@@ -54,7 +54,7 @@ export class SeriesGraphComponent implements OnChanges {
             color: '#ffffff'
           },
           margin: {
-            l: 50,
+            l: 45,
             r: 20,
             t: 20,
             b: 50
