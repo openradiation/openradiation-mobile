@@ -427,7 +427,7 @@ export class MeasuresState implements NgxsOnInit {
         return (
           measure.hitsAccuracy !== undefined &&
           measure.hitsAccuracy > measureSeries.params.measureHitsLimit &&
-          currentTime - measure.startTime > device.timeAccuracy
+          currentTime - measure.startTime > 10000
         );
     }
   }

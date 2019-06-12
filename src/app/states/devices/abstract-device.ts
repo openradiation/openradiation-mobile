@@ -16,7 +16,6 @@ export abstract class AbstractDevice {
     good: 30,
     accurate: 50
   };
-  timeAccuracy = 10000;
   abstract hitsPeriod: number;
 }
 
