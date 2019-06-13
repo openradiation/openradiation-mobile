@@ -23,9 +23,9 @@ import { UserStateModel } from '../states/user/user.state';
 })
 export class StorageService {
   private userKey = 'user';
-  private knownDevicesKey = 'knownDevices';
-  private paramsKey = 'measures.measures';
-  private measuresKey = 'measures.params';
+  private knownDevicesKey = 'devices.knownDevices';
+  private paramsKey = 'measures.params';
+  private measuresKey = 'measures.measures';
   private recentTagsKey = 'measures.recentTags';
 
   constructor(
@@ -108,7 +108,11 @@ export class StorageService {
   }
 
   private getFromDB(key: string): any {
-    return from(this.storage.get(key).then(rawValue => this.parseFromDB(rawValue)));
+    return from(
+      this.storage.get(key).then(rawValue => {
+        return rawValue ? this.parseFromDB(rawValue) : this.parseFromDB(localStorage.getItem(key)!);
+      })
+    );
   }
 
   saveUser(user: UserStateModel) {
