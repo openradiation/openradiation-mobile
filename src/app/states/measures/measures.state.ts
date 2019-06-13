@@ -554,11 +554,25 @@ export class MeasuresState {
         };
         if (measureReport.model.duration !== undefined) {
           const durationDate = new Date(measureReport.model.duration);
+          let hours;
+          let minutes;
+          let seconds;
+          console.log(durationDate);
+          if (!isNaN(durationDate.getTime())) {
+            console.log('date');
+            hours = durationDate.getHours();
+            minutes = durationDate.getMinutes();
+            seconds = durationDate.getSeconds();
+          } else {
+            console.log('parse');
+            const parseDate = measureReport.model.duration.split(':');
+            hours = parseInt(parseDate[0], 10);
+            minutes = parseInt(parseDate[1], 10);
+            seconds = parseInt(parseDate[2], 10);
+          }
           updatedCurrentMeasure = {
             ...updatedCurrentMeasure,
-            endTime:
-              currentMeasure.startTime +
-              (durationDate.getHours() * 60 * 60 + durationDate.getMinutes() * 60 + durationDate.getSeconds()) * 1000
+            endTime: currentMeasure.startTime + (hours * 60 * 60 + minutes * 60 + seconds) * 1000
           };
         }
       }
