@@ -557,14 +557,11 @@ export class MeasuresState {
           let hours;
           let minutes;
           let seconds;
-          console.log(durationDate);
           if (!isNaN(durationDate.getTime())) {
-            console.log('date');
             hours = durationDate.getHours();
             minutes = durationDate.getMinutes();
             seconds = durationDate.getSeconds();
           } else {
-            console.log('parse');
             const parseDate = measureReport.model.duration.split(':');
             hours = parseInt(parseDate[0], 10);
             minutes = parseInt(parseDate[1], 10);
