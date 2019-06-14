@@ -160,6 +160,7 @@ export enum MeasureEnvironment {
 export interface Params {
   expertMode: boolean;
   autoPublish: boolean;
+  planeMode: boolean;
 }
 
 export interface MeasureReport {
