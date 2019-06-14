@@ -144,7 +144,12 @@
               </ion-item>
               <ion-item class="description">
                 <ion-label>{{'MEASURES.FLIGHT.SEAT_NUMBER' | translate}}</ion-label>
-                <ion-input formControlName="seatNumber" mask="AAAAA" [required]="false" [placeholder]="'GENERAL.EXAMPLE' | translate:exampleSeatNumber ">
+                <ion-input
+                  formControlName="seatNumber"
+                  mask="AAAAA"
+                  [required]="false"
+                  [placeholder]="'GENERAL.EXAMPLE' | translate:exampleSeatNumber "
+                >
                 </ion-input>
               </ion-item>
             </ion-list>
