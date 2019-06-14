@@ -137,11 +137,33 @@
             <img src="assets/img/bg-radiation.png" />
           </div>
         </div>
+        <ng-container *ngIf="planeMode$ | async; else planeModeFalse">
+          <div class="message">
+            <div class="message-series">
+              {{'HOME.MEASURE_MODE' | translate}} : {{('GENERAL.ON_PLANE' | translate | lowercase) }}
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #planeModeFalse>
+          <div class="message">
+            <div class="message-series">
+              {{'HOME.MEASURE_MODE' | translate}} : {{('GENERAL.ON_GROUND' | translate | lowercase) }}
+            </div>
+          </div>
+        </ng-template>
         <ng-container *ngIf="currentSeries$ | async as currentSeries">
           <div class="message">
             <div class="message-series">
               {{currentSeries.measures.length | i18nPlural : currentSeriesMessageMapping | translate : { count:
               currentSeries.measures.length, duration: currentSeries.startTime | date: 'HH:mm\'\'\'ss"' } }}
+            </div>
+          </div>
+          <div class="message" *ngIf="currentSeries.measures.length !== 0">
+            <div class="message-series">
+              {{'MEASURE_SERIES.LAST_MEASURE_VALUE' | translate: { lastMeasure:
+              currentSeries.measures[currentSeries.measures.length - 1].value | number : '1.3-3' } }}<span>
+                {{'MEASURES.DOSE_RATE_UNIT' | translate}}</span
+              >
             </div>
           </div>
           <div class="message">
@@ -161,6 +183,9 @@
                 currentSeries.params.seriesDurationLimit / 3600000 }) } }}
               </ng-container>
             </div>
+          </div>
+          <div class="graph-zone">
+            <app-series-graph [seriesMeasure]="currentSeries"></app-series-graph>
           </div>
         </ng-container>
         <div class="bottom-buttons">

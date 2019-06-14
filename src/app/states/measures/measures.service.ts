@@ -59,8 +59,8 @@ export class MeasuresService {
     return detectHits;
   }
 
-  computeRadiationValue(measure: Measure, device: AbstractDevice): number {
-    return this.devicesService.service(device).computeRadiationValue(measure);
+  computeRadiationValue(measure: Measure, device: AbstractDevice, planeMode: boolean): [number, string] {
+    return this.devicesService.service(device).computeRadiationValue(measure, planeMode);
   }
 
   publishMeasure(measure: Measure | MeasureSeries): Observable<any> {
@@ -113,7 +113,12 @@ export class MeasuresService {
           userId: this.store.selectSnapshot(({ user }: { user: UserStateModel }) => user.login),
           userPwd: this.store.selectSnapshot(({ user }: { user: UserStateModel }) => user.password),
           measurementEnvironment: measure.measurementEnvironment,
-          rain: measure.rain
+          rain: measure.rain,
+          flightNumber: measure.flightNumber,
+          seatNumber: measure.seatNumber,
+          storm: measure.storm,
+          windowSeat: measure.windowSeat,
+          calibrationFunction: measure.calibrationFunction
         }
       };
       return this.httpClient.post(environment.API_URI, payload);

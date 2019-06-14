@@ -15,6 +15,15 @@ import { DeviceAtomTag } from './device-atom-tag';
   providedIn: 'root'
 })
 export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag> {
+  protected calibrationFunctions = {
+    planeMode: {
+      0: 'max((cps * 0.128 * 3600 - 40) / 1000, 0)'
+    },
+    groundLevel: {
+      0: 'max((cps * 0.128 * 3600 - 40) / 1000, 0)'
+    }
+  };
+
   protected service = '63462A4A-C28C-4FFD-87A4-2D23A1C72581';
   protected receiveCharacteristic = '70BC767E-7A1A-4304-81ED-14B9AF54F7BD';
   private firmwareService = '180a';
@@ -23,10 +32,6 @@ export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag
 
   constructor(protected store: Store, protected ble: BLE) {
     super(store, ble);
-  }
-
-  protected convertHitsNumberPerSec(hitsNumberPerSec: number): number {
-    return (hitsNumberPerSec * 0.128 * 3600 - 40) / 1000;
   }
 
   getDeviceInfo(device: DeviceAtomTag): Observable<Partial<DeviceAtomTag>> {

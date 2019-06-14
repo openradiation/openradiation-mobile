@@ -5,8 +5,8 @@ import { Network } from '@ionic-native/network/ngx';
 import { Platform } from '@ionic/angular';
 import { Location } from '@mauron85/cordova-plugin-background-geolocation';
 import { Select } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { delay, take } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { MeasuresState } from '../../../states/measures/measures.state';
@@ -27,6 +27,8 @@ export class MapPage extends AutoUnsubscribePage {
   language$: Observable<string | undefined>;
   @Select(MeasuresState.currentPosition)
   currentPosition$: Observable<Location | undefined>;
+  @Select(MeasuresState.planeMode)
+  planeMode$: Observable<boolean>;
 
   iframeURL: SafeResourceUrl;
   isLoading = false;
@@ -72,16 +74,25 @@ export class MapPage extends AutoUnsubscribePage {
         language === 'fr' || language === 'en' ? '/' + language : ''
       }/${environment.IN_APP_BROWSER_URI.suffix}`;
       this.iframeURL = this.domSanitizer.bypassSecurityTrustResourceUrl(url);
-      this.currentPosition$.pipe(take(1)).subscribe(currentPosition => {
-        if (currentPosition) {
-          const lat = currentPosition.latitude.toFixed(7);
-          const long = currentPosition.longitude.toFixed(7);
-          const zoom = 12;
-          url += `/${zoom}/${lat}/${long}`;
+      combineLatest(this.currentPosition$, this.planeMode$)
+        .pipe(take(1))
+        .subscribe(([currentPosition, planeMode]) => {
+          if (currentPosition) {
+            const lat = currentPosition.latitude.toFixed(7);
+            const long = currentPosition.longitude.toFixed(7);
+            const zoom = 12;
+            url += `/${zoom}/${lat}/${long}`;
+          }
+          if (planeMode !== undefined) {
+            const valueMin = 0;
+            const valueMax = 100;
+            const dateMin = 0;
+            const dateMax = 100;
+            url += `/all/all/${planeMode ? 'plane' : 'groundlevel'}/all/${valueMin}/${valueMax}/${dateMin}/${dateMax}`;
+          }
           this.iframeURL = this.domSanitizer.bypassSecurityTrustResourceUrl(url);
           this.changeDetectorRef.markForCheck();
-        }
-      });
+        });
     });
   }
 

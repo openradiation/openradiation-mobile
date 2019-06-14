@@ -1,6 +1,6 @@
 {
   "name": "open-radiation",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "author": "OpenRadiation",
   "homepage": "https://www.openradiation.org/",
   "description": "Les citoyens mesurent la radioactivité.",
@@ -18,7 +18,7 @@
     "run:android": "ionic cordova run android",
     "run:ios": "ionic cordova run ios",
     "lint": "ng lint",
-    "analyze": "webpack-bundle-analyzer ./dist/stats.json",
+    "analyze": "webpack-bundle-analyzer ./www/stats.json",
     "compodoc:build": "compodoc -p src/tsconfig.app.json --disableLifeCycleHooks",
     "compodoc:serve": "compodoc -p src/tsconfig.app.json --disableLifeCycleHooks -s -w",
     "prettier": "prettier --write \"src/**/*.ts\" \"src/**/*.scss\" \"src/**/*.md\" \"src/**/*.html\"",
@@ -57,6 +57,7 @@
     "@ngxs/storage-plugin": "~3.4.3",
     "@ngxs/store": "~3.4.3",
     "@types/uuid": "^3.4.3",
+    "angular-plotly.js": "^1.3.2",
     "cordova-android": "8.0.0",
     "cordova-ios": "5.0.0",
     "cordova-plugin-ble-central": "^1.2.2",
@@ -77,6 +78,8 @@
     "cordova.plugins.diagnostic": "^4.0.12",
     "core-js": "^2.5.4",
     "es6-promise-plugin": "^4.2.2",
+    "ngx-mask-ionic": "^1.1.2",
+    "plotly.js": "^1.47.4",
     "rxjs": "~6.3.3",
     "uuid": "^3.3.2",
     "zone.js": "^0.8.29"

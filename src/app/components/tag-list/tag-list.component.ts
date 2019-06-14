@@ -68,12 +68,12 @@ export class TagListComponent implements ControlValueAccessor {
   addCurrentTag(): void {
     if (this.currentTag) {
       this.addTag(this.currentTag);
-      this.currentTag = '';
       this.updateDisplayedProposedTagList();
     }
   }
 
   addTag(tag: string): void {
+    this.currentTag = '';
     if (!this.tagList) {
       this.tagList = [];
     }

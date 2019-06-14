@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxsFormPluginModule } from '@ngxs/form-plugin';
+import { NgxMaskIonicModule } from 'ngx-mask-ionic';
 import { ComponentsModule } from '../../../../components/components.module';
 import { MeasureReportPage } from './measure-report-page';
 
@@ -24,7 +25,8 @@ const routes: Routes = [
     NgxsFormPluginModule,
     ReactiveFormsModule,
     ComponentsModule,
-    TranslateModule
+    TranslateModule,
+    NgxMaskIonicModule.forRoot()
   ],
   declarations: [MeasureReportPage]
 })

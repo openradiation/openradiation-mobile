@@ -11,13 +11,17 @@ import { DeviceMock } from './device-mock';
   providedIn: 'root'
 })
 export class DeviceMockService extends AbstractDeviceService<DeviceMock> {
+  protected calibrationFunctions = {
+    planeMode: {
+      0: '0.000001 * (cps - 0.14) ^ 3 + 0.0025 * (cps - 0.14) ^ 2 + 0.39 * (cps - 0.14)'
+    },
+    groundLevel: {
+      0: '0.000001 * (cps - 0.14) ^ 3 + 0.0025 * (cps - 0.14) ^ 2 + 0.39 * (cps - 0.14)'
+    }
+  };
+
   constructor(protected store: Store) {
     super(store);
-  }
-
-  protected convertHitsNumberPerSec(hitsNumberPerSec: number): number {
-    const TcNet = hitsNumberPerSec - 0.14;
-    return 0.000001 * TcNet ** 3 + 0.0025 * TcNet ** 2 + 0.39 * TcNet;
   }
 
   getDeviceInfo(device: DeviceMock): Observable<Partial<DeviceMock>> {
