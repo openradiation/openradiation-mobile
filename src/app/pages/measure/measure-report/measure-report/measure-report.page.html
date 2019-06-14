@@ -57,9 +57,11 @@
               <ion-item [ngClass]="{'custom-disabled': inputDisabled}">
                 <ion-label position="fixed">{{'MEASURES.DURATION' | translate}}</ion-label>
                 <ion-datetime
+                  [ngClass]="{'placeholder': measureReportForm.value.duration === undefined}"
                   display-format="HH:mm'ss''"
                   pickerFormat="HH mm ss"
                   formControlName="duration"
+                  [value]="inputDisabled ? undefined : 0"
                   [cancelText]="'GENERAL.CANCEL' | translate"
                   [doneText]="'GENERAL.SUBMIT' | translate"
                   [placeholder]="inputDisabled ? '-' : '00\'00\'\''"
