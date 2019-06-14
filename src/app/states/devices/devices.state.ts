@@ -2,6 +2,7 @@ import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
 import { concatMap, map, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
+import { Form } from '../../app.component';
 import { AbstractDevice } from './abstract-device';
 import { AbstractBLEDevice } from './ble/abstract-ble-device';
 import { BLEDevicesService } from './ble/ble-devices.service';
@@ -14,6 +15,7 @@ import {
   DeviceConnectionLost,
   DisconnectDevice,
   EditDeviceParams,
+  InitDevices,
   SaveDeviceParams,
   StartDiscoverBLEDevices,
   StartDiscoverUSBDevices,
@@ -33,12 +35,7 @@ export interface DevicesStateModel {
   knownDevices: AbstractDevice[];
   connectedDevice?: AbstractDevice;
   editedDevice?: AbstractDevice;
-  editedDeviceForm?: {
-    model: DeviceParams;
-    dirty: boolean;
-    status: string;
-    errors: any;
-  };
+  editedDeviceForm?: Form<DeviceParams>;
 }
 
 @State<DevicesStateModel>({
@@ -98,6 +95,11 @@ export class DevicesState {
   @Selector()
   static editedDevice({ editedDevice }: DevicesStateModel): AbstractDevice | undefined {
     return editedDevice;
+  }
+
+  @Action(InitDevices)
+  initUser({ patchState }: StateContext<DevicesStateModel>, { knownDevices }: InitDevices) {
+    patchState({ knownDevices });
   }
 
   @Action(StartDiscoverBLEDevices, { cancelUncompleted: true })
