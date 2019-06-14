@@ -10,6 +10,9 @@
         <div class="message" *ngIf="positionChangeSpeedOverLimit">
           <div class="message-style">{{'HISTORY.MESSAGE_SPEED' | translate}}</div>
         </div>
+        <div class="message" *ngIf="positionChangeAltitudeOverLimit">
+          <div class="message-style">{{'MEASURE_SERIES.MESSAGE_ALTITUDE' | translate}}</div>
+        </div>
         <form class="form" [formGroup]="measureReportForm" ngxsForm="measures.measureSeriesReport">
           <ion-list>
             <ion-item class="custom-disabled">
@@ -89,33 +92,84 @@
                 <ion-input formControlName="valueAverage" required type="number" placeholder="-"></ion-input>
                 <span class="unit">{{'MEASURES.DOSE_RATE_UNIT' | translate}}</span>
               </ion-item>
+              <ion-item class="custom-disabled">
+                <ion-label>{{'HOME.MEASURE_MODE' | translate}}</ion-label>
+                <ion-input
+                  value="{{planeMode? ('GENERAL.ON_PLANE' | translate | lowercase) : ('GENERAL.ON_GROUND' | translate | lowercase)}}"
+                  type="text"
+                ></ion-input>
+              </ion-item>
             </ion-list>
           </div>
-          <div class="environment">
-            <app-select-icon
-              [options]="measurementEnvironmentOptions"
-              formControlName="measurementEnvironment"
-              [required]="true"
-              [title]="'MEASURES.ENVIRONMENT.TITLE_SERIES' | translate"
-            >
-            </app-select-icon>
-          </div>
-          <div class="options">
-            <app-select-icon
-              [options]="measurementHeightOptions"
-              formControlName="measurementHeight"
-              [required]="false"
-              [title]="'MEASURES.SENSOR_POSITION.TITLE' | translate"
-            >
-            </app-select-icon>
-            <app-select-icon
-              [options]="rainOptions"
-              formControlName="rain"
-              [required]="false"
-              [title]="'MEASURES.WEATHER.TITLE' | translate"
-            >
-            </app-select-icon>
-          </div>
+          <ng-container *ngIf="!planeMode; else onBoardAPlane">
+            <div class="environment">
+              <app-select-icon
+                [options]="measurementEnvironmentOptions"
+                formControlName="measurementEnvironment"
+                [required]="true"
+                [title]="'MEASURES.ENVIRONMENT.TITLE_SERIES' | translate"
+              >
+              </app-select-icon>
+            </div>
+            <div class="options">
+              <app-select-icon
+                [options]="measurementHeightOptions"
+                formControlName="measurementHeight"
+                [required]="false"
+                [title]="'MEASURES.SENSOR_POSITION.TITLE' | translate"
+              >
+              </app-select-icon>
+              <app-select-icon
+                [options]="rainOptions"
+                formControlName="rain"
+                [required]="false"
+                [title]="'MEASURES.WEATHER.TITLE_RAIN' | translate"
+              >
+              </app-select-icon>
+            </div>
+          </ng-container>
+          <ng-template #onBoardAPlane>
+            <div class="title">{{'MEASURES.ENVIRONMENT.TITLE' | translate}}</div>
+            <ion-list>
+              <ion-item class="description">
+                <ion-label>{{'MEASURES.FLIGHT.FLIGHT_NUMBER' | translate}}</ion-label>
+                <ion-input
+                  formControlName="flightNumber"
+                  minlength="3"
+                  mask="AA0999"
+                  [required]="false"
+                  [placeholder]="'GENERAL.EXAMPLE' | translate:exampleFlightNumber "
+                >
+                </ion-input>
+              </ion-item>
+              <ion-item class="description">
+                <ion-label>{{'MEASURES.FLIGHT.SEAT_NUMBER' | translate}}</ion-label>
+                <ion-input
+                  formControlName="seatNumber"
+                  mask="AAAAA"
+                  [required]="false"
+                  [placeholder]="'GENERAL.EXAMPLE' | translate:exampleSeatNumber "
+                >
+                </ion-input>
+              </ion-item>
+            </ion-list>
+            <div class="options">
+              <app-select-icon
+                [options]="stormOptions"
+                formControlName="storm"
+                [required]="false"
+                [title]="'MEASURES.WEATHER.TITLE_RAIN' | translate"
+              >
+              </app-select-icon>
+              <app-select-icon
+                [options]="windowSeatOptions"
+                formControlName="windowSeat"
+                [required]="false"
+                [title]="'GENERAL.SEAT_POSITION' | translate"
+              >
+              </app-select-icon>
+            </div>
+          </ng-template>
           <ng-container *ngIf="login$ | async">
             <div class="separator"></div>
             <ion-list>

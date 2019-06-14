@@ -1,0 +1,21 @@
+@import 'src/theme/variables.scss';
+
+ion-content {
+  --padding-top: 20px;
+  --padding-end: 20px;
+  --padding-bottom: 20px;
+  --padding-start: 20px;
+}
+
+.notice {
+  color: white;
+  text-align: justify;
+  font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+  font-weight: 200;
+  font-size: 14px;
+  padding-bottom: 10px;
+}
+
+.radio {
+  padding-top: 10px;
+}

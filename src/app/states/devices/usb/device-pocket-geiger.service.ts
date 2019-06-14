@@ -16,6 +16,15 @@ declare const UsbSerial: UsbSerial;
   providedIn: 'root'
 })
 export class DevicePocketGeigerService extends AbstractUSBDeviceService<DevicePocketGeiger> {
+  protected calibrationFunctions = {
+    planeMode: {
+      0: 'cps / 0.88387'
+    },
+    groundLevel: {
+      0: 'cps / 0.88387'
+    }
+  };
+
   private SEND_GET_HITS = 'S\n';
   private RECEIVE_GET_HITS = '>';
   private NOISE_REJECT_DURATION = 200;
@@ -23,10 +32,6 @@ export class DevicePocketGeigerService extends AbstractUSBDeviceService<DevicePo
 
   constructor(protected store: Store, protected actions$: Actions) {
     super(store, actions$);
-  }
-
-  protected convertHitsNumberPerSec(hitsNumberPerSec: number): number {
-    return (hitsNumberPerSec * 60) / 53.032;
   }
 
   getDeviceInfo(device: DevicePocketGeiger): Observable<Partial<DevicePocketGeiger>> {

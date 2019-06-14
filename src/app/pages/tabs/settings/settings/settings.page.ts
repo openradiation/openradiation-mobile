@@ -40,6 +40,10 @@ export class SettingsPage {
     this.navigationService.navigateForward(['tabs', 'settings', 'measures-param']);
   }
 
+  goToPlaneMode() {
+    this.navigationService.navigateForward(['tabs', 'settings', 'plane-mode']);
+  }
+
   goToLogIn() {
     this.navigationService.navigateForward(['tabs', 'settings', 'log-in']);
   }

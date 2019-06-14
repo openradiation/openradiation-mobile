@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { NavigationService } from '../../../../services/navigation.service';
 import { DateService } from '../../../../states/measures/date.service';
-import { Measure } from '../../../../states/measures/measure';
+import { Measure, MeasureEnvironment } from '../../../../states/measures/measure';
 import { StartMeasureReport, StopMeasure, StopMeasureReport } from '../../../../states/measures/measures.action';
 import { MeasuresState, MeasuresStateModel } from '../../../../states/measures/measures.state';
 import { AbstractMeasureReportPage } from '../abstact-measure-report.page';
@@ -20,7 +21,11 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
   @Select(MeasuresState.expertMode)
   expertMode$: Observable<boolean>;
 
+  exampleFlightNumber = { message: ': AF179' };
+  exampleSeatNumber = { message: ': C15' };
+
   currentMeasure?: Measure;
+  planeMode: boolean;
   inputDisabled = false;
 
   url = '/measure/report';
@@ -46,18 +51,34 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
           ({ measures }: { measures: MeasuresStateModel }) => measures
         );
         this.currentMeasure = currentMeasure;
-        this.reportScan = !this.currentMeasure!.manualReporting;
-        this.inputDisabled = this.reportScan || this.currentMeasure!.sent;
-        this.initMeasurementEnvironmentOptions(this.currentMeasure!);
-        if (measureReport) {
-          this.measureReportForm = this.formBuilder.group({ ...measureReport.model, tags: [measureReport.model.tags] });
-          if (this.currentMeasure!.sent) {
-            this.measureReportForm.get('measurementEnvironment')!.disable();
-            this.measureReportForm.get('measurementHeight')!.disable();
-            this.measureReportForm.get('rain')!.disable();
-            this.measureReportForm.get('description')!.disable();
-            this.measureReportForm.get('tags')!.disable();
-            this.measureReportForm.get('enclosedObject')!.disable();
+        if (this.currentMeasure) {
+          this.reportScan = !this.currentMeasure.manualReporting;
+          this.inputDisabled = this.reportScan || this.currentMeasure.sent;
+          this.planeMode = this.currentMeasure.measurementEnvironment === MeasureEnvironment.Plane;
+          if (measureReport) {
+            this.measureReportForm = this.formBuilder.group({
+              ...measureReport.model,
+              tags: [measureReport.model.tags]
+            });
+            if (!this.planeMode) {
+              this.initPositionChangeAltitudeOverLimit(this.currentMeasure);
+              this.initMeasurementEnvironmentOptions(this.currentMeasure);
+            }
+            if (this.currentMeasure.sent) {
+              if (!this.planeMode) {
+                this.measureReportForm.get('measurementEnvironment')!.disable();
+                this.measureReportForm.get('measurementHeight')!.disable();
+                this.measureReportForm.get('rain')!.disable();
+              } else {
+                this.measureReportForm.get('storm')!.disable();
+                this.measureReportForm.get('windowSeat')!.disable();
+                this.measureReportForm.get('flightNumber')!.disable();
+                this.measureReportForm.get('seatNumber')!.disable();
+              }
+              this.measureReportForm.get('description')!.disable();
+              this.measureReportForm.get('tags')!.disable();
+              this.measureReportForm.get('enclosedObject')!.disable();
+            }
           }
         }
       });
@@ -103,5 +124,9 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
   protected initMeasurementEnvironmentOptions(measure: Measure) {
     this.positionChangeSpeedOverLimit = AbstractMeasureReportPage.hasPositionChanged(measure);
     this.updateMeasurementEnvironmentOptions();
+  }
+
+  protected initPositionChangeAltitudeOverLimit(measure: Measure) {
+    this.positionChangeAltitudeOverLimit = AbstractMeasureReportPage.positionChangeAltitudeOverLimit(measure.altitude);
   }
 }

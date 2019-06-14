@@ -56,8 +56,10 @@
   }
 
   .graph-zone {
+    background-color: #{$second-color};
     width: 100%;
     margin: 20px 0 10px 0;
+    padding-left: 5px;
   }
 
   .category {
@@ -213,7 +215,7 @@
       width: 100%;
       display: flex;
       align-items: center;
-      animation: moving-background 6s linear infinite;
+      animation: moving-background 6s 0.1s linear infinite;
 
       img {
         min-width: 100%;

@@ -1,0 +1,26 @@
+<app-header [backButton]="true" (back)="goBack()">{{'HOME.MEASURE_MODE' | translate}}</app-header>
+
+<ion-content>
+  <div class="notice" [innerHTML]="'MEASURES.PLANE_MODE_NOTICE.PART1' | translate | sanitizeHtml"></div>
+  <!-- TODO Voir avec le client pour le texte définitf-->
+  <div class="notice" [innerHTML]="'MEASURES.PLANE_MODE_NOTICE.PART2' | translate | sanitizeHtml"></div>
+  <div class="notice" [innerHTML]="'MEASURES.PLANE_MODE_NOTICE.PART3' | translate | sanitizeHtml"></div>
+
+  <ion-item class="radio">
+    <div>{{'HOME.MEASURE_MODE' | translate}}</div>
+    <ion-radio-group [value]="planeMode$ | async" (ionChange)="onParamSelectedChange($event)">
+      <ion-item>
+        <ion-label>
+          {{'GENERAL.ON_PLANE' | translate }}
+        </ion-label>
+        <ion-radio slot="start" [value]="true" mode="md"></ion-radio>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          {{'GENERAL.ON_GROUND' | translate }}
+        </ion-label>
+        <ion-radio slot="start" [value]="false" mode="md"></ion-radio>
+      </ion-item>
+    </ion-radio-group>
+  </ion-item>
+</ion-content>

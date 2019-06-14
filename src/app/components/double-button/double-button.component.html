@@ -1,0 +1,17 @@
+<ng-container *ngIf="!modeSimple; else simple">
+  <ion-button class="double-button" (click)="onClick($event)">
+    <div class="button-content">
+      <div class="header">
+        {{ headerMessage }}
+      </div>
+      <div>
+        {{ mainMessage }}
+      </div>
+    </div>
+  </ion-button>
+</ng-container>
+<ng-template #simple>
+  <ion-button class="device-button" fill="clear" (click)="onClick($event)">
+    {{ headerMessage }}<br />{{ mainMessage }}
+  </ion-button>
+</ng-template>

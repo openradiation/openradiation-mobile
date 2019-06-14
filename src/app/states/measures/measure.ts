@@ -49,8 +49,13 @@ export class Measure extends AbstractMeasure {
   enclosedObject?: string;
   measurementEnvironment?: MeasureEnvironment;
   rain?: boolean;
+  storm?: boolean;
+  windowSeat?: boolean;
+  flightNumber?: string;
+  seatNumber?: string;
   steps?: Step[] = [];
   hitsAccuracy?: number;
+  calibrationFunction?: string;
 
   constructor(
     apparatusId: string | undefined,
@@ -155,6 +160,7 @@ export enum MeasureEnvironment {
 export interface Params {
   expertMode: boolean;
   autoPublish: boolean;
+  planeMode: boolean;
 }
 
 export interface MeasureReport {
@@ -174,6 +180,10 @@ export interface MeasureReport {
   tags: string[] | undefined;
   measurementEnvironment: MeasureEnvironment | undefined;
   rain: boolean | undefined;
+  storm: boolean | undefined;
+  windowSeat: boolean | undefined;
+  flightNumber: string | undefined;
+  seatNumber: string | undefined;
 }
 
 export interface MeasureSeriesParams {
@@ -202,6 +212,10 @@ export interface MeasureSeriesReport {
   tags: string[] | undefined;
   measurementEnvironment: MeasureEnvironment | undefined;
   rain: boolean | undefined;
+  storm: boolean | undefined;
+  windowSeat: boolean | undefined;
+  flightNumber: string | undefined;
+  seatNumber: string | undefined;
 }
 
 export class MeasureSeries extends AbstractMeasure {

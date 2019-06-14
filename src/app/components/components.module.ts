@@ -3,8 +3,11 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
+import { PlotlyModule } from 'angular-plotly.js';
+import * as PlotlyJS from 'plotly.js';
 import { AccordionComponent } from './accordion/accordion.component';
 import { CategoryLabelComponent } from './category-label/category-label.component';
+import { DoubleButtonComponent } from './double-button/double-button.component';
 import { GpsIndicatorComponent } from './gps-indicator/gps-indicator.component';
 import { HeaderComponent } from './header/header.component';
 import { PhotoComponent } from './photo/photo.component';
@@ -17,8 +20,6 @@ import { RoundButtonComponent } from './round-button/round-button.component';
 import { SelectIconComponent } from './select-icon/select-icon.component';
 import { SeriesGraphComponent } from './series-graph/series-graph.component';
 import { TagListComponent } from './tag-list/tag-list.component';
-import { PlotlyModule } from 'angular-plotly.js';
-import * as PlotlyJS from 'plotly.js/dist/plotly.js';
 
 PlotlyModule.plotlyjs = PlotlyJS;
 
@@ -38,7 +39,8 @@ PlotlyModule.plotlyjs = PlotlyJS;
     TagListComponent,
     PhotoComponent,
     SanitizeHtmlPipe,
-    SeriesGraphComponent
+    SeriesGraphComponent,
+    DoubleButtonComponent
   ],
   exports: [
     HeaderComponent,
@@ -54,7 +56,8 @@ PlotlyModule.plotlyjs = PlotlyJS;
     TagListComponent,
     PhotoComponent,
     SanitizeHtmlPipe,
-    SeriesGraphComponent
+    SeriesGraphComponent,
+    DoubleButtonComponent
   ],
   entryComponents: []
 })

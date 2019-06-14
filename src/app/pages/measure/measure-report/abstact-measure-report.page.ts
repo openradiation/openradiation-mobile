@@ -23,11 +23,12 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
   login$: Observable<string | undefined>;
 
   @Select(MeasuresState.recentTags)
-  recentTags$: Observable<string>;
+  recentTags$: Observable<string[]>;
 
   measureReportForm?: FormGroup;
   reportScan = true;
   positionChangeSpeedOverLimit = false;
+  positionChangeAltitudeOverLimit = false;
 
   measurementEnvironmentOptions: SelectIconOption[];
 
@@ -57,6 +58,36 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
       iconOn: 'assets/img/icon-rain-on.png',
       iconOff: 'assets/img/icon-rain-off.png',
       label: <string>_('MEASURES.WEATHER.RAIN'),
+      value: true
+    }
+  ];
+
+  stormOptions: SelectIconOption[] = [
+    {
+      iconOn: 'assets/img/icon-plane-on.png',
+      iconOff: 'assets/img/icon-plane-off.png',
+      label: <string>_('MEASURES.WEATHER.NO_STORM'),
+      value: false
+    },
+    {
+      iconOn: 'assets/img/icon-plane-storm-on.png',
+      iconOff: 'assets/img/icon-plane-storm-off.png',
+      label: <string>_('MEASURES.WEATHER.STORM'),
+      value: true
+    }
+  ];
+
+  windowSeatOptions: SelectIconOption[] = [
+    {
+      iconOn: 'assets/img/icon-aisle-on.png',
+      iconOff: 'assets/img/icon-aisle-off.png',
+      label: <string>_('MEASURES.SENSOR_POSITION.NO_WINDOW_SIDE'),
+      value: false
+    },
+    {
+      iconOn: 'assets/img/icon-window-on.png',
+      iconOff: 'assets/img/icon-window-off.png',
+      label: <string>_('MEASURES.SENSOR_POSITION.WINDOW_SIDE'),
       value: true
     }
   ];
@@ -125,12 +156,6 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
         iconOff: 'assets/img/icon-ontheroad-off.png',
         label: <string>_('MEASURES.ENVIRONMENT.ON_THE_ROAD'),
         value: MeasureEnvironment.OnTheRoad
-      },
-      {
-        iconOn: 'assets/img/icon-plane-on.png',
-        iconOff: 'assets/img/icon-plane-off.png',
-        label: <string>_('MEASURES.ENVIRONMENT.PLANE'),
-        value: MeasureEnvironment.Plane
       }
     ];
   }
@@ -195,5 +220,10 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
     );
   }
 
+  protected static positionChangeAltitudeOverLimit(altitude: number | undefined): boolean {
+    return altitude !== undefined && altitude > 6000;
+  }
+
   protected abstract initMeasurementEnvironmentOptions(measure: T): void;
+  protected abstract initPositionChangeAltitudeOverLimit(measure: T): void;
 }

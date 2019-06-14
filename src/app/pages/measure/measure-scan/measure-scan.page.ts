@@ -11,6 +11,7 @@ import { DevicesState } from '../../../states/devices/devices.state';
 import {
   HitsAccuracy,
   Measure,
+  MeasureEnvironment,
   MeasureSeries,
   MeasureSeriesParamsSelected,
   PositionAccuracyThreshold
@@ -35,6 +36,9 @@ export class MeasureScanPage extends AutoUnsubscribePage {
 
   @Select(DevicesState.connectedDevice)
   connectedDevice$: Observable<AbstractDevice | undefined>;
+
+  @Select(MeasuresState.planeMode)
+  planeMode$: Observable<boolean>;
 
   hitsAccuracy: HitsAccuracy = HitsAccuracy.Start;
   hitsAccuracyWidth = 0;

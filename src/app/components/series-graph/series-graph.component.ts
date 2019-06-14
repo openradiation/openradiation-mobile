@@ -47,13 +47,14 @@ export class SeriesGraphComponent implements OnChanges {
             linecolor: '#ffffff',
             gridcolor: 'rgba(255,255,255,0.3)',
             rangemode: 'nonnegative',
-            fixedrange: true
+            fixedrange: true,
+            title: this.translateService.instant('MEASURES.DOSE_RATE_UNIT')
           },
           font: {
             color: '#ffffff'
           },
           margin: {
-            l: 30,
+            l: 40,
             r: 20,
             t: 20,
             b: 50
@@ -61,7 +62,7 @@ export class SeriesGraphComponent implements OnChanges {
         },
         frames: {
           displayModeBar: false,
-          locale: locale
+          locale
         }
       };
     });

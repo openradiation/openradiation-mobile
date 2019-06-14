@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { filter, map, scan, shareReplay, take, tap } from 'rxjs/operators';
 import { Step } from '../../measures/measure';
-import { ApparatusSensorType, DeviceType } from '../abstract-device';
+import { ApparatusSensorType } from '../abstract-device';
 import { RawBLEDevice } from './abstract-ble-device';
 import { AbstractBLEDeviceService } from './abstract-ble-device.service';
 import { DeviceOGKit } from './device-og-kit';
@@ -14,6 +14,15 @@ import { DeviceOGKit } from './device-og-kit';
   providedIn: 'root'
 })
 export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
+  protected calibrationFunctions = {
+    planeMode: {
+      0: '0.000001 * (cps - 0.14) ^ 3 + 0.0025 * (cps - 0.14) ^ 2 + 0.39 * (cps - 0.14)'
+    },
+    groundLevel: {
+      0: '0.000001 * (cps - 0.14) ^ 3 + 0.0025 * (cps - 0.14) ^ 2 + 0.39 * (cps - 0.14)'
+    }
+  };
+
   protected service = '2220';
   protected receiveCharacteristic = '2221';
   private sendCharacteristic = '2222';
@@ -53,11 +62,6 @@ export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
 
   constructor(protected store: Store, protected ble: BLE) {
     super(store, ble);
-  }
-
-  protected convertHitsNumberPerSec(hitsNumberPerSec: number): number {
-    const TcNet = hitsNumberPerSec - 0.14;
-    return 0.000001 * TcNet ** 3 + 0.0025 * TcNet ** 2 + 0.39 * TcNet;
   }
 
   getDeviceInfo(device: DeviceOGKit): Observable<Partial<DeviceOGKit>> {
