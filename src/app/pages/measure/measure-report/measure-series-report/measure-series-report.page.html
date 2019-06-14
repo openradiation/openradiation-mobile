@@ -38,7 +38,9 @@
               <ion-input formControlName="measureHitsLimit" type="number" placeholder="-"></ion-input>
             </ion-item>
           </ion-list>
-          <div class="separator"></div>
+          <div class="graph-zone">
+            <app-series-graph [seriesMeasure]="currentSeries"></app-series-graph>
+          </div>
           <ion-list>
             <ion-item class="custom-disabled">
               <ion-label class="value">{{'GENERAL.DATE' | translate}}</ion-label>

@@ -188,6 +188,7 @@
     "ALERT_LOG_IN": "Vous devez vous identifier pour pouvoir commencer une série de mesure.",
     "ALERT_SENSOR": "Vous devez connecter un capteur pour pouvoir commencer une série de mesure.",
     "HITS_NUMBER": "Nb coups minimun",
+    "LAST_MEASURE_VALUE": "Dernière valeur mesurée : {{lastMeasure}}",
     "MEASURES_DURATION": "Durée minimale",
     "MEASURE_LIMIT": "Chaque mesure se terminera automatiquement après",
     "MESSAGE_SCAN": {
@@ -246,11 +247,5 @@
   },
   "SETTINGS": {
     "TITLE": "Paramètres"
-  },
-  "USB": {
-    "USB_PERMISSION": {
-      "NOTICE": "Vous devez accepter la permission afin de pouvoir utiliser le capteur USB.",
-      "TITLE": "USB - permission refusée"
-    }
   }
 }
