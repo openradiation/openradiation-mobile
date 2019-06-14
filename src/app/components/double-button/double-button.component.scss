@@ -17,6 +17,7 @@
   --color-activated: white;
   --background-focused: transparent;
   --background-activated: transparent;
+  --border-radius: 5px;
 }
 .double-button {
   @extend .device-button;
