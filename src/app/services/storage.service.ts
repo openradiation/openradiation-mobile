@@ -110,7 +110,16 @@ export class StorageService {
   private getFromDB(key: string): any {
     return from(
       this.storage.get(key).then(rawValue => {
-        return rawValue ? this.parseFromDB(rawValue) : this.parseFromDB(localStorage.getItem(key)!);
+        if (rawValue) {
+          return this.parseFromDB(rawValue);
+        } else {
+          const retrieveLocalStorageData = localStorage.getItem(key);
+          if (retrieveLocalStorageData) {
+            return this.parseFromDB(retrieveLocalStorageData);
+          } else {
+            return null;
+          }
+        }
       })
     );
   }
