@@ -3,8 +3,6 @@ import * as uuid from 'uuid';
 import { environment } from '../../../environments/environment';
 import { ApparatusSensorType } from '../devices/abstract-device';
 
-export const V1OrganisationReporting = 'OpenRadiation app 1.0.0';
-
 export abstract class AbstractMeasure {
   abstract readonly type: MeasureType;
   startTime: number;
@@ -152,6 +150,11 @@ export enum MeasureEnvironment {
   OnTheRoad = 'ontheroad',
   Inside = 'inside',
   Plane = 'plane'
+}
+
+export interface Params {
+  expertMode: boolean;
+  autoPublish: boolean;
 }
 
 export interface MeasureReport {

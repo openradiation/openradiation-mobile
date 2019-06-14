@@ -1,6 +1,11 @@
 import { Location } from '@mauron85/cordova-plugin-background-geolocation';
 import { AbstractDevice } from '../devices/abstract-device';
-import { Measure, MeasureSeries, Step } from './measure';
+import { Measure, MeasureSeries, Params, Step } from './measure';
+
+export class InitMeasures {
+  static readonly type = '[Measure] Init';
+  constructor(public measures: (Measure | MeasureSeries)[], public params: Params, public recentTags: string[]) {}
+}
 
 export class EnableExpertMode {
   static readonly type = '[Measures] Enable expert mode';
@@ -110,8 +115,4 @@ export class ShowMeasure {
 export class AddRecentTag {
   static readonly type = '[Measures] Add recent tag';
   constructor(public tag: string) {}
-}
-
-export class RetrieveV1Measures {
-  static readonly type = '[User] Retrieve V1 measures';
 }
