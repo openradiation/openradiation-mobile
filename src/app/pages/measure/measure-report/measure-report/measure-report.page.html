@@ -61,7 +61,7 @@
                   display-format="HH:mm'ss''"
                   pickerFormat="HH mm ss"
                   formControlName="duration"
-                  [value]="inputDisabled ? undefined : measureReportForm.value.duration === undefined ? 0 : measureReportForm.value.duration"
+                  [value]="inputDisabled ? undefined : measureReportForm.value.duration === undefined ? '2000-01-01T00:00:00' : measureReportForm.value.duration"
                   [cancelText]="'GENERAL.CANCEL' | translate"
                   [doneText]="'GENERAL.SUBMIT' | translate"
                   [placeholder]="inputDisabled ? '-' : '00\'00\'\''"
