@@ -6,6 +6,8 @@
   "description": "Les citoyens mesurent la radioactivité.",
   "scripts": {
     "start": "ionic serve --no-open --configuration mockDevice",
+    "add:android": "ionic cordova platform add android --no-resources",
+    "add:ios": "ionic cordova platform add ios --no-resources",
     "cordova:prepare": "ionic cordova prepare android ios --no-build",
     "build:mockDevice:android": "ionic cordova build android --configuration mockDevice",
     "build:mockDevice:ios": "ionic cordova build ios --configuration mockDevice",
@@ -132,7 +134,9 @@
       "cordova-plugin-network-information": {},
       "cordova-plugin-screen-orientation": {},
       "cordova-plugin-x-socialsharing": {
-        "ANDROID_SUPPORT_V4_VERSION": "24.1.1+"
+        "ANDROID_SUPPORT_V4_VERSION": "24.1.1+",
+        "PHOTO_LIBRARY_ADD_USAGE_DESCRIPTION": "This app requires photo library access to function properly.",
+        "PHOTO_LIBRARY_USAGE_DESCRIPTION": "This app requires photo library access to function properly."
       },
       "cordova-plugin-camera": {},
       "cordova-plugin-mauron85-background-geolocation": {
