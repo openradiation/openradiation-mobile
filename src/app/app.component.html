@@ -1,6 +1,6 @@
 <ion-app [ngClass]="{ 'keyboard-open': keyboardOpen }">
   <ion-split-pane [when]="false">
-    <ion-menu side="end" type="push">
+    <ion-menu side="end" type="push" (ionDidOpen)="onMenuOpen()">
       <app-menu></app-menu>
     </ion-menu>
     <ion-router-outlet main></ion-router-outlet>

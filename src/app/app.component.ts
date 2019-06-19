@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MenuController, Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-root',
@@ -8,13 +9,19 @@ import { Component } from '@angular/core';
 export class AppComponent {
   keyboardOpen: boolean;
 
-  constructor() {
+  constructor(private menuController: MenuController, private platform: Platform) {
     this.initializeApp();
   }
 
   initializeApp() {
     window.addEventListener('keyboardWillShow', () => (this.keyboardOpen = true));
     window.addEventListener('keyboardWillHide', () => (this.keyboardOpen = false));
+  }
+
+  onMenuOpen() {
+    const backButtonSubscription = this.platform.backButton.subscribeWithPriority(9999, () =>
+      this.menuController.close().then(() => backButtonSubscription.unsubscribe())
+    );
   }
 }
 
