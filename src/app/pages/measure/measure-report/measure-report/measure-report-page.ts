@@ -24,6 +24,8 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
   exampleFlightNumber = { message: ': AF179' };
   exampleSeatNumber = { message: ': C15' };
 
+  initialDatePickerValue: string;
+
   currentMeasure?: Measure;
   planeMode: boolean;
   inputDisabled = false;
@@ -41,6 +43,11 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
     private dateService: DateService
   ) {
     super(router, store, activatedRoute, navigationService, actions$, platform);
+    const date = new Date();
+    date.setHours(0);
+    date.setMinutes(0);
+    date.setSeconds(0);
+    this.initialDatePickerValue = date.toISOString();
   }
 
   pageEnter() {
