@@ -1,0 +1,9 @@
+{
+  "config_ios": {
+    "NSLocationWhenInUseUsageDescription": "La position de l'appareil est nécessaire pour l'envoi des mesures à la base OpenRadiation. Merci d'accepter la permission.",
+    "NSLocationAlwaysAndWhenInUseUsageDescription": "La position de l'appareil est nécessaire pour l'envoi des mesures à la base OpenRadiation. Merci d'accepter la permission.",
+    "NSLocationAlwaysUsageDescription": "La position de l'appareil est nécessaire pour l'envoi des mesures à la base OpenRadiation. Merci d'accepter la permission.",
+    "NSMotionUsageDescription": "La détection du déplacement de l'appareil est nécessaire pour améliorer la précision de la localisation des mesures. Merci d'accepter la permission.",
+    "NSBluetoothPeripheralUsageDescription": "L'activation du bluetooth est nécessaire pour se connecter aux capteurs. Merci d'accepter la permission."
+  }
+}
