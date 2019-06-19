@@ -69,6 +69,15 @@
     padding: 0;
   }
 
+  .title {
+    font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+    font-weight: 200;
+    font-size: 16px;
+    color: $second-color;
+    margin: 20px 0 10px 0;
+    text-align: center;
+  }
+
   ion-list {
     padding: 0 10px;
     margin: 0;
@@ -122,8 +131,13 @@
           line-height: 26px;
         }
         &.description {
-          margin: 0;
-          margin-top: 10px;
+          margin: 10px 0 0;
+          ion-label {
+            min-width: 165px;
+          }
+          ion-input {
+            text-transform: uppercase;
+          }
         }
       }
       ion-label {

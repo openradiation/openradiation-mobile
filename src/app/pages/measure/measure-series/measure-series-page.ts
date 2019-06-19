@@ -11,7 +11,7 @@ import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
 import { MeasureSeriesParamsSelected } from '../../../states/measures/measure';
 import { CancelMeasure, StartMeasure, StopMeasureSeriesParams } from '../../../states/measures/measures.action';
-import { MeasuresStateModel } from '../../../states/measures/measures.state';
+import { MeasuresState, MeasuresStateModel } from '../../../states/measures/measures.state';
 
 @Component({
   selector: 'app-measure-series',
@@ -21,6 +21,9 @@ import { MeasuresStateModel } from '../../../states/measures/measures.state';
 export class MeasureSeriesPage extends AutoUnsubscribePage {
   @Select(DevicesState.connectedDevice)
   connectedDevice$: Observable<AbstractDevice | undefined>;
+
+  @Select(MeasuresState.planeMode)
+  planeMode$: Observable<boolean>;
 
   measureSeriesParamsForm?: FormGroup;
   url = '/measure/series';

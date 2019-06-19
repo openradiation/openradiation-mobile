@@ -8,15 +8,44 @@
     </div>
     <app-gps-indicator [accuracy]="positionAccuracy$ | async"></app-gps-indicator>
     <ng-container *ngIf="connectedDevice$ | async as connectedDevice; else noConnectedDevice">
-      <div class="connected-device-header">{{'HOME.CONNECTED_SENSOR' | translate}}</div>
-      <ion-button class="connected-device-button" fill="clear" (click)="goToDevices()">
-        {{connectedDevice.apparatusVersion}}
-      </ion-button>
+      <div class="button-component">
+        <app-double-button
+          [headerMessage]="'HOME.CONNECTED_SENSOR' | translate"
+          [mainMessage]="connectedDevice.apparatusVersion"
+          [modeSimple]="false"
+          (click)="goToDevices()"
+        ></app-double-button>
+      </div>
     </ng-container>
     <ng-template #noConnectedDevice>
-      <ion-button class="device-button" fill="clear" (click)="goToDevices()">
-        {{'HOME.NO_SENSORS' | translate}}<br />{{'GENERAL.CLICK_HERE' | translate}}
-      </ion-button>
+      <div class="button-component">
+        <app-double-button
+          [headerMessage]="'HOME.NO_SENSORS' | translate"
+          [mainMessage]=" 'GENERAL.CLICK_HERE' | translate"
+          [modeSimple]="true"
+          (click)="goToDevices()"
+        ></app-double-button>
+      </div>
+    </ng-template>
+    <ng-container *ngIf="planeMode$ | async; else groundLevel">
+      <div class="button-component">
+        <app-double-button
+          [headerMessage]="'HOME.MEASURE_MODE' | translate"
+          [mainMessage]="'GENERAL.ON_PLANE' | translate"
+          [modeSimple]="false"
+          (click)="goToPlaneMode()"
+        ></app-double-button>
+      </div>
+    </ng-container>
+    <ng-template #groundLevel>
+      <div class="button-component">
+        <app-double-button
+          [headerMessage]="'HOME.MEASURE_MODE' | translate"
+          [mainMessage]="'GENERAL.ON_GROUND' | translate"
+          [modeSimple]="false"
+          (click)="goToPlaneMode()"
+        ></app-double-button>
+      </div>
     </ng-template>
     <app-round-button
       [disabled]="!(canStartMeasure | async)"

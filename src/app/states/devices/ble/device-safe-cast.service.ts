@@ -13,15 +13,20 @@ import { DeviceSafeCast } from './device-safe-cast';
   providedIn: 'root'
 })
 export class DeviceSafeCastService extends AbstractBLEDeviceService<DeviceSafeCast> {
+  protected calibrationFunctions = {
+    planeMode: {
+      0: 'cps / 5.56667'
+    },
+    groundLevel: {
+      0: 'cps / 5.56667'
+    }
+  };
+
   protected service = 'ef080d8c-c3be-41ff-bd3f-05a5f4795d7f';
   protected receiveCharacteristic = 'a1e8f5b1-696b-4e4c-87c6-69dfe0b0093b';
 
   constructor(protected store: Store, protected ble: BLE) {
     super(store, ble);
-  }
-
-  protected convertHitsNumberPerSec(hitsNumberPerSec: number): number {
-    return (hitsNumberPerSec * 60) / 334;
   }
 
   getDeviceInfo(device: DeviceSafeCast): Observable<Partial<DeviceSafeCast>> {

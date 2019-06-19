@@ -36,3 +36,9 @@ export enum DeviceType {
   PocketGeiger = 'Pocket Geiger Type 6',
   Rium = 'RiumGm'
 }
+
+// The key set the threshold and the value is the calibration function
+export interface CalibrationFunctions {
+  0: string;
+  [key: number]: string;
+}

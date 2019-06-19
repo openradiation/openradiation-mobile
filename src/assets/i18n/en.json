@@ -5,7 +5,7 @@
       "TITLE": "Radioactivity measurement"
     },
     "MEASURES_HOW_TO": {
-      "NOTICE": "Turn on your sensor, start the application, and connect the sensor. OpenRadiation is a data base aiming to map environmental radioactivity. To ensure that the data received is homogeneous, comparable and as representative as possible, your measurements published on OpenRadiation must ideally be taken outdoors, if possible at a distance from housing, and with the sensor at a height of approximately 1 m above the ground. The longer the measurement, the more precise the measurement and hence the statistics: an indicator reflects the reliability of the measurement as you take it. After completing the measurement, you can qualify the local environment (indoors, in a plane, on a road, in a rural area, in town) and enter additional information before publishing the data. This information can be used to appraise the reliability of the measurement more precisely.",
+      "NOTICE": "Start the application, search for available sensors and connect a sensor directly from the application. OpenRadiation is a data base aiming to map environmental radioactivity. Select the appropriate measurement mode according to if you take measurements at ground level or on board a plane. To ensure that the data received is homogeneous, comparable and as representative as possible, measurements taken at ground level and published on OpenRadiation must ideally be taken outdoors, if possible at a distance from housing, and with the sensor at a height of approximately 1 m above the ground. The longer the measurement, the more precise the measurement and hence the statistics: an indicator reflects the reliability of the measurement as you take it. After completing the measurement, you can qualify the local environment at ground level (in a rural area, in town) or on board a plane (flight number) and enter additional information before publishing the data. This information can be used to appraise the reliability of the measurement more precisely and to consolidate data.",
       "TITLE": "How can you take measurements?"
     },
     "OPENRADIATION_PROJECT": {
@@ -30,6 +30,7 @@
     "CONNEXION_ERROR": "Connection error: {{message}}",
     "DATE": "Date",
     "END": "End",
+    "EXAMPLE": "Ex {{message}}",
     "GOOD": "Good",
     "GO_TO_SETTINGS": "Go to settings",
     "HITS": {
@@ -50,7 +51,10 @@
     },
     "NO": "No",
     "OK": "Ok",
+    "ON_GROUND": "At ground level",
+    "ON_PLANE": "On board a plane",
     "POOR": "Poor",
+    "SEAT_POSITION": "Seat position",
     "SHARE": "Share",
     "SUBMIT": "Submit",
     "TIMESTAMP": "Timestamp",
@@ -91,7 +95,11 @@
   },
   "HOME": {
     "CONNECTED_SENSOR": "Connected sensor",
+    "ELEVATED_ALTITUDE": "High altitude detected",
+    "ELEVATED_ALTITUDE_MESSAGE": "Tip: if you are on board a plane, please select the measurement mode on board a plane.",
+    "MEASURE_MODE": "Measurement mode",
     "NO_SENSORS": "No sensor",
+    "SWITCH_PLANE_MODE": "Switch to plane mode",
     "TITLE": "measure radioactivity"
   },
   "LANGUAGE": {
@@ -148,25 +156,36 @@
       "COUNTRYSIDE": "Countryside",
       "INSIDE": "Inside",
       "ON_THE_ROAD": "On the road",
-      "PLANE": "Plane",
       "TITLE": "Measurement environment",
       "TITLE_SERIES": "Measurements environment"
     },
     "EXPERT": "Expert",
     "EXPERT_MODE": "Expert mode",
     "FIABILITY": "Reliability",
+    "FLIGHT": {
+      "FLIGHT_NUMBER": "Flight number",
+      "SEAT_NUMBER": "Seat number"
+    },
     "HITS_NUMBER": "No. of counts",
     "HITS_PER_MIN": "No. of counts/min.",
     "INIT": "Start-up",
     "MEASURE": "Measurement",
     "MEASURE_START": "Measurement start",
+    "MESSAGE_ALTITUDE": "Tip: high altitude detected, if the measurement was made on board a plane, you should have selected the measurement mode on board a plane",
     "ONGOING": "Measurement in progress",
+    "PLANE_MODE_NOTICE": {
+      "PART1": "Cosmic radiation is more important at high altitude, during flights, because they are less attenuated by the atmospheric layer.",
+      "PART2": "Activation of the on board a plane measurement mode makes it possible to take into account a specific calibration of the sensors for these radiations. On the other hand, if you take measurements at ground level, even in the mountains, choose the ground level measurement mode.",
+      "PART3": "<a onclick=\"window.open('https://www.openradiation.org/en/cosmic-radiation', '_system')\">Learn more</a>"
+    },
     "REPORT_LATITUDE": "Latitude",
     "REPORT_LONGITUDE": "Longitude",
     "SENSOR_POSITION": {
       "1_METER_HIGH": "1 m above the ground",
       "FLOOR": "On the ground",
-      "TITLE": "Sensor position"
+      "NO_WINDOW_SIDE": "Aisle",
+      "TITLE": "Sensor position",
+      "WINDOW_SIDE": "Window"
     },
     "SENSOR_TEMPERATURE": "Sensor temperature",
     "TAG_LIST": "Tag list",
@@ -176,8 +195,10 @@
     "VOLTAGE": "Voltage (V)",
     "WEATHER": {
       "NO_RAIN": "No rain",
+      "NO_STORM": "No storm",
       "RAIN": "Rain",
-      "TITLE": "Weather"
+      "STORM": "Storm crossing",
+      "TITLE_RAIN": "Weather"
     }
   },
   "MEASURE_MANUAL": {
@@ -188,8 +209,10 @@
     "ALERT_LOG_IN": "You must be logged in before you can fill out a manual measurement report.",
     "ALERT_SENSOR": "You must connect a sensor before you can fill out a manual measurement report.",
     "HITS_NUMBER": "Minimum no. of counts",
+    "LAST_MEASURE_VALUE": "Last measurement value : {{lastMeasure}}",
     "MEASURES_DURATION": "Minimum duration",
     "MEASURE_LIMIT": "Each measurement will end automatically after",
+    "MESSAGE_ALTITUDE": "Tip: high altitude detected, if these measurements were made on board a plane, you should have selected the measurement mode on board a plane",
     "MESSAGE_SCAN": {
       "NONE": "First measurement in progress",
       "PLURAL": "{{count}} measurements taken since {{duration}}",
@@ -246,11 +269,5 @@
   },
   "SETTINGS": {
     "TITLE": "Settings"
-  },
-  "USB": {
-    "USB_PERMISSION": {
-      "NOTICE": "You need to accept the permission in order to use the USB sensor.",
-      "TITLE": "USB - Permission denied"
-    }
   }
 }

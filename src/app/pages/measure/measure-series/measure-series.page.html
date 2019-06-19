@@ -63,6 +63,20 @@
               snaps="true"
             ></ion-range>
           </ion-item>
+          <ng-container *ngIf="planeMode$ | async; else groundLevel">
+            <ion-item class="title">
+              <ion-label
+                >{{'HOME.MEASURE_MODE' | translate}} : {{('GENERAL.ON_PLANE' | translate | lowercase) }}</ion-label
+              >
+            </ion-item>
+          </ng-container>
+          <ng-template #groundLevel>
+            <ion-item class="title">
+              <ion-label
+                >{{'HOME.MEASURE_MODE' | translate}} : {{('GENERAL.ON_GROUND' | translate | lowercase) }}</ion-label
+              >
+            </ion-item>
+          </ng-template>
           <ion-item class="title">
             <ion-label>{{'MEASURE_SERIES.STOP' | translate}}</ion-label>
           </ion-item>

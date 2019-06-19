@@ -23,6 +23,14 @@ export class DisableAutoPublish {
   static readonly type = '[Measures] Disable auto publish';
 }
 
+export class EnablePLaneMode {
+  static readonly type = '[Measures] Enable plane mode';
+}
+
+export class DisablePlaneMode {
+  static readonly type = '[Measures] Disable plane mode';
+}
+
 export class PositionChanged {
   static readonly type = '[Measures] Position changed';
   constructor(public position?: Location) {}

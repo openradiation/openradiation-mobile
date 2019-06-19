@@ -8,6 +8,7 @@ import { AbstractDevice } from '../devices/abstract-device';
 import { DateService } from './date.service';
 import {
   Measure,
+  MeasureEnvironment,
   MeasureReport,
   MeasureSeries,
   MeasureSeriesParams,
@@ -24,8 +25,10 @@ import {
   DeleteMeasure,
   DisableAutoPublish,
   DisableExpertMode,
+  DisablePlaneMode,
   EnableAutoPublish,
   EnableExpertMode,
+  EnablePLaneMode,
   InitMeasures,
   PositionChanged,
   PublishMeasure,
@@ -60,6 +63,7 @@ export interface MeasuresStateModel {
   params: {
     expertMode: boolean;
     autoPublish: boolean;
+    planeMode: boolean;
   };
 }
 
@@ -71,7 +75,8 @@ export interface MeasuresStateModel {
     canEndCurrentScan: false,
     params: {
       expertMode: false,
-      autoPublish: false
+      autoPublish: false,
+      planeMode: false
     }
   }
 })
@@ -91,6 +96,11 @@ export class MeasuresState {
   @Selector()
   static autoPublish({ params }: MeasuresStateModel): boolean {
     return params.autoPublish;
+  }
+
+  @Selector()
+  static planeMode({ params }: MeasuresStateModel): boolean {
+    return params.planeMode;
   }
 
   @Selector()
@@ -165,6 +175,22 @@ export class MeasuresState {
     });
   }
 
+  @Action(EnablePLaneMode)
+  enablePlaneMode({ getState, patchState }: StateContext<MeasuresStateModel>) {
+    const { params } = getState();
+    patchState({
+      params: { ...params, planeMode: true }
+    });
+  }
+
+  @Action(DisablePlaneMode)
+  disablePlaneMode({ getState, patchState }: StateContext<MeasuresStateModel>) {
+    const { params } = getState();
+    patchState({
+      params: { ...params, planeMode: false }
+    });
+  }
+
   @Action(PositionChanged)
   positionChanged({ patchState }: StateContext<MeasuresStateModel>, { position }: PositionChanged) {
     patchState({
@@ -173,9 +199,10 @@ export class MeasuresState {
   }
 
   @Action(StartMeasure)
-  startMeasure({ patchState }: StateContext<MeasuresStateModel>, { device }: StartMeasure) {
-    patchState({
-      currentMeasure: new Measure(
+  startMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, { device }: StartMeasure) {
+    const { params } = getState();
+    const currentMeasure: Measure = {
+      ...new Measure(
         device.apparatusId,
         device.apparatusVersion,
         device.apparatusSensorType,
@@ -184,14 +211,18 @@ export class MeasuresState {
         this.device.platform,
         this.device.version,
         this.device.model
-      )
+      ),
+      measurementEnvironment: params.planeMode ? MeasureEnvironment.Plane : undefined
+    };
+    patchState({
+      currentMeasure
     });
   }
 
   @Action(StartManualMeasure)
   startManualMeasure({ getState, patchState }: StateContext<MeasuresStateModel>) {
-    const { currentPosition } = getState();
-    let currentMeasure = {
+    const { currentPosition, params } = getState();
+    let currentMeasure: Measure = {
       ...new Measure(
         undefined,
         undefined,
@@ -203,7 +234,8 @@ export class MeasuresState {
         this.device.model,
         true
       ),
-      startTime: Date.now()
+      startTime: Date.now(),
+      measurementEnvironment: params.planeMode ? MeasureEnvironment.Plane : undefined
     };
     currentMeasure = Measure.updateStartPosition(currentMeasure, currentPosition);
     currentMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
@@ -308,7 +340,7 @@ export class MeasuresState {
     { getState, patchState, dispatch }: StateContext<MeasuresStateModel>,
     { step, device }: AddMeasureScanStep
   ) {
-    const { currentMeasure, currentSeries } = getState();
+    const { currentMeasure, currentSeries, params } = getState();
     if (currentMeasure && currentMeasure.steps) {
       const newCurrentMeasure = {
         ...currentMeasure,
@@ -322,8 +354,14 @@ export class MeasuresState {
         newCurrentMeasure.hitsNumber = currentMeasure.hitsNumber
           ? currentMeasure.hitsNumber + step.hitsNumber
           : step.hitsNumber;
+        const [value, calibrationFunction] = this.measuresService.computeRadiationValue(
+          newCurrentMeasure,
+          device,
+          params.planeMode
+        );
         newCurrentMeasure.hitsAccuracy = newCurrentMeasure.hitsNumber;
-        newCurrentMeasure.value = this.measuresService.computeRadiationValue(newCurrentMeasure, device);
+        newCurrentMeasure.value = value;
+        newCurrentMeasure.calibrationFunction = calibrationFunction;
       } else if (step.hitsAccuracy !== undefined && step.value !== undefined) {
         newCurrentMeasure.hitsAccuracy = step.hitsAccuracy;
         newCurrentMeasure.value = step.value;
@@ -366,7 +404,11 @@ export class MeasuresState {
           measure.hitsAccuracy > device.hitsAccuracyThreshold.accurate
         );
       case MeasureSeriesParamsSelected.measureHitsLimit:
-        return measure.hitsAccuracy !== undefined && measure.hitsAccuracy > measureSeries.params.measureHitsLimit;
+        return (
+          measure.hitsAccuracy !== undefined &&
+          measure.hitsAccuracy > measureSeries.params.measureHitsLimit &&
+          currentTime - measure.startTime > 10000
+        );
     }
   }
 
@@ -474,7 +516,11 @@ export class MeasuresState {
         tags: currentMeasure.tags,
         measurementEnvironment: currentMeasure.measurementEnvironment,
         rain: currentMeasure.rain,
-        enclosedObject: currentMeasure.enclosedObject
+        enclosedObject: currentMeasure.enclosedObject,
+        storm: currentMeasure.storm,
+        windowSeat: currentMeasure.windowSeat,
+        flightNumber: currentMeasure.flightNumber,
+        seatNumber: currentMeasure.seatNumber
       };
       patchState({
         measureReport: {
@@ -519,7 +565,11 @@ export class MeasuresState {
         description: currentSeries.measures[0].description,
         tags: currentSeries.measures[0].tags,
         measurementEnvironment: currentSeries.measures[0].measurementEnvironment,
-        rain: currentSeries.measures[0].rain
+        rain: currentSeries.measures[0].rain,
+        storm: currentSeries.measures[0].storm,
+        windowSeat: currentSeries.measures[0].windowSeat,
+        flightNumber: currentSeries.measures[0].flightNumber,
+        seatNumber: currentSeries.measures[0].seatNumber
       };
       patchState({
         measureSeriesReport: {
@@ -541,6 +591,10 @@ export class MeasuresState {
         measurementHeight: measureReport.model.measurementHeight,
         measurementEnvironment: measureReport.model.measurementEnvironment,
         rain: measureReport.model.rain,
+        storm: measureReport.model.storm,
+        flightNumber: measureReport.model.flightNumber ? measureReport.model.flightNumber.toUpperCase() : undefined,
+        seatNumber: measureReport.model.seatNumber ? measureReport.model.seatNumber.toUpperCase() : undefined,
+        windowSeat: measureReport.model.windowSeat,
         description: measureReport.model.description,
         tags: measureReport.model.tags,
         enclosedObject: measureReport.model.enclosedObject
@@ -594,7 +648,15 @@ export class MeasuresState {
             measurementEnvironment: measureSeriesReport.model.measurementEnvironment,
             rain: measureSeriesReport.model.rain,
             description: measureSeriesReport.model.description,
-            tags: measureSeriesReport.model.tags
+            tags: measureSeriesReport.model.tags,
+            storm: measureSeriesReport.model.storm,
+            windowSeat: measureSeriesReport.model.windowSeat,
+            flightNumber: measureSeriesReport.model.flightNumber
+              ? measureSeriesReport.model.flightNumber.toUpperCase()
+              : undefined,
+            seatNumber: measureSeriesReport.model.seatNumber
+              ? measureSeriesReport.model.seatNumber.toUpperCase()
+              : undefined
           }))
         }
       });
