@@ -10,6 +10,8 @@ import { ErrorResponse, ErrorResponseCode } from '../measures/error-response';
   providedIn: 'root'
 })
 export class UserService {
+  private allowedLanguages = ['en', 'fr'];
+
   constructor(private httpClient: HttpClient, private translateService: TranslateService) {
     this.translateService.setDefaultLang('en');
   }
@@ -50,6 +52,11 @@ export class UserService {
   }
 
   getDefaultLanguage(): string {
-    return this.translateService.getBrowserLang();
+    const userLang = this.translateService.getBrowserLang();
+    if (this.allowedLanguages.includes(userLang)) {
+      return userLang;
+    } else {
+      return this.translateService.getDefaultLang();
+    }
   }
 }
