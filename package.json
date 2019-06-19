@@ -1,13 +1,11 @@
 {
   "name": "open-radiation",
-  "version": "2.2.5",
+  "version": "2.2.6",
   "author": "OpenRadiation",
   "homepage": "https://www.openradiation.org/",
   "description": "Les citoyens mesurent la radioactivité.",
   "scripts": {
     "start": "ionic serve --no-open --configuration mockDevice",
-    "add:android": "ionic cordova platform add android --no-resources",
-    "add:ios": "ionic cordova platform add ios --no-resources",
     "cordova:prepare": "ionic cordova prepare android ios --no-build",
     "build:mockDevice:android": "ionic cordova build android --configuration mockDevice",
     "build:mockDevice:ios": "ionic cordova build ios --configuration mockDevice",
@@ -68,14 +66,15 @@
     "cordova-plugin-inappbrowser": "^3.0.0",
     "cordova-plugin-ionic-keyboard": "^2.1.3",
     "cordova-plugin-ionic-webview": "^3.1.2",
+    "cordova-plugin-localization-strings": "^3.1.0",
     "cordova-plugin-network-information": "^2.0.1",
     "cordova-plugin-screen-orientation": "^3.0.1",
     "cordova-plugin-splashscreen": "^5.0.2",
     "cordova-plugin-statusbar": "^2.4.2",
     "cordova-plugin-usb-serial": "file:cordova-plugin-usb-serial",
     "cordova-plugin-whitelist": "^1.3.3",
-    "cordova-plugin-x-socialsharing": "^5.4.4",
-    "cordova-sqlite-storage": "3.2.0",
+    "cordova-plugin-x-socialsharing": "^5.4.6",
+    "cordova-sqlite-storage": "^3.2.0",
     "cordova.plugins.diagnostic": "^4.0.12",
     "core-js": "^2.5.4",
     "es6-promise-plugin": "^4.2.2",
@@ -121,9 +120,7 @@
       "cordova-plugin-device": {},
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-ionic-keyboard": {},
-      "cordova-plugin-ble-central": {
-        "BLUETOOTH_USAGE_DESCRIPTION": "L'activation du bluetooth est nécessaire pour se connecter aux capteurs. Merci d'accepter la permission."
-      },
+      "cordova-plugin-ble-central": {},
       "cordova-plugin-ionic-webview": {
         "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
       },
@@ -134,9 +131,7 @@
       "cordova-plugin-network-information": {},
       "cordova-plugin-screen-orientation": {},
       "cordova-plugin-x-socialsharing": {
-        "ANDROID_SUPPORT_V4_VERSION": "24.1.1+",
-        "PHOTO_LIBRARY_ADD_USAGE_DESCRIPTION": "This app requires photo library access to function properly.",
-        "PHOTO_LIBRARY_USAGE_DESCRIPTION": "This app requires photo library access to function properly."
+        "ANDROID_SUPPORT_V4_VERSION": "24.1.1+"
       },
       "cordova-plugin-camera": {},
       "cordova-plugin-mauron85-background-geolocation": {
@@ -147,9 +142,7 @@
         "ACCOUNT_NAME": "@string/app_name",
         "ACCOUNT_LABEL": "@string/app_name",
         "ACCOUNT_TYPE": "$PACKAGE_NAME.account",
-        "CONTENT_AUTHORITY": "$PACKAGE_NAME",
-        "ALWAYS_USAGE_DESCRIPTION": "La position de l'appareil est nécessaire pour l'envoi des mesures à la base OpenRadiation. Merci d'accepter la permission.",
-        "MOTION_USAGE_DESCRIPTION": "La détection du déplacement de l'appareil est nécessaire pour améliorer la précision de la localisation des mesures. Merci d'accepter la permission."
+        "CONTENT_AUTHORITY": "$PACKAGE_NAME"
       },
       "cordova-plugin-inappbrowser": {},
       "@mauron85/cordova-plugin-background-geolocation": {
@@ -160,12 +153,13 @@
         "ACCOUNT_NAME": "@string/app_name",
         "ACCOUNT_LABEL": "@string/app_name",
         "ACCOUNT_TYPE": "$PACKAGE_NAME.account",
-        "CONTENT_AUTHORITY": "$PACKAGE_NAME",
-        "ALWAYS_USAGE_DESCRIPTION": "La position de l'appareil est nécessaire pour l'envoi des mesures à la base OpenRadiation. Merci d'accepter la permission.",
-        "MOTION_USAGE_DESCRIPTION": "La détection du déplacement de l'appareil est nécessaire pour améliorer la précision de la localisation des mesures. Merci d'accepter la permission."
+        "CONTENT_AUTHORITY": "$PACKAGE_NAME"
       },
       "cordova-plugin-usb-serial": {},
-      "cordova-sqlite-storage": {}
+      "cordova-sqlite-storage": {},
+      "cordova-plugin-localization-strings": {
+        "TRANSLATION_PATH": "ios-native-translations/"
+      }
     },
     "platforms": [
       "android",

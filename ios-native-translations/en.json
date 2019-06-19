@@ -1,0 +1,9 @@
+{
+  "config_ios": {
+    "NSLocationWhenInUseUsageDescription": "Phone location is needed to send measurements to the OpenRadiation data base. Please accept the permission.",
+    "NSLocationAlwaysAndWhenInUseUsageDescription": "Phone location is needed to send measurements to the OpenRadiation data base. Please accept the permission.",
+    "NSLocationAlwaysUsageDescription": "Phone location is needed to send measurements to the OpenRadiation data base. Please accept the permission.",
+    "NSMotionUsageDescription": "Motion detection is needed to improve phone location accuracy. Please accept the permission.",
+    "NSBluetoothPeripheralUsageDescription": "Bluetooth activation is mandatory to connect to the sensors. Please accept the permission."
+  }
+}
