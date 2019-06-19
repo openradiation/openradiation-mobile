@@ -10,7 +10,7 @@ Design and graphism is protected
 
 Then you need to download project dependencies by running `npm install` in the source directory.
 
-If you want to build your app for a real device (Android or iOS), you also need to run `npm run add:android` or `npm run add:ios`. 
+If you want to build your app for a real device (Android or iOS), you also need to run `npm run cordova:prepare`
 
 ## Test in browser
 
