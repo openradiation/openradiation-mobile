@@ -668,9 +668,7 @@ export class MeasuresState {
       if (index !== -1) {
         return this.measuresService.publishMeasure(measure).pipe(
           tap(() => {
-            console.log(getState().measures, index);
             measures = getState().measures;
-            console.log('prev', measures.slice(0, index), 'measure', measure, 'next', measures.slice(index + 1));
             patchState({
               measures: [...measures.slice(0, index), { ...measure, sent: true }, ...measures.slice(index + 1)]
             });
