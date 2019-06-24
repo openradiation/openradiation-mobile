@@ -183,7 +183,7 @@
     "SENSOR_POSITION": {
       "1_METER_HIGH": "1 m above the ground",
       "FLOOR": "On the ground",
-      "NO_WINDOW_SIDE": "Aisle",
+      "NO_WINDOW_SIDE": "Aisle / Middle",
       "TITLE": "Sensor position",
       "WINDOW_SIDE": "Window"
     },

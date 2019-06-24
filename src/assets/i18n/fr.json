@@ -54,7 +54,7 @@
     "ON_GROUND": "Au niveau du sol",
     "ON_PLANE": "À bord d’avion",
     "POOR": "Moyen",
-    "SEAT_POSITION": "Position de siège",
+    "SEAT_POSITION": "Position du siège",
     "SHARE": "Partager",
     "SUBMIT": "Valider",
     "TIMESTAMP": "Timestamp",
@@ -175,7 +175,7 @@
     "ONGOING": "Mesure en cours",
     "PLANE_MODE_NOTICE": {
       "PART1": "Les rayonnements cosmiques sont plus importants en haute altitude, lors des vols en avion, car ils sont moins atténués par la couche atmosphérique.",
-      "PART2": "L’activation du mode de mesure à bord d'avion permet de prendre en compte un étalonnage spécifique des capteurs pour le rayonnement cosmiques. Au contraire, si vous faites des mesures au sol (même à la montage), choisissez le mode de mesure au niveau du sol.",
+      "PART2": "L’activation du mode de mesure à bord d'avion permet de prendre en compte un étalonnage spécifique des capteurs pour le rayonnement cosmiques. Au contraire, si vous faites des mesures au sol (même à la montagne), choisissez le mode de mesure au niveau du sol.",
       "PART3": "<a onclick=\"window.open('https://www.openradiation.org/fr/rayonnement-cosmique', '_system')\">En savoir plus</a>"
     },
     "REPORT_LATITUDE": "Latitude",
@@ -183,7 +183,7 @@
     "SENSOR_POSITION": {
       "1_METER_HIGH": "À 1 mètre du sol",
       "FLOOR": "Au sol",
-      "NO_WINDOW_SIDE": "Couloir",
+      "NO_WINDOW_SIDE": "Couloir / Milieu",
       "TITLE": "Position du capteur",
       "WINDOW_SIDE": "Hublot"
     },

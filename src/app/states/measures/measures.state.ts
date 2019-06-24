@@ -125,7 +125,7 @@ export class MeasuresState {
 
   @Selector()
   static measures({ measures }: MeasuresStateModel): (Measure | MeasureSeries)[] {
-    return measures.sort((a, b) => b.startTime - a.startTime);
+    return [...measures].sort((a, b) => b.startTime - a.startTime);
   }
 
   @Selector()
@@ -139,8 +139,12 @@ export class MeasuresState {
   }
 
   @Action(InitMeasures)
-  initMeasures({ patchState }: StateContext<MeasuresStateModel>, { measures, params, recentTags }: InitMeasures) {
-    patchState({ measures, params, recentTags });
+  initMeasures(
+    { patchState, getState }: StateContext<MeasuresStateModel>,
+    { measures, params, recentTags }: InitMeasures
+  ) {
+    const { params: defaultParams } = getState();
+    patchState({ measures, params: { ...defaultParams, ...params }, recentTags });
   }
 
   @Action(EnableExpertMode)
@@ -611,16 +615,9 @@ export class MeasuresState {
           let hours;
           let minutes;
           let seconds;
-          if (!isNaN(durationDate.getTime())) {
-            hours = durationDate.getHours();
-            minutes = durationDate.getMinutes();
-            seconds = durationDate.getSeconds();
-          } else {
-            const parseDate = measureReport.model.duration.split(':');
-            hours = parseInt(parseDate[0], 10);
-            minutes = parseInt(parseDate[1], 10);
-            seconds = parseInt(parseDate[2], 10);
-          }
+          hours = durationDate.getHours();
+          minutes = durationDate.getMinutes();
+          seconds = durationDate.getSeconds();
           updatedCurrentMeasure = {
             ...updatedCurrentMeasure,
             endTime: currentMeasure.startTime + (hours * 60 * 60 + minutes * 60 + seconds) * 1000
