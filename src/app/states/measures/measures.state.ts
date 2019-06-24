@@ -125,7 +125,7 @@ export class MeasuresState {
 
   @Selector()
   static measures({ measures }: MeasuresStateModel): (Measure | MeasureSeries)[] {
-    return measures.sort((a, b) => b.startTime - a.startTime);
+    return [...measures].sort((a, b) => b.startTime - a.startTime);
   }
 
   @Selector()
@@ -139,8 +139,12 @@ export class MeasuresState {
   }
 
   @Action(InitMeasures)
-  initMeasures({ patchState }: StateContext<MeasuresStateModel>, { measures, params, recentTags }: InitMeasures) {
-    patchState({ measures, params, recentTags });
+  initMeasures(
+    { patchState, getState }: StateContext<MeasuresStateModel>,
+    { measures, params, recentTags }: InitMeasures
+  ) {
+    const { params: defaultParams } = getState();
+    patchState({ measures, params: { ...defaultParams, ...params }, recentTags });
   }
 
   @Action(EnableExpertMode)
