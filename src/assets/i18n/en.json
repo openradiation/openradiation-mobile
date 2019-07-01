@@ -9,7 +9,7 @@
       "TITLE": "How can you take measurements?"
     },
     "OPENRADIATION_PROJECT": {
-      "NOTICE": "OpenRadiation is a collaborative project with the following partners: IFFO-RME - training network in major educational risks -, IRSN - public expert in research and expertise on nuclear and radiological risks -, Planète Sciences – association contributing to the scientific and technical culture of young people - and SORBONNE UNIVERSITE and the fablab PMClab in particular.<br/>Find out more at:  <a onclick=\"window.open('https://www.openradiation.org/en/about-us', '_system')\">www.openradiation.org/en/about-us</a>.",
+      "NOTICE": "OpenRadiation is a collaborative project with the following partners: IFFO-RME - training network in major educational risks -, IRSN - public expert in research and expertise on nuclear and radiological risks -, Planète Sciences – association contributing to the scientific and technical culture of young people - and Sorbonne Université and the fablab PMClab in particular.<br/>Find out more at:  <a onclick=\"window.open('https://www.openradiation.org/en/about-us', '_system')\">www.openradiation.org/en/about-us</a>.",
       "TITLE": "The OpenRadiation project"
     },
     "TITLE": "About"
@@ -224,7 +224,7 @@
       "FIRST_MEASURE-TIME": "Beginning of the first measurement",
       "HITS_AVERAGE": "Average hits number",
       "MEASURE_NUMBER": "Number of measurements",
-      "SERIES_DURATION": "Total duration of measurements",
+      "SERIES_DURATION": "Total measurement duration",
       "VALUE_AVERAGE": "Average of measurements"
     },
     "SERIES_LIMIT": "The next measurement will start automatically, for a maximum of",
