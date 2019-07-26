@@ -2,7 +2,6 @@ import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { Measure, Step } from '../measures/measure';
 import { AbstractDevice, CalibrationFunctions, RawDevice } from './abstract-device';
-import { DeviceRium } from './usb/device-rium';
 
 export abstract class AbstractDeviceService<T extends AbstractDevice> {
   protected textDecoder = new TextDecoder('utf8');
@@ -60,8 +59,9 @@ export abstract class AbstractDeviceService<T extends AbstractDevice> {
       .reverse();
     let determinedCalibrationFunctions = 0;
     for (const threshold of thresholds) {
-      if (hitsNumberPerSec >= parseInt(threshold, 10)) {
-        determinedCalibrationFunctions = parseInt(threshold, 10);
+      const parsedThreshold = Number(threshold);
+      if (hitsNumberPerSec >= parsedThreshold) {
+        determinedCalibrationFunctions = parsedThreshold;
         break;
       }
     }

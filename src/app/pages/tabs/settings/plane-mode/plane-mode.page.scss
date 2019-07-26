@@ -19,3 +19,8 @@ ion-content {
 .radio {
   padding-top: 10px;
 }
+
+ion-radio {
+  --color: white;
+  --color-checked: #{$second-color};
+}

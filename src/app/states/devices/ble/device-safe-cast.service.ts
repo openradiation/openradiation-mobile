@@ -15,7 +15,8 @@ import { DeviceSafeCast } from './device-safe-cast';
 export class DeviceSafeCastService extends AbstractBLEDeviceService<DeviceSafeCast> {
   protected calibrationFunctions = {
     planeMode: {
-      0: 'cps / 5.56667'
+      0: 'cps / 5.56667',
+      4.33: 'cps * 0.42'
     },
     groundLevel: {
       0: 'cps / 5.56667'

@@ -116,6 +116,19 @@ export class Measure extends AbstractMeasure {
       return { ...measure };
     }
   }
+
+  static updateTemperature(measure: Measure): Measure {
+    if (measure.steps && measure.steps[0] && measure.steps[0].temperature !== undefined) {
+      return {
+        ...measure,
+        temperature:
+          measure.steps
+            .map(currentMeasureStep => currentMeasureStep.temperature!)
+            .reduce((acc, current) => acc + current) / measure.steps.length
+      };
+    }
+    return { ...measure };
+  }
 }
 
 export interface Step {

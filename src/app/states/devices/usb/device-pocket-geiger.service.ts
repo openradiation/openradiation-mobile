@@ -18,7 +18,8 @@ declare const UsbSerial: UsbSerial;
 export class DevicePocketGeigerService extends AbstractUSBDeviceService<DevicePocketGeiger> {
   protected calibrationFunctions = {
     planeMode: {
-      0: 'cps / 0.88387'
+      0: 'cps / 0.88387',
+      0.25: 'cps * 7.2'
     },
     groundLevel: {
       0: 'cps / 0.88387'

@@ -254,6 +254,7 @@
   "SENSORS": {
     "ALERT_TITLE": "Connect a sensor",
     "CONNECTION_LOST": "Connection lost with the sensor",
+    "CONNECTION_TIMEOUT": "Connection closed with the sensor : communication timeout",
     "DETAILS": "Details",
     "LIST": "List of sensors",
     "PARAM": {
