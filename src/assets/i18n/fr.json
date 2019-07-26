@@ -254,6 +254,7 @@
   "SENSORS": {
     "ALERT_TITLE": "Connecter un capteur",
     "CONNECTION_LOST": "Connexion avec le capteur perdue",
+    "CONNECTION_TIMEOUT": "Connexion interrompue avec le capteur : délai de communication dépassé",
     "DETAILS": "Infos",
     "LIST": "Liste des capteurs",
     "PARAM": {

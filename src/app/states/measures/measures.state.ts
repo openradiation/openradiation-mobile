@@ -5,6 +5,7 @@ import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Form } from '../../app.component';
 import { AbstractDevice } from '../devices/abstract-device';
+import { DeviceConnectionLost } from '../devices/devices.action';
 import { DateService } from './date.service';
 import {
   Measure,
@@ -346,29 +347,35 @@ export class MeasuresState {
   ) {
     const { currentMeasure, currentSeries, params } = getState();
     if (currentMeasure && currentMeasure.steps) {
-      let newCurrentMeasure: Measure = {
-        ...currentMeasure,
-        endTime: step.ts,
-        steps: [...currentMeasure.steps, step]
-      };
-      if (newCurrentMeasure.startTime === undefined) {
-        newCurrentMeasure.startTime = step.ts - device.hitsPeriod;
-      }
-      newCurrentMeasure = this.updateMeasureHits(newCurrentMeasure, params.planeMode, { step, device });
-      newCurrentMeasure = Measure.updateTemperature(newCurrentMeasure);
-      const patch: Partial<MeasuresStateModel> = { currentMeasure: newCurrentMeasure };
-      if (
-        newCurrentMeasure.hitsAccuracy !== undefined &&
-        newCurrentMeasure.hitsAccuracy >= device.hitsAccuracyThreshold.accurate
-      ) {
-        patch.canEndCurrentScan = true;
-      }
-      patchState(patch);
-      if (
-        currentSeries &&
-        MeasuresState.shouldStopMeasureSeriesCurrentScan(device, currentSeries, newCurrentMeasure, step.ts)
-      ) {
-        return dispatch(new StartNextMeasureSeries(device));
+      const stepDuration =
+        currentMeasure.steps.length > 0 ? step.ts - currentMeasure.steps[currentMeasure.steps.length - 1].ts : 0;
+      if (stepDuration > device.hitsPeriod * 6) {
+        return dispatch(new DeviceConnectionLost(true));
+      } else {
+        let newCurrentMeasure: Measure = {
+          ...currentMeasure,
+          endTime: step.ts,
+          steps: [...currentMeasure.steps, step]
+        };
+        if (newCurrentMeasure.startTime === undefined) {
+          newCurrentMeasure.startTime = step.ts - device.hitsPeriod;
+        }
+        newCurrentMeasure = this.updateMeasureHits(newCurrentMeasure, params.planeMode, { step, device });
+        newCurrentMeasure = Measure.updateTemperature(newCurrentMeasure);
+        const patch: Partial<MeasuresStateModel> = { currentMeasure: newCurrentMeasure };
+        if (
+          newCurrentMeasure.hitsAccuracy !== undefined &&
+          newCurrentMeasure.hitsAccuracy >= device.hitsAccuracyThreshold.accurate
+        ) {
+          patch.canEndCurrentScan = true;
+        }
+        patchState(patch);
+        if (
+          currentSeries &&
+          MeasuresState.shouldStopMeasureSeriesCurrentScan(device, currentSeries, newCurrentMeasure, step.ts)
+        ) {
+          return dispatch(new StartNextMeasureSeries(device));
+        }
       }
     }
     return of(null);

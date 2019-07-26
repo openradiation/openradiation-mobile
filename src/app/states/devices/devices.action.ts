@@ -40,6 +40,7 @@ export class DisconnectDevice {
 
 export class DeviceConnectionLost {
   static readonly type = '[Devices] Device connection lost';
+  constructor(public communicationTimeout?: boolean) {}
 }
 
 export class UpdateDeviceInfo {
