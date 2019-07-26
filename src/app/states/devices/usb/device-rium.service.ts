@@ -18,7 +18,8 @@ declare const UsbSerial: UsbSerial;
 export class DeviceRiumService extends AbstractUSBDeviceService<DeviceRium> {
   protected calibrationFunctions = {
     planeMode: {
-      0: '(0.00000003751 * (cps * 60 - 4) ^ 2 + 0.00965 * (cps * 60 - 4)) * 0.85'
+      0: '(0.00000003751 * (cps * 60 - 4) ^ 2 + 0.00965 * (cps * 60 - 4)) * 0.85',
+      1.5: 'cps * 1.14'
     },
     groundLevel: {
       0: '(0.00000003751 * (cps * 60 - 4) ^ 2 + 0.00965 * (cps * 60 - 4)) * 0.85'

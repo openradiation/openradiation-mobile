@@ -16,7 +16,8 @@ import { DeviceOGKit } from './device-og-kit';
 export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
   protected calibrationFunctions = {
     planeMode: {
-      0: '0.000001 * (cps - 0.14) ^ 3 + 0.0025 * (cps - 0.14) ^ 2 + 0.39 * (cps - 0.14)'
+      0: '0.000001 * (cps - 0.14) ^ 3 + 0.0025 * (cps - 0.14) ^ 2 + 0.39 * (cps - 0.14)',
+      1.83: 'cps * 0.96'
     },
     groundLevel: {
       0: '0.000001 * (cps - 0.14) ^ 3 + 0.0025 * (cps - 0.14) ^ 2 + 0.39 * (cps - 0.14)'
