@@ -37,12 +37,14 @@ export class DevicesService {
       [DeviceType.PocketGeiger]: this.devicePocketGeigerService,
       [DeviceType.Rium]: this.deviceRiumService
     };
-    this.actions$.pipe(ofActionSuccessful(DeviceConnectionLost)).subscribe(() =>
+    this.actions$.pipe(ofActionSuccessful(DeviceConnectionLost)).subscribe(({ communicationTimeout }) =>
       this.toastController
         .create({
-          message: this.translateService.instant('SENSORS.CONNECTION_LOST'),
+          message: this.translateService.instant(
+            communicationTimeout ? 'SENSORS.CONNECTION_TIMEOUT' : 'SENSORS.CONNECTION_LOST'
+          ),
           showCloseButton: true,
-          duration: 3000,
+          duration: communicationTimeout ? undefined : 3000,
           closeButtonText: this.translateService.instant('GENERAL.OK')
         })
         .then(toast => toast.present())

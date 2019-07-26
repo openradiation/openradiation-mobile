@@ -204,10 +204,17 @@ export class DevicesState {
   }
 
   @Action(DeviceConnectionLost)
-  deviceConnectionLost({ patchState }: StateContext<DevicesStateModel>) {
+  deviceConnectionLost({ getState, patchState }: StateContext<DevicesStateModel>) {
+    const { connectedDevice } = getState();
     patchState({
       connectedDevice: undefined
     });
+    if (connectedDevice) {
+      this.devicesService
+        .service(connectedDevice)
+        .disconnectDevice(connectedDevice)
+        .subscribe();
+    }
   }
 
   @Action(DisconnectDevice)

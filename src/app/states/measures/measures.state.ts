@@ -5,6 +5,7 @@ import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Form } from '../../app.component';
 import { AbstractDevice } from '../devices/abstract-device';
+import { DeviceConnectionLost } from '../devices/devices.action';
 import { DateService } from './date.service';
 import {
   Measure,
@@ -249,48 +250,48 @@ export class MeasuresState {
   }
 
   @Action(StopMeasure)
-  stopMeasure({ getState, patchState, dispatch }: StateContext<MeasuresStateModel>) {
-    const { currentMeasure, measures, params } = getState();
+  stopMeasure(stateContext: StateContext<MeasuresStateModel>) {
+    const { currentMeasure } = stateContext.getState();
     if (currentMeasure) {
       const patch: Partial<MeasuresStateModel> = { currentMeasure: undefined };
       if (currentMeasure.sent) {
-        patchState(patch);
+        stateContext.patchState(patch);
       } else {
         const measure = { ...currentMeasure, steps: undefined };
-        const measureIndex = measures.findIndex(historyMeasure => historyMeasure.id === measure.id);
-        if (measureIndex > -1) {
-          patch.measures = [...measures.slice(0, measureIndex), measure, ...measures.slice(measureIndex + 1)];
-        } else {
-          patch.measures = [...measures, measure];
-        }
-        patchState(patch);
-        if (params.autoPublish) {
-          dispatch(new PublishMeasure(measure));
-        }
+        MeasuresState.stopAbstractMeasure(measure, patch, stateContext);
       }
     }
   }
 
   @Action(StopMeasureSeries)
-  stopMeasureSeries({ getState, patchState, dispatch }: StateContext<MeasuresStateModel>) {
-    const { currentSeries, measures, params } = getState();
+  stopMeasureSeries(stateContext: StateContext<MeasuresStateModel>) {
+    const { currentSeries } = stateContext.getState();
     if (currentSeries) {
       const patch: Partial<MeasuresStateModel> = { currentSeries: undefined };
       if (currentSeries.sent) {
-        patchState(patch);
+        stateContext.patchState(patch);
       } else {
         const series = { ...currentSeries };
-        const measureIndex = measures.findIndex(historyMeasure => historyMeasure.id === series.id);
-        if (measureIndex > -1) {
-          patch.measures = [...measures.slice(0, measureIndex), series, ...measures.slice(measureIndex + 1)];
-        } else {
-          patch.measures = [...measures, series];
-        }
-        patchState(patch);
-        if (params.autoPublish) {
-          dispatch(new PublishMeasure(series));
-        }
+        MeasuresState.stopAbstractMeasure(series, patch, stateContext);
       }
+    }
+  }
+
+  private static stopAbstractMeasure(
+    abstractMeasure: Measure | MeasureSeries,
+    patch: Partial<MeasuresStateModel>,
+    { getState, patchState, dispatch }: StateContext<MeasuresStateModel>
+  ) {
+    const { measures, params } = getState();
+    const measureIndex = measures.findIndex(historyMeasure => historyMeasure.id === abstractMeasure.id);
+    if (measureIndex > -1) {
+      patch.measures = [...measures.slice(0, measureIndex), abstractMeasure, ...measures.slice(measureIndex + 1)];
+    } else {
+      patch.measures = [...measures, abstractMeasure];
+    }
+    patchState(patch);
+    if (params.autoPublish) {
+      dispatch(new PublishMeasure(abstractMeasure));
     }
   }
 
@@ -346,52 +347,53 @@ export class MeasuresState {
   ) {
     const { currentMeasure, currentSeries, params } = getState();
     if (currentMeasure && currentMeasure.steps) {
-      const newCurrentMeasure = {
-        ...currentMeasure,
-        endTime: step.ts,
-        steps: [...currentMeasure.steps, step]
-      };
-      if (newCurrentMeasure.startTime === undefined) {
-        newCurrentMeasure.startTime = step.ts - device.hitsPeriod;
-      }
-      if (step.hitsNumber !== undefined) {
-        newCurrentMeasure.hitsNumber = currentMeasure.hitsNumber
-          ? currentMeasure.hitsNumber + step.hitsNumber
-          : step.hitsNumber;
-        const [value, calibrationFunction] = this.measuresService.computeRadiationValue(
-          newCurrentMeasure,
-          device,
-          params.planeMode
-        );
-        newCurrentMeasure.hitsAccuracy = newCurrentMeasure.hitsNumber;
-        newCurrentMeasure.value = value;
-        newCurrentMeasure.calibrationFunction = calibrationFunction;
-      } else if (step.hitsAccuracy !== undefined && step.value !== undefined) {
-        newCurrentMeasure.hitsAccuracy = step.hitsAccuracy;
-        newCurrentMeasure.value = step.value;
-      }
-      if (newCurrentMeasure.steps[0] && newCurrentMeasure.steps[0].temperature !== undefined) {
-        newCurrentMeasure.temperature =
-          newCurrentMeasure.steps
-            .map(currentMeasureStep => currentMeasureStep.temperature!)
-            .reduce((acc, current) => acc + current) / newCurrentMeasure.steps.length;
-      }
-      const patch: Partial<MeasuresStateModel> = { currentMeasure: newCurrentMeasure };
-      if (
-        newCurrentMeasure.hitsAccuracy !== undefined &&
-        newCurrentMeasure.hitsAccuracy >= device.hitsAccuracyThreshold.accurate
-      ) {
-        patch.canEndCurrentScan = true;
-      }
-      patchState(patch);
-      if (
-        currentSeries &&
-        MeasuresState.shouldStopMeasureSeriesCurrentScan(device, currentSeries, newCurrentMeasure, step.ts)
-      ) {
-        return dispatch(new StartNextMeasureSeries(device));
+      const stepDuration =
+        currentMeasure.steps.length > 0 ? step.ts - currentMeasure.steps[currentMeasure.steps.length - 1].ts : 0;
+      if (stepDuration > device.hitsPeriod * 6) {
+        return dispatch(new DeviceConnectionLost(true));
+      } else {
+        let newCurrentMeasure: Measure = {
+          ...currentMeasure,
+          endTime: step.ts,
+          steps: [...currentMeasure.steps, step]
+        };
+        if (newCurrentMeasure.startTime === undefined) {
+          newCurrentMeasure.startTime = step.ts - device.hitsPeriod;
+        }
+        newCurrentMeasure = this.updateMeasureHits(newCurrentMeasure, params.planeMode, { step, device });
+        newCurrentMeasure = Measure.updateTemperature(newCurrentMeasure);
+        const patch: Partial<MeasuresStateModel> = { currentMeasure: newCurrentMeasure };
+        if (
+          newCurrentMeasure.hitsAccuracy !== undefined &&
+          newCurrentMeasure.hitsAccuracy >= device.hitsAccuracyThreshold.accurate
+        ) {
+          patch.canEndCurrentScan = true;
+        }
+        patchState(patch);
+        if (
+          currentSeries &&
+          MeasuresState.shouldStopMeasureSeriesCurrentScan(device, currentSeries, newCurrentMeasure, step.ts)
+        ) {
+          return dispatch(new StartNextMeasureSeries(device));
+        }
       }
     }
     return of(null);
+  }
+
+  private updateMeasureHits(measure: Measure, planeMode: boolean, { step, device }: AddMeasureScanStep): Measure {
+    const newMeasure = { ...measure };
+    if (step.hitsNumber !== undefined) {
+      newMeasure.hitsNumber = measure.hitsNumber ? measure.hitsNumber + step.hitsNumber : step.hitsNumber;
+      const [value, calibrationFunction] = this.measuresService.computeRadiationValue(newMeasure, device, planeMode);
+      newMeasure.hitsAccuracy = newMeasure.hitsNumber;
+      newMeasure.value = value;
+      newMeasure.calibrationFunction = calibrationFunction;
+    } else if (step.hitsAccuracy !== undefined && step.value !== undefined) {
+      newMeasure.hitsAccuracy = step.hitsAccuracy;
+      newMeasure.value = step.value;
+    }
+    return newMeasure;
   }
 
   private static shouldStopMeasureSeriesCurrentScan(
@@ -538,7 +540,7 @@ export class MeasuresState {
   }
 
   @Action(StartMeasureSeriesReport)
-  StartMeasureSeriesReport({ getState, patchState }: StateContext<MeasuresStateModel>) {
+  startMeasureSeriesReport({ getState, patchState }: StateContext<MeasuresStateModel>) {
     const { currentSeries } = getState();
     if (currentSeries) {
       const startTimeIOSString = this.dateService.toISOString(currentSeries.startTime!);
