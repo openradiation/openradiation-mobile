@@ -346,7 +346,7 @@ export class MeasuresState {
   ) {
     const { currentMeasure, currentSeries, params } = getState();
     if (currentMeasure && currentMeasure.steps) {
-      const newCurrentMeasure = {
+      let newCurrentMeasure: Measure = {
         ...currentMeasure,
         endTime: step.ts,
         steps: [...currentMeasure.steps, step]
@@ -354,28 +354,8 @@ export class MeasuresState {
       if (newCurrentMeasure.startTime === undefined) {
         newCurrentMeasure.startTime = step.ts - device.hitsPeriod;
       }
-      if (step.hitsNumber !== undefined) {
-        newCurrentMeasure.hitsNumber = currentMeasure.hitsNumber
-          ? currentMeasure.hitsNumber + step.hitsNumber
-          : step.hitsNumber;
-        const [value, calibrationFunction] = this.measuresService.computeRadiationValue(
-          newCurrentMeasure,
-          device,
-          params.planeMode
-        );
-        newCurrentMeasure.hitsAccuracy = newCurrentMeasure.hitsNumber;
-        newCurrentMeasure.value = value;
-        newCurrentMeasure.calibrationFunction = calibrationFunction;
-      } else if (step.hitsAccuracy !== undefined && step.value !== undefined) {
-        newCurrentMeasure.hitsAccuracy = step.hitsAccuracy;
-        newCurrentMeasure.value = step.value;
-      }
-      if (newCurrentMeasure.steps[0] && newCurrentMeasure.steps[0].temperature !== undefined) {
-        newCurrentMeasure.temperature =
-          newCurrentMeasure.steps
-            .map(currentMeasureStep => currentMeasureStep.temperature!)
-            .reduce((acc, current) => acc + current) / newCurrentMeasure.steps.length;
-      }
+      newCurrentMeasure = this.updateMeasureHits(newCurrentMeasure, params.planeMode, { step, device });
+      newCurrentMeasure = Measure.updateTemperature(newCurrentMeasure);
       const patch: Partial<MeasuresStateModel> = { currentMeasure: newCurrentMeasure };
       if (
         newCurrentMeasure.hitsAccuracy !== undefined &&
@@ -392,6 +372,21 @@ export class MeasuresState {
       }
     }
     return of(null);
+  }
+
+  private updateMeasureHits(measure: Measure, planeMode: boolean, { step, device }: AddMeasureScanStep): Measure {
+    const newMeasure = { ...measure };
+    if (step.hitsNumber !== undefined) {
+      newMeasure.hitsNumber = measure.hitsNumber ? measure.hitsNumber + step.hitsNumber : step.hitsNumber;
+      const [value, calibrationFunction] = this.measuresService.computeRadiationValue(newMeasure, device, planeMode);
+      newMeasure.hitsAccuracy = newMeasure.hitsNumber;
+      newMeasure.value = value;
+      newMeasure.calibrationFunction = calibrationFunction;
+    } else if (step.hitsAccuracy !== undefined && step.value !== undefined) {
+      newMeasure.hitsAccuracy = step.hitsAccuracy;
+      newMeasure.value = step.value;
+    }
+    return newMeasure;
   }
 
   private static shouldStopMeasureSeriesCurrentScan(
