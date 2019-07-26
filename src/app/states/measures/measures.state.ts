@@ -249,48 +249,48 @@ export class MeasuresState {
   }
 
   @Action(StopMeasure)
-  stopMeasure({ getState, patchState, dispatch }: StateContext<MeasuresStateModel>) {
-    const { currentMeasure, measures, params } = getState();
+  stopMeasure(stateContext: StateContext<MeasuresStateModel>) {
+    const { currentMeasure } = stateContext.getState();
     if (currentMeasure) {
       const patch: Partial<MeasuresStateModel> = { currentMeasure: undefined };
       if (currentMeasure.sent) {
-        patchState(patch);
+        stateContext.patchState(patch);
       } else {
         const measure = { ...currentMeasure, steps: undefined };
-        const measureIndex = measures.findIndex(historyMeasure => historyMeasure.id === measure.id);
-        if (measureIndex > -1) {
-          patch.measures = [...measures.slice(0, measureIndex), measure, ...measures.slice(measureIndex + 1)];
-        } else {
-          patch.measures = [...measures, measure];
-        }
-        patchState(patch);
-        if (params.autoPublish) {
-          dispatch(new PublishMeasure(measure));
-        }
+        MeasuresState.stopAbstractMeasure(measure, patch, stateContext);
       }
     }
   }
 
   @Action(StopMeasureSeries)
-  stopMeasureSeries({ getState, patchState, dispatch }: StateContext<MeasuresStateModel>) {
-    const { currentSeries, measures, params } = getState();
+  stopMeasureSeries(stateContext: StateContext<MeasuresStateModel>) {
+    const { currentSeries } = stateContext.getState();
     if (currentSeries) {
       const patch: Partial<MeasuresStateModel> = { currentSeries: undefined };
       if (currentSeries.sent) {
-        patchState(patch);
+        stateContext.patchState(patch);
       } else {
         const series = { ...currentSeries };
-        const measureIndex = measures.findIndex(historyMeasure => historyMeasure.id === series.id);
-        if (measureIndex > -1) {
-          patch.measures = [...measures.slice(0, measureIndex), series, ...measures.slice(measureIndex + 1)];
-        } else {
-          patch.measures = [...measures, series];
-        }
-        patchState(patch);
-        if (params.autoPublish) {
-          dispatch(new PublishMeasure(series));
-        }
+        MeasuresState.stopAbstractMeasure(series, patch, stateContext);
       }
+    }
+  }
+
+  private static stopAbstractMeasure(
+    abstractMeasure: Measure | MeasureSeries,
+    patch: Partial<MeasuresStateModel>,
+    { getState, patchState, dispatch }: StateContext<MeasuresStateModel>
+  ) {
+    const { measures, params } = getState();
+    const measureIndex = measures.findIndex(historyMeasure => historyMeasure.id === abstractMeasure.id);
+    if (measureIndex > -1) {
+      patch.measures = [...measures.slice(0, measureIndex), abstractMeasure, ...measures.slice(measureIndex + 1)];
+    } else {
+      patch.measures = [...measures, abstractMeasure];
+    }
+    patchState(patch);
+    if (params.autoPublish) {
+      dispatch(new PublishMeasure(abstractMeasure));
     }
   }
 
