@@ -538,7 +538,7 @@ export class MeasuresState {
   }
 
   @Action(StartMeasureSeriesReport)
-  StartMeasureSeriesReport({ getState, patchState }: StateContext<MeasuresStateModel>) {
+  startMeasureSeriesReport({ getState, patchState }: StateContext<MeasuresStateModel>) {
     const { currentSeries } = getState();
     if (currentSeries) {
       const startTimeIOSString = this.dateService.toISOString(currentSeries.startTime!);
