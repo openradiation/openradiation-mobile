@@ -37,7 +37,7 @@ export class DevicesService {
       [DeviceType.PocketGeiger]: this.devicePocketGeigerService,
       [DeviceType.Rium]: this.deviceRiumService
     };
-    this.actions$.pipe(ofActionSuccessful(DeviceConnectionLost)).subscribe(({ communicationTimeout }) => {
+    this.actions$.pipe(ofActionSuccessful(DeviceConnectionLost)).subscribe(({ communicationTimeout }) =>
       this.toastController
         .create({
           message: this.translateService.instant(
@@ -47,8 +47,8 @@ export class DevicesService {
           duration: communicationTimeout ? undefined : 3000,
           closeButtonText: this.translateService.instant('GENERAL.OK')
         })
-        .then(toast => toast.present());
-    });
+        .then(toast => toast.present())
+    );
   }
 
   service(device: AbstractDevice): AbstractDeviceService<AbstractDevice> {
