@@ -61,21 +61,21 @@
     "cordova-android": "8.0.0",
     "cordova-ios": "5.0.0",
     "cordova-plugin-ble-central": "^1.2.2",
-    "cordova-plugin-camera": "^4.0.3",
+    "cordova-plugin-camera": "^4.1.0",
     "cordova-plugin-compat": "^1.2.0",
-    "cordova-plugin-device": "^2.0.2",
-    "cordova-plugin-inappbrowser": "^3.0.0",
+    "cordova-plugin-device": "^2.0.3",
+    "cordova-plugin-inappbrowser": "^3.1.0",
     "cordova-plugin-ionic-keyboard": "^2.1.3",
-    "cordova-plugin-ionic-webview": "^3.1.2",
+    "cordova-plugin-ionic-webview": "^4.1.1",
     "cordova-plugin-localization-strings": "^3.1.0",
-    "cordova-plugin-network-information": "^2.0.1",
-    "cordova-plugin-screen-orientation": "^3.0.1",
-    "cordova-plugin-splashscreen": "^5.0.2",
-    "cordova-plugin-statusbar": "^2.4.2",
+    "cordova-plugin-network-information": "^2.0.2",
+    "cordova-plugin-screen-orientation": "^3.0.2",
+    "cordova-plugin-splashscreen": "^5.0.3",
+    "cordova-plugin-statusbar": "^2.4.3",
     "cordova-plugin-usb-serial": "file:cordova-plugin-usb-serial",
-    "cordova-plugin-whitelist": "^1.3.3",
-    "cordova-plugin-x-socialsharing": "^5.4.6",
-    "cordova-sqlite-storage": "^3.2.0",
+    "cordova-plugin-whitelist": "^1.3.4",
+    "cordova-plugin-x-socialsharing": "^5.4.7",
+    "cordova-sqlite-storage": "^3.2.1",
     "cordova.plugins.diagnostic": "^4.0.12",
     "core-js": "^2.5.4",
     "es6-promise-plugin": "^4.2.2",
@@ -124,9 +124,6 @@
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-ble-central": {},
-      "cordova-plugin-ionic-webview": {
-        "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
-      },
       "cordova-plugin-statusbar": {},
       "cordova.plugins.diagnostic": {
         "ANDROID_SUPPORT_VERSION": "26.+"
@@ -136,7 +133,9 @@
       "cordova-plugin-x-socialsharing": {
         "ANDROID_SUPPORT_V4_VERSION": "24.1.1+"
       },
-      "cordova-plugin-camera": {},
+      "cordova-plugin-camera": {
+        "ANDROID_SUPPORT_V4_VERSION": "27.+"
+      },
       "cordova-plugin-mauron85-background-geolocation": {
         "GOOGLE_PLAY_SERVICES_VERSION": "11+",
         "ANDROID_SUPPORT_LIBRARY_VERSION": "26+",
@@ -162,6 +161,9 @@
       "cordova-sqlite-storage": {},
       "cordova-plugin-localization-strings": {
         "TRANSLATION_PATH": "ios-native-translations/"
+      },
+      "cordova-plugin-ionic-webview": {
+        "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
       }
     },
     "platforms": [
