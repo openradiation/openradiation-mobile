@@ -6,7 +6,7 @@ import { Platform } from '@ionic/angular';
 import { Location } from '@mauron85/cordova-plugin-background-geolocation';
 import { Select } from '@ngxs/store';
 import { combineLatest, Observable } from 'rxjs';
-import { delay, take } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { MeasuresState } from '../../../states/measures/measures.state';
@@ -80,7 +80,7 @@ export class MapPage extends AutoUnsubscribePage {
           if (currentPosition) {
             const lat = currentPosition.latitude.toFixed(7);
             const long = currentPosition.longitude.toFixed(7);
-            const zoom = 12;
+            const zoom = planeMode ? 4 : 12;
             url += `/${zoom}/${lat}/${long}`;
           }
           if (planeMode !== undefined) {
