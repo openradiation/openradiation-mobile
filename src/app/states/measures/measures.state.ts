@@ -349,7 +349,7 @@ export class MeasuresState {
     if (currentMeasure && currentMeasure.steps) {
       const stepDuration =
         currentMeasure.steps.length > 0 ? step.ts - currentMeasure.steps[currentMeasure.steps.length - 1].ts : 0;
-      if (stepDuration > device.hitsPeriod * 6) {
+      if (stepDuration > device.hitsPeriod * 11) {
         return dispatch(new DeviceConnectionLost(true));
       } else {
         let newCurrentMeasure: Measure = {
