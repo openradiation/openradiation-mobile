@@ -8,7 +8,7 @@ import { Step } from '../../measures/measure';
 import { ApparatusSensorType } from '../abstract-device';
 import { RawBLEDevice } from './abstract-ble-device';
 import { AbstractBLEDeviceService } from './abstract-ble-device.service';
-import { DeviceOGKit } from './device-og-kit';
+import { DeviceOGKit, DeviceOgKitType } from './device-og-kit';
 
 @Injectable({
   providedIn: 'root'
@@ -148,7 +148,10 @@ export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
   }
 
   buildDevice(rawBLEDevice: RawBLEDevice): DeviceOGKit | null {
-    if (rawBLEDevice.name.toUpperCase().startsWith('OG') || rawBLEDevice.name.toUpperCase().includes('OPENG')) {
+    if (
+      rawBLEDevice.name.toUpperCase().startsWith(DeviceOgKitType.OG) ||
+      rawBLEDevice.name.toUpperCase().includes(DeviceOgKitType.OPENG)
+    ) {
       return new DeviceOGKit(rawBLEDevice);
     }
     return null;
