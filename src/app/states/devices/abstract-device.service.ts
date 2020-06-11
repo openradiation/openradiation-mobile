@@ -11,7 +11,7 @@ export abstract class AbstractDeviceService<T extends AbstractDevice> {
     groundLevel: CalibrationFunctions;
   };
 
-  constructor(protected store: Store) {}
+  protected constructor(protected store: Store) {}
 
   abstract buildDevice(rawDevice?: RawDevice): T | null;
 

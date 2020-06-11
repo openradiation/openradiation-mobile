@@ -11,7 +11,7 @@ export abstract class AbstractBLEDeviceService<T extends AbstractBLEDevice> exte
   protected abstract service: string;
   protected abstract receiveCharacteristic: string;
 
-  constructor(protected store: Store, protected ble: BLE) {
+  protected constructor(protected store: Store, protected ble: BLE) {
     super(store);
   }
 
