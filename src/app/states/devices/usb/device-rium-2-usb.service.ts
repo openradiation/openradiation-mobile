@@ -27,12 +27,13 @@ export class DeviceRium2USBService extends AbstractUSBDeviceService<DeviceRium2U
   getDeviceInfo(device: DeviceRium2USB): Observable<Partial<DeviceRium2USB>> {
     return this.receiveData().pipe(
       map((buffer: ArrayBuffer) => {
-        if (buffer.byteLength === 12) {
-          // TODO
-          const dataView = new DataView(buffer);
+        if (buffer.byteLength === 32) {
+          const data = this.textDecoder.decode(buffer).split(',');
+          const apparatusId = data[1];
+          const batteryLevel = Number(data[5]) / 100;
           return {
-            apparatusId: dataView.getUint32(2, false).toString(),
-            batteryLevel: dataView.getInt16(12) / 10
+            apparatusId,
+            batteryLevel
           };
         } else {
           return null;
@@ -55,10 +56,10 @@ export class DeviceRium2USBService extends AbstractUSBDeviceService<DeviceRium2U
   }
 
   protected decodeDataPackage(buffer: ArrayBuffer): Step | null {
-    if (buffer.byteLength === 12) {
-      const dataView = new DataView(buffer);
-      const hitsNumber = dataView.getInt16(6); // TODO
-      const temperature = dataView.getInt16(10) / 10; // TODO
+    if (buffer.byteLength === 32) {
+      const data = this.textDecoder.decode(buffer).split(',');
+      const hitsNumber = Number(data[3]);
+      const temperature = Number(data[4]) / 10;
       return {
         ts: Date.now(),
         hitsNumber,

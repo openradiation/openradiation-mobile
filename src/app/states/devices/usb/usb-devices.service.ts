@@ -19,7 +19,7 @@ declare const UsbSerial: UsbSerial;
   providedIn: 'root'
 })
 export class USBDevicesService {
-  private devices = [DeviceType.PocketGeiger, DeviceType.Rium, DeviceType.Rium2USB]; // TODO
+  private devices = [DeviceType.PocketGeiger, /*DeviceType.Rium,*/ DeviceType.Rium2USB]; // TODO
 
   private currentAlert?: any;
 
