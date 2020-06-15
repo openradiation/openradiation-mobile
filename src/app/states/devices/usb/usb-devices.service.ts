@@ -38,7 +38,9 @@ export class USBDevicesService {
       }
     });
     this.actions$.pipe(ofActionDispatched(StopDiscoverDevices)).subscribe(() => {
-      UsbSerial.onDeviceAttached([], null);
+      if (this.platform.is('cordova')) {
+        UsbSerial.onDeviceAttached([], null);
+      }
     });
   }
 

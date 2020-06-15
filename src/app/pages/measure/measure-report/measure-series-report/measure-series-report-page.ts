@@ -2,10 +2,13 @@ import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
+import { AlertService } from '../../../../services/alert.service';
 import { NavigationService } from '../../../../services/navigation.service';
 import { MeasureEnvironment, MeasureSeries, MeasureSeriesParamsSelected } from '../../../../states/measures/measure';
 import {
+  CancelMeasure,
   StartMeasureSeriesReport,
   StopMeasureSeries,
   StopMeasureSeriesReport
@@ -35,7 +38,9 @@ export class MeasureSeriesReportPage extends AbstractMeasureReportPage<MeasureSe
     protected navigationService: NavigationService,
     protected actions$: Actions,
     protected platform: Platform,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private alertService: AlertService,
+    private translateService: TranslateService
   ) {
     super(router, store, activatedRoute, navigationService, actions$, platform);
   }
@@ -97,6 +102,27 @@ export class MeasureSeriesReportPage extends AbstractMeasureReportPage<MeasureSe
       })
     );
     this.store.dispatch(new StopMeasureSeriesReport());
+  }
+
+  cancelMeasure() {
+    if (this.fromHistory) {
+      super.cancelMeasure();
+    } else {
+      this.alertService.show({
+        header: this.translateService.instant('GENERAL.CANCEL'),
+        message: this.translateService.instant('MEASURE_SERIES.REPORT.CANCEL_CONFIRMATION'),
+        backdropDismiss: false,
+        buttons: [
+          {
+            text: this.translateService.instant('GENERAL.NO')
+          },
+          {
+            text: this.translateService.instant('GENERAL.YES'),
+            handler: () => this.store.dispatch(new CancelMeasure())
+          }
+        ]
+      });
+    }
   }
 
   protected initMeasurementEnvironmentOptions(measureSeries: MeasureSeries) {
