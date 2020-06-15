@@ -35,8 +35,8 @@ export enum DeviceType {
   SafeCast = 'bGeigieBLE',
   PocketGeiger = 'Pocket Geiger Type 6',
   Rium = 'RiumGm',
-  Rium2USB = 'RiumGM BLE -u'
-  // Rium2BLE = 'RiumGM BLE -b' TODO
+  Rium2USB = 'RiumGM BLE -u',
+  Rium2BLE = 'RiumGM BLE -b'
 }
 
 // The key set the threshold and the value is the calibration function
