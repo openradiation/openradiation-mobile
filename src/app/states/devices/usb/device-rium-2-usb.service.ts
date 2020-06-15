@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Actions, Store } from '@ngxs/store';
-import { Observable, of } from 'rxjs';
-import { filter, map, take } from 'rxjs/operators';
+import { Observable, of, throwError } from 'rxjs';
+import { concatMap, filter, map, take } from 'rxjs/operators';
 import { Step } from '../../measures/measure';
+import { ConnectDevice, UpdateDeviceInfo } from '../devices.action';
 import { AbstractUSBDeviceService } from './abstract-usb-device.service';
+import { DeviceRium } from './device-rium';
 import { DeviceRium2USB } from './device-rium-2-usb';
 
 @Injectable({
@@ -22,6 +24,28 @@ export class DeviceRium2USBService extends AbstractUSBDeviceService<DeviceRium2U
 
   constructor(protected store: Store, protected actions$: Actions) {
     super(store, actions$);
+  }
+
+  connectDevice(device: DeviceRium2USB): Observable<any> {
+    return super.connectDevice(device).pipe(
+      concatMap(() => this.receiveData()),
+      concatMap((buffer: ArrayBuffer) => {
+        if (buffer.byteLength === 32) {
+          return of(null);
+        } else if (buffer.byteLength === 12) {
+          // If we detect this buffer size if means the connected device is an old Rium and we switch to the correct service
+          const correctDevice = new DeviceRium();
+          this.store
+            .dispatch(new ConnectDevice(correctDevice))
+            .subscribe(() => this.store.dispatch(new UpdateDeviceInfo(correctDevice)));
+
+          return throwError('old Rium detected');
+        } else {
+          return of();
+        }
+      }),
+      take(1)
+    );
   }
 
   getDeviceInfo(device: DeviceRium2USB): Observable<Partial<DeviceRium2USB>> {

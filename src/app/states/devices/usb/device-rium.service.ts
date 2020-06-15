@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Actions, Store } from '@ngxs/store';
-import { Observable, of } from 'rxjs';
-import { filter, map, take } from 'rxjs/operators';
+import { Observable, of, throwError } from 'rxjs';
+import { concatMap, filter, map, take } from 'rxjs/operators';
 import { Step } from '../../measures/measure';
+import { ConnectDevice, UpdateDeviceInfo } from '../devices.action';
 import { AbstractUSBDeviceService } from './abstract-usb-device.service';
 import { DeviceRium } from './device-rium';
+import { DeviceRium2USB } from './device-rium-2-usb';
 
 @Injectable({
   providedIn: 'root'
@@ -24,13 +26,36 @@ export class DeviceRiumService extends AbstractUSBDeviceService<DeviceRium> {
     super(store, actions$);
   }
 
+  connectDevice(device: DeviceRium): Observable<any> {
+    return super.connectDevice(device).pipe(
+      concatMap(() => this.receiveData()),
+      concatMap((buffer: ArrayBuffer) => {
+        if (buffer.byteLength === 12) {
+          return of(null);
+        } else if (buffer.byteLength === 32) {
+          // If we detect this buffer size if means the connected device is an new Rium and we switch to the correct service
+          const correctDevice = new DeviceRium2USB();
+          this.store
+            .dispatch(new ConnectDevice(correctDevice))
+            .subscribe(() => this.store.dispatch(new UpdateDeviceInfo(correctDevice)));
+
+          return throwError('new Rium detected');
+        } else {
+          return of();
+        }
+      }),
+      take(1)
+    );
+  }
+
   getDeviceInfo(device: DeviceRium): Observable<Partial<DeviceRium>> {
     return this.receiveData().pipe(
       map((buffer: ArrayBuffer) => {
         if (buffer.byteLength === 12) {
           const dataView = new DataView(buffer);
+          const apparatusId = dataView.getUint32(2, false).toString();
           return {
-            apparatusId: dataView.getUint32(2, false).toString()
+            apparatusId
           };
         } else {
           return null;
