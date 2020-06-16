@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BLE } from '@ionic-native/ble/ngx';
 import { Store } from '@ngxs/store';
-import { forkJoin, Observable, of } from 'rxjs';
+import { forkJoin, Observable, of, zip } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { catchError, map, take, tap } from 'rxjs/operators';
 import { Step } from '../../measures/measure';
@@ -44,7 +44,7 @@ export class DeviceRium2BLEService extends AbstractBLEDeviceService<DeviceRium2B
     ).pipe(
       map(([idBuffer, batteryBuffer]: [ArrayBuffer, ArrayBuffer]) => {
         const apparatusId = this.arrayBufferToHex(idBuffer);
-        const batteryLevel = Number(this.arrayBufferToHex(batteryBuffer).slice(0, 3)) / 100;
+        const batteryLevel = this.getNumberFromBuffer(batteryBuffer, 3) / 100;
         return {
           apparatusId,
           batteryLevel
@@ -58,22 +58,30 @@ export class DeviceRium2BLEService extends AbstractBLEDeviceService<DeviceRium2B
   }
 
   startMeasureScan(device: DeviceRium2BLE, stopSignal: Observable<any>): Observable<Step> {
-    stopSignal.subscribe(() => this.stopReceiveData(device));
-    return this.startReceiveData(device).pipe(
-      map((buffer: ArrayBuffer) => this.decodeDataPackage(buffer)),
+    stopSignal.subscribe(() => {
+      this.stopReceiveData(device);
+      this.ble.stopNotification(device.sensorUUID, this.service, this.temperatureCharacteristic);
+    });
+    return zip(
+      this.startReceiveData(device),
+      this.ble.startNotification(device.sensorUUID, this.service, this.temperatureCharacteristic)
+    ).pipe(
+      map((buffers: [ArrayBuffer, ArrayBuffer]) => this.decodeDataPackage(buffers)),
       catchError(err => {
         this.disconnectDevice(device).subscribe();
         setTimeout(() => this.store.dispatch(new DeviceConnectionLost()), 1000);
         throw err;
       })
-    ); // TODO temp
+    );
   }
 
-  protected decodeDataPackage(buffer: ArrayBuffer): Step {
-    const dataView = new DataView(buffer);
+  protected decodeDataPackage([hitsBuffer, temperatureBuffer]: [ArrayBuffer, ArrayBuffer]): Step {
+    const hitsNumber = this.getNumberFromBuffer(hitsBuffer, 2);
+    const temperature = this.getNumberFromBuffer(temperatureBuffer, 3) / 10;
     return {
       ts: Date.now(),
-      hitsNumber: dataView.getInt8(0)
+      hitsNumber,
+      temperature
     };
   }
 
@@ -82,5 +90,9 @@ export class DeviceRium2BLEService extends AbstractBLEDeviceService<DeviceRium2B
       return new DeviceRium2BLE(rawBLEDevice);
     }
     return null;
+  }
+
+  private getNumberFromBuffer(buffer: ArrayBuffer, size: number): number {
+    return parseInt(this.arrayBufferToHex(buffer).slice(0, size), 16);
   }
 }
