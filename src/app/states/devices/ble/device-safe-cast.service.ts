@@ -4,10 +4,9 @@ import { Store } from '@ngxs/store';
 import { Observable, of } from 'rxjs';
 import { bufferCount, filter, map, tap } from 'rxjs/operators';
 import { Step } from '../../measures/measure';
-import { DeviceType } from '../abstract-device';
 import { RawBLEDevice } from './abstract-ble-device';
 import { AbstractBLEDeviceService } from './abstract-ble-device.service';
-import { DeviceSafeCast } from './device-safe-cast';
+import { DeviceSafeCast, DeviceSafeCastType } from './device-safe-cast';
 
 @Injectable({
   providedIn: 'root'
@@ -65,7 +64,10 @@ export class DeviceSafeCastService extends AbstractBLEDeviceService<DeviceSafeCa
   }
 
   buildDevice(rawBLEDevice: RawBLEDevice): DeviceSafeCast | null {
-    if (rawBLEDevice.name.includes(DeviceType.SafeCast)) {
+    if (
+      rawBLEDevice.name.includes(DeviceSafeCastType.BGeigieBLE) ||
+      rawBLEDevice.name.startsWith(DeviceSafeCastType.BLEBee)
+    ) {
       return new DeviceSafeCast(rawBLEDevice);
     }
     return null;
