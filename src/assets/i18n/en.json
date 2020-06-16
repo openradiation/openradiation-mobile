@@ -225,7 +225,8 @@
       "HITS_AVERAGE": "Average hits number",
       "MEASURE_NUMBER": "Number of measurements",
       "SERIES_DURATION": "Total measurement duration",
-      "VALUE_AVERAGE": "Average of measurements"
+      "VALUE_AVERAGE": "Average of measurements",
+      "CANCEL_CONFIRMATION": "Are you sure you wish to delete these measurements?"
     },
     "SERIES_LIMIT": "The next measurement will start automatically, for a maximum of",
     "STOP": "You can stop the measurements at any time.",

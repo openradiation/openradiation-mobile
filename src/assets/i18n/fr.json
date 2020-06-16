@@ -225,7 +225,8 @@
       "HITS_AVERAGE": "Moyenne Nb coups",
       "MEASURE_NUMBER": "Nombre de mesures",
       "SERIES_DURATION": "Durée totale des mesures",
-      "VALUE_AVERAGE": "Moyenne des mesures"
+      "VALUE_AVERAGE": "Moyenne des mesures",
+      "CANCEL_CONFIRMATION": "Êtes-vous sûr(e) de vouloir supprimer ces mesures ?"
     },
     "SERIES_LIMIT": "La mesure suivante démarrera automatiquement, pendant une durée maximale de",
     "STOP": "Vous pourrez arrêter les mesures à tout moment.",
