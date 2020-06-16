@@ -6,10 +6,12 @@ import { AbstractDevice, DeviceType, RawDevice } from './abstract-device';
 import { AbstractDeviceService } from './abstract-device.service';
 import { DeviceAtomTagService } from './ble/device-atom-tag.service';
 import { DeviceOGKitService } from './ble/device-og-kit.service';
+import { DeviceRium2BLEService } from './ble/device-rium-2-ble.service';
 import { DeviceSafeCastService } from './ble/device-safe-cast.service';
 import { DeviceMockService } from './device-mock.service';
 import { DeviceConnectionLost } from './devices.action';
 import { DevicePocketGeigerService } from './usb/device-pocket-geiger.service';
+import { DeviceRium2USBService } from './usb/device-rium-2-usb.service';
 import { DeviceRiumService } from './usb/device-rium.service';
 
 @Injectable({
@@ -23,19 +25,27 @@ export class DevicesService {
     private toastController: ToastController,
     private translateService: TranslateService,
     private deviceMockService: DeviceMockService,
+    // BLE devices
     private deviceOGKitService: DeviceOGKitService,
     private deviceAtomTagService: DeviceAtomTagService,
     private deviceSafeCastService: DeviceSafeCastService,
+    private deviceRium2BLEService: DeviceRium2BLEService,
+    // USB devices
     private devicePocketGeigerService: DevicePocketGeigerService,
-    private deviceRiumService: DeviceRiumService
+    private deviceRiumService: DeviceRiumService,
+    private deviceRium2USBService: DeviceRium2USBService
   ) {
     this.services = {
       [DeviceType.Mock]: this.deviceMockService,
+      // BLE devices
       [DeviceType.OGKit]: this.deviceOGKitService,
       [DeviceType.AtomTag]: this.deviceAtomTagService,
       [DeviceType.SafeCast]: this.deviceSafeCastService,
+      [DeviceType.Rium2BLE]: this.deviceRium2BLEService,
+      // USB devices
       [DeviceType.PocketGeiger]: this.devicePocketGeigerService,
-      [DeviceType.Rium]: this.deviceRiumService
+      [DeviceType.Rium]: this.deviceRiumService,
+      [DeviceType.Rium2USB]: this.deviceRium2USBService
     };
     this.actions$.pipe(ofActionSuccessful(DeviceConnectionLost)).subscribe(({ communicationTimeout }) =>
       this.toastController

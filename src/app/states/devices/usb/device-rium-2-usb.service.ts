@@ -11,7 +11,7 @@ import { DeviceRium2USB } from './device-rium-2-usb';
 @Injectable({
   providedIn: 'root'
 })
-export class DeviceRiumService extends AbstractUSBDeviceService<DeviceRium> {
+export class DeviceRium2USBService extends AbstractUSBDeviceService<DeviceRium2USB> {
   protected calibrationFunctions = {
     planeMode: {
       0: '(0.00000003751 * (cps * 60 - 4) ^ 2 + 0.00965 * (cps * 60 - 4)) * 0.85',
@@ -26,20 +26,20 @@ export class DeviceRiumService extends AbstractUSBDeviceService<DeviceRium> {
     super(store, actions$);
   }
 
-  connectDevice(device: DeviceRium): Observable<any> {
+  connectDevice(device: DeviceRium2USB): Observable<any> {
     return super.connectDevice(device).pipe(
       concatMap(() => this.receiveData()),
       concatMap((buffer: ArrayBuffer) => {
-        if (buffer.byteLength === 12) {
+        if (buffer.byteLength === 32) {
           return of(null);
-        } else if (buffer.byteLength === 32) {
-          // If we detect this buffer size if means the connected device is an new Rium and we switch to the correct service
-          const correctDevice = new DeviceRium2USB();
+        } else if (buffer.byteLength === 12) {
+          // If we detect this buffer size if means the connected device is an old Rium and we switch to the correct service
+          const correctDevice = new DeviceRium();
           this.store
             .dispatch(new ConnectDevice(correctDevice))
             .subscribe(() => this.store.dispatch(new UpdateDeviceInfo(correctDevice)));
 
-          return throwError('new Rium detected');
+          return throwError('old Rium detected');
         } else {
           return of();
         }
@@ -48,29 +48,31 @@ export class DeviceRiumService extends AbstractUSBDeviceService<DeviceRium> {
     );
   }
 
-  getDeviceInfo(device: DeviceRium): Observable<Partial<DeviceRium>> {
+  getDeviceInfo(device: DeviceRium2USB): Observable<Partial<DeviceRium2USB>> {
     return this.receiveData().pipe(
       map((buffer: ArrayBuffer) => {
-        if (buffer.byteLength === 12) {
-          const dataView = new DataView(buffer);
-          const apparatusId = dataView.getUint32(2, false).toString();
+        if (buffer.byteLength === 32) {
+          const data = this.textDecoder.decode(buffer).split(',');
+          const apparatusId = data[1];
+          const batteryLevel = Number(data[5]) / 100;
           return {
-            apparatusId
+            apparatusId,
+            batteryLevel
           };
         } else {
           return null;
         }
       }),
-      filter((update: Partial<DeviceRium> | null): update is Partial<DeviceRium> => update !== null),
+      filter((update: Partial<DeviceRium2USB> | null): update is Partial<DeviceRium2USB> => update !== null),
       take(1)
     );
   }
 
-  saveDeviceParams(device: DeviceRium): Observable<any> {
+  saveDeviceParams(device: DeviceRium2USB): Observable<any> {
     return of(null);
   }
 
-  startMeasureScan(device: DeviceRium, stopSignal: Observable<any>): Observable<Step> {
+  startMeasureScan(device: DeviceRium2USB, stopSignal: Observable<any>): Observable<Step> {
     return this.receiveData(stopSignal).pipe(
       map((buffer: ArrayBuffer) => this.decodeDataPackage(buffer)),
       filter((step: Step | null): step is Step => step !== null)
@@ -78,10 +80,10 @@ export class DeviceRiumService extends AbstractUSBDeviceService<DeviceRium> {
   }
 
   protected decodeDataPackage(buffer: ArrayBuffer): Step | null {
-    if (buffer.byteLength === 12) {
-      const dataView = new DataView(buffer);
-      const hitsNumber = dataView.getInt16(6);
-      const temperature = dataView.getInt16(10) / 10;
+    if (buffer.byteLength === 32) {
+      const data = this.textDecoder.decode(buffer).split(',');
+      const hitsNumber = Number(data[3]);
+      const temperature = Number(data[4]) / 10;
       return {
         ts: Date.now(),
         hitsNumber,
@@ -91,7 +93,7 @@ export class DeviceRiumService extends AbstractUSBDeviceService<DeviceRium> {
     return null;
   }
 
-  buildDevice(): DeviceRium {
-    return new DeviceRium();
+  buildDevice(): DeviceRium2USB {
+    return new DeviceRium2USB();
   }
 }

@@ -1,16 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Actions, Store } from '@ngxs/store';
-import { UsbSerial } from 'cordova-plugin-usb-serial';
-import { Observable, Observer, of } from 'rxjs';
-import { filter, map, startWith, takeUntil } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { filter, map, startWith } from 'rxjs/operators';
 import { Step } from '../../measures/measure';
 import { AbstractUSBDeviceService } from './abstract-usb-device.service';
 import { DevicePocketGeiger } from './device-pocket-geiger';
-
-/**
- * Constant from cordova-plugin-usb-serial
- */
-declare const UsbSerial: UsbSerial;
 
 @Injectable({
   providedIn: 'root'
@@ -44,11 +38,8 @@ export class DevicePocketGeigerService extends AbstractUSBDeviceService<DevicePo
   }
 
   startMeasureScan(device: DevicePocketGeiger, stopSignal: Observable<any>): Observable<Step> {
-    UsbSerial.write(this.SEND_GET_HITS);
-    return Observable.create((observer: Observer<ArrayBuffer>) => {
-      UsbSerial.onDataReceived(data => observer.next(data), err => observer.error(err));
-    }).pipe(
-      takeUntil(stopSignal),
+    this.sendData(this.SEND_GET_HITS);
+    return this.receiveData(stopSignal).pipe(
       filter(() => this.noiseTimeout < Date.now()),
       map((buffer: ArrayBuffer) => this.decodeDataPackage(buffer)),
       startWith({ ts: Date.now(), hitsNumber: 0 }),

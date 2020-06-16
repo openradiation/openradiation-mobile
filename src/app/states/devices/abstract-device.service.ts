@@ -11,7 +11,7 @@ export abstract class AbstractDeviceService<T extends AbstractDevice> {
     groundLevel: CalibrationFunctions;
   };
 
-  constructor(protected store: Store) {}
+  protected constructor(protected store: Store) {}
 
   abstract buildDevice(rawDevice?: RawDevice): T | null;
 
@@ -73,4 +73,10 @@ export abstract class AbstractDeviceService<T extends AbstractDevice> {
   abstract disconnectDevice(device: T): Observable<any>;
 
   protected abstract decodeDataPackage(buffer: ArrayBuffer | ArrayBuffer[]): Step | null;
+
+  protected arrayBufferToHex(buffer: ArrayBuffer): string {
+    return Array.from(new Uint8Array(buffer))
+      .map(n => n.toString(16).padStart(2, '0'))
+      .join('');
+  }
 }

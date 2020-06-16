@@ -1,7 +1,7 @@
 import { Actions, Store } from '@ngxs/store';
 import { UsbSerial } from 'cordova-plugin-usb-serial';
-import { Observable, Observer } from 'rxjs';
-import { catchError, concatMap, shareReplay, take } from 'rxjs/operators';
+import { Observable, Observer, of } from 'rxjs';
+import { catchError, concatMap, shareReplay, take, takeUntil } from 'rxjs/operators';
 import { AbstractDeviceService } from '../abstract-device.service';
 import { DeviceConnectionLost } from '../devices.action';
 import { AbstractUSBDevice } from './abstract-usb-device';
@@ -12,7 +12,7 @@ import { AbstractUSBDevice } from './abstract-usb-device';
 declare const UsbSerial: UsbSerial;
 
 export abstract class AbstractUSBDeviceService<T extends AbstractUSBDevice> extends AbstractDeviceService<T> {
-  constructor(protected store: Store, protected actions$: Actions) {
+  protected constructor(protected store: Store, protected actions$: Actions) {
     super(store);
   }
 
@@ -55,5 +55,15 @@ export abstract class AbstractUSBDeviceService<T extends AbstractUSBDevice> exte
         err => observer.error(err)
       )
     );
+  }
+
+  protected receiveData(stopSignal: Observable<any> = of()): Observable<ArrayBuffer> {
+    return Observable.create((observer: Observer<ArrayBuffer>) => {
+      UsbSerial.onDataReceived(data => observer.next(data), err => observer.error(err));
+    }).pipe(takeUntil(stopSignal));
+  }
+
+  protected sendData(data: string) {
+    UsbSerial.write(data);
   }
 }
