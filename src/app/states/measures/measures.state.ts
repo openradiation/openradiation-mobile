@@ -1,9 +1,11 @@
 import { Device } from '@ionic-native/device/ngx';
 import { Location } from '@mauron85/cordova-plugin-background-geolocation';
+import { TranslateService } from '@ngx-translate/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Form } from '../../app.component';
+import { AlertService } from '../../services/alert.service';
 import { AbstractDevice } from '../devices/abstract-device';
 import { DeviceConnectionLost } from '../devices/devices.action';
 import { DateService } from './date.service';
@@ -86,7 +88,9 @@ export class MeasuresState {
     private positionService: PositionService,
     private device: Device,
     private measuresService: MeasuresService,
-    private dateService: DateService
+    private dateService: DateService,
+    private alertService: AlertService,
+    private translateService: TranslateService
   ) {}
 
   @Selector()
@@ -141,11 +145,33 @@ export class MeasuresState {
 
   @Action(InitMeasures)
   initMeasures(
-    { patchState, getState }: StateContext<MeasuresStateModel>,
-    { measures, params, recentTags }: InitMeasures
+    { patchState, getState, dispatch }: StateContext<MeasuresStateModel>,
+    { measures, params, recentTags, currentSeries }: InitMeasures
   ) {
     const { params: defaultParams } = getState();
-    patchState({ measures, params: { ...defaultParams, ...params }, recentTags });
+    const patch = { measures, params: { ...defaultParams, ...params }, recentTags };
+    if (currentSeries) {
+      this.alertService.show({
+        header: this.translateService.instant('GENERAL.CANCEL'), // TOOD traduction
+        message: this.translateService.instant('MEASURE_SERIES.REPORT.CANCEL_CONFIRMATION'),
+        backdropDismiss: false,
+        buttons: [
+          {
+            text: this.translateService.instant('GENERAL.NO'),
+            handler: () => patchState(patch)
+          },
+          {
+            text: this.translateService.instant('GENERAL.YES'),
+            handler: () => {
+              patchState({ ...patch, currentSeries });
+              dispatch(new StartMeasureSeriesReport());
+            }
+          }
+        ]
+      });
+    } else {
+      patchState(patch);
+    }
   }
 
   @Action(EnableExpertMode)

@@ -27,6 +27,7 @@ export class StorageService {
   private paramsKey = 'measures.params';
   private measuresKey = 'measures.measures';
   private recentTagsKey = 'measures.recentTags';
+  private currentSeriesKey = 'measures.currentSeries';
 
   constructor(
     private storage: Storage,
@@ -47,10 +48,10 @@ export class StorageService {
           return knownDevices ? this.store.dispatch(new InitDevices(knownDevices)) : of(null);
         })
       ),
-      forkJoin(this.getMeasures(), this.getParams(), this.getRecentTags()).pipe(
-        concatMap(([measures, params, recentTags]) => {
+      forkJoin(this.getMeasures(), this.getParams(), this.getRecentTags(), this.getCurrentSeries()).pipe(
+        concatMap(([measures, params, recentTags, currentSeries]) => {
           return measures && params && recentTags
-            ? this.store.dispatch(new InitMeasures(measures, params, recentTags))
+            ? this.store.dispatch(new InitMeasures(measures, params, recentTags, currentSeries || undefined))
             : of(null);
         })
       ),
@@ -75,6 +76,9 @@ export class StorageService {
         this.store
           .select(({ measures }: { measures: MeasuresStateModel }) => measures.recentTags)
           .subscribe(recentTags => this.saveRecentTags(recentTags));
+        this.store
+          .select(({ measures }: { measures: MeasuresStateModel }) => measures.currentSeries)
+          .subscribe(currentSeries => this.saveCurrentSeries(currentSeries));
         this.platform.ready().then(() => {
           if (this.platform.is('cordova')) {
             this.statusBar.overlaysWebView(true);
@@ -105,6 +109,10 @@ export class StorageService {
 
   getRecentTags(): Observable<string[] | null> {
     return this.getFromDB(this.recentTagsKey);
+  }
+
+  getCurrentSeries(): Observable<MeasureSeries | null> {
+    return this.getFromDB(this.currentSeriesKey);
   }
 
   private getFromDB(key: string): any {
@@ -142,6 +150,10 @@ export class StorageService {
 
   saveRecentTags(recentTags: string[]) {
     this.storage.set(this.recentTagsKey, this.formatToDB(recentTags));
+  }
+
+  saveCurrentSeries(currentSeries?: MeasureSeries) {
+    this.storage.set(this.currentSeriesKey, currentSeries ? this.formatToDB(currentSeries) : null);
   }
 
   private parseFromDB(jsonString: string): any {
