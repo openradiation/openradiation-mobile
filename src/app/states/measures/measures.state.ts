@@ -1,9 +1,12 @@
 import { Device } from '@ionic-native/device/ngx';
 import { Location } from '@mauron85/cordova-plugin-background-geolocation';
+import { TranslateService } from '@ngx-translate/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Form } from '../../app.component';
+import { AlertService } from '../../services/alert.service';
+import { NavigationService } from '../../services/navigation.service';
 import { AbstractDevice } from '../devices/abstract-device';
 import { DeviceConnectionLost } from '../devices/devices.action';
 import { DateService } from './date.service';
@@ -86,7 +89,10 @@ export class MeasuresState {
     private positionService: PositionService,
     private device: Device,
     private measuresService: MeasuresService,
-    private dateService: DateService
+    private dateService: DateService,
+    private alertService: AlertService,
+    private translateService: TranslateService,
+    private navigationService: NavigationService
   ) {}
 
   @Selector()
@@ -141,11 +147,33 @@ export class MeasuresState {
 
   @Action(InitMeasures)
   initMeasures(
-    { patchState, getState }: StateContext<MeasuresStateModel>,
-    { measures, params, recentTags }: InitMeasures
+    { patchState, getState, dispatch }: StateContext<MeasuresStateModel>,
+    { measures, params, recentTags, currentSeries }: InitMeasures
   ) {
     const { params: defaultParams } = getState();
-    patchState({ measures, params: { ...defaultParams, ...params }, recentTags });
+    const patch = { measures, params: { ...defaultParams, ...params }, recentTags };
+    if (currentSeries) {
+      this.alertService.show({
+        header: this.translateService.instant('MEASURE_SERIES.ABORTED_SERIES.TITLE'),
+        message: this.translateService.instant('MEASURE_SERIES.ABORTED_SERIES.MESSAGE'),
+        backdropDismiss: false,
+        buttons: [
+          {
+            text: this.translateService.instant('MEASURE_SERIES.ABORTED_SERIES.DELETE_SERIES'),
+            handler: () => patchState(patch)
+          },
+          {
+            text: this.translateService.instant('MEASURE_SERIES.ABORTED_SERIES.GO_TO_REPORT'),
+            handler: () => {
+              patchState({ ...patch, currentSeries });
+              this.navigationService.navigateRoot(['measure', 'report-series']);
+            }
+          }
+        ]
+      });
+    } else {
+      patchState(patch);
+    }
   }
 
   @Action(EnableExpertMode)
