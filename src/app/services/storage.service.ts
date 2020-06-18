@@ -48,20 +48,24 @@ export class StorageService {
           return knownDevices ? this.store.dispatch(new InitDevices(knownDevices)) : of(null);
         })
       ),
-      forkJoin(this.getMeasures(), this.getParams(), this.getRecentTags(), this.getCurrentSeries()).pipe(
-        concatMap(([measures, params, recentTags, currentSeries]) => {
-          return measures && params && recentTags
-            ? this.store.dispatch(new InitMeasures(measures, params, recentTags, currentSeries || undefined))
-            : of(null);
-        })
-      ),
       this.getUser().pipe(
         concatMap(user => {
           return user ? this.store.dispatch(new InitUser(user)) : of(null);
         })
       )
     )
-      .pipe(concatMap(() => this.store.dispatch(new SetLanguage())))
+      .pipe(
+        concatMap(() => this.store.dispatch(new SetLanguage())),
+        concatMap(() =>
+          forkJoin(this.getMeasures(), this.getParams(), this.getRecentTags(), this.getCurrentSeries()).pipe(
+            concatMap(([measures, params, recentTags, currentSeries]) => {
+              return measures && params && recentTags
+                ? this.store.dispatch(new InitMeasures(measures, params, recentTags, currentSeries || undefined))
+                : of(null);
+            })
+          )
+        )
+      )
       .subscribe(() => {
         this.store.select(({ user }: { user: UserStateModel }) => user).subscribe(user => this.saveUser(user));
         this.store

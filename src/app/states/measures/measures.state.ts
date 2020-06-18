@@ -6,6 +6,7 @@ import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Form } from '../../app.component';
 import { AlertService } from '../../services/alert.service';
+import { NavigationService } from '../../services/navigation.service';
 import { AbstractDevice } from '../devices/abstract-device';
 import { DeviceConnectionLost } from '../devices/devices.action';
 import { DateService } from './date.service';
@@ -90,7 +91,8 @@ export class MeasuresState {
     private measuresService: MeasuresService,
     private dateService: DateService,
     private alertService: AlertService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private navigationService: NavigationService
   ) {}
 
   @Selector()
@@ -152,19 +154,19 @@ export class MeasuresState {
     const patch = { measures, params: { ...defaultParams, ...params }, recentTags };
     if (currentSeries) {
       this.alertService.show({
-        header: this.translateService.instant('GENERAL.CANCEL'), // TOOD traduction
-        message: this.translateService.instant('MEASURE_SERIES.REPORT.CANCEL_CONFIRMATION'),
+        header: this.translateService.instant('MEASURE_SERIES.ABORTED_SERIES.TITLE'),
+        message: this.translateService.instant('MEASURE_SERIES.ABORTED_SERIES.MESSAGE'),
         backdropDismiss: false,
         buttons: [
           {
-            text: this.translateService.instant('GENERAL.NO'),
+            text: this.translateService.instant('MEASURE_SERIES.ABORTED_SERIES.DELETE_SERIES'),
             handler: () => patchState(patch)
           },
           {
-            text: this.translateService.instant('GENERAL.YES'),
+            text: this.translateService.instant('MEASURE_SERIES.ABORTED_SERIES.GO_TO_REPORT'),
             handler: () => {
               patchState({ ...patch, currentSeries });
-              dispatch(new StartMeasureSeriesReport());
+              this.navigationService.navigateRoot(['measure', 'report-series']);
             }
           }
         ]

@@ -230,7 +230,13 @@
     },
     "SERIES_LIMIT": "La mesure suivante démarrera automatiquement, pendant une durée maximale de",
     "STOP": "Vous pourrez arrêter les mesures à tout moment.",
-    "TITLE": "Série de mesures"
+    "TITLE": "Série de mesures",
+    "ABORTED_SERIES": {
+      "TITLE": "Serie interrompue",
+      "MESSAGE": "Un problème a eu lieu sur la série de mesures en cours, celle-ci a malheureusement été interrompue. Vous pouvez cependant accéder aux mesures qui ont été réalisées avant l’interruption",
+      "GO_TO_REPORT": "Accéder aux mesures",
+      "DELETE_SERIES": "Supprimer la serie"
+    }
   },
   "POSITION": {
     "BACKGROUND": {

@@ -230,7 +230,13 @@
     },
     "SERIES_LIMIT": "The next measurement will start automatically, for a maximum of",
     "STOP": "You can stop the measurements at any time.",
-    "TITLE": "Measurement series"
+    "TITLE": "Measurement series",
+    "ABORTED_SERIES": {
+      "TITLE": "Interrupted series",
+      "MESSAGE": "There was a problem with the current series of measurements, which unfortunately was interrupted. However, you can still access the measurements that were performed before the interruption",
+      "GO_TO_REPORT": "Access the measurements",
+      "DELETE_SERIES": "Delete the series"
+    }
   },
   "POSITION": {
     "BACKGROUND": {
