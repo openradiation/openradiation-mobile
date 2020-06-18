@@ -1,17 +1,18 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
+import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
+import { AlertService } from '../../../services/alert.service';
 import { NavigationService } from '../../../services/navigation.service';
 import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
 import {
   HitsAccuracy,
   Measure,
-  MeasureEnvironment,
   MeasureSeries,
   MeasureSeriesParamsSelected,
   PositionAccuracyThreshold
@@ -78,7 +79,9 @@ export class MeasureScanPage extends AutoUnsubscribePage {
     protected router: Router,
     private store: Store,
     private navigationService: NavigationService,
-    private actions$: Actions
+    private actions$: Actions,
+    private alertService: AlertService,
+    private translateService: TranslateService
   ) {
     super(router);
   }
@@ -130,6 +133,23 @@ export class MeasureScanPage extends AutoUnsubscribePage {
   }
 
   cancelMeasure() {
-    this.store.dispatch(new CancelMeasure());
+    if (this.isMeasureSeries) {
+      this.alertService.show({
+        header: this.translateService.instant('GENERAL.CANCEL'),
+        message: this.translateService.instant('MEASURE_SERIES.REPORT.CANCEL_CONFIRMATION'),
+        backdropDismiss: false,
+        buttons: [
+          {
+            text: this.translateService.instant('GENERAL.NO')
+          },
+          {
+            text: this.translateService.instant('GENERAL.YES'),
+            handler: () => this.store.dispatch(new CancelMeasure())
+          }
+        ]
+      });
+    } else {
+      this.store.dispatch(new CancelMeasure());
+    }
   }
 }
