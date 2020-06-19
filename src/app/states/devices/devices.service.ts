@@ -50,9 +50,9 @@ export class DevicesService {
     this.actions$.pipe(ofActionSuccessful(DeviceConnectionLost)).subscribe(({ communicationTimeout }) =>
       this.toastController
         .create({
-          message: this.translateService.instant(
-            communicationTimeout ? 'SENSORS.CONNECTION_TIMEOUT' : 'SENSORS.CONNECTION_LOST'
-          ),
+          message: communicationTimeout
+            ? this.translateService.instant('SENSORS.CONNECTION_TIMEOUT')
+            : this.translateService.instant('SENSORS.CONNECTION_LOST'),
           showCloseButton: true,
           duration: communicationTimeout ? undefined : 3000,
           closeButtonText: this.translateService.instant('GENERAL.OK')

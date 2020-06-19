@@ -206,6 +206,12 @@
     "TITLE": "Manual input"
   },
   "MEASURE_SERIES": {
+    "ABORTED_SERIES": {
+      "DELETE_SERIES": "Delete the series",
+      "GO_TO_REPORT": "Access the measurements",
+      "MESSAGE": "There was a problem with the current series of measurements, which unfortunately was interrupted. However, you can still access the measurements that were performed before the interruption",
+      "TITLE": "Interrupted series"
+    },
     "ALERT_LOG_IN": "You must be logged in before you can fill out a manual measurement report.",
     "ALERT_SENSOR": "You must connect a sensor before you can fill out a manual measurement report.",
     "HITS_NUMBER": "Minimum no. of counts",
@@ -221,22 +227,16 @@
     "MESSAGE_SCAN_PARAM": "{{measureLimit}} auto. measurements for a max. duration of {{seriesLimit}}",
     "NOTICE": "You can take automatic measurements. Thank you for doing these measurements in a homogenous environment, since you will have to qualify this environment for all measurements and not for each one.",
     "REPORT": {
+      "CANCEL_CONFIRMATION": "Are you sure you wish to delete these measurements?",
       "FIRST_MEASURE-TIME": "Beginning of the first measurement",
       "HITS_AVERAGE": "Average hits number",
       "MEASURE_NUMBER": "Number of measurements",
       "SERIES_DURATION": "Total measurement duration",
-      "VALUE_AVERAGE": "Average of measurements",
-      "CANCEL_CONFIRMATION": "Are you sure you wish to delete these measurements?"
+      "VALUE_AVERAGE": "Average of measurements"
     },
     "SERIES_LIMIT": "The next measurement will start automatically, for a maximum of",
     "STOP": "You can stop the measurements at any time.",
-    "TITLE": "Measurement series",
-    "ABORTED_SERIES": {
-      "TITLE": "Interrupted series",
-      "MESSAGE": "There was a problem with the current series of measurements, which unfortunately was interrupted. However, you can still access the measurements that were performed before the interruption",
-      "GO_TO_REPORT": "Access the measurements",
-      "DELETE_SERIES": "Delete the series"
-    }
+    "TITLE": "Measurement series"
   },
   "POSITION": {
     "BACKGROUND": {

@@ -206,6 +206,12 @@
     "TITLE": "Saisie manuelle"
   },
   "MEASURE_SERIES": {
+    "ABORTED_SERIES": {
+      "DELETE_SERIES": "Supprimer la serie",
+      "GO_TO_REPORT": "Accéder aux mesures",
+      "MESSAGE": "Un problème a eu lieu sur la série de mesures en cours, celle-ci a malheureusement été interrompue. Vous pouvez cependant accéder aux mesures qui ont été réalisées avant l’interruption",
+      "TITLE": "Serie interrompue"
+    },
     "ALERT_LOG_IN": "Vous devez vous identifier pour pouvoir commencer une série de mesure.",
     "ALERT_SENSOR": "Vous devez connecter un capteur pour pouvoir commencer une série de mesure.",
     "HITS_NUMBER": "Nb coups minimun",
@@ -221,22 +227,16 @@
     "MESSAGE_SCAN_PARAM": "Mesures auto. de {{measureLimit}} pour une durée max. de {{seriesLimit}}",
     "NOTICE": "Vous pouvez prendre des mesures automatiques. Merci de faire ces mesures dans un environnement homogène, car vous devrez ensuite qualifier l’environnement de l’ensemble des mesures et non de chaque mesure.",
     "REPORT": {
+      "CANCEL_CONFIRMATION": "Êtes-vous sûr(e) de vouloir supprimer ces mesures ?",
       "FIRST_MEASURE-TIME": "Début de la première mesure",
       "HITS_AVERAGE": "Moyenne Nb coups",
       "MEASURE_NUMBER": "Nombre de mesures",
       "SERIES_DURATION": "Durée totale des mesures",
-      "VALUE_AVERAGE": "Moyenne des mesures",
-      "CANCEL_CONFIRMATION": "Êtes-vous sûr(e) de vouloir supprimer ces mesures ?"
+      "VALUE_AVERAGE": "Moyenne des mesures"
     },
     "SERIES_LIMIT": "La mesure suivante démarrera automatiquement, pendant une durée maximale de",
     "STOP": "Vous pourrez arrêter les mesures à tout moment.",
-    "TITLE": "Série de mesures",
-    "ABORTED_SERIES": {
-      "TITLE": "Serie interrompue",
-      "MESSAGE": "Un problème a eu lieu sur la série de mesures en cours, celle-ci a malheureusement été interrompue. Vous pouvez cependant accéder aux mesures qui ont été réalisées avant l’interruption",
-      "GO_TO_REPORT": "Accéder aux mesures",
-      "DELETE_SERIES": "Supprimer la serie"
-    }
+    "TITLE": "Série de mesures"
   },
   "POSITION": {
     "BACKGROUND": {
