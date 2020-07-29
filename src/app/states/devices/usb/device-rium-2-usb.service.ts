@@ -54,7 +54,8 @@ export class DeviceRium2USBService extends AbstractUSBDeviceService<DeviceRium2U
         if (buffer.byteLength === 32) {
           const data = this.textDecoder.decode(buffer).split(',');
           const apparatusId = data[1];
-          const batteryLevel = Number(data[5]) / 100;
+          const batteryVoltage = Number(data[5]) / 100;
+          const batteryLevel = Math.max(0, Math.min(100, 227.27 * batteryVoltage - 840.9));
           return {
             apparatusId,
             batteryLevel

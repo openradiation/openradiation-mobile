@@ -54,6 +54,11 @@ import {
 import { MeasuresService } from './measures.service';
 import { PositionService } from './position.service';
 
+/**
+ * Max duration between 2 measure steps before the device connection is considered as lost
+ */
+const TIMEOUT_DURATION = 35000;
+
 export interface MeasuresStateModel {
   measures: (Measure | MeasureSeries)[];
   currentPosition?: Location;
@@ -377,7 +382,7 @@ export class MeasuresState {
     if (currentMeasure && currentMeasure.steps) {
       const stepDuration =
         currentMeasure.steps.length > 0 ? step.ts - currentMeasure.steps[currentMeasure.steps.length - 1].ts : 0;
-      if (stepDuration > device.hitsPeriod * 11) {
+      if (stepDuration > TIMEOUT_DURATION) {
         return dispatch(new DeviceConnectionLost(true));
       } else {
         let newCurrentMeasure: Measure = {

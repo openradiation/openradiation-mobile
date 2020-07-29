@@ -44,7 +44,8 @@ export class DeviceRium2BLEService extends AbstractBLEDeviceService<DeviceRium2B
     ).pipe(
       map(([idBuffer, batteryBuffer]: [ArrayBuffer, ArrayBuffer]) => {
         const apparatusId = this.arrayBufferToHex(idBuffer);
-        const batteryLevel = this.getNumberFromBuffer(batteryBuffer, 3) / 100;
+        const batteryVoltage = this.getNumberFromBuffer(batteryBuffer, 3) / 100;
+        const batteryLevel = Math.max(0, Math.min(100, 227.27 * batteryVoltage - 840.9));
         return {
           apparatusId,
           batteryLevel
