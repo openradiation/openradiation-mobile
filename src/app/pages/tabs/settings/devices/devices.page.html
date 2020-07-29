@@ -16,7 +16,7 @@
       <span class="state connected">
         {{'GENERAL.CONNECTED' | translate}}
         <div class="battery-icon" *ngIf="connectedDevice.batteryLevel !== undefined">
-          <ion-icon name="battery-full" mode="ios"></ion-icon>{{connectedDevice.batteryLevel}}%
+          <ion-icon name="battery-full" mode="ios"></ion-icon>{{connectedDevice.batteryLevel | number : '1.2-2'}}%
         </div>
       </span>
       <ion-button
@@ -43,7 +43,7 @@
       <span class="state" *ngIf="connectingDevice?.sensorUUID !== availableDevice.sensorUUID">
         {{'GENERAL.AVAILABLE' | translate}}
         <div class="battery-icon" *ngIf="availableDevice.batteryLevel">
-          <ion-icon name="battery-full" mode="ios"></ion-icon>{{availableDevice.batteryLevel}}%
+          <ion-icon name="battery-full" mode="ios"></ion-icon>{{availableDevice.batteryLevel | number : '1.2-2'}}%
         </div>
       </span>
       <ion-button
