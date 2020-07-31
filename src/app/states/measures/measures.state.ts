@@ -7,7 +7,7 @@ import { tap } from 'rxjs/operators';
 import { Form } from '../../app.component';
 import { AlertService } from '../../services/alert.service';
 import { NavigationService } from '../../services/navigation.service';
-import { AbstractDevice } from '../devices/abstract-device';
+import { AbstractDevice, DeviceType } from '../devices/abstract-device';
 import { DeviceConnectionLost } from '../devices/devices.action';
 import { DateService } from './date.service';
 import {
@@ -382,7 +382,7 @@ export class MeasuresState {
     if (currentMeasure && currentMeasure.steps) {
       const stepDuration =
         currentMeasure.steps.length > 0 ? step.ts - currentMeasure.steps[currentMeasure.steps.length - 1].ts : 0;
-      if (stepDuration > TIMEOUT_DURATION) {
+      if (device.deviceType !== DeviceType.PocketGeiger && stepDuration > TIMEOUT_DURATION) {
         return dispatch(new DeviceConnectionLost(true));
       } else {
         let newCurrentMeasure: Measure = {
