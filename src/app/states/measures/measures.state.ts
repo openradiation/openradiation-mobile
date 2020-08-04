@@ -1,10 +1,13 @@
 import { Device } from '@ionic-native/device/ngx';
 import { Location } from '@mauron85/cordova-plugin-background-geolocation';
+import { TranslateService } from '@ngx-translate/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Form } from '../../app.component';
-import { AbstractDevice } from '../devices/abstract-device';
+import { AlertService } from '../../services/alert.service';
+import { NavigationService } from '../../services/navigation.service';
+import { AbstractDevice, DeviceType } from '../devices/abstract-device';
 import { DeviceConnectionLost } from '../devices/devices.action';
 import { DateService } from './date.service';
 import {
@@ -51,6 +54,11 @@ import {
 import { MeasuresService } from './measures.service';
 import { PositionService } from './position.service';
 
+/**
+ * Max duration between 2 measure steps before the device connection is considered as lost
+ */
+const TIMEOUT_DURATION = 35000;
+
 export interface MeasuresStateModel {
   measures: (Measure | MeasureSeries)[];
   currentPosition?: Location;
@@ -86,7 +94,10 @@ export class MeasuresState {
     private positionService: PositionService,
     private device: Device,
     private measuresService: MeasuresService,
-    private dateService: DateService
+    private dateService: DateService,
+    private alertService: AlertService,
+    private translateService: TranslateService,
+    private navigationService: NavigationService
   ) {}
 
   @Selector()
@@ -141,11 +152,33 @@ export class MeasuresState {
 
   @Action(InitMeasures)
   initMeasures(
-    { patchState, getState }: StateContext<MeasuresStateModel>,
-    { measures, params, recentTags }: InitMeasures
+    { patchState, getState, dispatch }: StateContext<MeasuresStateModel>,
+    { measures, params, recentTags, currentSeries }: InitMeasures
   ) {
     const { params: defaultParams } = getState();
-    patchState({ measures, params: { ...defaultParams, ...params }, recentTags });
+    const patch = { measures, params: { ...defaultParams, ...params }, recentTags };
+    if (currentSeries) {
+      this.alertService.show({
+        header: this.translateService.instant('MEASURE_SERIES.ABORTED_SERIES.TITLE'),
+        message: this.translateService.instant('MEASURE_SERIES.ABORTED_SERIES.MESSAGE'),
+        backdropDismiss: false,
+        buttons: [
+          {
+            text: this.translateService.instant('MEASURE_SERIES.ABORTED_SERIES.DELETE_SERIES'),
+            handler: () => patchState(patch)
+          },
+          {
+            text: this.translateService.instant('MEASURE_SERIES.ABORTED_SERIES.GO_TO_REPORT'),
+            handler: () => {
+              patchState({ ...patch, currentSeries });
+              this.navigationService.navigateRoot(['measure', 'report-series']);
+            }
+          }
+        ]
+      });
+    } else {
+      patchState(patch);
+    }
   }
 
   @Action(EnableExpertMode)
@@ -349,7 +382,7 @@ export class MeasuresState {
     if (currentMeasure && currentMeasure.steps) {
       const stepDuration =
         currentMeasure.steps.length > 0 ? step.ts - currentMeasure.steps[currentMeasure.steps.length - 1].ts : 0;
-      if (stepDuration > device.hitsPeriod * 11) {
+      if (device.deviceType !== DeviceType.PocketGeiger && stepDuration > TIMEOUT_DURATION) {
         return dispatch(new DeviceConnectionLost(true));
       } else {
         let newCurrentMeasure: Measure = {

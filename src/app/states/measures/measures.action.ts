@@ -4,7 +4,12 @@ import { Measure, MeasureSeries, Params, Step } from './measure';
 
 export class InitMeasures {
   static readonly type = '[Measure] Init';
-  constructor(public measures: (Measure | MeasureSeries)[], public params: Params, public recentTags: string[]) {}
+  constructor(
+    public measures: (Measure | MeasureSeries)[],
+    public params: Params,
+    public recentTags: string[],
+    public currentSeries?: MeasureSeries
+  ) {}
 }
 
 export class EnableExpertMode {

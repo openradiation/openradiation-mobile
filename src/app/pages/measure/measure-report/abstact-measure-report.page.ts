@@ -29,6 +29,7 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
   reportScan = true;
   positionChangeSpeedOverLimit = false;
   positionChangeAltitudeOverLimit = false;
+  fromHistory = false;
 
   measurementEnvironmentOptions: SelectIconOption[];
 
@@ -106,6 +107,7 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
   init() {
     this.activatedRoute.queryParams.pipe(take(1)).subscribe(queryParams => {
       if (queryParams.goBackHistory) {
+        this.fromHistory = true;
         this.subscriptions.push(
           this.actions$.pipe(ofActionSuccessful(StopMeasureSeries, CancelMeasure, StopMeasure)).subscribe(() => {
             this.measureReportForm = undefined;

@@ -9,7 +9,7 @@ export abstract class AbstractMeasure {
   endTime?: number;
   sent = false;
 
-  constructor(public id: string) {}
+  protected constructor(public id: string) {}
 }
 
 export enum MeasureType {

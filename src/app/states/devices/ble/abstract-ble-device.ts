@@ -1,7 +1,7 @@
 import { AbstractDevice, RawDevice } from '../abstract-device';
 
 export abstract class AbstractBLEDevice extends AbstractDevice {
-  constructor(rawDevice: RawBLEDevice) {
+  protected constructor(rawDevice: RawBLEDevice) {
     super();
     this.sensorUUID = rawDevice.id;
   }

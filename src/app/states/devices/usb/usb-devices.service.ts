@@ -19,7 +19,7 @@ declare const UsbSerial: UsbSerial;
   providedIn: 'root'
 })
 export class USBDevicesService {
-  private devices = [DeviceType.PocketGeiger, DeviceType.Rium];
+  private devices = [DeviceType.PocketGeiger, DeviceType.Rium2USB]; // Only the 2nd version of Rium is present here, but it will be used to detect old version of Rium too
 
   private currentAlert?: any;
 
@@ -38,7 +38,9 @@ export class USBDevicesService {
       }
     });
     this.actions$.pipe(ofActionDispatched(StopDiscoverDevices)).subscribe(() => {
-      UsbSerial.onDeviceAttached([], null);
+      if (this.platform.is('cordova')) {
+        UsbSerial.onDeviceAttached([], null);
+      }
     });
   }
 
