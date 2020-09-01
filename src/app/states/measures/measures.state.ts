@@ -157,7 +157,7 @@ export class MeasuresState {
   ) {
     const { params: defaultParams } = getState();
     const patch = { measures, params: { ...defaultParams, ...params }, recentTags };
-    if (currentSeries) {
+    if (currentSeries && currentSeries.measures.length) {
       this.alertService.show({
         header: this.translateService.instant('MEASURE_SERIES.ABORTED_SERIES.TITLE'),
         message: this.translateService.instant('MEASURE_SERIES.ABORTED_SERIES.MESSAGE'),
