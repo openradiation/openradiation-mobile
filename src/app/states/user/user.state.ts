@@ -1,5 +1,6 @@
 import { Action, NgxsOnInit, Selector, State, StateContext } from '@ngxs/store';
-import { tap } from 'rxjs/operators';
+import { concatMap, tap } from 'rxjs/operators';
+import { NotificationService } from '../../services/notification.service';
 import { StorageService } from '../../services/storage.service';
 import { InitUser, LogIn, LogOut, SetLanguage } from './user.action';
 import { UserService } from './user.service';
@@ -14,7 +15,11 @@ export interface UserStateModel {
   name: 'user'
 })
 export class UserState implements NgxsOnInit {
-  constructor(private userService: UserService, private storageService: StorageService) {}
+  constructor(
+    private userService: UserService,
+    private storageService: StorageService,
+    private notificationService: NotificationService
+  ) {}
 
   @Selector()
   static login({ login }: UserStateModel): string | undefined {
@@ -28,6 +33,7 @@ export class UserState implements NgxsOnInit {
 
   ngxsOnInit({ dispatch, patchState }: StateContext<UserStateModel>) {
     this.storageService.init();
+    this.notificationService.init();
   }
 
   @Action(InitUser)
@@ -57,7 +63,11 @@ export class UserState implements NgxsOnInit {
 
   @Action(SetLanguage)
   setLanguage({ getState, patchState }: StateContext<UserStateModel>, { language }: SetLanguage) {
-    language = language || getState().language || this.userService.getDefaultLanguage();
-    return this.userService.setLanguage(language).pipe(tap(() => patchState({ language })));
+    const previousLanguage = getState().language;
+    const newLanguage = language || getState().language || this.userService.getDefaultLanguage();
+    return this.userService.setLanguage(newLanguage).pipe(
+      concatMap(() => this.notificationService.useLanguage(newLanguage, previousLanguage)),
+      tap(() => patchState({ language: newLanguage }))
+    );
   }
 }
