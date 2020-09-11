@@ -21,6 +21,7 @@
     <preference name="AutoHideSplashScreen" value="false" />
     <preference name="FadeSplashScreen" value="false" />
     <preference name="ShowSplashScreenSpinner" value="false" />
+    <preference name="WKWebViewOnly" value="true" />
     <platform name="android">
         <allow-intent href="market:*" />
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
@@ -96,7 +97,7 @@
     <plugin name="cordova-plugin-screen-orientation" spec="3.0.1" />
     <plugin name="cordova-plugin-x-socialsharing" spec="5.4.4" />
     <plugin name="cordova-plugin-camera" spec="4.0.3" />
-    <plugin name="cordova-plugin-inappbrowser" spec="3.0.0" />
+    <plugin name="cordova-plugin-inappbrowser" spec="4.0.0" />
     <plugin name="cordova-plugin-usb-serial" spec="./cordova-plugin-usb-serial" />
     <plugin name="cordova-sqlite-storage" spec="3.2.0" />
     <plugin name="cordova-plugin-localization-strings" spec="3.1.0">

@@ -84,7 +84,12 @@ export class UserState implements NgxsOnInit {
   enableNotifications({ getState, patchState }: StateContext<UserStateModel>) {
     const { language } = getState();
     return from(this.notificationService.enableNotifications(language)).pipe(
-      tap(notifications => patchState({ notifications }))
+      tap(notifications => {
+        patchState({ notifications: true });
+        if (!notifications) {
+          setTimeout(() => patchState({ notifications: false }), 300);
+        }
+      })
     );
   }
 

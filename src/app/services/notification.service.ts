@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { FCM } from 'cordova-plugin-fcm-with-dependecy-updated/ionic/ngx';
@@ -13,7 +14,8 @@ export class NotificationService {
     private platform: Platform,
     private fcm: FCM,
     private alertService: AlertService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private diagnostic: Diagnostic
   ) {}
 
   init() {
@@ -50,7 +52,27 @@ export class NotificationService {
       return this.fcm
         .hasPermission()
         .then(hasPermission => hasPermission || this.fcm.requestPushPermission())
-        .then(hasPermission => (!hasPermission ? false : this.fcm.subscribeToTopic(language).then(() => true)));
+        .then(hasPermission => {
+          if (hasPermission) {
+            return this.fcm.subscribeToTopic(language).then(() => true);
+          } else {
+            this.alertService.show({
+              header: this.translateService.instant('NOTIFICATIONS.ALERT.TITLE'),
+              message: this.translateService.instant('NOTIFICATIONS.ALERT.MESSAGE'),
+              backdropDismiss: true,
+              buttons: [
+                {
+                  text: this.translateService.instant('GENERAL.CANCEL')
+                },
+                {
+                  text: this.translateService.instant('GENERAL.GO_TO_SETTINGS'),
+                  handler: () => this.diagnostic.switchToSettings()
+                }
+              ]
+            });
+            return false;
+          }
+        });
     } else {
       return Promise.resolve(false);
     }
