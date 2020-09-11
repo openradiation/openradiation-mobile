@@ -39,12 +39,8 @@ export class UserState implements NgxsOnInit {
   }
 
   ngxsOnInit({ getState, patchState, dispatch }: StateContext<UserStateModel>) {
-    const { notifications } = getState();
     this.storageService.init();
     this.notificationService.init();
-    if (notifications === undefined || notifications) {
-      dispatch(new EnableNotifications());
-    }
   }
 
   @Action(InitUser)
@@ -88,7 +84,7 @@ export class UserState implements NgxsOnInit {
   enableNotifications({ getState, patchState }: StateContext<UserStateModel>) {
     const { language } = getState();
     return from(this.notificationService.enableNotifications(language)).pipe(
-      tap(() => patchState({ notifications: true }))
+      tap(notifications => patchState({ notifications }))
     );
   }
 

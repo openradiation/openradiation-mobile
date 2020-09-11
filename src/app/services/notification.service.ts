@@ -53,11 +53,14 @@ export class NotificationService {
     }
   }
 
-  enableNotifications(language?: string): Promise<void> {
+  enableNotifications(language?: string): Promise<boolean> {
     if (language) {
-      return this.fcm.subscribeToTopic(language);
+      return this.fcm
+        .hasPermission()
+        .then(hasPermission => hasPermission || this.fcm.requestPushPermission())
+        .then(hasPermission => (!hasPermission ? false : this.fcm.subscribeToTopic(language).then(() => true)));
     } else {
-      return Promise.resolve();
+      return Promise.resolve(false);
     }
   }
 
