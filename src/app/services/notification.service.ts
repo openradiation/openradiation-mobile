@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { FCM } from 'cordova-plugin-fcm-with-dependecy-updated/ionic/ngx';
+import { INotificationPayload } from 'cordova-plugin-fcm-with-dependecy-updated/src/www/INotificationPayload';
 import { AlertService } from './alert.service';
 
 @Injectable({
@@ -26,21 +27,12 @@ export class NotificationService {
       lights: true, // enable lights for notifications
       vibration: true // enable vibration for notifications
     });
-    this.fcm.onNotification().subscribe(({ title, body }) =>
-      this.alertService.show(
-        {
-          header: title,
-          message: body,
-          backdropDismiss: true,
-          buttons: [
-            {
-              text: this.translateService.instant('GENERAL.OK')
-            }
-          ]
-        },
-        true
-      )
-    );
+    this.fcm.onNotification().subscribe(notification => this.showNotificationAlert(notification));
+    this.fcm.getInitialPushPayload().then(notification => {
+      if (notification) {
+        setTimeout(() => this.showNotificationAlert(notification));
+      }
+    });
   }
 
   useLanguage(newLanguage: string, previousLanguage?: string): Promise<void> {
@@ -70,5 +62,21 @@ export class NotificationService {
     } else {
       return Promise.resolve();
     }
+  }
+
+  private showNotificationAlert({ title, body }: INotificationPayload) {
+    this.alertService.show(
+      {
+        header: title,
+        message: body,
+        backdropDismiss: true,
+        buttons: [
+          {
+            text: this.translateService.instant('GENERAL.OK')
+          }
+        ]
+      },
+      true
+    );
   }
 }
