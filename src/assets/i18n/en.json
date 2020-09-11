@@ -238,6 +238,9 @@
     "STOP": "You can stop the measurements at any time.",
     "TITLE": "Measurement series"
   },
+  "NOTIFICATIONS": {
+    "TITLE": "Notifications"
+  },
   "POSITION": {
     "BACKGROUND": {
       "TEXT": "Measurements location tracking",

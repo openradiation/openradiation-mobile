@@ -238,6 +238,9 @@
     "STOP": "Vous pourrez arrêter les mesures à tout moment.",
     "TITLE": "Série de mesures"
   },
+  "NOTIFICATIONS": {
+    "TITLE": "Notifications"
+  },
   "POSITION": {
     "BACKGROUND": {
       "TEXT": "Suivi de la position des mesures",

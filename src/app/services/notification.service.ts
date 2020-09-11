@@ -44,8 +44,26 @@ export class NotificationService {
   }
 
   useLanguage(newLanguage: string, previousLanguage?: string): Promise<void> {
-    if (previousLanguage && previousLanguage !== newLanguage) {
+    if (!previousLanguage) {
+      return this.fcm.subscribeToTopic(newLanguage);
+    } else if (previousLanguage !== newLanguage) {
       return this.fcm.unsubscribeFromTopic(previousLanguage).then(() => this.fcm.subscribeToTopic(newLanguage));
+    } else {
+      return Promise.resolve();
+    }
+  }
+
+  enableNotifications(language?: string): Promise<void> {
+    if (language) {
+      return this.fcm.subscribeToTopic(language);
+    } else {
+      return Promise.resolve();
+    }
+  }
+
+  disableNotifications(language?: string): Promise<void> {
+    if (language) {
+      return this.fcm.unsubscribeFromTopic(language);
     } else {
       return Promise.resolve();
     }
