@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="2030301" id="org.openradiation" ios-CFBundleVersion="2.3.3.1" version="2.3.3" xmlns="http://www.w3.org/ns/widgets">
+<widget android-versionCode="2030400" id="org.openradiation" ios-CFBundleVersion="2.3.4.0" version="2.3.4" xmlns="http://www.w3.org/ns/widgets">
     <name>OpenRadiation</name>
     <description>Les citoyens mesurent la radioactivité.</description>
     <author email="contact@openradiation.org" href="https://www.openradiation.org/">OpenRadiation</author>
