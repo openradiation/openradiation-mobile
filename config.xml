@@ -21,6 +21,7 @@
     <preference name="AutoHideSplashScreen" value="false" />
     <preference name="FadeSplashScreen" value="false" />
     <preference name="ShowSplashScreenSpinner" value="false" />
+    <preference name="WKWebViewOnly" value="true" />
     <platform name="android">
         <allow-intent href="market:*" />
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
@@ -96,17 +97,7 @@
     <plugin name="cordova-plugin-screen-orientation" spec="3.0.1" />
     <plugin name="cordova-plugin-x-socialsharing" spec="5.4.4" />
     <plugin name="cordova-plugin-camera" spec="4.0.3" />
-    <plugin name="@mauron85/cordova-plugin-background-geolocation" spec="3.0.3">
-        <variable name="GOOGLE_PLAY_SERVICES_VERSION" value="11+" />
-        <variable name="ANDROID_SUPPORT_LIBRARY_VERSION" value="26+" />
-        <variable name="ICON" value="@mipmap/ic_launcher" />
-        <variable name="SMALL_ICON" value="@mipmap/ic_launcher" />
-        <variable name="ACCOUNT_NAME" value="@string/app_name" />
-        <variable name="ACCOUNT_LABEL" value="@string/app_name" />
-        <variable name="ACCOUNT_TYPE" value="$PACKAGE_NAME.account" />
-        <variable name="CONTENT_AUTHORITY" value="$PACKAGE_NAME" />
-    </plugin>
-    <plugin name="cordova-plugin-inappbrowser" spec="3.0.0" />
+    <plugin name="cordova-plugin-inappbrowser" spec="4.0.0" />
     <plugin name="cordova-plugin-usb-serial" spec="./cordova-plugin-usb-serial" />
     <plugin name="cordova-sqlite-storage" spec="3.2.0" />
     <plugin name="cordova-plugin-localization-strings" spec="3.1.0">
@@ -115,6 +106,7 @@
     <plugin name="cordova-plugin-ionic-webview" spec="4.1.1">
         <variable name="ANDROID_SUPPORT_ANNOTATIONS_VERSION" value="27.+" />
     </plugin>
-    <engine name="android" spec="8.0.0" />
-    <engine name="ios" spec="5.0.0" />
+    <engine name="android" spec="^8.1.0" />
+    <engine name="ios" spec="^5.1.0" />
+    <plugin name="cordova-plugin-fcm-with-dependecy-updated" spec="7.3.1" />
 </widget>

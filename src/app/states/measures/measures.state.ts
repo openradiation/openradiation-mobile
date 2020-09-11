@@ -4,11 +4,11 @@ import { TranslateService } from '@ngx-translate/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Form } from '../../app.component';
 import { AlertService } from '../../services/alert.service';
 import { NavigationService } from '../../services/navigation.service';
 import { AbstractDevice, DeviceType } from '../devices/abstract-device';
 import { DeviceConnectionLost } from '../devices/devices.action';
+import { Form } from '../formModel';
 import { DateService } from './date.service';
 import {
   Measure,

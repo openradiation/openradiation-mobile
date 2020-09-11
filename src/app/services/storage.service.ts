@@ -14,7 +14,7 @@ import { Measure, MeasureSeries, Params } from '../states/measures/measure';
 import { InitMeasures } from '../states/measures/measures.action';
 import { MeasuresStateModel } from '../states/measures/measures.state';
 import { PositionService } from '../states/measures/position.service';
-import { InitUser, SetLanguage } from '../states/user/user.action';
+import { EnableNotifications, InitUser, SetLanguage } from '../states/user/user.action';
 import { UserService } from '../states/user/user.service';
 import { UserStateModel } from '../states/user/user.state';
 
@@ -56,6 +56,13 @@ export class StorageService {
     )
       .pipe(
         concatMap(() => this.store.dispatch(new SetLanguage())),
+        concatMap(() => {
+          const { notifications } = this.store.snapshot().user;
+
+          return notifications || notifications === undefined
+            ? this.store.dispatch(new EnableNotifications())
+            : of(null);
+        }),
         concatMap(() =>
           forkJoin(this.getMeasures(), this.getParams(), this.getRecentTags(), this.getCurrentSeries()).pipe(
             concatMap(([measures, params, recentTags, currentSeries]) => {
