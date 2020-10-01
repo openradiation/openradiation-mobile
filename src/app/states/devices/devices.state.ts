@@ -2,7 +2,7 @@ import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
 import { concatMap, map, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { Form } from '../../app.component';
+import { Form } from '../formModel';
 import { AbstractDevice } from './abstract-device';
 import { AbstractBLEDevice } from './ble/abstract-ble-device';
 import { BLEDevicesService } from './ble/ble-devices.service';

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { NavigationService } from '../../../../services/navigation.service';
 import { DisableExpertMode, EnableExpertMode } from '../../../../states/measures/measures.action';
 import { MeasuresState } from '../../../../states/measures/measures.state';
-import { LogOut, SetLanguage } from '../../../../states/user/user.action';
+import { DisableNotifications, EnableNotifications, LogOut, SetLanguage } from '../../../../states/user/user.action';
 import { UserState } from '../../../../states/user/user.state';
 
 @Component({
@@ -22,6 +22,9 @@ export class SettingsPage {
   @Select(UserState.language)
   language$: Observable<string | undefined>;
 
+  @Select(UserState.notifications)
+  notifications$: Observable<boolean | undefined>;
+
   constructor(private navigationService: NavigationService, private store: Store) {}
 
   toggleExpertMode(enable: boolean) {
@@ -29,6 +32,14 @@ export class SettingsPage {
       this.store.dispatch(new EnableExpertMode());
     } else {
       this.store.dispatch(new DisableExpertMode());
+    }
+  }
+
+  toggleNotifications(enable: boolean) {
+    if (enable) {
+      this.store.dispatch(new EnableNotifications());
+    } else {
+      this.store.dispatch(new DisableNotifications());
     }
   }
 

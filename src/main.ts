@@ -11,3 +11,5 @@ if (environment.production) {
 platformBrowserDynamic()
   .bootstrapModule(AppModule)
   .catch(err => console.log(err));
+
+window.open = (cordova as any).InAppBrowser.open;

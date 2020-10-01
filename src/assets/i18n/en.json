@@ -238,6 +238,13 @@
     "STOP": "You can stop the measurements at any time.",
     "TITLE": "Measurement series"
   },
+  "NOTIFICATIONS": {
+    "ALERT": {
+      "MESSAGE": "If you want to allow notifications, you need to manually accept them in settings.",
+      "TITLE": "Notifications permission denied"
+    },
+    "TITLE": "Notifications"
+  },
   "POSITION": {
     "BACKGROUND": {
       "TEXT": "Measurements location tracking",

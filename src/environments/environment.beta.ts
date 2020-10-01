@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  APP_NAME_VERSION: 'OpenRadiation app 2.3.3 beta',
+  APP_NAME_VERSION: 'OpenRadiation app 2.3.4 beta',
   API_KEY: '50adef3bdec466edc25f40c8fedccbce',
   API_URI: 'https://submit.open-radiation.net/measurements',
   IN_APP_BROWSER_URI: {

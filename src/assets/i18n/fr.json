@@ -202,19 +202,19 @@
     }
   },
   "MEASURE_MANUAL": {
-    "ALERT": "Vous devez vous identifier pour pouvoir saisir manuellemment une mesure.",
+    "ALERT": "Vous devez vous identifier pour pouvoir saisir manuellement une mesure.",
     "TITLE": "Saisie manuelle"
   },
   "MEASURE_SERIES": {
     "ABORTED_SERIES": {
-      "DELETE_SERIES": "Supprimer la serie",
+      "DELETE_SERIES": "Supprimer la série",
       "GO_TO_REPORT": "Accéder aux mesures",
       "MESSAGE": "Un problème a eu lieu sur la série de mesures en cours, celle-ci a malheureusement été interrompue. Vous pouvez cependant accéder aux mesures qui ont été réalisées avant l’interruption",
-      "TITLE": "Serie interrompue"
+      "TITLE": "Série interrompue"
     },
     "ALERT_LOG_IN": "Vous devez vous identifier pour pouvoir commencer une série de mesure.",
     "ALERT_SENSOR": "Vous devez connecter un capteur pour pouvoir commencer une série de mesure.",
-    "HITS_NUMBER": "Nb coups minimun",
+    "HITS_NUMBER": "Nb coups minimum",
     "LAST_MEASURE_VALUE": "Dernière valeur mesurée : {{lastMeasure}}",
     "MEASURES_DURATION": "Durée minimale",
     "MEASURE_LIMIT": "Chaque mesure se terminera automatiquement après",
@@ -237,6 +237,13 @@
     "SERIES_LIMIT": "La mesure suivante démarrera automatiquement, pendant une durée maximale de",
     "STOP": "Vous pourrez arrêter les mesures à tout moment.",
     "TITLE": "Série de mesures"
+  },
+  "NOTIFICATIONS": {
+    "ALERT": {
+      "MESSAGE": "Si vous voulez accepter les notifications, vous devez les activer manuellement dans les paramètres.",
+      "TITLE": "Permission des notifications refusée"
+    },
+    "TITLE": "Notifications"
   },
   "POSITION": {
     "BACKGROUND": {
