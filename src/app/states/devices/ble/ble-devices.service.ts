@@ -22,7 +22,13 @@ import { AbstractBLEDevice, RawBLEDevice } from './abstract-ble-device';
   providedIn: 'root'
 })
 export class BLEDevicesService {
-  private devices = [DeviceType.OGKit, DeviceType.AtomTag, DeviceType.SafeCast, DeviceType.Rium2BLE];
+  private devices = [
+    DeviceType.OGKit,
+    DeviceType.OGKit2,
+    DeviceType.AtomTag,
+    DeviceType.SafeCast,
+    DeviceType.Rium2BLE
+  ];
 
   private currentAlert?: any;
   private scanDuration = 3;

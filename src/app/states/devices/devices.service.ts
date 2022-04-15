@@ -6,6 +6,7 @@ import { AbstractDevice, DeviceType, RawDevice } from './abstract-device';
 import { AbstractDeviceService } from './abstract-device.service';
 import { DeviceAtomTagService } from './ble/device-atom-tag.service';
 import { DeviceOGKitService } from './ble/device-og-kit.service';
+import { DeviceOGKit2Service } from './ble/device-og-kit-2.service';
 import { DeviceRium2BLEService } from './ble/device-rium-2-ble.service';
 import { DeviceSafeCastService } from './ble/device-safe-cast.service';
 import { DeviceMockService } from './device-mock.service';

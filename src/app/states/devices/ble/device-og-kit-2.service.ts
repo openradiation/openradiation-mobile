@@ -8,27 +8,27 @@ import { Step } from '../../measures/measure';
 import { ApparatusSensorType } from '../abstract-device';
 import { RawBLEDevice } from './abstract-ble-device';
 import { AbstractBLEDeviceService } from './abstract-ble-device.service';
-import { DeviceOGKit, DeviceOgKitType } from './device-og-kit';
+import { DeviceOGKit2, DeviceOGKit2Type } from './device-og-kit-2';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
+export class DeviceOGKit2Service extends AbstractBLEDeviceService<DeviceOGKit2> {
   protected calibrationFunctions = {
     planeMode: {
-      0: '0.000001 * (cps - 0.14) ^ 3 + 0.0025 * (cps - 0.14) ^ 2 + 0.39 * (cps - 0.14)',
+      0: '((cps - 0.1) / 1.7209) / 1.25',
       1.83: 'cps * 0.96'
     },
     groundLevel: {
-      0: '0.000001 * (cps - 0.14) ^ 3 + 0.0025 * (cps - 0.14) ^ 2 + 0.39 * (cps - 0.14)'
+      0: '((cps - 0.1) / 1.7209) / 1.25'
     }
   };
 
-  //RF-Duino config
-  protected service = '2220';
-  protected receiveCharacteristic = '2221';
-  private sendCharacteristic = '2222';
-
+  //ADAFruit Feather
+  protected service = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
+  protected receiveCharacteristic = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
+  private sendCharacteristic = 'beb5483f-36e1-4688-b7f5-ea07361b26a8';
+  
   private SEND_GET_INFO = 0x12;
   private RECEIVE_SENSOR_TYPE = 3;
   private RECEIVE_TUBE_TYPE = 16;
@@ -66,12 +66,12 @@ export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
     super(store, ble);
   }
 
-  getDeviceInfo(device: DeviceOGKit): Observable<Partial<DeviceOGKit>> {
+  getDeviceInfo(device: DeviceOGKit2): Observable<Partial<DeviceOGKit2>> {
     const startReceiveData = this.startReceiveData(device).pipe(shareReplay());
     startReceiveData.subscribe();
     this.sendData(device, [this.SEND_GET_INFO]);
     return startReceiveData.pipe(
-      scan((update: Partial<DeviceOGKit>, buffer: ArrayBuffer) => {
+      scan((update: Partial<DeviceOGKit2>, buffer: ArrayBuffer) => {
         const array = new Uint8Array(buffer);
         switch (array[0]) {
           case this.RECEIVE_SENSOR_TYPE:
@@ -90,7 +90,7 @@ export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
     );
   }
 
-  saveDeviceParams(device: DeviceOGKit): Observable<any> {
+  saveDeviceParams(device: DeviceOGKit2): Observable<any> {
     return fromPromise(
       this.sendData(device, [this.SEND_SET_VISUAL_HIT, device.params.visualHits ? 0x00 : 0x01]).then(() =>
         this.sendData(device, [this.SEND_SET_AUDIO_HIT, device.params.audioHits ? 0x00 : 0x01])
@@ -98,7 +98,7 @@ export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
     );
   }
 
-  startMeasureScan(device: DeviceOGKit, stopSignal: Observable<any>): Observable<Step> {
+  startMeasureScan(device: DeviceOGKit2, stopSignal: Observable<any>): Observable<Step> {
     this.setTubeVoltageOn(device);
     stopSignal.subscribe(() => this.stopReceiveData(device));
     return this.startReceiveData(device).pipe(
@@ -111,7 +111,7 @@ export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
     );
   }
 
-  private setTubeVoltageOn(device: DeviceOGKit) {
+  private setTubeVoltageOn(device: DeviceOGKit2) {
     if (device.apparatusTubeType) {
       this.sendData(device, [
         this.SEND_SET_VOLTAGE,
@@ -120,7 +120,7 @@ export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
     }
   }
 
-  private sendData(device: DeviceOGKit, data: number[]): Promise<any> {
+  private sendData(device: DeviceOGKit2, data: number[]): Promise<any> {
     return this.ble.write(device.sensorUUID, this.service, this.sendCharacteristic, <ArrayBuffer>(
       new Uint8Array(data).buffer
     ));
@@ -148,12 +148,11 @@ export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
     }
   }
 
-  buildDevice(rawBLEDevice: RawBLEDevice): DeviceOGKit | null {
+  buildDevice(rawBLEDevice: RawBLEDevice): DeviceOGKit2 | null {
     if (
-      rawBLEDevice.name.toUpperCase().startsWith(DeviceOgKitType.OG) ||
-      rawBLEDevice.name.toUpperCase().includes(DeviceOgKitType.OPENG)
+      rawBLEDevice.name.toUpperCase().includes(DeviceOGKit2Type.OPENG)
     ) {
-      return new DeviceOGKit(rawBLEDevice);
+      return new DeviceOGKit2(rawBLEDevice);
     }
     return null;
   }

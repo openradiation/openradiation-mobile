@@ -3,13 +3,12 @@ import { DeviceType } from '../abstract-device';
 import { DeviceParams, DeviceParamsModel, DeviceParamType } from '../device-params';
 import { AbstractBLEDevice, RawBLEDevice } from './abstract-ble-device';
 
-export enum DeviceOgKitType {
-  OG = 'OG',
-  OPENG = 'OPENGKIT71'
+export enum DeviceOGKit2Type {
+  OPENG = 'OPENGKIT72'
 }
 
-export class DeviceOGKit extends AbstractBLEDevice {
-  readonly deviceType = DeviceType.OGKit;
+export class DeviceOGKit2 extends AbstractBLEDevice {
+  readonly deviceType = DeviceType.OGKit2;
   hitsPeriod = 1000;
 
   params: DeviceParams = {
