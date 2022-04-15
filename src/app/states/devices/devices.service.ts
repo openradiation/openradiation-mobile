@@ -28,6 +28,7 @@ export class DevicesService {
     private deviceMockService: DeviceMockService,
     // BLE devices
     private deviceOGKitService: DeviceOGKitService,
+    private deviceOGKit2Service: DeviceOGKit2Service,
     private deviceAtomTagService: DeviceAtomTagService,
     private deviceSafeCastService: DeviceSafeCastService,
     private deviceRium2BLEService: DeviceRium2BLEService,
@@ -40,6 +41,7 @@ export class DevicesService {
       [DeviceType.Mock]: this.deviceMockService,
       // BLE devices
       [DeviceType.OGKit]: this.deviceOGKitService,
+      [DeviceType.OGKit2]: this.deviceOGKit2Service,
       [DeviceType.AtomTag]: this.deviceAtomTagService,
       [DeviceType.SafeCast]: this.deviceSafeCastService,
       [DeviceType.Rium2BLE]: this.deviceRium2BLEService,
