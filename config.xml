@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="2030400" id="org.openradiation" ios-CFBundleVersion="2.3.4.0" version="2.3.4" xmlns="http://www.w3.org/ns/widgets">
+<widget android-versionCode="2030500" id="org.openradiation" ios-CFBundleVersion="2.3.5.0" version="2.3.5" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android">
     <name>OpenRadiation</name>
     <description>Les citoyens mesurent la radioactivité.</description>
     <author email="contact@openradiation.org" href="https://www.openradiation.org/">OpenRadiation</author>
@@ -42,6 +42,33 @@
         <splash density="port-xhdpi" src="resources/android/splash/drawable-port-xhdpi-screen.png" />
         <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
+        <preference name="android-targetSdkVersion" value="33" />
+        <preference name="android:exported" value="true" />
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/uses-permission" xmlns:android="http://schemas.android.com/apk/res/android">
+            <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+            <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+        </edit-config>
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application/activity">
+            <activity android:exported="true" />
+        </edit-config>
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application/activity[@android:name='com.gae.scaffolder.plugin.FCMPluginActivity']">
+            <activity android:exported="true" />
+        </edit-config>
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application/service">
+            <service android:exported="true" />
+        </edit-config>
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application/service[@android:name='com.marianhello.bgloc.sync.AuthenticatorService']">
+            <service android:exported="true" />
+        </edit-config>
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application/receiver">
+            <receiver android:exported="true" />
+        </edit-config>
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application/provider">
+            <provider android:exported="true" />
+        </edit-config>
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application/provider[@android:name='nl.xservices.plugins.FileProvider']">
+            <provider android:exported="false" />
+        </edit-config>
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
@@ -89,8 +116,8 @@
     <plugin name="cordova-plugin-ionic-keyboard" spec="2.0.5" />
     <plugin name="cordova-plugin-ble-central" spec="1.2.2" />
     <plugin name="cordova-plugin-statusbar" spec="2.4.2" />
-    <plugin name="cordova.plugins.diagnostic" spec="4.0.12">
-        <variable name="ANDROID_SUPPORT_VERSION" value="26+" />
+    <plugin name="cordova.plugins.diagnostic" spec="7.1.2">
+        <variable name="ANDROID_SUPPORT_VERSION" value="33+" />
     </plugin>
     <plugin name="cordova-plugin-network-information" spec="2.0.1" />
     <plugin name="cordova-plugin-device" spec="2.0.2" />
@@ -109,4 +136,5 @@
     <engine name="android" spec="^8.1.0" />
     <engine name="ios" spec="^5.1.0" />
     <plugin name="cordova-plugin-fcm-with-dependecy-updated" spec="7.3.1" />
+    <plugin name="cordova-plugin-android-permissions" spec="1.1.5" />
 </widget>

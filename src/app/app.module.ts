@@ -27,6 +27,8 @@ import { MenuComponent } from './pages/menu/menu.component';
 import { DevicesState } from './states/devices/devices.state';
 import { MeasuresState } from './states/measures/measures.state';
 import { UserState } from './states/user/user.state';
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
+
 
 @NgModule({
   declarations: [AppComponent, MenuComponent],
@@ -65,7 +67,8 @@ import { UserState } from './states/user/user.state';
     SocialSharing,
     Camera,
     BLE,
-    FCM
+    FCM,
+    AndroidPermissions
   ],
   bootstrap: [AppComponent]
 })
