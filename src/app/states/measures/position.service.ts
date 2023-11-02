@@ -8,6 +8,7 @@ import { take } from 'rxjs/operators';
 import { AlertService } from '../../services/alert.service';
 import { PositionChanged } from './measures.action';
 import { MeasuresStateModel } from './measures.state';
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 
 /**
  * Constant from @mauron85/cordova-plugin-background-geolocation
@@ -25,7 +26,8 @@ export class PositionService {
     private platform: Platform,
     private store: Store,
     private alertService: AlertService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private androidPermissions: AndroidPermissions
   ) {}
 
   init() {
@@ -87,6 +89,37 @@ export class PositionService {
       this.currentAlert.dismiss();
       this.currentAlert = undefined;
     }
+
+    this.androidPermissions.requestPermissions(["android.permission.FOREGROUND_SERVICE"]).then(
+      success => {
+        this.androidPermissions.requestPermissions(["android.permission.ACCESS_BACKGROUND_LOCATION"]).then(
+          success => {    
+            this.androidPermissions.requestPermissions(["android.permission.ACTIVITY_RECOGNITION"]).then(
+              success => {        
+                this.androidPermissions.requestPermissions(["android.permission.ACCESS_FINE_LOCATION"]).then(
+                  success => {            
+                    this.androidPermissions.requestPermissions(["android.permission.ACCESS_COARSE_LOCATION"]).then(
+                      success => {                
+                        this.androidPermissions.requestPermissions(["android.permission.READ_EXTERNAL_STORAGE"]).then(
+                          success => {
+
+                            //this.onGPSDeniedAlways();
+                            this.watchGPSActivation();
+
+                        }, err => {console.error("openradiation : ERREUR READ_EXTERNAL_STORAGE");}
+                        );  
+                      }, err => {console.error("openradiation : ERREUR ACCESS_COARSE_LOCATION");}
+                      );  
+                  }, err => {console.error("openradiation : ERREUR ACCESS_FINE_LOCATION");}
+                  );  
+              }, err => {console.error("openradiation : ERREUR ACTIVITY_RECOGNITION");}
+              );            
+          }, err => {console.error("openradiation : ERREUR ACCESS_BACKGROUND_LOCATION");}
+          );
+      }, err => {console.error("openradiation : ERREUR FOREGROUND_SERVICE");}
+      );
+
+    /*
     this.diagnostic
       .getLocationAuthorizationStatus()
       .then(status =>
@@ -116,6 +149,8 @@ export class PositionService {
             this.requestAuthorization();
         }
       });
+
+      */
   }
 
   private onGPSDeniedAlways() {
