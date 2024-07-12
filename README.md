@@ -100,3 +100,7 @@ Don't forget to increase the app version number if you want to upload your build
 5. wait for the build to be uploaded and ready to use for test (you will receive an email when it's ready)
 6. go to [App Store Connect](https://appstoreconnect.apple.com) and select your app
 7. follow the [official guide](https://help.apple.com/app-store-connect/) to manage both beta and prod builds
+
+## Development considerations
+
+`npm run check-outdated` allows no make sure the project does not reference outdated dependencies
