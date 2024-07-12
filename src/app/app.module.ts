@@ -29,45 +29,44 @@ import { MeasuresState } from './states/measures/measures.state';
 import { UserState } from './states/user/user.state';
 
 @NgModule({
-  declarations: [AppComponent, MenuComponent],
-  entryComponents: [],
-  imports: [
-    BrowserModule,
-    IonicModule.forRoot(),
-    AppRoutingModule,
-    IonicStorageModule.forRoot({
-      name: 'ord-db',
-      driverOrder: ['sqlite']
-    }),
-    NgxsModule.forRoot([DevicesState, MeasuresState, UserState]),
-    NgxsFormPluginModule.forRoot(),
-    NgxsLoggerPluginModule.forRoot({
-      disabled: environment.production
-    }),
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
-      }
-    }),
-    HttpClientModule
-  ],
-  providers: [
-    StatusBar,
-    SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    Diagnostic,
-    Network,
-    Device,
-    ScreenOrientation,
-    DatePipe,
-    SocialSharing,
-    Camera,
-    BLE,
-    FCM
-  ],
-  bootstrap: [AppComponent]
+    declarations: [AppComponent, MenuComponent],
+    imports: [
+        BrowserModule,
+        IonicModule.forRoot(),
+        AppRoutingModule,
+        IonicStorageModule.forRoot({
+            name: 'ord-db',
+            driverOrder: ['sqlite']
+        }),
+        NgxsModule.forRoot([DevicesState, MeasuresState, UserState]),
+        NgxsFormPluginModule.forRoot(),
+        NgxsLoggerPluginModule.forRoot({
+            disabled: environment.production
+        }),
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient]
+            }
+        }),
+        HttpClientModule
+    ],
+    providers: [
+        StatusBar,
+        SplashScreen,
+        { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+        Diagnostic,
+        Network,
+        Device,
+        ScreenOrientation,
+        DatePipe,
+        SocialSharing,
+        Camera,
+        BLE,
+        FCM
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule {}
 
