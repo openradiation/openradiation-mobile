@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
@@ -25,7 +25,7 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
   @Select(MeasuresState.planeMode)
   planeMode$: Observable<boolean>;
 
-  measureSeriesParamsForm?: FormGroup;
+  measureSeriesParamsForm?: UntypedFormGroup;
   url = '/measure/series';
   measureSeriesParamsSelected = MeasureSeriesParamsSelected;
 
@@ -54,7 +54,7 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
     private store: Store,
     private navigationService: NavigationService,
     private actions$: Actions,
-    private formBuilder: FormBuilder
+    private formBuilder: UntypedFormBuilder
   ) {
     super(router);
   }

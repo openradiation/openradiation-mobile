@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { AutoUnsubscribePage } from '../../../../components/auto-unsubscribe/auto-unsubscribe.page';
@@ -18,14 +18,14 @@ export class DeviceParamPage extends AutoUnsubscribePage {
   editedDevice: AbstractDevice | undefined;
 
   deviceParamType = DeviceParamType;
-  editedDeviceForm: FormGroup;
+  editedDeviceForm: UntypedFormGroup;
   paramsModel: [string, DeviceParamModel][] = [];
 
   url = '/tabs/settings/device-param';
 
   constructor(
     protected router: Router,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private store: Store,
     private navigationService: NavigationService
   ) {

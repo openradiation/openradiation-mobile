@@ -1,4 +1,4 @@
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
 import { Platform } from '@ionic/angular';
@@ -25,7 +25,7 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
   @Select(MeasuresState.recentTags)
   recentTags$: Observable<string[]>;
 
-  measureReportForm?: FormGroup;
+  measureReportForm?: UntypedFormGroup;
   reportScan = true;
   positionChangeSpeedOverLimit = false;
   positionChangeAltitudeOverLimit = false;

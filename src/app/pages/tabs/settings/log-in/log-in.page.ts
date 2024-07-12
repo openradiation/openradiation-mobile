@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
@@ -28,7 +28,7 @@ export class LogInPage extends AutoUnsubscribePage {
   @Select(DevicesState.connectedDevice)
   connectedDevice$: Observable<AbstractDevice | undefined>;
 
-  loginForm: FormGroup;
+  loginForm: UntypedFormGroup;
   connecting = false;
   redirectAfterLogin: RedirectAfterLogin;
 
@@ -39,7 +39,7 @@ export class LogInPage extends AutoUnsubscribePage {
     protected router: Router,
     private navigationService: NavigationService,
     private store: Store,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private toastController: ToastController,
     private actions$: Actions,
     private translateService: TranslateService

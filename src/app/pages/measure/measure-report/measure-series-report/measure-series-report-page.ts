@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
@@ -38,7 +38,7 @@ export class MeasureSeriesReportPage extends AbstractMeasureReportPage<MeasureSe
     protected navigationService: NavigationService,
     protected actions$: Actions,
     protected platform: Platform,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private alertService: AlertService,
     private translateService: TranslateService
   ) {
