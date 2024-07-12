@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 // TODO Remove this abstract class when Ionic issues with lifecycle events are fixed.
+// TODO: Add Angular decorator.
 export abstract class AutoUnsubscribePage implements OnDestroy {
   protected subscriptions: Subscription[] = [];
   private focused = false;
