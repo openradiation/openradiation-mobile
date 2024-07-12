@@ -13,7 +13,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: './home/home.module#HomePageModule'
+            loadChildren: () => import('./home/home.module').then(m => m.HomePageModule)
           }
         ]
       },
@@ -22,7 +22,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: './history/history.module#HistoryPageModule'
+            loadChildren: () => import('./history/history.module').then(m => m.HistoryPageModule)
           }
         ]
       },
@@ -31,27 +31,27 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: './settings/settings/settings.module#SettingsPageModule'
+            loadChildren: () => import('./settings/settings/settings.module').then(m => m.SettingsPageModule)
           },
           {
             path: 'devices',
-            loadChildren: './settings/devices/devices.module#DevicesPageModule'
+            loadChildren: () => import('./settings/devices/devices.module').then(m => m.DevicesPageModule)
           },
           {
             path: 'device-param',
-            loadChildren: './settings/device-param/device-param.module#DeviceParamPageModule'
+            loadChildren: () => import('./settings/device-param/device-param.module').then(m => m.DeviceParamPageModule)
           },
           {
             path: 'measures-param',
-            loadChildren: './settings/measures-param/measures-param.module#MeasuresParamPageModule'
+            loadChildren: () => import('./settings/measures-param/measures-param.module').then(m => m.MeasuresParamPageModule)
           },
           {
             path: 'plane-mode',
-            loadChildren: './settings/plane-mode/plane-mode.module#PlaneModePageModule'
+            loadChildren: () => import('./settings/plane-mode/plane-mode.module').then(m => m.PlaneModePageModule)
           },
           {
             path: 'log-in',
-            loadChildren: './settings/log-in/log-in.module#LogInPageModule'
+            loadChildren: () => import('./settings/log-in/log-in.module').then(m => m.LogInPageModule)
           }
         ]
       },
@@ -60,7 +60,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: './map/map.module#MapPageModule'
+            loadChildren: () => import('./map/map.module').then(m => m.MapPageModule)
           }
         ]
       },
@@ -73,11 +73,11 @@ const routes: Routes = [
           },
           {
             path: 'legal-notice',
-            loadChildren: './legal-notice/legal-notice.module#LegalNoticePageModule'
+            loadChildren: () => import('./legal-notice/legal-notice.module').then(m => m.LegalNoticePageModule)
           },
           {
             path: 'about',
-            loadChildren: './about/about.module#AboutPageModule'
+            loadChildren: () => import('./about/about.module').then(m => m.AboutPageModule)
           }
         ]
       }
