@@ -4,8 +4,7 @@ import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, ofActionSuccessful, Store } from '@ngxs/store';
-import { merge, Observable, timer } from 'rxjs';
-import { fromPromise } from 'rxjs/internal-compatibility';
+import { merge, Observable, timer, from } from 'rxjs';
 import { buffer, map, scan, skip, switchMap, takeUntil, tap, throttleTime } from 'rxjs/operators';
 import { AlertService } from '../../../services/alert.service';
 import { AbstractDevice, DeviceType } from '../abstract-device';
@@ -53,7 +52,7 @@ export class BLEDevicesService {
   }
 
   startDiscoverDevices(): Observable<any> {
-    return fromPromise(
+    return from(
       this.ble
         .isEnabled()
         .catch(err => {
@@ -123,7 +122,7 @@ export class BLEDevicesService {
   private onBLEError() {
     this.diagnostic.registerBluetoothStateChangeHandler(() => {
       this.store.dispatch(new StartDiscoverBLEDevices()).subscribe();
-      this.diagnostic.registerBluetoothStateChangeHandler(() => {});
+      this.diagnostic.registerBluetoothStateChangeHandler(() => { });
     });
     this.alertService
       .show(

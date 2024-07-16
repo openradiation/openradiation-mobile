@@ -51,6 +51,10 @@
     "@ionic/core": "^8.2.5",
     "@ionic/storage": "^4.0.0",
     "@mauron85/cordova-plugin-background-geolocation": "^3.0.3",
+    "@ngx-translate/core": "^15.0.0",
+    "@ngx-translate/http-loader": "^8.0.0",
+    "@ngxs/form-plugin": "^18.0.0",
+    "@ngxs/store": "^18.0.0",
     "@types/uuid": "^3.4.3",
     "angular-plotly.js": "^5.2.2",
     "cordova-android": "^8.1.0",
@@ -81,6 +85,7 @@
     "ngx-mask": "^17.1.2",
     "plotly.js": "^2.33.0",
     "rxjs": "^7.4.3",
+    "rxjs-compat": "^6.6.7",
     "uuid": "^10.0.0",
     "zone.js": "~0.14.7"
   },

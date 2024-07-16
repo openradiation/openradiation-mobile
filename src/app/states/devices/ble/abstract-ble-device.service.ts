@@ -1,7 +1,6 @@
 import { BLE } from '@ionic-native/ble/ngx';
 import { Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { fromPromise } from 'rxjs/internal-compatibility';
+import { Observable, from } from 'rxjs';
 import { catchError, concatMap, shareReplay, take } from 'rxjs/operators';
 import { AbstractDeviceService } from '../abstract-device.service';
 import { DeviceConnectionLost } from '../devices.action';
@@ -27,7 +26,7 @@ export abstract class AbstractBLEDeviceService<T extends AbstractBLEDevice> exte
   }
 
   disconnectDevice(device: T): Observable<any> {
-    return fromPromise(this.ble.disconnect(device.sensorUUID));
+    return from(this.ble.disconnect(device.sensorUUID));
   }
 
   protected startReceiveData(device: T): Observable<any> {

@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BLE } from '@ionic-native/ble/ngx';
 import { Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { fromPromise } from 'rxjs/internal-compatibility';
+import { Observable, from } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Step } from '../../measures/measure';
 import { DeviceType } from '../abstract-device';
@@ -36,7 +35,7 @@ export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag
   }
 
   getDeviceInfo(device: DeviceAtomTag): Observable<Partial<DeviceAtomTag>> {
-    return fromPromise(this.ble.read(device.sensorUUID, this.firmwareService, this.firmwareCharacteristic)).pipe(
+    return from(this.ble.read(device.sensorUUID, this.firmwareService, this.firmwareCharacteristic)).pipe(
       map(buffer => {
         const firmwareVersion = this.textDecoder.decode(new Uint8Array(buffer));
         return {
@@ -58,7 +57,7 @@ export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag
     } else {
       command = this.sendSettingsCommand(device, 0x0a);
     }
-    return fromPromise(command);
+    return from(command);
   }
 
   private sendSettingsCommand(device: DeviceAtomTag, command: number, param?: number): Promise<any> {

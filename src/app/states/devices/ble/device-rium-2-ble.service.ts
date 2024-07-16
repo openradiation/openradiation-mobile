@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BLE } from '@ionic-native/ble/ngx';
 import { Store } from '@ngxs/store';
-import { forkJoin, Observable, of, zip } from 'rxjs';
-import { fromPromise } from 'rxjs/internal-compatibility';
+import { forkJoin, Observable, of, zip, from } from 'rxjs';
 import { catchError, map, take, tap } from 'rxjs/operators';
 import { Step } from '../../measures/measure';
 import { DeviceConnectionLost } from '../devices.action';
@@ -36,7 +35,7 @@ export class DeviceRium2BLEService extends AbstractBLEDeviceService<DeviceRium2B
 
   getDeviceInfo(device: DeviceRium2BLE): Observable<Partial<DeviceRium2BLE>> {
     return forkJoin(
-      fromPromise(this.ble.read(device.sensorUUID, this.service, this.idCharacteristic)),
+      from(this.ble.read(device.sensorUUID, this.service, this.idCharacteristic)),
       this.ble.startNotification(device.sensorUUID, this.service, this.batteryCharacteristic).pipe(
         take(1),
         tap(() => this.ble.stopNotification(device.sensorUUID, this.service, this.batteryCharacteristic))

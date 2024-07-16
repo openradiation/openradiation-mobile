@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BLE } from '@ionic-native/ble/ngx';
 import { Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { fromPromise } from 'rxjs/internal-compatibility';
+import { Observable, from } from 'rxjs';
 import { filter, map, scan, shareReplay, take, tap } from 'rxjs/operators';
 import { Step } from '../../measures/measure';
 import { ApparatusSensorType } from '../abstract-device';
@@ -28,7 +27,7 @@ export class DeviceOGKit2Service extends AbstractBLEDeviceService<DeviceOGKit2> 
   protected service = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
   protected receiveCharacteristic = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
   private sendCharacteristic = 'beb5483f-36e1-4688-b7f5-ea07361b26a8';
-  
+
   private SEND_GET_INFO = 0x12;
   private RECEIVE_SENSOR_TYPE = 3;
   private RECEIVE_TUBE_TYPE = 16;
@@ -91,7 +90,7 @@ export class DeviceOGKit2Service extends AbstractBLEDeviceService<DeviceOGKit2> 
   }
 
   saveDeviceParams(device: DeviceOGKit2): Observable<any> {
-    return fromPromise(
+    return from(
       this.sendData(device, [this.SEND_SET_VISUAL_HIT, device.params.visualHits ? 0x00 : 0x01]).then(() =>
         this.sendData(device, [this.SEND_SET_AUDIO_HIT, device.params.audioHits ? 0x00 : 0x01])
       )
