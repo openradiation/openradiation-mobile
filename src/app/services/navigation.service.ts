@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { NavigationEnd, Router, UrlTree } from '@angular/router';
 import { NavController, Platform } from '@ionic/angular';
-import { NavigationOptions } from '@ionic/angular/dist/providers/nav-controller';
+// Fixme Capacitor migration
+//import { NavigationOptions } from '@ionic/angular/dist/providers/nav-controller';
 import { filter } from 'rxjs/operators';
 
 // TODO Remove this service when https://github.com/ionic-team/ionic/issues/16340 is fixed
@@ -25,7 +26,7 @@ export class NavigationService {
     this.navController.navigateRoot(url);
   }
 
-  navigateForward(url: string | UrlTree | any[], options?: NavigationOptions) {
+  navigateForward(url: string | UrlTree | any[], options?: any) {
     this.navController.navigateForward(url, options);
   }
 
