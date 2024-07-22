@@ -13,7 +13,7 @@ import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-import { IonicStorageModule } from '@ionic/storage';
+import { IonicStorageModule } from '@ionic/storage-angular';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgxsFormPluginModule } from '@ngxs/form-plugin';
@@ -68,8 +68,8 @@ import { UserState } from './states/user/user.state';
     ],
     bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }
 
 export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http);
+    return new TranslateHttpLoader(http);
 }
