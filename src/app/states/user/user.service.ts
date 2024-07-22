@@ -53,7 +53,7 @@ export class UserService {
 
   getDefaultLanguage(): string {
     const userLang = this.translateService.getBrowserLang();
-    if (this.allowedLanguages.includes(userLang)) {
+    if (userLang && this.allowedLanguages.includes(userLang)) {
       return userLang;
     } else {
       return this.translateService.getDefaultLang();
