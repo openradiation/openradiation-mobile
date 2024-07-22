@@ -5,7 +5,7 @@ import { MeasureSeries } from '../../states/measures/measure';
 import Figure = Plotly.Figure;
 import { Select } from '@ngxs/store';
 import { PlotlyService } from 'angular-plotly.js';
-import { Plotly } from 'angular-plotly.js/src/app/shared/plotly.interface';
+import { Plotly } from 'angular-plotly.js/lib/plotly.interface';
 import * as PlotlyFR from 'plotly.js/lib/locales/fr.js';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -25,7 +25,9 @@ export class SeriesGraphComponent implements OnChanges {
   barPlot: Figure;
 
   constructor(private plotlyService: PlotlyService, private translateService: TranslateService) {
-    this.plotlyService.getPlotly().register(PlotlyFR);
+    this.plotlyService.getPlotly().then(plotlyInstance => {
+      plotlyInstance.register(PlotlyFR);
+    });
     this.language$.pipe(take(1)).subscribe(locale => {
       this.barPlot = {
         data: [],
@@ -96,9 +98,9 @@ export class SeriesGraphComponent implements OnChanges {
           range:
             currentSeries.measures.length > 0
               ? [
-                  new Date(currentSeries.measures[0].startTime),
-                  new Date(currentSeries.measures[currentSeries.measures.length - 1].endTime!)
-                ]
+                new Date(currentSeries.measures[0].startTime),
+                new Date(currentSeries.measures[currentSeries.measures.length - 1].endTime!)
+              ]
               : [new Date(), new Date(new Date().getTime() + 60000)]
         },
         yaxis: {
