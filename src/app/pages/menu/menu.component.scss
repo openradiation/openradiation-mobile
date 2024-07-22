@@ -1,7 +1,9 @@
-@import 'src/theme/variables.scss';
+@import 'theme/variables.scss';
+
 
 :host {
   height: 100%;
+
   ion-content {
     background: dimgray;
     --padding-top: 24px;

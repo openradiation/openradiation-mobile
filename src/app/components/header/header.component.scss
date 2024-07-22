@@ -1,4 +1,5 @@
-@import 'src/theme/variables.scss';
+@import 'theme/variables.scss';
+
 
 .keyboard-open :host {
   .container {
@@ -17,6 +18,7 @@
   flex-direction: column;
   align-items: center;
   position: relative;
+
   .logo {
     display: flex;
     align-items: center;
@@ -26,12 +28,14 @@
     opacity: 1;
     transition: height ease-in 100ms, opacity ease-in 100ms, padding-bottom ease-in 100ms;
     flex: none;
+
     img {
       height: 100%;
       width: 100%;
       object-fit: contain;
     }
   }
+
   .other-content {
     position: absolute;
     right: 0;
@@ -43,12 +47,14 @@
     align-items: center;
     justify-content: center;
   }
+
   .title {
     color: white;
     background-color: $third-color;
     position: relative;
     flex: none;
     width: 100%;
+
     .side-button {
       height: 100%;
       position: absolute;
@@ -56,16 +62,20 @@
       align-items: center;
       justify-content: center;
       top: 0;
+
       ion-button {
         height: 100%;
       }
+
       &.left {
         left: 0;
       }
+
       &.right {
         right: 0;
       }
     }
+
     .label {
       width: 100%;
       text-align: center;
@@ -73,6 +83,7 @@
       font-family: 'ARIALROUNDED', Arial, Helvetica, sans-serif;
     }
   }
+
   &::after {
     left: 0;
     bottom: -5px;

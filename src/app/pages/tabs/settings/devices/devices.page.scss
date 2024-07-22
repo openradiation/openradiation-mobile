@@ -1,4 +1,4 @@
-@import 'src/theme/variables';
+@import 'theme/variables.scss';
 
 ion-content {
   --padding-top: 10px;
@@ -12,7 +12,8 @@ ion-content {
   display: inline-block;
   vertical-align: bottom;
   animation: ellipsis steps(4, end) 2000ms infinite;
-  content: '\2026'; /* ascii code for the ellipsis character */
+  content: '\2026';
+  /* ascii code for the ellipsis character */
   width: 0;
 }
 
@@ -30,6 +31,7 @@ ion-item {
 .battery-icon {
   display: flex;
   align-items: center;
+
   ion-icon {
     margin-right: 4px;
   }
@@ -51,6 +53,7 @@ ion-item {
 .state {
   font-size: 16px;
   font-weight: 200;
+
   &.connected {
     font-weight: normal;
   }

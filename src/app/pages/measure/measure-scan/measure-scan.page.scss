@@ -1,4 +1,4 @@
-@import 'src/theme/variables';
+@import 'theme/variables.scss';
 
 .content {
   display: flex;
@@ -15,9 +15,11 @@
     width: 100%;
     align-items: center;
     justify-content: center;
+
     app-round-button {
       width: 50%;
     }
+
     .side-buttons {
       position: absolute;
       height: 100%;
@@ -25,10 +27,12 @@
       display: flex;
       align-items: center;
       pointer-events: none;
+
       ion-button {
         pointer-events: all;
         position: absolute;
         --border-radius: 10px;
+
         &.cancel {
           right: 70%;
         }
@@ -41,11 +45,13 @@
     padding-top: 5px;
     white-space: normal;
     text-align: center;
+
     .message-style {
       color: $base-color;
       font-size: 12px;
       font-style: italic;
     }
+
     .message-series {
       padding-left: 12px;
       padding-right: 12px;
@@ -66,41 +72,50 @@
     display: flex;
     width: 100%;
     padding-top: 5px;
+
     &.top {
       padding-bottom: 10px;
       padding-top: 5px;
     }
+
     .item {
       display: flex;
       flex-direction: column;
       align-items: center;
       flex: auto;
       padding: 20px 10px 10px 10px;
+
       .label {
         color: $base-color;
         font-size: 12px;
         font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
         margin-bottom: 4px;
       }
+
       .value {
         color: white;
         font-size: 30px;
         font-family: 'ARIALROUNDED', Arial, Helvetica, sans-serif;
       }
+
       &.temperature {
         position: relative;
         padding-right: 24px;
+
         .temperature-unit {
           font-size: 20px;
         }
+
         .icon {
           position: absolute;
           top: 20px;
           right: 10px;
         }
       }
+
       &.duration {
         position: relative;
+
         .icon {
           position: absolute;
           top: 6px;
@@ -110,10 +125,12 @@
           display: flex;
           align-items: center;
           justify-content: center;
+
           img {
             width: 100%;
             padding: 8px;
           }
+
           @media (min-width: 650px) {
             img {
               width: 55%;
@@ -123,12 +140,14 @@
       }
     }
   }
+
   .separator {
     margin: 10px 0 4px 0;
     border: 1px solid $forth-color;
     border-radius: 2px;
     flex: none;
   }
+
   .accuracy {
     margin: 10px 0 20px 0;
     width: 100%;
@@ -136,12 +155,14 @@
     position: relative;
     justify-content: center;
     align-items: center;
+
     .label {
       z-index: 1;
       color: white;
       font-size: 14px;
       font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
     }
+
     .accuracy-indicator {
       z-index: 0;
       position: absolute;
@@ -157,21 +178,26 @@
         &.start {
           background: black;
         }
+
         &.bad {
           background: #e70000;
         }
+
         &.medium {
           background: #ff7f00;
         }
+
         &.good {
           background: #ffce00;
         }
+
         &.accurate {
           background: #14c921;
         }
       }
     }
   }
+
   .radiation {
     background: $second-color;
     color: white;
@@ -184,29 +210,34 @@
     padding: 10px;
     position: relative;
     margin-top: 26px;
+
     .start {
       z-index: 1;
       font-size: 30px;
       font-family: 'ARIALROUNDED', Arial, Helvetica, sans-serif;
       text-align: center;
     }
+
     .label {
       z-index: 1;
       font-size: 12px;
       font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
       font-weight: 200;
     }
+
     .value {
       z-index: 1;
       margin: 4px;
       font-size: 50px;
       font-family: 'ARIALROUNDED', Arial, Helvetica, sans-serif;
     }
+
     .unit {
       z-index: 1;
       font-size: 12px;
       font-family: 'ARIALROUNDED', Arial, Helvetica, sans-serif;
     }
+
     .background {
       z-index: 0;
       position: absolute;
@@ -226,6 +257,7 @@
       from {
         transform: translateX(-100%);
       }
+
       to {
         transform: translateX(0);
       }

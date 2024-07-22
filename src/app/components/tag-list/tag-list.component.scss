@@ -1,4 +1,5 @@
-@import 'src/theme/variables';
+@import 'theme/variables.scss';
+
 :host {
   display: flex;
   align-items: center;
@@ -14,9 +15,11 @@
     color: $second-color;
     margin-bottom: 10px;
   }
+
   .tag-list {
     width: 100%;
     margin-left: -10px;
+
     ion-chip {
       --background: #{$second-color};
       color: white;
@@ -30,25 +33,30 @@
       opacity: 0.7;
     }
   }
+
   .add-tag {
     width: 100%;
     background: $forth-color;
     border-radius: 10px;
     margin-top: 10px;
+
     ion-item {
       color: $second-color;
       --border-color: transparent;
       --inner-padding-end: 4px;
+
       ion-button {
         color: $second-color;
       }
     }
+
     .separator {
       margin: -1px 15px 10px;
       border: 1px solid #3c1d7c;
       border-radius: 2px;
       opacity: 0.3;
     }
+
     .tag-list {
       padding: 0 12px 8px;
       display: flex;

@@ -91,6 +91,8 @@
     "zone.js": "~0.14.7"
   },
   "devDependencies": {
+    "node-sass": "^9.0.0",
+    "sass": "^1.77.8 ",
     "@biesbjerg/ngx-translate-extract-marker": "^1.0.0",
     "@angular-devkit/architect": "^0.1703.8",
     "@angular-devkit/build-angular": "^17.3.8",

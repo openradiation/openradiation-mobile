@@ -1,22 +1,27 @@
-@import 'src/theme/variables';
+@import 'theme/variables.scss';
 
 ion-content {
   --padding-top: 20px;
+
   .content {
     display: flex;
     flex-direction: column;
     align-items: center;
     height: 100%;
+
     .logo {
       width: 66%;
       margin-top: 20px;
+
       img {
         width: 100%;
       }
     }
+
     .button-component {
       width: 70%;
     }
+
     .subtitle {
       color: $third-color;
       font-size: 20px;
@@ -24,9 +29,11 @@ ion-content {
       font-weight: 200;
       margin: 10px;
     }
+
     app-gps-indicator {
       margin: 10px;
     }
+
     app-round-button {
       margin: auto 0;
       width: 70%;
