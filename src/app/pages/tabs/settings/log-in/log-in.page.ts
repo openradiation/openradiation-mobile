@@ -77,9 +77,12 @@ export class LogInPage extends AutoUnsubscribePage {
               this.toastController
                 .create({
                   message: this.translateService.instant('LOG_IN.WRONG_CREDENTIALS'),
-                  closeButtonText: this.translateService.instant('GENERAL.OK'),
                   duration: 5000,
-                  showCloseButton: true
+                  buttons: [{
+                    text: this.translateService.instant('GENERAL.OK'),
+                    role: 'cancel',
+                    handler: () => { }
+                  }]
                 })
                 .then(toast => toast.present());
               break;
@@ -87,9 +90,12 @@ export class LogInPage extends AutoUnsubscribePage {
               this.toastController
                 .create({
                   message: this.translateService.instant('GENERAL.CONNEXION_ERROR', { message: error.message }),
-                  closeButtonText: this.translateService.instant('GENERAL.OK'),
                   duration: 5000,
-                  showCloseButton: true
+                  buttons: [{
+                    text: this.translateService.instant('GENERAL.OK'),
+                    role: 'cancel',
+                    handler: () => { }
+                  }]
                 })
                 .then(toast => toast.present());
           }

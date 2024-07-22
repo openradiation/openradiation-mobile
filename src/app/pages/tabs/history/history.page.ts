@@ -50,9 +50,12 @@ export class HistoryPage extends AutoUnsubscribePage {
         this.toastController
           .create({
             message: this.translateService.instant('HISTORY.SEND_ERROR'),
-            showCloseButton: true,
             duration: 3000,
-            closeButtonText: this.translateService.instant('GENERAL.OK')
+            buttons: [{
+              text: this.translateService.instant('GENERAL.OK'),
+              role: 'cancel',
+              handler: () => { }
+            }]
           })
           .then(toast => toast.present());
       }),

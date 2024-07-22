@@ -56,9 +56,12 @@ export class DevicesService {
           message: communicationTimeout
             ? this.translateService.instant('SENSORS.CONNECTION_TIMEOUT')
             : this.translateService.instant('SENSORS.CONNECTION_LOST'),
-          showCloseButton: true,
           duration: communicationTimeout ? undefined : 3000,
-          closeButtonText: this.translateService.instant('GENERAL.OK')
+          buttons: [{
+            text: this.translateService.instant('GENERAL.OK'),
+            role: 'cancel',
+            handler: () => { }
+          }]
         })
         .then(toast => toast.present())
     );
