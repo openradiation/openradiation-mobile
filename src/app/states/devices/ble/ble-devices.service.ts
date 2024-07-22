@@ -83,7 +83,10 @@ export class BLEDevicesService {
     );
     merge(
       this.ble.scan([], this.scanDuration).pipe(
-        scan<RawBLEDevice>((devices, newDevice) => [...devices, newDevice], []),
+        scan<RawBLEDevice, RawBLEDevice[]>(
+          (devices: RawBLEDevice[], newDevice: RawBLEDevice) => [...devices, newDevice],
+          []
+        ),
         throttleTime(100)
       ),
       time.pipe(
