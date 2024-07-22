@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
+import { marker as _ } from '@biesbjerg/ngx-translate-extract-marker';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';

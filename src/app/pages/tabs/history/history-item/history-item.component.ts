@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
+import { marker as _ } from '@biesbjerg/ngx-translate-extract-marker';
 import { Measure, MeasureSeries, MeasureType } from '../../../../states/measures/measure';
 
 @Component({
@@ -31,9 +31,9 @@ export class HistoryItemComponent implements OnInit {
     other: <string>_('HISTORY.MEASURE_SERIES.PLURAL')
   };
 
-  constructor() {}
+  constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   showDetailClick() {
     this.showDetail.emit();

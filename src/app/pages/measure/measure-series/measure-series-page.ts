@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
+import { marker as _ } from '@biesbjerg/ngx-translate-extract-marker';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';

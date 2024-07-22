@@ -53,9 +53,9 @@
     "@ionic/storage-angular": "4.0.0",
     "@mauron85/cordova-plugin-background-geolocation": "^3.0.3",
     "@ngx-translate/core": "^15.0.0",
-    "@ngxs/logger-plugin": "^18.0.0",
     "@ngx-translate/http-loader": "^8.0.0",
     "@ngxs/form-plugin": "^18.0.0",
+    "@ngxs/logger-plugin": "^18.0.0",
     "@ngxs/store": "^18.0.0",
     "@types/uuid": "^3.4.3",
     "angular-plotly.js": "^5.2.2",
@@ -91,6 +91,7 @@
     "zone.js": "~0.14.7"
   },
   "devDependencies": {
+    "@biesbjerg/ngx-translate-extract-marker": "^1.0.0",
     "@angular-devkit/architect": "^0.1703.8",
     "@angular-devkit/build-angular": "^17.3.8",
     "@angular-devkit/core": "^17.3.8",
@@ -99,7 +100,6 @@
     "@angular/compiler": "^17.3.11",
     "@angular/compiler-cli": "^17.3.11",
     "@angular/language-service": "^17.3.11",
-    "@biesbjerg/ngx-translate-extract": "7.0.4",
     "@compodoc/compodoc": "^1.1.25",
     "@types/jasmine": "~5.1.2",
     "@types/node": "~20.14.10",

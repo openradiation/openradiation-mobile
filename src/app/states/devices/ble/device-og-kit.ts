@@ -1,4 +1,4 @@
-import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
+import { marker as _ } from '@biesbjerg/ngx-translate-extract-marker';
 import { DeviceType } from '../abstract-device';
 import { DeviceParams, DeviceParamsModel, DeviceParamType } from '../device-params';
 import { AbstractBLEDevice, RawBLEDevice } from './abstract-ble-device';

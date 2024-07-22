@@ -1,6 +1,6 @@
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
+import { marker as _ } from '@biesbjerg/ngx-translate-extract-marker';
 import { Platform } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
