@@ -1,4 +1,3 @@
-import { Device } from '@ionic-native/device/ngx';
 import { Location } from '@mauron85/cordova-plugin-background-geolocation';
 import { TranslateService } from '@ngx-translate/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
@@ -53,6 +52,7 @@ import {
 } from './measures.action';
 import { MeasuresService } from './measures.service';
 import { PositionService } from './position.service';
+import { Device, DeviceId, DeviceInfo } from "@capacitor/device";
 
 /**
  * Max duration between 2 measure steps before the device connection is considered as lost
@@ -90,15 +90,20 @@ export interface MeasuresStateModel {
   }
 })
 export class MeasuresState {
+  public static MISSING_STRING = "<Missing>"
+  deviceUUID: string = MeasuresState.MISSING_STRING
+  devicePlatform: string = MeasuresState.MISSING_STRING
+  deviceOsVersion: string = MeasuresState.MISSING_STRING
+  deviceModel: string = MeasuresState.MISSING_STRING
+
   constructor(
     private positionService: PositionService,
-    private device: Device,
     private measuresService: MeasuresService,
     private dateService: DateService,
     private alertService: AlertService,
     private translateService: TranslateService,
     private navigationService: NavigationService
-  ) {}
+  ) { }
 
   @Selector()
   static expertMode({ params }: MeasuresStateModel): boolean {
@@ -237,7 +242,8 @@ export class MeasuresState {
   }
 
   @Action(StartMeasure)
-  startMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, { device }: StartMeasure) {
+  async startMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, { device }: StartMeasure) {
+    await this.computeDeviceInfoIfMissing();
     const { params } = getState();
     const currentMeasure: Measure = {
       ...new Measure(
@@ -245,10 +251,10 @@ export class MeasuresState {
         device.apparatusVersion,
         device.apparatusSensorType,
         device.apparatusTubeType,
-        this.device.uuid,
-        this.device.platform,
-        this.device.version,
-        this.device.model
+        this.deviceUUID,
+        this.devicePlatform,
+        this.deviceOsVersion,
+        this.deviceModel
       ),
       measurementEnvironment: params.planeMode ? MeasureEnvironment.Plane : undefined
     };
@@ -258,7 +264,8 @@ export class MeasuresState {
   }
 
   @Action(StartManualMeasure)
-  startManualMeasure({ getState, patchState }: StateContext<MeasuresStateModel>) {
+  async startManualMeasure({ getState, patchState }: StateContext<MeasuresStateModel>) {
+    await this.computeDeviceInfoIfMissing();
     const { currentPosition, params } = getState();
     let currentMeasure: Measure = {
       ...new Measure(
@@ -266,10 +273,10 @@ export class MeasuresState {
         undefined,
         undefined,
         undefined,
-        this.device.uuid,
-        this.device.platform,
-        this.device.version,
-        this.device.model,
+        this.deviceUUID,
+        this.devicePlatform,
+        this.deviceOsVersion,
+        this.deviceModel,
         true
       ),
       startTime: Date.now(),
@@ -497,11 +504,12 @@ export class MeasuresState {
   }
 
   @Action(StartNextMeasureSeries)
-  startNextMeasureSeries(
+  async startNextMeasureSeries(
     { getState, patchState, dispatch }: StateContext<MeasuresStateModel>,
     { device }: StartNextMeasureSeries
   ) {
     const { currentMeasure, currentSeries, currentPosition } = getState();
+    await this.computeDeviceInfoIfMissing();
     if (currentMeasure && currentSeries) {
       if (currentMeasure.endTime! - currentSeries.startTime > currentSeries.params.seriesDurationLimit) {
         return dispatch(new StopMeasureScan(device));
@@ -513,10 +521,10 @@ export class MeasuresState {
             currentMeasure.apparatusVersion,
             currentMeasure.apparatusSensorType,
             currentMeasure.apparatusTubeType,
-            this.device.uuid,
-            this.device.platform,
-            this.device.version,
-            this.device.model
+            this.deviceUUID,
+            this.devicePlatform,
+            this.deviceOsVersion,
+            this.deviceModel,
           ),
           currentPosition
         );
@@ -589,11 +597,11 @@ export class MeasuresState {
         hitsNumberAverage:
           currentSeries.measures.length > 0 && currentSeries.measures[0].hitsNumber !== undefined
             ? Number(
-                (
-                  currentSeries.measures.reduce((acc, measure) => acc + measure.hitsNumber!, 0) /
-                  currentSeries.measures.length
-                ).toFixed(1)
-              )
+              (
+                currentSeries.measures.reduce((acc, measure) => acc + measure.hitsNumber!, 0) /
+                currentSeries.measures.length
+              ).toFixed(1)
+            )
             : undefined,
         valueAverage: Number(
           (
@@ -755,5 +763,17 @@ export class MeasuresState {
       recentTags:
         index === -1 ? [tag, ...recentTags] : [tag, ...recentTags.slice(0, index), ...recentTags.slice(index + 1)]
     });
+  }
+
+  async computeDeviceInfoIfMissing() {
+    if (this.deviceUUID == MeasuresState.MISSING_STRING) {
+      this.deviceUUID = (await Device.getId()).identifier;
+    }
+    if (this.devicePlatform == MeasuresState.MISSING_STRING) {
+      let deviceInfo = await Device.getInfo();
+      this.devicePlatform = deviceInfo.platform
+      this.deviceModel = deviceInfo.model
+      this.deviceOsVersion = deviceInfo.osVersion
+    }
   }
 }

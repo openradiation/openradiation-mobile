@@ -4,8 +4,6 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { BLE } from '@ionic-native/ble/ngx';
-import { Camera } from '@capacitor/camera';
-import { Device } from '@ionic-native/device/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
@@ -58,7 +56,6 @@ import { UserState } from './states/user/user.state';
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
         Diagnostic,
         Network,
-        Device,
         ScreenOrientation,
         DatePipe,
         SocialSharing,
