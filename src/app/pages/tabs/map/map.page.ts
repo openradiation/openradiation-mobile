@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { Network } from '@ionic-native/network/ngx';
 import { Platform } from '@ionic/angular';
 import { Location } from '@mauron85/cordova-plugin-background-geolocation';
 import { Select } from '@ngxs/store';
@@ -11,7 +10,7 @@ import { environment } from '../../../../environments/environment';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { MeasuresState } from '../../../states/measures/measures.state';
 import { UserState } from '../../../states/user/user.state';
-
+import { Network, ConnectionType } from '@capacitor/network';
 /**
  * Constants from cordova-plugin-network-information to get network types
  */
@@ -41,27 +40,23 @@ export class MapPage extends AutoUnsubscribePage {
     protected router: Router,
     private domSanitizer: DomSanitizer,
     private platform: Platform,
-    private network: Network,
     private changeDetectorRef: ChangeDetectorRef
   ) {
     super(router);
   }
 
-  pageEnter() {
+  async pageEnter() {
     super.pageEnter();
-    if (this.platform.is('cordova')) {
-      if (this.network.type === Connection.NONE || this.network.type === Connection.UNKNOWN) {
-        this.connectionAvailable = false;
-        this.network
-          .onConnect()
-          .pipe(take(1))
-          .subscribe(() => {
-            this.connectionAvailable = true;
-            this.loadMap();
-          });
-      } else {
-        this.loadMap();
-      }
+    // FIXME was only done for 'cordova' platform
+    let networkStatus = await Network.getStatus()
+    if (!networkStatus.connected) {
+      this.connectionAvailable = false;
+      Network.addListener('networkStatusChange', newNetworkStatus => {
+        if (newNetworkStatus.connected) {
+          this.connectionAvailable = true;
+          this.loadMap();
+        }
+      })
     } else {
       this.loadMap();
     }
@@ -70,9 +65,8 @@ export class MapPage extends AutoUnsubscribePage {
   private loadMap() {
     this.language$.subscribe(language => {
       this.isLoading = true;
-      let url = `${environment.IN_APP_BROWSER_URI.base}${
-        language === 'fr' || language === 'en' ? '/' + language : ''
-      }/${environment.IN_APP_BROWSER_URI.suffix}`;
+      let url = `${environment.IN_APP_BROWSER_URI.base}${language === 'fr' || language === 'en' ? '/' + language : ''
+        }/${environment.IN_APP_BROWSER_URI.suffix}`;
       this.iframeURL = this.domSanitizer.bypassSecurityTrustResourceUrl(url);
       combineLatest(this.currentPosition$, this.planeMode$)
         .pipe(take(1))

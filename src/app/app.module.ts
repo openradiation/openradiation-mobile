@@ -5,7 +5,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { BLE } from '@ionic-native/ble/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
-import { Network } from '@ionic-native/network/ngx';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -55,7 +54,6 @@ import { UserState } from './states/user/user.state';
         SplashScreen,
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
         Diagnostic,
-        Network,
         ScreenOrientation,
         DatePipe,
         SocialSharing,
