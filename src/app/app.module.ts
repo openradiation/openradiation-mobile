@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { BLE } from '@ionic-native/ble/ngx';
-import { Camera } from '@ionic-native/camera/ngx';
+import { Camera } from '@capacitor/camera';
 import { Device } from '@ionic-native/device/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Network } from '@ionic-native/network/ngx';
@@ -62,7 +62,6 @@ import { UserState } from './states/user/user.state';
         ScreenOrientation,
         DatePipe,
         SocialSharing,
-        Camera,
         BLE,
         FCM
     ],
