@@ -5,7 +5,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { BLE } from '@ionic-native/ble/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
-import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -50,7 +49,6 @@ import { UserState } from './states/user/user.state';
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
         Diagnostic,
         DatePipe,
-        SocialSharing,
         BLE,
         FCM
     ],
