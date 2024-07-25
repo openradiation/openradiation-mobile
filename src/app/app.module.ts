@@ -6,7 +6,6 @@ import { RouteReuseStrategy } from '@angular/router';
 import { BLE } from '@ionic-native/ble/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { IonicStorageModule } from '@ionic/storage-angular';
@@ -50,7 +49,6 @@ import { UserState } from './states/user/user.state';
     ],
     providers: [
         StatusBar,
-        SplashScreen,
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
         Diagnostic,
         DatePipe,

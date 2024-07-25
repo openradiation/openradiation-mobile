@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
@@ -17,6 +16,7 @@ import { EnableNotifications, InitUser, SetLanguage } from '../states/user/user.
 import { UserService } from '../states/user/user.service';
 import { UserStateModel } from '../states/user/user.state';
 import { ScreenOrientation } from '@capacitor/screen-orientation';
+import { SplashScreen } from '@capacitor/splash-screen';
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +35,6 @@ export class StorageService {
     private store: Store,
     private userService: UserService,
     private platform: Platform,
-    private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private positionService: PositionService
   ) { }
@@ -93,7 +92,7 @@ export class StorageService {
           if (this.platform.is('cordova')) {
             this.statusBar.overlaysWebView(true);
             this.statusBar.styleLightContent();
-            this.splashScreen.hide();
+            SplashScreen.hide();
             await ScreenOrientation.lock({ orientation: 'portrait' });
             this.positionService.init();
           }
