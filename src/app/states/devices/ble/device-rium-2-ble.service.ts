@@ -35,9 +35,9 @@ export class DeviceRium2BLEService extends AbstractBLEDeviceService<DeviceRium2B
   getDeviceInfo(device: DeviceRium2BLE): Observable<Partial<DeviceRium2BLE>> {
     return forkJoin(
       from(BleClient.read(device.sensorUUID, this.service, this.idCharacteristic)),
-      BleClient.startNotification(device.sensorUUID, this.service, this.batteryCharacteristic).pipe(
+      this.startNotificationsRx(device.sensorUUID, this.batteryCharacteristic).pipe(
         take(1),
-        tap(() => BleClient.stopNotification(device.sensorUUID, this.service, this.batteryCharacteristic))
+        tap(() => BleClient.stopNotifications(device.sensorUUID, this.service, this.batteryCharacteristic))
       )
     ).pipe(
       map(([idBuffer, batteryBuffer]: [ArrayBuffer, ArrayBuffer]) => {
@@ -59,11 +59,11 @@ export class DeviceRium2BLEService extends AbstractBLEDeviceService<DeviceRium2B
   startMeasureScan(device: DeviceRium2BLE, stopSignal: Observable<any>): Observable<Step> {
     stopSignal.subscribe(() => {
       this.stopReceiveData(device);
-      BleClient.stopNotification(device.sensorUUID, this.service, this.temperatureCharacteristic);
+      BleClient.stopNotifications(device.sensorUUID, this.service, this.temperatureCharacteristic);
     });
     return zip(
       this.startReceiveData(device),
-      BleClient.startNotification(device.sensorUUID, this.service, this.temperatureCharacteristic)
+      this.startNotificationsRx(device.sensorUUID, this.temperatureCharacteristic)
     ).pipe(
       map((buffers: [ArrayBuffer, ArrayBuffer]) => this.decodeDataPackage(buffers)),
       catchError(err => {

@@ -56,7 +56,7 @@ export class BLEDevicesService {
         .isEnabled()
         .catch(err => {
           if (this.platform.is('android')) {
-            return BleClient.enable();
+            return BleClient.requestEnable();
           } else {
             throw err;
           }
@@ -81,7 +81,7 @@ export class BLEDevicesService {
       takeUntil(this.actions$.pipe(ofActionSuccessful(StopDiscoverDevices, BLEConnectionLost)))
     );
     merge(
-      BleClient.scan([], this.scanDuration).pipe(
+      this.scan(this.scanDuration).pipe(
         scan<RawBLEDevice, RawBLEDevice[]>(
           (devices: RawBLEDevice[], newDevice: RawBLEDevice) => [...devices, newDevice],
           []
@@ -89,7 +89,7 @@ export class BLEDevicesService {
         throttleTime(100)
       ),
       time.pipe(
-        switchMap(() => BleClient.scan([], this.scanDuration)),
+        switchMap(() => this.scan(this.scanDuration)),
         buffer(time),
         skip(1)
       )
@@ -149,5 +149,15 @@ export class BLEDevicesService {
         false
       )
       .then(alert => (this.currentAlert = alert));
+  }
+
+
+  private scan(_scanDuration: number): Observable<any> {
+    // FIXME : parameter "scanDuration" cannot be passed to new capacitor BLE API
+    return new Observable(observer => {
+      BleClient.requestLEScan({},
+        (scanResult) => (observer.next(scanResult))
+      ).catch(e => observer.error(e));
+    });
   }
 }

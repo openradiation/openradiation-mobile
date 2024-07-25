@@ -12,12 +12,21 @@ export abstract class AbstractBLEDeviceService<T extends AbstractBLEDevice> exte
 
   protected constructor(protected store: Store) {
     super(store);
+    BleClient.initialize();
   }
 
   abstract buildDevice(rawBLEDevice: RawBLEDevice): T | null;
 
   connectDevice(device: T): Observable<any> {
-    const connection = BleClient.connect(device.sensorUUID).pipe(
+    const connection = new Observable((observer) => {
+      BleClient.connect(device.sensorUUID,
+        // On disconnect, provoque error to trigger RxJS catchError callback
+        (deviceId) => {
+          observer.error(new Error('Device disconnected : ' + deviceId))
+        }
+      ).then(() => observer.next())
+        .catch(e => observer.error(e));
+    }).pipe(
       concatMap(() => this.saveDeviceParams(device)),
       shareReplay()
     );
@@ -30,10 +39,28 @@ export abstract class AbstractBLEDeviceService<T extends AbstractBLEDevice> exte
   }
 
   protected startReceiveData(device: T): Observable<any> {
-    return BleClient.startNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
+    return new Observable(observer => {
+      BleClient.startNotifications(
+        device.sensorUUID, this.service, this.receiveCharacteristic,
+        (value) => {
+          observer.next(value);
+        }
+      ).catch(e => observer.error(e));
+    })
   }
 
   protected stopReceiveData(device: T) {
-    return BleClient.stopNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
+    BleClient.stopNotifications(device.sensorUUID, this.service, this.receiveCharacteristic);
   }
+
+  protected startNotificationsRx(sensorUUID: string, characteristicId: string): Observable<any> {
+    return new Observable<any>(observer => {
+      BleClient.startNotifications(sensorUUID, this.service, characteristicId,
+        (value) => {
+          observer.next(value)
+        }
+      ).catch(e => observer.error(e));
+    });
+  }
+
 }
