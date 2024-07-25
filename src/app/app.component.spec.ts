@@ -1,7 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-
-import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { StatusBar } from '@capacitor/status-bar';
 import { Platform } from '@ionic/angular';
 
 import { SplashScreen } from '@capacitor/splash-screen';
@@ -14,7 +13,7 @@ describe('AppComponent', () => {
   let platformSpy: any;
 
   beforeEach(async () => {
-    statusBarSpy = jasmine.createSpyObj('StatusBar', ['styleDefault']);
+    statusBarSpy = jasmine.createSpyObj('StatusBar', ['setOverlaysWebView']);
     splashScreenSpy = jasmine.createSpyObj('SplashScreen', ['hide']);
     platformReadySpy = Promise.resolve();
     platformSpy = jasmine.createSpyObj('Platform', { ready: platformReadySpy });

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { StatusBar, Style } from '@capacitor/status-bar';
 import { Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Actions, Store } from '@ngxs/store';
@@ -35,7 +35,6 @@ export class StorageService {
     private store: Store,
     private userService: UserService,
     private platform: Platform,
-    private statusBar: StatusBar,
     private positionService: PositionService
   ) { }
 
@@ -90,8 +89,8 @@ export class StorageService {
           .subscribe(currentSeries => this.saveCurrentSeries(currentSeries));
         this.platform.ready().then(async () => {
           if (this.platform.is('cordova')) {
-            this.statusBar.overlaysWebView(true);
-            this.statusBar.styleLightContent();
+            StatusBar.setOverlaysWebView({ overlay: true });
+            StatusBar.setStyle({ style: Style.Light });
             SplashScreen.hide();
             await ScreenOrientation.lock({ orientation: 'portrait' });
             this.positionService.init();
