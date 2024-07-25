@@ -17,6 +17,11 @@ const config: CapacitorConfig = {
       ShowSplashScreenSpinner: 'false',
       WKWebViewOnly: 'true'
     }
+  },
+  plugins: {
+    PushNotifications: {
+      presentationOptions: ["badge", "sound", "alert"]
+    }
   }
 };
 

@@ -11,7 +11,6 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgxsFormPluginModule } from '@ngxs/form-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsModule } from '@ngxs/store';
-import { FCM } from 'cordova-plugin-fcm-with-dependecy-updated/ionic/ngx';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -46,8 +45,7 @@ import { UserState } from './states/user/user.state';
     ],
     providers: [
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-        DatePipe,
-        FCM
+        DatePipe
     ],
     bootstrap: [AppComponent]
 })

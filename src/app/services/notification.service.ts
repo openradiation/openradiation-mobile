@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Diagnostic } from '@awesome-cordova-plugins/diagnostic';
-import { Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { FCM } from 'cordova-plugin-fcm-with-dependecy-updated/ionic/ngx';
-import { INotificationPayload } from 'cordova-plugin-fcm-with-dependecy-updated/src/www/INotificationPayload';
+import { PushNotifications, PushNotificationSchema } from '@capacitor/push-notifications';
+import { FCM } from '@capacitor-community/fcm';
 import { AlertService } from './alert.service';
 
 @Injectable({
@@ -11,81 +10,66 @@ import { AlertService } from './alert.service';
 })
 export class NotificationService {
   constructor(
-    private platform: Platform,
-    private fcm: FCM,
     private alertService: AlertService,
     private translateService: TranslateService
   ) { }
 
-  init() {
-    this.fcm.createNotificationChannel({
-      id: 'openradiation', // required
-      name: 'OpenRadiation', // required
+  async init() {
+    PushNotifications.createChannel({
+      id: 'openradiation',
+      name: 'OpenRadiation',
       description: 'OpenRadiation alert',
-      importance: 'high', // https://developer.android.com/guide/topics/ui/notifiers/notifications#importance
-      visibility: 'public', // https://developer.android.com/training/notify-user/build-notification#lockscreenNotification
-      sound: 'alert_sound', // In the "alert_sound" example, the file should located as resources/raw/alert_sound.mp3
+      importance: 4,  // Importance high : see https://developer.android.com/reference/android/app/NotificationManager#IMPORTANCE_HIGH
+      visibility: 1, // Visibility Public : see https://developer.android.com/reference/androidx/core/app/NotificationCompat#VISIBILITY_PUBLIC()
+      sound: 'alert_sound', // File should located as resources/raw/alert_sound.mp3
       lights: true, // enable lights for notifications
       vibration: true // enable vibration for notifications
     });
-    this.fcm.onNotification().subscribe(notification => this.showNotificationAlert(notification));
-    this.fcm.getInitialPushPayload().then(notification => {
+    await PushNotifications.addListener('pushNotificationReceived', notification => { this.showNotificationAlert(notification) });
+
+    // Show in-app alerts for already pushed notifications
+    // (this was done through getInitialPushPayload() in old cordova fcm plugin implementation)
+    const notificationList = await PushNotifications.getDeliveredNotifications();
+    notificationList.notifications.forEach(notification => {
       if (notification) {
         setTimeout(() => this.showNotificationAlert(notification));
       }
     });
+    // May not work if no permission was granted.
+    await PushNotifications.register();
   }
 
-  useLanguage(newLanguage: string, previousLanguage?: string): Promise<void> {
+  async useLanguage(newLanguage: string, previousLanguage?: string): Promise<void> {
     if (!previousLanguage) {
-      return this.fcm.subscribeToTopic(newLanguage);
+      await FCM.subscribeTo({ topic: newLanguage });
     } else if (previousLanguage !== newLanguage) {
-      return this.fcm.unsubscribeFromTopic(previousLanguage).then(() => this.fcm.subscribeToTopic(newLanguage));
-    } else {
-      return Promise.resolve();
+      await FCM.unsubscribeFrom({ topic: previousLanguage });
+      await FCM.subscribeTo({ topic: newLanguage });
     }
   }
 
-  enableNotifications(language?: string): Promise<boolean> {
+  async enableNotifications(language?: string): Promise<boolean> {
     if (language) {
-      return this.fcm
-        .hasPermission()
-        .then(hasPermission => hasPermission || this.fcm.requestPushPermission())
-        .then(hasPermission => {
-          if (hasPermission) {
-            return this.fcm.subscribeToTopic(language).then(() => true);
-          } else {
-            this.alertService.show({
-              header: this.translateService.instant('NOTIFICATIONS.ALERT.TITLE'),
-              message: this.translateService.instant('NOTIFICATIONS.ALERT.MESSAGE'),
-              backdropDismiss: true,
-              buttons: [
-                {
-                  text: this.translateService.instant('GENERAL.CANCEL')
-                },
-                {
-                  text: this.translateService.instant('GENERAL.GO_TO_SETTINGS'),
-                  handler: () => Diagnostic.switchToSettings()
-                }
-              ]
-            });
-            return false;
-          }
-        });
-    } else {
-      return Promise.resolve(false);
+      let permStatus = await PushNotifications.checkPermissions();
+      if (permStatus.receive === 'prompt') {
+        permStatus = await PushNotifications.requestPermissions();
+      }
+      if (permStatus.receive === 'granted') {
+        await PushNotifications.register();
+        await FCM.subscribeTo({ topic: language });
+        return true;
+      }
     }
+    return false;
   }
 
-  disableNotifications(language?: string): Promise<void> {
+  async disableNotifications(language?: string): Promise<void> {
     if (language) {
-      return this.fcm.unsubscribeFromTopic(language);
-    } else {
-      return Promise.resolve();
+      await FCM.unsubscribeFrom({ topic: language });
     }
   }
 
-  private showNotificationAlert({ title, body }: INotificationPayload) {
+  private showNotificationAlert({ title, body }: PushNotificationSchema) {
     this.alertService.show(
       {
         header: title,

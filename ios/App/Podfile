@@ -12,16 +12,17 @@ def capacitor_pods
   pod 'Capacitor', :path => '../../node_modules/@capacitor/ios'
   pod 'CapacitorCordova', :path => '../../node_modules/@capacitor/ios'
   pod 'CapacitorCommunityBluetoothLe', :path => '../../node_modules/@capacitor-community/bluetooth-le'
+  pod 'CapacitorCommunityFcm', :path => '../../node_modules/@capacitor-community/fcm'
   pod 'CapacitorCamera', :path => '../../node_modules/@capacitor/camera'
   pod 'CapacitorDevice', :path => '../../node_modules/@capacitor/device'
   pod 'CapacitorKeyboard', :path => '../../node_modules/@capacitor/keyboard'
   pod 'CapacitorNetwork', :path => '../../node_modules/@capacitor/network'
+  pod 'CapacitorPushNotifications', :path => '../../node_modules/@capacitor/push-notifications'
   pod 'CapacitorScreenOrientation', :path => '../../node_modules/@capacitor/screen-orientation'
   pod 'CapacitorShare', :path => '../../node_modules/@capacitor/share'
   pod 'CapacitorSplashScreen', :path => '../../node_modules/@capacitor/splash-screen'
   pod 'CapacitorStatusBar', :path => '../../node_modules/@capacitor/status-bar'
   pod 'CordovaPlugins', :path => '../capacitor-cordova-ios-plugins'
-  pod 'CordovaPluginsResources', :path => '../capacitor-cordova-ios-plugins'
 end
 
 target 'App' do
