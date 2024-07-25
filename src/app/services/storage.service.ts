@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Platform } from '@ionic/angular';
@@ -17,6 +16,7 @@ import { PositionService } from '../states/measures/position.service';
 import { EnableNotifications, InitUser, SetLanguage } from '../states/user/user.action';
 import { UserService } from '../states/user/user.service';
 import { UserStateModel } from '../states/user/user.state';
+import { ScreenOrientation } from '@capacitor/screen-orientation';
 
 @Injectable({
   providedIn: 'root'
@@ -37,9 +37,8 @@ export class StorageService {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private positionService: PositionService,
-    private screenOrientation: ScreenOrientation
-  ) {}
+    private positionService: PositionService
+  ) { }
 
   init() {
     forkJoin(
@@ -90,12 +89,12 @@ export class StorageService {
         this.store
           .select(({ measures }: { measures: MeasuresStateModel }) => measures.currentSeries)
           .subscribe(currentSeries => this.saveCurrentSeries(currentSeries));
-        this.platform.ready().then(() => {
+        this.platform.ready().then(async () => {
           if (this.platform.is('cordova')) {
             this.statusBar.overlaysWebView(true);
             this.statusBar.styleLightContent();
             this.splashScreen.hide();
-            this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+            await ScreenOrientation.lock({ orientation: 'portrait' });
             this.positionService.init();
           }
         });
