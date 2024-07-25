@@ -40,9 +40,9 @@ export class DeviceRium2BLEService extends AbstractBLEDeviceService<DeviceRium2B
         tap(() => BleClient.stopNotifications(device.sensorUUID, this.service, this.batteryCharacteristic))
       )
     ).pipe(
-      map(([idBuffer, batteryBuffer]: [ArrayBuffer, ArrayBuffer]) => {
-        const apparatusId = this.arrayBufferToHex(idBuffer);
-        const batteryVoltage = this.getNumberFromBuffer(batteryBuffer, 3) / 100;
+      map(([idDataView, batteryDataView]: [DataView, DataView]) => {
+        const apparatusId = this.arrayBufferToHex(idDataView.buffer);
+        const batteryVoltage = this.getNumberFromBuffer(batteryDataView.buffer, 3) / 100;
         const batteryLevel = Math.max(0, Math.min(100, 227.27 * batteryVoltage - 840.9));
         return {
           apparatusId,
@@ -65,7 +65,10 @@ export class DeviceRium2BLEService extends AbstractBLEDeviceService<DeviceRium2B
       this.startReceiveData(device),
       this.startNotificationsRx(device.sensorUUID, this.temperatureCharacteristic)
     ).pipe(
-      map((buffers: [ArrayBuffer, ArrayBuffer]) => this.decodeDataPackage(buffers)),
+      map((dataViews: [DataView, DataView]) => {
+        let buffers: [ArrayBuffer, ArrayBuffer] = [dataViews[0].buffer, dataViews[1].buffer]
+        return this.decodeDataPackage(buffers)
+      }),
       catchError(err => {
         this.disconnectDevice(device).subscribe();
         setTimeout(() => this.store.dispatch(new DeviceConnectionLost()), 1000);

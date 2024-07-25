@@ -53,10 +53,10 @@ export abstract class AbstractBLEDeviceService<T extends AbstractBLEDevice> exte
     BleClient.stopNotifications(device.sensorUUID, this.service, this.receiveCharacteristic);
   }
 
-  protected startNotificationsRx(sensorUUID: string, characteristicId: string): Observable<any> {
+  protected startNotificationsRx(sensorUUID: string, characteristicId: string): Observable<DataView> {
     return new Observable<any>(observer => {
       BleClient.startNotifications(sensorUUID, this.service, characteristicId,
-        (value) => {
+        (value: DataView) => {
           observer.next(value)
         }
       ).catch(e => observer.error(e));

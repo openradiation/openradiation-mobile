@@ -37,7 +37,7 @@ export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag
   getDeviceInfo(device: DeviceAtomTag): Observable<Partial<DeviceAtomTag>> {
     return from(BleClient.read(device.sensorUUID, this.firmwareService, this.firmwareCharacteristic)).pipe(
       map(buffer => {
-        const firmwareVersion = this.textDecoder.decode(new Uint8Array(buffer));
+        const firmwareVersion = this.textDecoder.decode(buffer);
         return {
           apparatusVersion: `${DeviceType.AtomTag} ${firmwareVersion.replace(/\0/g, '')}`
         };
@@ -66,7 +66,7 @@ export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag
     if (param !== undefined) {
       dataView.setUint16(1, param);
     }
-    return BleClient.write(device.sensorUUID, this.service, this.settingsCharacteristic, dataView.buffer);
+    return BleClient.write(device.sensorUUID, this.service, this.settingsCharacteristic, dataView);
   }
 
   startMeasureScan(device: DeviceAtomTag, stopSignal: Observable<any>): Observable<Step> {

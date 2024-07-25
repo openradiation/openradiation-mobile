@@ -120,9 +120,9 @@ export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
   }
 
   private sendData(device: DeviceOGKit, data: number[]): Promise<any> {
-    return BleClient.write(device.sensorUUID, this.service, this.sendCharacteristic, <ArrayBuffer>(
-      new Uint8Array(data).buffer
-    ));
+    return BleClient.write(device.sensorUUID, this.service, this.sendCharacteristic,
+      new DataView(new Uint8Array(data).buffer)
+    );
   }
 
   private decodeStringArray(array: Uint8Array): string {
