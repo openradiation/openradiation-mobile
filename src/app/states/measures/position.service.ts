@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { Diagnostic } from '@awesome-cordova-plugins/diagnostic';
 import { Platform } from '@ionic/angular';
 import { BackgroundGeolocationPlugin } from '@mauron85/cordova-plugin-background-geolocation';
 import { TranslateService } from '@ngx-translate/core';
@@ -21,12 +21,11 @@ export class PositionService {
   private currentAlert?: any;
 
   constructor(
-    private diagnostic: Diagnostic,
     private platform: Platform,
     private store: Store,
     private alertService: AlertService,
     private translateService: TranslateService
-  ) {}
+  ) { }
 
   init() {
     BackgroundGeolocation.configure(
@@ -87,29 +86,29 @@ export class PositionService {
       this.currentAlert.dismiss();
       this.currentAlert = undefined;
     }
-    this.diagnostic
+    Diagnostic
       .getLocationAuthorizationStatus()
       .then(status =>
-        this.platform.is('ios') && status === this.diagnostic.permissionStatus.DENIED
-          ? this.diagnostic.permissionStatus.DENIED_ALWAYS
+        this.platform.is('ios') && status === Diagnostic.permissionStatus.DENIED
+          ? Diagnostic.permissionStatus.DENIED_ALWAYS
           : status
       )
       .then(status => {
         switch (status) {
-          case this.diagnostic.permissionStatus.NOT_REQUESTED:
-          case this.diagnostic.permissionStatus.DENIED:
-            return this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.ALWAYS);
+          case Diagnostic.permissionStatus.NOT_REQUESTED:
+          case Diagnostic.permissionStatus.DENIED:
+            return Diagnostic.requestLocationAuthorization(Diagnostic.locationAuthorizationMode.ALWAYS);
           default:
             return status;
         }
       })
       .then(status => {
         switch (status) {
-          case this.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
-          case this.diagnostic.permissionStatus.DENIED_ALWAYS:
+          case Diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
+          case Diagnostic.permissionStatus.DENIED_ALWAYS:
             this.onGPSDeniedAlways();
             break;
-          case this.diagnostic.permissionStatus.GRANTED:
+          case Diagnostic.permissionStatus.GRANTED:
             this.watchGPSActivation();
             break;
           default:
@@ -147,13 +146,13 @@ export class PositionService {
       this.currentAlert.dismiss();
       this.currentAlert = undefined;
     }
-    this.diagnostic.registerLocationStateChangeHandler(() => {
+    Diagnostic.registerLocationStateChangeHandler(() => {
       this.watchGPSActivation();
     });
 
     const isLocationEnabled = this.platform.is('android')
-      ? this.diagnostic.isGpsLocationEnabled()
-      : this.diagnostic.isLocationEnabled();
+      ? Diagnostic.isGpsLocationEnabled()
+      : Diagnostic.isLocationEnabled();
     isLocationEnabled.then(enabled => {
       if (enabled) {
         this.watchPosition();

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { Diagnostic } from '@awesome-cordova-plugins/diagnostic';
 import { Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, ofActionSuccessful, Store } from '@ngxs/store';
@@ -37,7 +37,6 @@ export class BLEDevicesService {
     private platform: Platform,
     private actions$: Actions,
     private store: Store,
-    private diagnostic: Diagnostic,
     private alertService: AlertService,
     private translateService: TranslateService,
     private devicesService: DevicesService
@@ -69,9 +68,9 @@ export class BLEDevicesService {
   }
 
   private discoverDevices() {
-    this.diagnostic.registerBluetoothStateChangeHandler((state: string) => {
+    Diagnostic.registerBluetoothStateChangeHandler((state: string) => {
       switch (state) {
-        case this.diagnostic.bluetoothState.POWERED_OFF:
+        case Diagnostic.bluetoothState.POWERED_OFF:
           this.onBLEError();
           this.store.dispatch(new BLEConnectionLost());
           break;
@@ -122,9 +121,9 @@ export class BLEDevicesService {
   }
 
   private onBLEError() {
-    this.diagnostic.registerBluetoothStateChangeHandler(() => {
+    Diagnostic.registerBluetoothStateChangeHandler(() => {
       this.store.dispatch(new StartDiscoverBLEDevices()).subscribe();
-      this.diagnostic.registerBluetoothStateChangeHandler(() => { });
+      Diagnostic.registerBluetoothStateChangeHandler(() => { });
     });
     this.alertService
       .show(
@@ -137,9 +136,9 @@ export class BLEDevicesService {
               text: this.translateService.instant('GENERAL.GO_TO_SETTINGS'),
               handler: () => {
                 if (this.platform.is('ios')) {
-                  this.diagnostic.switchToSettings();
+                  Diagnostic.switchToSettings();
                 } else {
-                  this.diagnostic.switchToBluetoothSettings();
+                  Diagnostic.switchToBluetoothSettings();
                 }
                 return false;
               }

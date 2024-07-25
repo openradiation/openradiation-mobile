@@ -3,7 +3,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
-import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { Diagnostic } from '@awesome-cordova-plugins/diagnostic';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -46,7 +46,6 @@ import { UserState } from './states/user/user.state';
     ],
     providers: [
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-        Diagnostic,
         DatePipe,
         FCM
     ],

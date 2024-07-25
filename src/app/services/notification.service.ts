@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { Diagnostic } from '@awesome-cordova-plugins/diagnostic';
 import { Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { FCM } from 'cordova-plugin-fcm-with-dependecy-updated/ionic/ngx';
@@ -14,9 +14,8 @@ export class NotificationService {
     private platform: Platform,
     private fcm: FCM,
     private alertService: AlertService,
-    private translateService: TranslateService,
-    private diagnostic: Diagnostic
-  ) {}
+    private translateService: TranslateService
+  ) { }
 
   init() {
     this.fcm.createNotificationChannel({
@@ -66,7 +65,7 @@ export class NotificationService {
                 },
                 {
                   text: this.translateService.instant('GENERAL.GO_TO_SETTINGS'),
-                  handler: () => this.diagnostic.switchToSettings()
+                  handler: () => Diagnostic.switchToSettings()
                 }
               ]
             });
