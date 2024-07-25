@@ -1,23 +1,23 @@
-import { BLE } from '@ionic-native/ble/ngx';
 import { Store } from '@ngxs/store';
 import { Observable, from } from 'rxjs';
 import { catchError, concatMap, shareReplay, take } from 'rxjs/operators';
 import { AbstractDeviceService } from '../abstract-device.service';
 import { DeviceConnectionLost } from '../devices.action';
 import { AbstractBLEDevice, RawBLEDevice } from './abstract-ble-device';
+import { BleClient } from '@capacitor-community/bluetooth-le';
 
 export abstract class AbstractBLEDeviceService<T extends AbstractBLEDevice> extends AbstractDeviceService<T> {
   protected abstract service: string;
   protected abstract receiveCharacteristic: string;
 
-  protected constructor(protected store: Store, protected ble: BLE) {
+  protected constructor(protected store: Store) {
     super(store);
   }
 
   abstract buildDevice(rawBLEDevice: RawBLEDevice): T | null;
 
   connectDevice(device: T): Observable<any> {
-    const connection = this.ble.connect(device.sensorUUID).pipe(
+    const connection = BleClient.connect(device.sensorUUID).pipe(
       concatMap(() => this.saveDeviceParams(device)),
       shareReplay()
     );
@@ -26,14 +26,14 @@ export abstract class AbstractBLEDeviceService<T extends AbstractBLEDevice> exte
   }
 
   disconnectDevice(device: T): Observable<any> {
-    return from(this.ble.disconnect(device.sensorUUID));
+    return from(BleClient.disconnect(device.sensorUUID));
   }
 
   protected startReceiveData(device: T): Observable<any> {
-    return this.ble.startNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
+    return BleClient.startNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
   }
 
   protected stopReceiveData(device: T) {
-    return this.ble.stopNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
+    return BleClient.stopNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
   }
 }

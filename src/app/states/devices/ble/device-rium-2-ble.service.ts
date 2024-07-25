@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { BLE } from '@ionic-native/ble/ngx';
 import { Store } from '@ngxs/store';
 import { forkJoin, Observable, of, zip, from } from 'rxjs';
 import { catchError, map, take, tap } from 'rxjs/operators';
@@ -8,7 +7,7 @@ import { DeviceConnectionLost } from '../devices.action';
 import { RawBLEDevice } from './abstract-ble-device';
 import { AbstractBLEDeviceService } from './abstract-ble-device.service';
 import { DeviceRium2BLE } from './device-rium-2-ble';
-
+import { BleClient } from '@capacitor-community/bluetooth-le';
 @Injectable({
   providedIn: 'root'
 })
@@ -29,16 +28,16 @@ export class DeviceRium2BLEService extends AbstractBLEDeviceService<DeviceRium2B
   private batteryCharacteristic = '1726218E-76b0-11EA-BC55-0242AC130003';
   private idCharacteristic = '90B4A556-7427-11EA-BC55-0242AC130003';
 
-  constructor(protected store: Store, protected ble: BLE) {
-    super(store, ble);
+  constructor(protected store: Store) {
+    super(store);
   }
 
   getDeviceInfo(device: DeviceRium2BLE): Observable<Partial<DeviceRium2BLE>> {
     return forkJoin(
-      from(this.ble.read(device.sensorUUID, this.service, this.idCharacteristic)),
-      this.ble.startNotification(device.sensorUUID, this.service, this.batteryCharacteristic).pipe(
+      from(BleClient.read(device.sensorUUID, this.service, this.idCharacteristic)),
+      BleClient.startNotification(device.sensorUUID, this.service, this.batteryCharacteristic).pipe(
         take(1),
-        tap(() => this.ble.stopNotification(device.sensorUUID, this.service, this.batteryCharacteristic))
+        tap(() => BleClient.stopNotification(device.sensorUUID, this.service, this.batteryCharacteristic))
       )
     ).pipe(
       map(([idBuffer, batteryBuffer]: [ArrayBuffer, ArrayBuffer]) => {
@@ -60,11 +59,11 @@ export class DeviceRium2BLEService extends AbstractBLEDeviceService<DeviceRium2B
   startMeasureScan(device: DeviceRium2BLE, stopSignal: Observable<any>): Observable<Step> {
     stopSignal.subscribe(() => {
       this.stopReceiveData(device);
-      this.ble.stopNotification(device.sensorUUID, this.service, this.temperatureCharacteristic);
+      BleClient.stopNotification(device.sensorUUID, this.service, this.temperatureCharacteristic);
     });
     return zip(
       this.startReceiveData(device),
-      this.ble.startNotification(device.sensorUUID, this.service, this.temperatureCharacteristic)
+      BleClient.startNotification(device.sensorUUID, this.service, this.temperatureCharacteristic)
     ).pipe(
       map((buffers: [ArrayBuffer, ArrayBuffer]) => this.decodeDataPackage(buffers)),
       catchError(err => {

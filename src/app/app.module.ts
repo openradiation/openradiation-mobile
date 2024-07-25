@@ -3,7 +3,6 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
-import { BLE } from '@ionic-native/ble/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { IonicStorageModule } from '@ionic/storage-angular';
@@ -49,7 +48,6 @@ import { UserState } from './states/user/user.state';
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
         Diagnostic,
         DatePipe,
-        BLE,
         FCM
     ],
     bootstrap: [AppComponent]

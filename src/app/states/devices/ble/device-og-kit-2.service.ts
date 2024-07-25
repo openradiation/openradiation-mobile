@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { BLE } from '@ionic-native/ble/ngx';
 import { Store } from '@ngxs/store';
 import { Observable, from } from 'rxjs';
 import { filter, map, scan, shareReplay, take, tap } from 'rxjs/operators';
@@ -8,6 +7,7 @@ import { ApparatusSensorType } from '../abstract-device';
 import { RawBLEDevice } from './abstract-ble-device';
 import { AbstractBLEDeviceService } from './abstract-ble-device.service';
 import { DeviceOGKit2, DeviceOGKit2Type } from './device-og-kit-2';
+import { BleClient } from '@capacitor-community/bluetooth-le';
 
 @Injectable({
   providedIn: 'root'
@@ -61,8 +61,8 @@ export class DeviceOGKit2Service extends AbstractBLEDeviceService<DeviceOGKit2> 
   private RECEIVE_VOLTAGE = 18;
   private RECEIVE_VOLTAGE_POSITION = 9;
 
-  constructor(protected store: Store, protected ble: BLE) {
-    super(store, ble);
+  constructor(protected store: Store) {
+    super(store);
   }
 
   getDeviceInfo(device: DeviceOGKit2): Observable<Partial<DeviceOGKit2>> {
@@ -120,7 +120,7 @@ export class DeviceOGKit2Service extends AbstractBLEDeviceService<DeviceOGKit2> 
   }
 
   private sendData(device: DeviceOGKit2, data: number[]): Promise<any> {
-    return this.ble.write(device.sensorUUID, this.service, this.sendCharacteristic, <ArrayBuffer>(
+    return BleClient.write(device.sensorUUID, this.service, this.sendCharacteristic, <ArrayBuffer>(
       new Uint8Array(data).buffer
     ));
   }

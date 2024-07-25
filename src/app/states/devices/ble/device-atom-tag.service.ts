@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { BLE } from '@ionic-native/ble/ngx';
 import { Store } from '@ngxs/store';
 import { Observable, from } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -9,6 +8,7 @@ import { DeviceConnectionLost } from '../devices.action';
 import { RawBLEDevice } from './abstract-ble-device';
 import { AbstractBLEDeviceService } from './abstract-ble-device.service';
 import { DeviceAtomTag } from './device-atom-tag';
+import { BleClient } from '@capacitor-community/bluetooth-le';
 
 @Injectable({
   providedIn: 'root'
@@ -30,12 +30,12 @@ export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag
   private firmwareCharacteristic = '2a26';
   private settingsCharacteristic = 'ea50cfcd-ac4a-4a48-bf0e-879e548ae157';
 
-  constructor(protected store: Store, protected ble: BLE) {
-    super(store, ble);
+  constructor(protected store: Store) {
+    super(store);
   }
 
   getDeviceInfo(device: DeviceAtomTag): Observable<Partial<DeviceAtomTag>> {
-    return from(this.ble.read(device.sensorUUID, this.firmwareService, this.firmwareCharacteristic)).pipe(
+    return from(BleClient.read(device.sensorUUID, this.firmwareService, this.firmwareCharacteristic)).pipe(
       map(buffer => {
         const firmwareVersion = this.textDecoder.decode(new Uint8Array(buffer));
         return {
@@ -66,7 +66,7 @@ export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag
     if (param !== undefined) {
       dataView.setUint16(1, param);
     }
-    return this.ble.write(device.sensorUUID, this.service, this.settingsCharacteristic, dataView.buffer);
+    return BleClient.write(device.sensorUUID, this.service, this.settingsCharacteristic, dataView.buffer);
   }
 
   startMeasureScan(device: DeviceAtomTag, stopSignal: Observable<any>): Observable<Step> {

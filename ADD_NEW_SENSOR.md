@@ -94,7 +94,6 @@ For a BLE sensor the file would be `src/app/states/devices/ble/device-toto.servi
 
 ```typescript
 import { Injectable } from '@angular/core';
-import { BLE } from '@ionic-native/ble/ngx';
 import { Store } from '@ngxs/store';
 import { Observable, of } from 'rxjs';
 import { bufferCount, filter, map, tap } from 'rxjs/operators';
@@ -109,7 +108,7 @@ export class DeviceTotoService extends AbstractBLEDeviceService<DeviceToto> {
   protected service = 'ef080d8c-c3be-41ff-bd3f-05a5f4795d7f';
   protected receiveCharacteristic = 'a1e8f5b1-696b-4e4c-87c6-69dfe0b0093b';
 
-  constructor(protected store: Store, protected ble: BLE) {
+  constructor(protected store: Store) {
     super(store, ble);
   }
 

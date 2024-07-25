@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { BLE } from '@ionic-native/ble/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
@@ -16,6 +15,7 @@ import {
 } from '../devices.action';
 import { DevicesService } from '../devices.service';
 import { AbstractBLEDevice, RawBLEDevice } from './abstract-ble-device';
+import { BleClient } from '@capacitor-community/bluetooth-le';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +34,6 @@ export class BLEDevicesService {
   private scanPeriod = 5000;
 
   constructor(
-    private ble: BLE,
     private platform: Platform,
     private actions$: Actions,
     private store: Store,
@@ -53,11 +52,11 @@ export class BLEDevicesService {
 
   startDiscoverDevices(): Observable<any> {
     return from(
-      this.ble
+      BleClient
         .isEnabled()
         .catch(err => {
           if (this.platform.is('android')) {
-            return this.ble.enable();
+            return BleClient.enable();
           } else {
             throw err;
           }
@@ -82,7 +81,7 @@ export class BLEDevicesService {
       takeUntil(this.actions$.pipe(ofActionSuccessful(StopDiscoverDevices, BLEConnectionLost)))
     );
     merge(
-      this.ble.scan([], this.scanDuration).pipe(
+      BleClient.scan([], this.scanDuration).pipe(
         scan<RawBLEDevice, RawBLEDevice[]>(
           (devices: RawBLEDevice[], newDevice: RawBLEDevice) => [...devices, newDevice],
           []
@@ -90,7 +89,7 @@ export class BLEDevicesService {
         throttleTime(100)
       ),
       time.pipe(
-        switchMap(() => this.ble.scan([], this.scanDuration)),
+        switchMap(() => BleClient.scan([], this.scanDuration)),
         buffer(time),
         skip(1)
       )
