@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Location } from '@mauron85/cordova-plugin-background-geolocation';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -12,6 +11,7 @@ import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
 import { StartMeasure } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
+import { Position } from '@capacitor/geolocation';
 
 @Component({
   selector: 'app-page-home',
@@ -26,7 +26,7 @@ export class HomePage extends AutoUnsubscribePage {
   @Select(MeasuresState.planeMode)
   planeMode$: Observable<boolean>;
   @Select(MeasuresState.currentPosition)
-  currentPosition$: Observable<Location>;
+  currentPosition$: Observable<Position>;
 
   canStartMeasure: Observable<boolean>;
 
@@ -51,7 +51,7 @@ export class HomePage extends AutoUnsubscribePage {
       if (planeMode === false) {
         this.subscriptions.push(
           this.currentPosition$.subscribe(position => {
-            if (position && position.altitude > 6000) {
+            if (position?.coords?.altitude && position.coords.altitude > 6000) {
               this.showElevatedAltitudeMessage();
             }
           })

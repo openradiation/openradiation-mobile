@@ -1,4 +1,4 @@
-import { Location } from '@mauron85/cordova-plugin-background-geolocation';
+import { Position } from '@capacitor/geolocation';
 import { TranslateService } from '@ngx-translate/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
@@ -52,7 +52,7 @@ import {
 } from './measures.action';
 import { MeasuresService } from './measures.service';
 import { PositionService } from './position.service';
-import { Device, DeviceId, DeviceInfo } from "@capacitor/device";
+import { Device } from "@capacitor/device";
 
 /**
  * Max duration between 2 measure steps before the device connection is considered as lost
@@ -61,7 +61,7 @@ const TIMEOUT_DURATION = 35000;
 
 export interface MeasuresStateModel {
   measures: (Measure | MeasureSeries)[];
-  currentPosition?: Location;
+  currentPosition?: Position;
   currentMeasure?: Measure;
   currentSeries?: MeasureSeries;
   canEndCurrentScan: boolean;
@@ -97,7 +97,6 @@ export class MeasuresState {
   deviceModel: string = MeasuresState.MISSING_STRING
 
   constructor(
-    private positionService: PositionService,
     private measuresService: MeasuresService,
     private dateService: DateService,
     private alertService: AlertService,
@@ -121,13 +120,13 @@ export class MeasuresState {
   }
 
   @Selector()
-  static currentPosition({ currentPosition }: MeasuresStateModel): Location | undefined {
+  static currentPosition({ currentPosition }: MeasuresStateModel): Position | undefined {
     return currentPosition;
   }
 
   @Selector()
   static positionAccuracy({ currentPosition }: MeasuresStateModel): number {
-    return currentPosition ? currentPosition.accuracy : PositionAccuracyThreshold.No;
+    return currentPosition?.coords?.accuracy ? currentPosition.coords.accuracy : PositionAccuracyThreshold.No;
   }
 
   @Selector()

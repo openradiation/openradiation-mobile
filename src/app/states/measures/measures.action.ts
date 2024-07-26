@@ -1,4 +1,4 @@
-import { Location } from '@mauron85/cordova-plugin-background-geolocation';
+import { Position } from '@capacitor/geolocation';
 import { AbstractDevice } from '../devices/abstract-device';
 import { Measure, MeasureSeries, Params, Step } from './measure';
 
@@ -9,7 +9,7 @@ export class InitMeasures {
     public params: Params,
     public recentTags: string[],
     public currentSeries?: MeasureSeries
-  ) {}
+  ) { }
 }
 
 export class EnableExpertMode {
@@ -38,12 +38,12 @@ export class DisablePlaneMode {
 
 export class PositionChanged {
   static readonly type = '[Measures] Position changed';
-  constructor(public position?: Location) {}
+  constructor(public position?: Position) { }
 }
 
 export class StartMeasure {
   static readonly type = '[Measures] Start measure';
-  constructor(public device: AbstractDevice) {}
+  constructor(public device: AbstractDevice) { }
 }
 
 export class StopMeasure {
@@ -68,22 +68,22 @@ export class StopMeasureSeriesParams {
 
 export class AddMeasureScanStep {
   static readonly type = '[Measures] Add measure scan step';
-  constructor(public step: Step, public device: AbstractDevice) {}
+  constructor(public step: Step, public device: AbstractDevice) { }
 }
 
 export class StartMeasureScan {
   static readonly type = '[Measures] Start measure radiation scan';
-  constructor(public device: AbstractDevice) {}
+  constructor(public device: AbstractDevice) { }
 }
 
 export class StopMeasureScan {
   static readonly type = '[Measures] Stop measure radiation scan';
-  constructor(public device: AbstractDevice) {}
+  constructor(public device: AbstractDevice) { }
 }
 
 export class StartNextMeasureSeries {
   static readonly type = '[Measures] Start next measure series';
-  constructor(public device: AbstractDevice) {}
+  constructor(public device: AbstractDevice) { }
 }
 
 export class StartMeasureReport {
@@ -108,12 +108,12 @@ export class StopMeasureSeriesReport {
 
 export class PublishMeasure {
   static readonly type = '[Measures] Publish measure';
-  constructor(public measure: Measure | MeasureSeries) {}
+  constructor(public measure: Measure | MeasureSeries) { }
 }
 
 export class DeleteMeasure {
   static readonly type = '[Measures] Delete measure';
-  constructor(public measure: Measure | MeasureSeries) {}
+  constructor(public measure: Measure | MeasureSeries) { }
 }
 
 export class DeleteAllMeasures {
@@ -122,10 +122,10 @@ export class DeleteAllMeasures {
 
 export class ShowMeasure {
   static readonly type = '[Measures] Show measure detail';
-  constructor(public measure: Measure | MeasureSeries) {}
+  constructor(public measure: Measure | MeasureSeries) { }
 }
 
 export class AddRecentTag {
   static readonly type = '[Measures] Add recent tag';
-  constructor(public tag: string) {}
+  constructor(public tag: string) { }
 }

@@ -2,7 +2,6 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
-import { Location } from '@mauron85/cordova-plugin-background-geolocation';
 import { Select } from '@ngxs/store';
 import { combineLatest, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -11,6 +10,8 @@ import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-u
 import { MeasuresState } from '../../../states/measures/measures.state';
 import { UserState } from '../../../states/user/user.state';
 import { Network, ConnectionType } from '@capacitor/network';
+import { Position } from '@capacitor/geolocation';
+
 /**
  * Constants from cordova-plugin-network-information to get network types
  */
@@ -25,7 +26,7 @@ export class MapPage extends AutoUnsubscribePage {
   @Select(UserState.language)
   language$: Observable<string | undefined>;
   @Select(MeasuresState.currentPosition)
-  currentPosition$: Observable<Location | undefined>;
+  currentPosition$: Observable<Position | undefined>;
   @Select(MeasuresState.planeMode)
   planeMode$: Observable<boolean>;
 
@@ -71,9 +72,9 @@ export class MapPage extends AutoUnsubscribePage {
       combineLatest(this.currentPosition$, this.planeMode$)
         .pipe(take(1))
         .subscribe(([currentPosition, planeMode]) => {
-          if (currentPosition) {
-            const lat = currentPosition.latitude.toFixed(7);
-            const long = currentPosition.longitude.toFixed(7);
+          if (currentPosition?.coords) {
+            const lat = currentPosition.coords.latitude.toFixed(7);
+            const long = currentPosition.coords.longitude.toFixed(7);
             const zoom = planeMode ? 4 : 12;
             url += `/${zoom}/${lat}/${long}`;
           }
