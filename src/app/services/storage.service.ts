@@ -88,7 +88,7 @@ export class StorageService {
           .select(({ measures }: { measures: MeasuresStateModel }) => measures.currentSeries)
           .subscribe(currentSeries => this.saveCurrentSeries(currentSeries));
         this.platform.ready().then(async () => {
-          if (this.platform.is('cordova')) {
+          if (this.platform.is('capacitor')) {
             StatusBar.setOverlaysWebView({ overlay: true });
             StatusBar.setStyle({ style: Style.Light });
             SplashScreen.hide();

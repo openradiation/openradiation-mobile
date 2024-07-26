@@ -48,7 +48,6 @@ export class MapPage extends AutoUnsubscribePage {
 
   async pageEnter() {
     super.pageEnter();
-    // FIXME was only done for 'cordova' platform
     let networkStatus = await Network.getStatus()
     if (!networkStatus.connected) {
       this.connectionAvailable = false;

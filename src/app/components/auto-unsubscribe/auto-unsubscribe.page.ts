@@ -1,10 +1,10 @@
-import { OnDestroy } from '@angular/core';
+import { Directive, OnDestroy } from '@angular/core';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 // TODO Remove this abstract class when Ionic issues with lifecycle events are fixed.
-// TODO: Add Angular decorator.
+@Directive()
 export abstract class AutoUnsubscribePage implements OnDestroy {
   protected subscriptions: Subscription[] = [];
   private focused = false;

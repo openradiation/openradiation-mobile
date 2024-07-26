@@ -38,7 +38,7 @@ export class USBDevicesService {
       }
     });
     this.actions$.pipe(ofActionDispatched(StopDiscoverDevices)).subscribe(() => {
-      if (this.platform.is('cordova')) {
+      if (this.platform.is('capacitor')) {
         UsbSerial.onDeviceAttached([], null);
       }
     });
