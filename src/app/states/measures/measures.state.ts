@@ -1,4 +1,4 @@
-import { Position } from '@capacitor/geolocation';
+import { Location } from "@capacitor-community/background-geolocation";
 import { TranslateService } from '@ngx-translate/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
@@ -61,7 +61,7 @@ const TIMEOUT_DURATION = 35000;
 
 export interface MeasuresStateModel {
   measures: (Measure | MeasureSeries)[];
-  currentPosition?: Position;
+  currentPosition?: Location;
   currentMeasure?: Measure;
   currentSeries?: MeasureSeries;
   canEndCurrentScan: boolean;
@@ -120,13 +120,13 @@ export class MeasuresState {
   }
 
   @Selector()
-  static currentPosition({ currentPosition }: MeasuresStateModel): Position | undefined {
+  static currentPosition({ currentPosition }: MeasuresStateModel): Location | undefined {
     return currentPosition;
   }
 
   @Selector()
   static positionAccuracy({ currentPosition }: MeasuresStateModel): number {
-    return currentPosition?.coords?.accuracy ? currentPosition.coords.accuracy : PositionAccuracyThreshold.No;
+    return currentPosition?.accuracy ?? PositionAccuracyThreshold.No;
   }
 
   @Selector()

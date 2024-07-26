@@ -10,7 +10,7 @@ import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-u
 import { MeasuresState } from '../../../states/measures/measures.state';
 import { UserState } from '../../../states/user/user.state';
 import { Network, ConnectionType } from '@capacitor/network';
-import { Position } from '@capacitor/geolocation';
+import { Location } from "@capacitor-community/background-geolocation";
 
 /**
  * Constants from cordova-plugin-network-information to get network types
@@ -26,7 +26,7 @@ export class MapPage extends AutoUnsubscribePage {
   @Select(UserState.language)
   language$: Observable<string | undefined>;
   @Select(MeasuresState.currentPosition)
-  currentPosition$: Observable<Position | undefined>;
+  currentPosition$: Observable<Location | undefined>;
   @Select(MeasuresState.planeMode)
   planeMode$: Observable<boolean>;
 
@@ -72,9 +72,9 @@ export class MapPage extends AutoUnsubscribePage {
       combineLatest(this.currentPosition$, this.planeMode$)
         .pipe(take(1))
         .subscribe(([currentPosition, planeMode]) => {
-          if (currentPosition?.coords) {
-            const lat = currentPosition.coords.latitude.toFixed(7);
-            const long = currentPosition.coords.longitude.toFixed(7);
+          if (currentPosition) {
+            const lat = currentPosition?.latitude.toFixed(7);
+            const long = currentPosition?.longitude.toFixed(7);
             const zoom = planeMode ? 4 : 12;
             url += `/${zoom}/${lat}/${long}`;
           }

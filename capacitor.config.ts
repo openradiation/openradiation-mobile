@@ -4,6 +4,9 @@ const config: CapacitorConfig = {
   appId: 'org.openradiation',
   appName: 'OpenRadiation',
   webDir: 'www',
+  android: {
+    useLegacyBridge: true
+  },
   cordova: {
     preferences: {
       ScrollEnabled: 'false',
@@ -21,6 +24,10 @@ const config: CapacitorConfig = {
   plugins: {
     PushNotifications: {
       presentationOptions: ["badge", "sound", "alert"]
+    },
+    LocalNotifications: {
+      smallIcon: "ic_stat_icon_config_sample",
+      iconColor: "#045cb8"
     }
   }
 };

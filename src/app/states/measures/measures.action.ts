@@ -1,4 +1,4 @@
-import { Position } from '@capacitor/geolocation';
+import { Location } from "@capacitor-community/background-geolocation";
 import { AbstractDevice } from '../devices/abstract-device';
 import { Measure, MeasureSeries, Params, Step } from './measure';
 
@@ -38,7 +38,7 @@ export class DisablePlaneMode {
 
 export class PositionChanged {
   static readonly type = '[Measures] Position changed';
-  constructor(public position?: Position) { }
+  constructor(public position?: Location) { }
 }
 
 export class StartMeasure {

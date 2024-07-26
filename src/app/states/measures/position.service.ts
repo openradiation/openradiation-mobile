@@ -1,24 +1,27 @@
 import { Injectable } from '@angular/core';
 import { Diagnostic } from '@awesome-cordova-plugins/diagnostic';
 import { Platform } from '@ionic/angular';
-import { BackgroundGeolocationPlugin } from '@mauron85/cordova-plugin-background-geolocation';
 import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
 import { take } from 'rxjs/operators';
 import { AlertService } from '../../services/alert.service';
 import { PositionChanged } from './measures.action';
 import { MeasuresStateModel } from './measures.state';
+import { registerPlugin } from "@capacitor/core";
+import { BackgroundGeolocationPlugin, Location } from "@capacitor-community/background-geolocation";
+import { LocalNotifications } from '@capacitor/local-notifications';
 
 /**
  * Constant from @mauron85/cordova-plugin-background-geolocation
  */
-declare const BackgroundGeolocation: BackgroundGeolocationPlugin;
+const BackgroundGeolocation = registerPlugin<BackgroundGeolocationPlugin>("BackgroundGeolocation");
 
 @Injectable({
   providedIn: 'root'
 })
 export class PositionService {
   private currentAlert?: any;
+  private currentWatcherId = "";
 
   constructor(
     private platform: Platform,
@@ -28,93 +31,86 @@ export class PositionService {
   ) { }
 
   init() {
-    BackgroundGeolocation.configure(
-      {
-        locationProvider: BackgroundGeolocation.ACTIVITY_PROVIDER,
-        desiredAccuracy: BackgroundGeolocation.HIGH_ACCURACY,
-        stationaryRadius: 50,
-        distanceFilter: 50,
-        notificationTitle: this.translateService.instant('POSITION.BACKGROUND.TITLE'),
-        notificationText: this.translateService.instant('POSITION.BACKGROUND.TEXT'),
-        notificationIconColor: '#045cb8',
-        interval: 10000,
-        fastestInterval: 5000,
-        activitiesInterval: 10000
-      },
-      () => this.requestAuthorization()
-    );
+    this.requestAuthorization();
   }
 
-  private watchPosition() {
+  private async watchPosition() {
     this.startWatchPosition();
-    BackgroundGeolocation.on('location', position =>
-      BackgroundGeolocation.startTask((taskKey: number) => {
-        this.store.dispatch(new PositionChanged(position));
-        BackgroundGeolocation.endTask(taskKey);
-      })
-    );
 
+    // When pausing app, also stop listening GPS position unless there is an ongoin scan
     this.platform.pause.subscribe(() => {
       const onGoingMeasuresScan = this.store.selectSnapshot(
         ({ measures }: { measures: MeasuresStateModel }) => measures.currentMeasure || measures.currentSeries
       );
-      if (!onGoingMeasuresScan) {
-        BackgroundGeolocation.stop();
+      if (!onGoingMeasuresScan && this.currentWatcherId) {
+        BackgroundGeolocation.removeWatcher({ id: this.currentWatcherId });
       }
     });
     this.platform.resume.subscribe(() => this.startWatchPosition());
   }
 
-  private startWatchPosition() {
+  private async startWatchPosition() {
     this.store.dispatch(new PositionChanged(undefined));
-    BackgroundGeolocation.getCurrentLocation(
-      position => this.store.dispatch(new PositionChanged(position)),
-      undefined,
-      {
-        enableHighAccuracy: true
-      }
+
+    // Step 1: get quickly last known position (allow stale, no need for permissions)
+    const lastPositionWatcherId = await BackgroundGeolocation.addWatcher({ requestPermissions: false, stale: true },
+      (position) => { this.positionReceived(position) }
     );
-    BackgroundGeolocation.checkStatus(status => {
-      if (!status.isRunning) {
-        BackgroundGeolocation.start();
-      }
-    });
+    BackgroundGeolocation.removeWatcher({ id: lastPositionWatcherId });
+
+    // Step 2: register for location updates
+    this.currentWatcherId = await BackgroundGeolocation.addWatcher({
+      // Fixme get proper messages
+      backgroundMessage: this.translateService.instant('POSITION.BACKGROUND.MESSAGE'),
+      backgroundTitle: this.translateService.instant('POSITION.BACKGROUND.TITLE'),
+      requestPermissions: true,
+      stale: false,
+      distanceFilter: 50
+    },
+      (position) => this.positionReceived(position)
+    );
   }
 
-  private requestAuthorization() {
+  positionReceived(position?: Location) {
+    this.store.dispatch(new PositionChanged(position));
+  }
+
+  private async requestAuthorization() {
     if (this.currentAlert) {
       this.currentAlert.dismiss();
       this.currentAlert = undefined;
     }
-    Diagnostic
-      .getLocationAuthorizationStatus()
-      .then(status =>
-        this.platform.is('ios') && status === Diagnostic.permissionStatus.DENIED
-          ? Diagnostic.permissionStatus.DENIED_ALWAYS
-          : status
-      )
-      .then(status => {
-        switch (status) {
-          case Diagnostic.permissionStatus.NOT_REQUESTED:
-          case Diagnostic.permissionStatus.DENIED:
-            return Diagnostic.requestLocationAuthorization(Diagnostic.locationAuthorizationMode.ALWAYS);
-          default:
-            return status;
-        }
-      })
-      .then(status => {
-        switch (status) {
-          case Diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
-          case Diagnostic.permissionStatus.DENIED_ALWAYS:
-            this.onGPSDeniedAlways();
-            break;
-          case Diagnostic.permissionStatus.GRANTED:
+    let locationAuthorizedStatus = await Diagnostic.getLocationAuthorizationStatus();
+    locationAuthorizedStatus = (this.platform.is('ios') && locationAuthorizedStatus === Diagnostic.permissionStatus.DENIED)
+      ? Diagnostic.permissionStatus.DENIED_ALWAYS
+      : locationAuthorizedStatus
+    switch (locationAuthorizedStatus) {
+      case Diagnostic.permissionStatus.NOT_REQUESTED:
+      case Diagnostic.permissionStatus.DENIED:
+        locationAuthorizedStatus = await Diagnostic.requestLocationAuthorization(Diagnostic.locationAuthorizationMode.ALWAYS);
+    }
+    switch (locationAuthorizedStatus) {
+      case Diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
+      case Diagnostic.permissionStatus.DENIED_ALWAYS:
+        this.onGPSDeniedAlways();
+        break;
+      case Diagnostic.permissionStatus.GRANTED:
+        // On Android, also need to check for local notifications permissions
+        if (this.platform.is('android')) {
+          let localNotificationStatus = await LocalNotifications.checkPermissions();
+          if (localNotificationStatus.display != 'granted') {
+            localNotificationStatus = await LocalNotifications.requestPermissions();
+          }
+          if (localNotificationStatus.display == 'granted') {
             this.watchGPSActivation();
-            break;
-          default:
-            this.requestAuthorization();
+          }
+        } else {
+          this.watchGPSActivation();
         }
-      });
+        break;
+      default:
+        this.requestAuthorization();
+    }
   }
 
   private onGPSDeniedAlways() {
@@ -131,7 +127,7 @@ export class PositionService {
               text: this.translateService.instant('GENERAL.GO_TO_SETTINGS'),
               handler: () => {
                 this.platform.resume.pipe(take(1)).subscribe(() => this.requestAuthorization());
-                BackgroundGeolocation.showAppSettings();
+                BackgroundGeolocation.openSettings();
               }
             }
           ]
@@ -175,7 +171,7 @@ export class PositionService {
             {
               text: this.translateService.instant('GENERAL.GO_TO_SETTINGS'),
               handler: () => {
-                BackgroundGeolocation.showLocationSettings();
+                BackgroundGeolocation.openSettings();
                 return false;
               }
             }

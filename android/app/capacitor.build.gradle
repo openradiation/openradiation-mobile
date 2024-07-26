@@ -9,28 +9,21 @@ android {
 
 apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
 dependencies {
+    implementation project(':capacitor-community-background-geolocation')
     implementation project(':capacitor-community-bluetooth-le')
     implementation project(':capacitor-community-fcm')
     implementation project(':capacitor-camera')
     implementation project(':capacitor-device')
     implementation project(':capacitor-keyboard')
+    implementation project(':capacitor-local-notifications')
     implementation project(':capacitor-network')
     implementation project(':capacitor-push-notifications')
     implementation project(':capacitor-screen-orientation')
     implementation project(':capacitor-share')
     implementation project(':capacitor-splash-screen')
     implementation project(':capacitor-status-bar')
-    implementation "com.google.android.gms:play-services-location:11+"
-    implementation "com.android.support:support-v4:26+"
-    implementation "com.android.support:appcompat-v7:26+"
-    implementation "com.google.android.gms:play-services-location:11+"
-    implementation "com.android.support:support-v4:26+"
-    implementation "com.android.support:appcompat-v7:26+"
-    implementation "com.android.support:support-v4:28.+"
-    implementation "com.android.support:appcompat-v7:28.+"
+
 }
-apply from: "../../node_modules/@mauron85/cordova-plugin-background-geolocation/android/dependencies.gradle"
-apply from: "../../node_modules/cordova-plugin-mauron85-background-geolocation/android/dependencies.gradle"
 apply from: "../../cordova-plugin-usb-serial/src/android/dependencies.gradle"
 apply from: "../../cordova-plugin-usb-serial/src/android/build.gradle"
 

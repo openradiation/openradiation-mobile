@@ -11,7 +11,7 @@ import { AbstractDevice } from '../../../states/devices/abstract-device';
 import { DevicesState } from '../../../states/devices/devices.state';
 import { StartMeasure } from '../../../states/measures/measures.action';
 import { MeasuresState } from '../../../states/measures/measures.state';
-import { Position } from '@capacitor/geolocation';
+import { Location } from "@capacitor-community/background-geolocation";
 
 @Component({
   selector: 'app-page-home',
@@ -26,7 +26,7 @@ export class HomePage extends AutoUnsubscribePage {
   @Select(MeasuresState.planeMode)
   planeMode$: Observable<boolean>;
   @Select(MeasuresState.currentPosition)
-  currentPosition$: Observable<Position>;
+  currentPosition$: Observable<Location>;
 
   canStartMeasure: Observable<boolean>;
 
@@ -51,7 +51,7 @@ export class HomePage extends AutoUnsubscribePage {
       if (planeMode === false) {
         this.subscriptions.push(
           this.currentPosition$.subscribe(position => {
-            if (position?.coords?.altitude && position.coords.altitude > 6000) {
+            if (position?.altitude && position.altitude > 6000) {
               this.showElevatedAltitudeMessage();
             }
           })

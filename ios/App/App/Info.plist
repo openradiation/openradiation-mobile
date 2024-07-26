@@ -45,5 +45,13 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	 <key>NSLocationWhenInUseUsageDescription</key>
+	<string>Suivi de la position des mesures</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Suivi de la position uniquement si une mesure est en cours</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+	</array>
 </dict>
 </plist>

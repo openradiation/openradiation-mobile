@@ -1,4 +1,4 @@
-import { Position } from '@capacitor/geolocation';
+import { Location } from "@capacitor-community/background-geolocation";
 import * as uuid from 'uuid';
 import { environment } from '../../../environments/environment';
 import { ApparatusSensorType } from '../devices/abstract-device';
@@ -87,14 +87,14 @@ export class Measure extends AbstractMeasure {
     this.hitsAccuracy = this.manualReporting ? undefined : 0;
   }
 
-  static updateStartPosition(measure: Measure, position?: Position): Measure {
+  static updateStartPosition(measure: Measure, position?: Location): Measure {
     if (position) {
       return {
         ...measure,
-        latitude: position?.coords?.latitude,
-        longitude: position?.coords?.longitude,
-        accuracy: position?.coords?.accuracy,
-        altitude: position?.coords?.altitude ? position.coords.altitude : undefined
+        latitude: position?.latitude,
+        longitude: position?.longitude,
+        accuracy: position?.accuracy,
+        altitude: position?.altitude ?? undefined
         // altitudeAccuracy: position.altitudeAccuracy
       };
     } else {
@@ -102,14 +102,14 @@ export class Measure extends AbstractMeasure {
     }
   }
 
-  static updateEndPosition(measure: Measure, position?: Position): Measure {
+  static updateEndPosition(measure: Measure, position?: Location): Measure {
     if (position) {
       return {
         ...measure,
-        endLatitude: position?.coords?.latitude,
-        endLongitude: position?.coords?.longitude,
-        endAccuracy: position?.coords?.accuracy,
-        endAltitude: position?.coords?.altitude ? position.coords.altitude : undefined
+        endLatitude: position?.latitude,
+        endLongitude: position?.longitude,
+        endAccuracy: position?.accuracy,
+        endAltitude: position?.altitude ?? undefined
         // endAltitudeAccuracy: position.altitudeAccuracy
       };
     } else {
