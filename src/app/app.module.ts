@@ -5,7 +5,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { Diagnostic } from '@awesome-cordova-plugins/diagnostic';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-import { IonicStorageModule } from '@ionic/storage-angular';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgxsFormPluginModule } from '@ngxs/form-plugin';
@@ -25,10 +24,6 @@ import { UserState } from './states/user/user.state';
         BrowserModule,
         IonicModule.forRoot(),
         AppRoutingModule,
-        IonicStorageModule.forRoot({
-            name: 'ord-db',
-            driverOrder: ['sqlite']
-        }),
         NgxsModule.forRoot([DevicesState, MeasuresState, UserState]),
         NgxsFormPluginModule.forRoot(),
         NgxsLoggerPluginModule.forRoot({

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { Platform } from '@ionic/angular';
-import { Storage } from '@ionic/storage';
 import { Actions, Store } from '@ngxs/store';
 import { forkJoin, from, Observable, of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
@@ -17,6 +16,7 @@ import { UserService } from '../states/user/user.service';
 import { UserStateModel } from '../states/user/user.state';
 import { ScreenOrientation } from '@capacitor/screen-orientation';
 import { SplashScreen } from '@capacitor/splash-screen';
+import { Preferences } from '@capacitor/preferences';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +30,6 @@ export class StorageService {
   private currentSeriesKey = 'measures.currentSeries';
 
   constructor(
-    private storage: Storage,
     private actions$: Actions,
     private store: Store,
     private userService: UserService,
@@ -125,9 +124,9 @@ export class StorageService {
 
   private getFromDB(key: string): any {
     return from(
-      this.storage.get(key).then(rawValue => {
+      Preferences.get({ key: key }).then(rawValue => {
         if (rawValue) {
-          return this.parseFromDB(rawValue);
+          return this.parseFromDB(rawValue.value ?? "");
         } else {
           const retrieveLocalStorageData = localStorage.getItem(key);
           if (retrieveLocalStorageData) {
@@ -141,27 +140,27 @@ export class StorageService {
   }
 
   saveUser(user: UserStateModel) {
-    this.storage.set(this.userKey, this.formatToDB(user));
+    Preferences.set({ key: this.userKey, value: this.formatToDB(user) });
   }
 
   saveKnownDevices(knownDevices: AbstractDevice[]) {
-    this.storage.set(this.knownDevicesKey, this.formatToDB(knownDevices));
+    Preferences.set({ key: this.knownDevicesKey, value: this.formatToDB(knownDevices) });
   }
 
   saveParams(params: { expertMode: boolean; autoPublish: boolean }) {
-    this.storage.set(this.paramsKey, this.formatToDB(params));
+    Preferences.set({ key: this.paramsKey, value: this.formatToDB(params) });
   }
 
   saveMeasures(measures: (Measure | MeasureSeries)[]) {
-    this.storage.set(this.measuresKey, this.formatToDB(measures));
+    Preferences.set({ key: this.measuresKey, value: this.formatToDB(measures) });
   }
 
   saveRecentTags(recentTags: string[]) {
-    this.storage.set(this.recentTagsKey, this.formatToDB(recentTags));
+    Preferences.set({ key: this.recentTagsKey, value: this.formatToDB(recentTags) });
   }
 
   saveCurrentSeries(currentSeries?: MeasureSeries) {
-    this.storage.set(this.currentSeriesKey, currentSeries ? this.formatToDB(currentSeries) : null);
+    Preferences.set({ key: this.currentSeriesKey, value: currentSeries ? this.formatToDB(currentSeries) : "" });
   }
 
   private parseFromDB(jsonString: string): any {
