@@ -1,4 +1,5 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { concatMap, map, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
@@ -47,12 +48,14 @@ export interface DevicesStateModel {
     knownDevices: []
   }
 })
+@Injectable()
 export class DevicesState {
+
   constructor(
     private devicesService: DevicesService,
     private bleDevicesService: BLEDevicesService,
     private usbDevicesService: USBDevicesService
-  ) {}
+  ) { }
 
   @Selector()
   static availableDevices({
@@ -121,12 +124,12 @@ export class DevicesState {
     return environment.mockDevice
       ? of(null)
       : this.usbDevicesService.startDiscoverDevices().pipe(
-          tap(() =>
-            patchState({
-              isScanning: true
-            })
-          )
-        );
+        tap(() =>
+          patchState({
+            isScanning: true
+          })
+        )
+      );
   }
 
   @Action(StopDiscoverDevices)

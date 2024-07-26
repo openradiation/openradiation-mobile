@@ -3,7 +3,6 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
-import { Diagnostic } from '@awesome-cordova-plugins/diagnostic';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -24,7 +23,13 @@ import { UserState } from './states/user/user.state';
         BrowserModule,
         IonicModule.forRoot(),
         AppRoutingModule,
-        NgxsModule.forRoot([DevicesState, MeasuresState, UserState]),
+        NgxsModule.forRoot(
+            [
+                DevicesState,
+                MeasuresState,
+                UserState
+            ]
+        ),
         NgxsFormPluginModule.forRoot(),
         NgxsLoggerPluginModule.forRoot({
             disabled: environment.production

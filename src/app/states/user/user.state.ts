@@ -5,7 +5,7 @@ import { NotificationService } from '../../services/notification.service';
 import { StorageService } from '../../services/storage.service';
 import { DisableNotifications, EnableNotifications, InitUser, LogIn, LogOut, SetLanguage } from './user.action';
 import { UserService } from './user.service';
-
+import { Injectable } from '@angular/core';
 export interface UserStateModel {
   login?: string;
   password?: string;
@@ -16,12 +16,13 @@ export interface UserStateModel {
 @State<UserStateModel>({
   name: 'user'
 })
+@Injectable()
 export class UserState implements NgxsOnInit {
   constructor(
     private userService: UserService,
     private storageService: StorageService,
     private notificationService: NotificationService
-  ) {}
+  ) { }
 
   @Selector()
   static login({ login }: UserStateModel): string | undefined {

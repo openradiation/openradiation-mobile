@@ -53,6 +53,7 @@ import {
 import { MeasuresService } from './measures.service';
 import { PositionService } from './position.service';
 import { Device } from "@capacitor/device";
+import { Injectable } from '@angular/core';
 
 /**
  * Max duration between 2 measure steps before the device connection is considered as lost
@@ -89,6 +90,7 @@ export interface MeasuresStateModel {
     }
   }
 })
+@Injectable()
 export class MeasuresState {
   public static MISSING_STRING = "<Missing>"
   deviceUUID: string = MeasuresState.MISSING_STRING
