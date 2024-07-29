@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Diagnostic } from '@awesome-cordova-plugins/diagnostic';
-import { Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, ofActionSuccessful, Store } from '@ngxs/store';
 import { merge, Observable, timer, from } from 'rxjs';
@@ -16,6 +15,8 @@ import {
 import { DevicesService } from '../devices.service';
 import { AbstractBLEDevice, RawBLEDevice } from './abstract-ble-device';
 import { BleClient } from '@capacitor-community/bluetooth-le';
+import { Capacitor } from '@capacitor/core';
+
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +35,6 @@ export class BLEDevicesService {
   private scanPeriod = 5000;
 
   constructor(
-    private platform: Platform,
     private actions$: Actions,
     private store: Store,
     private alertService: AlertService,
@@ -54,7 +54,7 @@ export class BLEDevicesService {
       BleClient
         .isEnabled()
         .catch(err => {
-          if (this.platform.is('android')) {
+          if (Capacitor.getPlatform() == 'android') {
             return BleClient.requestEnable();
           } else {
             throw err;
@@ -135,7 +135,7 @@ export class BLEDevicesService {
             {
               text: this.translateService.instant('GENERAL.GO_TO_SETTINGS'),
               handler: () => {
-                if (this.platform.is('ios')) {
+                if (Capacitor.getPlatform() == 'ios') {
                   Diagnostic.switchToSettings();
                 } else {
                   Diagnostic.switchToBluetoothSettings();

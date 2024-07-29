@@ -17,6 +17,8 @@ import { UserStateModel } from '../states/user/user.state';
 import { ScreenOrientation } from '@capacitor/screen-orientation';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { Preferences } from '@capacitor/preferences';
+import { Capacitor } from '@capacitor/core';
+
 
 @Injectable({
   providedIn: 'root'
@@ -87,7 +89,7 @@ export class StorageService {
           .select(({ measures }: { measures: MeasuresStateModel }) => measures.currentSeries)
           .subscribe(currentSeries => this.saveCurrentSeries(currentSeries));
         this.platform.ready().then(async () => {
-          if (this.platform.is('capacitor')) {
+          if (Capacitor.getPlatform() != "web") {
             StatusBar.setOverlaysWebView({ overlay: true });
             StatusBar.setStyle({ style: Style.Light });
             SplashScreen.hide();
@@ -125,7 +127,7 @@ export class StorageService {
   private getFromDB(key: string): any {
     return from(
       Preferences.get({ key: key }).then(rawValue => {
-        if (rawValue) {
+        if (rawValue && rawValue.value) {
           return this.parseFromDB(rawValue.value ?? "");
         } else {
           const retrieveLocalStorageData = localStorage.getItem(key);
@@ -164,7 +166,11 @@ export class StorageService {
   }
 
   private parseFromDB(jsonString: string): any {
-    return JSON.parse(jsonString);
+    try {
+      return JSON.parse(jsonString);
+    } catch (error) {
+      return undefined;
+    }
   }
 
   private formatToDB(json: any): string {

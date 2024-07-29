@@ -6,6 +6,8 @@ import { Observable } from 'rxjs';
 import { AutoUnsubscribePage } from '../../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { NavigationService } from '../../../../services/navigation.service';
 import { AbstractDevice } from '../../../../states/devices/abstract-device';
+import { Capacitor } from '@capacitor/core';
+
 import {
   ConnectDevice,
   DeviceConnectionLost,
@@ -43,8 +45,7 @@ export class DevicesPage extends AutoUnsubscribePage {
     protected router: Router,
     private store: Store,
     private actions$: Actions,
-    private navigationService: NavigationService,
-    private platform: Platform
+    private navigationService: NavigationService
   ) {
     super(router);
   }
@@ -62,7 +63,7 @@ export class DevicesPage extends AutoUnsubscribePage {
       this.knownDevices$.subscribe(knownDevices => (this.knownDevices = knownDevices))
     );
     this.store.dispatch(new StartDiscoverBLEDevices()).subscribe();
-    if (this.platform.is('android')) {
+    if (Capacitor.getPlatform() == 'android') {
       this.store.dispatch(new StartDiscoverUSBDevices()).subscribe();
     }
   }

@@ -69,7 +69,10 @@ const routes: Routes = [
         canActivateChild: [TabsGuard],
         children: [
           {
-            path: ''
+            path: '',
+            // FIXME should not be empty, but was in previous code version
+            redirectTo: '/tabs/other/about',
+            pathMatch: 'full'
           },
           {
             path: 'legal-notice',
@@ -94,4 +97,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class TabsRoutingModule {}
+export class TabsRoutingModule { }

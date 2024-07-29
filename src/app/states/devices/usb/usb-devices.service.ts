@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, Store } from '@ngxs/store';
 import { UsbSerial } from 'cordova-plugin-usb-serial';
@@ -9,6 +8,7 @@ import { AbstractDevice, DeviceType } from '../abstract-device';
 import { StartDiscoverUSBDevices, StopDiscoverDevices, USBDevicesDiscovered } from '../devices.action';
 import { DevicesService } from '../devices.service';
 import { AbstractUSBDevice } from './abstract-usb-device';
+import { Capacitor } from '@capacitor/core';
 
 /**
  * Constant from cordova-plugin-usb-serial
@@ -27,7 +27,6 @@ export class USBDevicesService {
     private store: Store,
     private translateService: TranslateService,
     private alertService: AlertService,
-    private platform: Platform,
     private actions$: Actions,
     private devicesService: DevicesService
   ) {
@@ -38,7 +37,7 @@ export class USBDevicesService {
       }
     });
     this.actions$.pipe(ofActionDispatched(StopDiscoverDevices)).subscribe(() => {
-      if (this.platform.is('capacitor')) {
+      if (Capacitor.getPlatform() != 'web') {
         UsbSerial.onDeviceAttached([], null);
       }
     });

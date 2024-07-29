@@ -5,14 +5,20 @@ import { AbstractDeviceService } from '../abstract-device.service';
 import { DeviceConnectionLost } from '../devices.action';
 import { AbstractBLEDevice, RawBLEDevice } from './abstract-ble-device';
 import { BleClient } from '@capacitor-community/bluetooth-le';
+import { Capacitor } from '@capacitor/core';
+
 
 export abstract class AbstractBLEDeviceService<T extends AbstractBLEDevice> extends AbstractDeviceService<T> {
   protected abstract service: string;
   protected abstract receiveCharacteristic: string;
 
-  protected constructor(protected store: Store) {
+  protected constructor(
+    protected store: Store,
+  ) {
     super(store);
-    BleClient.initialize();
+    if (Capacitor.getPlatform() != "web") {
+      BleClient.initialize();
+    }
   }
 
   abstract buildDevice(rawBLEDevice: RawBLEDevice): T | null;

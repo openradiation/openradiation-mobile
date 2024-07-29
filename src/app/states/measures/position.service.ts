@@ -10,6 +10,8 @@ import { MeasuresStateModel } from './measures.state';
 import { registerPlugin } from "@capacitor/core";
 import { BackgroundGeolocationPlugin, Location } from "@capacitor-community/background-geolocation";
 import { LocalNotifications } from '@capacitor/local-notifications';
+import { Capacitor } from '@capacitor/core';
+
 
 /**
  * Constant from @mauron85/cordova-plugin-background-geolocation
@@ -81,7 +83,8 @@ export class PositionService {
       this.currentAlert = undefined;
     }
     let locationAuthorizedStatus = await Diagnostic.getLocationAuthorizationStatus();
-    locationAuthorizedStatus = (this.platform.is('ios') && locationAuthorizedStatus === Diagnostic.permissionStatus.DENIED)
+    locationAuthorizedStatus = (Capacitor.getPlatform() == 'ios'
+      && locationAuthorizedStatus === Diagnostic.permissionStatus.DENIED)
       ? Diagnostic.permissionStatus.DENIED_ALWAYS
       : locationAuthorizedStatus
     switch (locationAuthorizedStatus) {
@@ -96,7 +99,7 @@ export class PositionService {
         break;
       case Diagnostic.permissionStatus.GRANTED:
         // On Android, also need to check for local notifications permissions
-        if (this.platform.is('android')) {
+        if (Capacitor.getPlatform() == 'android') {
           let localNotificationStatus = await LocalNotifications.checkPermissions();
           if (localNotificationStatus.display != 'granted') {
             localNotificationStatus = await LocalNotifications.requestPermissions();
@@ -118,7 +121,7 @@ export class PositionService {
       .show(
         {
           header: this.translateService.instant('POSITION.DENIED_ALWAYS.TITLE'),
-          message: this.platform.is('ios')
+          message: Capacitor.getPlatform() == 'ios'
             ? this.translateService.instant('POSITION.DENIED_ALWAYS.NOTICE.IOS')
             : this.translateService.instant('POSITION.DENIED_ALWAYS.NOTICE.ANDROID'),
           backdropDismiss: false,
@@ -146,7 +149,7 @@ export class PositionService {
       this.watchGPSActivation();
     });
 
-    const isLocationEnabled = this.platform.is('android')
+    const isLocationEnabled = Capacitor.getPlatform() == 'android'
       ? Diagnostic.isGpsLocationEnabled()
       : Diagnostic.isLocationEnabled();
     isLocationEnabled.then(enabled => {
@@ -163,7 +166,7 @@ export class PositionService {
       .show(
         {
           header: this.translateService.instant('POSITION.GPS_DISABLED.TITLE'),
-          message: this.platform.is('ios')
+          message: Capacitor.getPlatform() == 'ios'
             ? this.translateService.instant('POSITION.GPS_DISABLED.NOTICE.IOS')
             : this.translateService.instant('POSITION.GPS_DISABLED.NOTICE.ANDROID'),
           backdropDismiss: false,
