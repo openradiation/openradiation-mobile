@@ -3,6 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HomePage } from './home.page';
 
+import { getTestImports, getTestProviders } from '../../../../tests/TestUtils'
+
 describe('HomePage', () => {
   let component: HomePage;
   let fixture: ComponentFixture<HomePage>;
@@ -11,6 +13,9 @@ describe('HomePage', () => {
     TestBed.configureTestingModule({
       declarations: [HomePage],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
+      ,
+      imports: getTestImports(),
+      providers: getTestProviders()
     }).compileComponents();
   });
 

@@ -3,6 +3,8 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PlaneModePage } from './plane-mode.page';
 
+import { getTestImports, getTestProviders } from '../../../../../tests/TestUtils'
+
 describe('MeasuresParamPage', () => {
   let component: PlaneModePage;
   let fixture: ComponentFixture<PlaneModePage>;
@@ -11,6 +13,9 @@ describe('MeasuresParamPage', () => {
     TestBed.configureTestingModule({
       declarations: [PlaneModePage],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
+      ,
+      imports: getTestImports(),
+      providers: getTestProviders()
     }).compileComponents();
   }));
 

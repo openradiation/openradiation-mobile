@@ -3,6 +3,8 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MapPage } from './map.page';
 
+import { getTestImports, getTestProviders } from '../../../../tests/TestUtils'
+
 describe('MapPage', () => {
   let component: MapPage;
   let fixture: ComponentFixture<MapPage>;
@@ -11,6 +13,9 @@ describe('MapPage', () => {
     TestBed.configureTestingModule({
       declarations: [MapPage],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
+      ,
+      imports: getTestImports(),
+      providers: getTestProviders()
     }).compileComponents();
   }));
 

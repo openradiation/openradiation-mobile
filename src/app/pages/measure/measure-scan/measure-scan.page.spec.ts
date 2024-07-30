@@ -2,6 +2,8 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MeasureScanPage } from './measure-scan.page';
 
+import { getTestImports, getTestProviders } from '../../../../tests/TestUtils'
+
 describe('MeasureScanPage', () => {
   let component: MeasureScanPage;
   let fixture: ComponentFixture<MeasureScanPage>;
@@ -10,6 +12,9 @@ describe('MeasureScanPage', () => {
     TestBed.configureTestingModule({
       declarations: [MeasureScanPage],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
+      ,
+      imports: getTestImports(),
+      providers: getTestProviders()
     }).compileComponents();
   }));
 

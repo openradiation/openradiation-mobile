@@ -3,6 +3,8 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MeasureSeriesReportPage } from './measure-series-report-page';
 
+import { getTestImports, getTestProviders } from '../../../../../tests/TestUtils'
+
 describe('MeasureSeriesReportPage', () => {
   let component: MeasureSeriesReportPage;
   let fixture: ComponentFixture<MeasureSeriesReportPage>;
@@ -11,6 +13,9 @@ describe('MeasureSeriesReportPage', () => {
     TestBed.configureTestingModule({
       declarations: [MeasureSeriesReportPage],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
+      ,
+      imports: getTestImports(),
+      providers: getTestProviders()
     }).compileComponents();
   }));
 
