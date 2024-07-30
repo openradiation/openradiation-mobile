@@ -176,9 +176,9 @@
           "options": {
             "eslintConfig": "eslint.config.js",
             "lintFilePatterns": [
-              "**/*.spec.ts",
-              "**/*.ts",
-              "**/*.js"
+              "src/**/*.spec.ts",
+              "src/**/*.ts",
+              "src/**/*.js"
             ]
           }
         }
