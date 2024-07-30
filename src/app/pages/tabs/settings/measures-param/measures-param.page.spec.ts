@@ -4,6 +4,7 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MeasuresParamPage } from './measures-param.page';
 
 import { getTestImports, getTestProviders } from '../../../../../tests/TestUtils'
+import { SanitizeHtmlPipe } from '../../../../components/pipes/sanitize-html/sanitize-html.pipe';
 
 describe('MeasuresParamPage', () => {
   let component: MeasuresParamPage;
@@ -11,7 +12,7 @@ describe('MeasuresParamPage', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [MeasuresParamPage],
+      declarations: [MeasuresParamPage, SanitizeHtmlPipe],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
       ,
       imports: getTestImports(),

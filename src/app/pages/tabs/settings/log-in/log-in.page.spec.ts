@@ -4,6 +4,7 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { LogInPage } from './log-in.page';
 
 import { getTestImports, getTestProviders } from '../../../../../tests/TestUtils'
+import { SanitizeHtmlPipe } from '../../../../components/pipes/sanitize-html/sanitize-html.pipe';
 
 describe('LogInPage', () => {
   let component: LogInPage;
@@ -11,7 +12,7 @@ describe('LogInPage', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [LogInPage],
+      declarations: [LogInPage, SanitizeHtmlPipe],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
       ,
       imports: getTestImports(),
