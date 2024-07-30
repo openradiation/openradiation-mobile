@@ -39,3 +39,6 @@ build.json
 openradiation.keystore
 google-services.json
 GoogleService-Info.plist
+
+.nx/cache
+.nx/workspace-data

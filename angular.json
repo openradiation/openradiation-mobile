@@ -174,34 +174,15 @@
             }
           }
         },
-        "ionic-cordova-build": {
-          "builder": "@ionic/angular-toolkit:cordova-build",
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "browserTarget": "app:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "app:build:production"
-            },
-            "beta": {
-              "browserTarget": "app:build:beta"
-            },
-            "mockDevice": {
-              "browserTarget": "app:build:mockDevice"
-            }
-          }
-        },
-        "ionic-cordova-serve": {
-          "builder": "@ionic/angular-toolkit:cordova-serve",
-          "options": {
-            "cordovaBuildTarget": "app:ionic-cordova-build",
-            "devServerTarget": "app:serve"
-          },
-          "configurations": {
-            "production": {
-              "cordovaBuildTarget": "app:ionic-cordova-build:production",
-              "devServerTarget": "app:serve:production"
-            }
+            "eslintConfig": "eslint.config.js",
+            "lintFilePatterns": [
+              "**/*.spec.ts",
+              "**/*.ts",
+              "**/*.js"
+            ]
           }
         }
       }
@@ -227,7 +208,8 @@
   },
   "cli": {
     "schematicCollections": [
-      "@ionic/angular-toolkit"
+      "@ionic/angular-toolkit",
+      "@angular-eslint/schematics"
     ],
     "analytics": false
   },
