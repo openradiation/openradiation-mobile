@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { Actions, ofActionDispatched, ofActionErrored, ofActionSuccessful, Select, Store } from '@ngxs/store';
+import { Actions, ofActionDispatched, ofActionErrored, ofActionSuccessful, Select, Store, ActionCompletion } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { AlertService } from '../../../services/alert.service';
@@ -45,20 +45,26 @@ export class HistoryPage extends AutoUnsubscribePage {
   pageEnter() {
     super.pageEnter();
     this.subscriptions.push(
-      this.actions$.pipe(ofActionErrored(PublishMeasure)).subscribe(({ measure }: PublishMeasure) => {
-        this.measureBeingSentMap[measure.id] = false;
-        this.toastController
-          .create({
-            message: this.translateService.instant('HISTORY.SEND_ERROR'),
-            duration: 3000,
-            buttons: [{
-              text: this.translateService.instant('GENERAL.OK'),
-              role: 'cancel',
-              handler: () => { }
-            }]
-          })
-          .then(toast => toast.present());
-      }),
+      this.actions$.pipe(ofActionErrored(PublishMeasure)).subscribe(
+        (actionCompletion: ActionCompletion<PublishMeasure, Error>) => {
+          if (actionCompletion.action && actionCompletion.action.measure) {
+            const measure = actionCompletion.action.measure;
+            this.measureBeingSentMap[measure.id] = false;
+            this.toastController
+              .create({
+                message: this.translateService.instant('HISTORY.SEND_ERROR'),
+                duration: 3000,
+                buttons: [{
+                  text: this.translateService.instant('GENERAL.OK'),
+                  role: 'cancel',
+                  handler: () => { }
+                }]
+              })
+              .then(toast => toast.present());
+          } else {
+            console.error("Error with Publish Measure", actionCompletion.result.error)
+          }
+        }),
       this.actions$.pipe(ofActionDispatched(PublishMeasure)).subscribe(({ measure }: PublishMeasure) => {
         this.measureBeingSentMap[measure.id] = true;
       }),

@@ -11,7 +11,7 @@ export abstract class AbstractDeviceService<T extends AbstractDevice> {
     groundLevel: CalibrationFunctions;
   };
 
-  protected constructor(protected store: Store) {}
+  protected constructor(protected store: Store) { }
 
   abstract buildDevice(rawDevice?: RawDevice): T | null;
 
@@ -38,9 +38,10 @@ export abstract class AbstractDeviceService<T extends AbstractDevice> {
       planeMode ? this.calibrationFunctions.planeMode : this.calibrationFunctions.groundLevel
     );
     if (calibrationFunction) {
+      // See https://esbuild.github.io/content-types/#direct-eval
+      var indirectEval = eval
       return [
-        // tslint:disable-next-line:no-eval
-        eval(
+        indirectEval(
           calibrationFunction
             .replace(/cps/g, 'hitsNumberPerSec')
             .replace(/\^/g, '**')
