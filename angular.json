@@ -11,16 +11,22 @@
       "schematics": {},
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": {
-              "base": "www"
-            },
+            "buildOptimizer": true,
+            "aot": true,
+            "outputPath": "www",
             "index": "src/index.html",
+            "scripts": [],
+            "extractLicenses": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true,
+            "main": "src/main.ts",
+            "tsConfig": "src/tsconfig.app.json",
             "polyfills": [
               "src/polyfills.ts"
             ],
-            "tsConfig": "src/tsconfig.app.json",
             "assets": [
               {
                 "glob": "**/*",
@@ -45,14 +51,7 @@
               {
                 "input": "src/theme/variables.scss"
               }
-            ],
-            "scripts": [],
-            "aot": false,
-            "extractLicenses": false,
-            "sourceMap": true,
-            "optimization": false,
-            "namedChunks": true,
-            "browser": "src/main.ts"
+            ]
           },
           "configurations": {
             "production": {
