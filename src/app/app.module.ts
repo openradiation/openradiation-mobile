@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
@@ -17,19 +17,15 @@ import { DevicesState } from './states/devices/devices.state';
 import { MeasuresState } from './states/measures/measures.state';
 import { UserState } from './states/user/user.state';
 
-@NgModule({
-    declarations: [AppComponent, MenuComponent],
-    imports: [
-        BrowserModule,
+@NgModule({ declarations: [AppComponent, MenuComponent],
+    bootstrap: [AppComponent], imports: [BrowserModule,
         IonicModule.forRoot(),
         AppRoutingModule,
-        NgxsModule.forRoot(
-            [
-                DevicesState,
-                MeasuresState,
-                UserState
-            ]
-        ),
+        NgxsModule.forRoot([
+            DevicesState,
+            MeasuresState,
+            UserState
+        ]),
         NgxsFormPluginModule.forRoot(),
         NgxsLoggerPluginModule.forRoot({
             disabled: environment.production
@@ -40,15 +36,11 @@ import { UserState } from './states/user/user.state';
                 useFactory: HttpLoaderFactory,
                 deps: [HttpClient]
             }
-        }),
-        HttpClientModule
-    ],
-    providers: [
+        })], providers: [
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-        DatePipe
-    ],
-    bootstrap: [AppComponent]
-})
+        DatePipe,
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 export class AppModule { }
 
 export function HttpLoaderFactory(http: HttpClient) {
