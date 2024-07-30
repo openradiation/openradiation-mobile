@@ -17,30 +17,34 @@ import { DevicesState } from './states/devices/devices.state';
 import { MeasuresState } from './states/measures/measures.state';
 import { UserState } from './states/user/user.state';
 
-@NgModule({ declarations: [AppComponent, MenuComponent],
-    bootstrap: [AppComponent], imports: [BrowserModule,
-        IonicModule.forRoot(),
-        AppRoutingModule,
-        NgxsModule.forRoot([
-            DevicesState,
-            MeasuresState,
-            UserState
-        ]),
-        NgxsFormPluginModule.forRoot(),
-        NgxsLoggerPluginModule.forRoot({
-            disabled: environment.production
-        }),
-        TranslateModule.forRoot({
-            loader: {
-                provide: TranslateLoader,
-                useFactory: HttpLoaderFactory,
-                deps: [HttpClient]
-            }
-        })], providers: [
-        { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-        DatePipe,
-        provideHttpClient(withInterceptorsFromDi())
-    ] })
+@NgModule({
+    declarations: [AppComponent, MenuComponent],
+    bootstrap: [AppComponent], imports:
+        [
+            BrowserModule,
+            IonicModule.forRoot(),
+            AppRoutingModule,
+            NgxsModule.forRoot([
+                DevicesState,
+                MeasuresState,
+                UserState
+            ]),
+            NgxsFormPluginModule.forRoot(),
+            NgxsLoggerPluginModule.forRoot({
+                disabled: environment.production
+            }),
+            TranslateModule.forRoot({
+                loader: {
+                    provide: TranslateLoader,
+                    useFactory: HttpLoaderFactory,
+                    deps: [HttpClient]
+                }
+            })], providers: [
+                { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+                DatePipe,
+                provideHttpClient(withInterceptorsFromDi())
+            ]
+})
 export class AppModule { }
 
 export function HttpLoaderFactory(http: HttpClient) {
