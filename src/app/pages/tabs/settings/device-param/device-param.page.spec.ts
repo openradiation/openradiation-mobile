@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DeviceParamPage } from './device-param.page';
 
@@ -7,7 +7,7 @@ describe('DeviceParamPage', () => {
   let component: DeviceParamPage;
   let fixture: ComponentFixture<DeviceParamPage>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [DeviceParamPage],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]

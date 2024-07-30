@@ -1,11 +1,11 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { SeriesGraphComponent } from './series-graph.component';
 
 describe('SeriesGraphComponent', () => {
   let component: SeriesGraphComponent;
   let fixture: ComponentFixture<SeriesGraphComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [SeriesGraphComponent]
     }).compileComponents();

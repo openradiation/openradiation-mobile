@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MeasuresParamPage } from './measures-param.page';
 
@@ -7,7 +7,7 @@ describe('MeasuresParamPage', () => {
   let component: MeasuresParamPage;
   let fixture: ComponentFixture<MeasuresParamPage>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [MeasuresParamPage],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]

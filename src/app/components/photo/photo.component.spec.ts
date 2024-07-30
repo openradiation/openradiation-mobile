@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PhotoComponent } from './photo.component';
 
@@ -6,7 +6,7 @@ describe('TagListComponent', () => {
   let component: PhotoComponent;
   let fixture: ComponentFixture<PhotoComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [PhotoComponent]
     }).compileComponents();

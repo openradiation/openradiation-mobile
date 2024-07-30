@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GpsIndicatorComponent } from './gps-indicator.component';
 
@@ -6,7 +6,7 @@ describe('GpsIndicatorComponent', () => {
   let component: GpsIndicatorComponent;
   let fixture: ComponentFixture<GpsIndicatorComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [GpsIndicatorComponent]
     }).compileComponents();
