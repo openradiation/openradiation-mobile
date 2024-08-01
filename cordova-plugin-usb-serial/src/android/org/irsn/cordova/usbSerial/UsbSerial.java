@@ -17,6 +17,7 @@ import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
 import android.util.Base64;
 import android.util.Log;
+import android.os.Build;
 
 import com.felhr.usbserial.UsbSerialDevice;
 import com.felhr.usbserial.UsbSerialInterface;
@@ -140,7 +141,10 @@ public class UsbSerial extends CordovaPlugin {
         filter.addAction(ACTION_USB_DETACHED);
         filter.addAction(ACTION_USB_ATTACHED);
         filter.addAction(ACTION_USB_PERMISSION);
-        cordova.getContext().registerReceiver(usbReceiver, filter);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            cordova.getContext().registerReceiver(usbReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+        }
     }
 
     /**
