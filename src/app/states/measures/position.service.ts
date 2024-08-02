@@ -22,7 +22,7 @@ const BackgroundGeolocation = registerPlugin<BackgroundGeolocationPlugin>("Backg
   providedIn: 'root'
 })
 export class PositionService {
-  private currentAlert?: any;
+  private currentAlert?: HTMLIonAlertElement;
   private currentWatcherId = "";
 
   constructor(

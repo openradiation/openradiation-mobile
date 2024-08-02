@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { NavigationEnd, Router, UrlTree } from '@angular/router';
 import { NavController, Platform } from '@ionic/angular';
+import { NavigationOptions } from '@ionic/angular/common/providers/nav-controller';
 // Fixme Capacitor migration
 //import { NavigationOptions } from '@ionic/angular/dist/providers/nav-controller';
 import { filter } from 'rxjs/operators';
@@ -21,12 +22,12 @@ export class NavigationService {
     });
   }
 
-  navigateRoot(url: string | UrlTree | any[]) {
+  navigateRoot(url: string | UrlTree | unknown[]) {
     this.stackDepth = 0;
     this.navController.navigateRoot(url);
   }
 
-  navigateForward(url: string | UrlTree | any[], options?: any) {
+  navigateForward(url: string | UrlTree | unknown[], options?: NavigationOptions) {
     this.navController.navigateForward(url, options);
   }
 

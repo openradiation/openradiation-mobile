@@ -18,8 +18,8 @@ export abstract class AbstractUSBDeviceService<T extends AbstractUSBDevice> exte
 
   abstract buildDevice(): T;
 
-  connectDevice(device: T): Observable<any> {
-    const connection = Observable.create((observer: Observer<any>) =>
+  connectDevice(device: T): Observable<unknown> {
+    const connection = Observable.create((observer: Observer<unknown>) =>
       UsbSerial.connect(
         { vid: device.vid, pid: device.pid },
         {
@@ -45,8 +45,8 @@ export abstract class AbstractUSBDeviceService<T extends AbstractUSBDevice> exte
     return connection.pipe(take(1));
   }
 
-  disconnectDevice(device: T): Observable<any> {
-    return Observable.create((observer: Observer<any>) =>
+  disconnectDevice(device: T): Observable<unknown> {
+    return Observable.create((observer: Observer<unknown>) =>
       UsbSerial.disconnect(
         () => {
           observer.next(null);
@@ -57,7 +57,7 @@ export abstract class AbstractUSBDeviceService<T extends AbstractUSBDevice> exte
     );
   }
 
-  protected receiveData(stopSignal: Observable<any> = of()): Observable<ArrayBuffer> {
+  protected receiveData(stopSignal: Observable<unknown> = of()): Observable<ArrayBuffer> {
     return Observable.create((observer: Observer<ArrayBuffer>) => {
       UsbSerial.onDataReceived(data => observer.next(data), err => observer.error(err));
     }).pipe(takeUntil(stopSignal));

@@ -7,10 +7,10 @@ import { SplashScreen } from '@capacitor/splash-screen';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
-  let statusBarSpy: any;
-  let splashScreenSpy: any;
-  let platformReadySpy: any;
-  let platformSpy: any;
+  let statusBarSpy: unknown;
+  let splashScreenSpy: unknown;
+  let platformReadySpy: unknown;
+  let platformSpy: unknown;
 
   beforeEach(async () => {
     statusBarSpy = jasmine.createSpyObj('StatusBar', ['setOverlaysWebView']);

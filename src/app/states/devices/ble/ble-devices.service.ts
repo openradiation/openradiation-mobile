@@ -30,7 +30,7 @@ export class BLEDevicesService {
     DeviceType.Rium2BLE
   ];
 
-  private currentAlert?: any;
+  private currentAlert?: HTMLIonAlertElement;
   private scanDuration = 3;
   private scanPeriod = 5000;
 
@@ -49,7 +49,7 @@ export class BLEDevicesService {
     });
   }
 
-  startDiscoverDevices(): Observable<any> {
+  startDiscoverDevices(): Observable<unknown> {
     return from(
       BleClient
         .isEnabled()
@@ -151,7 +151,7 @@ export class BLEDevicesService {
   }
 
 
-  private scan(_scanDuration: number): Observable<any> {
+  private scan(_scanDuration: number): Observable<unknown> {
     // FIXME : parameter "scanDuration" cannot be passed to new capacitor BLE API
     return new Observable(observer => {
       BleClient.requestLEScan({},

@@ -17,9 +17,9 @@ export abstract class AbstractDeviceService<T extends AbstractDevice> {
 
   abstract getDeviceInfo(device: T): Observable<Partial<T>>;
 
-  abstract saveDeviceParams(device: T): Observable<any>;
+  abstract saveDeviceParams(device: T): Observable<unknown>;
 
-  abstract startMeasureScan(device: T, stopSignal: Observable<any>): Observable<Step>;
+  abstract startMeasureScan(device: T, stopSignal: Observable<unknown>): Observable<Step>;
 
   computeRadiationValue(measure: Measure, planeMode: boolean): [number, string] {
     if (measure.endTime && measure.hitsNumber !== undefined) {
@@ -39,7 +39,7 @@ export abstract class AbstractDeviceService<T extends AbstractDevice> {
     );
     if (calibrationFunction) {
       // See https://esbuild.github.io/content-types/#direct-eval
-      var indirectEval = eval
+      const indirectEval = eval
       return [
         indirectEval(
           calibrationFunction
@@ -69,9 +69,9 @@ export abstract class AbstractDeviceService<T extends AbstractDevice> {
     return calibrationFunctions[determinedCalibrationFunctions];
   }
 
-  abstract connectDevice(device: T): Observable<any>;
+  abstract connectDevice(device: T): Observable<unknown>;
 
-  abstract disconnectDevice(device: T): Observable<any>;
+  abstract disconnectDevice(device: T): Observable<unknown>;
 
   protected abstract decodeDataPackage(buffer: ArrayBuffer | ArrayBuffer[]): Step | null;
 

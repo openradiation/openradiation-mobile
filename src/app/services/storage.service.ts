@@ -124,6 +124,7 @@ export class StorageService {
     return this.getFromDB(this.currentSeriesKey);
   }
 
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   private getFromDB(key: string): any {
     return from(
       Preferences.get({ key: key }).then(rawValue => {
@@ -168,7 +169,7 @@ export class StorageService {
   private parseFromDB(jsonString: string): any {
     try {
       return JSON.parse(jsonString);
-    } catch (error) {
+    } catch (_error) {
       return undefined;
     }
   }

@@ -32,11 +32,11 @@ export class DeviceSafeCastService extends AbstractBLEDeviceService<DeviceSafeCa
     return of({});
   }
 
-  saveDeviceParams(device: DeviceSafeCast): Observable<any> {
+  saveDeviceParams(device: DeviceSafeCast): Observable<unknown> {
     return of(null);
   }
 
-  startMeasureScan(device: DeviceSafeCast, stopSignal: Observable<any>): Observable<Step> {
+  startMeasureScan(device: DeviceSafeCast, stopSignal: Observable<unknown>): Observable<Step> {
     stopSignal.subscribe(() => this.stopReceiveData(device));
     let readingBufferSequence = false;
     return this.startReceiveData(device).pipe(

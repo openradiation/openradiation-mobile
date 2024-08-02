@@ -15,7 +15,7 @@ import { Location } from "@capacitor-community/background-geolocation";
 /**
  * Constants from cordova-plugin-network-information to get network types
  */
-declare var Connection: any;
+declare var Connection: unknown;
 
 @Component({
   selector: 'app-map',

@@ -16,11 +16,11 @@ export class DeviceAtomTag extends AbstractBLEDevice {
   };
   paramsModel: DeviceParamsModel = {
     audioHits: {
-      label: <string>_('SENSORS.PARAM.AUDIO_HITS'),
+      label: _('SENSORS.PARAM.AUDIO_HITS') as string,
       type: DeviceParamType.Boolean
     },
     vibrationHits: {
-      label: <string>_('SENSORS.PARAM.VIBRATION_HITS'),
+      label: _('SENSORS.PARAM.VIBRATION_HITS') as string,
       type: DeviceParamType.Boolean
     }
   };

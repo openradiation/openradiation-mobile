@@ -52,11 +52,11 @@ export class DeviceRium2BLEService extends AbstractBLEDeviceService<DeviceRium2B
     );
   }
 
-  saveDeviceParams(device: DeviceRium2BLE): Observable<any> {
+  saveDeviceParams(device: DeviceRium2BLE): Observable<unknown> {
     return of(null);
   }
 
-  startMeasureScan(device: DeviceRium2BLE, stopSignal: Observable<any>): Observable<Step> {
+  startMeasureScan(device: DeviceRium2BLE, stopSignal: Observable<unknown>): Observable<Step> {
     stopSignal.subscribe(() => {
       this.stopReceiveData(device);
       BleClient.stopNotifications(device.sensorUUID, this.service, this.temperatureCharacteristic);

@@ -16,7 +16,7 @@ export class UserService {
     this.translateService.setDefaultLang('en');
   }
 
-  logIn(login: string, password: string): Observable<any> {
+  logIn(login: string, password: string): Observable<unknown> {
     return this.httpClient
       .post(environment.API_URI, {
         apiKey: environment.API_KEY,
@@ -47,7 +47,7 @@ export class UserService {
       );
   }
 
-  setLanguage(language: string): Observable<any> {
+  setLanguage(language: string): Observable<unknown> {
     return this.translateService.use(language);
   }
 

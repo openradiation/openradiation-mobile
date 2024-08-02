@@ -26,7 +26,7 @@ export class DeviceRium2USBService extends AbstractUSBDeviceService<DeviceRium2U
     super(store, actions$);
   }
 
-  connectDevice(device: DeviceRium2USB): Observable<any> {
+  connectDevice(device: DeviceRium2USB): Observable<unknown> {
     return super.connectDevice(device).pipe(
       concatMap(() => this.receiveData()),
       concatMap((buffer: ArrayBuffer) => {
@@ -69,11 +69,11 @@ export class DeviceRium2USBService extends AbstractUSBDeviceService<DeviceRium2U
     );
   }
 
-  saveDeviceParams(device: DeviceRium2USB): Observable<any> {
+  saveDeviceParams(device: DeviceRium2USB): Observable<unknown> {
     return of(null);
   }
 
-  startMeasureScan(device: DeviceRium2USB, stopSignal: Observable<any>): Observable<Step> {
+  startMeasureScan(device: DeviceRium2USB, stopSignal: Observable<unknown>): Observable<Step> {
     return this.receiveData(stopSignal).pipe(
       map((buffer: ArrayBuffer) => this.decodeDataPackage(buffer)),
       filter((step: Step | null): step is Step => step !== null)

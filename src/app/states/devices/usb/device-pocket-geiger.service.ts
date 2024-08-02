@@ -33,11 +33,11 @@ export class DevicePocketGeigerService extends AbstractUSBDeviceService<DevicePo
     return of({});
   }
 
-  saveDeviceParams(device: DevicePocketGeiger): Observable<any> {
+  saveDeviceParams(device: DevicePocketGeiger): Observable<unknown> {
     return of(null);
   }
 
-  startMeasureScan(device: DevicePocketGeiger, stopSignal: Observable<any>): Observable<Step> {
+  startMeasureScan(device: DevicePocketGeiger, stopSignal: Observable<unknown>): Observable<Step> {
     this.sendData(this.SEND_GET_HITS);
     return this.receiveData(stopSignal).pipe(
       filter(() => this.noiseTimeout < Date.now()),

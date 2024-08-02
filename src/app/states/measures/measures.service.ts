@@ -22,9 +22,9 @@ export class MeasuresService {
     private actions$: Actions,
     private httpClient: HttpClient,
     private devicesService: DevicesService
-  ) {}
+  ) { }
 
-  startMeasureScan(device: AbstractDevice): Observable<any> {
+  startMeasureScan(device: AbstractDevice): Observable<unknown> {
     const stopSignal = this.actions$.pipe(
       ofActionSuccessful(StopMeasureScan, CancelMeasure),
       take(1)
@@ -47,7 +47,7 @@ export class MeasuresService {
     return this.detectHits(device, stopSignal).pipe(take(1));
   }
 
-  private detectHits(device: AbstractDevice, stopSignal: Observable<any>): Observable<Step> {
+  private detectHits(device: AbstractDevice, stopSignal: Observable<unknown>): Observable<Step> {
     const detectHits = this.devicesService
       .service(device)
       .startMeasureScan(device, stopSignal)
@@ -63,7 +63,7 @@ export class MeasuresService {
     return this.devicesService.service(device).computeRadiationValue(measure, planeMode);
   }
 
-  publishMeasure(measure: Measure | MeasureSeries): Observable<any> {
+  publishMeasure(measure: Measure | MeasureSeries): Observable<unknown> {
     switch (measure.type) {
       case MeasureType.Measure: {
         return this.postMeasure(measure);
@@ -74,7 +74,7 @@ export class MeasuresService {
     }
   }
 
-  private postMeasure(measure: Measure): Observable<any> {
+  private postMeasure(measure: Measure): Observable<unknown> {
     if (MeasuresService.canPublishMeasure(measure)) {
       const payload: MeasureApi = {
         apiKey: environment.API_KEY,

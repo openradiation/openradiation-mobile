@@ -45,8 +45,8 @@ export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag
     );
   }
 
-  saveDeviceParams(device: DeviceAtomTag): Observable<any> {
-    let command: Promise<any>;
+  saveDeviceParams(device: DeviceAtomTag): Observable<unknown> {
+    let command: Promise<unknown>;
     if (device.params.audioHits && device.params.vibrationHits) {
       command = this.sendSettingsCommand(device, 0x10).then(() => this.sendSettingsCommand(device, 0x06));
     } else if (device.params.audioHits) {
@@ -60,7 +60,7 @@ export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag
     return from(command);
   }
 
-  private sendSettingsCommand(device: DeviceAtomTag, command: number, param?: number): Promise<any> {
+  private sendSettingsCommand(device: DeviceAtomTag, command: number, param?: number): Promise<unknown> {
     const dataView = new DataView(new ArrayBuffer(3));
     dataView.setUint8(0, command);
     if (param !== undefined) {
@@ -69,7 +69,7 @@ export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag
     return BleClient.write(device.sensorUUID, this.service, this.settingsCharacteristic, dataView);
   }
 
-  startMeasureScan(device: DeviceAtomTag, stopSignal: Observable<any>): Observable<Step> {
+  startMeasureScan(device: DeviceAtomTag, stopSignal: Observable<unknown>): Observable<Step> {
     stopSignal.subscribe(() => this.stopReceiveData(device));
     return this.startReceiveData(device).pipe(
       map((buffer: ArrayBuffer) => this.decodeDataPackage(buffer)),

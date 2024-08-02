@@ -18,11 +18,11 @@ export class DeviceOGKit extends AbstractBLEDevice {
   };
   paramsModel: DeviceParamsModel = {
     audioHits: {
-      label: <string>_('SENSORS.PARAM.AUDIO_HITS'),
+      label: _('SENSORS.PARAM.AUDIO_HITS') as string,
       type: DeviceParamType.Boolean
     },
     visualHits: {
-      label: <string>_('SENSORS.PARAM.VISUAL_HITS'),
+      label: _('SENSORS.PARAM.VISUAL_HITS') as string,
       type: DeviceParamType.Boolean
     }
   };

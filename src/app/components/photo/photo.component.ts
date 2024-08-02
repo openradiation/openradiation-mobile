@@ -21,11 +21,15 @@ export class PhotoComponent implements ControlValueAccessor {
   @Input()
   title?: string;
 
-  private onChange = (option: any) => { };
+  private onChange = (_option: string | undefined) => {
+    // Left empty
+  };
 
-  private onTouched = () => { };
+  private onTouched = () => {
+    // Left empty
+  };
 
-  registerOnChange(fn: (option: any) => void): void {
+  registerOnChange(fn: (option: unknown) => void): void {
     this.onChange = fn;
   }
 
@@ -33,7 +37,7 @@ export class PhotoComponent implements ControlValueAccessor {
     this.onTouched = fn;
   }
 
-  writeValue(photo: any): void {
+  writeValue(photo: string | undefined): void {
     this.photo = photo;
     this.onChange(this.photo);
   }

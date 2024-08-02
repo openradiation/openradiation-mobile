@@ -37,13 +37,13 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
     {
       iconOn: 'assets/img/icon-floor-on.png',
       iconOff: 'assets/img/icon-floor-off.png',
-      label: <string>_('MEASURES.SENSOR_POSITION.FLOOR'),
+      label: ('MEASURES.SENSOR_POSITION.FLOOR') as string,
       value: 0
     },
     {
       iconOn: 'assets/img/icon-elevated-on.png',
       iconOff: 'assets/img/icon-elevated-off.png',
-      label: <string>_('MEASURES.SENSOR_POSITION.1_METER_HIGH'),
+      label: ('MEASURES.SENSOR_POSITION.1_METER_HIGH') as string,
       value: 1
     }
   ];
@@ -52,13 +52,13 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
     {
       iconOn: 'assets/img/icon-sun-on.png',
       iconOff: 'assets/img/icon-sun-off.png',
-      label: <string>_('MEASURES.WEATHER.NO_RAIN'),
+      label: ('MEASURES.WEATHER.NO_RAIN') as string,
       value: false
     },
     {
       iconOn: 'assets/img/icon-rain-on.png',
       iconOff: 'assets/img/icon-rain-off.png',
-      label: <string>_('MEASURES.WEATHER.RAIN'),
+      label: ('MEASURES.WEATHER.RAIN') as string,
       value: true
     }
   ];
@@ -67,13 +67,13 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
     {
       iconOn: 'assets/img/icon-plane-on.png',
       iconOff: 'assets/img/icon-plane-off.png',
-      label: <string>_('MEASURES.WEATHER.NO_STORM'),
+      label: ('MEASURES.WEATHER.NO_STORM') as string,
       value: false
     },
     {
       iconOn: 'assets/img/icon-plane-storm-on.png',
       iconOff: 'assets/img/icon-plane-storm-off.png',
-      label: <string>_('MEASURES.WEATHER.STORM'),
+      label: _('MEASURES.WEATHER.STORM') as string,
       value: true
     }
   ];
@@ -82,13 +82,13 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
     {
       iconOn: 'assets/img/icon-aisle-on.png',
       iconOff: 'assets/img/icon-aisle-off.png',
-      label: <string>_('MEASURES.SENSOR_POSITION.NO_WINDOW_SIDE'),
+      label: _('MEASURES.SENSOR_POSITION.NO_WINDOW_SIDE') as string,
       value: false
     },
     {
       iconOn: 'assets/img/icon-window-on.png',
       iconOff: 'assets/img/icon-window-off.png',
-      label: <string>_('MEASURES.SENSOR_POSITION.WINDOW_SIDE'),
+      label: _('MEASURES.SENSOR_POSITION.WINDOW_SIDE') as string,
       value: true
     }
   ];
@@ -135,28 +135,28 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
       {
         iconOn: 'assets/img/icon-countryside-on.png',
         iconOff: 'assets/img/icon-countryside-off.png',
-        label: <string>_('MEASURES.ENVIRONMENT.COUNTRYSIDE'),
+        label: _('MEASURES.ENVIRONMENT.COUNTRYSIDE') as string,
         value: MeasureEnvironment.Countryside,
         disabled: this.positionChangeSpeedOverLimit
       },
       {
         iconOn: 'assets/img/icon-city-on.png',
         iconOff: 'assets/img/icon-city-off.png',
-        label: <string>_('MEASURES.ENVIRONMENT.CITY'),
+        label: _('MEASURES.ENVIRONMENT.CITY') as string,
         value: MeasureEnvironment.City,
         disabled: this.positionChangeSpeedOverLimit
       },
       {
         iconOn: 'assets/img/icon-inside-on.png',
         iconOff: 'assets/img/icon-inside-off.png',
-        label: <string>_('MEASURES.ENVIRONMENT.INSIDE'),
+        label: _('MEASURES.ENVIRONMENT.INSIDE') as string,
         value: MeasureEnvironment.Inside,
         disabled: this.positionChangeSpeedOverLimit
       },
       {
         iconOn: 'assets/img/icon-ontheroad-on.png',
         iconOff: 'assets/img/icon-ontheroad-off.png',
-        label: <string>_('MEASURES.ENVIRONMENT.ON_THE_ROAD'),
+        label: _('MEASURES.ENVIRONMENT.ON_THE_ROAD') as string,
         value: MeasureEnvironment.OnTheRoad
       }
     ];

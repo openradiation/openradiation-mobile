@@ -14,7 +14,7 @@ export interface RawBLEDevice extends RawDevice {
   characteristics?: {
     characteristic: string;
     properties: string[];
-    descriptors: any[];
+    descriptors: unknown[];
     service: string;
   }[];
 }

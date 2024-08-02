@@ -30,21 +30,21 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
   measureSeriesParamsSelected = MeasureSeriesParamsSelected;
 
   minuteMessageMapping = {
-    '=0': <string>_('GENERAL.MINUTE.NONE'),
-    '=1': <string>_('GENERAL.MINUTE.SINGULAR'),
-    other: <string>_('GENERAL.MINUTE.PLURAL')
+    '=0': _('GENERAL.MINUTE.NONE') as string,
+    '=1': _('GENERAL.MINUTE.SINGULAR') as string,
+    other: _('GENERAL.MINUTE.PLURAL') as string,
   };
 
   hourMessageMapping = {
-    '=0': <string>_('GENERAL.HOUR.NONE'),
-    '=1': <string>_('GENERAL.HOUR.SINGULAR'),
-    other: <string>_('GENERAL.HOUR.PLURAL')
+    '=0': _('GENERAL.HOUR.NONE') as string,
+    '=1': _('GENERAL.HOUR.SINGULAR') as string,
+    other: _('GENERAL.HOUR.PLURAL') as string,
   };
 
   hitsMessageMapping = {
-    '=0': <string>_('GENERAL.HITS.NONE'),
-    '=1': <string>_('GENERAL.HITS.SINGULAR'),
-    other: <string>_('GENERAL.HITS.PLURAL')
+    '=0': _('GENERAL.HITS.NONE') as string,
+    '=1': _('GENERAL.HITS.SINGULAR') as string,
+    other: _('GENERAL.HITS.PLURAL') as string,
   };
 
   private paramSelected: MeasureSeriesParamsSelected;

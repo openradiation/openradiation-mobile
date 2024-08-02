@@ -21,7 +21,7 @@ declare const UsbSerial: UsbSerial;
 export class USBDevicesService {
   private devices = [DeviceType.PocketGeiger, DeviceType.Rium2USB]; // Only the 2nd version of Rium is present here, but it will be used to detect old version of Rium too
 
-  private currentAlert?: any;
+  private currentAlert?: HTMLIonAlertElement;
 
   constructor(
     private store: Store,
@@ -43,7 +43,7 @@ export class USBDevicesService {
     });
   }
 
-  startDiscoverDevices(): Observable<any> {
+  startDiscoverDevices(): Observable<unknown> {
     this.discoverDevices();
     return of(null);
   }

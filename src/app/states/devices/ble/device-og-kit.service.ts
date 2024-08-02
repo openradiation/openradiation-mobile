@@ -89,7 +89,7 @@ export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
     );
   }
 
-  saveDeviceParams(device: DeviceOGKit): Observable<any> {
+  saveDeviceParams(device: DeviceOGKit): Observable<unknown> {
     return from(
       this.sendData(device, [this.SEND_SET_VISUAL_HIT, device.params.visualHits ? 0x00 : 0x01]).then(() =>
         this.sendData(device, [this.SEND_SET_AUDIO_HIT, device.params.audioHits ? 0x00 : 0x01])
@@ -97,7 +97,7 @@ export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
     );
   }
 
-  startMeasureScan(device: DeviceOGKit, stopSignal: Observable<any>): Observable<Step> {
+  startMeasureScan(device: DeviceOGKit, stopSignal: Observable<unknown>): Observable<Step> {
     this.setTubeVoltageOn(device);
     stopSignal.subscribe(() => this.stopReceiveData(device));
     return this.startReceiveData(device).pipe(
@@ -119,7 +119,7 @@ export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
     }
   }
 
-  private sendData(device: DeviceOGKit, data: number[]): Promise<any> {
+  private sendData(device: DeviceOGKit, data: number[]): Promise<unknown> {
     return BleClient.write(device.sensorUUID, this.service, this.sendCharacteristic,
       new DataView(new Uint8Array(data).buffer)
     );

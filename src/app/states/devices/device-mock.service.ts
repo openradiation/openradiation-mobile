@@ -28,11 +28,11 @@ export class DeviceMockService extends AbstractDeviceService<DeviceMock> {
     return of({});
   }
 
-  saveDeviceParams(device: DeviceMock): Observable<any> {
+  saveDeviceParams(device: DeviceMock): Observable<unknown> {
     return of(null);
   }
 
-  startMeasureScan(device: DeviceMock, stopSignal: Observable<any>): Observable<Step> {
+  startMeasureScan(device: DeviceMock, stopSignal: Observable<unknown>): Observable<Step> {
     const mockSource = interval(1000).pipe(takeUntil(stopSignal));
     return mockSource.pipe(
       map(() => this.decodeDataPackage()),
@@ -40,11 +40,11 @@ export class DeviceMockService extends AbstractDeviceService<DeviceMock> {
     );
   }
 
-  connectDevice(device: DeviceMock): Observable<any> {
+  connectDevice(device: DeviceMock): Observable<unknown> {
     return of(null);
   }
 
-  disconnectDevice(device: DeviceMock): Observable<any> {
+  disconnectDevice(device: DeviceMock): Observable<unknown> {
     return of(null);
   }
 

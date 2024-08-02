@@ -23,7 +23,7 @@ export abstract class AbstractBLEDeviceService<T extends AbstractBLEDevice> exte
 
   abstract buildDevice(rawBLEDevice: RawBLEDevice): T | null;
 
-  connectDevice(device: T): Observable<any> {
+  connectDevice(device: T): Observable<unknown> {
     const connection = new Observable((observer) => {
       BleClient.connect(device.sensorUUID,
         // On disconnect, provoque error to trigger RxJS catchError callback
@@ -40,11 +40,11 @@ export abstract class AbstractBLEDeviceService<T extends AbstractBLEDevice> exte
     return connection.pipe(take(1));
   }
 
-  disconnectDevice(device: T): Observable<any> {
+  disconnectDevice(device: T): Observable<unknown> {
     return from(BleClient.disconnect(device.sensorUUID));
   }
 
-  protected startReceiveData(device: T): Observable<any> {
+  protected startReceiveData(device: T): Observable<unknown> {
     return new Observable(observer => {
       BleClient.startNotifications(
         device.sensorUUID, this.service, this.receiveCharacteristic,
@@ -60,7 +60,7 @@ export abstract class AbstractBLEDeviceService<T extends AbstractBLEDevice> exte
   }
 
   protected startNotificationsRx(sensorUUID: string, characteristicId: string): Observable<DataView> {
-    return new Observable<any>(observer => {
+    return new Observable<DataView>(observer => {
       BleClient.startNotifications(sensorUUID, this.service, characteristicId,
         (value: DataView) => {
           observer.next(value)

@@ -33,13 +33,17 @@ export class TagListComponent implements ControlValueAccessor {
   proposedTagListTitle?: string;
 
   @Output()
-  tagAdded: EventEmitter<string> = new EventEmitter();
+  tagAdded = new EventEmitter<string>();
 
-  private onChange = (option: any) => {};
+  private onChange = (_option: string[] | undefined) => {
+    // Left empty
+  };
 
-  private onTouched = () => {};
+  private onTouched = () => {
+    // Left empty
+  };
 
-  registerOnChange(fn: (option: any) => void): void {
+  registerOnChange(fn: (option: unknown) => void): void {
     this.onChange = fn;
   }
 
@@ -47,7 +51,7 @@ export class TagListComponent implements ControlValueAccessor {
     this.onTouched = fn;
   }
 
-  writeValue(tagList: any): void {
+  writeValue(tagList: string[] | undefined): void {
     this.tagList = tagList;
     this.displayTagList = this.tagList ? this.tagList.filter(tag => tag !== this.hiddenTag) : [];
     this.updateDisplayedProposedTagList();
@@ -86,12 +90,12 @@ export class TagListComponent implements ControlValueAccessor {
     this.displayedProposedTagList =
       this.proposedTagList && this.currentTag
         ? this.proposedTagList
-            .filter(
-              proposedTag =>
-                (!this.tagList || this.tagList.every(tag => tag !== proposedTag)) &&
-                proposedTag.startsWith(this.currentTag)
-            )
-            .slice(0, 6)
+          .filter(
+            proposedTag =>
+              (!this.tagList || this.tagList.every(tag => tag !== proposedTag)) &&
+              proposedTag.startsWith(this.currentTag)
+          )
+          .slice(0, 6)
         : undefined;
   }
 }
