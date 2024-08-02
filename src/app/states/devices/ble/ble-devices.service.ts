@@ -123,7 +123,9 @@ export class BLEDevicesService {
   private onBLEError() {
     Diagnostic.registerBluetoothStateChangeHandler(() => {
       this.store.dispatch(new StartDiscoverBLEDevices()).subscribe();
-      Diagnostic.registerBluetoothStateChangeHandler(() => { });
+      Diagnostic.registerBluetoothStateChangeHandler(() => {
+        // Nothing to do
+      });
     });
     this.alertService
       .show(

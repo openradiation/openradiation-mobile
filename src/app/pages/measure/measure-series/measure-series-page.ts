@@ -96,7 +96,7 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
 
   onParamSelectedChange(value: CustomEvent) {
     if (this.measureSeriesParamsForm) {
-      // @ts-ignore : we do check for tagName presence before accessing it
+      // @ts-expect-error no-prototype-builtins : we do check for tagName presence before accessing it
       if (value.target && value.target.hasOwnProperty('tagName') && value.target.tagName.toLowerCase() === 'ion-radio-group') {
         this.paramSelected = this.measureSeriesParamsForm.value.paramSelected;
       } else {

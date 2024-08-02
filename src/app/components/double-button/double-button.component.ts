@@ -12,6 +12,7 @@ export class DoubleButtonComponent {
   mainMessage: string;
   @Input()
   modeSimple: boolean;
+
   @Output()
   click = new EventEmitter();
 

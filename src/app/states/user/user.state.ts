@@ -39,7 +39,7 @@ export class UserState implements NgxsOnInit {
     return notifications;
   }
 
-  ngxsOnInit({ getState, patchState, dispatch }: StateContext<UserStateModel>) {
+  ngxsOnInit(_stateContext: StateContext<UserStateModel>) {
     this.storageService.init();
     this.notificationService.init();
   }

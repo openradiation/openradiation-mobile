@@ -51,7 +51,6 @@ import {
   StopMeasureSeriesReport
 } from './measures.action';
 import { MeasuresService } from './measures.service';
-import { PositionService } from './position.service';
 import { Device } from "@capacitor/device";
 import { Injectable } from '@angular/core';
 
@@ -158,7 +157,7 @@ export class MeasuresState {
 
   @Action(InitMeasures)
   initMeasures(
-    { patchState, getState, dispatch }: StateContext<MeasuresStateModel>,
+    { patchState, getState }: StateContext<MeasuresStateModel>,
     { measures, params, recentTags, currentSeries }: InitMeasures
   ) {
     const { params: defaultParams } = getState();
@@ -656,12 +655,9 @@ export class MeasuresState {
         };
         if (measureReport.model.duration !== undefined) {
           const durationDate = new Date(measureReport.model.duration);
-          let hours;
-          let minutes;
-          let seconds;
-          hours = durationDate.getHours();
-          minutes = durationDate.getMinutes();
-          seconds = durationDate.getSeconds();
+          const hours = durationDate.getHours();
+          const minutes = durationDate.getMinutes();
+          const seconds = durationDate.getSeconds();
           updatedCurrentMeasure = {
             ...updatedCurrentMeasure,
             endTime: currentMeasure.startTime + (hours * 60 * 60 + minutes * 60 + seconds) * 1000

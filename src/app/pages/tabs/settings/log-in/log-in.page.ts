@@ -81,7 +81,9 @@ export class LogInPage extends AutoUnsubscribePage {
                   buttons: [{
                     text: this.translateService.instant('GENERAL.OK'),
                     role: 'cancel',
-                    handler: () => { }
+                    handler: () => {
+                      // canceled, nothing to do
+                    }
                   }]
                 })
                 .then(toast => toast.present());
@@ -94,7 +96,9 @@ export class LogInPage extends AutoUnsubscribePage {
                   buttons: [{
                     text: this.translateService.instant('GENERAL.OK'),
                     role: 'cancel',
-                    handler: () => { }
+                    handler: () => {
+                      // canceled, nothing to do
+                    }
                   }]
                 })
                 .then(toast => toast.present());

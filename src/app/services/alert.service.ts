@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AlertController, Platform } from '@ionic/angular';
 import { AlertOptions } from '@ionic/core';
-import { Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

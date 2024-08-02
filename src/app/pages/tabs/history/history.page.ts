@@ -57,7 +57,9 @@ export class HistoryPage extends AutoUnsubscribePage {
                 buttons: [{
                   text: this.translateService.instant('GENERAL.OK'),
                   role: 'cancel',
-                  handler: () => { }
+                  handler: () => {
+                    // Nothing to do
+                  }
                 }]
               })
               .then(toast => toast.present());

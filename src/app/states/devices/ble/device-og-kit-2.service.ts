@@ -74,7 +74,7 @@ export class DeviceOGKit2Service extends AbstractBLEDeviceService<DeviceOGKit2> 
         const array = new Uint8Array(buffer);
         switch (array[0]) {
           case this.RECEIVE_SENSOR_TYPE:
-            update.apparatusSensorType = <ApparatusSensorType>this.decodeStringArray(array).toLowerCase();
+            update.apparatusSensorType = this.decodeStringArray(array).toLowerCase() as ApparatusSensorType;
             break;
           case this.RECEIVE_TUBE_TYPE:
             update.apparatusTubeType = this.decodeStringArray(array);

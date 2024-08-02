@@ -3,10 +3,9 @@ import { SeriesGraphComponent } from './series-graph.component';
 
 import { getTestImports, getTestProviders } from '../../../tests/TestUtils'
 
-
-import * as PlotlyJS from 'plotly.js';
 // FIXME as soon as we import PlolyModule here, we have a polyfill error in tests
 // import { PlotlyModule } from 'angular-plotly.js';
+// import * as PlotlyJS from 'plotly.js';
 // PlotlyModule.plotlyjs = PlotlyJS;
 
 describe('SeriesGraphComponent', () => {

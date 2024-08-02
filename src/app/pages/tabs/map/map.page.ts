@@ -9,13 +9,7 @@ import { environment } from '../../../../environments/environment';
 import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
 import { MeasuresState } from '../../../states/measures/measures.state';
 import { UserState } from '../../../states/user/user.state';
-import { Network, ConnectionType } from '@capacitor/network';
 import { Location } from "@capacitor-community/background-geolocation";
-
-/**
- * Constants from cordova-plugin-network-information to get network types
- */
-declare let Connection: unknown;
 
 @Component({
   selector: 'app-map',

@@ -29,6 +29,9 @@ module.exports = tseslint.config(
         processor: angular.processInlineTemplates,
         // Override specific rules for TypeScript files (these will take priority over the extended configs above)
         rules: {
+            '@angular-eslint/component-class-suffix': 'off',
+            '@typescript-eslint/consistent-indexed-object-style': 'off',
+            '@angular-eslint/no-output-native': 'off',
             '@angular-eslint/directive-selector': [
                 'error',
                 {

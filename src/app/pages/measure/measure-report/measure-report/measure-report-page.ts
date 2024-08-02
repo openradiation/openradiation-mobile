@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { UntypedFormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { NavigationService } from '../../../../services/navigation.service';
@@ -100,7 +99,7 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
           this.measureReportForm!.get('duration')!.setValue(
             this.dateService.toISODuration(
               (value.duration.hour.value * 60 * 60 + value.duration.minute.value * 60 + value.duration.second.value) *
-                1000
+              1000
             )
           );
         }

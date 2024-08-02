@@ -60,7 +60,9 @@ export class DevicesService {
           buttons: [{
             text: this.translateService.instant('GENERAL.OK'),
             role: 'cancel',
-            handler: () => { }
+            handler: () => {
+              // canceled, nothing to do
+            }
           }]
         })
         .then(toast => toast.present())
