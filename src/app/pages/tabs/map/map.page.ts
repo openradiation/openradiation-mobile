@@ -10,6 +10,7 @@ import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-u
 import { MeasuresState } from '../../../states/measures/measures.state';
 import { UserState } from '../../../states/user/user.state';
 import { Location } from "@capacitor-community/background-geolocation";
+import { ConnectionStatus, Network, } from '@capacitor/network';
 
 @Component({
   selector: 'app-map',
@@ -45,7 +46,7 @@ export class MapPage extends AutoUnsubscribePage {
     const networkStatus = await Network.getStatus()
     if (!networkStatus.connected) {
       this.connectionAvailable = false;
-      Network.addListener('networkStatusChange', newNetworkStatus => {
+      Network.addListener('networkStatusChange', (newNetworkStatus: ConnectionStatus) => {
         if (newNetworkStatus.connected) {
           this.connectionAvailable = true;
           this.loadMap();

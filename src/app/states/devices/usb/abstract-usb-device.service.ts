@@ -45,7 +45,7 @@ export abstract class AbstractUSBDeviceService<T extends AbstractUSBDevice> exte
     return connection.pipe(take(1));
   }
 
-  disconnectDevice(device: T): Observable<unknown> {
+  disconnectDevice(_device: T): Observable<unknown> {
     return Observable.create((observer: Observer<unknown>) =>
       UsbSerial.disconnect(
         () => {

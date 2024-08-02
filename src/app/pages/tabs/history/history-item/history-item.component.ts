@@ -31,6 +31,11 @@ export class HistoryItemComponent implements OnInit {
     other: _('HISTORY.MEASURE_SERIES.PLURAL') as string,
   };
 
+
+  ngOnInit() {
+    this.showSeriesDetail = false;
+  }
+
   showDetailClick() {
     this.showDetail.emit();
   }

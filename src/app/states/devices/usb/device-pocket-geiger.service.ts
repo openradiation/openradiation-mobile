@@ -29,11 +29,11 @@ export class DevicePocketGeigerService extends AbstractUSBDeviceService<DevicePo
     super(store, actions$);
   }
 
-  getDeviceInfo(device: DevicePocketGeiger): Observable<Partial<DevicePocketGeiger>> {
+  getDeviceInfo(_device: DevicePocketGeiger): Observable<Partial<DevicePocketGeiger>> {
     return of({});
   }
 
-  saveDeviceParams(device: DevicePocketGeiger): Observable<unknown> {
+  saveDeviceParams(_device: DevicePocketGeiger): Observable<unknown> {
     return of(null);
   }
 

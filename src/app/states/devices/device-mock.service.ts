@@ -24,11 +24,11 @@ export class DeviceMockService extends AbstractDeviceService<DeviceMock> {
     super(store);
   }
 
-  getDeviceInfo(device: DeviceMock): Observable<Partial<DeviceMock>> {
+  getDeviceInfo(_device: DeviceMock): Observable<Partial<DeviceMock>> {
     return of({});
   }
 
-  saveDeviceParams(device: DeviceMock): Observable<unknown> {
+  saveDeviceParams(_device: DeviceMock): Observable<unknown> {
     return of(null);
   }
 
@@ -40,11 +40,11 @@ export class DeviceMockService extends AbstractDeviceService<DeviceMock> {
     );
   }
 
-  connectDevice(device: DeviceMock): Observable<unknown> {
+  connectDevice(_device: DeviceMock): Observable<unknown> {
     return of(null);
   }
 
-  disconnectDevice(device: DeviceMock): Observable<unknown> {
+  disconnectDevice(_device: DeviceMock): Observable<unknown> {
     return of(null);
   }
 

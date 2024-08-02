@@ -52,7 +52,7 @@ export class DeviceRium2BLEService extends AbstractBLEDeviceService<DeviceRium2B
     );
   }
 
-  saveDeviceParams(device: DeviceRium2BLE): Observable<unknown> {
+  saveDeviceParams(_device: DeviceRium2BLE): Observable<unknown> {
     return of(null);
   }
 

@@ -28,11 +28,11 @@ export class DeviceSafeCastService extends AbstractBLEDeviceService<DeviceSafeCa
     super(store);
   }
 
-  getDeviceInfo(device: DeviceSafeCast): Observable<Partial<DeviceSafeCast>> {
+  getDeviceInfo(_device: DeviceSafeCast): Observable<Partial<DeviceSafeCast>> {
     return of({});
   }
 
-  saveDeviceParams(device: DeviceSafeCast): Observable<unknown> {
+  saveDeviceParams(_device: DeviceSafeCast): Observable<unknown> {
     return of(null);
   }
 

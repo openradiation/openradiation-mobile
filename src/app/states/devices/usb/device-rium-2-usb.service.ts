@@ -48,7 +48,7 @@ export class DeviceRium2USBService extends AbstractUSBDeviceService<DeviceRium2U
     );
   }
 
-  getDeviceInfo(device: DeviceRium2USB): Observable<Partial<DeviceRium2USB>> {
+  getDeviceInfo(_device: DeviceRium2USB): Observable<Partial<DeviceRium2USB>> {
     return this.receiveData().pipe(
       map((buffer: ArrayBuffer) => {
         if (buffer.byteLength === 32) {
@@ -69,7 +69,7 @@ export class DeviceRium2USBService extends AbstractUSBDeviceService<DeviceRium2U
     );
   }
 
-  saveDeviceParams(device: DeviceRium2USB): Observable<unknown> {
+  saveDeviceParams(_device: DeviceRium2USB): Observable<unknown> {
     return of(null);
   }
 
