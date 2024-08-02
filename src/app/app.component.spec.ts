@@ -7,10 +7,10 @@ import { SplashScreen } from '@capacitor/splash-screen';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
-  let statusBarSpy: unknown;
-  let splashScreenSpy: unknown;
+  let statusBarSpy: jasmine.SpyObj<StatusBarMock>;
+  let splashScreenSpy: jasmine.SpyObj<SplashScreenMock>;
   let platformReadySpy: unknown;
-  let platformSpy: unknown;
+  let platformSpy: jasmine.SpyObj<PlatformMock>;
 
   beforeEach(async () => {
     statusBarSpy = jasmine.createSpyObj('StatusBar', ['setOverlaysWebView']);
@@ -39,7 +39,19 @@ describe('AppComponent', () => {
     TestBed.createComponent(AppComponent);
     expect(platformSpy.ready).toHaveBeenCalled();
     await platformReadySpy;
-    expect(statusBarSpy.styleDefault).toHaveBeenCalled();
+    expect(statusBarSpy.setOverlaysWebView).toHaveBeenCalled();
     expect(splashScreenSpy.hide).toHaveBeenCalled();
   });
 });
+
+interface StatusBarMock {
+  setOverlaysWebView(): void;
+}
+
+interface SplashScreenMock {
+  hide(): void;
+}
+
+interface PlatformMock {
+  ready(): void;
+}

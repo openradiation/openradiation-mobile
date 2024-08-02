@@ -22,7 +22,7 @@ export function getTestImports() {
         // Provides ActivatedRoute
         RouterModule.forRoot([]),
         // Provides all ionic elements (ion-list, ion-button...)
-        IonicModule.forRoot()
+        IonicModule.forRoot(),
     ]
 }
 

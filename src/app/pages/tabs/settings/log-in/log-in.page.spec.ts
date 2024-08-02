@@ -5,6 +5,7 @@ import { LogInPage } from './log-in.page';
 
 import { getTestImports, getTestProviders } from '../../../../../tests/TestUtils'
 import { SanitizeHtmlPipe } from '../../../../components/pipes/sanitize-html/sanitize-html.pipe';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 describe('LogInPage', () => {
   let component: LogInPage;
@@ -15,7 +16,12 @@ describe('LogInPage', () => {
       declarations: [LogInPage, SanitizeHtmlPipe],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
       ,
-      imports: getTestImports(),
+      imports: [
+        ...getTestImports(),
+        // Provides form
+        FormsModule,
+        ReactiveFormsModule
+      ],
       providers: getTestProviders()
     }).compileComponents();
   }));
