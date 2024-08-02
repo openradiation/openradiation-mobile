@@ -771,7 +771,7 @@ export class MeasuresState {
       this.deviceUUID = (await Device.getId()).identifier;
     }
     if (this.devicePlatform == MeasuresState.MISSING_STRING) {
-      let deviceInfo = await Device.getInfo();
+      const deviceInfo = await Device.getInfo();
       this.devicePlatform = deviceInfo.platform
       this.deviceModel = deviceInfo.model
       this.deviceOsVersion = deviceInfo.osVersion

@@ -168,12 +168,10 @@ export class DevicesState {
     patchState({
       availableUSBDevices: [
         ...devices.map(device => ({
-          ...(<AbstractUSBDevice>(
-            knownDevices.find(
+          ...(knownDevices.find(
               (knownDevice: AbstractUSBDevice) =>
                 knownDevice.pid !== undefined && knownDevice.sensorUUID === device.sensorUUID
-            )
-          ) || device),
+            ) as AbstractUSBDevice || device),
           batteryLevel: device.batteryLevel
         }))
       ]

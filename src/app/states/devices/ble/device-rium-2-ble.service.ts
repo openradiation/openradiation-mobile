@@ -66,7 +66,7 @@ export class DeviceRium2BLEService extends AbstractBLEDeviceService<DeviceRium2B
       this.startNotificationsRx(device.sensorUUID, this.temperatureCharacteristic)
     ).pipe(
       map((dataViews: [DataView, DataView]) => {
-        let buffers: [ArrayBuffer, ArrayBuffer] = [dataViews[0].buffer, dataViews[1].buffer]
+        const buffers: [ArrayBuffer, ArrayBuffer] = [dataViews[0].buffer, dataViews[1].buffer]
         return this.decodeDataPackage(buffers)
       }),
       catchError(err => {

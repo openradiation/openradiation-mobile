@@ -15,7 +15,7 @@ import { Location } from "@capacitor-community/background-geolocation";
 /**
  * Constants from cordova-plugin-network-information to get network types
  */
-declare var Connection: unknown;
+declare let Connection: unknown;
 
 @Component({
   selector: 'app-map',
@@ -48,7 +48,7 @@ export class MapPage extends AutoUnsubscribePage {
 
   async pageEnter() {
     super.pageEnter();
-    let networkStatus = await Network.getStatus()
+    const networkStatus = await Network.getStatus()
     if (!networkStatus.connected) {
       this.connectionAvailable = false;
       Network.addListener('networkStatusChange', newNetworkStatus => {
