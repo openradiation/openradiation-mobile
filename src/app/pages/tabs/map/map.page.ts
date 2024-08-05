@@ -5,10 +5,10 @@ import { Platform } from '@ionic/angular';
 import { Select } from '@ngxs/store';
 import { combineLatest, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { environment } from '../../../../environments/environment';
-import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
-import { MeasuresState } from '../../../states/measures/measures.state';
-import { UserState } from '../../../states/user/user.state';
+import { environment } from '@environments/environment';
+import { AutoUnsubscribePage } from '@app/components/auto-unsubscribe/auto-unsubscribe.page';
+import { MeasuresState } from '@app/states/measures/measures.state';
+import { UserState } from '@app/states/user/user.state';
 import { Location } from "@capacitor-community/background-geolocation";
 import { ConnectionStatus, Network, } from '@capacitor/network';
 

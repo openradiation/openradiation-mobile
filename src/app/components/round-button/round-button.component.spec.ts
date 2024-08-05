@@ -2,7 +2,7 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RoundButtonComponent } from './round-button.component';
 
-import { getTestImports, getTestProviders } from '../../../tests/TestUtils'
+import { getTestImports, getTestProviders } from '@tests/TestUtils'
 
 describe('RoundButtonComponent', () => {
   let component: RoundButtonComponent;

@@ -4,15 +4,15 @@ import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, ofActionSuccessful, Store } from '@ngxs/store';
 import { merge, Observable, timer, from } from 'rxjs';
 import { buffer, map, scan, skip, switchMap, takeUntil, tap, throttleTime } from 'rxjs/operators';
-import { AlertService } from '../../../services/alert.service';
-import { AbstractDevice, DeviceType } from '../abstract-device';
+import { AlertService } from '@app/services/alert.service';
+import { AbstractDevice, DeviceType } from '@app/states/devices/abstract-device';
 import {
   BLEConnectionLost,
   BLEDevicesDiscovered,
   StartDiscoverBLEDevices,
   StopDiscoverDevices
-} from '../devices.action';
-import { DevicesService } from '../devices.service';
+} from '@app/states/devices/devices.action';
+import { DevicesService } from '@app/states/devices/devices.service';
 import { AbstractBLEDevice, RawBLEDevice } from './abstract-ble-device';
 import { BleClient } from '@capacitor-community/bluetooth-le';
 import { Capacitor } from '@capacitor/core';

@@ -1,6 +1,6 @@
 import { marker as _ } from '@biesbjerg/ngx-translate-extract-marker';
-import { ApparatusSensorType, DeviceType } from '../abstract-device';
-import { DeviceParams, DeviceParamsModel, DeviceParamType } from '../device-params';
+import { ApparatusSensorType, DeviceType } from '@app/states/devices/abstract-device';
+import { DeviceParams, DeviceParamsModel, DeviceParamType } from '@app/states/devices/device-params';
 import { AbstractBLEDevice, RawBLEDevice } from './abstract-ble-device';
 
 export class DeviceAtomTag extends AbstractBLEDevice {

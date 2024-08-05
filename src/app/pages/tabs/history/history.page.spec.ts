@@ -3,7 +3,7 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HistoryPage } from './history.page';
 
-import { getTestImports, getTestProviders } from '../../../../tests/TestUtils'
+import { getTestImports, getTestProviders } from '@tests/TestUtils'
 
 describe('HistoryPage', () => {
   let component: HistoryPage;

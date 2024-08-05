@@ -2,10 +2,10 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HistoryItemComponent } from './history-item.component';
 
-import { getTestImports, getTestProviders } from '../../../../../tests/TestUtils'
-import { Measure } from '../../../../../app/states/measures/measure';
-import { ApparatusSensorType } from '../../../../../app/states/devices/abstract-device';
-import { DosePipe } from '../../../../..//app/components/pipes/dose/dose.pipe';
+import { getTestImports, getTestProviders } from '@tests/TestUtils'
+import { Measure } from '@app/states/measures/measure';
+import { ApparatusSensorType } from '@app/states/devices/abstract-device';
+import { DosePipe } from '@app/components/pipes/dose/dose.pipe';
 
 describe('HistoryItemComponent', () => {
   let component: HistoryItemComponent;

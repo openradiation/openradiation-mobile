@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { NavigationService } from '../../../../services/navigation.service';
-import { DisableAutoPublish, EnableAutoPublish } from '../../../../states/measures/measures.action';
-import { MeasuresState } from '../../../../states/measures/measures.state';
+import { NavigationService } from '@app/services/navigation.service';
+import { DisableAutoPublish, EnableAutoPublish } from '@app/states/measures/measures.action';
+import { MeasuresState } from '@app/states/measures/measures.state';
 
 @Component({
   selector: 'app-measures-param',
@@ -14,7 +14,7 @@ export class MeasuresParamPage {
   @Select(MeasuresState.autoPublish)
   autoPublish$: Observable<boolean>;
 
-  constructor(private navigationService: NavigationService, private store: Store) {}
+  constructor(private navigationService: NavigationService, private store: Store) { }
 
   toggleAutoPublish(enable: boolean) {
     if (enable) {

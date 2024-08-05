@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxsFormPluginModule } from '@ngxs/form-plugin';
-import { ComponentsModule } from '../../../components/components.module';
+import { ComponentsModule } from '@app/components/components.module';
 import { MeasureSeriesPage } from './measure-series-page';
 
 const routes: Routes = [
@@ -30,4 +30,4 @@ const routes: Routes = [
   ],
   declarations: [MeasureSeriesPage]
 })
-export class MeasureSeriesPageModule {}
+export class MeasureSeriesPageModule { }

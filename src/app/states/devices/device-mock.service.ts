@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { interval, Observable, of } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
-import { Step } from '../measures/measure';
+import { Step } from '@app/states/measures/measure';
 import { DeviceType, RawDevice } from './abstract-device';
 import { AbstractDeviceService } from './abstract-device.service';
 import { DeviceMock } from './device-mock';

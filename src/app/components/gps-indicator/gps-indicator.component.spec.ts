@@ -2,7 +2,7 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GpsIndicatorComponent } from './gps-indicator.component';
 
-import { getTestImports, getTestProviders } from '../../../tests/TestUtils'
+import { getTestImports, getTestProviders } from '@tests/TestUtils'
 
 describe('GpsIndicatorComponent', () => {
   let component: GpsIndicatorComponent;

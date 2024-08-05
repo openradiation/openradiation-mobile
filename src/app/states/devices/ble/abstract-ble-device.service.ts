@@ -1,8 +1,8 @@
 import { Store } from '@ngxs/store';
 import { Observable, from } from 'rxjs';
 import { catchError, concatMap, shareReplay, take } from 'rxjs/operators';
-import { AbstractDeviceService } from '../abstract-device.service';
-import { DeviceConnectionLost } from '../devices.action';
+import { AbstractDeviceService } from '@app/states/devices/abstract-device.service';
+import { DeviceConnectionLost } from '@app/states/devices/devices.action';
 import { AbstractBLEDevice, RawBLEDevice } from './abstract-ble-device';
 import { BleClient } from '@capacitor-community/bluetooth-le';
 import { Capacitor } from '@capacitor/core';

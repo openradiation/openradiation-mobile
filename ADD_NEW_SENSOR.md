@@ -39,8 +39,8 @@ Some inherited values from base class like `hitsAccuracyThreshold` can also be o
 For a BLE sensor the file would be `src/app/states/devices/ble/device-toto.ts`
 
 ```typescript
-import { ApparatusSensorType, DeviceType } from '../abstract-device';
-import { AbstractBLEDevice, RawBLEDevice } from './abstract-ble-device';
+import { ApparatusSensorType, DeviceType } from '@app/states/devices/abstract-device';
+import { AbstractBLEDevice, RawBLEDevice } from '@app/states/devices/abstract-ble-device';
 
 export class DeviceToto extends AbstractBLEDevice {
   readonly deviceType = DeviceType.Toto;
@@ -97,9 +97,9 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable, of } from 'rxjs';
 import { bufferCount, filter, map, tap } from 'rxjs/operators';
-import { Step } from '../../measures/measure';
-import { AbstractBLEDeviceService } from './abstract-ble-device.service';
-import { DeviceSafeCast } from './device-safe-cast';
+import { Step } from '@app/states/measures/measures/measure';
+import { AbstractBLEDeviceService } from '@app/states/devices/ble/abstract-ble-device.service';
+import { DeviceSafeCast } from '@app/states/devices/ble/device-safe-cast';
 
 @Injectable({
   providedIn: 'root'

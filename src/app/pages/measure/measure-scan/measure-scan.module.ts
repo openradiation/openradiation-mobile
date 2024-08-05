@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
-import { ComponentsModule } from '../../../components/components.module';
+import { ComponentsModule } from '@app/components/components.module';
 import { MeasureScanPage } from './measure-scan.page';
 
 const routes: Routes = [
@@ -18,4 +18,4 @@ const routes: Routes = [
   imports: [CommonModule, FormsModule, IonicModule, RouterModule.forChild(routes), ComponentsModule, TranslateModule],
   declarations: [MeasureScanPage]
 })
-export class MeasureScanPageModule {}
+export class MeasureScanPageModule { }

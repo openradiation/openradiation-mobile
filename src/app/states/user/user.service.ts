@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
-import { ErrorResponse, ErrorResponseCode } from '../measures/error-response';
+import { environment } from '@environments/environment';
+import { ErrorResponse, ErrorResponseCode } from '@app/states/measures/error-response';
 
 @Injectable({
   providedIn: 'root'

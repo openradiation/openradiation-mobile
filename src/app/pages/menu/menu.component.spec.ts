@@ -2,7 +2,7 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MenuComponent } from './menu.component';
 
-import { getTestImports, getTestProviders } from '../../../tests/TestUtils'
+import { getTestImports, getTestProviders } from '@tests/TestUtils'
 
 describe('MenuComponent', () => {
   let component: MenuComponent;

@@ -3,7 +3,7 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SettingsPage } from './settings.page';
 
-import { getTestImports, getTestProviders } from '../../../../../tests/TestUtils'
+import { getTestImports, getTestProviders } from '@tests/TestUtils'
 
 describe('SettingsPage', () => {
   let component: SettingsPage;

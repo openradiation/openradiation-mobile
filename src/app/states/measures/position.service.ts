@@ -4,7 +4,7 @@ import { Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
 import { take } from 'rxjs/operators';
-import { AlertService } from '../../services/alert.service';
+import { AlertService } from '@app/services/alert.service';
 import { PositionChanged } from './measures.action';
 import { MeasuresStateModel } from './measures.state';
 import { registerPlugin } from "@capacitor/core";

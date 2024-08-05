@@ -1,6 +1,6 @@
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { Measure, Step } from '../measures/measure';
+import { Measure, Step } from '@app/states/measures/measure';
 import { AbstractDevice, CalibrationFunctions, RawDevice } from './abstract-device';
 
 export abstract class AbstractDeviceService<T extends AbstractDevice> {

@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { MeasureSeries } from '../../states/measures/measure';
+import { MeasureSeries } from '@app/states/measures/measure';
 
 import Figure = Plotly.Figure;
 import { Select } from '@ngxs/store';
@@ -9,7 +9,7 @@ import { Plotly } from 'angular-plotly.js/lib/plotly.interface';
 import * as PlotlyFR from 'plotly.js/lib/locales/fr.js';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { UserState } from '../../states/user/user.state';
+import { UserState } from '@app/states/user/user.state';
 
 @Component({
   selector: 'app-series-graph',

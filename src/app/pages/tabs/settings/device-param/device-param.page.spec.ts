@@ -2,7 +2,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DeviceParamPage } from './device-param.page';
-import { getTestImports, getTestProviders } from '../../../../../tests/TestUtils'
+import { getTestImports, getTestProviders } from '@tests/TestUtils'
 
 describe('DeviceParamPage', () => {
   let component: DeviceParamPage;

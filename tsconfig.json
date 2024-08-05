@@ -22,7 +22,18 @@
       "es2018",
       "dom"
     ],
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "paths": {
+      "@app/*": [
+        "./src/app/*"
+      ],
+      "@environments/*": [
+        "./src/environments/*"
+      ],
+      "@tests/*": [
+        "./src/tests/*"
+      ],
+    }
   },
   "angularCompilerOptions": {
     "strictInjectionParameters": true,

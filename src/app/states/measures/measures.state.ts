@@ -3,12 +3,12 @@ import { TranslateService } from '@ngx-translate/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { AlertService } from '../../services/alert.service';
-import { NavigationService } from '../../services/navigation.service';
-import { AbstractDevice, DeviceType } from '../devices/abstract-device';
-import { DeviceConnectionLost } from '../devices/devices.action';
-import { Form } from '../formModel';
-import { DateService } from './date.service';
+import { AlertService } from '@app/services/alert.service';
+import { NavigationService } from '@app/services/navigation.service';
+import { AbstractDevice, DeviceType } from '@app/states/devices/abstract-device';
+import { DeviceConnectionLost } from '@app/states/devices/devices.action';
+import { Form } from '@app/states/formModel';
+import { DateService } from '@app/states/measures/date.service';
 import {
   Measure,
   MeasureEnvironment,
@@ -19,7 +19,7 @@ import {
   MeasureSeriesReport,
   MeasureType,
   PositionAccuracyThreshold
-} from './measure';
+} from '@app/states/measures/measure';
 import {
   AddMeasureScanStep,
   AddRecentTag,
@@ -49,8 +49,8 @@ import {
   StopMeasureSeries,
   StopMeasureSeriesParams,
   StopMeasureSeriesReport
-} from './measures.action';
-import { MeasuresService } from './measures.service';
+} from '@app/states/measures/measures.action';
+import { MeasuresService } from '@app/states/measures/measures.service';
 import { Device } from "@capacitor/device";
 import { Injectable } from '@angular/core';
 

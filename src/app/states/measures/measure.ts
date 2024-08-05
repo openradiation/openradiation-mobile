@@ -1,7 +1,7 @@
 import { Location } from "@capacitor-community/background-geolocation";
 import * as uuid from 'uuid';
-import { environment } from '../../../environments/environment';
-import { ApparatusSensorType } from '../devices/abstract-device';
+import { environment } from '@environments/environment';
+import { ApparatusSensorType } from '@app/states/devices/abstract-device';
 
 export abstract class AbstractMeasure {
   abstract readonly type: MeasureType;

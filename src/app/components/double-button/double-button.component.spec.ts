@@ -2,7 +2,7 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DoubleButtonComponent } from './double-button.component';
 
-import { getTestImports, getTestProviders } from '../../../tests/TestUtils'
+import { getTestImports, getTestProviders } from '@tests/TestUtils'
 
 describe('DoubleButtonComponent', () => {
   let component: DoubleButtonComponent;

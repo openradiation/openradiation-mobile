@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
-import { AutoUnsubscribePage } from '../../../../components/auto-unsubscribe/auto-unsubscribe.page';
-import { NavigationService } from '../../../../services/navigation.service';
-import { AbstractDevice } from '../../../../states/devices/abstract-device';
-import { DeviceParamModel, DeviceParamType } from '../../../../states/devices/device-params';
-import { SaveDeviceParams } from '../../../../states/devices/devices.action';
-import { DevicesStateModel } from '../../../../states/devices/devices.state';
+import { AutoUnsubscribePage } from '@app/components/auto-unsubscribe/auto-unsubscribe.page';
+import { NavigationService } from '@app/services/navigation.service';
+import { AbstractDevice } from '@app/states/devices/abstract-device';
+import { DeviceParamModel, DeviceParamType } from '@app/states/devices/device-params';
+import { SaveDeviceParams } from '@app/states/devices/devices.action';
+import { DevicesStateModel } from '@app/states/devices/devices.state';
 
 @Component({
   selector: 'app-page-device-param',

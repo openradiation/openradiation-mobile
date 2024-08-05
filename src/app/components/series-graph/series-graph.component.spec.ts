@@ -1,10 +1,10 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { SeriesGraphComponent } from './series-graph.component';
 
-import { getTestImports, getTestProviders } from '../../../tests/TestUtils'
+import { getTestImports, getTestProviders } from '@tests/TestUtils'
 import { PlotlyViaCDNModule } from 'angular-plotly.js'
-import { Measure, MeasureSeries, MeasureSeriesParams, MeasureSeriesParamsSelected } from '../../states/measures/measure';
-import { ApparatusSensorType } from '../../states/devices/abstract-device';
+import { Measure, MeasureSeries, MeasureSeriesParams, MeasureSeriesParamsSelected } from '@app/states/measures/measure';
+import { ApparatusSensorType } from '@app/states/devices/abstract-device';
 PlotlyViaCDNModule.setPlotlyVersion('latest');
 
 describe('SeriesGraphComponent', () => {

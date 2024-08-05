@@ -2,8 +2,8 @@ import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { concatMap, map, tap } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
-import { Form } from '../formModel';
+import { environment } from '@environments/environment';
+import { Form } from '@app/states/formModel';
 import { AbstractDevice } from './abstract-device';
 import { AbstractBLEDevice } from './ble/abstract-ble-device';
 import { BLEDevicesService } from './ble/ble-devices.service';
@@ -169,9 +169,9 @@ export class DevicesState {
       availableUSBDevices: [
         ...devices.map(device => ({
           ...(knownDevices.find(
-              (knownDevice: AbstractUSBDevice) =>
-                knownDevice.pid !== undefined && knownDevice.sensorUUID === device.sensorUUID
-            ) as AbstractUSBDevice || device),
+            (knownDevice: AbstractUSBDevice) =>
+              knownDevice.pid !== undefined && knownDevice.sensorUUID === device.sensorUUID
+          ) as AbstractUSBDevice || device),
           batteryLevel: device.batteryLevel
         }))
       ]

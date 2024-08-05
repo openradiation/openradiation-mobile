@@ -3,10 +3,10 @@ import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, Store } from '@ngxs/store';
 import { UsbSerial } from 'cordova-plugin-usb-serial';
 import { Observable, of } from 'rxjs';
-import { AlertService } from '../../../services/alert.service';
-import { AbstractDevice, DeviceType } from '../abstract-device';
-import { StartDiscoverUSBDevices, StopDiscoverDevices, USBDevicesDiscovered } from '../devices.action';
-import { DevicesService } from '../devices.service';
+import { AlertService } from '@app/services/alert.service';
+import { AbstractDevice, DeviceType } from '@app/states/devices/abstract-device';
+import { StartDiscoverUSBDevices, StopDiscoverDevices, USBDevicesDiscovered } from '@app/states/devices/devices.action';
+import { DevicesService } from '@app/states/devices/devices.service';
 import { AbstractUSBDevice } from './abstract-usb-device';
 import { Capacitor } from '@capacitor/core';
 

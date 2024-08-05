@@ -3,15 +3,15 @@ import { Injectable } from '@angular/core';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { forkJoin, Observable, of } from 'rxjs';
 import { shareReplay, take, takeUntil } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
-import { AbstractDevice, ApparatusSensorType } from '../devices/abstract-device';
-import { DeviceConnectionLost } from '../devices/devices.action';
-import { DevicesService } from '../devices/devices.service';
-import { UserStateModel } from '../user/user.state';
-import { Measure, MeasureSeries, MeasureType, PositionAccuracyThreshold, Step } from './measure';
-import { MeasureApi } from './measure-api';
-import { AddMeasureScanStep, CancelMeasure, StopMeasureScan } from './measures.action';
-import { MeasuresStateModel } from './measures.state';
+import { environment } from '@environments/environment';
+import { AbstractDevice, ApparatusSensorType } from '@app/states/devices/abstract-device';
+import { DeviceConnectionLost } from '@app/states/devices/devices.action';
+import { DevicesService } from '@app/states/devices/devices.service';
+import { UserStateModel } from '@app/states/user/user.state';
+import { Measure, MeasureSeries, MeasureType, PositionAccuracyThreshold, Step } from '@app/states/measures/measure';
+import { MeasureApi } from '@app/states/measures/measure-api';
+import { AddMeasureScanStep, CancelMeasure, StopMeasureScan } from '@app/states/measures/measures.action';
+import { MeasuresStateModel } from '@app/states/measures/measures.state';
 
 @Injectable({
   providedIn: 'root'

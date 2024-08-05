@@ -4,13 +4,13 @@ import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
-import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
-import { AlertService } from '../../../services/alert.service';
-import { NavigationService } from '../../../services/navigation.service';
-import { AbstractDevice } from '../../../states/devices/abstract-device';
-import { DevicesState } from '../../../states/devices/devices.state';
-import { StartMeasure } from '../../../states/measures/measures.action';
-import { MeasuresState } from '../../../states/measures/measures.state';
+import { AutoUnsubscribePage } from '@app/components/auto-unsubscribe/auto-unsubscribe.page';
+import { AlertService } from '@app/services/alert.service';
+import { NavigationService } from '@app/services/navigation.service';
+import { AbstractDevice } from '@app/states/devices/abstract-device';
+import { DevicesState } from '@app/states/devices/devices.state';
+import { StartMeasure } from '@app/states/measures/measures.action';
+import { MeasuresState } from '@app/states/measures/measures.state';
 import { Location } from "@capacitor-community/background-geolocation";
 
 @Component({

@@ -3,8 +3,8 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AboutPage } from './about.page';
 
-import { getTestImports, getTestProviders } from '../../../../tests/TestUtils'
-import { SanitizeHtmlPipe } from '../../../components/pipes/sanitize-html/sanitize-html.pipe';
+import { getTestImports, getTestProviders } from '@tests/TestUtils'
+import { SanitizeHtmlPipe } from '@app/components/pipes/sanitize-html/sanitize-html.pipe';
 
 describe('AboutPage', () => {
   let component: AboutPage;

@@ -4,11 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { NavigationService } from '../../../../services/navigation.service';
-import { DateService } from '../../../../states/measures/date.service';
-import { Measure, MeasureEnvironment } from '../../../../states/measures/measure';
-import { StartMeasureReport, StopMeasure, StopMeasureReport } from '../../../../states/measures/measures.action';
-import { MeasuresState, MeasuresStateModel } from '../../../../states/measures/measures.state';
+import { NavigationService } from '@app/services/navigation.service';
+import { DateService } from '@app/states/measures/date.service';
+import { Measure, MeasureEnvironment } from '@app/states/measures/measure';
+import { StartMeasureReport, StopMeasure, StopMeasureReport } from '@app/states/measures/measures.action';
+import { MeasuresState, MeasuresStateModel } from '@app/states/measures/measures.state';
 import { AbstractMeasureReportPage } from '../abstact-measure-report.page';
 
 @Component({

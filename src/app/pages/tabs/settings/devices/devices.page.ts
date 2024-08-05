@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, ofActionDispatched, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { AutoUnsubscribePage } from '../../../../components/auto-unsubscribe/auto-unsubscribe.page';
-import { NavigationService } from '../../../../services/navigation.service';
-import { AbstractDevice } from '../../../../states/devices/abstract-device';
+import { AutoUnsubscribePage } from '@app/components/auto-unsubscribe/auto-unsubscribe.page';
+import { NavigationService } from '@app/services/navigation.service';
+import { AbstractDevice } from '@app/states/devices/abstract-device';
 import { Capacitor } from '@capacitor/core';
 
 import {
@@ -16,8 +16,8 @@ import {
   StartDiscoverUSBDevices,
   StopDiscoverDevices,
   UpdateDeviceInfo
-} from '../../../../states/devices/devices.action';
-import { DevicesState } from '../../../../states/devices/devices.state';
+} from '@app/states/devices/devices.action';
+import { DevicesState } from '@app/states/devices/devices.state';
 
 @Component({
   selector: 'app-page-devices',

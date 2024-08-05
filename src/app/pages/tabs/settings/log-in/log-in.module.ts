@@ -6,7 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { TranslateModule } from '@ngx-translate/core';
-import { ComponentsModule } from '../../../../components/components.module';
+import { ComponentsModule } from '@app/components/components.module';
 import { LogInPage } from './log-in.page';
 
 const routes: Routes = [
@@ -28,4 +28,4 @@ const routes: Routes = [
   ],
   declarations: [LogInPage]
 })
-export class LogInPageModule {}
+export class LogInPageModule { }

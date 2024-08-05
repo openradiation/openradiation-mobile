@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxsFormPluginModule } from '@ngxs/form-plugin';
-import { ComponentsModule } from '../../../../components/components.module';
+import { ComponentsModule } from '@app/components/components.module';
 import { MeasureSeriesReportPage } from './measure-series-report-page';
 
 const routes: Routes = [

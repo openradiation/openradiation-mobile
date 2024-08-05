@@ -3,7 +3,7 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MapPage } from './map.page';
 
-import { getTestImports, getTestProviders } from '../../../../tests/TestUtils'
+import { getTestImports, getTestProviders } from '@tests/TestUtils'
 
 describe('MapPage', () => {
   let component: MapPage;

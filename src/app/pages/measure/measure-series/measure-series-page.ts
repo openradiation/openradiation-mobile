@@ -5,13 +5,13 @@ import { marker as _ } from '@biesbjerg/ngx-translate-extract-marker';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
-import { NavigationService } from '../../../services/navigation.service';
-import { AbstractDevice } from '../../../states/devices/abstract-device';
-import { DevicesState } from '../../../states/devices/devices.state';
-import { MeasureSeriesParamsSelected } from '../../../states/measures/measure';
-import { CancelMeasure, StartMeasure, StopMeasureSeriesParams } from '../../../states/measures/measures.action';
-import { MeasuresState, MeasuresStateModel } from '../../../states/measures/measures.state';
+import { AutoUnsubscribePage } from '@app/components/auto-unsubscribe/auto-unsubscribe.page';
+import { NavigationService } from '@app/services/navigation.service';
+import { AbstractDevice } from '@app/states/devices/abstract-device';
+import { DevicesState } from '@app/states/devices/devices.state';
+import { MeasureSeriesParamsSelected } from '@app/states/measures/measure';
+import { CancelMeasure, StartMeasure, StopMeasureSeriesParams } from '@app/states/measures/measures.action';
+import { MeasuresState, MeasuresStateModel } from '@app/states/measures/measures.state';
 
 @Component({
   selector: 'app-measure-series',

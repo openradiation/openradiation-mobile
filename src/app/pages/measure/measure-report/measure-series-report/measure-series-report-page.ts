@@ -4,16 +4,16 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
-import { AlertService } from '../../../../services/alert.service';
-import { NavigationService } from '../../../../services/navigation.service';
-import { MeasureEnvironment, MeasureSeries, MeasureSeriesParamsSelected } from '../../../../states/measures/measure';
+import { AlertService } from '@app/services/alert.service';
+import { NavigationService } from '@app/services/navigation.service';
+import { MeasureEnvironment, MeasureSeries, MeasureSeriesParamsSelected } from '@app/states/measures/measure';
 import {
   CancelMeasure,
   StartMeasureSeriesReport,
   StopMeasureSeries,
   StopMeasureSeriesReport
-} from '../../../../states/measures/measures.action';
-import { MeasuresStateModel } from '../../../../states/measures/measures.state';
+} from '@app/states/measures/measures.action';
+import { MeasuresStateModel } from '@app/states/measures/measures.state';
 import { AbstractMeasureReportPage } from '../abstact-measure-report.page';
 
 @Component({

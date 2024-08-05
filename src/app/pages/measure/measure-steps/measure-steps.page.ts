@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { NavigationService } from '../../../services/navigation.service';
-import { Measure } from '../../../states/measures/measure';
-import { MeasuresState } from '../../../states/measures/measures.state';
+import { NavigationService } from '@app/services/navigation.service';
+import { Measure } from '@app/states/measures/measure';
+import { MeasuresState } from '@app/states/measures/measures.state';
 import { Share } from '@capacitor/share';
 
 @Component({

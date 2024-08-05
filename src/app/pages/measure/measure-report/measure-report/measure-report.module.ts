@@ -5,7 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxsFormPluginModule } from '@ngxs/form-plugin';
-import { ComponentsModule } from '../../../../components/components.module';
+import { ComponentsModule } from '@app/components/components.module';
 import { MeasureReportPage } from './measure-report-page';
 
 const routes: Routes = [

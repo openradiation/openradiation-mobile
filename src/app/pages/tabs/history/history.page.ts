@@ -4,18 +4,18 @@ import { ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, ofActionErrored, ofActionSuccessful, Select, Store, ActionCompletion } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
-import { AlertService } from '../../../services/alert.service';
-import { NavigationService } from '../../../services/navigation.service';
-import { Measure, MeasureSeries, MeasureType } from '../../../states/measures/measure';
+import { AutoUnsubscribePage } from '@app/components/auto-unsubscribe/auto-unsubscribe.page';
+import { AlertService } from '@app/services/alert.service';
+import { NavigationService } from '@app/services/navigation.service';
+import { Measure, MeasureSeries, MeasureType } from '@app/states/measures/measure';
 import {
   DeleteAllMeasures,
   DeleteMeasure,
   PublishMeasure,
   ShowMeasure
-} from '../../../states/measures/measures.action';
-import { MeasuresService } from '../../../states/measures/measures.service';
-import { MeasuresState } from '../../../states/measures/measures.state';
+} from '@app/states/measures/measures.action';
+import { MeasuresService } from '@app/states/measures/measures.service';
+import { MeasuresState } from '@app/states/measures/measures.state';
 
 @Component({
   selector: 'app-history',

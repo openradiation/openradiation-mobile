@@ -1,6 +1,6 @@
 import { Location } from "@capacitor-community/background-geolocation";
-import { AbstractDevice } from '../devices/abstract-device';
-import { Measure, MeasureSeries, Params, Step } from './measure';
+import { AbstractDevice } from '@app/states/devices/abstract-device';
+import { Measure, MeasureSeries, Params, Step } from '@app/states/measures/measure';
 
 export class InitMeasures {
   static readonly type = '[Measure] Init';

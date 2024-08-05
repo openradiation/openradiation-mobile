@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable, of } from 'rxjs';
 import { bufferCount, filter, map, tap } from 'rxjs/operators';
-import { Step } from '../../measures/measure';
+import { Step } from '@app/states/measures/measure';
 import { RawBLEDevice } from './abstract-ble-device';
 import { AbstractBLEDeviceService } from './abstract-ble-device.service';
 import { DeviceSafeCast, DeviceSafeCastType } from './device-safe-cast';

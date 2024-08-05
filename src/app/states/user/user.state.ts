@@ -1,8 +1,8 @@
 import { Action, NgxsOnInit, Selector, State, StateContext } from '@ngxs/store';
 import { from, of } from 'rxjs';
 import { concatMap, tap } from 'rxjs/operators';
-import { NotificationService } from '../../services/notification.service';
-import { StorageService } from '../../services/storage.service';
+import { NotificationService } from '@app/services/notification.service';
+import { StorageService } from '@app/services/storage.service';
 import { DisableNotifications, EnableNotifications, InitUser, LogIn, LogOut, SetLanguage } from './user.action';
 import { UserService } from './user.service';
 import { Injectable } from '@angular/core';

@@ -5,7 +5,7 @@ import { FCM } from '@capacitor-community/fcm';
 import { AlertService } from './alert.service';
 import { initializeApp } from "firebase/app";
 import { Capacitor } from "@capacitor/core";
-import { environment } from "../../environments/environment";
+import { environment } from "@environments/environment";
 
 
 @Injectable({

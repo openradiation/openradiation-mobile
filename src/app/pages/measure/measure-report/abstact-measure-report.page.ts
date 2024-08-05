@@ -5,18 +5,18 @@ import { Platform } from '@ionic/angular';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
-import { SelectIconOption } from '../../../components/select-icon/select-icon-option';
-import { NavigationService } from '../../../services/navigation.service';
+import { AutoUnsubscribePage } from '@app/components/auto-unsubscribe/auto-unsubscribe.page';
+import { SelectIconOption } from '@app/components/select-icon/select-icon-option';
+import { NavigationService } from '@app/services/navigation.service';
 import {
   AbstractMeasure,
   Measure,
   MeasureEnvironment,
   PositionAccuracyThreshold
-} from '../../../states/measures/measure';
-import { AddRecentTag, CancelMeasure, StopMeasure, StopMeasureSeries } from '../../../states/measures/measures.action';
-import { MeasuresState } from '../../../states/measures/measures.state';
-import { UserState } from '../../../states/user/user.state';
+} from '@app/states/measures/measure';
+import { AddRecentTag, CancelMeasure, StopMeasure, StopMeasureSeries } from '@app/states/measures/measures.action';
+import { MeasuresState } from '@app/states/measures/measures.state';
+import { UserState } from '@app/states/user/user.state';
 
 export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> extends AutoUnsubscribePage {
   @Select(UserState.login)

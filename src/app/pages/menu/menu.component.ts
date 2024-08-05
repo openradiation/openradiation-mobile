@@ -5,12 +5,12 @@ import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
-import { AlertService } from '../../services/alert.service';
-import { NavigationService } from '../../services/navigation.service';
-import { AbstractDevice } from '../../states/devices/abstract-device';
-import { DevicesState } from '../../states/devices/devices.state';
-import { StartManualMeasure, StartMeasureSeriesParams } from '../../states/measures/measures.action';
-import { UserState } from '../../states/user/user.state';
+import { AlertService } from '@app/services/alert.service';
+import { NavigationService } from '@app/services/navigation.service';
+import { AbstractDevice } from '@app/states/devices/abstract-device';
+import { DevicesState } from '@app/states/devices/devices.state';
+import { StartManualMeasure, StartMeasureSeriesParams } from '@app/states/measures/measures.action';
+import { UserState } from '@app/states/user/user.state';
 import { RedirectAfterLogin } from '../tabs/settings/log-in/log-in.page';
 
 @Component({

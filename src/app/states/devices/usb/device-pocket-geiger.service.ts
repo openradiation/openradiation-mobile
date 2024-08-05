@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, Store } from '@ngxs/store';
 import { Observable, of } from 'rxjs';
 import { filter, map, startWith } from 'rxjs/operators';
-import { Step } from '../../measures/measure';
+import { Step } from '@app/states/measures/measure';
 import { AbstractUSBDeviceService } from './abstract-usb-device.service';
 import { DevicePocketGeiger } from './device-pocket-geiger';
 

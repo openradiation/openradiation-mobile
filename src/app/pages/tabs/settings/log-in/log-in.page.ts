@@ -6,13 +6,13 @@ import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { catchError, take } from 'rxjs/operators';
-import { AutoUnsubscribePage } from '../../../../components/auto-unsubscribe/auto-unsubscribe.page';
-import { NavigationService } from '../../../../services/navigation.service';
-import { AbstractDevice } from '../../../../states/devices/abstract-device';
-import { DevicesState } from '../../../../states/devices/devices.state';
-import { ErrorResponse, ErrorResponseCode } from '../../../../states/measures/error-response';
-import { StartManualMeasure, StartMeasureSeriesParams } from '../../../../states/measures/measures.action';
-import { LogIn } from '../../../../states/user/user.action';
+import { AutoUnsubscribePage } from '@app/components/auto-unsubscribe/auto-unsubscribe.page';
+import { NavigationService } from '@app/services/navigation.service';
+import { AbstractDevice } from '@app/states/devices/abstract-device';
+import { DevicesState } from '@app/states/devices/devices.state';
+import { ErrorResponse, ErrorResponseCode } from '@app/states/measures/error-response';
+import { StartManualMeasure, StartMeasureSeriesParams } from '@app/states/measures/measures.action';
+import { LogIn } from '@app/states/user/user.action';
 
 export enum RedirectAfterLogin {
   ManualMeasure = 'manualMeasure',

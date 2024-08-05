@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HomePage } from './home.page';
 
-import { getTestImports, getTestProviders } from '../../../../tests/TestUtils'
+import { getTestImports, getTestProviders } from '@tests/TestUtils'
 
 describe('HomePage', () => {
   let component: HomePage;

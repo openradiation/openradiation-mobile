@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { NavigationService } from '../../../../services/navigation.service';
-import { DisableExpertMode, EnableExpertMode } from '../../../../states/measures/measures.action';
-import { MeasuresState } from '../../../../states/measures/measures.state';
-import { DisableNotifications, EnableNotifications, LogOut, SetLanguage } from '../../../../states/user/user.action';
-import { UserState } from '../../../../states/user/user.state';
+import { NavigationService } from '@app/services/navigation.service';
+import { DisableExpertMode, EnableExpertMode } from '@app/states/measures/measures.action';
+import { MeasuresState } from '@app/states/measures/measures.state';
+import { DisableNotifications, EnableNotifications, LogOut, SetLanguage } from '@app/states/user/user.action';
+import { UserState } from '@app/states/user/user.state';
 
 @Component({
   selector: 'app-settings',
@@ -25,7 +25,7 @@ export class SettingsPage {
   @Select(UserState.notifications)
   notifications$: Observable<boolean | undefined>;
 
-  constructor(private navigationService: NavigationService, private store: Store) {}
+  constructor(private navigationService: NavigationService, private store: Store) { }
 
   toggleExpertMode(enable: boolean) {
     if (enable) {

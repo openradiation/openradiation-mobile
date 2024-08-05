@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { marker as _ } from '@biesbjerg/ngx-translate-extract-marker';
-import { Measure, MeasureSeries, MeasureType } from '../../../../states/measures/measure';
+import { Measure, MeasureSeries, MeasureType } from '@app/states/measures/measure';
 
 @Component({
   selector: 'app-history-item',

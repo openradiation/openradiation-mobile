@@ -3,6 +3,20 @@
   "compilerOptions": {
     "outDir": "../out-tsc/spec",
     "baseUrl": "./",
+    "paths": {
+      "@app/*": [
+        "./app/*"
+      ],
+      "@tests/*": [
+        "./tests/*"
+      ],
+      "@environments/*": [
+        "./environments/*"
+      ],
+      "@capacitor/*": [
+        "__mocks__/@capacitor/*"
+      ]
+    },
     "types": [
       "jasmine",
       "node"

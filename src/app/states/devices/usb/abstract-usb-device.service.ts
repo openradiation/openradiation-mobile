@@ -2,8 +2,8 @@ import { Actions, Store } from '@ngxs/store';
 import { UsbSerial } from 'cordova-plugin-usb-serial';
 import { Observable, Observer, of } from 'rxjs';
 import { catchError, concatMap, shareReplay, take, takeUntil } from 'rxjs/operators';
-import { AbstractDeviceService } from '../abstract-device.service';
-import { DeviceConnectionLost } from '../devices.action';
+import { AbstractDeviceService } from '@app/states/devices/abstract-device.service';
+import { DeviceConnectionLost } from '@app/states/devices/devices.action';
 import { AbstractUSBDevice } from './abstract-usb-device';
 
 /**
