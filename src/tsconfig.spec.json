@@ -14,7 +14,13 @@
         "./environments/*"
       ],
       "@capacitor/*": [
-        "__mocks__/@capacitor/*"
+        "./tests/__mocks__/@capacitor/*"
+      ],
+      "@awesome-cordova-plugins/diagnostic": [
+        "./tests/__mocks__/@awesome-cordova-plugins/diagnostic.ts"
+      ],
+      "~*": [
+        "../node_modules/*"
       ]
     },
     "types": [

@@ -1,6 +1,6 @@
 export const environment = {
-  production: true,
-  APP_NAME_VERSION: 'OpenRadiation app 2.3.5 beta',
+  production: false,
+  APP_NAME_VERSION: 'OpenRadiation app 2.3.5 test',
   API_KEY: '50adef3bdec466edc25f40c8fedccbce',
   API_URI: 'https://submit.open-radiation.net/measurements',
   IN_APP_BROWSER_URI: {
@@ -8,8 +8,8 @@ export const environment = {
     suffix: 'openradiation'
   },
   mockDevice: false,
-  isTestEnvironment: false,
-  // FIXE : use beta configuration here
+  isTestEnvironment: true,
+  // FIXE : use firebase production configuration here
   firebase: {
     pushNotificationsConfigured: false,
     apiKey: "YOUR_API_KEY",

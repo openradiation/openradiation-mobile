@@ -18,6 +18,7 @@ import { ScreenOrientation } from '@capacitor/screen-orientation';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { Preferences } from '@capacitor/preferences';
 import { Capacitor } from '@capacitor/core';
+import { environment } from '@environments/environment';
 
 
 @Injectable({
@@ -89,12 +90,16 @@ export class StorageService {
           .select(({ measures }: { measures: MeasuresStateModel }) => measures.currentSeries)
           .subscribe(currentSeries => this.saveCurrentSeries(currentSeries));
         this.platform.ready().then(async () => {
-          if (Capacitor.getPlatform() != "web") {
+          if (Capacitor.getPlatform() != "web"
+            || environment.isTestEnvironment
+          ) {
             StatusBar.setOverlaysWebView({ overlay: true });
             StatusBar.setStyle({ style: Style.Light });
             SplashScreen.hide();
             await ScreenOrientation.lock({ orientation: 'portrait' });
-            this.positionService.init();
+            if (!environment.isTestEnvironment) {
+              this.positionService.init();
+            }
           }
         });
       });

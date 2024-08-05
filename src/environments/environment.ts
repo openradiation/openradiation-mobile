@@ -8,6 +8,7 @@ export const environment = {
     suffix: 'openradiation'
   },
   mockDevice: false,
+  isTestEnvironment: false,
   // FIXE : use firebase production configuration here
   firebase: {
     pushNotificationsConfigured: false,
