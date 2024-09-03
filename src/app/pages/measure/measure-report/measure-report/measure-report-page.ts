@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { UntypedFormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
-import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
+import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { NavigationService } from '@app/services/navigation.service';
 import { DateService } from '@app/states/measures/date.service';
@@ -17,8 +17,7 @@ import { AbstractMeasureReportPage } from '../abstact-measure-report.page';
   styleUrls: ['./measure-report.page.scss']
 })
 export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
-  @Select(MeasuresState.expertMode)
-  expertMode$: Observable<boolean>;
+  expertMode$: Observable<boolean> = inject(Store).select(MeasuresState.expertMode);
 
   exampleFlightNumber = { message: ': AF179' };
   exampleSeatNumber = { message: ': C15' };

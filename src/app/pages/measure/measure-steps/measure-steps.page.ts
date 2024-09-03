@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Select } from '@ngxs/store';
+import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { NavigationService } from '@app/services/navigation.service';
 import { Measure } from '@app/states/measures/measure';
@@ -13,8 +13,7 @@ import { Share } from '@capacitor/share';
   styleUrls: ['./measure-steps.page.scss']
 })
 export class MeasureStepsPage {
-  @Select(MeasuresState.currentMeasure)
-  currentMeasure$: Observable<Measure | undefined>;
+  currentMeasure$: Observable<Measure | undefined> = inject(Store).select(MeasuresState.currentMeasure);
 
   constructor(
     private navigationService: NavigationService,

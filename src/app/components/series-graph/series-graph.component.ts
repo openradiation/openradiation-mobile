@@ -1,9 +1,9 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { MeasureSeries } from '@app/states/measures/measure';
 
 import Figure = Plotly.Figure;
-import { Select } from '@ngxs/store';
+import { Store } from '@ngxs/store';
 import { PlotlyService } from 'angular-plotly.js';
 import { Plotly } from 'angular-plotly.js/lib/plotly.interface';
 import * as PlotlyFR from 'plotly.js/lib/locales/fr.js';
@@ -16,8 +16,7 @@ import { UserState } from '@app/states/user/user.state';
   template: '<plotly-plot [data]="barPlot.data" [layout]="barPlot.layout" [config]="barPlot.frames"></plotly-plot>'
 })
 export class SeriesGraphComponent implements OnChanges {
-  @Select(UserState.language)
-  language$: Observable<string | undefined>;
+  language$: Observable<string | undefined> = inject(Store).select(UserState.language);
 
   @Input()
   seriesMeasure: MeasureSeries;

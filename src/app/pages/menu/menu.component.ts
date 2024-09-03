@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
+import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 import { AlertService } from '@app/services/alert.service';
@@ -19,11 +19,9 @@ import { RedirectAfterLogin } from '../tabs/settings/log-in/log-in.page';
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent {
-  @Select(UserState.login)
-  login$: Observable<string | undefined>;
+  login$: Observable<string | undefined> = inject(Store).select(UserState.login);
 
-  @Select(DevicesState.connectedDevice)
-  connectedDevice$: Observable<AbstractDevice | undefined>;
+  connectedDevice$: Observable<AbstractDevice | undefined> = inject(Store).select(DevicesState.connectedDevice);
 
   currentUrl: string;
 

@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
+import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { catchError, take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '@app/components/auto-unsubscribe/auto-unsubscribe.page';
@@ -25,8 +25,7 @@ export enum RedirectAfterLogin {
   styleUrls: ['./log-in.page.scss']
 })
 export class LogInPage extends AutoUnsubscribePage {
-  @Select(DevicesState.connectedDevice)
-  connectedDevice$: Observable<AbstractDevice | undefined>;
+  connectedDevice$: Observable<AbstractDevice | undefined> = inject(Store).select(DevicesState.connectedDevice);
 
   loginForm: UntypedFormGroup;
   connecting = false;

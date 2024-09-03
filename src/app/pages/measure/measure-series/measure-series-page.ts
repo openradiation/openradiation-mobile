@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { marker as _ } from '@biesbjerg/ngx-translate-extract-marker';
-import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
+import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '@app/components/auto-unsubscribe/auto-unsubscribe.page';
@@ -19,11 +19,9 @@ import { MeasuresState, MeasuresStateModel } from '@app/states/measures/measures
   styleUrls: ['./measure-series.page.scss']
 })
 export class MeasureSeriesPage extends AutoUnsubscribePage {
-  @Select(DevicesState.connectedDevice)
-  connectedDevice$: Observable<AbstractDevice | undefined>;
+  connectedDevice$: Observable<AbstractDevice | undefined> = inject(Store).select(DevicesState.connectedDevice);
 
-  @Select(MeasuresState.planeMode)
-  planeMode$: Observable<boolean>;
+  planeMode$: Observable<boolean> = inject(Store).select(MeasuresState.planeMode);
 
   measureSeriesParamsForm?: UntypedFormGroup;
   url = '/measure/series';

@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
+import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '@app/components/auto-unsubscribe/auto-unsubscribe.page';
@@ -19,14 +19,10 @@ import { Location } from "@capacitor-community/background-geolocation";
   styleUrls: ['home.page.scss']
 })
 export class HomePage extends AutoUnsubscribePage {
-  @Select(DevicesState.connectedDevice)
-  connectedDevice$: Observable<AbstractDevice | undefined>;
-  @Select(MeasuresState.positionAccuracy)
-  positionAccuracy$: Observable<number>;
-  @Select(MeasuresState.planeMode)
-  planeMode$: Observable<boolean>;
-  @Select(MeasuresState.currentPosition)
-  currentPosition$: Observable<Location>;
+  connectedDevice$: Observable<AbstractDevice | undefined> = inject(Store).select(DevicesState.connectedDevice);
+  positionAccuracy$: Observable<number> = inject(Store).select(MeasuresState.positionAccuracy);
+  planeMode$: Observable<boolean> = inject(Store).select(MeasuresState.planeMode);
+  currentPosition$: Observable<Location|undefined> = inject(Store).select(MeasuresState.currentPosition);
 
   canStartMeasure: Observable<boolean>;
 

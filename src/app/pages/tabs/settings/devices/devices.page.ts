@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { Actions, ofActionDispatched, ofActionSuccessful, Select, Store } from '@ngxs/store';
+import { Actions, ofActionDispatched, ofActionSuccessful, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { AutoUnsubscribePage } from '@app/components/auto-unsubscribe/auto-unsubscribe.page';
 import { NavigationService } from '@app/services/navigation.service';
@@ -25,16 +25,12 @@ import { DevicesState } from '@app/states/devices/devices.state';
   styleUrls: ['./devices.page.scss']
 })
 export class DevicesPage extends AutoUnsubscribePage {
-  @Select(DevicesState.availableDevices)
-  availableDevices$: Observable<AbstractDevice[]>;
+  availableDevices$: Observable<AbstractDevice[]> = inject(Store).select(DevicesState.availableDevices);
   availableDevices: AbstractDevice[] = [];
-  @Select(DevicesState.knownDevices)
-  knownDevices$: Observable<AbstractDevice[]>;
+  knownDevices$: Observable<AbstractDevice[]> = inject(Store).select(DevicesState.knownDevices);
   knownDevices: AbstractDevice[] = [];
-  @Select(DevicesState.isScanning)
-  isScanning$: Observable<boolean>;
-  @Select(DevicesState.connectedDevice)
-  connectedDevice$: Observable<AbstractDevice>;
+  isScanning$: Observable<boolean> = inject(Store).select(DevicesState.isScanning);
+  connectedDevice$: Observable<AbstractDevice|undefined> = inject(Store).select(DevicesState.connectedDevice);
 
   connectingDevice: AbstractDevice | undefined;
 

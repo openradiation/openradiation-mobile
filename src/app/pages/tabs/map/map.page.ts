@@ -1,8 +1,8 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
-import { Select } from '@ngxs/store';
+import { Store } from '@ngxs/store';
 import { combineLatest, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { environment } from '@environments/environment';
@@ -18,12 +18,9 @@ import { ConnectionStatus, Network, } from '@capacitor/network';
   styleUrls: ['./map.page.scss']
 })
 export class MapPage extends AutoUnsubscribePage {
-  @Select(UserState.language)
-  language$: Observable<string | undefined>;
-  @Select(MeasuresState.currentPosition)
-  currentPosition$: Observable<Location | undefined>;
-  @Select(MeasuresState.planeMode)
-  planeMode$: Observable<boolean>;
+  language$: Observable<string | undefined> = inject(Store).select(UserState.language);
+  currentPosition$: Observable<Location | undefined> = inject(Store).select(MeasuresState.currentPosition);
+  planeMode$: Observable<boolean> = inject(Store).select(MeasuresState.planeMode);
 
   iframeURL: SafeResourceUrl;
   isLoading = false;

@@ -2,7 +2,8 @@ import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { marker as _ } from '@biesbjerg/ngx-translate-extract-marker';
 import { Platform } from '@ionic/angular';
-import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
+import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
+import { inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '@app/components/auto-unsubscribe/auto-unsubscribe.page';
@@ -19,11 +20,9 @@ import { MeasuresState } from '@app/states/measures/measures.state';
 import { UserState } from '@app/states/user/user.state';
 
 export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> extends AutoUnsubscribePage {
-  @Select(UserState.login)
-  login$: Observable<string | undefined>;
+  login$: Observable<string | undefined> = inject(Store).select(UserState.login);
 
-  @Select(MeasuresState.recentTags)
-  recentTags$: Observable<string[]>;
+  recentTags$: Observable<string[]> = inject(Store).select(MeasuresState.recentTags);
 
   measureReportForm?: UntypedFormGroup;
   reportScan = true;

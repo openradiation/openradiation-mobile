@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
+import { Component, inject } from '@angular/core';
+import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { NavigationService } from '@app/services/navigation.service';
 import { DisableAutoPublish, EnableAutoPublish } from '@app/states/measures/measures.action';
@@ -11,8 +11,7 @@ import { MeasuresState } from '@app/states/measures/measures.state';
   styleUrls: ['./measures-param.page.scss']
 })
 export class MeasuresParamPage {
-  @Select(MeasuresState.autoPublish)
-  autoPublish$: Observable<boolean>;
+  autoPublish$: Observable<boolean> = inject(Store).select(MeasuresState.autoPublish);
 
   constructor(private navigationService: NavigationService, private store: Store) { }
 

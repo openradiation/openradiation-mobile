@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { marker as _ } from '@biesbjerg/ngx-translate-extract-marker';
 import { TranslateService } from '@ngx-translate/core';
-import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
+import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '@app/components/auto-unsubscribe/auto-unsubscribe.page';
@@ -26,20 +26,15 @@ import { MeasuresState } from '@app/states/measures/measures.state';
   styleUrls: ['./measure-scan.page.scss']
 })
 export class MeasureScanPage extends AutoUnsubscribePage {
-  @Select(MeasuresState.currentMeasure)
-  currentMeasure$: Observable<Measure | undefined>;
+  currentMeasure$: Observable<Measure | undefined> = inject(Store).select(MeasuresState.currentMeasure);
 
-  @Select(MeasuresState.currentSeries)
-  currentSeries$: Observable<MeasureSeries | undefined>;
+  currentSeries$: Observable<MeasureSeries | undefined> = inject(Store).select(MeasuresState.currentSeries);
 
-  @Select(MeasuresState.canEndCurrentScan)
-  canEndCurrentScan$: Observable<boolean>;
+  canEndCurrentScan$: Observable<boolean> = inject(Store).select(MeasuresState.canEndCurrentScan);
 
-  @Select(DevicesState.connectedDevice)
-  connectedDevice$: Observable<AbstractDevice | undefined>;
+  connectedDevice$: Observable<AbstractDevice | undefined> = inject(Store).select(DevicesState.connectedDevice);
 
-  @Select(MeasuresState.planeMode)
-  planeMode$: Observable<boolean>;
+  planeMode$: Observable<boolean> = inject(Store).select(MeasuresState.planeMode);
 
   hitsAccuracy: HitsAccuracy = HitsAccuracy.Start;
   hitsAccuracyWidth = 0;
