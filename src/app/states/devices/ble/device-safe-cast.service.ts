@@ -40,20 +40,19 @@ export class DeviceSafeCastService extends AbstractBLEDeviceService<DeviceSafeCa
     stopSignal.subscribe(() => this.stopReceiveData(device));
     let readingBufferSequence = false;
     return this.startReceiveData(device).pipe(
-      filter((buffer: ArrayBuffer) => {
-        const dataView = new DataView(buffer);
+      filter((dataView: DataView) => {
         return dataView.getUint8(0) === 36 || readingBufferSequence;
       }),
       tap(() => (readingBufferSequence = true)),
       bufferCount(18),
       tap(() => (readingBufferSequence = false)),
-      map(buffers => this.decodeDataPackage(buffers))
+      map(dataViews => this.decodeDataPackage(dataViews))
     );
   }
 
-  protected decodeDataPackage(buffers: ArrayBuffer[]): Step {
-    const data = buffers
-      .map(buffer => this.textDecoder.decode(buffer))
+  protected decodeDataPackage(dataViews: DataView[]): Step {
+    const data = dataViews
+      .map(dataView => this.textDecoder.decode(dataView.buffer))
       .join('')
       .split(',');
     return {

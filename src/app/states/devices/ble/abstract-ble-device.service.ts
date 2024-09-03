@@ -30,8 +30,15 @@ export abstract class AbstractBLEDeviceService<T extends AbstractBLEDevice> exte
         (deviceId) => {
           observer.error(new Error('Device disconnected : ' + deviceId))
         }
-      ).then(() => observer.next())
-        .catch(e => observer.error(e));
+      ).then(() => {
+        console.info("Connected to device ", device)
+        observer.next()
+      })
+        .catch(e => {
+          console.error("Error while connected to device", device, e);
+          observer.error(e);
+        }
+        )
     }).pipe(
       concatMap(() => this.saveDeviceParams(device)),
       shareReplay()

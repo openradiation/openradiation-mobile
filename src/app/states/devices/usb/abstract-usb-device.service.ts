@@ -57,7 +57,7 @@ export abstract class AbstractUSBDeviceService<T extends AbstractUSBDevice> exte
     );
   }
 
-  protected receiveData(stopSignal: Observable<unknown> = of()): Observable<ArrayBuffer> {
+  protected receiveData(stopSignal: Observable<unknown> = of()): Observable<DataView> {
     return Observable.create((observer: Observer<ArrayBuffer>) => {
       UsbSerial.onDataReceived(data => observer.next(data), err => observer.error(err));
     }).pipe(takeUntil(stopSignal));

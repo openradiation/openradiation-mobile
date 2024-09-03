@@ -41,14 +41,14 @@ export class DevicePocketGeigerService extends AbstractUSBDeviceService<DevicePo
     this.sendData(this.SEND_GET_HITS);
     return this.receiveData(stopSignal).pipe(
       filter(() => this.noiseTimeout < Date.now()),
-      map((buffer: ArrayBuffer) => this.decodeDataPackage(buffer)),
+      map((dataView: DataView) => this.decodeDataPackage(dataView)),
       startWith({ ts: Date.now(), hitsNumber: 0 }),
       filter((step: Step | null): step is Step => step !== null)
     );
   }
 
-  protected decodeDataPackage(buffer: ArrayBuffer): Step | null {
-    const data = this.textDecoder.decode(buffer);
+  protected decodeDataPackage(dataView: DataView): Step | null {
+    const data = this.textDecoder.decode(dataView.buffer);
     if (data[0] === this.RECEIVE_GET_HITS) {
       const dataPackage = data.slice(1).split(',');
       const hitsNumber = Number(dataPackage[0]);

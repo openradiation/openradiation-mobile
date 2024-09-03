@@ -66,8 +66,7 @@ export class DeviceRium2BLEService extends AbstractBLEDeviceService<DeviceRium2B
       this.startNotificationsRx(device, this.temperatureCharacteristic)
     ).pipe(
       map((dataViews: [DataView, DataView]) => {
-        const buffers: [ArrayBuffer, ArrayBuffer] = [dataViews[0].buffer, dataViews[1].buffer]
-        return this.decodeDataPackage(buffers)
+        return this.decodeDataPackage(dataViews)
       }),
       catchError(err => {
         this.disconnectDevice(device).subscribe();
@@ -77,9 +76,9 @@ export class DeviceRium2BLEService extends AbstractBLEDeviceService<DeviceRium2B
     );
   }
 
-  protected decodeDataPackage([hitsBuffer, temperatureBuffer]: [ArrayBuffer, ArrayBuffer]): Step {
-    const hitsNumber = this.getNumberFromBuffer(hitsBuffer, 2);
-    const temperature = this.getNumberFromBuffer(temperatureBuffer, 3) / 10;
+  protected decodeDataPackage([hitsBuffer, temperatureBuffer]: [DataView, DataView]): Step {
+    const hitsNumber = this.getNumberFromBuffer(hitsBuffer.buffer, 2);
+    const temperature = this.getNumberFromBuffer(temperatureBuffer.buffer, 3) / 10;
     return {
       ts: Date.now(),
       hitsNumber,

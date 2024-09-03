@@ -72,7 +72,7 @@ export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag
   startMeasureScan(device: DeviceAtomTag, stopSignal: Observable<unknown>): Observable<Step> {
     stopSignal.subscribe(() => this.stopReceiveData(device));
     return this.startReceiveData(device).pipe(
-      map((buffer: ArrayBuffer) => this.decodeDataPackage(buffer)),
+      map((dataView: DataView) => this.decodeDataPackage(dataView)),
       catchError(err => {
         this.disconnectDevice(device).subscribe();
         setTimeout(() => this.store.dispatch(new DeviceConnectionLost()), 1000);
@@ -81,8 +81,7 @@ export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag
     );
   }
 
-  protected decodeDataPackage(buffer: ArrayBuffer): Step {
-    const dataView = new DataView(buffer);
+  protected decodeDataPackage(dataView: DataView): Step {
     return {
       ts: Date.now(),
       hitsNumber: dataView.getUint16(9, true),

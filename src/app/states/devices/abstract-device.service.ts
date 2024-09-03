@@ -73,7 +73,7 @@ export abstract class AbstractDeviceService<T extends AbstractDevice> {
 
   abstract disconnectDevice(device: T): Observable<unknown>;
 
-  protected abstract decodeDataPackage(buffer: ArrayBuffer | ArrayBuffer[]): Step | null;
+  protected abstract decodeDataPackage(dataView: DataView | DataView[]): Step | null;
 
   protected arrayBufferToHex(buffer: ArrayBuffer): string {
     return Array.from(new Uint8Array(buffer))

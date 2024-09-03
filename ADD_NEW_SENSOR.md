@@ -135,12 +135,12 @@ export class DeviceTotoService extends AbstractBLEDeviceService<DeviceToto> {
       tap(() => (readingBufferSequence = true)),
       bufferCount(18),
       tap(() => (readingBufferSequence = false)),
-      map(buffers => this.decodeDataPackage(buffers))
+      map(dataView => this.decodeDataPackage(dataView))
     );
   }
 
-  protected decodeDataPackage(buffers: ArrayBuffer[]): Step {
-    const data = buffers
+  protected decodeDataPackage(dataView: DataView): Step {
+    const data = dataView.buffer
       .map(buffer => this.textDecoder.decode(buffer))
       .join('')
       .split(',');

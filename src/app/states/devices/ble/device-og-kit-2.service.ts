@@ -101,7 +101,7 @@ export class DeviceOGKit2Service extends AbstractBLEDeviceService<DeviceOGKit2> 
     this.setTubeVoltageOn(device);
     stopSignal.subscribe(() => this.stopReceiveData(device));
     return this.startReceiveData(device).pipe(
-      map((buffer: ArrayBuffer) => this.decodeDataPackage(buffer)),
+      map((dataView: DataView) => this.decodeDataPackage(dataView)),
       filter((step: Step | null): step is Step => step !== null),
       filter(
         (step: Step) =>
@@ -129,8 +129,7 @@ export class DeviceOGKit2Service extends AbstractBLEDeviceService<DeviceOGKit2> 
     return this.textDecoder.decode(array.slice(2, 2 + array[1]));
   }
 
-  protected decodeDataPackage(buffer: ArrayBuffer): Step | null {
-    const dataView = new DataView(buffer);
+  protected decodeDataPackage(dataView: DataView): Step | null {
     if (
       dataView.getUint8(this.RECEIVE_HIT_POSITION) === this.RECEIVE_HIT &&
       dataView.getUint8(this.RECEIVE_TEMPERATURE_POSITION) === this.RECEIVE_TEMPERATURE &&

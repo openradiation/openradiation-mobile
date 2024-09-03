@@ -29,10 +29,10 @@ export class DeviceRiumService extends AbstractUSBDeviceService<DeviceRium> {
   connectDevice(device: DeviceRium): Observable<unknown> {
     return super.connectDevice(device).pipe(
       concatMap(() => this.receiveData()),
-      concatMap((buffer: ArrayBuffer) => {
-        if (buffer.byteLength === 12) {
+      concatMap((dataView: DataView) => {
+        if (dataView.buffer.byteLength === 12) {
           return of(null);
-        } else if (buffer.byteLength === 32) {
+        } else if (dataView.buffer.byteLength === 32) {
           // If we detect this buffer size if means the connected device is an new Rium and we switch to the correct service
           const correctDevice = new DeviceRium2USB();
           this.store
@@ -50,9 +50,8 @@ export class DeviceRiumService extends AbstractUSBDeviceService<DeviceRium> {
 
   getDeviceInfo(_device: DeviceRium): Observable<Partial<DeviceRium>> {
     return this.receiveData().pipe(
-      map((buffer: ArrayBuffer) => {
-        if (buffer.byteLength === 12) {
-          const dataView = new DataView(buffer);
+      map((dataView: DataView) => {
+        if (dataView.buffer.byteLength === 12) {
           const apparatusId = dataView.getUint32(2, false).toString();
           return {
             apparatusId
@@ -72,14 +71,13 @@ export class DeviceRiumService extends AbstractUSBDeviceService<DeviceRium> {
 
   startMeasureScan(device: DeviceRium, stopSignal: Observable<unknown>): Observable<Step> {
     return this.receiveData(stopSignal).pipe(
-      map((buffer: ArrayBuffer) => this.decodeDataPackage(buffer)),
+      map((dataView: DataView) => this.decodeDataPackage(dataView)),
       filter((step: Step | null): step is Step => step !== null)
     );
   }
 
-  protected decodeDataPackage(buffer: ArrayBuffer): Step | null {
-    if (buffer.byteLength === 12) {
-      const dataView = new DataView(buffer);
+  protected decodeDataPackage(dataView: DataView): Step | null {
+    if (dataView.buffer.byteLength === 12) {
       const hitsNumber = dataView.getInt16(6);
       const temperature = dataView.getInt16(10) / 10;
       return {

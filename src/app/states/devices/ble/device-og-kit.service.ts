@@ -102,7 +102,7 @@ export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
     this.setTubeVoltageOn(device);
     stopSignal.subscribe(() => this.stopReceiveData(device));
     return this.startReceiveData(device).pipe(
-      map((buffer: ArrayBuffer) => this.decodeDataPackage(buffer)),
+      map((dataView: DataView) => this.decodeDataPackage(dataView)),
       filter((step: Step | null): step is Step => step !== null),
       filter(
         (step: Step) =>
@@ -120,18 +120,24 @@ export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
     }
   }
 
-  private sendData(device: DeviceOGKit, data: number[]): Promise<unknown> {
-    return BleClient.write(device.sensorUUID, this.service, this.sendCharacteristic,
-      new DataView(new Uint8Array(data).buffer)
-    );
+  private async sendData(device: DeviceOGKit, data: number[]): Promise<unknown> {
+    try {
+      const result = await BleClient.write(device.sensorUUID, this.service, this.sendCharacteristic,
+        new DataView(new Uint8Array(data).buffer)
+      );
+      return result;
+    } catch (error) {
+      console.error("Error while sending data with OgKit", error)
+      console.error("UUID : " + device.sensorUUID + " / Service: " + this.service + " /Characteristic: " + this.sendCharacteristic + " /data : ", data)
+      return Promise.reject(error);
+    }
   }
 
   private decodeStringArray(array: Uint8Array): string {
     return this.textDecoder.decode(array.slice(2, 2 + array[1]));
   }
 
-  protected decodeDataPackage(buffer: ArrayBuffer): Step | null {
-    const dataView = new DataView(buffer);
+  protected decodeDataPackage(dataView: DataView): Step | null {
     if (
       dataView.getUint8(this.RECEIVE_HIT_POSITION) === this.RECEIVE_HIT &&
       dataView.getUint8(this.RECEIVE_TEMPERATURE_POSITION) === this.RECEIVE_TEMPERATURE &&
