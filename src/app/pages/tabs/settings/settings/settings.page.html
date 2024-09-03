@@ -47,12 +47,6 @@
         <ion-select-option value="fr">{{'LANGUAGE.FRENCH' | translate}}</ion-select-option>
       </ion-select>
     </ion-item>
-    <ion-item class="no-padding">
-      <ion-label>
-        {{'NOTIFICATIONS.TITLE' | translate}}
-      </ion-label>
-      <ion-toggle [ngModel]="notifications$ | async" (ngModelChange)="toggleNotifications($event)"></ion-toggle>
-    </ion-item>
   </ion-list>
   <ion-list>
     <app-category-label>

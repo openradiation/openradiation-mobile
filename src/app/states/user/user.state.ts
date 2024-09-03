@@ -1,9 +1,7 @@
 import { Action, NgxsOnInit, Selector, State, StateContext } from '@ngxs/store';
-import { from, of } from 'rxjs';
-import { concatMap, tap } from 'rxjs/operators';
-import { NotificationService } from '@app/services/notification.service';
+import { tap } from 'rxjs/operators';
 import { StorageService } from '@app/services/storage.service';
-import { DisableNotifications, EnableNotifications, InitUser, LogIn, LogOut, SetLanguage } from './user.action';
+import { InitUser, LogIn, LogOut, SetLanguage } from './user.action';
 import { UserService } from './user.service';
 import { Injectable } from '@angular/core';
 export interface UserStateModel {
@@ -20,8 +18,7 @@ export interface UserStateModel {
 export class UserState implements NgxsOnInit {
   constructor(
     private userService: UserService,
-    private storageService: StorageService,
-    private notificationService: NotificationService
+    private storageService: StorageService
   ) { }
 
   @Selector()
@@ -41,7 +38,6 @@ export class UserState implements NgxsOnInit {
 
   ngxsOnInit(_stateContext: StateContext<UserStateModel>) {
     this.storageService.init();
-    this.notificationService.init();
   }
 
   @Action(InitUser)
@@ -71,34 +67,10 @@ export class UserState implements NgxsOnInit {
 
   @Action(SetLanguage)
   setLanguage({ getState, patchState }: StateContext<UserStateModel>, { language }: SetLanguage) {
-    const { language: previousLanguage, notifications } = getState();
+    const { language: previousLanguage } = getState();
     const newLanguage = language || previousLanguage || this.userService.getDefaultLanguage();
     return this.userService.setLanguage(newLanguage).pipe(
-      concatMap(() =>
-        notifications ? from(this.notificationService.useLanguage(newLanguage, previousLanguage)) : of(null)
-      ),
       tap(() => patchState({ language: newLanguage }))
-    );
-  }
-
-  @Action(EnableNotifications)
-  enableNotifications({ getState, patchState }: StateContext<UserStateModel>) {
-    const { language } = getState();
-    return from(this.notificationService.enableNotifications(language)).pipe(
-      tap(notifications => {
-        patchState({ notifications: true });
-        if (!notifications) {
-          setTimeout(() => patchState({ notifications: false }), 300);
-        }
-      })
-    );
-  }
-
-  @Action(DisableNotifications)
-  disableNotifications({ getState, patchState }: StateContext<UserStateModel>) {
-    const { language } = getState();
-    return from(this.notificationService.disableNotifications(language)).pipe(
-      tap(() => patchState({ notifications: false }))
     );
   }
 }

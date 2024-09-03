@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { Actions, ofActionDispatched, ofActionErrored, ofActionSuccessful, Select, Store, ActionCompletion } from '@ngxs/store';
+import { Actions, ofActionDispatched, ofActionErrored, ofActionSuccessful, Store, ActionCompletion } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { AutoUnsubscribePage } from '@app/components/auto-unsubscribe/auto-unsubscribe.page';
 import { AlertService } from '@app/services/alert.service';
@@ -23,8 +23,7 @@ import { MeasuresState } from '@app/states/measures/measures.state';
   styleUrls: ['./history.page.scss']
 })
 export class HistoryPage extends AutoUnsubscribePage {
-  @Select(MeasuresState.measures)
-  measures$: Observable<(Measure | MeasureSeries)[]>;
+  measures$: Observable<(Measure | MeasureSeries)[]> = inject(Store).select(MeasuresState.measures);
 
   measureBeingSentMap: { [K: string]: boolean } = {};
 

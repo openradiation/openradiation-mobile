@@ -11,7 +11,7 @@ import { Measure, MeasureSeries, Params } from '@app/states/measures/measure';
 import { InitMeasures } from '@app/states/measures/measures.action';
 import { MeasuresStateModel } from '@app/states/measures/measures.state';
 import { PositionService } from '@app/states/measures/position.service';
-import { EnableNotifications, InitUser, SetLanguage } from '@app/states/user/user.action';
+import { InitUser, SetLanguage } from '@app/states/user/user.action';
 import { UserService } from '@app/states/user/user.service';
 import { UserStateModel } from '@app/states/user/user.state';
 import { ScreenOrientation } from '@capacitor/screen-orientation';
@@ -55,13 +55,6 @@ export class StorageService {
     )
       .pipe(
         concatMap(() => this.store.dispatch(new SetLanguage())),
-        concatMap(() => {
-          const { notifications } = this.store.snapshot().user;
-
-          return notifications || notifications === undefined
-            ? this.store.dispatch(new EnableNotifications())
-            : of(null);
-        }),
         concatMap(() =>
           forkJoin(this.getMeasures(), this.getParams(), this.getRecentTags(), this.getCurrentSeries()).pipe(
             concatMap(([measures, params, recentTags, currentSeries]) => {
