@@ -63,6 +63,7 @@
     "cordova-plugin-localization-strings": "^5.0.6",
     "cordova-plugin-usb-serial": "file:cordova-plugin-usb-serial",
     "cordova-sqlite-storage": "^6.1.0",
+    "cordova.plugins.diagnostic": "^7.1.4",
     "es6-promise-plugin": "^4.2.2",
     "firebase": "^10.12.5",
     "install": "^0.13.0",
