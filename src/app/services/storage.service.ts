@@ -42,7 +42,7 @@ export class StorageService {
 
   init() {
     forkJoin(
-      this.getKnownDevices().pipe(
+      [this.getKnownDevices().pipe(
         concatMap(knownDevices => {
           return knownDevices ? this.store.dispatch(new InitDevices(knownDevices)) : of(null);
         })
@@ -51,12 +51,12 @@ export class StorageService {
         concatMap(user => {
           return user ? this.store.dispatch(new InitUser(user)) : of(null);
         })
-      )
+      )]
     )
       .pipe(
         concatMap(() => this.store.dispatch(new SetLanguage())),
         concatMap(() =>
-          forkJoin(this.getMeasures(), this.getParams(), this.getRecentTags(), this.getCurrentSeries()).pipe(
+          forkJoin([this.getMeasures(), this.getParams(), this.getRecentTags(), this.getCurrentSeries()]).pipe(
             concatMap(([measures, params, recentTags, currentSeries]) => {
               return measures && params && recentTags
                 ? this.store.dispatch(new InitMeasures(measures, params, recentTags, currentSeries || undefined))
