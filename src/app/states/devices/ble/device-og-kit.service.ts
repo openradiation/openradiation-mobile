@@ -8,6 +8,7 @@ import { RawBLEDevice } from './abstract-ble-device';
 import { AbstractBLEDeviceService } from './abstract-ble-device.service';
 import { DeviceOGKit, DeviceOgKitType } from './device-og-kit';
 import { BleClient } from '@capacitor-community/bluetooth-le';
+import { numberToUUID } from '@capacitor-community/bluetooth-le';
 
 @Injectable({
   providedIn: 'root'
@@ -24,9 +25,9 @@ export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
   };
 
   //RF-Duino config
-  protected service = '2220';
-  protected receiveCharacteristic = '2221';
-  private sendCharacteristic = '2222';
+  protected service = numberToUUID(0x2220);
+  protected receiveCharacteristic = numberToUUID(0x2221);
+  private sendCharacteristic = numberToUUID(0x2222);
 
   private SEND_GET_INFO = 0x12;
   private RECEIVE_SENSOR_TYPE = 3;

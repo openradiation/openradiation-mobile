@@ -14,7 +14,7 @@ import {
 } from '@app/states/devices/devices.action';
 import { DevicesService } from '@app/states/devices/devices.service';
 import { AbstractBLEDevice, RawBLEDevice } from './abstract-ble-device';
-import { BleClient } from '@capacitor-community/bluetooth-le';
+import { BleClient, ScanMode } from '@capacitor-community/bluetooth-le';
 import { Capacitor } from '@capacitor/core';
 
 
@@ -156,9 +156,23 @@ export class BLEDevicesService {
   private scan(_scanDuration: number): Observable<unknown> {
     // FIXME : parameter "scanDuration" cannot be passed to new capacitor BLE API
     return new Observable(observer => {
-      BleClient.requestLEScan({},
-        (scanResult) => (observer.next(scanResult))
-      ).catch(e => observer.error(e));
+      BleClient.requestLEScan({
+        scanMode: ScanMode.SCAN_MODE_LOW_LATENCY
+      },
+        (scanResult) => {
+          const device = scanResult.device
+
+          const newDevice: RawBLEDevice = {
+            id: device.deviceId,
+            advertising: scanResult.rawAdvertisement ? scanResult.rawAdvertisement.buffer : new ArrayBuffer(0),
+            name: device.name ? device.name : "",
+            rssi: scanResult.rssi ? scanResult.rssi : 0
+          }
+          observer.next(newDevice)
+        }
+      ).catch(e => {
+        observer.error(e);
+      });
     });
   }
 }

@@ -43,7 +43,7 @@ export abstract class AbstractDeviceService<T extends AbstractDevice> {
       return [
         indirectEval(
           calibrationFunction
-            .replace(/cps/g, 'hitsNumberPerSec')
+            .replace(/cps/g, '' + hitsNumberPerSec)
             .replace(/\^/g, '**')
             .replace(/max/g, 'Math.max')
         ),
