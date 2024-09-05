@@ -24,14 +24,24 @@
               *ngIf="currentSeries.params.paramSelected === measureSeriesParamsSelected.measureDurationLimit"
             >
               <ion-label class="value">{{'MEASURE_SERIES.MEASURES_DURATION' | translate}}</ion-label>
-              <ion-datetime
+              <ion-datetime-button
                 class="values"
-                display-format="HH:mm'ss''"
-                formControlName="measureDurationLimit"
-                required
-                [cancelText]="'GENERAL.CANCEL' | translate"
-                [doneText]="'GENERAL.SUBMIT' | translate"
-              ></ion-datetime>
+                datetime="measureDurationLimit"
+                [disabled]="true"
+                ></ion-datetime-button>
+                <ion-modal [keepContentsMounted]="true">
+                  <ng-template>
+                    <ion-datetime
+                    id="measureDurationLimit"
+                    presentation="time"
+                    prefer-wheel="true"
+                    required
+                    [formatOptions]="{
+                        time: { hour: '2-digit', minute: '2-digit', second: '2-digit' },
+                      }"
+                    formControlName="measureDurationLimit"></ion-datetime>
+                  </ng-template>
+                </ion-modal>
             </ion-item>
             <ion-item
               class="custom-disabled"
@@ -47,36 +57,66 @@
           <ion-list>
             <ion-item class="custom-disabled">
               <ion-label class="value">{{'GENERAL.DATE' | translate}}</ion-label>
-              <ion-datetime
+              <ion-datetime-button
                 class="values"
-                display-format="DD/MM/YYYY"
-                formControlName="date"
-                required
-                [cancelText]="'GENERAL.CANCEL' | translate"
-                [doneText]="'GENERAL.SUBMIT' | translate"
-              ></ion-datetime>
+                datetime="date"
+                [disabled]="true"
+                ></ion-datetime-button>
+              <ion-modal [keepContentsMounted]="true">
+                <ng-template>
+                  <ion-datetime
+                  id="date"
+                  presentation="date"
+                  prefer-wheel="true"
+                  required
+                  [formatOptions]="{
+                      date: { day: '2-digit', month: '2-digit', year: '2-digit' },
+                    }"
+                  formControlName="date"></ion-datetime>
+                </ng-template>
+              </ion-modal>
             </ion-item>
             <ion-item class="custom-disabled">
               <ion-label class="value">{{'MEASURE_SERIES.REPORT.FIRST_MEASURE-TIME' | translate}} </ion-label>
-              <ion-datetime
+              <ion-datetime-button
                 class="values"
-                display-format="HH:mm'ss''"
-                formControlName="startTime"
-                required
-                [cancelText]="'GENERAL.CANCEL' | translate"
-                [doneText]="'GENERAL.SUBMIT' | translate"
-              ></ion-datetime>
+                datetime="startTime"
+                [disabled]="true"
+                ></ion-datetime-button>
+              <ion-modal [keepContentsMounted]="true">
+                <ng-template>
+                  <ion-datetime
+                  id="startTime"
+                  presentation="time"
+                  prefer-wheel="true"
+                  required
+                  [formatOptions]="{
+                      time: { hour: '2-digit', minute: '2-digit', second: '2-digit' },
+                    }"
+                  formControlName="startTime"></ion-datetime>
+                </ng-template>
+              </ion-modal>
             </ion-item>
             <ion-item class="custom-disabled">
               <ion-label class="value">{{'MEASURE_SERIES.REPORT.SERIES_DURATION' | translate}}</ion-label>
-              <ion-datetime
+              <ion-datetime-button
                 class="values"
-                display-format="HH:mm'ss''"
-                formControlName="duration"
-                required
-                [cancelText]="'GENERAL.CANCEL' | translate"
-                [doneText]="'GENERAL.SUBMIT' | translate"
-              ></ion-datetime>
+                datetime="duration"
+                [disabled]="true"
+                ></ion-datetime-button>
+              <ion-modal [keepContentsMounted]="true">
+                <ng-template>
+                  <ion-datetime
+                  id="duration"
+                  presentation="time"
+                  prefer-wheel="true"
+                  required
+                  [formatOptions]="{
+                      time: { hour: '2-digit', minute: '2-digit', second: '2-digit' },
+                    }"
+                  formControlName="duration"></ion-datetime>
+                </ng-template>
+              </ion-modal>
             </ion-item>
           </ion-list>
           <div class="measure">
