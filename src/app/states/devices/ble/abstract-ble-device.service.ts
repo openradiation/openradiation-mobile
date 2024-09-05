@@ -31,11 +31,11 @@ export abstract class AbstractBLEDeviceService<T extends AbstractBLEDevice> exte
           observer.error(new Error('Device disconnected : ' + deviceId))
         }
       ).then(() => {
-        console.info("Connected to device ", device)
+        this.logAndStore("Connected to device " + JSON.stringify(device))
         observer.next()
       })
         .catch(e => {
-          console.error("Error while connected to device", device, e);
+          this.logAndStore("Error while connected to device " + JSON.stringify(device), e);
           observer.error(e);
         }
         )

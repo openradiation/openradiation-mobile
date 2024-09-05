@@ -4,6 +4,7 @@ import { Measure, Step } from '@app/states/measures/measure';
 import { AbstractDevice, CalibrationFunctions, RawDevice } from './abstract-device';
 
 export abstract class AbstractDeviceService<T extends AbstractDevice> {
+  public static MAX_LOGS_LENGTH = 50000;
   protected textDecoder = new TextDecoder('utf8');
 
   protected abstract calibrationFunctions: {
@@ -79,5 +80,22 @@ export abstract class AbstractDeviceService<T extends AbstractDevice> {
     return Array.from(new Uint8Array(buffer))
       .map(n => n.toString(16).padStart(2, '0'))
       .join('');
+  }
+
+  protected logAndStore(newLog: string, error?: Error) {
+    if (localStorage) {
+      const existingLogFromStorage = localStorage.getItem('logs');
+      const existingLog = existingLogFromStorage ?
+        existingLogFromStorage.substring(0, AbstractDeviceService.MAX_LOGS_LENGTH) : ""
+      const d = new Date()
+      const dateString = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDay() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+      const newLogWithDateAndError = dateString + " " + newLog + (error ? JSON.stringify(error) : "")
+      localStorage.setItem('logs', newLogWithDateAndError + "\n" + existingLog)
+    }
+    if (error) {
+      console.error(newLog, error)
+    } else {
+      console.debug(newLog)
+    }
   }
 }

@@ -120,6 +120,11 @@
       "NOTICE": "Vous participez à la base de données collaborative OpenRadiation dès lors que vous publiez des mesures par l’application smartphone, que la publication soit automatique ou déclenchée par une action manuelle. <br>L’objet du projet OpenRadiation étant la création d’une base de données collaborative relative à la radioactivité ambiante, tout utilisateur de l’application mobile accepte explicitement de partager les données qu’il relève, que ce soit par une publication automatique ou déclenchée par une action manuelle.<br>La base de données OpenRadiation est publiée en intégralité sous la license <a onclick=\"window.open('https://www.openradiation.org/conditions-dutilisation#licence_odbl', '_system')\">ODC-ODbL (Open Database License)</a>. La plupart des données que vous soumettez participent à la constitution de la base de données OpenRadiation.<br>Vous vous engagez à respecter la législation en cours concernant notamment le droit d'auteur. L’utilisation de la base de données OpenRadiation vous engage à respecter des règles d’éthique (propos insultants, respect de la vie privée, ...).<br>OpenRadiation se réserve le droit de supprimer un contenu qui lui serait signalé ne respectant pas les consignes ci-dessus, ceci sans avertissement.<br>Vous pouvez retrouver le détail de l’ensemble des conditions d’utilisation sur le site <a onclick=\"window.open('https://www.openradiation.org/conditions-dutilisation', '_system')\">www.openradiation.org/conditions-dutilisation</a>.",
       "TITLE": "Conditions d'utilisation"
     },
+    "LOGS": {
+      "COPY": "Copier logs",
+      "COPIED": "Logs copiés dans votre presse-papier",
+      "NO_LOG": "Aucun log sauvegardé"
+    },
     "TITLE": "Mentions légales"
   },
   "LOG_IN": {
@@ -252,7 +257,7 @@
     },
     "DENIED_ALWAYS": {
       "NOTICE": {
-        "ANDROID": "La position de l'appareil est nécessaire  pour l'envoi des mesures à la base OpenRadiation. Merci d'accepter la permission.",
+        "ANDROID": "La position de l'appareil est nécessaire  pour l'envoi des mesures à la base OpenRadiation. Merci d'accepter la permission en mode \"Toujours\".",
         "IOS": "La position de l'appareil est nécessaire  pour l'envoi des mesures à la base OpenRadiation. Merci d'accepter la permission en mode \"Toujours\"."
       },
       "TITLE": "Position - Permission refusée"

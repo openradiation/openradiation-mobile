@@ -119,10 +119,17 @@ export class DeviceOGKit2Service extends AbstractBLEDeviceService<DeviceOGKit2> 
     }
   }
 
-  private sendData(device: DeviceOGKit2, data: number[]): Promise<unknown> {
-    return BleClient.write(device.sensorUUID, this.service, this.sendCharacteristic,
-      new DataView(new Uint8Array(data).buffer)
-    );
+  private async sendData(device: DeviceOGKit2, data: number[]): Promise<unknown> {
+    try {
+      const result = await BleClient.write(device.sensorUUID, this.service, this.sendCharacteristic,
+        new DataView(new Uint8Array(data).buffer)
+      );
+      return result;
+    } catch (error) {
+      const logInfos = "UUID : " + device.sensorUUID + " / Service: " + this.service + " /Characteristic: " + this.sendCharacteristic + " /data : " + data.toString();
+      this.logAndStore("Error while sending data with OgKit v2 " + logInfos, error)
+      return Promise.reject(error);
+    }
   }
 
   private decodeStringArray(array: Uint8Array): string {
@@ -135,12 +142,14 @@ export class DeviceOGKit2Service extends AbstractBLEDeviceService<DeviceOGKit2> 
       dataView.getUint8(this.RECEIVE_TEMPERATURE_POSITION) === this.RECEIVE_TEMPERATURE &&
       dataView.getUint8(this.RECEIVE_VOLTAGE_POSITION) === this.RECEIVE_VOLTAGE
     ) {
-      return {
+      const receiveData = {
         ts: Date.now(),
         hitsNumber: dataView.getUint8(this.RECEIVE_HIT_POSITION + 1),
         temperature: dataView.getFloat32(this.RECEIVE_TEMPERATURE_POSITION + 1, true),
         voltage: dataView.getFloat32(this.RECEIVE_VOLTAGE_POSITION + 1, true)
       };
+      this.logAndStore("Received from OgKit v2 : " + JSON.stringify(receiveData))
+      return receiveData;
     } else {
       return null;
     }

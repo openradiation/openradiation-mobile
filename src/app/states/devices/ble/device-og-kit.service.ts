@@ -127,8 +127,8 @@ export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
       );
       return result;
     } catch (error) {
-      console.error("Error while sending data with OgKit", error)
-      console.error("UUID : " + device.sensorUUID + " / Service: " + this.service + " /Characteristic: " + this.sendCharacteristic + " /data : ", data)
+      const logInfos = "UUID : " + device.sensorUUID + " / Service: " + this.service + " /Characteristic: " + this.sendCharacteristic + " /data : " + data.toString();
+      this.logAndStore("Error while sending data with OgKit " + logInfos, error)
       return Promise.reject(error);
     }
   }
@@ -143,12 +143,14 @@ export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
       dataView.getUint8(this.RECEIVE_TEMPERATURE_POSITION) === this.RECEIVE_TEMPERATURE &&
       dataView.getUint8(this.RECEIVE_VOLTAGE_POSITION) === this.RECEIVE_VOLTAGE
     ) {
-      return {
+      const receiveData = {
         ts: Date.now(),
         hitsNumber: dataView.getUint8(this.RECEIVE_HIT_POSITION + 1),
         temperature: dataView.getFloat32(this.RECEIVE_TEMPERATURE_POSITION + 1, true),
         voltage: dataView.getFloat32(this.RECEIVE_VOLTAGE_POSITION + 1, true)
       };
+      this.logAndStore("Received from OgKit : " + JSON.stringify(receiveData))
+      return receiveData;
     } else {
       return null;
     }

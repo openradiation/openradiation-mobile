@@ -60,13 +60,20 @@ export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag
     return from(command);
   }
 
-  private sendSettingsCommand(device: DeviceAtomTag, command: number, param?: number): Promise<unknown> {
+  private async sendSettingsCommand(device: DeviceAtomTag, command: number, param?: number): Promise<unknown> {
     const dataView = new DataView(new ArrayBuffer(3));
     dataView.setUint8(0, command);
     if (param !== undefined) {
       dataView.setUint16(1, param);
     }
-    return BleClient.write(device.sensorUUID, this.service, this.settingsCharacteristic, dataView);
+    try {
+      const result = await BleClient.write(device.sensorUUID, this.service, this.settingsCharacteristic, dataView);
+      return result;
+    } catch (error) {
+      const logInfos = "UUID : " + device.sensorUUID + " / Service: " + this.service + " /Characteristic: " + this.settingsCharacteristic + " / command : " + command + " / param : " + param;
+      this.logAndStore("Error while sending data with AtomTag " + logInfos, error)
+      return Promise.reject(error);
+    }
   }
 
   startMeasureScan(device: DeviceAtomTag, stopSignal: Observable<unknown>): Observable<Step> {
@@ -82,11 +89,13 @@ export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag
   }
 
   protected decodeDataPackage(dataView: DataView): Step {
-    return {
+    const receiveData = {
       ts: Date.now(),
       hitsNumber: dataView.getUint16(9, true),
       temperature: dataView.getUint8(12)
     };
+    this.logAndStore("Received from AtomTag : " + JSON.stringify(receiveData))
+    return receiveData
   }
 
   buildDevice(rawBLEDevice: RawBLEDevice): DeviceAtomTag | null {

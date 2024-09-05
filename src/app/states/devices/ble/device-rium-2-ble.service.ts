@@ -79,11 +79,13 @@ export class DeviceRium2BLEService extends AbstractBLEDeviceService<DeviceRium2B
   protected decodeDataPackage([hitsBuffer, temperatureBuffer]: [DataView, DataView]): Step {
     const hitsNumber = this.getNumberFromBuffer(hitsBuffer.buffer, 2);
     const temperature = this.getNumberFromBuffer(temperatureBuffer.buffer, 3) / 10;
-    return {
+    const receiveData = {
       ts: Date.now(),
       hitsNumber,
       temperature
     };
+    this.logAndStore("Received from Rium2 : " + JSON.stringify(receiveData))
+    return receiveData
   }
 
   buildDevice(rawBLEDevice: RawBLEDevice): DeviceRium2BLE | null {

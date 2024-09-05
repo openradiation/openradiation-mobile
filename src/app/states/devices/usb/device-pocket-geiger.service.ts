@@ -57,10 +57,12 @@ export class DevicePocketGeigerService extends AbstractUSBDeviceService<DevicePo
         this.noiseTimeout = Date.now() + this.NOISE_REJECT_DURATION;
       } else {
         if (hitsNumber) {
-          return {
+          const receiveData = {
             ts: Date.now(),
             hitsNumber
           };
+          this.logAndStore("Received from PocketGeiger : " + JSON.stringify(receiveData))
+          return receiveData
         }
       }
     }

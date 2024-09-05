@@ -171,13 +171,7 @@ export class PositionService {
             : this.translateService.instant('POSITION.GPS_DISABLED.NOTICE.ANDROID'),
           backdropDismiss: false,
           buttons: [
-            {
-              text: this.translateService.instant('GENERAL.GO_TO_SETTINGS'),
-              handler: () => {
-                BackgroundGeolocation.openSettings();
-                return false;
-              }
-            }
+
           ]
         },
         false

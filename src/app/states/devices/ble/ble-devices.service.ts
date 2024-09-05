@@ -157,7 +157,7 @@ export class BLEDevicesService {
     // FIXME : parameter "scanDuration" cannot be passed to new capacitor BLE API
     return new Observable(observer => {
       BleClient.requestLEScan({
-        scanMode: ScanMode.SCAN_MODE_LOW_LATENCY
+        scanMode: ScanMode.SCAN_MODE_BALANCED
       },
         (scanResult) => {
           const device = scanResult.device

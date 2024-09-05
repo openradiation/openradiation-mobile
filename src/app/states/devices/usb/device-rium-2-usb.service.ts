@@ -85,11 +85,13 @@ export class DeviceRium2USBService extends AbstractUSBDeviceService<DeviceRium2U
       const data = this.textDecoder.decode(dataView.buffer).split(',');
       const hitsNumber = Number(data[3]);
       const temperature = Number(data[4]) / 10;
-      return {
+      const receiveData = {
         ts: Date.now(),
         hitsNumber,
         temperature
       };
+      this.logAndStore("Received from Rium2USB : " + JSON.stringify(receiveData))
+      return receiveData
     }
     return null;
   }

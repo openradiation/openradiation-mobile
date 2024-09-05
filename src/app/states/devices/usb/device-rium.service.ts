@@ -80,11 +80,13 @@ export class DeviceRiumService extends AbstractUSBDeviceService<DeviceRium> {
     if (dataView.buffer.byteLength === 12) {
       const hitsNumber = dataView.getInt16(6);
       const temperature = dataView.getInt16(10) / 10;
-      return {
+      const receiveData = {
         ts: Date.now(),
         hitsNumber,
         temperature
       };
+      this.logAndStore("Received from Rium : " + JSON.stringify(receiveData))
+      return receiveData
     }
     return null;
   }

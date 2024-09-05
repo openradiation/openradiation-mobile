@@ -55,10 +55,12 @@ export class DeviceSafeCastService extends AbstractBLEDeviceService<DeviceSafeCa
       .map(dataView => this.textDecoder.decode(dataView.buffer))
       .join('')
       .split(',');
-    return {
+    const receiveData = {
       ts: Date.now(),
       hitsNumber: Number(data[4])
     };
+    this.logAndStore("Received from SafeCast : " + JSON.stringify(receiveData))
+    return receiveData
   }
 
   buildDevice(rawBLEDevice: RawBLEDevice): DeviceSafeCast | null {
