@@ -98,31 +98,72 @@
 
       &.custom-disabled {
         pointer-events: none;
+
+        ion-datetime-button::part(native){
+          background: $third-color;
+          font-weight: 200;
+          font-size: 15px;
+          border-radius: 10px;
+          color: #FFF;
+          height: 26px;
+          line-height: 26px;
+          padding: 0 8px;
+          height: 26px;
+          line-height: 26px;
+          padding: 0 8px;
+          width: 100%;
+          text-align: right;
+          opacity: 1;
+        }
       }
 
       &:not(.custom-disabled) {
 
-        ion-input,
-        ion-datetime,
+        ion-datetime-button,
         ion-textarea {
           background: $forth-color;
           border-radius: 10px;
           color: $second-color;
         }
 
-        ion-input,
-        ion-datetime {
+        ion-input.input {
+          background: $forth-color;
+          border-radius: 10px;
+          color: $second-color;
+          height: 26px;
+          line-height: 26px;
+          padding: 0 8px;
+          max-height:26px;
+          min-height:26px;
+          font-weight: 200;
+        }
+
+
+        ion-datetime-button::part(native){
+          background: $forth-color;
+          border-radius: 10px;
+          color: $second-color;
+          height: 26px;
+          line-height: 26px;
+          padding: 0 8px;
+          height: 26px;
+          line-height: 26px;
+          padding: 0 8px;
+          width: 100%;
+          font-size: 15px;
+          font-weight: 200;
+          text-align: right;
+          --ion-placeholder-color: #{transparentize($second-color, 0.5)};
+        }
+
+        ion-datetime{
           height: 26px;
           line-height: 26px;
           padding: 0 8px;
         }
 
-        ion-input {
-          --padding-top: 6px;
-          --padding-bottom: 4px;
-        }
 
-        ion-datetime {
+        ion-datetime{
           width: 100%;
           text-align: right;
           --ion-placeholder-color: #{transparentize($second-color, 0.5)};
@@ -176,7 +217,9 @@
         --padding-end: 8px;
       }
 
-      ion-datetime {
+      ion-datetime,
+      ion-datetime-button,
+      ion-datetime-button.button {
         padding-right: 8px;
       }
     }
@@ -198,7 +241,8 @@
           min-width: 165px;
         }
 
-        ion-datetime {
+        ion-datetime,
+        ion-datetime-button {
           width: 100%;
           text-align: right;
         }
