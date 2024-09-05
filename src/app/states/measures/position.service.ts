@@ -63,7 +63,7 @@ export class PositionService {
     // Step 2: register for location updates
     this.currentWatcherId = await BackgroundGeolocation.addWatcher({
       // Fixme get proper messages
-      backgroundMessage: this.translateService.instant('POSITION.BACKGROUND.MESSAGE'),
+      backgroundMessage: this.translateService.instant('POSITION.BACKGROUND.TEXT'),
       backgroundTitle: this.translateService.instant('POSITION.BACKGROUND.TITLE'),
       requestPermissions: true,
       stale: false,
