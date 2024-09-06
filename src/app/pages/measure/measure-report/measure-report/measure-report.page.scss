@@ -100,7 +100,7 @@
         pointer-events: none;
 
         ion-datetime-button::part(native){
-          background: $third-color;
+          background: transparent;
           font-weight: 200;
           font-size: 15px;
           border-radius: 10px;
