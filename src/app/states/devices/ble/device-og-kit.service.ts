@@ -71,8 +71,8 @@ export class DeviceOGKitService extends AbstractBLEDeviceService<DeviceOGKit> {
     startReceiveData.subscribe();
     this.sendData(device, [this.SEND_GET_INFO]);
     return startReceiveData.pipe(
-      scan((update: Partial<DeviceOGKit>, buffer: ArrayBuffer) => {
-        const array = new Uint8Array(buffer);
+      scan((update: Partial<DeviceOGKit>, dataView: DataView) => {
+        const array = new Uint8Array(dataView.buffer);
         switch (array[0]) {
           case this.RECEIVE_SENSOR_TYPE:
             update.apparatusSensorType = this.decodeStringArray(array).toLowerCase() as ApparatusSensorType;
