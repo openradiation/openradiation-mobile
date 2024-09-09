@@ -33,6 +33,6 @@ export class NavigationService {
 
   goBack() {
     this.stackDepth -= 2;
-    this.navController.back();
+    this.navController.pop();
   }
 }
