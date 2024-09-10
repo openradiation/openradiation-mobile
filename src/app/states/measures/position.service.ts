@@ -69,7 +69,13 @@ export class PositionService {
       stale: false,
       distanceFilter: 50
     },
-      (position) => this.positionReceived(position)
+      (position, error) => {
+        if (position && !error) {
+          this.positionReceived(position)
+        } else if (error && error.code === "NOT_AUTHORIZED") {
+          this.onGPSDeniedAlways();
+        }
+      }
     );
   }
 
@@ -91,13 +97,15 @@ export class PositionService {
       case Diagnostic.permissionStatus.NOT_REQUESTED:
       case Diagnostic.permissionStatus.DENIED:
         locationAuthorizedStatus = await Diagnostic.requestLocationAuthorization(Diagnostic.locationAuthorizationMode.ALWAYS);
+        this.platform.resume.subscribe(() => this.requestAuthorization());
     }
     switch (locationAuthorizedStatus) {
-      case Diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
       case Diagnostic.permissionStatus.DENIED_ALWAYS:
         this.onGPSDeniedAlways();
+        this.platform.resume.subscribe(() => this.requestAuthorization());
         break;
       case Diagnostic.permissionStatus.GRANTED:
+      case Diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
         // On Android, also need to check for local notifications permissions
         if (Capacitor.getPlatform() == 'android') {
           let localNotificationStatus = await LocalNotifications.checkPermissions();

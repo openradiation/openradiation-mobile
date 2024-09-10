@@ -6,6 +6,8 @@ const config: CapacitorConfig = {
   appName: 'OpenRadiation',
   webDir: 'www',
   android: {
+    // Required by https://github.com/capacitor-community/background-geolocation
+    // To prevent location updates halting after 5 minutes in the background.
     useLegacyBridge: true
   },
   cordova: {
