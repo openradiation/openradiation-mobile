@@ -30,6 +30,7 @@
     "@awesome-cordova-plugins/diagnostic": "^6.8.0",
     "@capacitor-community/background-geolocation": "^1.2.18",
     "@capacitor-community/bluetooth-le": "^6.0.1",
+    "@capacitor-community/safe-area": "^6.0.0-alpha.7",
     "@capacitor/android": "^6.1.1",
     "@capacitor/app": "6.0.0",
     "@capacitor/camera": "^6.0.1",

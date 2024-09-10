@@ -1,4 +1,5 @@
 import type { CapacitorConfig } from '@capacitor/cli';
+import '@capacitor-community/safe-area';
 
 const config: CapacitorConfig = {
   appId: 'org.openradiation',
@@ -28,6 +29,10 @@ const config: CapacitorConfig = {
     LocalNotifications: {
       smallIcon: "ic_stat_icon_config_sample",
       iconColor: "#045cb8"
+    },
+    SafeArea: {
+      enabled: true,
+      offset: 0,
     }
   }
 };
