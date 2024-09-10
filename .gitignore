@@ -42,3 +42,6 @@ GoogleService-Info.plist
 
 .nx/cache
 .nx/workspace-data
+
+android/app/release/
+cordova-plugin-usb-serial/src/android/.gradle/
