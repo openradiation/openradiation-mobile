@@ -195,10 +195,15 @@ ion-spinner {
                 text-align: left;
               }
             }
-          }
-        }
 
-        ion-input {
+            &.planeMode {
+
+              .label-text {
+                color:$second-color;
+              }
+
+            }
+          }
 
           &.values {
 
