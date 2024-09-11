@@ -143,3 +143,139 @@ ion-spinner {
     color: white;
   }
 }
+
+//We need to put measure-report specific css here so that it is not scoped
+.content {
+  ion-list {
+    ion-item {
+      --border-color: transparent;
+      margin: -5px 0;
+      --min-height: 0;
+      font-size: 15px;
+
+      &.has-suffix {
+        ion-input.input {
+          input {
+            border-radius: 10px 0 0 10px;
+          }
+        }
+      }
+
+      &.custom-disabled {
+        pointer-events: none;
+
+        ion-datetime-button::part(native){
+          background: transparent;
+          font-weight: 200;
+          font-size: 15px;
+          border-radius: 10px;
+          color: #FFF;
+          height: 26px;
+          line-height: 26px;
+          padding: 0 8px;
+          height: 26px;
+          line-height: 26px;
+          padding: 0 8px;
+          width: 100%;
+          text-align: right;
+          opacity: 1;
+          margin: 10px 0;
+        }
+
+        ion-input {
+
+          &.input {
+
+            .label-text-wrapper {
+              margin-inline-end: 0px;
+
+              .label-text {
+                color:$third-color;
+                min-width: 165px;
+                text-align: left;
+              }
+            }
+          }
+        }
+
+        ion-input {
+
+          &.values {
+
+            .label-text-wrapper {
+              margin-inline-end: 0px;
+
+              .label-text {
+                color:$second-color;
+                min-width: 165px;
+                text-align: left;
+              }
+            }
+          }
+        }
+
+      }
+
+      &:not(.custom-disabled) {
+
+        ion-datetime-button,
+        ion-textarea {
+          background: $forth-color;
+          border-radius: 10px;
+          color: $second-color;
+        }
+
+        ion-input {
+
+          &.input {
+            height: 26px;
+            line-height: 26px;
+            --padding-bottom: 0;
+            --padding-top: 0;
+            --padding-start: 0px;
+            --padding-end: 8px;
+            max-height:26px;
+            min-height:26px;
+            font-weight: 200;
+            margin: 10px 0;
+
+            .input-wrapper {
+              padding-inline-end: 0px;
+            }
+
+            .label-text-wrapper {
+              margin-inline-end: 0px;
+
+              .label-text {
+                color:$third-color;
+                min-width: 165px;
+                text-align: left;
+              }
+            }
+            
+            input {
+              background: $forth-color;
+              border-radius: 10px;
+              color: $second-color;
+              height: 26px;
+              line-height: 26px;
+              padding: 0 8px;
+              max-height:26px;
+              min-height:26px;
+              font-weight: 200;
+              text-transform:uppercase;
+            }
+
+            &.planeMode {
+
+              .label-text {
+                color:$second-color;
+              }
+
+            }
+          }
+        }
+      }
+    }
+  }
+}

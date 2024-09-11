@@ -126,19 +126,6 @@
           color: $second-color;
         }
 
-        ion-input.input {
-          background: $forth-color;
-          border-radius: 10px;
-          color: $second-color;
-          height: 26px;
-          line-height: 26px;
-          padding: 0 8px;
-          max-height:26px;
-          min-height:26px;
-          font-weight: 200;
-        }
-
-
         ion-datetime-button::part(native){
           background: $forth-color;
           border-radius: 10px;
@@ -154,6 +141,7 @@
           font-weight: 200;
           text-align: right;
           --ion-placeholder-color: #{transparentize($second-color, 0.5)};
+          margin-right: 0px;
         }
 
         ion-datetime{
@@ -173,17 +161,12 @@
           --padding-start: 8px;
         }
 
-        &.has-suffix {
-          ion-input {
-            border-radius: 10px 0 0 10px;
-          }
-        }
-
         .unit {
           background: $forth-color;
           border-radius: 0 10px 10px 0;
           color: $second-color;
-          margin-left: -1px;
+          margin-left: -8px;
+          padding-left: 8px;
           height: 26px;
           line-height: 26px;
         }
@@ -193,10 +176,7 @@
 
           ion-label {
             min-width: 165px;
-          }
-
-          ion-input {
-            text-transform: uppercase;
+            margin: 10px 0;
           }
         }
       }
@@ -220,7 +200,7 @@
       ion-datetime,
       ion-datetime-button,
       ion-datetime-button.button {
-        padding-right: 8px;
+        padding-right: 0px;
       }
     }
   }
@@ -245,6 +225,7 @@
         ion-datetime-button {
           width: 100%;
           text-align: right;
+          margin: 10px 0;
         }
       }
     }

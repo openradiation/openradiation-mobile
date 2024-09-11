@@ -17,12 +17,10 @@
           <div class="position">
             <ion-list>
               <ion-item class="custom-disabled">
-                <ion-label class="value">{{'MEASURES.REPORT_LATITUDE' | translate}}</ion-label>
-                <ion-input class="values" formControlName="latitude" type="number"></ion-input>
+                <ion-input [label]="'MEASURES.REPORT_LATITUDE' | translate" class="values" formControlName="latitude" type="number"></ion-input>
               </ion-item>
               <ion-item class="custom-disabled">
-                <ion-label class="value">{{'MEASURES.REPORT_LONGITUDE' | translate}}</ion-label>
-                <ion-input class="values" formControlName="longitude" type="number"></ion-input>
+                <ion-input [label]="'MEASURES.REPORT_LONGITUDE' | translate" class="values" formControlName="longitude" type="number"></ion-input>
               </ion-item>
             </ion-list>
             <app-gps-indicator [accuracy]="currentMeasure.accuracy" [compact]="true"></app-gps-indicator>
@@ -91,24 +89,40 @@
                 </ion-modal>
               </ion-item>
               <ion-item class="has-suffix long-label" [ngClass]="{'custom-disabled': inputDisabled}">
-                <ion-label position="fixed">{{'MEASURES.SENSOR_TEMPERATURE' | translate}}</ion-label>
-                <ion-input formControlName="temperature" type="number" class="input"></ion-input>
+                <ion-input
+                  formControlName="temperature"
+                  type="number"
+                  class="input"
+                  [label]="'MEASURES.SENSOR_TEMPERATURE' | translate"
+                  labelPlacement="fixed"></ion-input>
                 <span class="unit">°C</span>
               </ion-item>
               <ion-item [ngClass]="{'custom-disabled': inputDisabled}">
-                <ion-label position="fixed">{{'MEASURES.HITS_NUMBER' | translate}}</ion-label>
-                <ion-input formControlName="hitsNumber" type="number" class="input"></ion-input>
+                <ion-input
+                  formControlName="hitsNumber"
+                  type="number"
+                  class="input"
+                  [label]="'MEASURES.HITS_NUMBER' | translate"
+                  placeholder="125"
+                  labelPlacement="fixed"></ion-input>
               </ion-item>
               <ion-item class="has-suffix" [ngClass]="{'custom-disabled': inputDisabled}">
-                <ion-label position="fixed">{{'MEASURES.TITLE' | translate}}<span *ngIf="!reportScan">
-                    *</span></ion-label>
-                <ion-input formControlName="value" required type="number" class="input"></ion-input>
+                <ion-input
+                  formControlName="value"
+                  required
+                  type="number"
+                  class="input"
+                  [label]="'MEASURES.TITLE' | translate"
+                  labelPlacement="fixed"></ion-input>
                 <span class="unit">{{'MEASURES.DOSE_RATE_UNIT' | translate}}</span>
               </ion-item>
               <ion-item class="custom-disabled">
-                <ion-label>{{'HOME.MEASURE_MODE' | translate}}</ion-label>
-                <ion-input value="{{planeMode? ('GENERAL.ON_PLANE' | translate) : ('GENERAL.ON_GROUND' | translate)}}"
-                  type="text"></ion-input>
+                <ion-input
+                  value="{{planeMode? ('GENERAL.ON_PLANE' | translate) : ('GENERAL.ON_GROUND' | translate)}}"
+                  type="text"
+                  class="input"
+                  [label]="'HOME.MEASURE_MODE' | translate"
+                  labelPlacement="fixed"></ion-input>
               </ion-item>
             </ion-list>
           </div>
@@ -131,15 +145,21 @@
             <div class="title">{{'MEASURES.ENVIRONMENT.TITLE' | translate}}</div>
             <ion-list>
               <ion-item class="description">
-                <ion-label>{{'MEASURES.FLIGHT.FLIGHT_NUMBER' | translate}}</ion-label>
                 <ion-input formControlName="flightNumber" mask="AA0999"
-                  [placeholder]="'GENERAL.EXAMPLE' | translate:exampleFlightNumber ">
+                  [placeholder]="'GENERAL.EXAMPLE' | translate:exampleFlightNumber "
+                  type="text"
+                  class="input planeMode"
+                  [label]="'MEASURES.FLIGHT.FLIGHT_NUMBER' | translate"
+                  labelPlacement="fixed">
                 </ion-input>
               </ion-item>
               <ion-item class="description">
-                <ion-label>{{'MEASURES.FLIGHT.SEAT_NUMBER' | translate}}</ion-label>
                 <ion-input formControlName="seatNumber" mask="AAAAA"
-                  [placeholder]="'GENERAL.EXAMPLE' | translate:exampleSeatNumber ">
+                  [placeholder]="'GENERAL.EXAMPLE' | translate:exampleSeatNumber "
+                  type="text"
+                  class="input planeMode"
+                  [label]="'MEASURES.FLIGHT.SEAT_NUMBER' | translate"
+                  labelPlacement="fixed">
                 </ion-input>
               </ion-item>
             </ion-list>
@@ -156,7 +176,7 @@
             <div class="separator"></div>
             <ion-list>
               <ion-item class="description">
-                <ion-textarea formControlName="description" rows="5" [placeholder]="'MEASURES.DESCRIPTION' | translate">
+                <ion-textarea formControlName="description" rows="5" [placeholder]="'MEASURES.DESCRIPTION' | translate" aria-label="Description" >
                 </ion-textarea>
               </ion-item>
             </ion-list>
