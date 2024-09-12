@@ -23,6 +23,7 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
   exampleSeatNumber = { message: ': C15' };
 
   initialDatePickerValue: string;
+  initialDurationValue: string;
 
   currentMeasure?: Measure;
   planeMode: boolean;
@@ -46,6 +47,7 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
     date.setMinutes(0);
     date.setSeconds(0);
     this.initialDatePickerValue = date.toISOString();
+    this.initialDurationValue = this.dateService.toISODuration(0);
   }
 
   pageEnter() {
@@ -94,7 +96,12 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
   init() {
     this.subscriptions.push(
       this.measureReportForm!.valueChanges.subscribe(value => {
-        if (typeof value.duration !== 'string' && value.duration) {
+        console.log("value changed")
+        if (value.duration === undefined) {
+          //si duration est undefined, le date picker se met à new Date(), on le force à 00h00m00s
+          this.measureReportForm!.get('duration')!.setValue(this.initialDurationValue);
+
+        } else if (typeof value.duration !== 'string' && value.duration) {
           this.measureReportForm!.get('duration')!.setValue(
             this.dateService.toISODuration(
               (value.duration.hour.value * 60 * 60 + value.duration.minute.value * 60 + value.duration.second.value) *

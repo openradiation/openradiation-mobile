@@ -69,7 +69,6 @@
               <ion-item [ngClass]="{'custom-disabled': inputDisabled}">
                 <ion-label position="fixed">{{'MEASURES.DURATION' | translate}}</ion-label>
                 <ion-datetime-button
-                  [ngClass]="{'placeholder': measureReportForm.value.duration === undefined}"
                   class="values button"
                   datetime="duration"
                 ></ion-datetime-button>
@@ -83,7 +82,7 @@
                           time: { hour: '2-digit', minute: '2-digit', second: '2-digit' },
                         }"
                       formControlName="duration"
-                      [value]="inputDisabled ? undefined : measureReportForm.value.duration === undefined ? initialDatePickerValue : measureReportForm.value.duration" type="time"
+                      [value]="inputDisabled ? initialDurationValue : measureReportForm.value.duration === undefined ? initialDurationValue : measureReportForm.value.duration" type="time"
                     ></ion-datetime>
                   </ng-template>
                 </ion-modal>
@@ -93,6 +92,7 @@
                   formControlName="temperature"
                   type="number"
                   class="input"
+                  placeholder="25"
                   [label]="'MEASURES.SENSOR_TEMPERATURE' | translate"
                   labelPlacement="fixed"></ion-input>
                 <span class="unit">°C</span>
@@ -112,6 +112,7 @@
                   required
                   type="number"
                   class="input"
+                  placeholder="0,000"
                   [label]="'MEASURES.TITLE' | translate"
                   labelPlacement="fixed"></ion-input>
                 <span class="unit">{{'MEASURES.DOSE_RATE_UNIT' | translate}}</span>
