@@ -22,14 +22,6 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Suivi de la position uniquement si une mesure est en cours</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Suivi de la position des mesures</string>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>location</string>
-	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -53,5 +45,30 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Suivi de la position uniquement si une mesure est en cours</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Suivi de la position des mesures</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>La position de l'appareil est nécessaire pour l'envoi des mesures à la base OpenRadiation. Merci d'accepter la permission.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>La détection du déplacement de l'appareil est nécessaire pour améliorer la précision de la localisation des mesures. Merci d'accepter la permission.</string>	
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>L'activation du bluetooth est nécessaire pour se connecter aux capteurs. Merci d'accepter la permission.</string>	
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>L'activation du bluetooth est nécessaire pour se connecter aux capteurs. Merci d'accepter la permission.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>L'accès à la gallerie est nécessaire pour associer une photo à votre mesure OpenRadiation</string>
+	
+	<key>NSCalendarsUsageDescription</key><string>Never used.</string>
+	<key>NSContactsUsageDescription</key><string>Never used.</string>
+	<key>NSMicrophoneUsageDescription</key><string>Never used.</string>
+	
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>bluetooth-central</string>
+		<string>location</string>
+	</array>
 </dict>
 </plist>
