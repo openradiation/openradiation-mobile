@@ -12,6 +12,7 @@ import { DevicesState } from '@app/states/devices/devices.state';
 import { MeasureSeriesParamsSelected } from '@app/states/measures/measure';
 import { CancelMeasure, StartMeasure, StopMeasureSeriesParams } from '@app/states/measures/measures.action';
 import { MeasuresState, MeasuresStateModel } from '@app/states/measures/measures.state';
+import { PositionService } from '@app/states/measures/position.service';
 
 @Component({
   selector: 'app-measure-series',
@@ -52,7 +53,8 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
     private store: Store,
     private navigationService: NavigationService,
     private actions$: Actions,
-    private formBuilder: UntypedFormBuilder
+    private formBuilder: UntypedFormBuilder,
+    private positionService: PositionService
   ) {
     super(router);
   }
@@ -78,7 +80,8 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
     );
   }
 
-  startMeasureSeries() {
+  async startMeasureSeries() {
+    await this.positionService.requestAuthorization();
     this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
       if (connectedDevice) {
         this.store

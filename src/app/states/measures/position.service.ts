@@ -32,58 +32,56 @@ export class PositionService {
     private translateService: TranslateService
   ) { }
 
-  init() {
-    this.requestAuthorization();
-  }
-
   private async watchPosition() {
     this.startWatchPosition();
 
     // When pausing app, also stop listening GPS position unless there is an ongoin scan
-    this.platform.pause.subscribe(() => {
+    this.platform.pause.subscribe(async () => {
       const onGoingMeasuresScan = this.store.selectSnapshot(
         ({ measures }: { measures: MeasuresStateModel }) => measures.currentMeasure || measures.currentSeries
       );
       if (!onGoingMeasuresScan && this.currentWatcherId) {
-        BackgroundGeolocation.removeWatcher({ id: this.currentWatcherId });
+        await BackgroundGeolocation.removeWatcher({ id: this.currentWatcherId });
+        this.currentWatcherId = "";
       }
     });
-    this.platform.resume.subscribe(() => this.startWatchPosition());
   }
 
   private async startWatchPosition() {
-    this.store.dispatch(new PositionChanged(undefined));
+    // If not already watching position
+    if (!this.currentWatcherId) {
+      this.store.dispatch(new PositionChanged(undefined));
 
-    // Step 1: get quickly last known position (allow stale, no need for permissions)
-    const lastPositionWatcherId = await BackgroundGeolocation.addWatcher({ requestPermissions: false, stale: true },
-      (position) => { this.positionReceived(position) }
-    );
-    BackgroundGeolocation.removeWatcher({ id: lastPositionWatcherId });
+      // Step 1: get quickly last known position (allow stale, no need for permissions)
+      const tempPositionWatcherId = await BackgroundGeolocation.addWatcher({ requestPermissions: false, stale: true },
+        (position) => { this.positionReceived(position) }
+      );
+      BackgroundGeolocation.removeWatcher({ id: tempPositionWatcherId });
 
-    // Step 2: register for location updates
-    this.currentWatcherId = await BackgroundGeolocation.addWatcher({
-      // Fixme get proper messages
-      backgroundMessage: this.translateService.instant('POSITION.BACKGROUND.TEXT'),
-      backgroundTitle: this.translateService.instant('POSITION.BACKGROUND.TITLE'),
-      requestPermissions: true,
-      stale: false,
-      distanceFilter: 50
-    },
-      (position, error) => {
-        if (position && !error) {
-          this.positionReceived(position)
-        } else if (error && error.code === "NOT_AUTHORIZED") {
-          this.onGPSDeniedAlways();
+      // Step 2: register for location updates
+      this.currentWatcherId = await BackgroundGeolocation.addWatcher({
+        backgroundMessage: this.translateService.instant('POSITION.BACKGROUND.TEXT'),
+        backgroundTitle: this.translateService.instant('POSITION.BACKGROUND.TITLE'),
+        requestPermissions: true,
+        stale: false,
+        distanceFilter: 20
+      },
+        (position, error) => {
+          if (position && !error) {
+            this.positionReceived(position)
+          } else if (error && error.code === "NOT_AUTHORIZED") {
+            this.onGPSDeniedAlways();
+          }
         }
-      }
-    );
+      );
+    }
   }
 
   positionReceived(position?: Location) {
     this.store.dispatch(new PositionChanged(position));
   }
 
-  private async requestAuthorization() {
+  public async requestAuthorization() {
     if (this.currentAlert) {
       this.currentAlert.dismiss();
       this.currentAlert = undefined;
@@ -132,7 +130,8 @@ export class PositionService {
           message: Capacitor.getPlatform() == 'ios'
             ? this.translateService.instant('POSITION.DENIED_ALWAYS.NOTICE.IOS')
             : this.translateService.instant('POSITION.DENIED_ALWAYS.NOTICE.ANDROID'),
-          backdropDismiss: false,
+          animated: true,
+          backdropDismiss: true,
           buttons: [
             {
               text: this.translateService.instant('GENERAL.GO_TO_SETTINGS'),
@@ -177,7 +176,8 @@ export class PositionService {
           message: Capacitor.getPlatform() == 'ios'
             ? this.translateService.instant('POSITION.GPS_DISABLED.NOTICE.IOS')
             : this.translateService.instant('POSITION.GPS_DISABLED.NOTICE.ANDROID'),
-          backdropDismiss: false,
+          animated: true,
+          backdropDismiss: true,
           buttons: [
 
           ]

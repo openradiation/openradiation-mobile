@@ -10,7 +10,6 @@ import { DevicesStateModel } from '@app/states/devices/devices.state';
 import { Measure, MeasureSeries, Params } from '@app/states/measures/measure';
 import { InitMeasures } from '@app/states/measures/measures.action';
 import { MeasuresStateModel } from '@app/states/measures/measures.state';
-import { PositionService } from '@app/states/measures/position.service';
 import { InitUser, SetLanguage } from '@app/states/user/user.action';
 import { UserService } from '@app/states/user/user.service';
 import { UserStateModel } from '@app/states/user/user.state';
@@ -36,8 +35,7 @@ export class StorageService {
     private actions$: Actions,
     private store: Store,
     private userService: UserService,
-    private platform: Platform,
-    private positionService: PositionService
+    private platform: Platform
   ) { }
 
   init() {
@@ -90,9 +88,6 @@ export class StorageService {
             StatusBar.setStyle({ style: Style.Light });
             SplashScreen.hide();
             await ScreenOrientation.lock({ orientation: 'portrait' });
-            if (!environment.isTestEnvironment) {
-              this.positionService.init();
-            }
           }
         });
       });
