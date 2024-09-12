@@ -82,7 +82,7 @@ export class DeviceRium2USBService extends AbstractUSBDeviceService<DeviceRium2U
 
   protected decodeDataPackage(dataView: DataView): Step | null {
     if (dataView.buffer.byteLength === 32) {
-      const data = this.textDecoder.decode(dataView).split(',');
+      const data = this.textDecoder.decode(dataView.buffer).split(',');
       const hitsNumber = Number(data[3]);
       const temperature = Number(data[4]) / 10;
       const receiveData = {

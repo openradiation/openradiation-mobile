@@ -48,7 +48,7 @@ export class DevicePocketGeigerService extends AbstractUSBDeviceService<DevicePo
   }
 
   protected decodeDataPackage(dataView: DataView): Step | null {
-    const data = this.textDecoder.decode(dataView);
+    const data = this.textDecoder.decode(dataView.buffer);
     this.logAndStore("Received from PocketGeiger : " + JSON.stringify(data))
     if (data[0] === this.RECEIVE_GET_HITS) {
       const dataPackage = data.slice(1).split(',');
