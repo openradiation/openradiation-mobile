@@ -24,6 +24,7 @@ const BackgroundGeolocation = registerPlugin<BackgroundGeolocationPlugin>("Backg
 export class PositionService {
   private currentAlert?: HTMLIonAlertElement;
   private currentWatcherId = "";
+  private listeningPlatformResume = false;
 
   constructor(
     private platform: Platform,
@@ -81,7 +82,7 @@ export class PositionService {
     this.store.dispatch(new PositionChanged(position));
   }
 
-  public async requestAuthorization() {
+  public async requestAuthorization(): Promise<boolean> {
     if (this.currentAlert) {
       this.currentAlert.dismiss();
       this.currentAlert = undefined;
@@ -111,15 +112,16 @@ export class PositionService {
             localNotificationStatus = await LocalNotifications.requestPermissions();
           }
           if (localNotificationStatus.display == 'granted') {
-            this.watchGPSActivation();
+            return await this.watchGPSActivation();
           }
         } else {
-          this.watchGPSActivation();
+          return await this.watchGPSActivation();
         }
         break;
       default:
         this.requestAuthorization();
     }
+    return false;
   }
 
   private onGPSDeniedAlways() {
@@ -144,28 +146,39 @@ export class PositionService {
         },
         false
       )
-      .then(alert => (this.currentAlert = alert));
+      .then(alert => {
+        this.currentAlert?.dismiss();
+        this.currentAlert = alert;
+      });
+    if (!this.listeningPlatformResume) {
+      this.listeningPlatformResume = true;
+      this.platform.resume.subscribe(() => {
+        if (this.currentAlert) {
+          this.currentAlert.dismiss(); this.currentAlert = undefined;
+          this.requestAuthorization();
+        }
+      });
+    }
   }
 
-  private watchGPSActivation() {
+  private async watchGPSActivation(): Promise<boolean> {
     if (this.currentAlert) {
       this.currentAlert.dismiss();
       this.currentAlert = undefined;
     }
-    Diagnostic.registerLocationStateChangeHandler(() => {
+    await Diagnostic.registerLocationStateChangeHandler(() => {
       this.watchGPSActivation();
     });
 
     const isLocationEnabled = Capacitor.getPlatform() == 'android'
-      ? Diagnostic.isGpsLocationEnabled()
-      : Diagnostic.isLocationEnabled();
-    isLocationEnabled.then(enabled => {
-      if (enabled) {
-        this.watchPosition();
-      } else {
-        this.onGPSDisabled();
-      }
-    });
+      ? await Diagnostic.isGpsLocationEnabled()
+      : await Diagnostic.isLocationEnabled();
+    if (isLocationEnabled) {
+      this.watchPosition();
+    } else {
+      this.onGPSDisabled();
+    }
+    return isLocationEnabled;
   }
 
   private onGPSDisabled() {
@@ -184,6 +197,9 @@ export class PositionService {
         },
         false
       )
-      .then(alert => (this.currentAlert = alert));
+      .then(alert => {
+        this.currentAlert?.dismiss();
+        this.currentAlert = alert;
+      });
   }
 }

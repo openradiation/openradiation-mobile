@@ -257,7 +257,7 @@
     },
     "DENIED_ALWAYS": {
       "NOTICE": {
-        "ANDROID": "La position de l'appareil est nécessaire  pour l'envoi des mesures à la base OpenRadiation. Merci d'accepter la permission en mode \"Toujours\".",
+        "ANDROID": "La position de l'appareil est nécessaire  pour l'envoi des mesures à la base OpenRadiation. Merci d'accepter la permission.",
         "IOS": "La position de l'appareil est nécessaire  pour l'envoi des mesures à la base OpenRadiation. Merci d'accepter la permission en mode \"Toujours\"."
       },
       "TITLE": "Position - Permission refusée"

@@ -89,11 +89,13 @@ export class HomePage extends AutoUnsubscribePage {
   }
 
   async startMeasure() {
-    await this.positionService.requestAuthorization();
-    this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
-      if (connectedDevice) {
-        this.store.dispatch(new StartMeasure(connectedDevice));
-      }
-    });
+    const hasLocationEnabled = await this.positionService.requestAuthorization();
+    if (hasLocationEnabled) {
+      this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
+        if (connectedDevice) {
+          this.store.dispatch(new StartMeasure(connectedDevice));
+        }
+      });
+    }
   }
 }

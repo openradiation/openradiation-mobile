@@ -257,7 +257,7 @@
     },
     "DENIED_ALWAYS": {
       "NOTICE": {
-        "ANDROID": "Phone geolocation is required to send measurement to OpenRadiation base. Please accept the permission on \"Always\" mode.",
+        "ANDROID": "Phone geolocation is required to send measurement to OpenRadiation base. Please accept the permission.",
         "IOS": "Phone geolocation is required to send measurement to OpenRadiation base. Please accept the permission on \"Always\" mode."
       },
       "TITLE": "Geolocation - Permission denied"

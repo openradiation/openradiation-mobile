@@ -16,6 +16,8 @@ import { DevicesService } from '@app/states/devices/devices.service';
 import { AbstractBLEDevice, RawBLEDevice } from './abstract-ble-device';
 import { BleClient, ScanMode } from '@capacitor-community/bluetooth-le';
 import { Capacitor } from '@capacitor/core';
+import { PositionService } from '@app/states/measures/position.service';
+import { Platform } from '@ionic/angular';
 
 
 @Injectable({
@@ -33,13 +35,16 @@ export class BLEDevicesService {
   private currentAlert?: HTMLIonAlertElement;
   private scanDuration = 3;
   private scanPeriod = 5000;
+  private listeningPlatformResume = false;
 
   constructor(
+    private platform: Platform,
     private actions$: Actions,
     private store: Store,
     private alertService: AlertService,
     private translateService: TranslateService,
-    private devicesService: DevicesService
+    private devicesService: DevicesService,
+    private positionService: PositionService
   ) {
     this.actions$.pipe(ofActionDispatched(StartDiscoverBLEDevices)).subscribe(() => {
       if (this.currentAlert) {
@@ -47,31 +52,50 @@ export class BLEDevicesService {
         this.currentAlert = undefined;
       }
     });
+
   }
 
   startDiscoverDevices(): Observable<unknown> {
     return from(
-      BleClient
-        .isEnabled()
-        .catch(err => {
-          if (Capacitor.getPlatform() == 'android') {
-            return BleClient.requestEnable();
-          } else {
-            throw err;
-          }
-        })
-        .catch(err => {
-          this.onBLEError();
-          throw err;
+      this.enableLocationAndBluetooth().then(bluetoothEnabled => {
+        if (!bluetoothEnabled) {
+          throw new Error("Missing bluetooth or location permissions")
+        }
+      })
+        .catch(error => {
+          console.error(error);
+          this.onBLEError(true);
         })
     ).pipe(tap(() => this.discoverDevices()));
+  }
+
+  private async enableLocationAndBluetooth(): Promise<boolean> {
+    const hasLocationEnabled = await this.positionService.requestAuthorization();
+    if (hasLocationEnabled) {
+      try {
+        await BleClient.initialize();
+      } catch (error) {
+        console.error("Error while initializing BleClient, probably missing permissions", error);
+        this.onBLEError(true);
+        return false;
+      }
+      const isBluetoothEnabled = await BleClient.isEnabled()
+
+      if (!isBluetoothEnabled && Capacitor.getPlatform() == 'android') {
+        await BleClient.requestEnable();
+      } else if (!isBluetoothEnabled) {
+        this.onBLEError(false);
+      }
+      return isBluetoothEnabled;
+    }
+    return false;
   }
 
   private discoverDevices() {
     Diagnostic.registerBluetoothStateChangeHandler((state: string) => {
       switch (state) {
         case Diagnostic.bluetoothState.POWERED_OFF:
-          this.onBLEError();
+          this.onBLEError(false);
           this.store.dispatch(new BLEConnectionLost());
           break;
       }
@@ -120,7 +144,7 @@ export class BLEDevicesService {
       .subscribe(devices => this.store.dispatch(new BLEDevicesDiscovered(devices)));
   }
 
-  private onBLEError() {
+  private onBLEError(missingPermissions: boolean) {
     Diagnostic.registerBluetoothStateChangeHandler(() => {
       this.store.dispatch(new StartDiscoverBLEDevices()).subscribe();
       Diagnostic.registerBluetoothStateChangeHandler(() => {
@@ -138,7 +162,7 @@ export class BLEDevicesService {
             {
               text: this.translateService.instant('GENERAL.GO_TO_SETTINGS'),
               handler: () => {
-                if (Capacitor.getPlatform() == 'ios') {
+                if (Capacitor.getPlatform() == 'ios' || missingPermissions) {
                   Diagnostic.switchToSettings();
                 } else {
                   Diagnostic.switchToBluetoothSettings();
@@ -150,7 +174,19 @@ export class BLEDevicesService {
         },
         false
       )
-      .then(alert => (this.currentAlert = alert));
+      .then(alert => {
+        this.currentAlert?.dismiss();
+        this.currentAlert = alert;
+      });
+    if (!this.listeningPlatformResume) {
+      this.listeningPlatformResume = true;
+      this.platform.resume.subscribe(() => {
+        if (this.currentAlert) {
+          this.currentAlert.dismiss(); this.currentAlert = undefined;
+          this.startDiscoverDevices();
+        }
+      });
+    }
   }
 
 
