@@ -132,7 +132,8 @@ export class BLEDevicesService {
         {
           header: this.translateService.instant('BLUETOOTH.BLE_DISABLED.TITLE'),
           message: this.translateService.instant('BLUETOOTH.BLE_DISABLED.NOTICE'),
-          backdropDismiss: false,
+          animated: true,
+          backdropDismiss: true,
           buttons: [
             {
               text: this.translateService.instant('GENERAL.GO_TO_SETTINGS'),

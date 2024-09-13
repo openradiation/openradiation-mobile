@@ -235,10 +235,40 @@ export class MeasuresState {
   }
 
   @Action(PositionChanged)
-  positionChanged({ patchState }: StateContext<MeasuresStateModel>, { position }: PositionChanged) {
+  positionChanged({ patchState, getState }: StateContext<MeasuresStateModel>, { position }: PositionChanged) {
     patchState({
       currentPosition: position
     });
+
+    // If position accuracy is acceptable
+    if (position && position.latitude && position.latitude != 0 &&
+      (position.accuracy < PositionAccuracyThreshold.Inaccurate)) {
+      // If current measure or serie has no good position, let's patch it with current position
+      const { currentMeasure, currentSeries } = getState();
+      if (currentMeasure && (!currentMeasure.latitude || currentMeasure.latitude == 0 || !currentMeasure.accuracy || currentMeasure.accuracy > PositionAccuracyThreshold.Poor)) {
+        currentMeasure.latitude = position.latitude;
+        currentMeasure.longitude = position.longitude;
+        currentMeasure.altitude = position.altitude ? position.altitude : undefined;
+        currentMeasure.altitudeAccuracy = position.altitudeAccuracy ? position.altitudeAccuracy : undefined;
+        currentMeasure.accuracy = position.accuracy;
+        patchState({
+          currentMeasure: currentMeasure
+        })
+      }
+      if (currentSeries && currentSeries.measures) {
+        const firstMeasure = currentSeries.measures[0];
+        if (firstMeasure && (!firstMeasure.latitude || firstMeasure.latitude == 0 || !firstMeasure.accuracy || firstMeasure.accuracy > PositionAccuracyThreshold.Poor)) {
+          firstMeasure.latitude = position.latitude;
+          firstMeasure.longitude = position.longitude;
+          firstMeasure.altitude = position.altitude ? position.altitude : undefined;
+          firstMeasure.altitudeAccuracy = position.altitudeAccuracy ? position.altitudeAccuracy : undefined;
+          firstMeasure.accuracy = position.accuracy;
+          patchState({
+            currentSeries: currentSeries
+          })
+        }
+      }
+    }
   }
 
   @Action(StartMeasure)
