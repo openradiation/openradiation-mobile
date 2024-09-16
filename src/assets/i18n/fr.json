@@ -204,7 +204,8 @@
       "RAIN": "Pluie",
       "STORM": "Traversée d’orage",
       "TITLE_RAIN": "Météo"
-    }
+    },
+    "CANCEL_CONFIRMATION": "Êtes-vous sûr(e) de vouloir supprimer cette mesure ?"
   },
   "MEASURE_MANUAL": {
     "ALERT": "Vous devez vous identifier pour pouvoir saisir manuellement une mesure.",

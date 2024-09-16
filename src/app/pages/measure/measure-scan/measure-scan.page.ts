@@ -19,6 +19,7 @@ import {
 } from '@app/states/measures/measure';
 import { CancelMeasure, StartMeasureScan, StopMeasureScan } from '@app/states/measures/measures.action';
 import { MeasuresState } from '@app/states/measures/measures.state';
+import { Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-measure-scan',
@@ -76,7 +77,8 @@ export class MeasureScanPage extends AutoUnsubscribePage {
     private navigationService: NavigationService,
     private actions$: Actions,
     private alertService: AlertService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private platform: Platform
   ) {
     super(router);
   }
@@ -88,6 +90,7 @@ export class MeasureScanPage extends AutoUnsubscribePage {
     });
     this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
       if (connectedDevice) {
+        this.platform.backButton.subscribeWithPriority(9999, () => this.cancelMeasure())
         this.subscriptions.push(
           this.currentMeasure$.subscribe(measure => this.updateHitsAccuracy(connectedDevice, measure)),
           this.actions$.pipe(ofActionSuccessful(StopMeasureScan)).subscribe(() => {
@@ -128,23 +131,23 @@ export class MeasureScanPage extends AutoUnsubscribePage {
   }
 
   cancelMeasure() {
+    let cancelMessage = this.translateService.instant('MEASURES.CANCEL_CONFIRMATION');
     if (this.isMeasureSeries) {
-      this.alertService.show({
-        header: this.translateService.instant('GENERAL.CANCEL'),
-        message: this.translateService.instant('MEASURE_SERIES.REPORT.CANCEL_CONFIRMATION'),
-        backdropDismiss: false,
-        buttons: [
-          {
-            text: this.translateService.instant('GENERAL.NO')
-          },
-          {
-            text: this.translateService.instant('GENERAL.YES'),
-            handler: () => this.store.dispatch(new CancelMeasure())
-          }
-        ]
-      });
-    } else {
-      this.store.dispatch(new CancelMeasure());
+      cancelMessage = this.translateService.instant('MEASURE_SERIES.REPORT.CANCEL_CONFIRMATION')
     }
+    this.alertService.show({
+      header: this.translateService.instant('GENERAL.CANCEL'),
+      message: cancelMessage,
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: this.translateService.instant('GENERAL.NO')
+        },
+        {
+          text: this.translateService.instant('GENERAL.YES'),
+          handler: () => this.store.dispatch(new CancelMeasure())
+        }
+      ]
+    });
   }
 }

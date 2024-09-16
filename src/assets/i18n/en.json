@@ -204,7 +204,8 @@
       "RAIN": "Rain",
       "STORM": "Storm crossing",
       "TITLE_RAIN": "Weather"
-    }
+    },
+    "CANCEL_CONFIRMATION": "Are you sure you wish to delete this measurement ?"
   },
   "MEASURE_MANUAL": {
     "ALERT": "You must be logged in before you can fill out a manual measurement report.",
