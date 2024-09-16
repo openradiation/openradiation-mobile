@@ -110,7 +110,7 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
         this.subscriptions.push(
           this.actions$.pipe(ofActionSuccessful(StopMeasureSeries, CancelMeasure, StopMeasure)).subscribe(() => {
             this.measureReportForm = undefined;
-            this.navigationService.goBack();
+            this.navigationService.pop();
           }),
           this.platform.backButton.subscribeWithPriority(9999, () => this.cancelMeasure())
         );

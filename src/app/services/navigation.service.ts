@@ -32,7 +32,12 @@ export class NavigationService {
   }
 
   goBack() {
-    this.stackDepth -= 2;
+    this.stackDepth = Math.max(0, this.stackDepth - 2);
+    this.navController.back();
+  }
+
+  pop() {
+    this.stackDepth = Math.max(0, this.stackDepth - 2);
     this.navController.pop();
   }
 }
