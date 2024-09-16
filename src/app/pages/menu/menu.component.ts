@@ -36,7 +36,6 @@ export class MenuComponent {
   ) {
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
       this.currentUrl = event.url;
-      this.menuController.enable(this.currentUrl === '/' || this.currentUrl.includes('/tabs/'));
     });
     this.actions$
       .pipe(ofActionSuccessful(StartManualMeasure))

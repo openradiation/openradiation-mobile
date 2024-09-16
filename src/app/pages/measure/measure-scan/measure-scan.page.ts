@@ -90,7 +90,7 @@ export class MeasureScanPage extends AutoUnsubscribePage {
     });
     this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
       if (connectedDevice) {
-        this.platform.backButton.subscribeWithPriority(9999, () => this.cancelMeasure())
+        this.subscriptions.push(this.platform.backButton.subscribeWithPriority(9999, () => this.cancelMeasure()));
         this.subscriptions.push(
           this.currentMeasure$.subscribe(measure => this.updateHitsAccuracy(connectedDevice, measure)),
           this.actions$.pipe(ofActionSuccessful(StopMeasureScan)).subscribe(() => {
