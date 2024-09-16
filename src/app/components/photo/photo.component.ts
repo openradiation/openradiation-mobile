@@ -38,7 +38,6 @@ export class PhotoComponent implements ControlValueAccessor {
   }
 
   writeValue(photo: string | undefined): void {
-    console.log(photo);
     this.photo = photo;
     this.onChange(this.photo);
   }
