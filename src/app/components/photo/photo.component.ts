@@ -38,6 +38,7 @@ export class PhotoComponent implements ControlValueAccessor {
   }
 
   writeValue(photo: string | undefined): void {
+    console.log(photo);
     this.photo = photo;
     this.onChange(this.photo);
   }
@@ -76,7 +77,7 @@ export class PhotoComponent implements ControlValueAccessor {
   async addPhoto(options: ImageOptions): Promise<void> {
     try {
       const imageData = await Camera.getPhoto(options);
-      this.writeValue('data:image/jpeg;base64,' + imageData);
+      this.writeValue(imageData.dataUrl);
     } catch (error) {
       console.error("Error while taking pictures", error, options);
     }
