@@ -5,3 +5,5 @@ NSMotionUsageDescription="Motion detection is needed to improve phone location a
 NSBluetoothPeripheralUsageDescription="Bluetooth activation is mandatory to connect to the sensors. Please accept the permission.";
 NSBluetoothAlwaysUsageDescription="Bluetooth activation is mandatory to connect to the sensors. Please accept the permission.";
 NSPhotoLibraryUsageDescription="Access to gallery is required to let you associate picture to your OpenRadiation measure.";
+NSPhotoLibraryAddUsageDescription="Access to gallery is required to let you associate picture to your OpenRadiation measure.";
+NSCameraUsageDescription="Access to camera is required to let you associate picture to your OpenRadiation measure.";

@@ -60,6 +60,10 @@
 	<string>L'activation du bluetooth est nécessaire pour se connecter aux capteurs. Merci d'accepter la permission.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>L'accès à la gallerie est nécessaire pour associer une photo à votre mesure OpenRadiation</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>L'accès à la gallerie est nécessaire pour associer une photo à votre mesure OpenRadiation</string>
+	<key>NSCameraUsageDescription</key>
+	<string>L'accès à l'appareil photo  est nécessaire pour prendre une photo à votre mesure OpenRadiation</string>
 	
 	<key>NSCalendarsUsageDescription</key><string>Never used.</string>
 	<key>NSContactsUsageDescription</key><string>Never used.</string>
