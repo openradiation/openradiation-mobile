@@ -173,7 +173,7 @@
               </app-select-icon>
             </div>
           </ng-template>
-          <ng-container *ngIf="login$ | async">
+          <ng-container *ngIf="login$ | async as login; else unlogged">
             <div class="separator"></div>
             <ion-list>
               <ion-item class="description">
@@ -191,6 +191,14 @@
               <app-photo formControlName="enclosedObject" [title]="'Photo'"> </app-photo>
             </div>
           </ng-container>
+          <ng-template  #unlogged>
+          <div class="separator"></div>
+          <ion-list>
+            <ion-item class="description">
+              {{'LOG_IN.LOG_TO_ADD_INFOS' | translate}}
+            </ion-item>
+          </ion-list>
+          </ng-template>
         </form>
         <div class="bottom-buttons">
           <app-round-button [disabled]="!measureReportForm.valid || currentMeasure.sent"

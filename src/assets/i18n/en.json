@@ -136,6 +136,7 @@
       "PART3": "If you have not already done so, we suggest that you create an account at <a onclick=\"window.open('https://www.openradiation.org/en/user/register', '_system')\">www.openradiation.org</a>, and then configure your account here (synchronization ~5 min)."
     },
     "NOT_LOGGED": "Unidentified",
+    "LOG_TO_ADD_INFOS": "Please log in to be able to add pictures and tags to your measurement.",
     "PASSWORD": "Password",
     "TITLE": "Log in",
     "USERNAME": "Username",

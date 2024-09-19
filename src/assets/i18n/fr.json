@@ -136,6 +136,7 @@
       "PART3": "Si vous ne l’avez pas déjà fait, nous vous invitons à créer un compte sur <a onclick=\"window.open('https://www.openradiation.org/user/register', '_system')\">www.openradiation.org</a>, puis à le paramétrer ici (synchronisation ~5 min)."
     },
     "NOT_LOGGED": "Non identifié",
+    "LOG_TO_ADD_INFOS": "Veuillez vous connecter pour ajouter des photos ou tag à votre mesure.",
     "PASSWORD": "Mot de passe",
     "TITLE": "S'identifier",
     "USERNAME": "Nom d'utilisateur",
