@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { Actions, ofActionDispatched, ofActionErrored, ofActionSuccessful, Store, ActionCompletion } from '@ngxs/store';
+import { Actions, ofActionDispatched, ofActionSuccessful, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { AutoUnsubscribePage } from '@app/components/auto-unsubscribe/auto-unsubscribe.page';
 import { AlertService } from '@app/services/alert.service';
@@ -12,6 +12,7 @@ import {
   DeleteAllMeasures,
   DeleteMeasure,
   PublishMeasure,
+  PublishMeasureError,
   ShowMeasure
 } from '@app/states/measures/measures.action';
 import { MeasuresService } from '@app/states/measures/measures.service';
@@ -44,11 +45,9 @@ export class HistoryPage extends AutoUnsubscribePage {
   pageEnter() {
     super.pageEnter();
     this.subscriptions.push(
-      this.actions$.pipe(ofActionErrored(PublishMeasure)).subscribe(
-        (actionCompletion: ActionCompletion<PublishMeasure, Error>) => {
-          if (actionCompletion.action && actionCompletion.action.measure) {
-            const measure = actionCompletion.action.measure;
-            this.measureBeingSentMap[measure.id] = false;
+      this.actions$.pipe(ofActionDispatched(PublishMeasureError)).subscribe(
+        (error: PublishMeasureError) => {
+            this.measureBeingSentMap[error.measure.id] = false;
             this.toastController
               .create({
                 message: this.translateService.instant('HISTORY.SEND_ERROR'),
@@ -62,9 +61,6 @@ export class HistoryPage extends AutoUnsubscribePage {
                 }]
               })
               .then(toast => toast.present());
-          } else {
-            console.error("Error with Publish Measure", actionCompletion.result.error)
-          }
         }),
       this.actions$.pipe(ofActionDispatched(PublishMeasure)).subscribe(({ measure }: PublishMeasure) => {
         this.measureBeingSentMap[measure.id] = true;

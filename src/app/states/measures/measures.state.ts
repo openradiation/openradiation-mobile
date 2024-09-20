@@ -1,6 +1,6 @@
 import { Location } from "@capacitor-community/background-geolocation";
 import { TranslateService } from '@ngx-translate/core';
-import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { Action, Selector, State, StateContext, Store } from '@ngxs/store';
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { AlertService } from '@app/services/alert.service';
@@ -10,6 +10,7 @@ import { DeviceConnectionLost } from '@app/states/devices/devices.action';
 import { Form } from '@app/states/formModel';
 import { DateService } from '@app/states/measures/date.service';
 import {
+  AbstractMeasure,
   Measure,
   MeasureEnvironment,
   MeasureReport,
@@ -35,6 +36,7 @@ import {
   InitMeasures,
   PositionChanged,
   PublishMeasure,
+  PublishMeasureError,
   ShowMeasure,
   StartManualMeasure,
   StartMeasure,
@@ -102,7 +104,8 @@ export class MeasuresState {
     private dateService: DateService,
     private alertService: AlertService,
     private translateService: TranslateService,
-    private navigationService: NavigationService
+    private navigationService: NavigationService,
+    private store: Store,
   ) { }
 
   @Selector()
@@ -736,13 +739,24 @@ export class MeasuresState {
       let { measures } = getState();
       const index = measures.findIndex(stateMeasure => stateMeasure.id === measure.id);
       if (index !== -1) {
-        return this.measuresService.publishMeasure(measure).pipe(
-          tap(() => {
+        return this.measuresService.publishMeasure(measure).subscribe(m => {
             measures = getState().measures;
-            patchState({
-              measures: [...measures.slice(0, index), { ...measure, sent: true }, ...measures.slice(index + 1)]
-            });
-          })
+            if ((m as AbstractMeasure)?.type == MeasureType.Measure) {
+              patchState({
+                  measures: [...measures.slice(0, index), { ...m as Measure }, ...measures.slice(index + 1)]
+              });
+            } else {
+              patchState({
+                measures: [...measures.slice(0, index), { ...m as MeasureSeries }, ...measures.slice(index + 1)]
+              });
+            }
+            if (!(m as AbstractMeasure).sent) {
+              this.store.dispatch(new PublishMeasureError(m as AbstractMeasure));
+              return of(null);
+            } else {
+              return of(m);
+            }
+          }
         );
       }
     }

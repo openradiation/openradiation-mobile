@@ -1,6 +1,6 @@
 import { Location } from "@capacitor-community/background-geolocation";
 import { AbstractDevice } from '@app/states/devices/abstract-device';
-import { Measure, MeasureSeries, Params, Step } from '@app/states/measures/measure';
+import { AbstractMeasure, Measure, MeasureSeries, Params, Step } from '@app/states/measures/measure';
 
 export class InitMeasures {
   static readonly type = '[Measure] Init';
@@ -109,6 +109,11 @@ export class StopMeasureSeriesReport {
 export class PublishMeasure {
   static readonly type = '[Measures] Publish measure';
   constructor(public measure: Measure | MeasureSeries) { }
+}
+
+export class PublishMeasureError {
+  static readonly type = '[Measures] Publish measure error';
+  constructor(public measure: AbstractMeasure) { }
 }
 
 export class DeleteMeasure {

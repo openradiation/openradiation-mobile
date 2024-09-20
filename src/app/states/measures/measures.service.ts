@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
-import { forkJoin, Observable, of } from 'rxjs';
-import { shareReplay, take, takeUntil } from 'rxjs/operators';
+import { forkJoin, Observable, of, tap, map } from 'rxjs';
+import { catchError, shareReplay, take, takeUntil } from 'rxjs/operators';
 import { environment } from '@environments/environment';
 import { AbstractDevice, ApparatusSensorType } from '@app/states/devices/abstract-device';
 import { DeviceConnectionLost } from '@app/states/devices/devices.action';
@@ -66,10 +66,41 @@ export class MeasuresService {
   publishMeasure(measure: Measure | MeasureSeries): Observable<unknown> {
     switch (measure.type) {
       case MeasureType.Measure: {
-        return this.postMeasure(measure);
+        return this.postMeasure(measure).pipe(
+          map(() => {
+            measure.sent = true;
+            return measure;
+          }),
+          catchError(() => {
+            measure.sent = false;
+            return of(measure);
+          })
+        );
       }
       case MeasureType.MeasureSeries: {
-        return forkJoin(measure.measures.map(subMeasure => this.postMeasure(subMeasure)));
+        return forkJoin(
+          measure.measures.map(subMeasure => {
+            if (!subMeasure.sent) {
+              return this.postMeasure(subMeasure).pipe(
+                map(() => {
+                  subMeasure.sent = true;
+                  return subMeasure;
+                }),
+                catchError(() => {
+                  subMeasure.sent = false;
+                  return of(subMeasure);
+                })
+              )
+            } else {
+              return of(subMeasure)
+            }
+          })
+          ).pipe(
+            map(() => {
+              measure.sent = measure.measures.filter(s => !s.sent).length === 0;
+              return measure
+            })
+          )
       }
     }
   }

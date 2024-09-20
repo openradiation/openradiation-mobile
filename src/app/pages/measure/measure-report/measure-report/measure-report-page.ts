@@ -96,7 +96,6 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
   init() {
     this.subscriptions.push(
       this.measureReportForm!.valueChanges.subscribe(value => {
-        console.log("value changed")
         if (value.duration === undefined) {
           //si duration est undefined, le date picker se met à new Date(), on le force à 00h00m00s
           this.measureReportForm!.get('duration')!.setValue(this.initialDurationValue);
