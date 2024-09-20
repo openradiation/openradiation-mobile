@@ -12,11 +12,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
 import android.util.Base64;
 import android.util.Log;
+import android.os.Build;
 
 import com.felhr.usbserial.UsbSerialDevice;
 import com.felhr.usbserial.UsbSerialInterface;
@@ -25,12 +27,11 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-
 /**
  * Cordova plugin to communicate with the android serial port
  */
 public class UsbSerial extends CordovaPlugin {
-    // logging tag
+    // logging TAG
     private final String TAG = UsbSerial.class.getSimpleName();
     // actions definitions
     private static final String ACTION_ON_DEVICE_ATTACHED = "onDeviceAttached";
@@ -41,7 +42,7 @@ public class UsbSerial extends CordovaPlugin {
 
     private static final String ACTION_USB_ATTACHED = "android.hardware.usb.action.USB_DEVICE_ATTACHED";
     private static final String ACTION_USB_DETACHED = "android.hardware.usb.action.USB_DEVICE_DETACHED";
-    private static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
+    private static final String ACTION_USB_PERMISSION = "irsn.usb.USB_PERMISSION";
 
     private UsbManager usbManager;
 
@@ -55,28 +56,18 @@ public class UsbSerial extends CordovaPlugin {
     private UsbDevice device;
     private UsbSerialDevice serialPort;
 
-    private UsbSerialInterface.UsbReadCallback mCallback = new UsbSerialInterface.UsbReadCallback() {
-
-        @Override
-        public void onReceivedData(byte[] arg0) {
-            updateReceivedData(arg0);
-        }
-
-    };
-
     /**
      * Overridden execute method
      *
      * @param action          the string representation of the action to execute
-     * @param args
      * @param callbackContext the cordova {@link CallbackContext}
      * @return true if the action exists, false otherwise
      * @throws JSONException if the args parsing fails
      */
     @Override
     public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
-        Log.d(TAG, "Action: " + action);
         JSONObject arg_object = args.optJSONObject(0);
+        Log.d(TAG, "Execute action: " + action);
         switch (action) {
             case ACTION_ON_DEVICE_ATTACHED:
                 JSONArray whiteList = arg_object.has("whiteList") ? arg_object.getJSONArray("whiteList") : null;
@@ -85,7 +76,10 @@ public class UsbSerial extends CordovaPlugin {
                 return true;
             case ACTION_CONNECT:
                 JSONObject device = arg_object.has("device") ? arg_object.getJSONObject("device") : null;
-                JSONObject connectionConfig = arg_object.has("connectionConfig") ? arg_object.getJSONObject("connectionConfig") : null;
+                JSONObject connectionConfig = arg_object.has("connectionConfig")
+                        ? arg_object.getJSONObject("connectionConfig")
+                        : null;
+                Log.d(TAG, "IRSN-usb ACTION_CONNECT: " + device + "/" + connectionConfig);
                 requestPermission(device, connectionConfig, callbackContext);
                 return true;
             case ACTION_DISCONNECT:
@@ -99,6 +93,7 @@ public class UsbSerial extends CordovaPlugin {
                 write(data);
                 return true;
             default:
+                Log.e(TAG, "Unhandled execute action : " + action);
                 return false;
         }
     }
@@ -106,45 +101,42 @@ public class UsbSerial extends CordovaPlugin {
     private final BroadcastReceiver usbReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            switch (intent.getAction()) {
-                case ACTION_USB_ATTACHED:
-                    Log.d(TAG, "usb attached");
-                    listDevicesAttached();
-                    break;
-                case ACTION_USB_DETACHED:
-                    Log.d(TAG, "usb detached");
-                    listDevicesAttached();
-                    if (connectCallback != null) {
-                        connectCallback.error("usb detached");
-                        connectCallback = null;
-                    }
-                    break;
-                case ACTION_USB_PERMISSION:
-                    Log.d(TAG, "usb permission");
-                    boolean granted = intent.getExtras().getBoolean(UsbManager.EXTRA_PERMISSION_GRANTED);
-                    if (granted) {
-                        connect();
-                    } else {
-                        connectionCallbackError("permission refused");
-                    }
-                    break;
-                default:
-                    Log.e(TAG, "Unknown action");
-                    break;
+            String action = intent.getAction();
+            if (action != null) {
+                switch (action) {
+                    case ACTION_USB_ATTACHED:
+                        Log.d(TAG, "Received broadcast - USB attached");
+                        listDevicesAttached();
+
+                        break;
+                    case ACTION_USB_DETACHED:
+                        Log.d(TAG, "Received broadcast - USB detached");
+                        listDevicesAttached();
+                        if (connectCallback != null) {
+                            connectCallback.error("usb detached");
+                            connectCallback = null;
+                        }
+                        break;
+                    case ACTION_USB_PERMISSION:
+                        boolean granted = intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false);
+                        Log.d(TAG, "\"Received broadcast - USB Permission (granted : " + granted +")");
+                        if (granted) {
+                            connect();
+                        } else {
+                            connectionCallbackError("permission refused");
+                        }
+                        break;
+                    default:
+                        Log.e(TAG, "Received unhandled broadcast action : " + action);
+                        break;
+                }
             }
         }
     };
 
-    private void setFilter() {
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(ACTION_USB_DETACHED);
-        filter.addAction(ACTION_USB_ATTACHED);
-        filter.addAction(ACTION_USB_PERMISSION);
-        cordova.getContext().registerReceiver(usbReceiver, filter);
-    }
-
     /**
-     * Register a callback that will be called when a usb device is attached to the phone
+     * Register a callback that will be called when a usb device is attached to the
+     * phone
      * A whitelist can be provided to filter which devices will trigger the callback
      */
     private void onDeviceAttached(final JSONArray whiteList, final CallbackContext callbackContext) {
@@ -174,10 +166,12 @@ public class UsbSerial extends CordovaPlugin {
                         for (int i = 0; i < deviceWhiteList.length(); i++) {
                             try {
                                 JSONObject authorizedDevice = deviceWhiteList.getJSONObject(i);
-                                Object o_vid = authorizedDevice.opt("vid"); //can be an integer Number or a hex String
-                                Object o_pid = authorizedDevice.opt("pid"); //can be an integer Number or a hex String
-                                int vid = o_vid instanceof Number ? ((Number) o_vid).intValue() : Integer.parseInt((String) o_vid, 16);
-                                int pid = o_pid instanceof Number ? ((Number) o_pid).intValue() : Integer.parseInt((String) o_pid, 16);
+                                Object o_vid = authorizedDevice.opt("vid"); // can be an integer Number or a hex String
+                                Object o_pid = authorizedDevice.opt("pid"); // can be an integer Number or a hex String
+                                int vid = o_vid instanceof Number ? ((Number) o_vid).intValue()
+                                        : Integer.parseInt((String) o_vid, 16);
+                                int pid = o_pid instanceof Number ? ((Number) o_pid).intValue()
+                                        : Integer.parseInt((String) o_pid, 16);
                                 if (deviceVID == vid && devicePID == pid) {
                                     LinkedHashMap<String, Object> deviceAttached = new LinkedHashMap<>();
                                     deviceAttached.put("pid", o_pid);
@@ -209,12 +203,13 @@ public class UsbSerial extends CordovaPlugin {
         });
     }
 
-    private void requestPermission(final JSONObject device, final JSONObject connectionConfig, final CallbackContext callbackContext) {
+    private void requestPermission(final JSONObject device, final JSONObject connectionConfig,
+            final CallbackContext callbackContext) {
         cordova.getThreadPool().execute(() -> {
             connectCallback = callbackContext;
             this.connectionConfig = connectionConfig;
-            Object o_vid = device.opt("vid"); //can be an integer Number or a hex String
-            Object o_pid = device.opt("pid"); //can be an integer Number or a hex String
+            Object o_vid = device.opt("vid"); // can be an integer Number or a hex String
+            Object o_pid = device.opt("pid"); // can be an integer Number or a hex String
             int vid = o_vid instanceof Number ? ((Number) o_vid).intValue() : Integer.parseInt((String) o_vid, 16);
             int pid = o_pid instanceof Number ? ((Number) o_pid).intValue() : Integer.parseInt((String) o_pid, 16);
             this.device = null;
@@ -229,14 +224,23 @@ public class UsbSerial extends CordovaPlugin {
             if (this.device == null) {
                 connectionCallbackError("device not found");
             } else {
-                PendingIntent mPendingIntent = PendingIntent.getBroadcast(cordova.getContext(), 0, new Intent(ACTION_USB_PERMISSION), 0);
-                usbManager.requestPermission(this.device, mPendingIntent);
+                Log.d(TAG, "Request permission for devices " + this.device);
+                boolean hasRequiredUSBHostFeature = cordova.getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_USB_HOST);
+                if (hasRequiredUSBHostFeature) {
+                    Intent permissionGrantIntent = new Intent(ACTION_USB_PERMISSION);
+                    permissionGrantIntent.setPackage(cordova.getContext().getPackageName());
+                    PendingIntent mPendingIntent = PendingIntent.getBroadcast(cordova.getContext(), 0, permissionGrantIntent, PendingIntent.FLAG_MUTABLE);
+                    usbManager.requestPermission(this.device, mPendingIntent);
+                } else {
+                    connectionCallbackError("missing usb host system feature");
+                }
             }
         });
     }
 
     private void connect() {
         cordova.getThreadPool().execute(() -> {
+            Log.d(TAG, "Connecting to device : " + device + "/ Connection Configuration : " + connectionConfig);
             if (device != null && connectionConfig != null) {
                 try {
                     int baudRate = connectionConfig.getInt("baudRate");
@@ -249,11 +253,13 @@ public class UsbSerial extends CordovaPlugin {
                     serialPort.setDataBits(dataBits);
                     serialPort.setStopBits(UsbSerialInterface.STOP_BITS_1);
                     serialPort.setParity(UsbSerialInterface.PARITY_NONE);
-                    serialPort.read(mCallback);
+                    Log.d(TAG, "IRSN usb - Serial Port opened");
+                    serialPort.read(this::updateReceivedData);
                     PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, "connected");
                     pluginResult.setKeepCallback(true);
                     connectCallback.sendPluginResult(pluginResult);
                 } catch (JSONException e) {
+                    Log.e(TAG, "IRSN usb " + e.getMessage(), e);
                     connectionCallbackError("invalid parameters");
                 }
             }
@@ -261,6 +267,7 @@ public class UsbSerial extends CordovaPlugin {
     }
 
     private void connectionCallbackError(String error) {
+        Log.e(TAG, "Error : " + error);
         cordova.getThreadPool().execute(() -> {
             if (connectCallback != null) {
                 connectCallback.error(error);
@@ -299,8 +306,10 @@ public class UsbSerial extends CordovaPlugin {
      * @param data the array of bytes to dispatch
      */
     private void updateReceivedData(byte[] data) {
+        Log.d(TAG, "IRSN usb - updateReceivedData..." + readCallback);
         cordova.getThreadPool().execute(() -> {
             if (readCallback != null) {
+                Log.d(TAG, "IRSN usb - plugin result : ok...");
                 PluginResult result = new PluginResult(PluginResult.Status.OK, data);
                 result.setKeepCallback(true);
                 readCallback.sendPluginResult(result);
@@ -330,7 +339,18 @@ public class UsbSerial extends CordovaPlugin {
 
     @Override
     public void pluginInitialize() {
-        setFilter();
+        // Register the usbReceiver as listening for usb attached/detached and permission
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ACTION_USB_DETACHED);
+        filter.addAction(ACTION_USB_ATTACHED);
+        filter.addAction(ACTION_USB_PERMISSION);
+
+        // Additional parameters required since Android 34
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            cordova.getContext().registerReceiver(usbReceiver, filter, Context.RECEIVER_EXPORTED);
+        } else {
+            cordova.getContext().registerReceiver(usbReceiver, filter);
+        }
         usbManager = (UsbManager) cordova.getContext().getSystemService(Context.USB_SERVICE);
     }
 
@@ -343,7 +363,6 @@ public class UsbSerial extends CordovaPlugin {
     public void onPause(boolean multitasking) {
     }
 
-
     /**
      * Resumed activity handler
      *
@@ -353,7 +372,6 @@ public class UsbSerial extends CordovaPlugin {
     public void onResume(boolean multitasking) {
     }
 
-
     /**
      * Destroy activity handler
      *
@@ -362,6 +380,5 @@ public class UsbSerial extends CordovaPlugin {
     @Override
     public void onDestroy() {
     }
-
 
 }

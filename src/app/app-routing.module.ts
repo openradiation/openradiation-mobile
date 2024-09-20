@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: '', loadChildren: './pages/tabs/tabs.module#TabsModule' },
-  { path: 'measure', loadChildren: './pages/measure/measure.module#MeasureModule' }
+  { path: '', loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsModule) },
+  { path: 'measure', loadChildren: () => import('./pages/measure/measure.module').then(m => m.MeasureModule) }
 ];
 
 @NgModule({

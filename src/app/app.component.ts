@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { MenuController, Platform } from '@ionic/angular';
+import { Keyboard } from '@capacitor/keyboard';
+import { Capacitor } from "@capacitor/core";
 
 @Component({
   selector: 'app-root',
@@ -14,8 +16,11 @@ export class AppComponent {
   }
 
   initializeApp() {
-    window.addEventListener('keyboardWillShow', () => (this.keyboardOpen = true));
-    window.addEventListener('keyboardWillHide', () => (this.keyboardOpen = false));
+    const isKeyboardAvailable = Capacitor.isPluginAvailable('Keyboard');
+    if (isKeyboardAvailable) {
+      Keyboard.addListener('keyboardWillShow', () => (this.keyboardOpen = true));
+      Keyboard.addListener('keyboardWillHide', () => (this.keyboardOpen = false));
+    }
   }
 
   onMenuOpen() {

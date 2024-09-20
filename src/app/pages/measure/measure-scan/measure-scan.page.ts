@@ -1,24 +1,25 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
+import { marker as _ } from '@biesbjerg/ngx-translate-extract-marker';
 import { TranslateService } from '@ngx-translate/core';
-import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
+import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
-import { AlertService } from '../../../services/alert.service';
-import { NavigationService } from '../../../services/navigation.service';
-import { AbstractDevice } from '../../../states/devices/abstract-device';
-import { DevicesState } from '../../../states/devices/devices.state';
+import { AutoUnsubscribePage } from '@app/components/auto-unsubscribe/auto-unsubscribe.page';
+import { AlertService } from '@app/services/alert.service';
+import { NavigationService } from '@app/services/navigation.service';
+import { AbstractDevice } from '@app/states/devices/abstract-device';
+import { DevicesState } from '@app/states/devices/devices.state';
 import {
   HitsAccuracy,
   Measure,
   MeasureSeries,
   MeasureSeriesParamsSelected,
   PositionAccuracyThreshold
-} from '../../../states/measures/measure';
-import { CancelMeasure, StartMeasureScan, StopMeasureScan } from '../../../states/measures/measures.action';
-import { MeasuresState } from '../../../states/measures/measures.state';
+} from '@app/states/measures/measure';
+import { CancelMeasure, StartMeasureScan, StopMeasureScan } from '@app/states/measures/measures.action';
+import { MeasuresState } from '@app/states/measures/measures.state';
+import { Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-measure-scan',
@@ -26,20 +27,15 @@ import { MeasuresState } from '../../../states/measures/measures.state';
   styleUrls: ['./measure-scan.page.scss']
 })
 export class MeasureScanPage extends AutoUnsubscribePage {
-  @Select(MeasuresState.currentMeasure)
-  currentMeasure$: Observable<Measure | undefined>;
+  currentMeasure$: Observable<Measure | undefined> = inject(Store).select(MeasuresState.currentMeasure);
 
-  @Select(MeasuresState.currentSeries)
-  currentSeries$: Observable<MeasureSeries | undefined>;
+  currentSeries$: Observable<MeasureSeries | undefined> = inject(Store).select(MeasuresState.currentSeries);
 
-  @Select(MeasuresState.canEndCurrentScan)
-  canEndCurrentScan$: Observable<boolean>;
+  canEndCurrentScan$: Observable<boolean> = inject(Store).select(MeasuresState.canEndCurrentScan);
 
-  @Select(DevicesState.connectedDevice)
-  connectedDevice$: Observable<AbstractDevice | undefined>;
+  connectedDevice$: Observable<AbstractDevice | undefined> = inject(Store).select(DevicesState.connectedDevice);
 
-  @Select(MeasuresState.planeMode)
-  planeMode$: Observable<boolean>;
+  planeMode$: Observable<boolean> = inject(Store).select(MeasuresState.planeMode);
 
   hitsAccuracy: HitsAccuracy = HitsAccuracy.Start;
   hitsAccuracyWidth = 0;
@@ -50,27 +46,27 @@ export class MeasureScanPage extends AutoUnsubscribePage {
   isMeasureSeries = false;
 
   currentSeriesMessageMapping = {
-    '=0': <string>_('MEASURE_SERIES.MESSAGE_SCAN.NONE'),
-    '=1': <string>_('MEASURE_SERIES.MESSAGE_SCAN.SINGULAR'),
-    other: <string>_('MEASURE_SERIES.MESSAGE_SCAN.PLURAL')
+    '=0': _('MEASURE_SERIES.MESSAGE_SCAN.NONE') as string,
+    '=1': _('MEASURE_SERIES.MESSAGE_SCAN.SINGULAR') as string,
+    other: _('MEASURE_SERIES.MESSAGE_SCAN.PLURAL') as string,
   };
 
   minuteMessageMapping = {
-    '=0': <string>_('GENERAL.MINUTE.NONE'),
-    '=1': <string>_('GENERAL.MINUTE.SINGULAR'),
-    other: <string>_('GENERAL.MINUTE.PLURAL')
+    '=0': _('GENERAL.MINUTE.NONE') as string,
+    '=1': _('GENERAL.MINUTE.SINGULAR') as string,
+    other: _('GENERAL.MINUTE.PLURAL') as string,
   };
 
   hourMessageMapping = {
-    '=0': <string>_('GENERAL.HOUR.NONE'),
-    '=1': <string>_('GENERAL.HOUR.SINGULAR'),
-    other: <string>_('GENERAL.HOUR.PLURAL')
+    '=0': _('GENERAL.HOUR.NONE') as string,
+    '=1': _('GENERAL.HOUR.SINGULAR') as string,
+    other: _('GENERAL.HOUR.PLURAL') as string,
   };
 
   hitsMessageMapping = {
-    '=0': <string>_('GENERAL.HITS.NONE'),
-    '=1': <string>_('GENERAL.HITS.SINGULAR'),
-    other: <string>_('GENERAL.HITS.PLURAL')
+    '=0': _('GENERAL.HITS.NONE') as string,
+    '=1': _('GENERAL.HITS.SINGULAR') as string,
+    other: _('GENERAL.HITS.PLURAL') as string,
   };
 
   url = '/measure/scan';
@@ -81,7 +77,8 @@ export class MeasureScanPage extends AutoUnsubscribePage {
     private navigationService: NavigationService,
     private actions$: Actions,
     private alertService: AlertService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private platform: Platform
   ) {
     super(router);
   }
@@ -93,6 +90,7 @@ export class MeasureScanPage extends AutoUnsubscribePage {
     });
     this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
       if (connectedDevice) {
+        this.subscriptions.push(this.platform.backButton.subscribeWithPriority(9999, () => this.cancelMeasure()));
         this.subscriptions.push(
           this.currentMeasure$.subscribe(measure => this.updateHitsAccuracy(connectedDevice, measure)),
           this.actions$.pipe(ofActionSuccessful(StopMeasureScan)).subscribe(() => {
@@ -133,23 +131,23 @@ export class MeasureScanPage extends AutoUnsubscribePage {
   }
 
   cancelMeasure() {
+    let cancelMessage = this.translateService.instant('MEASURES.CANCEL_CONFIRMATION');
     if (this.isMeasureSeries) {
-      this.alertService.show({
-        header: this.translateService.instant('GENERAL.CANCEL'),
-        message: this.translateService.instant('MEASURE_SERIES.REPORT.CANCEL_CONFIRMATION'),
-        backdropDismiss: false,
-        buttons: [
-          {
-            text: this.translateService.instant('GENERAL.NO')
-          },
-          {
-            text: this.translateService.instant('GENERAL.YES'),
-            handler: () => this.store.dispatch(new CancelMeasure())
-          }
-        ]
-      });
-    } else {
-      this.store.dispatch(new CancelMeasure());
+      cancelMessage = this.translateService.instant('MEASURE_SERIES.REPORT.CANCEL_CONFIRMATION')
     }
+    this.alertService.show({
+      header: this.translateService.instant('GENERAL.CANCEL'),
+      message: cancelMessage,
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: this.translateService.instant('GENERAL.NO')
+        },
+        {
+          text: this.translateService.instant('GENERAL.YES'),
+          handler: () => this.store.dispatch(new CancelMeasure())
+        }
+      ]
+    });
   }
 }

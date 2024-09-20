@@ -1,7 +1,8 @@
 {
   "name": "OpenRadiation",
   "integrations": {
-    "cordova": {}
+    "cordova": {},
+    "capacitor": {}
   },
   "type": "angular"
 }

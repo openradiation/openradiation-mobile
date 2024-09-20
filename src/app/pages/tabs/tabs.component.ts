@@ -8,10 +8,9 @@ import { TabsGuard } from './tabs.guard';
   styleUrls: ['tabs.component.scss']
 })
 export class Tabs {
-  constructor(private menuController: MenuController, private tabsGuard: TabsGuard) {}
+  constructor(private menuController: MenuController, private tabsGuard: TabsGuard) { }
 
   openMenu() {
-    this.tabsGuard.blockNavigation();
     this.menuController.open();
   }
 }

@@ -1,4 +1,4 @@
-import { ApparatusSensorType, DeviceType } from '../abstract-device';
+import { ApparatusSensorType, DeviceType } from '@app/states/devices/abstract-device';
 import { AbstractUSBDevice } from './abstract-usb-device';
 
 export class DeviceRium extends AbstractUSBDevice {

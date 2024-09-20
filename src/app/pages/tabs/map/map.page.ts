@@ -1,21 +1,16 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { Network } from '@ionic-native/network/ngx';
 import { Platform } from '@ionic/angular';
-import { Location } from '@mauron85/cordova-plugin-background-geolocation';
-import { Select } from '@ngxs/store';
+import { Store } from '@ngxs/store';
 import { combineLatest, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { environment } from '../../../../environments/environment';
-import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
-import { MeasuresState } from '../../../states/measures/measures.state';
-import { UserState } from '../../../states/user/user.state';
-
-/**
- * Constants from cordova-plugin-network-information to get network types
- */
-declare var Connection: any;
+import { environment } from '@environments/environment';
+import { AutoUnsubscribePage } from '@app/components/auto-unsubscribe/auto-unsubscribe.page';
+import { MeasuresState } from '@app/states/measures/measures.state';
+import { UserState } from '@app/states/user/user.state';
+import { Location } from "@capacitor-community/background-geolocation";
+import { ConnectionStatus, Network, } from '@capacitor/network';
 
 @Component({
   selector: 'app-map',
@@ -23,12 +18,9 @@ declare var Connection: any;
   styleUrls: ['./map.page.scss']
 })
 export class MapPage extends AutoUnsubscribePage {
-  @Select(UserState.language)
-  language$: Observable<string | undefined>;
-  @Select(MeasuresState.currentPosition)
-  currentPosition$: Observable<Location | undefined>;
-  @Select(MeasuresState.planeMode)
-  planeMode$: Observable<boolean>;
+  language$: Observable<string | undefined> = inject(Store).select(UserState.language);
+  currentPosition$: Observable<Location | undefined> = inject(Store).select(MeasuresState.currentPosition);
+  planeMode$: Observable<boolean> = inject(Store).select(MeasuresState.planeMode);
 
   iframeURL: SafeResourceUrl;
   isLoading = false;
@@ -41,27 +33,22 @@ export class MapPage extends AutoUnsubscribePage {
     protected router: Router,
     private domSanitizer: DomSanitizer,
     private platform: Platform,
-    private network: Network,
     private changeDetectorRef: ChangeDetectorRef
   ) {
     super(router);
   }
 
-  pageEnter() {
+  async pageEnter() {
     super.pageEnter();
-    if (this.platform.is('cordova')) {
-      if (this.network.type === Connection.NONE || this.network.type === Connection.UNKNOWN) {
-        this.connectionAvailable = false;
-        this.network
-          .onConnect()
-          .pipe(take(1))
-          .subscribe(() => {
-            this.connectionAvailable = true;
-            this.loadMap();
-          });
-      } else {
-        this.loadMap();
-      }
+    const networkStatus = await Network.getStatus()
+    if (!networkStatus.connected) {
+      this.connectionAvailable = false;
+      Network.addListener('networkStatusChange', (newNetworkStatus: ConnectionStatus) => {
+        if (newNetworkStatus.connected) {
+          this.connectionAvailable = true;
+          this.loadMap();
+        }
+      })
     } else {
       this.loadMap();
     }
@@ -70,16 +57,15 @@ export class MapPage extends AutoUnsubscribePage {
   private loadMap() {
     this.language$.subscribe(language => {
       this.isLoading = true;
-      let url = `${environment.IN_APP_BROWSER_URI.base}${
-        language === 'fr' || language === 'en' ? '/' + language : ''
-      }/${environment.IN_APP_BROWSER_URI.suffix}`;
+      let url = `${environment.IN_APP_BROWSER_URI.base}${language === 'fr' || language === 'en' ? '/' + language : ''
+        }/${environment.IN_APP_BROWSER_URI.suffix}`;
       this.iframeURL = this.domSanitizer.bypassSecurityTrustResourceUrl(url);
       combineLatest(this.currentPosition$, this.planeMode$)
         .pipe(take(1))
         .subscribe(([currentPosition, planeMode]) => {
           if (currentPosition) {
-            const lat = currentPosition.latitude.toFixed(7);
-            const long = currentPosition.longitude.toFixed(7);
+            const lat = currentPosition?.latitude.toFixed(7);
+            const long = currentPosition?.longitude.toFixed(7);
             const zoom = planeMode ? 4 : 12;
             url += `/${zoom}/${lat}/${long}`;
           }

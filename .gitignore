@@ -1,3 +1,4 @@
+/.angular/cache
 # Specifies intentionally untracked files to ignore when using Git
 # http://git-scm.com/docs/gitignore
 
@@ -38,3 +39,9 @@ build.json
 openradiation.keystore
 google-services.json
 GoogleService-Info.plist
+
+.nx/cache
+.nx/workspace-data
+
+android/app/release/
+cordova-plugin-usb-serial/src/android/.gradle/

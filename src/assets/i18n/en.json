@@ -120,6 +120,11 @@
       "NOTICE": "You are considered to participate in the OpenRadiation collaborative data base if you publish measurements using the smartphone application, either automatically or manually.<br>The purpose of the OpenRadiation project is to create a collaborative data base on ambient radioactivity levels, therefore all users of the mobile application explicitly accept to share the data recorded, whether published automatically or manually.<br>The entire OpenRadiation data base is published under the <a onclick=\"window.open('https://www.openradiation.org/en/terms-use#odc_odbl', '_system')\">ODC-ODbL (Open Database License)</a>. Most of the data submitted is used to create the OpenRadiation data base.<br>You agree to comply with current legislation, particularly copyright. Using the OpenRadiation data base implies compliance with ethical rules (no insults, respect for privacy, etc.).<br>OpenRadiation reserves the right to delete any content reported and which fails to comply with the above instructions, without need for a warning.<br>You can find full details of the conditions of use at the following website address: <a onclick=\"window.open('https://www.openradiation.org/en/terms-use', '_system')\">www.openradiation.org/en/terms-use</a>.",
       "TITLE": "Terms of use"
     },
+    "LOGS": {
+      "COPY": "Copy logs",
+      "COPIED": "Logs copied into your clipboard",
+      "NO_LOG": "No log available"
+    },
     "TITLE": "Legal text"
   },
   "LOG_IN": {
@@ -131,6 +136,7 @@
       "PART3": "If you have not already done so, we suggest that you create an account at <a onclick=\"window.open('https://www.openradiation.org/en/user/register', '_system')\">www.openradiation.org</a>, and then configure your account here (synchronization ~5 min)."
     },
     "NOT_LOGGED": "Unidentified",
+    "LOG_TO_ADD_INFOS": "Please log in to be able to add pictures and tags to your measurement.",
     "PASSWORD": "Password",
     "TITLE": "Log in",
     "USERNAME": "Username",
@@ -199,7 +205,8 @@
       "RAIN": "Rain",
       "STORM": "Storm crossing",
       "TITLE_RAIN": "Weather"
-    }
+    },
+    "CANCEL_CONFIRMATION": "Are you sure you wish to delete this measurement ?"
   },
   "MEASURE_MANUAL": {
     "ALERT": "You must be logged in before you can fill out a manual measurement report.",

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { interval, Observable, of } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
-import { Step } from '../measures/measure';
+import { Step } from '@app/states/measures/measure';
 import { DeviceType, RawDevice } from './abstract-device';
 import { AbstractDeviceService } from './abstract-device.service';
 import { DeviceMock } from './device-mock';
@@ -24,15 +24,15 @@ export class DeviceMockService extends AbstractDeviceService<DeviceMock> {
     super(store);
   }
 
-  getDeviceInfo(device: DeviceMock): Observable<Partial<DeviceMock>> {
+  getDeviceInfo(_device: DeviceMock): Observable<Partial<DeviceMock>> {
     return of({});
   }
 
-  saveDeviceParams(device: DeviceMock): Observable<any> {
+  saveDeviceParams(_device: DeviceMock): Observable<unknown> {
     return of(null);
   }
 
-  startMeasureScan(device: DeviceMock, stopSignal: Observable<any>): Observable<Step> {
+  startMeasureScan(device: DeviceMock, stopSignal: Observable<unknown>): Observable<Step> {
     const mockSource = interval(1000).pipe(takeUntil(stopSignal));
     return mockSource.pipe(
       map(() => this.decodeDataPackage()),
@@ -40,11 +40,11 @@ export class DeviceMockService extends AbstractDeviceService<DeviceMock> {
     );
   }
 
-  connectDevice(device: DeviceMock): Observable<any> {
+  connectDevice(_device: DeviceMock): Observable<unknown> {
     return of(null);
   }
 
-  disconnectDevice(device: DeviceMock): Observable<any> {
+  disconnectDevice(_device: DeviceMock): Observable<unknown> {
     return of(null);
   }
 

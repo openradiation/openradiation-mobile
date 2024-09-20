@@ -1,31 +1,30 @@
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
+import { marker as _ } from '@biesbjerg/ngx-translate-extract-marker';
 import { Platform } from '@ionic/angular';
-import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
+import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
+import { inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
-import { SelectIconOption } from '../../../components/select-icon/select-icon-option';
-import { NavigationService } from '../../../services/navigation.service';
+import { AutoUnsubscribePage } from '@app/components/auto-unsubscribe/auto-unsubscribe.page';
+import { SelectIconOption } from '@app/components/select-icon/select-icon-option';
+import { NavigationService } from '@app/services/navigation.service';
 import {
   AbstractMeasure,
   Measure,
   MeasureEnvironment,
   PositionAccuracyThreshold
-} from '../../../states/measures/measure';
-import { AddRecentTag, CancelMeasure, StopMeasure, StopMeasureSeries } from '../../../states/measures/measures.action';
-import { MeasuresState } from '../../../states/measures/measures.state';
-import { UserState } from '../../../states/user/user.state';
+} from '@app/states/measures/measure';
+import { AddRecentTag, CancelMeasure, StopMeasure, StopMeasureSeries } from '@app/states/measures/measures.action';
+import { MeasuresState } from '@app/states/measures/measures.state';
+import { UserState } from '@app/states/user/user.state';
 
 export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> extends AutoUnsubscribePage {
-  @Select(UserState.login)
-  login$: Observable<string | undefined>;
+  login$: Observable<string | undefined> = inject(Store).select(UserState.login);
 
-  @Select(MeasuresState.recentTags)
-  recentTags$: Observable<string[]>;
+  recentTags$: Observable<string[]> = inject(Store).select(MeasuresState.recentTags);
 
-  measureReportForm?: FormGroup;
+  measureReportForm?: UntypedFormGroup;
   reportScan = true;
   positionChangeSpeedOverLimit = false;
   positionChangeAltitudeOverLimit = false;
@@ -37,13 +36,13 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
     {
       iconOn: 'assets/img/icon-floor-on.png',
       iconOff: 'assets/img/icon-floor-off.png',
-      label: <string>_('MEASURES.SENSOR_POSITION.FLOOR'),
+      label: ('MEASURES.SENSOR_POSITION.FLOOR') as string,
       value: 0
     },
     {
       iconOn: 'assets/img/icon-elevated-on.png',
       iconOff: 'assets/img/icon-elevated-off.png',
-      label: <string>_('MEASURES.SENSOR_POSITION.1_METER_HIGH'),
+      label: ('MEASURES.SENSOR_POSITION.1_METER_HIGH') as string,
       value: 1
     }
   ];
@@ -52,13 +51,13 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
     {
       iconOn: 'assets/img/icon-sun-on.png',
       iconOff: 'assets/img/icon-sun-off.png',
-      label: <string>_('MEASURES.WEATHER.NO_RAIN'),
+      label: ('MEASURES.WEATHER.NO_RAIN') as string,
       value: false
     },
     {
       iconOn: 'assets/img/icon-rain-on.png',
       iconOff: 'assets/img/icon-rain-off.png',
-      label: <string>_('MEASURES.WEATHER.RAIN'),
+      label: ('MEASURES.WEATHER.RAIN') as string,
       value: true
     }
   ];
@@ -67,13 +66,13 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
     {
       iconOn: 'assets/img/icon-plane-on.png',
       iconOff: 'assets/img/icon-plane-off.png',
-      label: <string>_('MEASURES.WEATHER.NO_STORM'),
+      label: ('MEASURES.WEATHER.NO_STORM') as string,
       value: false
     },
     {
       iconOn: 'assets/img/icon-plane-storm-on.png',
       iconOff: 'assets/img/icon-plane-storm-off.png',
-      label: <string>_('MEASURES.WEATHER.STORM'),
+      label: _('MEASURES.WEATHER.STORM') as string,
       value: true
     }
   ];
@@ -82,13 +81,13 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
     {
       iconOn: 'assets/img/icon-aisle-on.png',
       iconOff: 'assets/img/icon-aisle-off.png',
-      label: <string>_('MEASURES.SENSOR_POSITION.NO_WINDOW_SIDE'),
+      label: _('MEASURES.SENSOR_POSITION.NO_WINDOW_SIDE') as string,
       value: false
     },
     {
       iconOn: 'assets/img/icon-window-on.png',
       iconOff: 'assets/img/icon-window-off.png',
-      label: <string>_('MEASURES.SENSOR_POSITION.WINDOW_SIDE'),
+      label: _('MEASURES.SENSOR_POSITION.WINDOW_SIDE') as string,
       value: true
     }
   ];
@@ -111,10 +110,10 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
         this.subscriptions.push(
           this.actions$.pipe(ofActionSuccessful(StopMeasureSeries, CancelMeasure, StopMeasure)).subscribe(() => {
             this.measureReportForm = undefined;
-            this.navigationService.goBack();
-          }),
-          this.platform.backButton.subscribeWithPriority(9999, () => this.cancelMeasure())
+            this.navigationService.pop();
+          })
         );
+        this.subscriptions.push(this.platform.backButton.subscribeWithPriority(9999, () => this.cancelMeasure()));
       } else {
         this.subscriptions.push(
           this.actions$.pipe(ofActionSuccessful(StopMeasureSeries, CancelMeasure, StopMeasure)).subscribe(() => {
@@ -135,28 +134,28 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
       {
         iconOn: 'assets/img/icon-countryside-on.png',
         iconOff: 'assets/img/icon-countryside-off.png',
-        label: <string>_('MEASURES.ENVIRONMENT.COUNTRYSIDE'),
+        label: _('MEASURES.ENVIRONMENT.COUNTRYSIDE') as string,
         value: MeasureEnvironment.Countryside,
         disabled: this.positionChangeSpeedOverLimit
       },
       {
         iconOn: 'assets/img/icon-city-on.png',
         iconOff: 'assets/img/icon-city-off.png',
-        label: <string>_('MEASURES.ENVIRONMENT.CITY'),
+        label: _('MEASURES.ENVIRONMENT.CITY') as string,
         value: MeasureEnvironment.City,
         disabled: this.positionChangeSpeedOverLimit
       },
       {
         iconOn: 'assets/img/icon-inside-on.png',
         iconOff: 'assets/img/icon-inside-off.png',
-        label: <string>_('MEASURES.ENVIRONMENT.INSIDE'),
+        label: _('MEASURES.ENVIRONMENT.INSIDE') as string,
         value: MeasureEnvironment.Inside,
         disabled: this.positionChangeSpeedOverLimit
       },
       {
         iconOn: 'assets/img/icon-ontheroad-on.png',
         iconOff: 'assets/img/icon-ontheroad-off.png',
-        label: <string>_('MEASURES.ENVIRONMENT.ON_THE_ROAD'),
+        label: _('MEASURES.ENVIRONMENT.ON_THE_ROAD') as string,
         value: MeasureEnvironment.OnTheRoad
       }
     ];

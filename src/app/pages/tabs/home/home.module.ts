@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
-import { ComponentsModule } from '../../../components/components.module';
+import { ComponentsModule } from '@app/components/components.module';
 import { HomePage } from './home.page';
 
 const routes: Routes = [
@@ -18,4 +18,4 @@ const routes: Routes = [
   imports: [IonicModule, CommonModule, FormsModule, RouterModule.forChild(routes), ComponentsModule, TranslateModule],
   declarations: [HomePage]
 })
-export class HomePageModule {}
+export class HomePageModule { }

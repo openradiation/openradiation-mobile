@@ -1,7 +1,7 @@
-import { Location } from '@mauron85/cordova-plugin-background-geolocation';
+import { Location } from "@capacitor-community/background-geolocation";
 import * as uuid from 'uuid';
-import { environment } from '../../../environments/environment';
-import { ApparatusSensorType } from '../devices/abstract-device';
+import { environment } from '@environments/environment';
+import { ApparatusSensorType } from '@app/states/devices/abstract-device';
 
 export abstract class AbstractMeasure {
   abstract readonly type: MeasureType;
@@ -9,7 +9,7 @@ export abstract class AbstractMeasure {
   endTime?: number;
   sent = false;
 
-  protected constructor(public id: string) {}
+  protected constructor(public id: string) { }
 }
 
 export enum MeasureType {
@@ -91,10 +91,10 @@ export class Measure extends AbstractMeasure {
     if (position) {
       return {
         ...measure,
-        latitude: position.latitude,
-        longitude: position.longitude,
-        accuracy: position.accuracy,
-        altitude: position.altitude
+        latitude: position?.latitude,
+        longitude: position?.longitude,
+        accuracy: position?.accuracy,
+        altitude: position?.altitude ?? undefined
         // altitudeAccuracy: position.altitudeAccuracy
       };
     } else {
@@ -106,10 +106,10 @@ export class Measure extends AbstractMeasure {
     if (position) {
       return {
         ...measure,
-        endLatitude: position.latitude,
-        endLongitude: position.longitude,
-        endAccuracy: position.accuracy,
-        endAltitude: position.altitude
+        endLatitude: position?.latitude,
+        endLongitude: position?.longitude,
+        endAccuracy: position?.accuracy,
+        endAltitude: position?.altitude ?? undefined
         // endAltitudeAccuracy: position.altitudeAccuracy
       };
     } else {

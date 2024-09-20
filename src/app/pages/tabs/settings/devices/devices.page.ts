@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { Platform } from '@ionic/angular';
-import { Actions, ofActionDispatched, ofActionSuccessful, Select, Store } from '@ngxs/store';
+import { Actions, ofActionDispatched, ofActionSuccessful, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { AutoUnsubscribePage } from '../../../../components/auto-unsubscribe/auto-unsubscribe.page';
-import { NavigationService } from '../../../../services/navigation.service';
-import { AbstractDevice } from '../../../../states/devices/abstract-device';
+import { AutoUnsubscribePage } from '@app/components/auto-unsubscribe/auto-unsubscribe.page';
+import { NavigationService } from '@app/services/navigation.service';
+import { AbstractDevice } from '@app/states/devices/abstract-device';
+import { Capacitor } from '@capacitor/core';
+
 import {
   ConnectDevice,
   DeviceConnectionLost,
@@ -15,8 +16,8 @@ import {
   StartDiscoverUSBDevices,
   StopDiscoverDevices,
   UpdateDeviceInfo
-} from '../../../../states/devices/devices.action';
-import { DevicesState } from '../../../../states/devices/devices.state';
+} from '@app/states/devices/devices.action';
+import { DevicesState } from '@app/states/devices/devices.state';
 
 @Component({
   selector: 'app-page-devices',
@@ -24,16 +25,12 @@ import { DevicesState } from '../../../../states/devices/devices.state';
   styleUrls: ['./devices.page.scss']
 })
 export class DevicesPage extends AutoUnsubscribePage {
-  @Select(DevicesState.availableDevices)
-  availableDevices$: Observable<AbstractDevice[]>;
+  availableDevices$: Observable<AbstractDevice[]> = inject(Store).select(DevicesState.availableDevices);
   availableDevices: AbstractDevice[] = [];
-  @Select(DevicesState.knownDevices)
-  knownDevices$: Observable<AbstractDevice[]>;
+  knownDevices$: Observable<AbstractDevice[]> = inject(Store).select(DevicesState.knownDevices);
   knownDevices: AbstractDevice[] = [];
-  @Select(DevicesState.isScanning)
-  isScanning$: Observable<boolean>;
-  @Select(DevicesState.connectedDevice)
-  connectedDevice$: Observable<AbstractDevice>;
+  isScanning$: Observable<boolean> = inject(Store).select(DevicesState.isScanning);
+  connectedDevice$: Observable<AbstractDevice|undefined> = inject(Store).select(DevicesState.connectedDevice);
 
   connectingDevice: AbstractDevice | undefined;
 
@@ -43,8 +40,7 @@ export class DevicesPage extends AutoUnsubscribePage {
     protected router: Router,
     private store: Store,
     private actions$: Actions,
-    private navigationService: NavigationService,
-    private platform: Platform
+    private navigationService: NavigationService
   ) {
     super(router);
   }
@@ -62,7 +58,7 @@ export class DevicesPage extends AutoUnsubscribePage {
       this.knownDevices$.subscribe(knownDevices => (this.knownDevices = knownDevices))
     );
     this.store.dispatch(new StartDiscoverBLEDevices()).subscribe();
-    if (this.platform.is('android')) {
+    if (Capacitor.getPlatform() == 'android') {
       this.store.dispatch(new StartDiscoverUSBDevices()).subscribe();
     }
   }

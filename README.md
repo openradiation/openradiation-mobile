@@ -6,11 +6,9 @@ Design and graphism is protected
 
 ## Global requirements
 
-[Node 8.10.0 (or more recent LTS version)](https://nodejs.org/en/) is required to build and test the application.
+[Node 22.4.0 (or more recent LTS version)](https://nodejs.org/en/) is required to build and test the application.
 
 Then you need to download project dependencies by running `npm install` in the source directory.
-
-If you want to build your app for a real device (Android or iOS), you also need to run `npm run cordova:prepare`
 
 ## Test in browser
 
@@ -25,14 +23,6 @@ A fake sensor will be available to simulate measurements.
 
 To build your app and run it on Android, you need to download and install [Android Studio](https://developer.android.com/studio/).
 
-Then you need to update the Android sdk and tools with the [SDK Manager](https://developer.android.com/studio/intro/update#sdk-manager). Be sure to have at least these installed :
-
-- SDK Platfors > Android API 28
-- SDK Tools > Android SDK Build-Tools
-- SDK Tools > Android SDK Platform-Tools
-- SDK Tools > Android SDK Tools
-- SDK Tools > Google USB Driver
-
 Your `PATH` environment variable should contain (example for Windows 10 standard installation) :
 
 - C:\Users\\<username>\AppData\Local\Android\sdk\tools
@@ -41,11 +31,12 @@ Your `PATH` environment variable should contain (example for Windows 10 standard
 
 ### Build
 
-1. run the app on a local device (connected via USB) with `npm run run:android`
-2. build the app to upload it on the Playstore beta channel with `npm run build:beta:android`
-3. build the app to upload it on the Playstore prod channel with `npm run build:android`
+1. Build the Android and/or iOS app with the expected flavor  `npm run build:mockDevice` or `npm run build:beta`or `npm run build`
+2. You can then open Android Studio manually or using `npx cap open android`
+3. Launch the app on a simulator or phone using Android Studio
+4. Build a signed APK using Android Studio
 
-App built with method 1 & 2 will send measure to the test API (safe to use for tests).
+App built with mockDevice or beta environments will send measure to the test API (safe to use for tests).
 
 Don't forget to increase the app version number if you want to upload your build to the playstore.
 
@@ -83,13 +74,14 @@ To run or build the app, you need to sign it, which require :
 
 ### Build
 
-1. run the app on a local device (connected via USB) with `npm run run:ios`
-2. build the app to upload it on the Playstore beta channel with `npm run build:beta:ios`
-3. build the app to upload it on the Playstore prod channel with `npm run build:ios`
+1. Build the Android and/or iOS app with the expected flavor  `npm run build:mockDevice` or `npm run build:beta`or `npm run build`
+2. You can then open XCode manually or using `npx cap open ios`
+3. Launch the app on a simulator or phone using XCode
+4. Build the app using XCode
 
-App built with method 1 & 2 will send measure to the test API (safe to use for tests).
+App built with mockDevice or beta environments will send measure to the test API (safe to use for tests).
 
-Don't forget to increase the app version number if you want to upload your build to the playstore.
+Don't forget to increase the app version number if you want to upload your build to the AppStore.
 
 ### Upload on Playstore
 
@@ -100,3 +92,7 @@ Don't forget to increase the app version number if you want to upload your build
 5. wait for the build to be uploaded and ready to use for test (you will receive an email when it's ready)
 6. go to [App Store Connect](https://appstoreconnect.apple.com) and select your app
 7. follow the [official guide](https://help.apple.com/app-store-connect/) to manage both beta and prod builds
+
+## Development considerations
+
+`npm run check-outdated` allows no make sure the project does not reference outdated dependencies

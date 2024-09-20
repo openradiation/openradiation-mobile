@@ -1,16 +1,21 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MeasureSeriesPage } from './measure-series-page';
+
+import { getTestImports, getTestProviders } from '@tests/TestUtils'
 
 describe('MeasureSeriesPage', () => {
   let component: MeasureSeriesPage;
   let fixture: ComponentFixture<MeasureSeriesPage>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [MeasureSeriesPage],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
+      ,
+      imports: getTestImports(),
+      providers: getTestProviders()
     }).compileComponents();
   }));
 

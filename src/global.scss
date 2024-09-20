@@ -1,15 +1,15 @@
-@import '~@ionic/angular/css/core.css';
-@import '~@ionic/angular/css/normalize.css';
-@import '~@ionic/angular/css/structure.css';
-@import '~@ionic/angular/css/typography.css';
+@import '@ionic/angular/css/core.css';
+@import '@ionic/angular/css/normalize.css';
+@import '@ionic/angular/css/structure.css';
+@import '@ionic/angular/css/typography.css';
 
-@import '~@ionic/angular/css/padding.css';
-@import '~@ionic/angular/css/float-elements.css';
-@import '~@ionic/angular/css/text-alignment.css';
-@import '~@ionic/angular/css/text-transformation.css';
-@import '~@ionic/angular/css/flex-utils.css';
+@import '@ionic/angular/css/padding.css';
+@import '@ionic/angular/css/float-elements.css';
+@import '@ionic/angular/css/text-alignment.css';
+@import '@ionic/angular/css/text-transformation.css';
+@import '@ionic/angular/css/flex-utils.css';
 
-@import 'src/theme/variables.scss';
+@import './theme/variables.scss';
 
 // http://ionicframework.com/docs/theming/
 
@@ -56,6 +56,11 @@
   font-weight: normal;
   font-style: normal;
   font-smooth: always;
+}
+
+ion-app {
+  margin-top: var(--safe-area-inset-top);
+  margin-bottom: var(--safe-area-inset-bottom);
 }
 
 * {
@@ -136,5 +141,146 @@ ion-spinner {
   .loading-wrapper {
     background: $base-color;
     color: white;
+  }
+}
+
+//We need to put measure-report specific css here so that it is not scoped
+.content {
+  ion-list {
+    ion-item {
+      --border-color: transparent;
+      margin: -5px 0;
+      --min-height: 0;
+      font-size: 15px;
+
+      &.has-suffix {
+        ion-input.input {
+          input {
+            border-radius: 10px 0 0 10px;
+          }
+        }
+      }
+
+      &.custom-disabled {
+        pointer-events: none;
+
+        ion-datetime-button::part(native){
+          background: transparent;
+          font-weight: 200;
+          font-size: 15px;
+          border-radius: 10px;
+          color: #FFF;
+          height: 26px;
+          line-height: 26px;
+          padding: 0 8px;
+          height: 26px;
+          line-height: 26px;
+          padding: 0 8px;
+          width: 100%;
+          text-align: right;
+          opacity: 1;
+          margin: 10px 0;
+        }
+
+        ion-input {
+
+          &.input {
+
+            .label-text-wrapper {
+              margin-inline-end: 0px;
+
+              .label-text {
+                color:$third-color;
+                min-width: 165px;
+                text-align: left;
+              }
+            }
+
+            &.planeMode {
+
+              .label-text {
+                color:$second-color;
+              }
+
+            }
+          }
+
+          &.values {
+
+            .label-text-wrapper {
+              margin-inline-end: 0px;
+
+              .label-text {
+                color:$second-color;
+                min-width: 165px;
+                text-align: left;
+              }
+            }
+          }
+        }
+
+      }
+
+      &:not(.custom-disabled) {
+
+        ion-datetime-button,
+        ion-textarea {
+          background: $forth-color;
+          border-radius: 10px;
+          color: $second-color;
+        }
+
+        ion-input {
+
+          &.input {
+            height: 26px;
+            line-height: 26px;
+            --padding-bottom: 0;
+            --padding-top: 0;
+            --padding-start: 0px;
+            --padding-end: 8px;
+            max-height:26px;
+            min-height:26px;
+            font-weight: 200;
+            margin: 10px 0;
+
+            .input-wrapper {
+              padding-inline-end: 0px;
+            }
+
+            .label-text-wrapper {
+              margin-inline-end: 0px;
+
+              .label-text {
+                color:$third-color;
+                min-width: 165px;
+                text-align: left;
+              }
+            }
+            
+            input {
+              background: $forth-color;
+              border-radius: 10px;
+              color: $second-color;
+              height: 26px;
+              line-height: 26px;
+              padding: 0 8px;
+              max-height:26px;
+              min-height:26px;
+              font-weight: 200;
+              text-transform:uppercase;
+            }
+
+            &.planeMode {
+
+              .label-text {
+                color:$second-color;
+              }
+
+            }
+          }
+        }
+      }
+    }
   }
 }

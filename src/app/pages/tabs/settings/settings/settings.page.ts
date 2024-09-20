@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
+import { Component, inject } from '@angular/core';
+import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { NavigationService } from '../../../../services/navigation.service';
-import { DisableExpertMode, EnableExpertMode } from '../../../../states/measures/measures.action';
-import { MeasuresState } from '../../../../states/measures/measures.state';
-import { DisableNotifications, EnableNotifications, LogOut, SetLanguage } from '../../../../states/user/user.action';
-import { UserState } from '../../../../states/user/user.state';
+import { NavigationService } from '@app/services/navigation.service';
+import { DisableExpertMode, EnableExpertMode } from '@app/states/measures/measures.action';
+import { MeasuresState } from '@app/states/measures/measures.state';
+import { LogOut, SetLanguage } from '@app/states/user/user.action';
+import { UserState } from '@app/states/user/user.state';
 
 @Component({
   selector: 'app-settings',
@@ -13,33 +13,21 @@ import { UserState } from '../../../../states/user/user.state';
   styleUrls: ['./settings.page.scss']
 })
 export class SettingsPage {
-  @Select(MeasuresState.expertMode)
-  expertMode$: Observable<boolean>;
+  expertMode$: Observable<boolean> = inject(Store).select(MeasuresState.expertMode);
 
-  @Select(UserState.login)
-  login$: Observable<string | undefined>;
+  login$: Observable<string | undefined> = inject(Store).select(UserState.login);
 
-  @Select(UserState.language)
-  language$: Observable<string | undefined>;
+  language$: Observable<string | undefined> = inject(Store).select(UserState.language);
 
-  @Select(UserState.notifications)
-  notifications$: Observable<boolean | undefined>;
+  notifications$: Observable<boolean | undefined> = inject(Store).select(UserState.notifications);
 
-  constructor(private navigationService: NavigationService, private store: Store) {}
+  constructor(private navigationService: NavigationService, private store: Store) { }
 
   toggleExpertMode(enable: boolean) {
     if (enable) {
       this.store.dispatch(new EnableExpertMode());
     } else {
       this.store.dispatch(new DisableExpertMode());
-    }
-  }
-
-  toggleNotifications(enable: boolean) {
-    if (enable) {
-      this.store.dispatch(new EnableNotifications());
-    } else {
-      this.store.dispatch(new DisableNotifications());
     }
   }
 

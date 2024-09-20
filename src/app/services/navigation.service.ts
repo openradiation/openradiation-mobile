@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { NavigationEnd, Router, UrlTree } from '@angular/router';
 import { NavController, Platform } from '@ionic/angular';
-import { NavigationOptions } from '@ionic/angular/dist/providers/nav-controller';
+import { NavigationOptions } from '@ionic/angular/common/providers/nav-controller';
+// Fixme Capacitor migration
+//import { NavigationOptions } from '@ionic/angular/dist/providers/nav-controller';
 import { filter } from 'rxjs/operators';
 
 // TODO Remove this service when https://github.com/ionic-team/ionic/issues/16340 is fixed
@@ -20,17 +22,22 @@ export class NavigationService {
     });
   }
 
-  navigateRoot(url: string | UrlTree | any[]) {
+  navigateRoot(url: string | UrlTree | unknown[]) {
     this.stackDepth = 0;
     this.navController.navigateRoot(url);
   }
 
-  navigateForward(url: string | UrlTree | any[], options?: NavigationOptions) {
+  navigateForward(url: string | UrlTree | unknown[], options?: NavigationOptions) {
     this.navController.navigateForward(url, options);
   }
 
   goBack() {
-    this.stackDepth -= 2;
+    this.stackDepth = Math.max(0, this.stackDepth - 2);
     this.navController.back();
+  }
+
+  pop() {
+    this.stackDepth = Math.max(0, this.stackDepth - 2);
+    this.navController.pop();
   }
 }

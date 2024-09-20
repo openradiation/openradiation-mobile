@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
+import { Component, inject } from '@angular/core';
+import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { NavigationService } from '../../../../services/navigation.service';
-import { DisablePlaneMode, EnablePLaneMode } from '../../../../states/measures/measures.action';
-import { MeasuresState } from '../../../../states/measures/measures.state';
+import { NavigationService } from '@app/services/navigation.service';
+import { DisablePlaneMode, EnablePLaneMode } from '@app/states/measures/measures.action';
+import { MeasuresState } from '@app/states/measures/measures.state';
 
 @Component({
   selector: 'app-plane-mode',
@@ -11,10 +11,9 @@ import { MeasuresState } from '../../../../states/measures/measures.state';
   styleUrls: ['./plane-mode.page.scss']
 })
 export class PlaneModePage {
-  @Select(MeasuresState.planeMode)
-  planeMode$: Observable<boolean>;
+  planeMode$: Observable<boolean> = inject(Store).select(MeasuresState.planeMode);
 
-  constructor(private navigationService: NavigationService, private store: Store) {}
+  constructor(private navigationService: NavigationService, private store: Store) { }
 
   goBack() {
     this.navigationService.goBack();

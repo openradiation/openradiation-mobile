@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
-import { ErrorResponse, ErrorResponseCode } from '../measures/error-response';
+import { environment } from '@environments/environment';
+import { ErrorResponse, ErrorResponseCode } from '@app/states/measures/error-response';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class UserService {
     this.translateService.setDefaultLang('en');
   }
 
-  logIn(login: string, password: string): Observable<any> {
+  logIn(login: string, password: string): Observable<unknown> {
     return this.httpClient
       .post(environment.API_URI, {
         apiKey: environment.API_KEY,
@@ -47,13 +47,13 @@ export class UserService {
       );
   }
 
-  setLanguage(language: string): Observable<any> {
+  setLanguage(language: string): Observable<unknown> {
     return this.translateService.use(language);
   }
 
   getDefaultLanguage(): string {
     const userLang = this.translateService.getBrowserLang();
-    if (this.allowedLanguages.includes(userLang)) {
+    if (userLang && this.allowedLanguages.includes(userLang)) {
       return userLang;
     } else {
       return this.translateService.getDefaultLang();

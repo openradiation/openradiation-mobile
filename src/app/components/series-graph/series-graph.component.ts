@@ -1,23 +1,22 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { MeasureSeries } from '../../states/measures/measure';
+import { MeasureSeries } from '@app/states/measures/measure';
 
 import Figure = Plotly.Figure;
-import { Select } from '@ngxs/store';
+import { Store } from '@ngxs/store';
 import { PlotlyService } from 'angular-plotly.js';
-import { Plotly } from 'angular-plotly.js/src/app/shared/plotly.interface';
+import { Plotly } from 'angular-plotly.js/lib/plotly.interface';
 import * as PlotlyFR from 'plotly.js/lib/locales/fr.js';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { UserState } from '../../states/user/user.state';
+import { UserState } from '@app/states/user/user.state';
 
 @Component({
   selector: 'app-series-graph',
   template: '<plotly-plot [data]="barPlot.data" [layout]="barPlot.layout" [config]="barPlot.frames"></plotly-plot>'
 })
 export class SeriesGraphComponent implements OnChanges {
-  @Select(UserState.language)
-  language$: Observable<string | undefined>;
+  language$: Observable<string | undefined> = inject(Store).select(UserState.language);
 
   @Input()
   seriesMeasure: MeasureSeries;
@@ -25,7 +24,9 @@ export class SeriesGraphComponent implements OnChanges {
   barPlot: Figure;
 
   constructor(private plotlyService: PlotlyService, private translateService: TranslateService) {
-    this.plotlyService.getPlotly().register(PlotlyFR);
+    this.plotlyService.getPlotly().then(plotlyInstance => {
+      plotlyInstance.register(PlotlyFR);
+    });
     this.language$.pipe(take(1)).subscribe(locale => {
       this.barPlot = {
         data: [],
@@ -96,9 +97,9 @@ export class SeriesGraphComponent implements OnChanges {
           range:
             currentSeries.measures.length > 0
               ? [
-                  new Date(currentSeries.measures[0].startTime),
-                  new Date(currentSeries.measures[currentSeries.measures.length - 1].endTime!)
-                ]
+                new Date(currentSeries.measures[0].startTime),
+                new Date(currentSeries.measures[currentSeries.measures.length - 1].endTime!)
+              ]
               : [new Date(), new Date(new Date().getTime() + 60000)]
         },
         yaxis: {

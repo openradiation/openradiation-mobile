@@ -1,4 +1,4 @@
-import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
+import { marker as _ } from '@biesbjerg/ngx-translate-extract-marker';
 import { AbstractDevice, ApparatusSensorType, DeviceType } from './abstract-device';
 import { DeviceParams, DeviceParamsModel, DeviceParamType } from './device-params';
 
@@ -15,11 +15,11 @@ export class DeviceMock extends AbstractDevice {
   };
   paramsModel: DeviceParamsModel = {
     audioHits: {
-      label: <string>_('SENSORS.PARAM.AUDIO_HITS'),
+      label: _('SENSORS.PARAM.AUDIO_HITS') as string,
       type: DeviceParamType.Boolean
     },
     visualHits: {
-      label: <string>_('SENSORS.PARAM.VISUAL_HITS'),
+      label: _('SENSORS.PARAM.VISUAL_HITS') as string,
       type: DeviceParamType.Boolean
     }
   };

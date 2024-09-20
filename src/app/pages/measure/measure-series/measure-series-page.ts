@@ -1,17 +1,18 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
-import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
+import { marker as _ } from '@biesbjerg/ngx-translate-extract-marker';
+import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
-import { NavigationService } from '../../../services/navigation.service';
-import { AbstractDevice } from '../../../states/devices/abstract-device';
-import { DevicesState } from '../../../states/devices/devices.state';
-import { MeasureSeriesParamsSelected } from '../../../states/measures/measure';
-import { CancelMeasure, StartMeasure, StopMeasureSeriesParams } from '../../../states/measures/measures.action';
-import { MeasuresState, MeasuresStateModel } from '../../../states/measures/measures.state';
+import { AutoUnsubscribePage } from '@app/components/auto-unsubscribe/auto-unsubscribe.page';
+import { NavigationService } from '@app/services/navigation.service';
+import { AbstractDevice } from '@app/states/devices/abstract-device';
+import { DevicesState } from '@app/states/devices/devices.state';
+import { MeasureSeriesParamsSelected } from '@app/states/measures/measure';
+import { CancelMeasure, StartMeasure, StopMeasureSeriesParams } from '@app/states/measures/measures.action';
+import { MeasuresState, MeasuresStateModel } from '@app/states/measures/measures.state';
+import { PositionService } from '@app/states/measures/position.service';
 
 @Component({
   selector: 'app-measure-series',
@@ -19,32 +20,30 @@ import { MeasuresState, MeasuresStateModel } from '../../../states/measures/meas
   styleUrls: ['./measure-series.page.scss']
 })
 export class MeasureSeriesPage extends AutoUnsubscribePage {
-  @Select(DevicesState.connectedDevice)
-  connectedDevice$: Observable<AbstractDevice | undefined>;
+  connectedDevice$: Observable<AbstractDevice | undefined> = inject(Store).select(DevicesState.connectedDevice);
 
-  @Select(MeasuresState.planeMode)
-  planeMode$: Observable<boolean>;
+  planeMode$: Observable<boolean> = inject(Store).select(MeasuresState.planeMode);
 
-  measureSeriesParamsForm?: FormGroup;
+  measureSeriesParamsForm?: UntypedFormGroup;
   url = '/measure/series';
   measureSeriesParamsSelected = MeasureSeriesParamsSelected;
 
   minuteMessageMapping = {
-    '=0': <string>_('GENERAL.MINUTE.NONE'),
-    '=1': <string>_('GENERAL.MINUTE.SINGULAR'),
-    other: <string>_('GENERAL.MINUTE.PLURAL')
+    '=0': _('GENERAL.MINUTE.NONE') as string,
+    '=1': _('GENERAL.MINUTE.SINGULAR') as string,
+    other: _('GENERAL.MINUTE.PLURAL') as string,
   };
 
   hourMessageMapping = {
-    '=0': <string>_('GENERAL.HOUR.NONE'),
-    '=1': <string>_('GENERAL.HOUR.SINGULAR'),
-    other: <string>_('GENERAL.HOUR.PLURAL')
+    '=0': _('GENERAL.HOUR.NONE') as string,
+    '=1': _('GENERAL.HOUR.SINGULAR') as string,
+    other: _('GENERAL.HOUR.PLURAL') as string,
   };
 
   hitsMessageMapping = {
-    '=0': <string>_('GENERAL.HITS.NONE'),
-    '=1': <string>_('GENERAL.HITS.SINGULAR'),
-    other: <string>_('GENERAL.HITS.PLURAL')
+    '=0': _('GENERAL.HITS.NONE') as string,
+    '=1': _('GENERAL.HITS.SINGULAR') as string,
+    other: _('GENERAL.HITS.PLURAL') as string,
   };
 
   private paramSelected: MeasureSeriesParamsSelected;
@@ -54,7 +53,8 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
     private store: Store,
     private navigationService: NavigationService,
     private actions$: Actions,
-    private formBuilder: FormBuilder
+    private formBuilder: UntypedFormBuilder,
+    private positionService: PositionService
   ) {
     super(router);
   }
@@ -80,14 +80,17 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
     );
   }
 
-  startMeasureSeries() {
-    this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
-      if (connectedDevice) {
-        this.store
-          .dispatch(new StopMeasureSeriesParams())
-          .subscribe(() => this.store.dispatch(new StartMeasure(connectedDevice)));
-      }
-    });
+  async startMeasureSeries() {
+    const hasLocationEnabled = await this.positionService.requestAuthorization();
+    if (hasLocationEnabled) {
+      this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
+        if (connectedDevice) {
+          this.store
+            .dispatch(new StopMeasureSeriesParams())
+            .subscribe(() => this.store.dispatch(new StartMeasure(connectedDevice)));
+        }
+      });
+    }
   }
 
   cancelMeasureSeries() {
@@ -96,7 +99,8 @@ export class MeasureSeriesPage extends AutoUnsubscribePage {
 
   onParamSelectedChange(value: CustomEvent) {
     if (this.measureSeriesParamsForm) {
-      if (value.srcElement && value.srcElement.tagName.toLowerCase() === 'ion-radio-group') {
+      // @ts-expect-error no-prototype-builtins : we do check for tagName presence before accessing it
+      if (value?.target?.tagName?.toLowerCase() === 'ion-radio-group') {
         this.paramSelected = this.measureSeriesParamsForm.value.paramSelected;
       } else {
         this.measureSeriesParamsForm.get('paramSelected')!.setValue(this.paramSelected);

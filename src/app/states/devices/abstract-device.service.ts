@@ -1,9 +1,10 @@
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { Measure, Step } from '../measures/measure';
+import { Measure, Step } from '@app/states/measures/measure';
 import { AbstractDevice, CalibrationFunctions, RawDevice } from './abstract-device';
 
 export abstract class AbstractDeviceService<T extends AbstractDevice> {
+  public static MAX_LOGS_LENGTH = 50000;
   protected textDecoder = new TextDecoder('utf8');
 
   protected abstract calibrationFunctions: {
@@ -11,15 +12,15 @@ export abstract class AbstractDeviceService<T extends AbstractDevice> {
     groundLevel: CalibrationFunctions;
   };
 
-  protected constructor(protected store: Store) {}
+  protected constructor(protected store: Store) { }
 
   abstract buildDevice(rawDevice?: RawDevice): T | null;
 
   abstract getDeviceInfo(device: T): Observable<Partial<T>>;
 
-  abstract saveDeviceParams(device: T): Observable<any>;
+  abstract saveDeviceParams(device: T): Observable<unknown>;
 
-  abstract startMeasureScan(device: T, stopSignal: Observable<any>): Observable<Step>;
+  abstract startMeasureScan(device: T, stopSignal: Observable<unknown>): Observable<Step>;
 
   computeRadiationValue(measure: Measure, planeMode: boolean): [number, string] {
     if (measure.endTime && measure.hitsNumber !== undefined) {
@@ -38,11 +39,12 @@ export abstract class AbstractDeviceService<T extends AbstractDevice> {
       planeMode ? this.calibrationFunctions.planeMode : this.calibrationFunctions.groundLevel
     );
     if (calibrationFunction) {
+      // See https://esbuild.github.io/content-types/#direct-eval
+      const indirectEval = eval
       return [
-        // tslint:disable-next-line:no-eval
-        eval(
+        indirectEval(
           calibrationFunction
-            .replace(/cps/g, 'hitsNumberPerSec')
+            .replace(/cps/g, '' + hitsNumberPerSec)
             .replace(/\^/g, '**')
             .replace(/max/g, 'Math.max')
         ),
@@ -68,15 +70,32 @@ export abstract class AbstractDeviceService<T extends AbstractDevice> {
     return calibrationFunctions[determinedCalibrationFunctions];
   }
 
-  abstract connectDevice(device: T): Observable<any>;
+  abstract connectDevice(device: T): Observable<unknown>;
 
-  abstract disconnectDevice(device: T): Observable<any>;
+  abstract disconnectDevice(device: T): Observable<unknown>;
 
-  protected abstract decodeDataPackage(buffer: ArrayBuffer | ArrayBuffer[]): Step | null;
+  protected abstract decodeDataPackage(dataView: DataView | DataView[]): Step | null;
 
   protected arrayBufferToHex(buffer: ArrayBuffer): string {
     return Array.from(new Uint8Array(buffer))
       .map(n => n.toString(16).padStart(2, '0'))
       .join('');
+  }
+
+  protected logAndStore(newLog: string, error?: Error) {
+    if (localStorage) {
+      const existingLogFromStorage = localStorage.getItem('logs');
+      const existingLog = existingLogFromStorage ?
+        existingLogFromStorage.substring(0, AbstractDeviceService.MAX_LOGS_LENGTH) : ""
+      const d = new Date()
+      const dateString = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDay() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+      const newLogWithDateAndError = dateString + " " + newLog + (error ? JSON.stringify(error) : "")
+      localStorage.setItem('logs', newLogWithDateAndError + "\n" + existingLog)
+    }
+    if (error) {
+      console.error(newLog, error)
+    } else {
+      console.debug(newLog)
+    }
   }
 }

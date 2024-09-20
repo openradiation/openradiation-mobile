@@ -1,24 +1,45 @@
-import { BLE } from '@ionic-native/ble/ngx';
 import { Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { fromPromise } from 'rxjs/internal-compatibility';
+import { Observable, from } from 'rxjs';
 import { catchError, concatMap, shareReplay, take } from 'rxjs/operators';
-import { AbstractDeviceService } from '../abstract-device.service';
-import { DeviceConnectionLost } from '../devices.action';
+import { AbstractDeviceService } from '@app/states/devices/abstract-device.service';
+import { DeviceConnectionLost } from '@app/states/devices/devices.action';
 import { AbstractBLEDevice, RawBLEDevice } from './abstract-ble-device';
+import { BleClient } from '@capacitor-community/bluetooth-le';
+import { Capacitor } from '@capacitor/core';
+
 
 export abstract class AbstractBLEDeviceService<T extends AbstractBLEDevice> extends AbstractDeviceService<T> {
   protected abstract service: string;
   protected abstract receiveCharacteristic: string;
 
-  protected constructor(protected store: Store, protected ble: BLE) {
+  protected constructor(
+    protected store: Store,
+  ) {
     super(store);
+    if (Capacitor.getPlatform() != "web") {
+      BleClient.initialize();
+    }
   }
 
   abstract buildDevice(rawBLEDevice: RawBLEDevice): T | null;
 
-  connectDevice(device: T): Observable<any> {
-    const connection = this.ble.connect(device.sensorUUID).pipe(
+  connectDevice(device: T): Observable<unknown> {
+    const connection = new Observable((observer) => {
+      BleClient.connect(device.sensorUUID,
+        // On disconnect, provoque error to trigger RxJS catchError callback
+        (deviceId) => {
+          observer.error(new Error('Device disconnected : ' + deviceId))
+        }
+      ).then(() => {
+        this.logAndStore("Connected to device " + JSON.stringify(device))
+        observer.next()
+      })
+        .catch(e => {
+          this.logAndStore("Error while connected to device " + JSON.stringify(device), e);
+          observer.error(e);
+        }
+        )
+    }).pipe(
       concatMap(() => this.saveDeviceParams(device)),
       shareReplay()
     );
@@ -26,15 +47,33 @@ export abstract class AbstractBLEDeviceService<T extends AbstractBLEDevice> exte
     return connection.pipe(take(1));
   }
 
-  disconnectDevice(device: T): Observable<any> {
-    return fromPromise(this.ble.disconnect(device.sensorUUID));
+  disconnectDevice(device: T): Observable<unknown> {
+    return from(BleClient.disconnect(device.sensorUUID));
   }
 
-  protected startReceiveData(device: T): Observable<any> {
-    return this.ble.startNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
+  protected startReceiveData(device: T): Observable<unknown> {
+    return new Observable(observer => {
+      BleClient.startNotifications(
+        device.sensorUUID, this.service, this.receiveCharacteristic,
+        (value) => {
+          observer.next(value);
+        }
+      ).catch(e => observer.error(e));
+    })
   }
 
   protected stopReceiveData(device: T) {
-    return this.ble.stopNotification(device.sensorUUID, this.service, this.receiveCharacteristic);
+    BleClient.stopNotifications(device.sensorUUID, this.service, this.receiveCharacteristic);
   }
+
+  protected startNotificationsRx(device: T, characteristicId: string): Observable<DataView> {
+    return new Observable<DataView>(observer => {
+      BleClient.startNotifications(device.sensorUUID, this.service, characteristicId,
+        (value: DataView) => {
+          observer.next(value)
+        }
+      ).catch(e => observer.error(e));
+    });
+  }
+
 }

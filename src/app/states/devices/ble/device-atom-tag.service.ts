@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
-import { BLE } from '@ionic-native/ble/ngx';
 import { Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { fromPromise } from 'rxjs/internal-compatibility';
+import { Observable, from } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { Step } from '../../measures/measure';
-import { DeviceType } from '../abstract-device';
-import { DeviceConnectionLost } from '../devices.action';
+import { Step } from '@app/states/measures/measure';
+import { DeviceType } from '@app/states/devices/abstract-device';
+import { DeviceConnectionLost } from '@app/states/devices/devices.action';
 import { RawBLEDevice } from './abstract-ble-device';
 import { AbstractBLEDeviceService } from './abstract-ble-device.service';
 import { DeviceAtomTag } from './device-atom-tag';
+import { BleClient } from '@capacitor-community/bluetooth-le';
 
 @Injectable({
   providedIn: 'root'
@@ -31,14 +30,14 @@ export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag
   private firmwareCharacteristic = '2a26';
   private settingsCharacteristic = 'ea50cfcd-ac4a-4a48-bf0e-879e548ae157';
 
-  constructor(protected store: Store, protected ble: BLE) {
-    super(store, ble);
+  constructor(protected store: Store) {
+    super(store);
   }
 
   getDeviceInfo(device: DeviceAtomTag): Observable<Partial<DeviceAtomTag>> {
-    return fromPromise(this.ble.read(device.sensorUUID, this.firmwareService, this.firmwareCharacteristic)).pipe(
+    return from(BleClient.read(device.sensorUUID, this.firmwareService, this.firmwareCharacteristic)).pipe(
       map(buffer => {
-        const firmwareVersion = this.textDecoder.decode(new Uint8Array(buffer));
+        const firmwareVersion = this.textDecoder.decode(buffer);
         return {
           apparatusVersion: `${DeviceType.AtomTag} ${firmwareVersion.replace(/\0/g, '')}`
         };
@@ -46,8 +45,8 @@ export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag
     );
   }
 
-  saveDeviceParams(device: DeviceAtomTag): Observable<any> {
-    let command: Promise<any>;
+  saveDeviceParams(device: DeviceAtomTag): Observable<unknown> {
+    let command: Promise<unknown>;
     if (device.params.audioHits && device.params.vibrationHits) {
       command = this.sendSettingsCommand(device, 0x10).then(() => this.sendSettingsCommand(device, 0x06));
     } else if (device.params.audioHits) {
@@ -58,22 +57,29 @@ export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag
     } else {
       command = this.sendSettingsCommand(device, 0x0a);
     }
-    return fromPromise(command);
+    return from(command);
   }
 
-  private sendSettingsCommand(device: DeviceAtomTag, command: number, param?: number): Promise<any> {
+  private async sendSettingsCommand(device: DeviceAtomTag, command: number, param?: number): Promise<unknown> {
     const dataView = new DataView(new ArrayBuffer(3));
     dataView.setUint8(0, command);
     if (param !== undefined) {
       dataView.setUint16(1, param);
     }
-    return this.ble.write(device.sensorUUID, this.service, this.settingsCharacteristic, dataView.buffer);
+    try {
+      const result = await BleClient.write(device.sensorUUID, this.service, this.settingsCharacteristic, dataView);
+      return result;
+    } catch (error) {
+      const logInfos = "UUID : " + device.sensorUUID + " / Service: " + this.service + " /Characteristic: " + this.settingsCharacteristic + " / command : " + command + " / param : " + param;
+      this.logAndStore("Error while sending data with AtomTag " + logInfos, error)
+      return Promise.reject(error);
+    }
   }
 
-  startMeasureScan(device: DeviceAtomTag, stopSignal: Observable<any>): Observable<Step> {
+  startMeasureScan(device: DeviceAtomTag, stopSignal: Observable<unknown>): Observable<Step> {
     stopSignal.subscribe(() => this.stopReceiveData(device));
     return this.startReceiveData(device).pipe(
-      map((buffer: ArrayBuffer) => this.decodeDataPackage(buffer)),
+      map((dataView: DataView) => this.decodeDataPackage(dataView)),
       catchError(err => {
         this.disconnectDevice(device).subscribe();
         setTimeout(() => this.store.dispatch(new DeviceConnectionLost()), 1000);
@@ -82,13 +88,14 @@ export class DeviceAtomTagService extends AbstractBLEDeviceService<DeviceAtomTag
     );
   }
 
-  protected decodeDataPackage(buffer: ArrayBuffer): Step {
-    const dataView = new DataView(buffer);
-    return {
+  protected decodeDataPackage(dataView: DataView): Step {
+    const receiveData = {
       ts: Date.now(),
       hitsNumber: dataView.getUint16(9, true),
       temperature: dataView.getUint8(12)
     };
+    this.logAndStore("Received from AtomTag : " + JSON.stringify(receiveData))
+    return receiveData
   }
 
   buildDevice(rawBLEDevice: RawBLEDevice): DeviceAtomTag | null {

@@ -1,22 +1,24 @@
 import { Injectable } from '@angular/core';
-import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { StatusBar, Style } from '@capacitor/status-bar';
 import { Platform } from '@ionic/angular';
-import { Storage } from '@ionic/storage';
 import { Actions, Store } from '@ngxs/store';
 import { forkJoin, from, Observable, of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
-import { AbstractDevice } from '../states/devices/abstract-device';
-import { InitDevices } from '../states/devices/devices.action';
-import { DevicesStateModel } from '../states/devices/devices.state';
-import { Measure, MeasureSeries, Params } from '../states/measures/measure';
-import { InitMeasures } from '../states/measures/measures.action';
-import { MeasuresStateModel } from '../states/measures/measures.state';
-import { PositionService } from '../states/measures/position.service';
-import { EnableNotifications, InitUser, SetLanguage } from '../states/user/user.action';
-import { UserService } from '../states/user/user.service';
-import { UserStateModel } from '../states/user/user.state';
+import { AbstractDevice } from '@app/states/devices/abstract-device';
+import { InitDevices } from '@app/states/devices/devices.action';
+import { DevicesStateModel } from '@app/states/devices/devices.state';
+import { Measure, MeasureSeries, Params } from '@app/states/measures/measure';
+import { InitMeasures } from '@app/states/measures/measures.action';
+import { MeasuresStateModel } from '@app/states/measures/measures.state';
+import { InitUser, SetLanguage } from '@app/states/user/user.action';
+import { UserService } from '@app/states/user/user.service';
+import { UserStateModel } from '@app/states/user/user.state';
+import { ScreenOrientation } from '@capacitor/screen-orientation';
+import { SplashScreen } from '@capacitor/splash-screen';
+import { Preferences } from '@capacitor/preferences';
+import { Capacitor } from '@capacitor/core';
+import { environment } from '@environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
@@ -30,20 +32,15 @@ export class StorageService {
   private currentSeriesKey = 'measures.currentSeries';
 
   constructor(
-    private storage: Storage,
     private actions$: Actions,
     private store: Store,
     private userService: UserService,
-    private platform: Platform,
-    private splashScreen: SplashScreen,
-    private statusBar: StatusBar,
-    private positionService: PositionService,
-    private screenOrientation: ScreenOrientation
-  ) {}
+    private platform: Platform
+  ) { }
 
   init() {
     forkJoin(
-      this.getKnownDevices().pipe(
+      [this.getKnownDevices().pipe(
         concatMap(knownDevices => {
           return knownDevices ? this.store.dispatch(new InitDevices(knownDevices)) : of(null);
         })
@@ -52,19 +49,12 @@ export class StorageService {
         concatMap(user => {
           return user ? this.store.dispatch(new InitUser(user)) : of(null);
         })
-      )
+      )]
     )
       .pipe(
         concatMap(() => this.store.dispatch(new SetLanguage())),
-        concatMap(() => {
-          const { notifications } = this.store.snapshot().user;
-
-          return notifications || notifications === undefined
-            ? this.store.dispatch(new EnableNotifications())
-            : of(null);
-        }),
         concatMap(() =>
-          forkJoin(this.getMeasures(), this.getParams(), this.getRecentTags(), this.getCurrentSeries()).pipe(
+          forkJoin([this.getMeasures(), this.getParams(), this.getRecentTags(), this.getCurrentSeries()]).pipe(
             concatMap(([measures, params, recentTags, currentSeries]) => {
               return measures && params && recentTags
                 ? this.store.dispatch(new InitMeasures(measures, params, recentTags, currentSeries || undefined))
@@ -90,13 +80,14 @@ export class StorageService {
         this.store
           .select(({ measures }: { measures: MeasuresStateModel }) => measures.currentSeries)
           .subscribe(currentSeries => this.saveCurrentSeries(currentSeries));
-        this.platform.ready().then(() => {
-          if (this.platform.is('cordova')) {
-            this.statusBar.overlaysWebView(true);
-            this.statusBar.styleLightContent();
-            this.splashScreen.hide();
-            this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
-            this.positionService.init();
+        this.platform.ready().then(async () => {
+          if (Capacitor.getPlatform() != "web"
+            || environment.isTestEnvironment
+          ) {
+            StatusBar.setOverlaysWebView({ overlay: true });
+            StatusBar.setStyle({ style: Style.Light });
+            SplashScreen.hide();
+            await ScreenOrientation.lock({ orientation: 'portrait' });
           }
         });
       });
@@ -126,11 +117,12 @@ export class StorageService {
     return this.getFromDB(this.currentSeriesKey);
   }
 
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   private getFromDB(key: string): any {
     return from(
-      this.storage.get(key).then(rawValue => {
-        if (rawValue) {
-          return this.parseFromDB(rawValue);
+      Preferences.get({ key: key }).then(rawValue => {
+        if (rawValue && rawValue.value) {
+          return this.parseFromDB(rawValue.value ?? "");
         } else {
           const retrieveLocalStorageData = localStorage.getItem(key);
           if (retrieveLocalStorageData) {
@@ -144,31 +136,35 @@ export class StorageService {
   }
 
   saveUser(user: UserStateModel) {
-    this.storage.set(this.userKey, this.formatToDB(user));
+    Preferences.set({ key: this.userKey, value: this.formatToDB(user) });
   }
 
   saveKnownDevices(knownDevices: AbstractDevice[]) {
-    this.storage.set(this.knownDevicesKey, this.formatToDB(knownDevices));
+    Preferences.set({ key: this.knownDevicesKey, value: this.formatToDB(knownDevices) });
   }
 
   saveParams(params: { expertMode: boolean; autoPublish: boolean }) {
-    this.storage.set(this.paramsKey, this.formatToDB(params));
+    Preferences.set({ key: this.paramsKey, value: this.formatToDB(params) });
   }
 
   saveMeasures(measures: (Measure | MeasureSeries)[]) {
-    this.storage.set(this.measuresKey, this.formatToDB(measures));
+    Preferences.set({ key: this.measuresKey, value: this.formatToDB(measures) });
   }
 
   saveRecentTags(recentTags: string[]) {
-    this.storage.set(this.recentTagsKey, this.formatToDB(recentTags));
+    Preferences.set({ key: this.recentTagsKey, value: this.formatToDB(recentTags) });
   }
 
   saveCurrentSeries(currentSeries?: MeasureSeries) {
-    this.storage.set(this.currentSeriesKey, currentSeries ? this.formatToDB(currentSeries) : null);
+    Preferences.set({ key: this.currentSeriesKey, value: currentSeries ? this.formatToDB(currentSeries) : "" });
   }
 
   private parseFromDB(jsonString: string): any {
-    return JSON.parse(jsonString);
+    try {
+      return JSON.parse(jsonString);
+    } catch (_error) {
+      return undefined;
+    }
   }
 
   private formatToDB(json: any): string {

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
-import { Measure, MeasureSeries, MeasureType } from '../../../../states/measures/measure';
+import { marker as _ } from '@biesbjerg/ngx-translate-extract-marker';
+import { Measure, MeasureSeries, MeasureType } from '@app/states/measures/measure';
 
 @Component({
   selector: 'app-history-item',
@@ -27,13 +27,14 @@ export class HistoryItemComponent implements OnInit {
   showSeriesDetail = false;
   measureType = MeasureType;
   measureSeriesMessageMapping = {
-    '=1': <string>_('HISTORY.MEASURE_SERIES.SINGULAR'),
-    other: <string>_('HISTORY.MEASURE_SERIES.PLURAL')
+    '=1': _('HISTORY.MEASURE_SERIES.SINGULAR') as string,
+    other: _('HISTORY.MEASURE_SERIES.PLURAL') as string,
   };
 
-  constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.showSeriesDetail = false;
+  }
 
   showDetailClick() {
     this.showDetail.emit();

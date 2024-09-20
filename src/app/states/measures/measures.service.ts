@@ -1,17 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
-import { forkJoin, Observable, of } from 'rxjs';
-import { shareReplay, take, takeUntil } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
-import { AbstractDevice, ApparatusSensorType } from '../devices/abstract-device';
-import { DeviceConnectionLost } from '../devices/devices.action';
-import { DevicesService } from '../devices/devices.service';
-import { UserStateModel } from '../user/user.state';
-import { Measure, MeasureSeries, MeasureType, PositionAccuracyThreshold, Step } from './measure';
-import { MeasureApi } from './measure-api';
-import { AddMeasureScanStep, CancelMeasure, StopMeasureScan } from './measures.action';
-import { MeasuresStateModel } from './measures.state';
+import { forkJoin, Observable, of, tap, map } from 'rxjs';
+import { catchError, shareReplay, take, takeUntil } from 'rxjs/operators';
+import { environment } from '@environments/environment';
+import { AbstractDevice, ApparatusSensorType } from '@app/states/devices/abstract-device';
+import { DeviceConnectionLost } from '@app/states/devices/devices.action';
+import { DevicesService } from '@app/states/devices/devices.service';
+import { UserStateModel } from '@app/states/user/user.state';
+import { Measure, MeasureSeries, MeasureType, PositionAccuracyThreshold, Step } from '@app/states/measures/measure';
+import { MeasureApi } from '@app/states/measures/measure-api';
+import { AddMeasureScanStep, CancelMeasure, StopMeasureScan } from '@app/states/measures/measures.action';
+import { MeasuresStateModel } from '@app/states/measures/measures.state';
 
 @Injectable({
   providedIn: 'root'
@@ -22,9 +22,9 @@ export class MeasuresService {
     private actions$: Actions,
     private httpClient: HttpClient,
     private devicesService: DevicesService
-  ) {}
+  ) { }
 
-  startMeasureScan(device: AbstractDevice): Observable<any> {
+  startMeasureScan(device: AbstractDevice): Observable<unknown> {
     const stopSignal = this.actions$.pipe(
       ofActionSuccessful(StopMeasureScan, CancelMeasure),
       take(1)
@@ -47,7 +47,7 @@ export class MeasuresService {
     return this.detectHits(device, stopSignal).pipe(take(1));
   }
 
-  private detectHits(device: AbstractDevice, stopSignal: Observable<any>): Observable<Step> {
+  private detectHits(device: AbstractDevice, stopSignal: Observable<unknown>): Observable<Step> {
     const detectHits = this.devicesService
       .service(device)
       .startMeasureScan(device, stopSignal)
@@ -63,18 +63,49 @@ export class MeasuresService {
     return this.devicesService.service(device).computeRadiationValue(measure, planeMode);
   }
 
-  publishMeasure(measure: Measure | MeasureSeries): Observable<any> {
+  publishMeasure(measure: Measure | MeasureSeries): Observable<unknown> {
     switch (measure.type) {
       case MeasureType.Measure: {
-        return this.postMeasure(measure);
+        return this.postMeasure(measure).pipe(
+          map(() => {
+            measure.sent = true;
+            return measure;
+          }),
+          catchError(() => {
+            measure.sent = false;
+            return of(measure);
+          })
+        );
       }
       case MeasureType.MeasureSeries: {
-        return forkJoin(measure.measures.map(subMeasure => this.postMeasure(subMeasure)));
+        return forkJoin(
+          measure.measures.map(subMeasure => {
+            if (!subMeasure.sent) {
+              return this.postMeasure(subMeasure).pipe(
+                map(() => {
+                  subMeasure.sent = true;
+                  return subMeasure;
+                }),
+                catchError(() => {
+                  subMeasure.sent = false;
+                  return of(subMeasure);
+                })
+              )
+            } else {
+              return of(subMeasure)
+            }
+          })
+          ).pipe(
+            map(() => {
+              measure.sent = measure.measures.filter(s => !s.sent).length === 0;
+              return measure
+            })
+          )
       }
     }
   }
 
-  private postMeasure(measure: Measure): Observable<any> {
+  private postMeasure(measure: Measure): Observable<unknown> {
     if (MeasuresService.canPublishMeasure(measure)) {
       const payload: MeasureApi = {
         apiKey: environment.API_KEY,

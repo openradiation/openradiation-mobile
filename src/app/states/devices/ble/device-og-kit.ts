@@ -1,6 +1,6 @@
-import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
-import { DeviceType } from '../abstract-device';
-import { DeviceParams, DeviceParamsModel, DeviceParamType } from '../device-params';
+import { marker as _ } from '@biesbjerg/ngx-translate-extract-marker';
+import { DeviceType } from '@app/states/devices/abstract-device';
+import { DeviceParams, DeviceParamsModel, DeviceParamType } from '@app/states/devices/device-params';
 import { AbstractBLEDevice, RawBLEDevice } from './abstract-ble-device';
 
 export enum DeviceOgKitType {
@@ -18,11 +18,11 @@ export class DeviceOGKit extends AbstractBLEDevice {
   };
   paramsModel: DeviceParamsModel = {
     audioHits: {
-      label: <string>_('SENSORS.PARAM.AUDIO_HITS'),
+      label: _('SENSORS.PARAM.AUDIO_HITS') as string,
       type: DeviceParamType.Boolean
     },
     visualHits: {
-      label: <string>_('SENSORS.PARAM.VISUAL_HITS'),
+      label: _('SENSORS.PARAM.VISUAL_HITS') as string,
       type: DeviceParamType.Boolean
     }
   };
