@@ -7,7 +7,7 @@ android {
         applicationId "org.openradiation"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 2030800
+        versionCode 2031000
         versionName "2.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
