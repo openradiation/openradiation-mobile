@@ -46,36 +46,30 @@ export class StorageService {
 
 
   async migrateLegacyDatabase() {
-    // TODO Uncomment this condition to run migration only once
-    //if (!localStorage.getItem("legacy-database-migrated")) {
-      localStorage.setItem("legacy-database-migrated", "true");
-      this.legacyDatabase = new Storage({
-        name: 'ord-db',
-        driverOrder: [CordovaSQLiteDriver._driver]
-      });
-      await this.legacyDatabase.defineDriver(CordovaSQLiteDriver);
-      await this.legacyDatabase.create();
-      const entriesCount = await this.legacyDatabase.length();
-      let message = "Connected to Legacy Database, found " + entriesCount + " entries"
-      if (entriesCount > 0) {
-        // copy existing data into new, encrypted format
-        await this.legacyDatabase.forEach((key, value, index) => {
-          message += "\n" + key + ": " + value;
-          Preferences.set({ key: key, value: this.formatToDB(value) });
+    if (!localStorage.getItem("legacy-database-migrated")) {
+      // Load legacy Database
+      try {
+        this.legacyDatabase = new Storage({
+          name: 'ord-db',
+          driverOrder: [CordovaSQLiteDriver._driver]
         });
+        await this.legacyDatabase.defineDriver(CordovaSQLiteDriver);
+        await this.legacyDatabase.create();
+        const entriesCount = await this.legacyDatabase.length();
+        if (entriesCount > 0) {
+          // Copy legacy data into new database
+          const legacyKeys = await this.legacyDatabase.keys();
+          for (const legacyKey of legacyKeys) {
+            const legacyValue = await this.legacyDatabase.get(legacyKey);
+            await Preferences.set({ key: legacyKey, value: legacyValue });
+          }
+        }
+        console.info("Legacy database correctly migrated ( " + entriesCount + " entries found)")
+      } catch (error) {
+        console.warn("Error while migrating legacy database. Legacy data will be loss", error)
       }
-
-      this.alertService.show({
-          header: "DEBUG",
-          message: message,
-          backdropDismiss: false,
-          buttons: [
-            {
-              text: "OK"
-            }
-          ]
-        });
-    //}
+      localStorage.setItem("legacy-database-migrated", "true");    
+    }
   }
 
   async init() {
