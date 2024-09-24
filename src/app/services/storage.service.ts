@@ -18,6 +18,9 @@ import { SplashScreen } from '@capacitor/splash-screen';
 import { Preferences } from '@capacitor/preferences';
 import { Capacitor } from '@capacitor/core';
 import { environment } from '@environments/environment';
+import { Storage } from '@ionic/storage';
+import CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
+import { AlertService } from './alert.service';
 
 
 @Injectable({
@@ -30,15 +33,48 @@ export class StorageService {
   private measuresKey = 'measures.measures';
   private recentTagsKey = 'measures.recentTags';
   private currentSeriesKey = 'measures.currentSeries';
+  private legacyDatabase: Storage
 
   constructor(
     private actions$: Actions,
     private store: Store,
     private userService: UserService,
-    private platform: Platform
-  ) { }
+    private platform: Platform,
+    private alertService: AlertService
+  ) { 
+  }
 
-  init() {
+
+  async migrateLegacyDatabase() {
+    if (!localStorage.getItem("legacy-database-migrated")) {
+      // Load legacy Database
+      try {
+        this.legacyDatabase = new Storage({
+          name: 'ord-db',
+          driverOrder: [CordovaSQLiteDriver._driver]
+        });
+        await this.legacyDatabase.defineDriver(CordovaSQLiteDriver);
+        await this.legacyDatabase.create();
+        const entriesCount = await this.legacyDatabase.length();
+        if (entriesCount > 0) {
+          // Copy legacy data into new database
+          const legacyKeys = await this.legacyDatabase.keys();
+          for (const legacyKey of legacyKeys) {
+            const legacyValue = await this.legacyDatabase.get(legacyKey);
+            await Preferences.set({ key: legacyKey, value: legacyValue });
+          }
+        }
+        console.info("Legacy database correctly migrated ( " + entriesCount + " entries found)")
+      } catch (error) {
+        console.warn("Error while migrating legacy database. Legacy data will be loss", error)
+      }
+      localStorage.setItem("legacy-database-migrated", "true");    
+    }
+  }
+
+  async init() {
+    await this.migrateLegacyDatabase();
+    
     forkJoin(
       [this.getKnownDevices().pipe(
         concatMap(knownDevices => {
@@ -120,19 +156,19 @@ export class StorageService {
   /* eslint-disable  @typescript-eslint/no-explicit-any */
   private getFromDB(key: string): any {
     return from(
-      Preferences.get({ key: key }).then(rawValue => {
-        if (rawValue && rawValue.value) {
-          return this.parseFromDB(rawValue.value ?? "");
-        } else {
-          const retrieveLocalStorageData = localStorage.getItem(key);
-          if (retrieveLocalStorageData) {
-            return this.parseFromDB(retrieveLocalStorageData);
+        Preferences.get({ key: key }).then(rawValue => {
+          if (rawValue && rawValue.value) {
+            return this.parseFromDB(rawValue.value ?? "");
           } else {
-            return null;
+            const retrieveLocalStorageData = localStorage.getItem(key);
+            if (retrieveLocalStorageData) {
+              return this.parseFromDB(retrieveLocalStorageData);
+            } else {
+              return null;
+            }
           }
-        }
-      })
-    );
+        })
+      );
   }
 
   saveUser(user: UserStateModel) {
