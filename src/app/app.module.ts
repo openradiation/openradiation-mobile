@@ -16,12 +16,18 @@ import { MenuComponent } from './pages/menu/menu.component';
 import { DevicesState } from './states/devices/devices.state';
 import { MeasuresState } from './states/measures/measures.state';
 import { UserState } from './states/user/user.state';
+import { IonicStorageModule } from '@ionic/storage-angular';
+import CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 
 @NgModule({
     declarations: [AppComponent, MenuComponent],
     bootstrap: [AppComponent], 
     imports:
         [
+            IonicStorageModule.forRoot({
+              name: 'ord-db',
+              driverOrder: [CordovaSQLiteDriver._driver]
+            }),
             BrowserModule,
             IonicModule.forRoot(),
             AppRoutingModule,

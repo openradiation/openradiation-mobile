@@ -19,6 +19,7 @@ import { Preferences } from '@capacitor/preferences';
 import { Capacitor } from '@capacitor/core';
 import { environment } from '@environments/environment';
 import { Storage } from '@ionic/storage';
+import CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 import { AlertService } from './alert.service';
 
 
@@ -32,14 +33,14 @@ export class StorageService {
   private measuresKey = 'measures.measures';
   private recentTagsKey = 'measures.recentTags';
   private currentSeriesKey = 'measures.currentSeries';
-  private legacyDatabase: Storage;
+  private legacyDatabase: Storage
 
   constructor(
     private actions$: Actions,
     private store: Store,
     private userService: UserService,
     private platform: Platform,
-    private alertService: AlertService,
+    private alertService: AlertService
   ) { 
   }
 
@@ -48,23 +49,21 @@ export class StorageService {
     // TODO Uncomment this condition to run migration only once
     //if (!localStorage.getItem("legacy-database-migrated")) {
       localStorage.setItem("legacy-database-migrated", "true");
-      console.error("OPENING DATABASE")
-     this.legacyDatabase = new Storage({
+      this.legacyDatabase = new Storage({
         name: 'ord-db',
-        driverOrder: ['sqlite']
-      }, "android");
-     // await this.legacyDatabase.defineDriver(CordovaSQLiteDriver);
-      //this.legacyDatabase = await this.legacyDatabase.create();
-      try {
-      console.error("OPENED, getting entries")
-      const entriesCount = (await this.legacyDatabase.keys()).length;
-      console.error("GOT ENRIES" + entriesCount);
-      let message = "Connected to Legacy Database v2, found " + entriesCount + " entries"
-      // copy existing data into new, encrypted format
-      await this.legacyDatabase.forEach((key, value, index) => {
-        message += "\n" + key + ": " + value;
-        Preferences.set({ key: key, value: this.formatToDB(value) });
+        driverOrder: [CordovaSQLiteDriver._driver]
       });
+      await this.legacyDatabase.defineDriver(CordovaSQLiteDriver);
+      await this.legacyDatabase.create();
+      const entriesCount = await this.legacyDatabase.length();
+      let message = "Connected to Legacy Database, found " + entriesCount + " entries"
+      if (entriesCount > 0) {
+        // copy existing data into new, encrypted format
+        await this.legacyDatabase.forEach((key, value, index) => {
+          message += "\n" + key + ": " + value;
+          Preferences.set({ key: key, value: this.formatToDB(value) });
+        });
+      }
 
       this.alertService.show({
           header: "DEBUG",
@@ -76,10 +75,6 @@ export class StorageService {
             }
           ]
         });
-      } catch (error) {
-        console.error("ERRREUR!!!!")
-        console.error(error)
-      }
     //}
   }
 
