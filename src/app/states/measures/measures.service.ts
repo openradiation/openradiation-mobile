@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
-import { forkJoin, Observable, of, tap, map } from 'rxjs';
+import { forkJoin, Observable, of, concatMap, timer, map } from 'rxjs';
 import { catchError, shareReplay, take, takeUntil } from 'rxjs/operators';
 import { environment } from '@environments/environment';
 import { AbstractDevice, ApparatusSensorType } from '@app/states/devices/abstract-device';
@@ -78,19 +78,24 @@ export class MeasuresService {
         );
       }
       case MeasureType.MeasureSeries: {
+        let postDelay = 0;
         return forkJoin(
           measure.measures.map(subMeasure => {
             if (!subMeasure.sent) {
-              return this.postMeasure(subMeasure).pipe(
-                map(() => {
-                  subMeasure.sent = true;
-                  return subMeasure;
-                }),
-                catchError(() => {
-                  subMeasure.sent = false;
-                  return of(subMeasure);
-                })
-              )
+              return timer(postDelay++ * 400).pipe(  // Délai de 100ms entre chaque appel
+                concatMap(() =>
+                  this.postMeasure(subMeasure).pipe(
+                    map(() => {
+                      subMeasure.sent = true;
+                      return subMeasure;
+                    }),
+                    catchError(() => {
+                      subMeasure.sent = false;
+                      return of(subMeasure);
+                    })
+                  )
+                )
+              );
             } else {
               return of(subMeasure)
             }

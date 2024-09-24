@@ -91,7 +91,8 @@
     },
     "SENT": "Publiée",
     "SENT_SERIES": "Publiées",
-    "TITLE": "Historique"
+    "TITLE": "Historique",
+    "SENDING": "Publication des mesures en cours..."
   },
   "HOME": {
     "CONNECTED_SENSOR": "Capteur connecté",

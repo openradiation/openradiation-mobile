@@ -8,6 +8,8 @@ import { AutoUnsubscribePage } from '@app/components/auto-unsubscribe/auto-unsub
 import { AlertService } from '@app/services/alert.service';
 import { NavigationService } from '@app/services/navigation.service';
 import { Measure, MeasureSeries, MeasureType } from '@app/states/measures/measure';
+
+import { LoadingController } from '@ionic/angular';
 import {
   DeleteAllMeasures,
   DeleteMeasure,
@@ -25,8 +27,8 @@ import { MeasuresState } from '@app/states/measures/measures.state';
 })
 export class HistoryPage extends AutoUnsubscribePage {
   measures$: Observable<(Measure | MeasureSeries)[]> = inject(Store).select(MeasuresState.measures);
-
   measureBeingSentMap: { [K: string]: boolean } = {};
+  loading?: HTMLIonLoadingElement;
 
   url = '/tabs/history';
 
@@ -37,7 +39,8 @@ export class HistoryPage extends AutoUnsubscribePage {
     private translateService: TranslateService,
     private actions$: Actions,
     private toastController: ToastController,
-    private navigationService: NavigationService
+    private navigationService: NavigationService,
+    private loadingCtrl: LoadingController
   ) {
     super(router);
   }
@@ -48,6 +51,8 @@ export class HistoryPage extends AutoUnsubscribePage {
       this.actions$.pipe(ofActionDispatched(PublishMeasureError)).subscribe(
         (error: PublishMeasureError) => {
             this.measureBeingSentMap[error.measure.id] = false;
+            this.loading?.dismiss();
+            this.loading = undefined;
             this.toastController
               .create({
                 message: this.translateService.instant('HISTORY.SEND_ERROR'),
@@ -67,7 +72,9 @@ export class HistoryPage extends AutoUnsubscribePage {
       }),
       this.actions$
         .pipe(ofActionSuccessful(PublishMeasure))
-        .subscribe(({ measure }: PublishMeasure) => (this.measureBeingSentMap[measure.id] = false)),
+        .subscribe(({ measure }: PublishMeasure) => {
+          this.measureBeingSentMap[measure.id] = false
+         }),
       this.actions$.pipe(ofActionSuccessful(ShowMeasure)).subscribe(action => {
         this.navigationService.navigateForward(
           ['measure', action.measure.type === MeasureType.Measure ? 'report' : 'report-series'],
@@ -86,6 +93,10 @@ export class HistoryPage extends AutoUnsubscribePage {
 
   publish(measure: Measure | MeasureSeries) {
     if (this.canPublish(measure)) {
+      let loaderDuration = 1500;
+      if ((measure as MeasureSeries).measures) {
+        loaderDuration = 800 + 500 * (measure as MeasureSeries).measures.length 
+      }
       this.alertService.show({
         header: this.translateService.instant('HISTORY.TITLE'),
         subHeader:
@@ -103,7 +114,18 @@ export class HistoryPage extends AutoUnsubscribePage {
           },
           {
             text: this.translateService.instant('GENERAL.YES'),
-            handler: () => this.store.dispatch(new PublishMeasure(measure))
+            handler: () => {
+              console.error("CREATE LOADER")
+              this.loadingCtrl.create({
+                backdropDismiss: true,
+                duration: loaderDuration,
+                message: this.translateService.instant("HISTORY.SENDING")
+              }).then(loading => {
+                this.loading = loading; 
+                this.loading.present(); 
+              })
+              this.store.dispatch(new PublishMeasure(measure))
+            }
           }
         ]
       });
