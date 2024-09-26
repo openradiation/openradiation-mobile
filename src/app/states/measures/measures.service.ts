@@ -82,7 +82,8 @@ export class MeasuresService {
         return forkJoin(
           measure.measures.map(subMeasure => {
             if (!subMeasure.sent) {
-              return timer(postDelay++ * 400).pipe(  // Délai de 100ms entre chaque appel
+              // delay of 50ms between each call to avoid overflowing the server
+              return timer(postDelay++ * 100).pipe(
                 concatMap(() =>
                   this.postMeasure(subMeasure).pipe(
                     map(() => {

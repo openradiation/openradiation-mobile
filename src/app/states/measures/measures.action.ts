@@ -116,6 +116,11 @@ export class PublishMeasureError {
   constructor(public measure: AbstractMeasure) { }
 }
 
+export class PublishMeasureSuccess {
+  static readonly type = '[Measures] Publish measure success';
+  constructor(public measure: AbstractMeasure) { }
+}
+
 export class DeleteMeasure {
   static readonly type = '[Measures] Delete measure';
   constructor(public measure: Measure | MeasureSeries) { }

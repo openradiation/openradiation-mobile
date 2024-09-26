@@ -15,6 +15,7 @@ import {
   DeleteMeasure,
   PublishMeasure,
   PublishMeasureError,
+  PublishMeasureSuccess,
   ShowMeasure
 } from '@app/states/measures/measures.action';
 import { MeasuresService } from '@app/states/measures/measures.service';
@@ -83,6 +84,10 @@ export class HistoryPage extends AutoUnsubscribePage {
             queryParams: { goBackHistory: true }
           }
         );
+      }),
+      this.actions$.pipe(ofActionDispatched(PublishMeasureSuccess)).subscribe(() => {
+         this.loading?.dismiss();
+         this.loading = undefined;
       })
     );
   }
@@ -93,10 +98,6 @@ export class HistoryPage extends AutoUnsubscribePage {
 
   publish(measure: Measure | MeasureSeries) {
     if (this.canPublish(measure)) {
-      let loaderDuration = 1500;
-      if ((measure as MeasureSeries).measures) {
-        loaderDuration = 800 + 500 * (measure as MeasureSeries).measures.length 
-      }
       this.alertService.show({
         header: this.translateService.instant('HISTORY.TITLE'),
         subHeader:
@@ -115,10 +116,8 @@ export class HistoryPage extends AutoUnsubscribePage {
           {
             text: this.translateService.instant('GENERAL.YES'),
             handler: () => {
-              console.error("CREATE LOADER")
               this.loadingCtrl.create({
                 backdropDismiss: true,
-                duration: loaderDuration,
                 message: this.translateService.instant("HISTORY.SENDING")
               }).then(loading => {
                 this.loading = loading; 

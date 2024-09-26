@@ -37,6 +37,7 @@ import {
   PositionChanged,
   PublishMeasure,
   PublishMeasureError,
+  PublishMeasureSuccess,
   ShowMeasure,
   StartManualMeasure,
   StartMeasure,
@@ -754,6 +755,7 @@ export class MeasuresState {
               this.store.dispatch(new PublishMeasureError(m as AbstractMeasure));
               return of(null);
             } else {
+              this.store.dispatch(new PublishMeasureSuccess(m as AbstractMeasure));
               return of(m);
             }
           }
