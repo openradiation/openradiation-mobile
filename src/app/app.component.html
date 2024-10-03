@@ -1,4 +1,5 @@
 <ion-app [ngClass]="{ 'keyboard-open': keyboardOpen }">
+  <div class="betaIndicator" *ngIf="!envIsProduction">{{ envName }}</div>
   <ion-split-pane [when]="false" contentId="openradiation-menu">
     <ion-menu side="end" type="push" (ionDidOpen)="onMenuOpen()" contentId="openradiation-menu">
       <app-menu></app-menu>
