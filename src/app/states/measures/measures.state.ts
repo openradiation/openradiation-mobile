@@ -29,9 +29,11 @@ import {
   DeleteMeasure,
   DisableAutoPublish,
   DisableExpertMode,
+  DisableFakeHitsMode,
   DisablePlaneMode,
   EnableAutoPublish,
   EnableExpertMode,
+  EnableFakeHitsMode,
   EnablePLaneMode,
   InitMeasures,
   PositionChanged,
@@ -56,6 +58,7 @@ import {
 import { MeasuresService } from '@app/states/measures/measures.service';
 import { Device } from "@capacitor/device";
 import { Injectable } from '@angular/core';
+import { environment } from "@environments/environment";
 
 /**
  * Max duration between 2 measure steps before the device connection is considered as lost
@@ -76,6 +79,7 @@ export interface MeasuresStateModel {
     expertMode: boolean;
     autoPublish: boolean;
     planeMode: boolean;
+    fakeHitsMode: boolean;
   };
 }
 
@@ -88,7 +92,8 @@ export interface MeasuresStateModel {
     params: {
       expertMode: false,
       autoPublish: false,
-      planeMode: false
+      planeMode: false,
+      fakeHitsMode: false
     }
   }
 })
@@ -112,6 +117,11 @@ export class MeasuresState {
   @Selector()
   static expertMode({ params }: MeasuresStateModel): boolean {
     return params.expertMode;
+  }
+
+  @Selector()
+  static fakeHitsMode({ params }: MeasuresStateModel): boolean {
+    return params.fakeHitsMode;
   }
 
   @Selector()
@@ -203,6 +213,23 @@ export class MeasuresState {
     const { params } = getState();
     patchState({
       params: { ...params, expertMode: false }
+    });
+  }
+
+
+  @Action(EnableFakeHitsMode)
+  enableFakeHitsMode({ getState, patchState }: StateContext<MeasuresStateModel>) {
+    const { params } = getState();
+    patchState({
+      params: { ...params, fakeHitsMode: true }
+    });
+  }
+
+  @Action(DisableFakeHitsMode)
+  disableFakeHitsMode({ getState, patchState }: StateContext<MeasuresStateModel>) {
+    const { params } = getState();
+    patchState({
+      params: { ...params, fakeHitsMode: false }
     });
   }
 
@@ -434,7 +461,7 @@ export class MeasuresState {
         if (newCurrentMeasure.startTime === undefined) {
           newCurrentMeasure.startTime = step.ts - device.hitsPeriod;
         }
-        newCurrentMeasure = this.updateMeasureHits(newCurrentMeasure, params.planeMode, { step, device });
+        newCurrentMeasure = this.updateMeasureHits(newCurrentMeasure, params.planeMode, { step, device }, getState());
         newCurrentMeasure = Measure.updateTemperature(newCurrentMeasure);
         const patch: Partial<MeasuresStateModel> = { currentMeasure: newCurrentMeasure };
         if (
@@ -455,8 +482,19 @@ export class MeasuresState {
     return of(null);
   }
 
-  private updateMeasureHits(measure: Measure, planeMode: boolean, { step, device }: AddMeasureScanStep): Measure {
+  private updateMeasureHits(measure: Measure, planeMode: boolean, { step, device }: AddMeasureScanStep, measureStateModel: MeasuresStateModel): Measure {
     const newMeasure = { ...measure };
+    if (measureStateModel.params.fakeHitsMode) {
+      // If fake hits mode is active, make sure we are not in beta environment (ignore if not)
+      const splitted = environment.APP_NAME_VERSION.split(" ")
+      if (splitted.length >= 2) {
+        const envName = splitted[splitted.length - 1] + " " + splitted[splitted.length - 2]
+        if (envName.toLocaleLowerCase().indexOf('beta') != -1)   {
+          step.hitsNumber = 10 + (step.hitsNumber ? step.hitsNumber : 0)
+        }
+      }
+    }
+  
     if (step.hitsNumber !== undefined) {
       newMeasure.hitsNumber = measure.hitsNumber ? measure.hitsNumber + step.hitsNumber : step.hitsNumber;
       const [value, calibrationFunction] = this.measuresService.computeRadiationValue(newMeasure, device, planeMode);
@@ -820,3 +858,4 @@ export class MeasuresState {
     }
   }
 }
+

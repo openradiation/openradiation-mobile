@@ -168,6 +168,7 @@
     },
     "EXPERT": "Expert",
     "EXPERT_MODE": "Expert mode",
+    "FAKE_HITS_MODE": "Fake hits (testing only)",
     "FIABILITY": "Reliability",
     "FLIGHT": {
       "FLIGHT_NUMBER": "Flight number",

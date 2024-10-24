@@ -20,6 +20,14 @@ export class DisableExpertMode {
   static readonly type = '[Measure] Disable expert mode';
 }
 
+export class EnableFakeHitsMode {
+  static readonly type = '[Measures] Enable fake hits mode';
+}
+
+export class DisableFakeHitsMode {
+  static readonly type = '[Measure] Disable fake hits mode';
+}
+
 export class EnableAutoPublish {
   static readonly type = '[Measures] Enable auto publish';
 }

@@ -168,6 +168,7 @@
     },
     "EXPERT": "Expert",
     "EXPERT_MODE": "Mode expert",
+    "FAKE_HITS_MODE": "Simuler les hits (uniquement en beta)",
     "FIABILITY": "Fiabilité",
     "FLIGHT": {
       "FLIGHT_NUMBER": "Numéro de vol",

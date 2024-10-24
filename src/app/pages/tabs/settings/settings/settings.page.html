@@ -68,5 +68,11 @@
       </ion-label>
       <ion-toggle [ngModel]="expertMode$ | async" (ngModelChange)="toggleExpertMode($event)"></ion-toggle>
     </ion-item>
+    <ion-item class="no-padding" *ngIf="allowFakeHitsMode">
+      <ion-label>
+        {{'MEASURES.FAKE_HITS_MODE' | translate}}
+      </ion-label>
+      <ion-toggle [ngModel]="fakeHitsMode$ | async" (ngModelChange)="toggleFakeHitsMode($event)"></ion-toggle>
+    </ion-item>
   </ion-list>
 </ion-content>
