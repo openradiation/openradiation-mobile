@@ -16,6 +16,7 @@ import {
   PublishMeasure,
   PublishMeasureError,
   PublishMeasureSuccess,
+  PublishMeasureProgress,
   ShowMeasure
 } from '@app/states/measures/measures.action';
 import { MeasuresService } from '@app/states/measures/measures.service';
@@ -30,6 +31,8 @@ export class HistoryPage extends AutoUnsubscribePage {
   measures$: Observable<(Measure | MeasureSeries)[]> = inject(Store).select(MeasuresState.measures);
   measureBeingSentMap: { [K: string]: boolean } = {};
   loading?: HTMLIonLoadingElement;
+  publishMeasureCountCurrent: number;
+  publishMeasureCountTotal: number;
 
   url = '/tabs/history';
 
@@ -88,6 +91,12 @@ export class HistoryPage extends AutoUnsubscribePage {
       this.actions$.pipe(ofActionDispatched(PublishMeasureSuccess)).subscribe(() => {
          this.loading?.dismiss();
          this.loading = undefined;
+      }),
+      this.actions$.pipe(ofActionDispatched(PublishMeasureProgress)).subscribe(() => {
+        this.publishMeasureCountCurrent = Math.min(this.publishMeasureCountTotal, this.publishMeasureCountCurrent + 1)
+        if (this.loading) {
+          this.loading.message = this.getLoaderMessage()
+        }
       })
     );
   }
@@ -116,9 +125,14 @@ export class HistoryPage extends AutoUnsubscribePage {
           {
             text: this.translateService.instant('GENERAL.YES'),
             handler: () => {
+              this.publishMeasureCountCurrent = 1;
+              this.publishMeasureCountTotal = 1;
+              if (measure.type == MeasureType.MeasureSeries) {
+                this.publishMeasureCountTotal = (measure as MeasureSeries).measures?.length
+              }
               this.loadingCtrl.create({
                 backdropDismiss: true,
-                message: this.translateService.instant("HISTORY.SENDING")
+                message: this.getLoaderMessage()
               }).then(loading => {
                 this.loading = loading; 
                 this.loading.present(); 
@@ -129,6 +143,14 @@ export class HistoryPage extends AutoUnsubscribePage {
         ]
       });
     }
+  }
+
+  getLoaderMessage() {
+    let progressMessage = "";
+    if (this.publishMeasureCountTotal > 1) {
+      progressMessage = "(" + this.publishMeasureCountCurrent + "/" + this.publishMeasureCountTotal + ")"
+    }
+    return this.translateService.instant("HISTORY.SENDING") + progressMessage
   }
 
   canPublish(measure: Measure | MeasureSeries): boolean {

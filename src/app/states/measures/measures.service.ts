@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { forkJoin, Observable, of, concatMap, timer, map } from 'rxjs';
@@ -10,7 +10,7 @@ import { DevicesService } from '@app/states/devices/devices.service';
 import { UserStateModel } from '@app/states/user/user.state';
 import { Measure, MeasureSeries, MeasureType, PositionAccuracyThreshold, Step } from '@app/states/measures/measure';
 import { MeasureApi } from '@app/states/measures/measure-api';
-import { AddMeasureScanStep, CancelMeasure, StopMeasureScan } from '@app/states/measures/measures.action';
+import { AddMeasureScanStep, CancelMeasure, PublishMeasureProgress, StopMeasureScan } from '@app/states/measures/measures.action';
 import { MeasuresStateModel } from '@app/states/measures/measures.state';
 
 @Injectable({
@@ -88,16 +88,25 @@ export class MeasuresService {
                   this.postMeasure(subMeasure).pipe(
                     map(() => {
                       subMeasure.sent = true;
+                      this.store.dispatch(new PublishMeasureProgress(subMeasure));
                       return subMeasure;
                     }),
-                    catchError(() => {
-                      subMeasure.sent = false;
+                    catchError((httpError: HttpErrorResponse) => {
+                      // Duplicate UUID error : measure was already sent on server (by a previous version)
+                      if (httpError.status == 400 && (""+httpError.error?.error?.message).indexOf("duplicate key") > -1) {
+                        // Marking it as sent
+                        subMeasure.sent = true;
+                      } else {
+                        subMeasure.sent = false;
+                      }
+                      this.store.dispatch(new PublishMeasureProgress(subMeasure));
                       return of(subMeasure);
                     })
                   )
                 )
               );
             } else {
+              this.store.dispatch(new PublishMeasureProgress(subMeasure));
               return of(subMeasure)
             }
           })
