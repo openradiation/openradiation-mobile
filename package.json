@@ -76,6 +76,7 @@
     "jquery": "^3.7.1",
     "localforage-cordovasqlitedriver": "^1.8.0",
     "ngx-mask": "^18.0.0",
+    "node-mailjet": "^6.0.6",
     "npm": "^10.8.2",
     "plotly.js": "^2.34.0",
     "rxjs": "^7.4.3",
