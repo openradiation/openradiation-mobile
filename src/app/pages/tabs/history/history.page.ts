@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { AutoUnsubscribePage } from '@app/components/auto-unsubscribe/auto-unsubscribe.page';
 import { AlertService } from '@app/services/alert.service';
 import { NavigationService } from '@app/services/navigation.service';
-import { Measure, MeasureSeries, MeasureType } from '@app/states/measures/measure';
+import { Measure, MeasureSeries, MeasureType, Step } from '@app/states/measures/measure';
 
 import { LoadingController } from '@ionic/angular';
 import {
@@ -21,6 +21,7 @@ import {
 } from '@app/states/measures/measures.action';
 import { MeasuresService } from '@app/states/measures/measures.service';
 import { MeasuresState } from '@app/states/measures/measures.state';
+import { Share } from '@capacitor/share';
 
 @Component({
   selector: 'app-history',
@@ -197,5 +198,57 @@ export class HistoryPage extends AutoUnsubscribePage {
         }
       ]
     });
+  }
+
+  exportCsv() {   
+    this.measures$.subscribe(async (measures: (Measure | MeasureSeries)[]) => {
+      // Step 1: create CSV content
+      let csvContent = "data:text/csv;charset=utf-8,type;date;measure;\n";
+      csvContent += measures.flatMap(measure => this.getMeasureAsCSVLines(measure))
+      
+      const canShare = await Share.canShare();
+      if (canShare && canShare.value) {
+         Share.share({
+            text: csvContent,
+            title: this.translateService.instant('HISTORY.SHARE'),
+            dialogTitle: this.translateService.instant('GENERAL.SHARE')
+          });
+      } else {
+        // If share API not available, download CSV directly
+        const encodedUri = encodeURI(csvContent);
+        const hiddenElement = document.createElement("a");
+        hiddenElement.href = encodedUri;
+        hiddenElement.target = "_blank";
+        const m = new Date();
+        const fileName =
+          "OpenRadiation_Export_" +
+          m.getUTCFullYear() +
+          "-" +
+          (m.getUTCMonth() + 1) +
+          "-" +
+          m.getUTCDate() +
+          ".csv";
+        hiddenElement.download = fileName;
+        hiddenElement.click();
+      }
+    })
+  }
+
+  getMeasureAsCSVLines(measure: (Measure | MeasureSeries)): string {
+    let measureLines: Measure[] = []
+    let csvContent = "";
+    if (measure.type == MeasureType.Measure) {
+      measureLines.push(measure);
+    } else {
+      measureLines = (measure as MeasureSeries).measures;
+    }
+    measureLines.forEach(measureLine => {
+        let csvRow = measureLine.measurementEnvironment ? measureLine.measurementEnvironment : "-" + ";"
+        const date = new Date(measureLine.startTime); 
+        csvRow += date.toISOString() + ";";
+        csvRow += measureLine.value.toFixed(3) + "µSv/h;";
+        csvContent += csvRow + "\n";
+    })
+    return csvContent;
   }
 }

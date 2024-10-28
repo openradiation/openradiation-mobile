@@ -14,15 +14,22 @@
     <div class="label">
       <ng-content></ng-content>
     </div>
-    <div class="side-button right" *ngIf="shareButton">
-      <ion-button fill="clear" (click)="share.emit()">
-        <ion-icon slot="icon-only" name="share"></ion-icon>
-      </ion-button>
-    </div>
-    <div class="side-button right" *ngIf="deleteButton">
-      <ion-button fill="clear" (click)="delete.emit()">
-        <ion-icon slot="icon-only" name="trash"></ion-icon>
-      </ion-button>
+    <div class="side-button-right-container side-button right">
+      <div *ngIf="shareButton">
+        <ion-button fill="clear" (click)="share.emit()">
+          <ion-icon slot="icon-only" name="share"></ion-icon>
+        </ion-button>
+      </div>
+      <div  *ngIf="exportButton">
+        <ion-button fill="clear" (click)="export.emit()">
+          <ion-icon slot="icon-only" name="download"></ion-icon>
+        </ion-button>
+      </div>
+      <div *ngIf="deleteButton">
+        <ion-button fill="clear" (click)="delete.emit()">
+          <ion-icon slot="icon-only" name="trash"></ion-icon>
+        </ion-button>
+      </div>
     </div>
   </div>
 </div>

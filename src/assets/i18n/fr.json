@@ -62,6 +62,7 @@
     "YES": "Oui"
   },
   "HISTORY": {
+    "SHARE" : "Historique des mesures (CSV)",
     "DELETE": {
       "NOTICE": "Êtes-vous sûr(e) de vouloir supprimer cette mesure ?"
     },

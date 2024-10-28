@@ -10,6 +10,8 @@ export class HeaderComponent {
   backButton = false;
   @Input()
   shareButton = false;
+   @Input()
+  exportButton = false;
   @Input()
   deleteButton = false;
   @Output()
@@ -18,4 +20,6 @@ export class HeaderComponent {
   share = new EventEmitter();
   @Output()
   delete = new EventEmitter();
+   @Output()
+  export = new EventEmitter();
 }

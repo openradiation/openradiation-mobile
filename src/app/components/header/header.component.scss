@@ -55,6 +55,9 @@
     flex: none;
     width: 100%;
 
+    .side-button-right-container {
+      display: flex;
+    }
     .side-button {
       height: 100%;
       position: absolute;
