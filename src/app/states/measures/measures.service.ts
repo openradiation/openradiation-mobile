@@ -8,7 +8,7 @@ import { AbstractDevice, ApparatusSensorType } from '@app/states/devices/abstrac
 import { DeviceConnectionLost } from '@app/states/devices/devices.action';
 import { DevicesService } from '@app/states/devices/devices.service';
 import { UserStateModel } from '@app/states/user/user.state';
-import { Measure, MeasureSeries, MeasureType, PositionAccuracyThreshold, Step } from '@app/states/measures/measure';
+import { Measure, MeasureEnvironment, MeasureSeries, MeasureType, PositionAccuracyThreshold, Step } from '@app/states/measures/measure';
 import { MeasureApi } from '@app/states/measures/measure-api';
 import { AddMeasureScanStep, CancelMeasure, PublishMeasureProgress, StopMeasureScan } from '@app/states/measures/measures.action';
 import { MeasuresStateModel } from '@app/states/measures/measures.state';
@@ -122,6 +122,9 @@ export class MeasuresService {
 
   private postMeasure(measure: Measure): Observable<unknown> {
     if (this.canPublishMeasure(measure)) {
+      // In case of an imprecise plane mesure : modify location & accuracy before sending if required
+      this.handlePoorAccuracyInPlaneMode(measure);
+      
       const payload: MeasureApi = {
         apiKey: environment.API_KEY,
         data: {
@@ -187,24 +190,40 @@ export class MeasuresService {
   canPublishMeasure(measure: Measure | MeasureSeries): boolean {
     switch (measure.type) {
       case MeasureType.Measure:
-        return (
-          measure.accuracy !== undefined &&
-          measure.accuracy !== null &&
-          measure.accuracy < PositionAccuracyThreshold.No &&
-          measure.endAccuracy !== undefined &&
-          measure.endAccuracy !== null &&
-          measure.endAccuracy < PositionAccuracyThreshold.No
-        );
+        return this.hasSufficientAccuracyToBePublished(measure);
       case MeasureType.MeasureSeries:
-        return measure.measures.some(
-          item =>
-            item.accuracy !== undefined &&
-            item.accuracy !== null &&
-            item.accuracy! < PositionAccuracyThreshold.No &&
-            item.endAccuracy !== undefined &&
-            item.endAccuracy !== null &&
-            item.endAccuracy! < PositionAccuracyThreshold.No
-        );
+        return measure.measures.some(this.hasSufficientAccuracyToBePublished);
+    }
+  }
+
+  private hasSufficientAccuracyToBePublished(measure: Measure) {
+    const hasSufficientAccuracyToBePublished = (
+      measure.accuracy !== undefined &&
+      measure.accuracy !== null &&
+      measure.accuracy < PositionAccuracyThreshold.No &&
+      measure.endAccuracy !== undefined &&
+      measure.endAccuracy !== null &&
+      measure.endAccuracy < PositionAccuracyThreshold.No
+    );
+    if (!hasSufficientAccuracyToBePublished) {
+      // Only allow publication with poor accuracy in plane mode with fligh number set
+      return measure.measurementEnvironment == MeasureEnvironment.Plane && measure.flightNumber != undefined && measure.flightNumber.length > 2
+    } else {
+      return true;
+    }
+  }
+
+  handlePoorAccuracyInPlaneMode(measure: Measure) {
+    if (measure.measurementEnvironment == MeasureEnvironment.Plane) {
+      measure.accuracy = Math.min(measure.accuracy ? measure.accuracy : Infinity, 40000)
+      measure.altitudeAccuracy = Math.min(measure.altitudeAccuracy ? measure.altitudeAccuracy: Infinity, 15000)
+      if (measure.accuracy > PositionAccuracyThreshold.Poor) {
+        measure.latitude = 0
+        measure.longitude = 0
+      }
+      if (measure.altitudeAccuracy > PositionAccuracyThreshold.Poor) {
+        measure.altitude = 10000
+      }
     }
   }
 }
