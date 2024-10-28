@@ -15,6 +15,7 @@ import {
 } from '@app/states/measures/measures.action';
 import { MeasuresStateModel } from '@app/states/measures/measures.state';
 import { AbstractMeasureReportPage } from '../abstact-measure-report.page';
+import { MeasuresService } from '@app/states/measures/measures.service';
 
 @Component({
   selector: 'app-measure-series-report',
@@ -40,9 +41,10 @@ export class MeasureSeriesReportPage extends AbstractMeasureReportPage<MeasureSe
     protected platform: Platform,
     private formBuilder: UntypedFormBuilder,
     private alertService: AlertService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    protected measureService: MeasuresService
   ) {
-    super(router, store, activatedRoute, navigationService, actions$, platform);
+    super(router, store, activatedRoute, navigationService, actions$, platform, measureService);
   }
 
   pageEnter() {
@@ -86,7 +88,7 @@ export class MeasureSeriesReportPage extends AbstractMeasureReportPage<MeasureSe
   }
 
   canPublish(measureSeries: MeasureSeries): boolean {
-    return measureSeries.measures.some(measure => AbstractMeasureReportPage.canPublishSingleMeasure(measure));
+    return this.measureService.canPublishMeasure(measureSeries);
   }
 
   initPositionChangeAltitudeOverLimit(measureSeries: MeasureSeries) {

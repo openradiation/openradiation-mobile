@@ -10,6 +10,7 @@ import { Measure, MeasureEnvironment } from '@app/states/measures/measure';
 import { StartMeasureReport, StopMeasure, StopMeasureReport } from '@app/states/measures/measures.action';
 import { MeasuresState, MeasuresStateModel } from '@app/states/measures/measures.state';
 import { AbstractMeasureReportPage } from '../abstact-measure-report.page';
+import { MeasuresService } from '@app/states/measures/measures.service';
 
 @Component({
   selector: 'app-measure-report',
@@ -39,9 +40,10 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
     protected actions$: Actions,
     protected platform: Platform,
     private formBuilder: UntypedFormBuilder,
-    private dateService: DateService
+    private dateService: DateService,
+    protected measureService: MeasuresService
   ) {
-    super(router, store, activatedRoute, navigationService, actions$, platform);
+    super(router, store, activatedRoute, navigationService, actions$, platform, measureService);
     const date = new Date();
     date.setHours(0);
     date.setMinutes(0);
@@ -129,7 +131,7 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
   }
 
   canPublish(measure: Measure): boolean {
-    return AbstractMeasureReportPage.canPublishSingleMeasure(measure);
+    return this.measureService.canPublishMeasure(measure);
   }
 
   protected initMeasurementEnvironmentOptions(measure: Measure) {

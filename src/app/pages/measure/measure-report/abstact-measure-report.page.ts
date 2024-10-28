@@ -12,12 +12,12 @@ import { NavigationService } from '@app/services/navigation.service';
 import {
   AbstractMeasure,
   Measure,
-  MeasureEnvironment,
-  PositionAccuracyThreshold
+  MeasureEnvironment
 } from '@app/states/measures/measure';
 import { AddRecentTag, CancelMeasure, StopMeasure, StopMeasureSeries } from '@app/states/measures/measures.action';
 import { MeasuresState } from '@app/states/measures/measures.state';
 import { UserState } from '@app/states/user/user.state';
+import { MeasuresService } from '@app/states/measures/measures.service';
 
 export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> extends AutoUnsubscribePage {
   login$: Observable<string | undefined> = inject(Store).select(UserState.login);
@@ -98,7 +98,8 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
     protected activatedRoute: ActivatedRoute,
     protected navigationService: NavigationService,
     protected actions$: Actions,
-    protected platform: Platform
+    protected platform: Platform,
+    protected measureService: MeasuresService
   ) {
     super(router);
   }
@@ -209,17 +210,6 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
   }
 
   abstract canPublish(measure: T): boolean;
-
-  protected static canPublishSingleMeasure(measure: Measure): boolean {
-    return (
-      measure.accuracy !== undefined &&
-      measure.accuracy !== null &&
-      measure.accuracy < PositionAccuracyThreshold.No &&
-      measure.endAccuracy !== undefined &&
-      measure.endAccuracy !== null &&
-      measure.endAccuracy < PositionAccuracyThreshold.No
-    );
-  }
 
   protected static positionChangeAltitudeOverLimit(altitude: number | undefined): boolean {
     return altitude !== undefined && altitude > 6000;

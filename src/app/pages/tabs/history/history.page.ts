@@ -45,7 +45,8 @@ export class HistoryPage extends AutoUnsubscribePage {
     private actions$: Actions,
     private toastController: ToastController,
     private navigationService: NavigationService,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private measureService: MeasuresService
   ) {
     super(router);
   }
@@ -155,7 +156,7 @@ export class HistoryPage extends AutoUnsubscribePage {
   }
 
   canPublish(measure: Measure | MeasureSeries): boolean {
-    return MeasuresService.canPublishMeasure(measure);
+    return this.measureService.canPublishMeasure(measure);
   }
 
   containsMeasureSeries(measures: (Measure | MeasureSeries)[]): boolean {

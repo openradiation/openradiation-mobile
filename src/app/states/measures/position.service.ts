@@ -11,6 +11,7 @@ import { registerPlugin } from "@capacitor/core";
 import { BackgroundGeolocationPlugin, Location } from "@capacitor-community/background-geolocation";
 import { LocalNotifications } from '@capacitor/local-notifications';
 import { Capacitor } from '@capacitor/core';
+import { environment } from '@environments/environment';
 
 
 /**
@@ -87,41 +88,45 @@ export class PositionService {
       this.currentAlert.dismiss();
       this.currentAlert = undefined;
     }
-    let locationAuthorizedStatus = await Diagnostic.getLocationAuthorizationStatus();
-    locationAuthorizedStatus = (Capacitor.getPlatform() == 'ios'
-      && locationAuthorizedStatus === Diagnostic.permissionStatus.DENIED)
-      ? Diagnostic.permissionStatus.DENIED_ALWAYS
-      : locationAuthorizedStatus
-    switch (locationAuthorizedStatus) {
-      case Diagnostic.permissionStatus.NOT_REQUESTED:
-      case Diagnostic.permissionStatus.DENIED:
-        locationAuthorizedStatus = await Diagnostic.requestLocationAuthorization(Diagnostic.locationAuthorizationMode.ALWAYS);
-        this.platform.resume.subscribe(() => this.requestAuthorization());
-    }
-    switch (locationAuthorizedStatus) {
-      case Diagnostic.permissionStatus.DENIED_ALWAYS:
-        this.onGPSDeniedAlways();
-        this.platform.resume.subscribe(() => this.requestAuthorization());
-        break;
-      case Diagnostic.permissionStatus.GRANTED:
-      case Diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
-        // On Android, also need to check for local notifications permissions
-        if (Capacitor.getPlatform() == 'android') {
-          let localNotificationStatus = await LocalNotifications.checkPermissions();
-          if (localNotificationStatus.display != 'granted') {
-            localNotificationStatus = await LocalNotifications.requestPermissions();
-          }
-          if (localNotificationStatus.display == 'granted') {
+    if (environment.mockDevice) {
+      return true;
+    } else {
+      let locationAuthorizedStatus = await Diagnostic.getLocationAuthorizationStatus();
+      locationAuthorizedStatus = (Capacitor.getPlatform() == 'ios'
+        && locationAuthorizedStatus === Diagnostic.permissionStatus.DENIED)
+        ? Diagnostic.permissionStatus.DENIED_ALWAYS
+        : locationAuthorizedStatus
+      switch (locationAuthorizedStatus) {
+        case Diagnostic.permissionStatus.NOT_REQUESTED:
+        case Diagnostic.permissionStatus.DENIED:
+          locationAuthorizedStatus = await Diagnostic.requestLocationAuthorization(Diagnostic.locationAuthorizationMode.ALWAYS);
+          this.platform.resume.subscribe(() => this.requestAuthorization());
+      }
+      switch (locationAuthorizedStatus) {
+        case Diagnostic.permissionStatus.DENIED_ALWAYS:
+          this.onGPSDeniedAlways();
+          this.platform.resume.subscribe(() => this.requestAuthorization());
+          break;
+        case Diagnostic.permissionStatus.GRANTED:
+        case Diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
+          // On Android, also need to check for local notifications permissions
+          if (Capacitor.getPlatform() == 'android') {
+            let localNotificationStatus = await LocalNotifications.checkPermissions();
+            if (localNotificationStatus.display != 'granted') {
+              localNotificationStatus = await LocalNotifications.requestPermissions();
+            }
+            if (localNotificationStatus.display == 'granted') {
+              return await this.watchGPSActivation();
+            }
+          } else {
             return await this.watchGPSActivation();
           }
-        } else {
-          return await this.watchGPSActivation();
-        }
-        break;
-      default:
-        this.requestAuthorization();
+          break;
+        default:
+          this.requestAuthorization();
+      }
+      return false;
     }
-    return false;
   }
 
   private onGPSDeniedAlways() {

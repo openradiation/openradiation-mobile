@@ -121,7 +121,7 @@ export class MeasuresService {
   }
 
   private postMeasure(measure: Measure): Observable<unknown> {
-    if (MeasuresService.canPublishMeasure(measure)) {
+    if (this.canPublishMeasure(measure)) {
       const payload: MeasureApi = {
         apiKey: environment.API_KEY,
         data: {
@@ -184,7 +184,7 @@ export class MeasuresService {
     return undefined;
   }
 
-  static canPublishMeasure(measure: Measure | MeasureSeries): boolean {
+  canPublishMeasure(measure: Measure | MeasureSeries): boolean {
     switch (measure.type) {
       case MeasureType.Measure:
         return (
