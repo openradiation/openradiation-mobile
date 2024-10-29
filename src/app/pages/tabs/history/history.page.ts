@@ -3,11 +3,11 @@ import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionDispatched, ofActionSuccessful, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import { AutoUnsubscribePage } from '@app/components/auto-unsubscribe/auto-unsubscribe.page';
 import { AlertService } from '@app/services/alert.service';
 import { NavigationService } from '@app/services/navigation.service';
-import { Measure, MeasureSeries, MeasureType, Step } from '@app/states/measures/measure';
+import { Measure, MeasureSeries, MeasureType } from '@app/states/measures/measure';
 
 import { LoadingController } from '@ionic/angular';
 import {
@@ -17,16 +17,17 @@ import {
   PublishMeasureError,
   PublishMeasureSuccess,
   PublishMeasureProgress,
-  ShowMeasure
+  ShowMeasure,
 } from '@app/states/measures/measures.action';
 import { MeasuresService } from '@app/states/measures/measures.service';
 import { MeasuresState } from '@app/states/measures/measures.state';
 import { Share } from '@capacitor/share';
+import { Directory, Encoding, Filesystem } from '@capacitor/filesystem';
 
 @Component({
   selector: 'app-history',
   templateUrl: './history.page.html',
-  styleUrls: ['./history.page.scss']
+  styleUrls: ['./history.page.scss'],
 })
 export class HistoryPage extends AutoUnsubscribePage {
   measures$: Observable<(Measure | MeasureSeries)[]> = inject(Store).select(MeasuresState.measures);
@@ -46,7 +47,7 @@ export class HistoryPage extends AutoUnsubscribePage {
     private toastController: ToastController,
     private navigationService: NavigationService,
     private loadingCtrl: LoadingController,
-    private measureService: MeasuresService
+    private measureService: MeasuresService,
   ) {
     super(router);
   }
@@ -54,52 +55,51 @@ export class HistoryPage extends AutoUnsubscribePage {
   pageEnter() {
     super.pageEnter();
     this.subscriptions.push(
-      this.actions$.pipe(ofActionDispatched(PublishMeasureError)).subscribe(
-        (error: PublishMeasureError) => {
-            this.measureBeingSentMap[error.measure.id] = false;
-            this.loading?.dismiss();
-            this.loading = undefined;
-            this.toastController
-              .create({
-                message: this.translateService.instant('HISTORY.SEND_ERROR'),
-                duration: 3000,
-                buttons: [{
-                  text: this.translateService.instant('GENERAL.OK'),
-                  role: 'cancel',
-                  handler: () => {
-                    // Nothing to do
-                  }
-                }]
-              })
-              .then(toast => toast.present());
-        }),
+      this.actions$.pipe(ofActionDispatched(PublishMeasureError)).subscribe((error: PublishMeasureError) => {
+        this.measureBeingSentMap[error.measure.id] = false;
+        this.loading?.dismiss();
+        this.loading = undefined;
+        this.toastController
+          .create({
+            message: this.translateService.instant('HISTORY.SEND_ERROR'),
+            duration: 3000,
+            buttons: [
+              {
+                text: this.translateService.instant('GENERAL.OK'),
+                role: 'cancel',
+                handler: () => {
+                  // Nothing to do
+                },
+              },
+            ],
+          })
+          .then((toast) => toast.present());
+      }),
       this.actions$.pipe(ofActionDispatched(PublishMeasure)).subscribe(({ measure }: PublishMeasure) => {
         this.measureBeingSentMap[measure.id] = true;
       }),
-      this.actions$
-        .pipe(ofActionSuccessful(PublishMeasure))
-        .subscribe(({ measure }: PublishMeasure) => {
-          this.measureBeingSentMap[measure.id] = false
-         }),
-      this.actions$.pipe(ofActionSuccessful(ShowMeasure)).subscribe(action => {
+      this.actions$.pipe(ofActionSuccessful(PublishMeasure)).subscribe(({ measure }: PublishMeasure) => {
+        this.measureBeingSentMap[measure.id] = false;
+      }),
+      this.actions$.pipe(ofActionSuccessful(ShowMeasure)).subscribe((action) => {
         this.navigationService.navigateForward(
           ['measure', action.measure.type === MeasureType.Measure ? 'report' : 'report-series'],
           {
             animated: true,
-            queryParams: { goBackHistory: true }
-          }
+            queryParams: { goBackHistory: true },
+          },
         );
       }),
       this.actions$.pipe(ofActionDispatched(PublishMeasureSuccess)).subscribe(() => {
-         this.loading?.dismiss();
-         this.loading = undefined;
+        this.loading?.dismiss();
+        this.loading = undefined;
       }),
       this.actions$.pipe(ofActionDispatched(PublishMeasureProgress)).subscribe(() => {
-        this.publishMeasureCountCurrent = Math.min(this.publishMeasureCountTotal, this.publishMeasureCountCurrent + 1)
+        this.publishMeasureCountCurrent = Math.min(this.publishMeasureCountTotal, this.publishMeasureCountCurrent + 1);
         if (this.loading) {
-          this.loading.message = this.getLoaderMessage()
+          this.loading.message = this.getLoaderMessage();
         }
-      })
+      }),
     );
   }
 
@@ -122,7 +122,7 @@ export class HistoryPage extends AutoUnsubscribePage {
         backdropDismiss: false,
         buttons: [
           {
-            text: this.translateService.instant('GENERAL.NO')
+            text: this.translateService.instant('GENERAL.NO'),
           },
           {
             text: this.translateService.instant('GENERAL.YES'),
@@ -130,29 +130,31 @@ export class HistoryPage extends AutoUnsubscribePage {
               this.publishMeasureCountCurrent = 1;
               this.publishMeasureCountTotal = 1;
               if (measure.type == MeasureType.MeasureSeries) {
-                this.publishMeasureCountTotal = (measure as MeasureSeries).measures?.length
+                this.publishMeasureCountTotal = (measure as MeasureSeries).measures?.length;
               }
-              this.loadingCtrl.create({
-                backdropDismiss: true,
-                message: this.getLoaderMessage()
-              }).then(loading => {
-                this.loading = loading; 
-                this.loading.present(); 
-              })
-              this.store.dispatch(new PublishMeasure(measure))
-            }
-          }
-        ]
+              this.loadingCtrl
+                .create({
+                  backdropDismiss: true,
+                  message: this.getLoaderMessage(),
+                })
+                .then((loading) => {
+                  this.loading = loading;
+                  this.loading.present();
+                });
+              this.store.dispatch(new PublishMeasure(measure));
+            },
+          },
+        ],
       });
     }
   }
 
   getLoaderMessage() {
-    let progressMessage = "";
+    let progressMessage = '';
     if (this.publishMeasureCountTotal > 1) {
-      progressMessage = "(" + this.publishMeasureCountCurrent + "/" + this.publishMeasureCountTotal + ")"
+      progressMessage = '(' + this.publishMeasureCountCurrent + '/' + this.publishMeasureCountTotal + ')';
     }
-    return this.translateService.instant("HISTORY.SENDING") + progressMessage
+    return this.translateService.instant('HISTORY.SENDING') + progressMessage;
   }
 
   canPublish(measure: Measure | MeasureSeries): boolean {
@@ -160,7 +162,7 @@ export class HistoryPage extends AutoUnsubscribePage {
   }
 
   containsMeasureSeries(measures: (Measure | MeasureSeries)[]): boolean {
-    return measures.some(measure => measure.type === MeasureType.MeasureSeries);
+    return measures.some((measure) => measure.type === MeasureType.MeasureSeries);
   }
 
   delete(measure: Measure | MeasureSeries) {
@@ -173,13 +175,13 @@ export class HistoryPage extends AutoUnsubscribePage {
       backdropDismiss: false,
       buttons: [
         {
-          text: this.translateService.instant('GENERAL.NO')
+          text: this.translateService.instant('GENERAL.NO'),
         },
         {
           text: this.translateService.instant('GENERAL.YES'),
-          handler: () => this.store.dispatch(new DeleteMeasure(measure))
-        }
-      ]
+          handler: () => this.store.dispatch(new DeleteMeasure(measure)),
+        },
+      ],
     });
   }
 
@@ -191,65 +193,69 @@ export class HistoryPage extends AutoUnsubscribePage {
       backdropDismiss: false,
       buttons: [
         {
-          text: this.translateService.instant('GENERAL.NO')
+          text: this.translateService.instant('GENERAL.NO'),
         },
         {
           text: this.translateService.instant('GENERAL.YES'),
-          handler: () => this.store.dispatch(new DeleteAllMeasures())
-        }
-      ]
+          handler: () => this.store.dispatch(new DeleteAllMeasures()),
+        },
+      ],
     });
   }
 
-  exportCsv() {   
-    this.measures$.subscribe(async (measures: (Measure | MeasureSeries)[]) => {
-      // Step 1: create CSV content
-      let csvContent = "data:text/csv;charset=utf-8,type;date;measure;\n";
-      csvContent += measures.flatMap(measure => this.getMeasureAsCSVLines(measure))
-      
+  exportCsv() {
+    this.measures$.pipe(take(1)).subscribe(async (measures: (Measure | MeasureSeries)[]) => {
+      let csvContent = 'type;date;measure;\n';
+      csvContent += measures.map((measure) => this.getMeasureAsCSVLines(measure)).join('');
+
+      const m = new Date();
+      const fileName =
+        'OpenRadiation_Export_' + m.getUTCFullYear() + '-' + (m.getUTCMonth() + 1) + '-' + m.getUTCDate() + '.csv';
+
+      // Step 3 : share or download
       const canShare = await Share.canShare();
+
       if (canShare && canShare.value) {
-         Share.share({
-            text: csvContent,
-            title: this.translateService.instant('HISTORY.SHARE'),
-            dialogTitle: this.translateService.instant('GENERAL.SHARE')
-          });
+        const result = await Filesystem.writeFile({
+          path: fileName,
+          data: csvContent,
+          directory: Directory.Cache,
+          encoding: Encoding.UTF8,
+        });
+        Share.share({
+          text: fileName,
+          title: this.translateService.instant('HISTORY.SHARE'),
+          dialogTitle: this.translateService.instant('GENERAL.SHARE'),
+          url: result.uri,
+        });
       } else {
         // If share API not available, download CSV directly
         const encodedUri = encodeURI(csvContent);
-        const hiddenElement = document.createElement("a");
+        const hiddenElement = document.createElement('a');
         hiddenElement.href = encodedUri;
-        hiddenElement.target = "_blank";
-        const m = new Date();
-        const fileName =
-          "OpenRadiation_Export_" +
-          m.getUTCFullYear() +
-          "-" +
-          (m.getUTCMonth() + 1) +
-          "-" +
-          m.getUTCDate() +
-          ".csv";
+        hiddenElement.target = '_blank';
+
         hiddenElement.download = fileName;
         hiddenElement.click();
       }
-    })
+    });
   }
 
-  getMeasureAsCSVLines(measure: (Measure | MeasureSeries)): string {
-    let measureLines: Measure[] = []
-    let csvContent = "";
+  getMeasureAsCSVLines(measure: Measure | MeasureSeries): string {
+    let measureLines: Measure[] = [];
+    let csvContent = '';
     if (measure.type == MeasureType.Measure) {
       measureLines.push(measure);
     } else {
       measureLines = (measure as MeasureSeries).measures;
     }
-    measureLines.forEach(measureLine => {
-        let csvRow = measureLine.measurementEnvironment ? measureLine.measurementEnvironment : "-" + ";"
-        const date = new Date(measureLine.startTime); 
-        csvRow += date.toISOString() + ";";
-        csvRow += measureLine.value.toFixed(3) + "µSv/h;";
-        csvContent += csvRow + "\n";
-    })
+    measureLines.forEach((measureLine) => {
+      let csvRow = (measureLine.measurementEnvironment ? measureLine.measurementEnvironment : '-') + ';';
+      const date = new Date(measureLine.startTime);
+      csvRow += date.toISOString() + ';';
+      csvRow += measureLine.value.toFixed(3) + 'µSv/h;';
+      csvContent += csvRow + '\n';
+    });
     return csvContent;
   }
 }
