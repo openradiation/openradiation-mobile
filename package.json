@@ -52,6 +52,8 @@
     "@ionic/core": "^8.2.6",
     "@ionic/storage": "^4.0.0",
     "@ionic/storage-angular": "^4.0.0",
+    "@maskito/angular": "^3.2.0",
+    "@maskito/core": "^3.2.0",
     "@ngx-translate/core": "^15.0.0",
     "@ngx-translate/http-loader": "^8.0.0",
     "@ngxs/form-plugin": "^18.1.0",

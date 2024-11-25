@@ -2,7 +2,12 @@ import { Component, inject } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { NavigationService } from '@app/services/navigation.service';
-import { DisableExpertMode, DisableFakeHitsMode, EnableExpertMode, EnableFakeHitsMode } from '@app/states/measures/measures.action';
+import {
+  DisableExpertMode,
+  DisableFakeHitsMode,
+  EnableExpertMode,
+  EnableFakeHitsMode,
+} from '@app/states/measures/measures.action';
 import { MeasuresState } from '@app/states/measures/measures.state';
 import { LogOut, SetLanguage } from '@app/states/user/user.action';
 import { UserState } from '@app/states/user/user.state';
@@ -11,10 +16,10 @@ import { environment } from '@environments/environment';
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.page.html',
-  styleUrls: ['./settings.page.scss']
+  styleUrls: ['./settings.page.scss'],
 })
 export class SettingsPage {
-  allowFakeHitsMode = false
+  allowFakeHitsMode = false;
   expertMode$: Observable<boolean> = inject(Store).select(MeasuresState.expertMode);
   fakeHitsMode$: Observable<boolean> = inject(Store).select(MeasuresState.fakeHitsMode);
 
@@ -24,11 +29,16 @@ export class SettingsPage {
 
   notifications$: Observable<boolean | undefined> = inject(Store).select(UserState.notifications);
 
-  constructor(private navigationService: NavigationService, private store: Store) { 
-    const splitted = environment.APP_NAME_VERSION.split(" ")
+  constructor(
+    private navigationService: NavigationService,
+    private store: Store,
+  ) {
+    const splitted = environment.APP_NAME_VERSION.split(' ');
+    console.error(splitted);
     if (splitted.length >= 2) {
-      const envName = splitted[splitted.length - 1] + " " + splitted[splitted.length - 2]
-      this.allowFakeHitsMode = envName.toLocaleLowerCase().indexOf('beta') != -1
+      const envName = splitted[splitted.length - 1] + ' ' + splitted[splitted.length - 2];
+      this.allowFakeHitsMode =
+        envName.toLocaleLowerCase().indexOf('beta') != -1 || envName.toLocaleLowerCase().indexOf('mockdevice') != -1;
     }
   }
 

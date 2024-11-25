@@ -197,13 +197,17 @@
                   type="text"
                   formControlName="flightNumber"
                   minlength="3"
-                  mask="AA0999"
                   [required]="false"
                   class="input planeMode"
                   [label]="'MEASURES.FLIGHT.FLIGHT_NUMBER' | translate"
                   labelPlacement="fixed"
+                  [maskito]="flightMask"
+                  [maskitoElement]="maskPredicate"
                   [placeholder]="'GENERAL.EXAMPLE' | translate:exampleFlightNumber "></ion-input>
               </ion-item>
+              <ion-label class="minor-warning" *ngIf="flightNumberWarningMessage.length > 0">
+                {{ flightNumberWarningMessage }}
+              </ion-label>
               <ion-item class="description">
                 <ion-input
                   type="text"

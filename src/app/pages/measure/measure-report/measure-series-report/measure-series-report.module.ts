@@ -9,12 +9,13 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NgxsFormPluginModule } from '@ngxs/form-plugin';
 import { ComponentsModule } from '@app/components/components.module';
 import { MeasureSeriesReportPage } from './measure-series-report-page';
+import { MaskitoDirective } from '@maskito/angular';
 
 const routes: Routes = [
   {
     path: '',
-    component: MeasureSeriesReportPage
-  }
+    component: MeasureSeriesReportPage,
+  },
 ];
 
 @NgModule({
@@ -22,6 +23,7 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
+    MaskitoDirective,
     RouterModule.forChild(routes),
     NgxsFormPluginModule,
     ReactiveFormsModule,
@@ -30,6 +32,6 @@ const routes: Routes = [
     // FixMe Capacitor migration
     // NgxMaskIonicModule.forRoot()
   ],
-  declarations: [MeasureSeriesReportPage]
+  declarations: [MeasureSeriesReportPage],
 })
-export class MeasureReportSeriesPageModule { }
+export class MeasureReportSeriesPageModule {}

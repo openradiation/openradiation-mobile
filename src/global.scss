@@ -284,3 +284,11 @@ ion-spinner {
     }
   }
 }
+
+.minor-warning {
+   text-align: right; 
+   display: block; 
+   color: var(--ion-color-warning-shade);
+   padding-right: 20px;
+   font-size: small;
+}

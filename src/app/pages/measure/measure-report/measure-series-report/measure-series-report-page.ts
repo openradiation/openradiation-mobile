@@ -11,7 +11,7 @@ import {
   CancelMeasure,
   StartMeasureSeriesReport,
   StopMeasureSeries,
-  StopMeasureSeriesReport
+  StopMeasureSeriesReport,
 } from '@app/states/measures/measures.action';
 import { MeasuresStateModel } from '@app/states/measures/measures.state';
 import { AbstractMeasureReportPage } from '../abstact-measure-report.page';
@@ -20,15 +20,12 @@ import { MeasuresService } from '@app/states/measures/measures.service';
 @Component({
   selector: 'app-measure-series-report',
   templateUrl: './measure-series-report.page.html',
-  styleUrls: ['./measure-series-report.page.scss']
+  styleUrls: ['./measure-series-report.page.scss'],
 })
 export class MeasureSeriesReportPage extends AbstractMeasureReportPage<MeasureSeries> {
   currentSeries?: MeasureSeries;
   planeMode: boolean;
   measureSeriesParamsSelected = MeasureSeriesParamsSelected;
-
-  exampleFlightNumber = { message: ': AF179' };
-  exampleSeatNumber = { message: ': C15' };
 
   url = '/measure/report-series';
 
@@ -41,27 +38,27 @@ export class MeasureSeriesReportPage extends AbstractMeasureReportPage<MeasureSe
     protected platform: Platform,
     private formBuilder: UntypedFormBuilder,
     private alertService: AlertService,
-    private translateService: TranslateService,
-    protected measureService: MeasuresService
+    protected translateService: TranslateService,
+    protected measureService: MeasuresService,
   ) {
-    super(router, store, activatedRoute, navigationService, actions$, platform, measureService);
+    super(router, store, activatedRoute, navigationService, actions$, platform, measureService, translateService);
   }
 
   pageEnter() {
     super.pageEnter();
     this.store.dispatch(new StartMeasureSeriesReport()).subscribe(() => {
       const { measureSeriesReport, currentSeries } = this.store.selectSnapshot(
-        ({ measures }: { measures: MeasuresStateModel }) => measures
+        ({ measures }: { measures: MeasuresStateModel }) => measures,
       );
       this.currentSeries = currentSeries;
       if (this.currentSeries) {
         this.planeMode = this.currentSeries.measures.some(
-          measure => measure.measurementEnvironment === MeasureEnvironment.Plane
+          (measure) => measure.measurementEnvironment === MeasureEnvironment.Plane,
         );
         if (measureSeriesReport) {
           this.measureReportForm = this.formBuilder.group({
             ...measureSeriesReport.model,
-            tags: [measureSeriesReport.model.tags]
+            tags: [measureSeriesReport.model.tags],
           });
           if (!this.planeMode) {
             this.initPositionChangeAltitudeOverLimit(this.currentSeries);
@@ -92,8 +89,8 @@ export class MeasureSeriesReportPage extends AbstractMeasureReportPage<MeasureSe
   }
 
   initPositionChangeAltitudeOverLimit(measureSeries: MeasureSeries) {
-    this.positionChangeAltitudeOverLimit = measureSeries.measures.some(measure =>
-      AbstractMeasureReportPage.positionChangeAltitudeOverLimit(measure.altitude)
+    this.positionChangeAltitudeOverLimit = measureSeries.measures.some((measure) =>
+      AbstractMeasureReportPage.positionChangeAltitudeOverLimit(measure.altitude),
     );
   }
 
@@ -101,7 +98,7 @@ export class MeasureSeriesReportPage extends AbstractMeasureReportPage<MeasureSe
     this.subscriptions.push(
       this.actions$.pipe(ofActionSuccessful(StopMeasureSeriesReport)).subscribe(() => {
         this.store.dispatch(new StopMeasureSeries());
-      })
+      }),
     );
     this.store.dispatch(new StopMeasureSeriesReport());
   }
@@ -116,20 +113,20 @@ export class MeasureSeriesReportPage extends AbstractMeasureReportPage<MeasureSe
         backdropDismiss: false,
         buttons: [
           {
-            text: this.translateService.instant('GENERAL.NO')
+            text: this.translateService.instant('GENERAL.NO'),
           },
           {
             text: this.translateService.instant('GENERAL.YES'),
-            handler: () => this.store.dispatch(new CancelMeasure())
-          }
-        ]
+            handler: () => this.store.dispatch(new CancelMeasure()),
+          },
+        ],
       });
     }
   }
 
   protected initMeasurementEnvironmentOptions(measureSeries: MeasureSeries) {
-    this.positionChangeSpeedOverLimit = measureSeries.measures.some(measure =>
-      AbstractMeasureReportPage.hasPositionChanged(measure)
+    this.positionChangeSpeedOverLimit = measureSeries.measures.some((measure) =>
+      AbstractMeasureReportPage.hasPositionChanged(measure),
     );
     this.updateMeasurementEnvironmentOptions();
   }

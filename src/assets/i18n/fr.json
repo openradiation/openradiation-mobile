@@ -173,7 +173,8 @@
     "FIABILITY": "Fiabilité",
     "FLIGHT": {
       "FLIGHT_NUMBER": "Numéro de vol",
-      "SEAT_NUMBER": "Numéro de siège"
+      "SEAT_NUMBER": "Numéro de siège",
+      "MASK": "Companie aérienne (2 à 3 lettres) suivie de 1 à 4 chiffres"
     },
     "HITS_NUMBER": "Nb coups",
     "HITS_PER_MIN": "Nb coups/min",

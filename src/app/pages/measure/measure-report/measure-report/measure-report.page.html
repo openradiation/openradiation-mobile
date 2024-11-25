@@ -146,7 +146,9 @@
             <div class="title">{{'MEASURES.ENVIRONMENT.TITLE' | translate}}</div>
             <ion-list>
               <ion-item class="description">
-                <ion-input formControlName="flightNumber" mask="AA0999"
+                <ion-input formControlName="flightNumber"
+                 [maskito]="flightMask"
+                 [maskitoElement]="maskPredicate"
                   [placeholder]="'GENERAL.EXAMPLE' | translate:exampleFlightNumber "
                   type="text"
                   class="input planeMode"
@@ -154,6 +156,12 @@
                   labelPlacement="fixed">
                 </ion-input>
               </ion-item>
+              <ion-label  
+               class="minor-warning"
+                *ngIf="flightNumberWarningMessage.length > 0"
+              >
+                {{ flightNumberWarningMessage }}
+              </ion-label>
               <ion-item class="description">
                 <ion-input formControlName="seatNumber" mask="AAAAA"
                   [placeholder]="'GENERAL.EXAMPLE' | translate:exampleSeatNumber "

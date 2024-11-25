@@ -11,17 +11,15 @@ import { StartMeasureReport, StopMeasure, StopMeasureReport } from '@app/states/
 import { MeasuresState, MeasuresStateModel } from '@app/states/measures/measures.state';
 import { AbstractMeasureReportPage } from '../abstact-measure-report.page';
 import { MeasuresService } from '@app/states/measures/measures.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-measure-report',
   templateUrl: './measure-report.page.html',
-  styleUrls: ['./measure-report.page.scss']
+  styleUrls: ['./measure-report.page.scss'],
 })
 export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
   expertMode$: Observable<boolean> = inject(Store).select(MeasuresState.expertMode);
-
-  exampleFlightNumber = { message: ': AF179' };
-  exampleSeatNumber = { message: ': C15' };
 
   initialDatePickerValue: string;
   initialDurationValue: string;
@@ -41,9 +39,10 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
     protected platform: Platform,
     private formBuilder: UntypedFormBuilder,
     private dateService: DateService,
-    protected measureService: MeasuresService
+    protected measureService: MeasuresService,
+    protected translateService: TranslateService,
   ) {
-    super(router, store, activatedRoute, navigationService, actions$, platform, measureService);
+    super(router, store, activatedRoute, navigationService, actions$, platform, measureService, translateService);
     const date = new Date();
     date.setHours(0);
     date.setMinutes(0);
@@ -57,7 +56,7 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
     if (!this.measureReportForm) {
       this.store.dispatch(new StartMeasureReport()).subscribe(() => {
         const { measureReport, currentMeasure } = this.store.selectSnapshot(
-          ({ measures }: { measures: MeasuresStateModel }) => measures
+          ({ measures }: { measures: MeasuresStateModel }) => measures,
         );
         this.currentMeasure = currentMeasure;
         if (this.currentMeasure) {
@@ -67,7 +66,7 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
           if (measureReport) {
             this.measureReportForm = this.formBuilder.group({
               ...measureReport.model,
-              tags: [measureReport.model.tags]
+              tags: [measureReport.model.tags],
             });
             if (!this.planeMode) {
               this.initPositionChangeAltitudeOverLimit(this.currentMeasure);
@@ -97,20 +96,19 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
 
   init() {
     this.subscriptions.push(
-      this.measureReportForm!.valueChanges.subscribe(value => {
+      this.measureReportForm!.valueChanges.subscribe((value) => {
         if (value.duration === undefined) {
           //si duration est undefined, le date picker se met à new Date(), on le force à 00h00m00s
           this.measureReportForm!.get('duration')!.setValue(this.initialDurationValue);
-
         } else if (typeof value.duration !== 'string' && value.duration) {
           this.measureReportForm!.get('duration')!.setValue(
             this.dateService.toISODuration(
               (value.duration.hour.value * 60 * 60 + value.duration.minute.value * 60 + value.duration.second.value) *
-              1000
-            )
+                1000,
+            ),
           );
         }
-      })
+      }),
     );
     super.init();
   }
@@ -120,7 +118,7 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
       this.subscriptions.push(
         this.actions$.pipe(ofActionSuccessful(StopMeasureReport)).subscribe(() => {
           this.store.dispatch(new StopMeasure());
-        })
+        }),
       );
       this.store.dispatch(new StopMeasureReport());
     }
