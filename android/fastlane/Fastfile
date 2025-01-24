@@ -11,16 +11,55 @@
 #
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
+versionName = "3.0.0"
+
 default_platform(:android)
 platform :android do
   
-  desc "Build an apk"
-  lane :build_prod_apk do
+  desc "Build and deploy prod aab"
+  lane :deploy_prod_aaab do
+    previous_build_number = google_play_track_version_codes(
+      package_name: "org.openradiation",
+      json_key: File.expand_path("../openradiation-fastlane-playstore.json"),
+      track: "beta"
+    )[0]
+    versionCode = previous_build_number + 1
     gradle(
-      task: "clean assembleRelease",
-      properties: {
-        "org.gradle.java.home" => "/opt/java/openjdk",
-      }
+          task: "clean bundleRelease",
+          print_command: true,
+          properties: {
+            "org.gradle.java.home" => "/opt/java/openjdk",
+            "android.injected.signing.store.file" => File.expand_path("../../openradiation.keystore"),
+            "android.injected.signing.store.password" => ENV["OPENRADIATION_KEYSTORE_PW"],
+            "android.injected.signing.key.alias" => "openradiation",
+            "android.injected.signing.key.password" => ENV["OPENRADIATION_KEYSTORE_PW"],
+            "versCode" => versionCode,
+            "versName" => versionName
+          }
     )
+    upload_to_play_store(track: 'internal')
+    puts "Aab created with version : "
+    puts versionName
+    puts " code "
+    puts versionCode
+    puts "(last known version was : "
+    previous_build_number
   end
+
+  desc "Build a prod apk"
+    lane :build_prod_apk do
+      gradle(
+        task: "clean assembleRelease",
+        print_command: true,
+        properties: {
+          "org.gradle.java.home" => "/opt/java/openjdk",
+          "android.injected.signing.store.file" => File.expand_path("../../openradiation.keystore"),
+          "android.injected.signing.store.password" => ENV["OPENRADIATION_KEYSTORE_PW"],
+          "android.injected.signing.key.alias" => "openradiation",
+          "android.injected.signing.key.password" => ENV["OPENRADIATION_KEYSTORE_PW"],
+          "versCode" => 1,
+          "versName" => versionName
+        }
+      )
+    end
 end
