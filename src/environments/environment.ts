@@ -5,8 +5,12 @@ export const environment = {
   API_URI: 'https://submit.open-radiation.net/measurements',
   IN_APP_BROWSER_URI: {
     base: 'https://request.open-radiation.net',
-    suffix: 'openradiation'
+    suffix: 'openradiation',
   },
   mockDevice: false,
   isTestEnvironment: false,
+  backgroundMeasureServerURL: 'http://background-measure-server-url.fr',
+  backgroundMeasureThreshold: 50,
+  backgroundMeasureStepDurationMinutes: 0.03,
+  backgroundMeasureStepCountBeforeSending: 10,
 };
