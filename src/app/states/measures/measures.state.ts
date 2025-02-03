@@ -85,7 +85,7 @@ export interface MeasuresStateModel {
     fakeHitsMode: boolean;
     backgroundMeasureServerURL: string;
     backgroundMeasureThreshold: number;
-    backgroundMeasureStepDurationSeconds: number;
+    backgroundMeasureStepDurationMinutes: number;
     backgroundMeasureStepCountBeforeSending: number;
   };
 }
@@ -106,7 +106,7 @@ export interface MeasuresStateModel {
       // If this threshold is exceeded, background measure will be sent immediately
       backgroundMeasureThreshold: environment.backgroundMeasureThreshold,
       // Duration of background measure step
-      backgroundMeasureStepDurationSeconds: environment.backgroundMeasureStepDurationSeconds,
+      backgroundMeasureStepDurationMinutes: environment.backgroundMeasureStepDurationMinutes,
       // Max Steps before sending an average value to the server
       backgroundMeasureStepCountBeforeSending: environment.backgroundMeasureStepCountBeforeSending,
     },
@@ -231,8 +231,9 @@ export class MeasuresState {
     const model: MeasureSeriesParams = {
       seriesDurationLimit: Infinity,
       measureHitsLimit: Infinity,
-      measureDurationLimit: params.backgroundMeasureStepDurationSeconds,
-      paramSelected: MeasureSeriesParamsSelected.measureDurationLimit,
+      maxValueLimit: params.backgroundMeasureThreshold,
+      measureDurationLimit: params.backgroundMeasureStepDurationMinutes,
+      paramSelected: MeasureSeriesParamsSelected.measureBackgroundLimit,
     };
     patchState({
       measureSeriesParams: {
@@ -501,6 +502,7 @@ export class MeasuresState {
       seriesDurationLimit: 24,
       measureHitsLimit: 50,
       measureDurationLimit: 5,
+      maxValueLimit: Infinity,
       paramSelected: MeasureSeriesParamsSelected.measureDurationLimit,
     };
     patchState({
@@ -610,6 +612,14 @@ export class MeasuresState {
     currentTime: number,
   ): boolean {
     switch (measureSeries.params.paramSelected) {
+      case MeasureSeriesParamsSelected.measureBackgroundLimit: {
+        // Two cases in which a background measure step should end :
+        const hasReachedDurationLimit = currentTime - measure.startTime > measureSeries.params.measureDurationLimit;
+        const hasEnoughAccuracy =
+          measure.hitsAccuracy !== undefined && measure.hitsAccuracy > device.hitsAccuracyThreshold.medium;
+        const thresholdExceeded = measure.value > measureSeries.params.maxValueLimit;
+        return (hasEnoughAccuracy && hasReachedDurationLimit) || thresholdExceeded;
+      }
       case MeasureSeriesParamsSelected.measureDurationLimit:
         return (
           currentTime - measure.startTime > measureSeries.params.measureDurationLimit &&
