@@ -14,6 +14,7 @@ export class InitMeasures {
 
 export class StartBackgroundMeasure {
   static readonly type = '[Measures] Starts a background measure';
+  constructor(public device: AbstractDevice) {}
 }
 
 export class StopBackgroundMeasure {

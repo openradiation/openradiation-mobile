@@ -18,6 +18,7 @@ import {
 import { UserState } from '@app/states/user/user.state';
 import { RedirectAfterLogin } from '../tabs/settings/log-in/log-in.page';
 import { MeasuresState } from '@app/states/measures/measures.state';
+import { PositionService } from '@app/states/measures/position.service';
 
 @Component({
   selector: 'app-menu',
@@ -43,6 +44,7 @@ export class MenuComponent {
     private actions$: Actions,
     private alertService: AlertService,
     private translateService: TranslateService,
+    private positionService: PositionService,
   ) {
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
       this.currentUrl = event.url;
@@ -88,18 +90,21 @@ export class MenuComponent {
 
   startBackgroundMeasure() {
     this.closeMenu();
-    this.isBackgoundMeasureInProgress$.pipe(take(1)).subscribe((isBackgoundMeasureInProgress) => {
+    this.isBackgoundMeasureInProgress$.pipe(take(1)).subscribe(async (isBackgoundMeasureInProgress) => {
       if (isBackgoundMeasureInProgress) {
         // TODO ask confirmation
         this.store.dispatch(new StopBackgroundMeasure());
       } else {
-        this.connectedDevice$.pipe(take(1)).subscribe((connectedDevice) => {
-          if (connectedDevice) {
-            this.store.dispatch(new StartBackgroundMeasure());
-          } else {
-            this.goToDevices();
-          }
-        });
+        const hasLocationEnabled = await this.positionService.requestAuthorization();
+        if (hasLocationEnabled) {
+          this.connectedDevice$.pipe(take(1)).subscribe((connectedDevice) => {
+            if (connectedDevice) {
+              this.store.dispatch(new StartBackgroundMeasure(connectedDevice));
+            } else {
+              this.goToDevices();
+            }
+          });
+        }
       }
     });
   }

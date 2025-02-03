@@ -83,7 +83,7 @@ export interface MeasuresStateModel {
     autoPublish: boolean;
     planeMode: boolean;
     fakeHitsMode: boolean;
-backgroundMeasureServerURL: string;
+    backgroundMeasureServerURL: string;
     backgroundMeasureThreshold: number;
     backgroundMeasureStepDurationSeconds: number;
     backgroundMeasureStepCountBeforeSending: number;
@@ -221,8 +221,34 @@ export class MeasuresState {
   }
 
   @Action(StartBackgroundMeasure)
-  startBackgroundMeasure({ patchState }: StateContext<MeasuresStateModel>) {
+  startBackgroundMeasure(
+    { getState, patchState }: StateContext<MeasuresStateModel>,
+    { device }: StartBackgroundMeasure,
+  ) {
     patchState({ backgroundMeasureInProgress: true });
+    const { params } = getState();
+    // Step 1 : Configure measure series
+    const model: MeasureSeriesParams = {
+      seriesDurationLimit: Infinity,
+      measureHitsLimit: Infinity,
+      measureDurationLimit: params.backgroundMeasureStepDurationSeconds,
+      paramSelected: MeasureSeriesParamsSelected.measureDurationLimit,
+    };
+    patchState({
+      measureSeriesParams: {
+        model,
+        dirty: false,
+        status: '',
+        errors: {},
+      },
+    });
+
+    // Step 2: Launch measure series
+    this.store.dispatch(new StopMeasureSeriesParams()).subscribe(() => {
+      this.store.dispatch(new StartMeasure(device)).subscribe(() => {
+        this.store.dispatch(new StartMeasureScan(device));
+      });
+    });
   }
 
   @Action(StopBackgroundMeasure)
@@ -237,7 +263,10 @@ export class MeasuresState {
         },
         {
           text: this.translateService.instant('GENERAL.YES'),
-          handler: () => patchState({ backgroundMeasureInProgress: false }),
+          handler: () => {
+            patchState({ backgroundMeasureInProgress: false });
+            this.store.dispatch(new StopMeasureSeriesParams());
+          },
         },
       ],
     });
