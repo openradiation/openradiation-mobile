@@ -12,6 +12,14 @@ export class InitMeasures {
   ) {}
 }
 
+export class StartBackgroundMeasure {
+  static readonly type = '[Measures] Starts a background measure';
+}
+
+export class StopBackgroundMeasure {
+  static readonly type = '[Measures] Stops a background measure';
+}
+
 export class EnableExpertMode {
   static readonly type = '[Measures] Enable expert mode';
 }

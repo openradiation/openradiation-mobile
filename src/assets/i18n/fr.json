@@ -249,6 +249,12 @@
     "STOP": "Vous pourrez arrêter les mesures à tout moment.",
     "TITLE": "Série de mesures"
   },
+  "MEASURE_BACKGROUND": {
+    "TITLE": "Mesure en tâche de fond",
+    "STOP": "Arrêter la mesure en cours",
+    "CONFIRM_MESSAGE": "Êtes-vous certain de vouloir arrêter la mesure en tâche de fond en cours ?",
+    "INDICATOR": "Mesure en cours..."
+  },
   "NOTIFICATIONS": {
     "ALERT": {
       "MESSAGE": "Si vous voulez accepter les notifications, vous devez les activer manuellement dans les paramètres.",
