@@ -208,11 +208,13 @@ export interface MeasureSeriesParams {
   measureHitsLimit: number;
   measureDurationLimit: number;
   paramSelected: MeasureSeriesParamsSelected;
+  maxValueLimit: number;
 }
 
 export enum MeasureSeriesParamsSelected {
   measureHitsLimit,
   measureDurationLimit,
+  measureBackgroundLimit,
 }
 
 export interface MeasureSeriesReport {
