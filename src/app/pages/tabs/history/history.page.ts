@@ -205,7 +205,7 @@ export class HistoryPage extends AutoUnsubscribePage {
 
   exportCsv() {
     this.measures$.pipe(take(1)).subscribe(async (measures: (Measure | MeasureSeries)[]) => {
-      let csvContent = 'type;date;measure;\n';
+      let csvContent = this.getCSVColumns().join(';') + '\n';
       csvContent += measures.map((measure) => this.getMeasureAsCSVLines(measure)).join('');
 
       const m = new Date();
@@ -231,10 +231,10 @@ export class HistoryPage extends AutoUnsubscribePage {
       } else {
         // If share API not available, download CSV directly
         const encodedUri = encodeURI(csvContent);
+        console.debug(csvContent);
         const hiddenElement = document.createElement('a');
         hiddenElement.href = encodedUri;
         hiddenElement.target = '_blank';
-
         hiddenElement.download = fileName;
         hiddenElement.click();
       }
@@ -250,12 +250,79 @@ export class HistoryPage extends AutoUnsubscribePage {
       measureLines = (measure as MeasureSeries).measures;
     }
     measureLines.forEach((measureLine) => {
-      let csvRow = (measureLine.measurementEnvironment ? measureLine.measurementEnvironment : '-') + ';';
-      const date = new Date(measureLine.startTime);
-      csvRow += date.toISOString() + ';';
-      csvRow += measureLine.value.toFixed(3) + 'µSv/h;';
+      let csvRow = '';
+      this.getCSVColumns().forEach((c) => {
+        // @ts-expect-error untyped access
+        const value = measureLine[c];
+        csvRow += (value ? value : '') + ';';
+      });
       csvContent += csvRow + '\n';
     });
     return csvContent;
+  }
+
+  getCSVColumns() {
+    return [
+      'apparatusId',
+      'apparatusVersion',
+      'apparatusSensorType',
+      'apparatusTubeType',
+      'temperature',
+      'value',
+      'hitsNumber',
+      'calibrationFunction',
+      'startTime',
+      'endTime',
+      'latitude',
+      'longitude',
+      'accuracy',
+      'altitude',
+      'altitudeAccuracy',
+      'endLatitude',
+      'endLongitude',
+      'endAccuracy',
+      'endAltitude',
+      'endAltitudeAccuracy',
+      'deviceUuid',
+      'devicePlatform',
+      'deviceVersion',
+      'deviceModel',
+      'reportUuid',
+      'manualReporting',
+      'organisationReporting',
+      'description',
+      'measurementHeight',
+      'enclosedObject',
+      'userId',
+      'measurementEnvironment',
+      'rain',
+      'flightNumber',
+      'seatNumber',
+      'windowSeat',
+      'storm',
+      'flightId',
+      'refinedLatitude',
+      'refinedLongitude',
+      'refinedAltitude',
+      'refinedEndLatitude',
+      'refinedEndLongitude',
+      'refinedEndAltitude',
+      'departureTime',
+      'arrivalTime',
+      'airportOrigin',
+      'airportDestination',
+      'aircraftType',
+      'firstLatitude',
+      'firstLongitude',
+      'midLatitude',
+      'midLongitude',
+      'lastLatitude',
+      'lastLongitude',
+      'dateAndTimeOfCreation',
+      'qualification',
+      'qualificationVotesNumber',
+      'reliability',
+      'atypical',
+    ];
   }
 }
