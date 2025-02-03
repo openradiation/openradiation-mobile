@@ -34,7 +34,6 @@ export class SettingsPage {
     private store: Store,
   ) {
     const splitted = environment.APP_NAME_VERSION.split(' ');
-    console.error(splitted);
     if (splitted.length >= 2) {
       const envName = splitted[splitted.length - 1] + ' ' + splitted[splitted.length - 2];
       this.allowFakeHitsMode =

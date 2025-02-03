@@ -41,6 +41,7 @@ import {
   PublishMeasureError,
   PublishMeasureSuccess,
   ShowMeasure,
+  StartBackgroundMeasure,
   StartManualMeasure,
   StartMeasure,
   StartMeasureReport,
@@ -48,6 +49,7 @@ import {
   StartMeasureSeriesParams,
   StartMeasureSeriesReport,
   StartNextMeasureSeries,
+  StopBackgroundMeasure,
   StopMeasure,
   StopMeasureReport,
   StopMeasureScan,
@@ -68,6 +70,7 @@ const TIMEOUT_DURATION = 35000;
 export interface MeasuresStateModel {
   measures: (Measure | MeasureSeries)[];
   currentPosition?: Location;
+  backgroundMeasureInProgress: boolean;
   currentMeasure?: Measure;
   currentSeries?: MeasureSeries;
   canEndCurrentScan: boolean;
@@ -80,6 +83,10 @@ export interface MeasuresStateModel {
     autoPublish: boolean;
     planeMode: boolean;
     fakeHitsMode: boolean;
+backgroundMeasureServerURL: string;
+    backgroundMeasureThreshold: number;
+    backgroundMeasureStepDurationSeconds: number;
+    backgroundMeasureStepCountBeforeSending: number;
   };
 }
 
@@ -89,11 +96,19 @@ export interface MeasuresStateModel {
     measures: [],
     recentTags: [],
     canEndCurrentScan: false,
+    backgroundMeasureInProgress: false,
     params: {
       expertMode: false,
       autoPublish: false,
       planeMode: false,
       fakeHitsMode: false,
+      backgroundMeasureServerURL: environment.backgroundMeasureServerURL,
+      // If this threshold is exceeded, background measure will be sent immediately
+      backgroundMeasureThreshold: environment.backgroundMeasureThreshold,
+      // Duration of background measure step
+      backgroundMeasureStepDurationSeconds: environment.backgroundMeasureStepDurationSeconds,
+      // Max Steps before sending an average value to the server
+      backgroundMeasureStepCountBeforeSending: environment.backgroundMeasureStepCountBeforeSending,
     },
   },
 })
@@ -169,6 +184,11 @@ export class MeasuresState {
     return canEndCurrentScan;
   }
 
+  @Selector()
+  static isBackgroundMeasureInProgress({ backgroundMeasureInProgress }: MeasuresStateModel): boolean {
+    return backgroundMeasureInProgress;
+  }
+
   @Action(InitMeasures)
   initMeasures(
     { patchState, getState }: StateContext<MeasuresStateModel>,
@@ -198,6 +218,29 @@ export class MeasuresState {
     } else {
       patchState(patch);
     }
+  }
+
+  @Action(StartBackgroundMeasure)
+  startBackgroundMeasure({ patchState }: StateContext<MeasuresStateModel>) {
+    patchState({ backgroundMeasureInProgress: true });
+  }
+
+  @Action(StopBackgroundMeasure)
+  stopBackgroundMeasure({ patchState }: StateContext<MeasuresStateModel>) {
+    this.alertService.show({
+      header: this.translateService.instant('MEASURE_BACKGROUND.TITLE'),
+      message: this.translateService.instant('MEASURE_BACKGROUND.CONFIRM_MESSAGE'),
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: this.translateService.instant('GENERAL.NO'),
+        },
+        {
+          text: this.translateService.instant('GENERAL.YES'),
+          handler: () => patchState({ backgroundMeasureInProgress: false }),
+        },
+      ],
+    });
   }
 
   @Action(EnableExpertMode)
