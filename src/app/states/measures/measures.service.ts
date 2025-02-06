@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { forkJoin, Observable, of, concatMap, timer, map } from 'rxjs';
-import { catchError, shareReplay, take, takeUntil } from 'rxjs/operators';
+import { catchError, shareReplay, take, takeUntil, tap } from 'rxjs/operators';
 import { environment } from '@environments/environment';
 import { AbstractDevice, ApparatusSensorType } from '@app/states/devices/abstract-device';
 import { DeviceConnectionLost } from '@app/states/devices/devices.action';
@@ -12,8 +12,10 @@ import {
   Measure,
   MeasureEnvironment,
   MeasureSeries,
+  MeasureSeriesParamsSelected,
   MeasureType,
   PositionAccuracyThreshold,
+  SendableBackgroundMeasure,
   Step,
 } from '@app/states/measures/measure';
 import { MeasureApi } from '@app/states/measures/measure-api';
@@ -24,6 +26,7 @@ import {
   StopMeasureScan,
 } from '@app/states/measures/measures.action';
 import { MeasuresStateModel } from '@app/states/measures/measures.state';
+import { ErrorResponse, ErrorResponseCode } from './error-response';
 
 @Injectable({
   providedIn: 'root',
@@ -209,7 +212,7 @@ export class MeasuresService {
       measure.endAccuracy !== null &&
       measure.endAccuracy < PositionAccuracyThreshold.No;
     if (!hasSufficientAccuracyToBePublished) {
-      // Only allow publication with poor accuracy in plane mode with fligh number set
+      // Only allow publication with poor accuracy in plane mode with flight number set
       return (
         measure.measurementEnvironment == MeasureEnvironment.Plane &&
         measure.flightNumber != undefined &&
@@ -232,5 +235,91 @@ export class MeasuresService {
         measure.altitude = 10000;
       }
     }
+  }
+
+  sendBackgroundMeasureToServer(
+    device: AbstractDevice,
+    currentSeries: MeasureSeries,
+    newCurrentMeasure: Measure,
+  ): boolean {
+    // Only consider background measures
+    if (currentSeries.params.paramSelected == MeasureSeriesParamsSelected.measureBackgroundLimit) {
+      const thresholdExceeded = newCurrentMeasure.value > currentSeries.params.maxValueLimit;
+      // If threshold is exceeded
+      if (thresholdExceeded) {
+        // Send to server right away
+        console.error('thresholdExceeded => send to server right away');
+        const jsonToSend = this.convertToSendableBackgroundMeasure(currentSeries, newCurrentMeasure, true);
+        this.doSendToServer(jsonToSend, currentSeries.params.backgroundMeasureServerURL);
+        return true;
+      } else {
+        // If we have made enough measures
+
+        if (currentSeries.measures.length + 1 >= currentSeries.params.backgroundMeasureStepCountBeforeSending) {
+          // Send an average to the server
+          console.error(currentSeries.measures.length + 1 + ' measures => send average to server');
+          const jsonToSend = this.convertToSendableBackgroundMeasure(currentSeries, newCurrentMeasure, false);
+          this.doSendToServer(jsonToSend, currentSeries.params.backgroundMeasureServerURL);
+          return true;
+        }
+      }
+      // In any other cases, do not send to server yet
+    }
+    console.debug(
+      '[BackgroundMeasure] Not sending to server yet (' +
+        (currentSeries.measures.length + 1) +
+        ' measures, waiting for ' +
+        currentSeries.params.backgroundMeasureStepCountBeforeSending +
+        ' or threshold ' +
+        currentSeries.params.maxValueLimit +
+        ')',
+    );
+    return false;
+  }
+
+  private convertToSendableBackgroundMeasure(
+    currentSeries: MeasureSeries,
+    newCurrentMeasure: Measure,
+    thresholdExceeded: boolean,
+  ): SendableBackgroundMeasure {
+    const userId = this.store.selectSnapshot(({ user }: { user: UserStateModel }) => user.login);
+    const userPwd = this.store.selectSnapshot(({ user }: { user: UserStateModel }) => user.password);
+    const converted: SendableBackgroundMeasure = {
+      latitude: newCurrentMeasure.latitude ?? 0,
+      longitude: newCurrentMeasure.longitude ?? 0,
+      reportUuid: currentSeries.seriesUuid,
+      startTime: currentSeries.startTime,
+      endTime: newCurrentMeasure.endTime
+        ? newCurrentMeasure.endTime
+        : newCurrentMeasure.startTime + currentSeries.params.measureDurationLimit,
+      value: newCurrentMeasure.hitsNumber ?? 0,
+      hits: newCurrentMeasure.hitsNumber ?? 0,
+      userId: userId ?? '',
+      userPwd: userPwd ?? '',
+    };
+
+    if (!thresholdExceeded) {
+      // Send an average of all measures
+      const allMeasures = [newCurrentMeasure, ...currentSeries.measures];
+      const hitSum = allMeasures.reduce((sum, m) => sum + (m.hitsNumber ?? 0), 0);
+      const valueSum = allMeasures.reduce((sum, m) => sum + (m.value ?? 0), 0);
+      converted.hits = hitSum / allMeasures.length;
+      converted.value = valueSum / allMeasures.length;
+    }
+    return converted;
+  }
+
+  private doSendToServer(backgroundMeasure: SendableBackgroundMeasure, url: string) {
+    console.error('[BackgroundMeasure] Sending following JSON to ' + url, backgroundMeasure);
+    return this.httpClient
+      .post(url, backgroundMeasure)
+      .pipe(
+        tap(() => console.error('DID SEND')),
+        catchError((error) => {
+          console.error('FAIL', error);
+          return of(null);
+        }),
+      )
+      .subscribe();
   }
 }

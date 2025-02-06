@@ -11,6 +11,6 @@ export const environment = {
   isTestEnvironment: false,
   backgroundMeasureServerURL: 'http://background-measure-server-url.fr',
   backgroundMeasureThreshold: 50,
-  backgroundMeasureStepDurationMinutes: 0.03,
-  backgroundMeasureStepCountBeforeSending: 10,
+  backgroundMeasureStepDurationMinutes: 0.06,
+  backgroundMeasureStepCountBeforeSending: 4,
 };

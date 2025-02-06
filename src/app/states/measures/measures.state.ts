@@ -56,11 +56,16 @@ import {
   StopMeasureSeries,
   StopMeasureSeriesParams,
   StopMeasureSeriesReport,
+  UpdateBackgroundMeasureServerURL,
+  UpdateBackgroundMeasureStepCount,
+  UpdateBackgroundMeasureStepDuration,
+  UpdateBackgroundMeasureThreshold,
 } from '@app/states/measures/measures.action';
 import { MeasuresService } from '@app/states/measures/measures.service';
 import { Device } from '@capacitor/device';
 import { Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
+import { StorageService } from '@app/services/storage.service';
 
 /**
  * Max duration between 2 measure steps before the device connection is considered as lost
@@ -78,16 +83,18 @@ export interface MeasuresStateModel {
   measureReport?: Form<MeasureReport>;
   measureSeriesParams?: Form<MeasureSeriesParams>;
   measureSeriesReport?: Form<MeasureSeriesReport>;
-  params: {
-    expertMode: boolean;
-    autoPublish: boolean;
-    planeMode: boolean;
-    fakeHitsMode: boolean;
-    backgroundMeasureServerURL: string;
-    backgroundMeasureThreshold: number;
-    backgroundMeasureStepDurationMinutes: number;
-    backgroundMeasureStepCountBeforeSending: number;
-  };
+  params: MeasuresStateParams;
+}
+
+export interface MeasuresStateParams {
+  expertMode: boolean;
+  autoPublish: boolean;
+  planeMode: boolean;
+  fakeHitsMode: boolean;
+  backgroundMeasureServerURL: string;
+  backgroundMeasureThreshold: number;
+  backgroundMeasureStepDurationMinutes: number;
+  backgroundMeasureStepCountBeforeSending: number;
 }
 
 @State<MeasuresStateModel>({
@@ -126,6 +133,7 @@ export class MeasuresState {
     private alertService: AlertService,
     private translateService: TranslateService,
     private navigationService: NavigationService,
+    private storageService: StorageService,
     private store: Store,
   ) {}
 
@@ -185,6 +193,11 @@ export class MeasuresState {
   }
 
   @Selector()
+  static params({ params }: MeasuresStateModel): MeasuresStateParams {
+    return params;
+  }
+
+  @Selector()
   static isBackgroundMeasureInProgress({ backgroundMeasureInProgress }: MeasuresStateModel): boolean {
     return backgroundMeasureInProgress;
   }
@@ -234,6 +247,8 @@ export class MeasuresState {
       maxValueLimit: params.backgroundMeasureThreshold,
       measureDurationLimit: params.backgroundMeasureStepDurationMinutes,
       paramSelected: MeasureSeriesParamsSelected.measureBackgroundLimit,
+      backgroundMeasureStepCountBeforeSending: params.backgroundMeasureStepCountBeforeSending,
+      backgroundMeasureServerURL: params.backgroundMeasureServerURL,
     };
     patchState({
       measureSeriesParams: {
@@ -245,6 +260,14 @@ export class MeasuresState {
     });
 
     // Step 2: Launch measure series
+    console.debug(
+      '[BackgroundMeasure] Start a new serie (at least ' +
+        params.backgroundMeasureStepCountBeforeSending +
+        ' measures of ' +
+        Math.floor(params.backgroundMeasureStepDurationMinutes * 60) +
+        's). Threshold : ' +
+        params.backgroundMeasureThreshold,
+    );
     this.store.dispatch(new StopMeasureSeriesParams()).subscribe(() => {
       this.store.dispatch(new StartMeasure(device)).subscribe(() => {
         this.store.dispatch(new StartMeasureScan(device));
@@ -253,7 +276,7 @@ export class MeasuresState {
   }
 
   @Action(StopBackgroundMeasure)
-  stopBackgroundMeasure({ patchState }: StateContext<MeasuresStateModel>) {
+  stopBackgroundMeasure({ patchState }: StateContext<MeasuresStateModel>, { device }: AddMeasureScanStep) {
     this.alertService.show({
       header: this.translateService.instant('MEASURE_BACKGROUND.TITLE'),
       message: this.translateService.instant('MEASURE_BACKGROUND.CONFIRM_MESSAGE'),
@@ -265,8 +288,11 @@ export class MeasuresState {
         {
           text: this.translateService.instant('GENERAL.YES'),
           handler: () => {
+            console.debug('[BackgroundMeasure] Stopped.');
             patchState({ backgroundMeasureInProgress: false });
-            this.store.dispatch(new StopMeasureSeriesParams());
+            this.store.dispatch(new StopMeasureScan(device)).subscribe(() => {
+              this.store.dispatch(new StopMeasureSeriesParams());
+            });
           },
         },
       ],
@@ -504,6 +530,8 @@ export class MeasuresState {
       measureDurationLimit: 5,
       maxValueLimit: Infinity,
       paramSelected: MeasureSeriesParamsSelected.measureDurationLimit,
+      backgroundMeasureStepCountBeforeSending: Infinity,
+      backgroundMeasureServerURL: '',
     };
     patchState({
       measureSeriesParams: {
@@ -564,7 +592,17 @@ export class MeasuresState {
           currentSeries &&
           MeasuresState.shouldStopMeasureSeriesCurrentScan(device, currentSeries, newCurrentMeasure, step.ts)
         ) {
-          return dispatch(new StartNextMeasureSeries(device));
+          if (this.measuresService.sendBackgroundMeasureToServer(device, currentSeries, newCurrentMeasure)) {
+            // Stop measure series and start a new one
+
+            return dispatch(new StopMeasureScan(device)).subscribe(() => {
+              this.store.dispatch(new StopMeasureSeries()).subscribe(() => {
+                this.store.dispatch(new StartBackgroundMeasure(device));
+              });
+            });
+          } else {
+            return dispatch(new StartNextMeasureSeries(device));
+          }
         }
       }
     }
@@ -615,10 +653,11 @@ export class MeasuresState {
       case MeasureSeriesParamsSelected.measureBackgroundLimit: {
         // Two cases in which a background measure step should end :
         const hasReachedDurationLimit = currentTime - measure.startTime > measureSeries.params.measureDurationLimit;
-        const hasEnoughAccuracy =
+        const _hasEnoughAccuracy =
           measure.hitsAccuracy !== undefined && measure.hitsAccuracy > device.hitsAccuracyThreshold.medium;
         const thresholdExceeded = measure.value > measureSeries.params.maxValueLimit;
-        return (hasEnoughAccuracy && hasReachedDurationLimit) || thresholdExceeded;
+        //   TODO use hasEnoughAccuracy &&
+        return hasReachedDurationLimit || thresholdExceeded;
       }
       case MeasureSeriesParamsSelected.measureDurationLimit:
         return (
@@ -960,5 +999,49 @@ export class MeasuresState {
       this.deviceModel = deviceInfo.model;
       this.deviceOsVersion = deviceInfo.osVersion;
     }
+  }
+
+  @Action(UpdateBackgroundMeasureThreshold)
+  updateBackgroundMeasureThreshold(
+    { getState, patchState }: StateContext<MeasuresStateModel>,
+    { value }: UpdateBackgroundMeasureThreshold,
+  ) {
+    const { params } = getState();
+    params.backgroundMeasureThreshold = value;
+    patchState({ params: params });
+    this.storageService.saveParams(params);
+  }
+
+  @Action(UpdateBackgroundMeasureStepDuration)
+  updateBackgroundMeasureStepDuration(
+    { getState, patchState }: StateContext<MeasuresStateModel>,
+    { value }: UpdateBackgroundMeasureThreshold,
+  ) {
+    const { params } = getState();
+    params.backgroundMeasureStepDurationMinutes = value;
+    patchState({ params: params });
+    this.storageService.saveParams(params);
+  }
+
+  @Action(UpdateBackgroundMeasureStepCount)
+  updateBackgroundMeasureStepCount(
+    { getState, patchState }: StateContext<MeasuresStateModel>,
+    { value }: UpdateBackgroundMeasureStepCount,
+  ) {
+    const { params } = getState();
+    params.backgroundMeasureStepCountBeforeSending = value;
+    patchState({ params: params });
+    this.storageService.saveParams(params);
+  }
+
+  @Action(UpdateBackgroundMeasureServerURL)
+  updateBackgroundMeasureServerURL(
+    { getState, patchState }: StateContext<MeasuresStateModel>,
+    { value }: UpdateBackgroundMeasureServerURL,
+  ) {
+    const { params } = getState();
+    params.backgroundMeasureServerURL = value;
+    patchState({ params: params });
+    this.storageService.saveParams(params);
   }
 }

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
@@ -12,12 +12,21 @@ import { SettingsPage } from './settings.page';
 const routes: Routes = [
   {
     path: '',
-    component: SettingsPage
-  }
+    component: SettingsPage,
+  },
 ];
 
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule, RouterModule.forChild(routes), ComponentsModule, TranslateModule],
-  declarations: [SettingsPage]
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    RouterModule.forChild(routes),
+    ComponentsModule,
+    TranslateModule,
+    ReactiveFormsModule,
+    FormsModule,
+  ],
+  declarations: [SettingsPage],
 })
-export class SettingsPageModule { }
+export class SettingsPageModule {}
