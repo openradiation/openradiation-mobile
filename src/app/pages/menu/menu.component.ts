@@ -93,7 +93,11 @@ export class MenuComponent {
     this.isBackgoundMeasureInProgress$.pipe(take(1)).subscribe(async (isBackgoundMeasureInProgress) => {
       if (isBackgoundMeasureInProgress) {
         // TODO ask confirmation
-        this.store.dispatch(new StopBackgroundMeasure());
+        this.connectedDevice$.pipe(take(1)).subscribe((connectedDevice) => {
+          if (connectedDevice) {
+            this.store.dispatch(new StopBackgroundMeasure(connectedDevice));
+          }
+        });
       } else {
         const hasLocationEnabled = await this.positionService.requestAuthorization();
         if (hasLocationEnabled) {

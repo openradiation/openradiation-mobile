@@ -209,6 +209,8 @@ export interface MeasureSeriesParams {
   measureDurationLimit: number;
   paramSelected: MeasureSeriesParamsSelected;
   maxValueLimit: number;
+  backgroundMeasureStepCountBeforeSending: number;
+  backgroundMeasureServerURL: string;
 }
 
 export enum MeasureSeriesParamsSelected {
@@ -235,6 +237,18 @@ export interface MeasureSeriesReport {
   windowSeat: boolean | undefined;
   flightNumber: string | undefined;
   seatNumber: string | undefined;
+}
+
+export interface SendableBackgroundMeasure {
+  value: number;
+  hits: number;
+  startTime: number;
+  endTime: number;
+  latitude: number;
+  longitude: number;
+  reportUuid: string;
+  userId: string;
+  userPwd: string;
 }
 
 export class FlightNumberMask implements MaskitoOptions {
