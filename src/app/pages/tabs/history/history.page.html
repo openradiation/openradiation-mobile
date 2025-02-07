@@ -7,19 +7,22 @@
 
   <ion-content>
     <div class="empty-list" *ngIf="measures.length <= 0" [innerHTML]="'HISTORY.NO_MEASURE' | translate"></div>
-    <ion-list>
-      <app-history-item
-        [measure]="measure"
-        [canPublish]="canPublish(measure)"
-        [measureBeingSent]="measureBeingSentMap[measure.id]"
-        [showArrowDetail]="containsMeasureSeries(measures)"
-        (publish)="publish(measure)"
-        (delete)="delete(measure)"
-        *ngFor="let measure of measures"
-        button
-        detail="false"
-        (showDetail)="showDetail(measure)"
-      ></app-history-item>
-    </ion-list>
+    <table datatable [dtOptions]="dtOptions" class="row-border hover">
+        <thead class="thead-light">
+          <tr>
+            <th>Date</th>
+            <th>Envoyé</th>
+            <th>Mesure</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+      <tr *ngFor="let measure of measures">
+        <td>{{ measure.startTime | date: "dd/MM/yyyy HH:mm'''ss\"" }}</td>
+        <td>Envoyé</td>
+        <td>Mesure</td>
+        <td>Actions</td>
+      </tr>
+    </table>
   </ion-content>
 </ng-container>

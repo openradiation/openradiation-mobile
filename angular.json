@@ -17,7 +17,10 @@
             "aot": true,
             "outputPath": "www",
             "index": "src/index.html",
-            "scripts": [],
+            "scripts": [  
+              "node_modules/jquery/dist/jquery.js",
+              "node_modules/datatables.net/js/dataTables.min.js"
+            ],
             "extractLicenses": false,
             "sourceMap": true,
             "optimization": false,
@@ -50,6 +53,9 @@
               },
               {
                 "input": "src/theme/variables.scss"
+              }
+              ,{
+               "input": "node_modules/datatables.net-dt/css/dataTables.dataTables.min.css"
               }
             ]
           },
@@ -150,8 +156,11 @@
                 "with": "src/environments/environment.test.ts"
               }
             ],
-            "styles": [],
-            "scripts": [],
+            "styles": ["node_modules/datatables.net-dt/css/dataTables.dataTables.min.css"],
+            "scripts": [  
+              "node_modules/jquery/dist/jquery.js",
+              "node_modules/datatables.net/js/dataTables.min.js"
+            ],
             "assets": [
               {
                 "glob": "favicon.ico",

@@ -35,6 +35,7 @@ export class HistoryPage extends AutoUnsubscribePage {
   loading?: HTMLIonLoadingElement;
   publishMeasureCountCurrent: number;
   publishMeasureCountTotal: number;
+  dtOptions = { bPaginate: false, bFilter: false, bInfo: false };
 
   url = '/tabs/history';
 
