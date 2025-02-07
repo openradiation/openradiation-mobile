@@ -10,15 +10,25 @@ import { ComponentsModule } from '@app/components/components.module';
 import { HistoryItemComponent } from './history-item/history-item.component';
 import { HistoryPage } from './history.page';
 
+import { DataTablesModule } from 'angular-datatables';
+
 const routes: Routes = [
   {
     path: '',
-    component: HistoryPage
-  }
+    component: HistoryPage,
+  },
 ];
 
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule, RouterModule.forChild(routes), ComponentsModule, TranslateModule],
-  declarations: [HistoryPage, HistoryItemComponent]
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    RouterModule.forChild(routes),
+    ComponentsModule,
+    TranslateModule,
+    DataTablesModule,
+  ],
+  declarations: [HistoryPage, HistoryItemComponent],
 })
-export class HistoryPageModule { }
+export class HistoryPageModule {}

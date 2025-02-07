@@ -19,41 +19,41 @@ import { UserState } from './states/user/user.state';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 
+import { DataTablesModule } from 'angular-datatables';
+
 @NgModule({
-    declarations: [AppComponent, MenuComponent],
-    bootstrap: [AppComponent], 
-    imports:
-        [
-            IonicStorageModule.forRoot({
-              name: 'ord-db',
-              driverOrder: [CordovaSQLiteDriver._driver]
-            }),
-            BrowserModule,
-            IonicModule.forRoot(),
-            AppRoutingModule,
-            NgxsModule.forRoot([
-                DevicesState,
-                MeasuresState,
-                UserState
-            ]),
-            NgxsFormPluginModule.forRoot(),
-            NgxsLoggerPluginModule.forRoot({
-                disabled: environment.production
-            }),
-            TranslateModule.forRoot({
-                loader: {
-                    provide: TranslateLoader,
-                    useFactory: HttpLoaderFactory,
-                    deps: [HttpClient]
-                }
-            })], providers: [
-                { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-                DatePipe,
-                provideHttpClient(withInterceptorsFromDi())
-            ]
+  declarations: [AppComponent, MenuComponent],
+  bootstrap: [AppComponent],
+  imports: [
+    IonicStorageModule.forRoot({
+      name: 'ord-db',
+      driverOrder: [CordovaSQLiteDriver._driver],
+    }),
+    BrowserModule,
+    IonicModule.forRoot(),
+    AppRoutingModule,
+    NgxsModule.forRoot([DevicesState, MeasuresState, UserState]),
+    NgxsFormPluginModule.forRoot(),
+    NgxsLoggerPluginModule.forRoot({
+      disabled: environment.production,
+    }),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      },
+    }),
+    DataTablesModule,
+  ],
+  providers: [
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    DatePipe,
+    provideHttpClient(withInterceptorsFromDi()),
+  ],
 })
-export class AppModule { }
+export class AppModule {}
 
 export function HttpLoaderFactory(http: HttpClient) {
-    return new TranslateHttpLoader(http);
+  return new TranslateHttpLoader(http);
 }
