@@ -1,31 +1,34 @@
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
+import { marker as _ } from '@biesbjerg/ngx-translate-extract-marker';
 import { Platform } from '@ionic/angular';
-import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
+import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
+import { inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
-import { SelectIconOption } from '../../../components/select-icon/select-icon-option';
-import { NavigationService } from '../../../services/navigation.service';
+import { AutoUnsubscribePage } from '@app/components/auto-unsubscribe/auto-unsubscribe.page';
+import { SelectIconOption } from '@app/components/select-icon/select-icon-option';
+import { NavigationService } from '@app/services/navigation.service';
+import { AbstractMeasure, FlightNumberMask, Measure, MeasureEnvironment } from '@app/states/measures/measure';
 import {
-  AbstractMeasure,
-  Measure,
-  MeasureEnvironment,
-  PositionAccuracyThreshold
-} from '../../../states/measures/measure';
-import { AddRecentTag, CancelMeasure, StopMeasure, StopMeasureSeries } from '../../../states/measures/measures.action';
-import { MeasuresState } from '../../../states/measures/measures.state';
-import { UserState } from '../../../states/user/user.state';
+  AddRecentTag,
+  CancelMeasure,
+  FlightNumberValidation,
+  StopMeasure,
+  StopMeasureSeries,
+} from '@app/states/measures/measures.action';
+import { MeasuresState } from '@app/states/measures/measures.state';
+import { UserState } from '@app/states/user/user.state';
+import { MeasuresService } from '@app/states/measures/measures.service';
+import { TranslateService } from '@ngx-translate/core';
+import { MaskitoElementPredicate, MaskitoOptions } from '@maskito/core';
 
 export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> extends AutoUnsubscribePage {
-  @Select(UserState.login)
-  login$: Observable<string | undefined>;
+  login$: Observable<string | undefined> = inject(Store).select(UserState.login);
 
-  @Select(MeasuresState.recentTags)
-  recentTags$: Observable<string[]>;
+  recentTags$: Observable<string[]> = inject(Store).select(MeasuresState.recentTags);
 
-  measureReportForm?: FormGroup;
+  measureReportForm?: UntypedFormGroup;
   reportScan = true;
   positionChangeSpeedOverLimit = false;
   positionChangeAltitudeOverLimit = false;
@@ -37,61 +40,67 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
     {
       iconOn: 'assets/img/icon-floor-on.png',
       iconOff: 'assets/img/icon-floor-off.png',
-      label: <string>_('MEASURES.SENSOR_POSITION.FLOOR'),
-      value: 0
+      label: 'MEASURES.SENSOR_POSITION.FLOOR' as string,
+      value: 0,
     },
     {
       iconOn: 'assets/img/icon-elevated-on.png',
       iconOff: 'assets/img/icon-elevated-off.png',
-      label: <string>_('MEASURES.SENSOR_POSITION.1_METER_HIGH'),
-      value: 1
-    }
+      label: 'MEASURES.SENSOR_POSITION.1_METER_HIGH' as string,
+      value: 1,
+    },
   ];
 
   rainOptions: SelectIconOption[] = [
     {
       iconOn: 'assets/img/icon-sun-on.png',
       iconOff: 'assets/img/icon-sun-off.png',
-      label: <string>_('MEASURES.WEATHER.NO_RAIN'),
-      value: false
+      label: 'MEASURES.WEATHER.NO_RAIN' as string,
+      value: false,
     },
     {
       iconOn: 'assets/img/icon-rain-on.png',
       iconOff: 'assets/img/icon-rain-off.png',
-      label: <string>_('MEASURES.WEATHER.RAIN'),
-      value: true
-    }
+      label: 'MEASURES.WEATHER.RAIN' as string,
+      value: true,
+    },
   ];
 
   stormOptions: SelectIconOption[] = [
     {
       iconOn: 'assets/img/icon-plane-on.png',
       iconOff: 'assets/img/icon-plane-off.png',
-      label: <string>_('MEASURES.WEATHER.NO_STORM'),
-      value: false
+      label: 'MEASURES.WEATHER.NO_STORM' as string,
+      value: false,
     },
     {
       iconOn: 'assets/img/icon-plane-storm-on.png',
       iconOff: 'assets/img/icon-plane-storm-off.png',
-      label: <string>_('MEASURES.WEATHER.STORM'),
-      value: true
-    }
+      label: _('MEASURES.WEATHER.STORM') as string,
+      value: true,
+    },
   ];
 
   windowSeatOptions: SelectIconOption[] = [
     {
       iconOn: 'assets/img/icon-aisle-on.png',
       iconOff: 'assets/img/icon-aisle-off.png',
-      label: <string>_('MEASURES.SENSOR_POSITION.NO_WINDOW_SIDE'),
-      value: false
+      label: _('MEASURES.SENSOR_POSITION.NO_WINDOW_SIDE') as string,
+      value: false,
     },
     {
       iconOn: 'assets/img/icon-window-on.png',
       iconOff: 'assets/img/icon-window-off.png',
-      label: <string>_('MEASURES.SENSOR_POSITION.WINDOW_SIDE'),
-      value: true
-    }
+      label: _('MEASURES.SENSOR_POSITION.WINDOW_SIDE') as string,
+      value: true,
+    },
   ];
+
+  protected exampleFlightNumber = { message: ': AF179' };
+  protected exampleSeatNumber = { message: ': C15' };
+  protected flightNumberWarningMessage = '';
+  readonly flightMask: MaskitoOptions = new FlightNumberMask(this.store);
+  readonly maskPredicate: MaskitoElementPredicate = async (el) => (el as HTMLIonInputElement).getInputElement();
 
   protected constructor(
     protected router: Router,
@@ -99,29 +108,39 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
     protected activatedRoute: ActivatedRoute,
     protected navigationService: NavigationService,
     protected actions$: Actions,
-    protected platform: Platform
+    protected platform: Platform,
+    protected measureService: MeasuresService,
+    protected translateService: TranslateService,
   ) {
     super(router);
   }
 
   init() {
-    this.activatedRoute.queryParams.pipe(take(1)).subscribe(queryParams => {
+    this.activatedRoute.queryParams.pipe(take(1)).subscribe((queryParams) => {
       if (queryParams.goBackHistory) {
         this.fromHistory = true;
         this.subscriptions.push(
           this.actions$.pipe(ofActionSuccessful(StopMeasureSeries, CancelMeasure, StopMeasure)).subscribe(() => {
             this.measureReportForm = undefined;
-            this.navigationService.goBack();
+            this.navigationService.pop();
           }),
-          this.platform.backButton.subscribeWithPriority(9999, () => this.cancelMeasure())
         );
+        this.subscriptions.push(this.platform.backButton.subscribeWithPriority(9999, () => this.cancelMeasure()));
       } else {
         this.subscriptions.push(
           this.actions$.pipe(ofActionSuccessful(StopMeasureSeries, CancelMeasure, StopMeasure)).subscribe(() => {
             this.measureReportForm = undefined;
             this.navigationService.navigateRoot(['tabs', 'home']);
-          })
+          }),
         );
+      }
+    });
+
+    this.actions$.pipe(ofActionSuccessful(FlightNumberValidation)).subscribe((flightNumberValidation) => {
+      if (flightNumberValidation.isValid) {
+        this.flightNumberWarningMessage = '';
+      } else {
+        this.flightNumberWarningMessage = this.translateService.instant('MEASURES.FLIGHT.MASK');
       }
     });
   }
@@ -135,30 +154,30 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
       {
         iconOn: 'assets/img/icon-countryside-on.png',
         iconOff: 'assets/img/icon-countryside-off.png',
-        label: <string>_('MEASURES.ENVIRONMENT.COUNTRYSIDE'),
+        label: _('MEASURES.ENVIRONMENT.COUNTRYSIDE') as string,
         value: MeasureEnvironment.Countryside,
-        disabled: this.positionChangeSpeedOverLimit
+        disabled: this.positionChangeSpeedOverLimit,
       },
       {
         iconOn: 'assets/img/icon-city-on.png',
         iconOff: 'assets/img/icon-city-off.png',
-        label: <string>_('MEASURES.ENVIRONMENT.CITY'),
+        label: _('MEASURES.ENVIRONMENT.CITY') as string,
         value: MeasureEnvironment.City,
-        disabled: this.positionChangeSpeedOverLimit
+        disabled: this.positionChangeSpeedOverLimit,
       },
       {
         iconOn: 'assets/img/icon-inside-on.png',
         iconOff: 'assets/img/icon-inside-off.png',
-        label: <string>_('MEASURES.ENVIRONMENT.INSIDE'),
+        label: _('MEASURES.ENVIRONMENT.INSIDE') as string,
         value: MeasureEnvironment.Inside,
-        disabled: this.positionChangeSpeedOverLimit
+        disabled: this.positionChangeSpeedOverLimit,
       },
       {
         iconOn: 'assets/img/icon-ontheroad-on.png',
         iconOff: 'assets/img/icon-ontheroad-off.png',
-        label: <string>_('MEASURES.ENVIRONMENT.ON_THE_ROAD'),
-        value: MeasureEnvironment.OnTheRoad
-      }
+        label: _('MEASURES.ENVIRONMENT.ON_THE_ROAD') as string,
+        value: MeasureEnvironment.OnTheRoad,
+      },
     ];
   }
 
@@ -180,7 +199,7 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
     long: number,
     endLat: number,
     endLong: number,
-    duration: number
+    duration: number,
   ): boolean {
     let speed;
     const distance = AbstractMeasureReportPage.getDistance(lat, long, endLat, endLong);
@@ -210,17 +229,6 @@ export abstract class AbstractMeasureReportPage<T extends AbstractMeasure> exten
   }
 
   abstract canPublish(measure: T): boolean;
-
-  protected static canPublishSingleMeasure(measure: Measure): boolean {
-    return (
-      measure.accuracy !== undefined &&
-      measure.accuracy !== null &&
-      measure.accuracy < PositionAccuracyThreshold.No &&
-      measure.endAccuracy !== undefined &&
-      measure.endAccuracy !== null &&
-      measure.endAccuracy < PositionAccuracyThreshold.No
-    );
-  }
 
   protected static positionChangeAltitudeOverLimit(altitude: number | undefined): boolean {
     return altitude !== undefined && altitude > 6000;

@@ -6,6 +6,7 @@ import { AbstractDevice, DeviceType, RawDevice } from './abstract-device';
 import { AbstractDeviceService } from './abstract-device.service';
 import { DeviceAtomTagService } from './ble/device-atom-tag.service';
 import { DeviceOGKitService } from './ble/device-og-kit.service';
+import { DeviceOGKit2Service } from './ble/device-og-kit-2.service';
 import { DeviceRium2BLEService } from './ble/device-rium-2-ble.service';
 import { DeviceSafeCastService } from './ble/device-safe-cast.service';
 import { DeviceMockService } from './device-mock.service';
@@ -27,6 +28,7 @@ export class DevicesService {
     private deviceMockService: DeviceMockService,
     // BLE devices
     private deviceOGKitService: DeviceOGKitService,
+    private deviceOGKit2Service: DeviceOGKit2Service,
     private deviceAtomTagService: DeviceAtomTagService,
     private deviceSafeCastService: DeviceSafeCastService,
     private deviceRium2BLEService: DeviceRium2BLEService,
@@ -39,6 +41,7 @@ export class DevicesService {
       [DeviceType.Mock]: this.deviceMockService,
       // BLE devices
       [DeviceType.OGKit]: this.deviceOGKitService,
+      [DeviceType.OGKit2]: this.deviceOGKit2Service,
       [DeviceType.AtomTag]: this.deviceAtomTagService,
       [DeviceType.SafeCast]: this.deviceSafeCastService,
       [DeviceType.Rium2BLE]: this.deviceRium2BLEService,
@@ -53,9 +56,14 @@ export class DevicesService {
           message: communicationTimeout
             ? this.translateService.instant('SENSORS.CONNECTION_TIMEOUT')
             : this.translateService.instant('SENSORS.CONNECTION_LOST'),
-          showCloseButton: true,
           duration: communicationTimeout ? undefined : 3000,
-          closeButtonText: this.translateService.instant('GENERAL.OK')
+          buttons: [{
+            text: this.translateService.instant('GENERAL.OK'),
+            role: 'cancel',
+            handler: () => {
+              // canceled, nothing to do
+            }
+          }]
         })
         .then(toast => toast.present())
     );

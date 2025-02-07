@@ -1,4 +1,4 @@
-import { ApparatusSensorType, DeviceType } from '../abstract-device';
+import { ApparatusSensorType, DeviceType } from '@app/states/devices/abstract-device';
 import { AbstractBLEDevice, RawBLEDevice } from './abstract-ble-device';
 
 export class DeviceRium2BLE extends AbstractBLEDevice {

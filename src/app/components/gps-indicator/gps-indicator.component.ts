@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import { PositionAccuracy, PositionAccuracyThreshold } from '../../states/measures/measure';
+import { PositionAccuracy, PositionAccuracyThreshold } from '@app/states/measures/measure';
 
 @Component({
   selector: 'app-gps-indicator',

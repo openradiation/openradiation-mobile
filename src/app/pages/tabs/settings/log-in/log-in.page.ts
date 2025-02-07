@@ -1,18 +1,18 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
+import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { catchError, take } from 'rxjs/operators';
-import { AutoUnsubscribePage } from '../../../../components/auto-unsubscribe/auto-unsubscribe.page';
-import { NavigationService } from '../../../../services/navigation.service';
-import { AbstractDevice } from '../../../../states/devices/abstract-device';
-import { DevicesState } from '../../../../states/devices/devices.state';
-import { ErrorResponse, ErrorResponseCode } from '../../../../states/measures/error-response';
-import { StartManualMeasure, StartMeasureSeriesParams } from '../../../../states/measures/measures.action';
-import { LogIn } from '../../../../states/user/user.action';
+import { AutoUnsubscribePage } from '@app/components/auto-unsubscribe/auto-unsubscribe.page';
+import { NavigationService } from '@app/services/navigation.service';
+import { AbstractDevice } from '@app/states/devices/abstract-device';
+import { DevicesState } from '@app/states/devices/devices.state';
+import { ErrorResponse, ErrorResponseCode } from '@app/states/measures/error-response';
+import { StartManualMeasure, StartMeasureSeriesParams } from '@app/states/measures/measures.action';
+import { LogIn } from '@app/states/user/user.action';
 
 export enum RedirectAfterLogin {
   ManualMeasure = 'manualMeasure',
@@ -25,10 +25,9 @@ export enum RedirectAfterLogin {
   styleUrls: ['./log-in.page.scss']
 })
 export class LogInPage extends AutoUnsubscribePage {
-  @Select(DevicesState.connectedDevice)
-  connectedDevice$: Observable<AbstractDevice | undefined>;
+  connectedDevice$: Observable<AbstractDevice | undefined> = inject(Store).select(DevicesState.connectedDevice);
 
-  loginForm: FormGroup;
+  loginForm: UntypedFormGroup;
   connecting = false;
   redirectAfterLogin: RedirectAfterLogin;
 
@@ -39,7 +38,7 @@ export class LogInPage extends AutoUnsubscribePage {
     protected router: Router,
     private navigationService: NavigationService,
     private store: Store,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private toastController: ToastController,
     private actions$: Actions,
     private translateService: TranslateService
@@ -77,9 +76,14 @@ export class LogInPage extends AutoUnsubscribePage {
               this.toastController
                 .create({
                   message: this.translateService.instant('LOG_IN.WRONG_CREDENTIALS'),
-                  closeButtonText: this.translateService.instant('GENERAL.OK'),
                   duration: 5000,
-                  showCloseButton: true
+                  buttons: [{
+                    text: this.translateService.instant('GENERAL.OK'),
+                    role: 'cancel',
+                    handler: () => {
+                      // canceled, nothing to do
+                    }
+                  }]
                 })
                 .then(toast => toast.present());
               break;
@@ -87,9 +91,14 @@ export class LogInPage extends AutoUnsubscribePage {
               this.toastController
                 .create({
                   message: this.translateService.instant('GENERAL.CONNEXION_ERROR', { message: error.message }),
-                  closeButtonText: this.translateService.instant('GENERAL.OK'),
                   duration: 5000,
-                  showCloseButton: true
+                  buttons: [{
+                    text: this.translateService.instant('GENERAL.OK'),
+                    role: 'cancel',
+                    handler: () => {
+                      // canceled, nothing to do
+                    }
+                  }]
                 })
                 .then(toast => toast.present());
           }

@@ -1,4 +1,4 @@
-@import 'src/theme/variables';
+@import '../../../theme/variables.scss';
 
 :host {
   display: flex;
@@ -28,6 +28,7 @@
       --padding-end: 0;
       --padding-top: 0;
     }
+
     .overlay {
       position: relative;
       width: 60%;

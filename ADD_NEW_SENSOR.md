@@ -39,8 +39,8 @@ Some inherited values from base class like `hitsAccuracyThreshold` can also be o
 For a BLE sensor the file would be `src/app/states/devices/ble/device-toto.ts`
 
 ```typescript
-import { ApparatusSensorType, DeviceType } from '../abstract-device';
-import { AbstractBLEDevice, RawBLEDevice } from './abstract-ble-device';
+import { ApparatusSensorType, DeviceType } from '@app/states/devices/abstract-device';
+import { AbstractBLEDevice, RawBLEDevice } from '@app/states/devices/abstract-ble-device';
 
 export class DeviceToto extends AbstractBLEDevice {
   readonly deviceType = DeviceType.Toto;
@@ -94,13 +94,12 @@ For a BLE sensor the file would be `src/app/states/devices/ble/device-toto.servi
 
 ```typescript
 import { Injectable } from '@angular/core';
-import { BLE } from '@ionic-native/ble/ngx';
 import { Store } from '@ngxs/store';
 import { Observable, of } from 'rxjs';
 import { bufferCount, filter, map, tap } from 'rxjs/operators';
-import { Step } from '../../measures/measure';
-import { AbstractBLEDeviceService } from './abstract-ble-device.service';
-import { DeviceSafeCast } from './device-safe-cast';
+import { Step } from '@app/states/measures/measures/measure';
+import { AbstractBLEDeviceService } from '@app/states/devices/ble/abstract-ble-device.service';
+import { DeviceSafeCast } from '@app/states/devices/ble/device-safe-cast';
 
 @Injectable({
   providedIn: 'root'
@@ -109,7 +108,7 @@ export class DeviceTotoService extends AbstractBLEDeviceService<DeviceToto> {
   protected service = 'ef080d8c-c3be-41ff-bd3f-05a5f4795d7f';
   protected receiveCharacteristic = 'a1e8f5b1-696b-4e4c-87c6-69dfe0b0093b';
 
-  constructor(protected store: Store, protected ble: BLE) {
+  constructor(protected store: Store) {
     super(store, ble);
   }
 
@@ -136,12 +135,12 @@ export class DeviceTotoService extends AbstractBLEDeviceService<DeviceToto> {
       tap(() => (readingBufferSequence = true)),
       bufferCount(18),
       tap(() => (readingBufferSequence = false)),
-      map(buffers => this.decodeDataPackage(buffers))
+      map(dataView => this.decodeDataPackage(dataView))
     );
   }
 
-  protected decodeDataPackage(buffers: ArrayBuffer[]): Step {
-    const data = buffers
+  protected decodeDataPackage(dataView: DataView): Step {
+    const data = dataView.buffer
       .map(buffer => this.textDecoder.decode(buffer))
       .join('')
       .split(',');

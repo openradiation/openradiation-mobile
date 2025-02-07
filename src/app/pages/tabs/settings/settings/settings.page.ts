@@ -1,31 +1,51 @@
-import { Component } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
+import { Component, inject } from '@angular/core';
+import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { NavigationService } from '../../../../services/navigation.service';
-import { DisableExpertMode, EnableExpertMode } from '../../../../states/measures/measures.action';
-import { MeasuresState } from '../../../../states/measures/measures.state';
-import { DisableNotifications, EnableNotifications, LogOut, SetLanguage } from '../../../../states/user/user.action';
-import { UserState } from '../../../../states/user/user.state';
+import { NavigationService } from '@app/services/navigation.service';
+import {
+  DisableExpertMode,
+  DisableFakeHitsMode,
+  EnableExpertMode,
+  EnableFakeHitsMode,
+  UpdateBackgroundMeasureServerURL,
+  UpdateBackgroundMeasureStepCount,
+  UpdateBackgroundMeasureStepDuration,
+  UpdateBackgroundMeasureThreshold,
+} from '@app/states/measures/measures.action';
+import { MeasuresState, MeasuresStateParams } from '@app/states/measures/measures.state';
+import { LogOut, SetLanguage } from '@app/states/user/user.action';
+import { UserState } from '@app/states/user/user.state';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.page.html',
-  styleUrls: ['./settings.page.scss']
+  styleUrls: ['./settings.page.scss'],
 })
 export class SettingsPage {
-  @Select(MeasuresState.expertMode)
-  expertMode$: Observable<boolean>;
+  allowFakeHitsMode = false;
+  expertMode$: Observable<boolean> = inject(Store).select(MeasuresState.expertMode);
+  fakeHitsMode$: Observable<boolean> = inject(Store).select(MeasuresState.fakeHitsMode);
 
-  @Select(UserState.login)
-  login$: Observable<string | undefined>;
+  login$: Observable<string | undefined> = inject(Store).select(UserState.login);
 
-  @Select(UserState.language)
-  language$: Observable<string | undefined>;
+  language$: Observable<string | undefined> = inject(Store).select(UserState.language);
 
-  @Select(UserState.notifications)
-  notifications$: Observable<boolean | undefined>;
+  notifications$: Observable<boolean | undefined> = inject(Store).select(UserState.notifications);
 
-  constructor(private navigationService: NavigationService, private store: Store) {}
+  measureParams$: Observable<MeasuresStateParams> = inject(Store).select(MeasuresState.params);
+
+  constructor(
+    private navigationService: NavigationService,
+    private store: Store,
+  ) {
+    const splitted = environment.APP_NAME_VERSION.split(' ');
+    if (splitted.length >= 2) {
+      const envName = splitted[splitted.length - 1] + ' ' + splitted[splitted.length - 2];
+      this.allowFakeHitsMode =
+        envName.toLocaleLowerCase().indexOf('beta') != -1 || envName.toLocaleLowerCase().indexOf('mockdevice') != -1;
+    }
+  }
 
   toggleExpertMode(enable: boolean) {
     if (enable) {
@@ -35,11 +55,11 @@ export class SettingsPage {
     }
   }
 
-  toggleNotifications(enable: boolean) {
+  toggleFakeHitsMode(enable: boolean) {
     if (enable) {
-      this.store.dispatch(new EnableNotifications());
+      this.store.dispatch(new EnableFakeHitsMode());
     } else {
-      this.store.dispatch(new DisableNotifications());
+      this.store.dispatch(new DisableFakeHitsMode());
     }
   }
 
@@ -65,5 +85,29 @@ export class SettingsPage {
 
   setLanguage(language: string) {
     this.store.dispatch(new SetLanguage(language));
+  }
+
+  updateBackgroundMeasureThreshold(event: unknown) {
+    // @ts-expect-error untyped access
+    const value = event.detail.value;
+    this.store.dispatch(new UpdateBackgroundMeasureThreshold(value));
+  }
+
+  updateBackgroundMeasureStepCountBeforeSending(event: unknown) {
+    // @ts-expect-error untyped access
+    const value = event.detail.value;
+    this.store.dispatch(new UpdateBackgroundMeasureStepCount(value));
+  }
+
+  updateBackgroundMeasureServerURL(event: unknown) {
+    // @ts-expect-error untyped access
+    const value = event.detail.value;
+    this.store.dispatch(new UpdateBackgroundMeasureServerURL(value));
+  }
+
+  updateBackgroundMeasureStepDurationMinutes(event: unknown) {
+    // @ts-expect-error untyped access
+    const value = event.detail.value;
+    this.store.dispatch(new UpdateBackgroundMeasureStepDuration(value));
   }
 }

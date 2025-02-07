@@ -24,41 +24,40 @@ import { TagListComponent } from './tag-list/tag-list.component';
 PlotlyModule.plotlyjs = PlotlyJS;
 
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule, TranslateModule, PlotlyModule],
-  declarations: [
-    HeaderComponent,
-    CategoryLabelComponent,
-    AccordionComponent,
-    RoundButtonComponent,
-    GpsIndicatorComponent,
-    DurationPipe,
-    HitNumberPerMinPipe,
-    HitNumberPipe,
-    DosePipe,
-    SelectIconComponent,
-    TagListComponent,
-    PhotoComponent,
-    SanitizeHtmlPipe,
-    SeriesGraphComponent,
-    DoubleButtonComponent
-  ],
-  exports: [
-    HeaderComponent,
-    CategoryLabelComponent,
-    AccordionComponent,
-    RoundButtonComponent,
-    GpsIndicatorComponent,
-    DurationPipe,
-    HitNumberPerMinPipe,
-    HitNumberPipe,
-    DosePipe,
-    SelectIconComponent,
-    TagListComponent,
-    PhotoComponent,
-    SanitizeHtmlPipe,
-    SeriesGraphComponent,
-    DoubleButtonComponent
-  ],
-  entryComponents: []
+    imports: [CommonModule, FormsModule, IonicModule, TranslateModule, PlotlyModule],
+    declarations: [
+        HeaderComponent,
+        CategoryLabelComponent,
+        AccordionComponent,
+        RoundButtonComponent,
+        GpsIndicatorComponent,
+        DurationPipe,
+        HitNumberPerMinPipe,
+        HitNumberPipe,
+        DosePipe,
+        SelectIconComponent,
+        TagListComponent,
+        PhotoComponent,
+        SanitizeHtmlPipe,
+        SeriesGraphComponent,
+        DoubleButtonComponent
+    ],
+    exports: [
+        HeaderComponent,
+        CategoryLabelComponent,
+        AccordionComponent,
+        RoundButtonComponent,
+        GpsIndicatorComponent,
+        DurationPipe,
+        HitNumberPerMinPipe,
+        HitNumberPipe,
+        DosePipe,
+        SelectIconComponent,
+        TagListComponent,
+        PhotoComponent,
+        SanitizeHtmlPipe,
+        SeriesGraphComponent,
+        DoubleButtonComponent
+    ]
 })
 export class ComponentsModule {}

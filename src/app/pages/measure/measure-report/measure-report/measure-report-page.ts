@@ -1,30 +1,28 @@
-import { Component } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import { UntypedFormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
-import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
+import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { NavigationService } from '../../../../services/navigation.service';
-import { DateService } from '../../../../states/measures/date.service';
-import { Measure, MeasureEnvironment } from '../../../../states/measures/measure';
-import { StartMeasureReport, StopMeasure, StopMeasureReport } from '../../../../states/measures/measures.action';
-import { MeasuresState, MeasuresStateModel } from '../../../../states/measures/measures.state';
+import { NavigationService } from '@app/services/navigation.service';
+import { DateService } from '@app/states/measures/date.service';
+import { Measure, MeasureEnvironment } from '@app/states/measures/measure';
+import { StartMeasureReport, StopMeasure, StopMeasureReport } from '@app/states/measures/measures.action';
+import { MeasuresState, MeasuresStateModel } from '@app/states/measures/measures.state';
 import { AbstractMeasureReportPage } from '../abstact-measure-report.page';
+import { MeasuresService } from '@app/states/measures/measures.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-measure-report',
   templateUrl: './measure-report.page.html',
-  styleUrls: ['./measure-report.page.scss']
+  styleUrls: ['./measure-report.page.scss'],
 })
 export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
-  @Select(MeasuresState.expertMode)
-  expertMode$: Observable<boolean>;
-
-  exampleFlightNumber = { message: ': AF179' };
-  exampleSeatNumber = { message: ': C15' };
+  expertMode$: Observable<boolean> = inject(Store).select(MeasuresState.expertMode);
 
   initialDatePickerValue: string;
+  initialDurationValue: string;
 
   currentMeasure?: Measure;
   planeMode: boolean;
@@ -39,15 +37,18 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
     protected navigationService: NavigationService,
     protected actions$: Actions,
     protected platform: Platform,
-    private formBuilder: FormBuilder,
-    private dateService: DateService
+    private formBuilder: UntypedFormBuilder,
+    private dateService: DateService,
+    protected measureService: MeasuresService,
+    protected translateService: TranslateService,
   ) {
-    super(router, store, activatedRoute, navigationService, actions$, platform);
+    super(router, store, activatedRoute, navigationService, actions$, platform, measureService, translateService);
     const date = new Date();
     date.setHours(0);
     date.setMinutes(0);
     date.setSeconds(0);
     this.initialDatePickerValue = date.toISOString();
+    this.initialDurationValue = this.dateService.toISODuration(0);
   }
 
   pageEnter() {
@@ -55,7 +56,7 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
     if (!this.measureReportForm) {
       this.store.dispatch(new StartMeasureReport()).subscribe(() => {
         const { measureReport, currentMeasure } = this.store.selectSnapshot(
-          ({ measures }: { measures: MeasuresStateModel }) => measures
+          ({ measures }: { measures: MeasuresStateModel }) => measures,
         );
         this.currentMeasure = currentMeasure;
         if (this.currentMeasure) {
@@ -65,7 +66,7 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
           if (measureReport) {
             this.measureReportForm = this.formBuilder.group({
               ...measureReport.model,
-              tags: [measureReport.model.tags]
+              tags: [measureReport.model.tags],
             });
             if (!this.planeMode) {
               this.initPositionChangeAltitudeOverLimit(this.currentMeasure);
@@ -95,16 +96,19 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
 
   init() {
     this.subscriptions.push(
-      this.measureReportForm!.valueChanges.subscribe(value => {
-        if (typeof value.duration !== 'string' && value.duration) {
+      this.measureReportForm!.valueChanges.subscribe((value) => {
+        if (value.duration === undefined) {
+          //si duration est undefined, le date picker se met à new Date(), on le force à 00h00m00s
+          this.measureReportForm!.get('duration')!.setValue(this.initialDurationValue);
+        } else if (typeof value.duration !== 'string' && value.duration) {
           this.measureReportForm!.get('duration')!.setValue(
             this.dateService.toISODuration(
               (value.duration.hour.value * 60 * 60 + value.duration.minute.value * 60 + value.duration.second.value) *
-                1000
-            )
+                1000,
+            ),
           );
         }
-      })
+      }),
     );
     super.init();
   }
@@ -114,7 +118,7 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
       this.subscriptions.push(
         this.actions$.pipe(ofActionSuccessful(StopMeasureReport)).subscribe(() => {
           this.store.dispatch(new StopMeasure());
-        })
+        }),
       );
       this.store.dispatch(new StopMeasureReport());
     }
@@ -125,7 +129,7 @@ export class MeasureReportPage extends AbstractMeasureReportPage<Measure> {
   }
 
   canPublish(measure: Measure): boolean {
-    return AbstractMeasureReportPage.canPublishSingleMeasure(measure);
+    return this.measureService.canPublishMeasure(measure);
   }
 
   protected initMeasurementEnvironmentOptions(measure: Measure) {

@@ -62,6 +62,7 @@
     "YES": "Oui"
   },
   "HISTORY": {
+    "SHARE" : "Historique des mesures (CSV)",
     "DELETE": {
       "NOTICE": "Êtes-vous sûr(e) de vouloir supprimer cette mesure ?"
     },
@@ -91,7 +92,8 @@
     },
     "SENT": "Publiée",
     "SENT_SERIES": "Publiées",
-    "TITLE": "Historique"
+    "TITLE": "Historique",
+    "SENDING": "Publication des mesures en cours..."
   },
   "HOME": {
     "CONNECTED_SENSOR": "Capteur connecté",
@@ -120,6 +122,11 @@
       "NOTICE": "Vous participez à la base de données collaborative OpenRadiation dès lors que vous publiez des mesures par l’application smartphone, que la publication soit automatique ou déclenchée par une action manuelle. <br>L’objet du projet OpenRadiation étant la création d’une base de données collaborative relative à la radioactivité ambiante, tout utilisateur de l’application mobile accepte explicitement de partager les données qu’il relève, que ce soit par une publication automatique ou déclenchée par une action manuelle.<br>La base de données OpenRadiation est publiée en intégralité sous la license <a onclick=\"window.open('https://www.openradiation.org/conditions-dutilisation#licence_odbl', '_system')\">ODC-ODbL (Open Database License)</a>. La plupart des données que vous soumettez participent à la constitution de la base de données OpenRadiation.<br>Vous vous engagez à respecter la législation en cours concernant notamment le droit d'auteur. L’utilisation de la base de données OpenRadiation vous engage à respecter des règles d’éthique (propos insultants, respect de la vie privée, ...).<br>OpenRadiation se réserve le droit de supprimer un contenu qui lui serait signalé ne respectant pas les consignes ci-dessus, ceci sans avertissement.<br>Vous pouvez retrouver le détail de l’ensemble des conditions d’utilisation sur le site <a onclick=\"window.open('https://www.openradiation.org/conditions-dutilisation', '_system')\">www.openradiation.org/conditions-dutilisation</a>.",
       "TITLE": "Conditions d'utilisation"
     },
+    "LOGS": {
+      "COPY": "Copier logs",
+      "COPIED": "Logs copiés dans votre presse-papier",
+      "NO_LOG": "Aucun log sauvegardé"
+    },
     "TITLE": "Mentions légales"
   },
   "LOG_IN": {
@@ -131,6 +138,7 @@
       "PART3": "Si vous ne l’avez pas déjà fait, nous vous invitons à créer un compte sur <a onclick=\"window.open('https://www.openradiation.org/user/register', '_system')\">www.openradiation.org</a>, puis à le paramétrer ici (synchronisation ~5 min)."
     },
     "NOT_LOGGED": "Non identifié",
+    "LOG_TO_ADD_INFOS": "Veuillez vous connecter pour ajouter des photos ou tag à votre mesure.",
     "PASSWORD": "Mot de passe",
     "TITLE": "S'identifier",
     "USERNAME": "Nom d'utilisateur",
@@ -161,10 +169,12 @@
     },
     "EXPERT": "Expert",
     "EXPERT_MODE": "Mode expert",
+    "FAKE_HITS_MODE": "Simuler les hits (uniquement en beta)",
     "FIABILITY": "Fiabilité",
     "FLIGHT": {
       "FLIGHT_NUMBER": "Numéro de vol",
-      "SEAT_NUMBER": "Numéro de siège"
+      "SEAT_NUMBER": "Numéro de siège",
+      "MASK": "Companie aérienne (2 à 3 lettres) suivie de 1 à 4 chiffres"
     },
     "HITS_NUMBER": "Nb coups",
     "HITS_PER_MIN": "Nb coups/min",
@@ -199,7 +209,8 @@
       "RAIN": "Pluie",
       "STORM": "Traversée d’orage",
       "TITLE_RAIN": "Météo"
-    }
+    },
+    "CANCEL_CONFIRMATION": "Êtes-vous sûr(e) de vouloir supprimer cette mesure ?"
   },
   "MEASURE_MANUAL": {
     "ALERT": "Vous devez vous identifier pour pouvoir saisir manuellement une mesure.",
@@ -237,6 +248,16 @@
     "SERIES_LIMIT": "La mesure suivante démarrera automatiquement, pendant une durée maximale de",
     "STOP": "Vous pourrez arrêter les mesures à tout moment.",
     "TITLE": "Série de mesures"
+  },
+  "MEASURE_BACKGROUND": {
+    "TITLE": "Mesure en tâche de fond",
+    "STOP": "Arrêter la mesure en cours",
+    "CONFIRM_MESSAGE": "Êtes-vous certain de vouloir arrêter la mesure en tâche de fond en cours ?",
+    "INDICATOR": "Mesure en cours...",
+    "SETTINGS_URL": "URL du serveur",
+    "SETTINGS_THRESHOLD": "Seuil (toute valeur au dessus provoque un envoi instantané)",
+    "SETTINGS_MINUTES": "Durée d'une mesure (en minutes)",
+    "SETTINGS_STEP_COUNTER": "Nombre de mesures avant envoi"
   },
   "NOTIFICATIONS": {
     "ALERT": {

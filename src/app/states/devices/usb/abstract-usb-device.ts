@@ -1,4 +1,4 @@
-import { AbstractDevice } from '../abstract-device';
+import { AbstractDevice } from '@app/states/devices/abstract-device';
 
 export abstract class AbstractUSBDevice extends AbstractDevice {
   abstract readonly pid: string;

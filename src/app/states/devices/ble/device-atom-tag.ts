@@ -1,6 +1,6 @@
-import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
-import { ApparatusSensorType, DeviceType } from '../abstract-device';
-import { DeviceParams, DeviceParamsModel, DeviceParamType } from '../device-params';
+import { marker as _ } from '@biesbjerg/ngx-translate-extract-marker';
+import { ApparatusSensorType, DeviceType } from '@app/states/devices/abstract-device';
+import { DeviceParams, DeviceParamsModel, DeviceParamType } from '@app/states/devices/device-params';
 import { AbstractBLEDevice, RawBLEDevice } from './abstract-ble-device';
 
 export class DeviceAtomTag extends AbstractBLEDevice {
@@ -16,11 +16,11 @@ export class DeviceAtomTag extends AbstractBLEDevice {
   };
   paramsModel: DeviceParamsModel = {
     audioHits: {
-      label: <string>_('SENSORS.PARAM.AUDIO_HITS'),
+      label: _('SENSORS.PARAM.AUDIO_HITS') as string,
       type: DeviceParamType.Boolean
     },
     vibrationHits: {
-      label: <string>_('SENSORS.PARAM.VIBRATION_HITS'),
+      label: _('SENSORS.PARAM.VIBRATION_HITS') as string,
       type: DeviceParamType.Boolean
     }
   };

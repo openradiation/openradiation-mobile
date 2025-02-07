@@ -1,16 +1,22 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LegalNoticePage } from './legal-notice.page';
+
+import { getTestImports, getTestProviders } from '@tests/TestUtils'
+import { SanitizeHtmlPipe } from '@app/components/pipes/sanitize-html/sanitize-html.pipe';
 
 describe('LegalNoticePage', () => {
   let component: LegalNoticePage;
   let fixture: ComponentFixture<LegalNoticePage>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [LegalNoticePage],
+      declarations: [LegalNoticePage, SanitizeHtmlPipe],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
+      ,
+      imports: getTestImports(),
+      providers: getTestProviders()
     }).compileComponents();
   }));
 

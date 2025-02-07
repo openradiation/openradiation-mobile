@@ -1,4 +1,4 @@
-@import 'src/theme/variables';
+@import '../../../../theme/variables.scss';
 
 .content {
   display: flex;
@@ -13,9 +13,11 @@
     width: 100%;
     align-items: center;
     justify-content: center;
+
     app-round-button {
       width: 50%;
     }
+
     .side-buttons {
       position: absolute;
       height: 100%;
@@ -23,13 +25,16 @@
       display: flex;
       align-items: center;
       pointer-events: none;
+
       ion-button {
         pointer-events: all;
         position: absolute;
         --border-radius: 10px;
+
         &.cancel {
           right: 70%;
         }
+
         &.expert {
           left: 70%;
         }
@@ -42,6 +47,7 @@
     white-space: normal;
     text-align: center;
     padding: 5px;
+
     .message-style {
       color: $second-color;
       font-size: 12px;
@@ -51,6 +57,7 @@
 
   .title {
     --padding-start: 8px;
+
     ion-label {
       font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
       font-weight: 200;

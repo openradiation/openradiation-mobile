@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BLE } from '@ionic-native/ble/ngx';
 import { Store } from '@ngxs/store';
 import { Observable, of } from 'rxjs';
 import { bufferCount, filter, map, tap } from 'rxjs/operators';
-import { Step } from '../../measures/measure';
+import { Step } from '@app/states/measures/measure';
 import { RawBLEDevice } from './abstract-ble-device';
 import { AbstractBLEDeviceService } from './abstract-ble-device.service';
 import { DeviceSafeCast, DeviceSafeCastType } from './device-safe-cast';
@@ -25,42 +24,43 @@ export class DeviceSafeCastService extends AbstractBLEDeviceService<DeviceSafeCa
   protected service = 'ef080d8c-c3be-41ff-bd3f-05a5f4795d7f';
   protected receiveCharacteristic = 'a1e8f5b1-696b-4e4c-87c6-69dfe0b0093b';
 
-  constructor(protected store: Store, protected ble: BLE) {
-    super(store, ble);
+  constructor(protected store: Store) {
+    super(store);
   }
 
-  getDeviceInfo(device: DeviceSafeCast): Observable<Partial<DeviceSafeCast>> {
+  getDeviceInfo(_device: DeviceSafeCast): Observable<Partial<DeviceSafeCast>> {
     return of({});
   }
 
-  saveDeviceParams(device: DeviceSafeCast): Observable<any> {
+  saveDeviceParams(_device: DeviceSafeCast): Observable<unknown> {
     return of(null);
   }
 
-  startMeasureScan(device: DeviceSafeCast, stopSignal: Observable<any>): Observable<Step> {
+  startMeasureScan(device: DeviceSafeCast, stopSignal: Observable<unknown>): Observable<Step> {
     stopSignal.subscribe(() => this.stopReceiveData(device));
     let readingBufferSequence = false;
     return this.startReceiveData(device).pipe(
-      filter((buffer: ArrayBuffer) => {
-        const dataView = new DataView(buffer);
+      filter((dataView: DataView) => {
         return dataView.getUint8(0) === 36 || readingBufferSequence;
       }),
       tap(() => (readingBufferSequence = true)),
       bufferCount(18),
       tap(() => (readingBufferSequence = false)),
-      map(buffers => this.decodeDataPackage(buffers))
+      map(dataViews => this.decodeDataPackage(dataViews))
     );
   }
 
-  protected decodeDataPackage(buffers: ArrayBuffer[]): Step {
-    const data = buffers
-      .map(buffer => this.textDecoder.decode(buffer))
+  protected decodeDataPackage(dataViews: DataView[]): Step {
+    const data = dataViews
+      .map(dataView => this.textDecoder.decode(dataView.buffer))
       .join('')
       .split(',');
-    return {
+    const receiveData = {
       ts: Date.now(),
       hitsNumber: Number(data[4])
     };
+    this.logAndStore("Received from SafeCast : " + JSON.stringify(receiveData))
+    return receiveData
   }
 
   buildDevice(rawBLEDevice: RawBLEDevice): DeviceSafeCast | null {

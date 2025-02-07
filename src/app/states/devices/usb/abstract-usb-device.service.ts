@@ -2,8 +2,8 @@ import { Actions, Store } from '@ngxs/store';
 import { UsbSerial } from 'cordova-plugin-usb-serial';
 import { Observable, Observer, of } from 'rxjs';
 import { catchError, concatMap, shareReplay, take, takeUntil } from 'rxjs/operators';
-import { AbstractDeviceService } from '../abstract-device.service';
-import { DeviceConnectionLost } from '../devices.action';
+import { AbstractDeviceService } from '@app/states/devices/abstract-device.service';
+import { DeviceConnectionLost } from '@app/states/devices/devices.action';
 import { AbstractUSBDevice } from './abstract-usb-device';
 
 /**
@@ -18,8 +18,8 @@ export abstract class AbstractUSBDeviceService<T extends AbstractUSBDevice> exte
 
   abstract buildDevice(): T;
 
-  connectDevice(device: T): Observable<any> {
-    const connection = Observable.create((observer: Observer<any>) =>
+  connectDevice(device: T): Observable<unknown> {
+    const connection = Observable.create((observer: Observer<unknown>) =>
       UsbSerial.connect(
         { vid: device.vid, pid: device.pid },
         {
@@ -45,8 +45,8 @@ export abstract class AbstractUSBDeviceService<T extends AbstractUSBDevice> exte
     return connection.pipe(take(1));
   }
 
-  disconnectDevice(device: T): Observable<any> {
-    return Observable.create((observer: Observer<any>) =>
+  disconnectDevice(_device: T): Observable<unknown> {
+    return new Observable((observer: Observer<unknown>) =>
       UsbSerial.disconnect(
         () => {
           observer.next(null);
@@ -57,9 +57,9 @@ export abstract class AbstractUSBDeviceService<T extends AbstractUSBDevice> exte
     );
   }
 
-  protected receiveData(stopSignal: Observable<any> = of()): Observable<ArrayBuffer> {
-    return Observable.create((observer: Observer<ArrayBuffer>) => {
-      UsbSerial.onDataReceived(data => observer.next(data), err => observer.error(err));
+  protected receiveData(stopSignal: Observable<unknown> = of()): Observable<DataView> {
+    return new Observable<DataView>((observer: Observer<DataView>) => {
+      UsbSerial.onDataReceived(data => observer.next(new DataView(data)), err => observer.error(err));
     }).pipe(takeUntil(stopSignal));
   }
 

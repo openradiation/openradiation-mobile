@@ -1,4 +1,4 @@
-import { ApparatusSensorType } from '../devices/abstract-device';
+import { ApparatusSensorType } from '@app/states/devices/abstract-device';
 
 export interface MeasureApi {
   apiKey: string;

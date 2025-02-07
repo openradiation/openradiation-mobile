@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Actions, Store } from '@ngxs/store';
 import { Observable, of, throwError } from 'rxjs';
 import { concatMap, filter, map, take } from 'rxjs/operators';
-import { Step } from '../../measures/measure';
-import { ConnectDevice, UpdateDeviceInfo } from '../devices.action';
+import { Step } from '@app/states/measures/measure';
+import { ConnectDevice, UpdateDeviceInfo } from '@app/states/devices/devices.action';
 import { AbstractUSBDeviceService } from './abstract-usb-device.service';
 import { DeviceRium } from './device-rium';
 import { DeviceRium2USB } from './device-rium-2-usb';
@@ -26,13 +26,13 @@ export class DeviceRium2USBService extends AbstractUSBDeviceService<DeviceRium2U
     super(store, actions$);
   }
 
-  connectDevice(device: DeviceRium2USB): Observable<any> {
+  connectDevice(device: DeviceRium2USB): Observable<unknown> {
     return super.connectDevice(device).pipe(
       concatMap(() => this.receiveData()),
-      concatMap((buffer: ArrayBuffer) => {
-        if (buffer.byteLength === 32) {
+      concatMap((dataView: DataView) => {
+        if (dataView.buffer.byteLength === 32) {
           return of(null);
-        } else if (buffer.byteLength === 12) {
+        } else if (dataView.buffer.byteLength === 12) {
           // If we detect this buffer size if means the connected device is an old Rium and we switch to the correct service
           const correctDevice = new DeviceRium();
           this.store
@@ -48,11 +48,11 @@ export class DeviceRium2USBService extends AbstractUSBDeviceService<DeviceRium2U
     );
   }
 
-  getDeviceInfo(device: DeviceRium2USB): Observable<Partial<DeviceRium2USB>> {
+  getDeviceInfo(_device: DeviceRium2USB): Observable<Partial<DeviceRium2USB>> {
     return this.receiveData().pipe(
-      map((buffer: ArrayBuffer) => {
-        if (buffer.byteLength === 32) {
-          const data = this.textDecoder.decode(buffer).split(',');
+      map((dataView: DataView) => {
+        if (dataView.buffer.byteLength === 32) {
+          const data = this.textDecoder.decode(dataView.buffer).split(',');
           const apparatusId = data[1];
           const batteryVoltage = Number(data[5]) / 100;
           const batteryLevel = Math.max(0, Math.min(100, 227.27 * batteryVoltage - 840.9));
@@ -69,27 +69,29 @@ export class DeviceRium2USBService extends AbstractUSBDeviceService<DeviceRium2U
     );
   }
 
-  saveDeviceParams(device: DeviceRium2USB): Observable<any> {
+  saveDeviceParams(_device: DeviceRium2USB): Observable<unknown> {
     return of(null);
   }
 
-  startMeasureScan(device: DeviceRium2USB, stopSignal: Observable<any>): Observable<Step> {
+  startMeasureScan(device: DeviceRium2USB, stopSignal: Observable<unknown>): Observable<Step> {
     return this.receiveData(stopSignal).pipe(
-      map((buffer: ArrayBuffer) => this.decodeDataPackage(buffer)),
+      map((dataView: DataView) => this.decodeDataPackage(dataView)),
       filter((step: Step | null): step is Step => step !== null)
     );
   }
 
-  protected decodeDataPackage(buffer: ArrayBuffer): Step | null {
-    if (buffer.byteLength === 32) {
-      const data = this.textDecoder.decode(buffer).split(',');
+  protected decodeDataPackage(dataView: DataView): Step | null {
+    if (dataView.buffer.byteLength === 32) {
+      const data = this.textDecoder.decode(dataView.buffer).split(',');
       const hitsNumber = Number(data[3]);
       const temperature = Number(data[4]) / 10;
-      return {
+      const receiveData = {
         ts: Date.now(),
         hitsNumber,
         temperature
       };
+      this.logAndStore("Received from Rium2USB : " + JSON.stringify(receiveData))
+      return receiveData
     }
     return null;
   }

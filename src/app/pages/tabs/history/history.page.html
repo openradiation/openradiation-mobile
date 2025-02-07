@@ -1,5 +1,9 @@
 <ng-container *ngIf="measures$ | async as measures">
-  <app-header [deleteButton]="measures.length > 0" (delete)="deleteAll()">{{'HISTORY.TITLE' | translate}}</app-header>
+  <app-header 
+    [deleteButton]="measures.length > 0" (delete)="deleteAll()"
+    [exportButton]="true" (export)="exportCsv()">
+      {{'HISTORY.TITLE' | translate}}
+  </app-header>
 
   <ion-content>
     <div class="empty-list" *ngIf="measures.length <= 0" [innerHTML]="'HISTORY.NO_MEASURE' | translate"></div>

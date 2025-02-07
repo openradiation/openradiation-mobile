@@ -1,8 +1,9 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { concatMap, map, tap } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
-import { Form } from '../formModel';
+import { environment } from '@environments/environment';
+import { Form } from '@app/states/formModel';
 import { AbstractDevice } from './abstract-device';
 import { AbstractBLEDevice } from './ble/abstract-ble-device';
 import { BLEDevicesService } from './ble/ble-devices.service';
@@ -47,12 +48,14 @@ export interface DevicesStateModel {
     knownDevices: []
   }
 })
+@Injectable()
 export class DevicesState {
+
   constructor(
     private devicesService: DevicesService,
     private bleDevicesService: BLEDevicesService,
     private usbDevicesService: USBDevicesService
-  ) {}
+  ) { }
 
   @Selector()
   static availableDevices({
@@ -121,12 +124,12 @@ export class DevicesState {
     return environment.mockDevice
       ? of(null)
       : this.usbDevicesService.startDiscoverDevices().pipe(
-          tap(() =>
-            patchState({
-              isScanning: true
-            })
-          )
-        );
+        tap(() =>
+          patchState({
+            isScanning: true
+          })
+        )
+      );
   }
 
   @Action(StopDiscoverDevices)
@@ -165,12 +168,10 @@ export class DevicesState {
     patchState({
       availableUSBDevices: [
         ...devices.map(device => ({
-          ...(<AbstractUSBDevice>(
-            knownDevices.find(
-              (knownDevice: AbstractUSBDevice) =>
-                knownDevice.pid !== undefined && knownDevice.sensorUUID === device.sensorUUID
-            )
-          ) || device),
+          ...(knownDevices.find(
+            (knownDevice: AbstractUSBDevice) =>
+              knownDevice.pid !== undefined && knownDevice.sensorUUID === device.sensorUUID
+          ) as AbstractUSBDevice || device),
           batteryLevel: device.batteryLevel
         }))
       ]

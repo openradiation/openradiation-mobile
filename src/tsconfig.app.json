@@ -4,13 +4,20 @@
     "outDir": "../out-tsc/app",
     "baseUrl": "./",
     "paths": {
+      "@app/*": [
+        "./app/*"
+      ],
+      "@environments/*": [
+        "./environments/*"
+      ],
       "plotly.js": [
         "../node_modules/plotly.js/dist/plotly-basic.min.js"
       ]
-    }
+    },
   },
   "exclude": [
     "test.ts",
+    "tests/**",
     "**/*.spec.ts"
   ]
 }

@@ -1,4 +1,5 @@
-@import 'src/theme/variables.scss';
+@import '../../../theme/variables.scss';
+
 
 ion-tabs {
   --ion-tab-bar-color: #{transparentize($second-color, 0.6)};

@@ -27,11 +27,15 @@ export class SelectIconComponent implements ControlValueAccessor {
   @Input()
   required?: boolean;
 
-  private onChange = (option: any) => {};
+  private onChange = (_option: unknown) => {
+    // Left empty
+  };
 
-  private onTouched = () => {};
+  private onTouched = () => {
+    // Left empty
+  };
 
-  registerOnChange(fn: (option: any) => void): void {
+  registerOnChange(fn: (option: unknown) => void): void {
     this.onChange = fn;
   }
 
@@ -39,7 +43,7 @@ export class SelectIconComponent implements ControlValueAccessor {
     this.onTouched = fn;
   }
 
-  writeValue(value: any): void {
+  writeValue(value: unknown): void {
     const selectedOption = this.options.find(option => option.value === value);
     this.selectedOption = this.selectedOption === selectedOption ? undefined : selectedOption;
     this.onChange(this.selectedOption ? this.selectedOption.value : undefined);

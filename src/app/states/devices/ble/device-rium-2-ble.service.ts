@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';
-import { BLE } from '@ionic-native/ble/ngx';
 import { Store } from '@ngxs/store';
-import { forkJoin, Observable, of, zip } from 'rxjs';
-import { fromPromise } from 'rxjs/internal-compatibility';
+import { forkJoin, Observable, of, zip, from } from 'rxjs';
 import { catchError, map, take, tap } from 'rxjs/operators';
-import { Step } from '../../measures/measure';
-import { DeviceConnectionLost } from '../devices.action';
+import { Step } from '@app/states/measures/measure';
+import { DeviceConnectionLost } from '@app/states/devices/devices.action';
 import { RawBLEDevice } from './abstract-ble-device';
 import { AbstractBLEDeviceService } from './abstract-ble-device.service';
 import { DeviceRium2BLE } from './device-rium-2-ble';
-
+import { BleClient } from '@capacitor-community/bluetooth-le';
 @Injectable({
   providedIn: 'root'
 })
@@ -30,21 +28,21 @@ export class DeviceRium2BLEService extends AbstractBLEDeviceService<DeviceRium2B
   private batteryCharacteristic = '1726218E-76b0-11EA-BC55-0242AC130003';
   private idCharacteristic = '90B4A556-7427-11EA-BC55-0242AC130003';
 
-  constructor(protected store: Store, protected ble: BLE) {
-    super(store, ble);
+  constructor(protected store: Store) {
+    super(store);
   }
 
   getDeviceInfo(device: DeviceRium2BLE): Observable<Partial<DeviceRium2BLE>> {
     return forkJoin(
-      fromPromise(this.ble.read(device.sensorUUID, this.service, this.idCharacteristic)),
-      this.ble.startNotification(device.sensorUUID, this.service, this.batteryCharacteristic).pipe(
+      [from(BleClient.read(device.sensorUUID, this.service, this.idCharacteristic)),
+      this.startNotificationsRx(device, this.batteryCharacteristic).pipe(
         take(1),
-        tap(() => this.ble.stopNotification(device.sensorUUID, this.service, this.batteryCharacteristic))
-      )
+        tap(() => BleClient.stopNotifications(device.sensorUUID, this.service, this.batteryCharacteristic))
+      )]
     ).pipe(
-      map(([idBuffer, batteryBuffer]: [ArrayBuffer, ArrayBuffer]) => {
-        const apparatusId = this.arrayBufferToHex(idBuffer);
-        const batteryVoltage = this.getNumberFromBuffer(batteryBuffer, 3) / 100;
+      map(([idDataView, batteryDataView]: [DataView, DataView]) => {
+        const apparatusId = this.arrayBufferToHex(idDataView.buffer);
+        const batteryVoltage = this.getNumberFromBuffer(batteryDataView.buffer, 3) / 100;
         const batteryLevel = Math.max(0, Math.min(100, 227.27 * batteryVoltage - 840.9));
         return {
           apparatusId,
@@ -54,20 +52,22 @@ export class DeviceRium2BLEService extends AbstractBLEDeviceService<DeviceRium2B
     );
   }
 
-  saveDeviceParams(device: DeviceRium2BLE): Observable<any> {
+  saveDeviceParams(_device: DeviceRium2BLE): Observable<unknown> {
     return of(null);
   }
 
-  startMeasureScan(device: DeviceRium2BLE, stopSignal: Observable<any>): Observable<Step> {
+  startMeasureScan(device: DeviceRium2BLE, stopSignal: Observable<unknown>): Observable<Step> {
     stopSignal.subscribe(() => {
       this.stopReceiveData(device);
-      this.ble.stopNotification(device.sensorUUID, this.service, this.temperatureCharacteristic);
+      BleClient.stopNotifications(device.sensorUUID, this.service, this.temperatureCharacteristic);
     });
     return zip(
       this.startReceiveData(device),
-      this.ble.startNotification(device.sensorUUID, this.service, this.temperatureCharacteristic)
+      this.startNotificationsRx(device, this.temperatureCharacteristic)
     ).pipe(
-      map((buffers: [ArrayBuffer, ArrayBuffer]) => this.decodeDataPackage(buffers)),
+      map((dataViews: [DataView, DataView]) => {
+        return this.decodeDataPackage(dataViews)
+      }),
       catchError(err => {
         this.disconnectDevice(device).subscribe();
         setTimeout(() => this.store.dispatch(new DeviceConnectionLost()), 1000);
@@ -76,14 +76,16 @@ export class DeviceRium2BLEService extends AbstractBLEDeviceService<DeviceRium2B
     );
   }
 
-  protected decodeDataPackage([hitsBuffer, temperatureBuffer]: [ArrayBuffer, ArrayBuffer]): Step {
-    const hitsNumber = this.getNumberFromBuffer(hitsBuffer, 2);
-    const temperature = this.getNumberFromBuffer(temperatureBuffer, 3) / 10;
-    return {
+  protected decodeDataPackage([hitsBuffer, temperatureBuffer]: [DataView, DataView]): Step {
+    const hitsNumber = this.getNumberFromBuffer(hitsBuffer.buffer, 2);
+    const temperature = this.getNumberFromBuffer(temperatureBuffer.buffer, 3) / 10;
+    const receiveData = {
       ts: Date.now(),
       hitsNumber,
       temperature
     };
+    this.logAndStore("Received from Rium2 : " + JSON.stringify(receiveData))
+    return receiveData
   }
 
   buildDevice(rawBLEDevice: RawBLEDevice): DeviceRium2BLE | null {

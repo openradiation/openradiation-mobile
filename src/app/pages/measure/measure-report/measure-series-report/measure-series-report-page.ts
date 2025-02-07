@@ -1,33 +1,31 @@
 import { Component } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
-import { AlertService } from '../../../../services/alert.service';
-import { NavigationService } from '../../../../services/navigation.service';
-import { MeasureEnvironment, MeasureSeries, MeasureSeriesParamsSelected } from '../../../../states/measures/measure';
+import { AlertService } from '@app/services/alert.service';
+import { NavigationService } from '@app/services/navigation.service';
+import { MeasureEnvironment, MeasureSeries, MeasureSeriesParamsSelected } from '@app/states/measures/measure';
 import {
   CancelMeasure,
   StartMeasureSeriesReport,
   StopMeasureSeries,
-  StopMeasureSeriesReport
-} from '../../../../states/measures/measures.action';
-import { MeasuresStateModel } from '../../../../states/measures/measures.state';
+  StopMeasureSeriesReport,
+} from '@app/states/measures/measures.action';
+import { MeasuresStateModel } from '@app/states/measures/measures.state';
 import { AbstractMeasureReportPage } from '../abstact-measure-report.page';
+import { MeasuresService } from '@app/states/measures/measures.service';
 
 @Component({
   selector: 'app-measure-series-report',
   templateUrl: './measure-series-report.page.html',
-  styleUrls: ['./measure-series-report.page.scss']
+  styleUrls: ['./measure-series-report.page.scss'],
 })
 export class MeasureSeriesReportPage extends AbstractMeasureReportPage<MeasureSeries> {
   currentSeries?: MeasureSeries;
   planeMode: boolean;
   measureSeriesParamsSelected = MeasureSeriesParamsSelected;
-
-  exampleFlightNumber = { message: ': AF179' };
-  exampleSeatNumber = { message: ': C15' };
 
   url = '/measure/report-series';
 
@@ -38,28 +36,29 @@ export class MeasureSeriesReportPage extends AbstractMeasureReportPage<MeasureSe
     protected navigationService: NavigationService,
     protected actions$: Actions,
     protected platform: Platform,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private alertService: AlertService,
-    private translateService: TranslateService
+    protected translateService: TranslateService,
+    protected measureService: MeasuresService,
   ) {
-    super(router, store, activatedRoute, navigationService, actions$, platform);
+    super(router, store, activatedRoute, navigationService, actions$, platform, measureService, translateService);
   }
 
   pageEnter() {
     super.pageEnter();
     this.store.dispatch(new StartMeasureSeriesReport()).subscribe(() => {
       const { measureSeriesReport, currentSeries } = this.store.selectSnapshot(
-        ({ measures }: { measures: MeasuresStateModel }) => measures
+        ({ measures }: { measures: MeasuresStateModel }) => measures,
       );
       this.currentSeries = currentSeries;
       if (this.currentSeries) {
         this.planeMode = this.currentSeries.measures.some(
-          measure => measure.measurementEnvironment === MeasureEnvironment.Plane
+          (measure) => measure.measurementEnvironment === MeasureEnvironment.Plane,
         );
         if (measureSeriesReport) {
           this.measureReportForm = this.formBuilder.group({
             ...measureSeriesReport.model,
-            tags: [measureSeriesReport.model.tags]
+            tags: [measureSeriesReport.model.tags],
           });
           if (!this.planeMode) {
             this.initPositionChangeAltitudeOverLimit(this.currentSeries);
@@ -86,12 +85,12 @@ export class MeasureSeriesReportPage extends AbstractMeasureReportPage<MeasureSe
   }
 
   canPublish(measureSeries: MeasureSeries): boolean {
-    return measureSeries.measures.some(measure => AbstractMeasureReportPage.canPublishSingleMeasure(measure));
+    return this.measureService.canPublishMeasure(measureSeries);
   }
 
   initPositionChangeAltitudeOverLimit(measureSeries: MeasureSeries) {
-    this.positionChangeAltitudeOverLimit = measureSeries.measures.some(measure =>
-      AbstractMeasureReportPage.positionChangeAltitudeOverLimit(measure.altitude)
+    this.positionChangeAltitudeOverLimit = measureSeries.measures.some((measure) =>
+      AbstractMeasureReportPage.positionChangeAltitudeOverLimit(measure.altitude),
     );
   }
 
@@ -99,7 +98,7 @@ export class MeasureSeriesReportPage extends AbstractMeasureReportPage<MeasureSe
     this.subscriptions.push(
       this.actions$.pipe(ofActionSuccessful(StopMeasureSeriesReport)).subscribe(() => {
         this.store.dispatch(new StopMeasureSeries());
-      })
+      }),
     );
     this.store.dispatch(new StopMeasureSeriesReport());
   }
@@ -114,20 +113,20 @@ export class MeasureSeriesReportPage extends AbstractMeasureReportPage<MeasureSe
         backdropDismiss: false,
         buttons: [
           {
-            text: this.translateService.instant('GENERAL.NO')
+            text: this.translateService.instant('GENERAL.NO'),
           },
           {
             text: this.translateService.instant('GENERAL.YES'),
-            handler: () => this.store.dispatch(new CancelMeasure())
-          }
-        ]
+            handler: () => this.store.dispatch(new CancelMeasure()),
+          },
+        ],
       });
     }
   }
 
   protected initMeasurementEnvironmentOptions(measureSeries: MeasureSeries) {
-    this.positionChangeSpeedOverLimit = measureSeries.measures.some(measure =>
-      AbstractMeasureReportPage.hasPositionChanged(measure)
+    this.positionChangeSpeedOverLimit = measureSeries.measures.some((measure) =>
+      AbstractMeasureReportPage.hasPositionChanged(measure),
     );
     this.updateMeasurementEnvironmentOptions();
   }

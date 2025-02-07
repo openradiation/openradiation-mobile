@@ -1,4 +1,4 @@
-import { AbstractDevice, RawDevice } from '../abstract-device';
+import { AbstractDevice, RawDevice } from '@app/states/devices/abstract-device';
 
 export abstract class AbstractBLEDevice extends AbstractDevice {
   protected constructor(rawDevice: RawBLEDevice) {
@@ -14,7 +14,7 @@ export interface RawBLEDevice extends RawDevice {
   characteristics?: {
     characteristic: string;
     properties: string[];
-    descriptors: any[];
+    descriptors: unknown[];
     service: string;
   }[];
 }

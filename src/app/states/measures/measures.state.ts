@@ -1,16 +1,16 @@
-import { Device } from '@ionic-native/device/ngx';
-import { Location } from '@mauron85/cordova-plugin-background-geolocation';
+import { Location } from '@capacitor-community/background-geolocation';
 import { TranslateService } from '@ngx-translate/core';
-import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { Action, Selector, State, StateContext, Store } from '@ngxs/store';
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { AlertService } from '../../services/alert.service';
-import { NavigationService } from '../../services/navigation.service';
-import { AbstractDevice, DeviceType } from '../devices/abstract-device';
-import { DeviceConnectionLost } from '../devices/devices.action';
-import { Form } from '../formModel';
-import { DateService } from './date.service';
+import { AlertService } from '@app/services/alert.service';
+import { NavigationService } from '@app/services/navigation.service';
+import { AbstractDevice, DeviceType } from '@app/states/devices/abstract-device';
+import { DeviceConnectionLost } from '@app/states/devices/devices.action';
+import { Form } from '@app/states/formModel';
+import { DateService } from '@app/states/measures/date.service';
 import {
+  AbstractMeasure,
   Measure,
   MeasureEnvironment,
   MeasureReport,
@@ -19,8 +19,8 @@ import {
   MeasureSeriesParamsSelected,
   MeasureSeriesReport,
   MeasureType,
-  PositionAccuracyThreshold
-} from './measure';
+  PositionAccuracyThreshold,
+} from '@app/states/measures/measure';
 import {
   AddMeasureScanStep,
   AddRecentTag,
@@ -29,14 +29,19 @@ import {
   DeleteMeasure,
   DisableAutoPublish,
   DisableExpertMode,
+  DisableFakeHitsMode,
   DisablePlaneMode,
   EnableAutoPublish,
   EnableExpertMode,
+  EnableFakeHitsMode,
   EnablePLaneMode,
   InitMeasures,
   PositionChanged,
   PublishMeasure,
+  PublishMeasureError,
+  PublishMeasureSuccess,
   ShowMeasure,
+  StartBackgroundMeasure,
   StartManualMeasure,
   StartMeasure,
   StartMeasureReport,
@@ -44,15 +49,23 @@ import {
   StartMeasureSeriesParams,
   StartMeasureSeriesReport,
   StartNextMeasureSeries,
+  StopBackgroundMeasure,
   StopMeasure,
   StopMeasureReport,
   StopMeasureScan,
   StopMeasureSeries,
   StopMeasureSeriesParams,
-  StopMeasureSeriesReport
-} from './measures.action';
-import { MeasuresService } from './measures.service';
-import { PositionService } from './position.service';
+  StopMeasureSeriesReport,
+  UpdateBackgroundMeasureServerURL,
+  UpdateBackgroundMeasureStepCount,
+  UpdateBackgroundMeasureStepDuration,
+  UpdateBackgroundMeasureThreshold,
+} from '@app/states/measures/measures.action';
+import { MeasuresService } from '@app/states/measures/measures.service';
+import { Device } from '@capacitor/device';
+import { Injectable } from '@angular/core';
+import { environment } from '@environments/environment';
+import { StorageService } from '@app/services/storage.service';
 
 /**
  * Max duration between 2 measure steps before the device connection is considered as lost
@@ -62,6 +75,7 @@ const TIMEOUT_DURATION = 35000;
 export interface MeasuresStateModel {
   measures: (Measure | MeasureSeries)[];
   currentPosition?: Location;
+  backgroundMeasureInProgress: boolean;
   currentMeasure?: Measure;
   currentSeries?: MeasureSeries;
   canEndCurrentScan: boolean;
@@ -69,11 +83,18 @@ export interface MeasuresStateModel {
   measureReport?: Form<MeasureReport>;
   measureSeriesParams?: Form<MeasureSeriesParams>;
   measureSeriesReport?: Form<MeasureSeriesReport>;
-  params: {
-    expertMode: boolean;
-    autoPublish: boolean;
-    planeMode: boolean;
-  };
+  params: MeasuresStateParams;
+}
+
+export interface MeasuresStateParams {
+  expertMode: boolean;
+  autoPublish: boolean;
+  planeMode: boolean;
+  fakeHitsMode: boolean;
+  backgroundMeasureServerURL: string;
+  backgroundMeasureThreshold: number;
+  backgroundMeasureStepDurationMinutes: number;
+  backgroundMeasureStepCountBeforeSending: number;
 }
 
 @State<MeasuresStateModel>({
@@ -82,27 +103,48 @@ export interface MeasuresStateModel {
     measures: [],
     recentTags: [],
     canEndCurrentScan: false,
+    backgroundMeasureInProgress: false,
     params: {
       expertMode: false,
       autoPublish: false,
-      planeMode: false
-    }
-  }
+      planeMode: false,
+      fakeHitsMode: false,
+      backgroundMeasureServerURL: environment.backgroundMeasureServerURL,
+      // If this threshold is exceeded, background measure will be sent immediately
+      backgroundMeasureThreshold: environment.backgroundMeasureThreshold,
+      // Duration of background measure step
+      backgroundMeasureStepDurationMinutes: environment.backgroundMeasureStepDurationMinutes,
+      // Max Steps before sending an average value to the server
+      backgroundMeasureStepCountBeforeSending: environment.backgroundMeasureStepCountBeforeSending,
+    },
+  },
 })
+@Injectable()
 export class MeasuresState {
+  public static MISSING_STRING = '<Missing>';
+  deviceUUID: string = MeasuresState.MISSING_STRING;
+  devicePlatform: string = MeasuresState.MISSING_STRING;
+  deviceOsVersion: string = MeasuresState.MISSING_STRING;
+  deviceModel: string = MeasuresState.MISSING_STRING;
+
   constructor(
-    private positionService: PositionService,
-    private device: Device,
     private measuresService: MeasuresService,
     private dateService: DateService,
     private alertService: AlertService,
     private translateService: TranslateService,
-    private navigationService: NavigationService
+    private navigationService: NavigationService,
+    private storageService: StorageService,
+    private store: Store,
   ) {}
 
   @Selector()
   static expertMode({ params }: MeasuresStateModel): boolean {
     return params.expertMode;
+  }
+
+  @Selector()
+  static fakeHitsMode({ params }: MeasuresStateModel): boolean {
+    return params.fakeHitsMode;
   }
 
   @Selector()
@@ -122,7 +164,7 @@ export class MeasuresState {
 
   @Selector()
   static positionAccuracy({ currentPosition }: MeasuresStateModel): number {
-    return currentPosition ? currentPosition.accuracy : PositionAccuracyThreshold.No;
+    return currentPosition?.accuracy ?? PositionAccuracyThreshold.No;
   }
 
   @Selector()
@@ -150,10 +192,20 @@ export class MeasuresState {
     return canEndCurrentScan;
   }
 
+  @Selector()
+  static params({ params }: MeasuresStateModel): MeasuresStateParams {
+    return params;
+  }
+
+  @Selector()
+  static isBackgroundMeasureInProgress({ backgroundMeasureInProgress }: MeasuresStateModel): boolean {
+    return backgroundMeasureInProgress;
+  }
+
   @Action(InitMeasures)
   initMeasures(
-    { patchState, getState, dispatch }: StateContext<MeasuresStateModel>,
-    { measures, params, recentTags, currentSeries }: InitMeasures
+    { patchState, getState }: StateContext<MeasuresStateModel>,
+    { measures, params, recentTags, currentSeries }: InitMeasures,
   ) {
     const { params: defaultParams } = getState();
     const patch = { measures, params: { ...defaultParams, ...params }, recentTags };
@@ -165,27 +217,93 @@ export class MeasuresState {
         buttons: [
           {
             text: this.translateService.instant('MEASURE_SERIES.ABORTED_SERIES.DELETE_SERIES'),
-            handler: () => patchState(patch)
+            handler: () => patchState(patch),
           },
           {
             text: this.translateService.instant('MEASURE_SERIES.ABORTED_SERIES.GO_TO_REPORT'),
             handler: () => {
               patchState({ ...patch, currentSeries });
               this.navigationService.navigateRoot(['measure', 'report-series']);
-            }
-          }
-        ]
+            },
+          },
+        ],
       });
     } else {
       patchState(patch);
     }
   }
 
+  @Action(StartBackgroundMeasure)
+  startBackgroundMeasure(
+    { getState, patchState }: StateContext<MeasuresStateModel>,
+    { device }: StartBackgroundMeasure,
+  ) {
+    patchState({ backgroundMeasureInProgress: true });
+    const { params } = getState();
+    // Step 1 : Configure measure series
+    const model: MeasureSeriesParams = {
+      seriesDurationLimit: Infinity,
+      measureHitsLimit: Infinity,
+      maxValueLimit: params.backgroundMeasureThreshold,
+      measureDurationLimit: params.backgroundMeasureStepDurationMinutes,
+      paramSelected: MeasureSeriesParamsSelected.measureBackgroundLimit,
+      backgroundMeasureStepCountBeforeSending: params.backgroundMeasureStepCountBeforeSending,
+      backgroundMeasureServerURL: params.backgroundMeasureServerURL,
+    };
+    patchState({
+      measureSeriesParams: {
+        model,
+        dirty: false,
+        status: '',
+        errors: {},
+      },
+    });
+
+    // Step 2: Launch measure series
+    console.debug(
+      '[BackgroundMeasure] Start a new serie (at least ' +
+        params.backgroundMeasureStepCountBeforeSending +
+        ' measures of ' +
+        Math.floor(params.backgroundMeasureStepDurationMinutes * 60) +
+        's). Threshold : ' +
+        params.backgroundMeasureThreshold,
+    );
+    this.store.dispatch(new StopMeasureSeriesParams()).subscribe(() => {
+      this.store.dispatch(new StartMeasure(device)).subscribe(() => {
+        this.store.dispatch(new StartMeasureScan(device));
+      });
+    });
+  }
+
+  @Action(StopBackgroundMeasure)
+  stopBackgroundMeasure({ patchState }: StateContext<MeasuresStateModel>, { device }: AddMeasureScanStep) {
+    this.alertService.show({
+      header: this.translateService.instant('MEASURE_BACKGROUND.TITLE'),
+      message: this.translateService.instant('MEASURE_BACKGROUND.CONFIRM_MESSAGE'),
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: this.translateService.instant('GENERAL.NO'),
+        },
+        {
+          text: this.translateService.instant('GENERAL.YES'),
+          handler: () => {
+            console.debug('[BackgroundMeasure] Stopped.');
+            patchState({ backgroundMeasureInProgress: false });
+            this.store.dispatch(new StopMeasureScan(device)).subscribe(() => {
+              this.store.dispatch(new StopMeasureSeriesParams());
+            });
+          },
+        },
+      ],
+    });
+  }
+
   @Action(EnableExpertMode)
   enableExpertMode({ getState, patchState }: StateContext<MeasuresStateModel>) {
     const { params } = getState();
     patchState({
-      params: { ...params, expertMode: true }
+      params: { ...params, expertMode: true },
     });
   }
 
@@ -193,7 +311,23 @@ export class MeasuresState {
   disableExpertMode({ getState, patchState }: StateContext<MeasuresStateModel>) {
     const { params } = getState();
     patchState({
-      params: { ...params, expertMode: false }
+      params: { ...params, expertMode: false },
+    });
+  }
+
+  @Action(EnableFakeHitsMode)
+  enableFakeHitsMode({ getState, patchState }: StateContext<MeasuresStateModel>) {
+    const { params } = getState();
+    patchState({
+      params: { ...params, fakeHitsMode: true },
+    });
+  }
+
+  @Action(DisableFakeHitsMode)
+  disableFakeHitsMode({ getState, patchState }: StateContext<MeasuresStateModel>) {
+    const { params } = getState();
+    patchState({
+      params: { ...params, fakeHitsMode: false },
     });
   }
 
@@ -201,7 +335,7 @@ export class MeasuresState {
   enableAutoPublish({ getState, patchState }: StateContext<MeasuresStateModel>) {
     const { params } = getState();
     patchState({
-      params: { ...params, autoPublish: true }
+      params: { ...params, autoPublish: true },
     });
   }
 
@@ -209,7 +343,7 @@ export class MeasuresState {
   disableAutoPublish({ getState, patchState }: StateContext<MeasuresStateModel>) {
     const { params } = getState();
     patchState({
-      params: { ...params, autoPublish: false }
+      params: { ...params, autoPublish: false },
     });
   }
 
@@ -217,7 +351,7 @@ export class MeasuresState {
   enablePlaneMode({ getState, patchState }: StateContext<MeasuresStateModel>) {
     const { params } = getState();
     patchState({
-      params: { ...params, planeMode: true }
+      params: { ...params, planeMode: true },
     });
   }
 
@@ -225,19 +359,66 @@ export class MeasuresState {
   disablePlaneMode({ getState, patchState }: StateContext<MeasuresStateModel>) {
     const { params } = getState();
     patchState({
-      params: { ...params, planeMode: false }
+      params: { ...params, planeMode: false },
     });
   }
 
   @Action(PositionChanged)
-  positionChanged({ patchState }: StateContext<MeasuresStateModel>, { position }: PositionChanged) {
+  positionChanged({ patchState, getState }: StateContext<MeasuresStateModel>, { position }: PositionChanged) {
     patchState({
-      currentPosition: position
+      currentPosition: position,
     });
+
+    // If position accuracy is acceptable
+    if (
+      position &&
+      position.latitude &&
+      position.latitude != 0 &&
+      position.accuracy < PositionAccuracyThreshold.Inaccurate
+    ) {
+      // If current measure or serie has no good position, let's patch it with current position
+      const { currentMeasure, currentSeries } = getState();
+      if (
+        currentMeasure &&
+        (!currentMeasure.latitude ||
+          currentMeasure.latitude == 0 ||
+          !currentMeasure.accuracy ||
+          currentMeasure.accuracy > PositionAccuracyThreshold.Poor)
+      ) {
+        currentMeasure.latitude = position.latitude;
+        currentMeasure.longitude = position.longitude;
+        currentMeasure.altitude = position.altitude ? position.altitude : undefined;
+        currentMeasure.altitudeAccuracy = position.altitudeAccuracy ? position.altitudeAccuracy : undefined;
+        currentMeasure.accuracy = position.accuracy;
+        patchState({
+          currentMeasure: currentMeasure,
+        });
+      }
+      if (currentSeries && currentSeries.measures) {
+        const firstMeasure = currentSeries.measures[0];
+        if (
+          firstMeasure &&
+          (!firstMeasure.latitude ||
+            firstMeasure.latitude == 0 ||
+            !firstMeasure.accuracy ||
+            firstMeasure.accuracy > PositionAccuracyThreshold.Poor)
+        ) {
+          firstMeasure.latitude = position.latitude;
+          firstMeasure.longitude = position.longitude;
+          firstMeasure.altitude = position.altitude ? position.altitude : undefined;
+          firstMeasure.altitudeAccuracy = position.altitudeAccuracy ? position.altitudeAccuracy : undefined;
+          firstMeasure.accuracy = position.accuracy;
+          patchState({
+            currentSeries: currentSeries,
+          });
+        }
+      }
+    }
   }
 
   @Action(StartMeasure)
-  startMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, { device }: StartMeasure) {
+  async startMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, { device }: StartMeasure) {
+    await this.computeDeviceInfoIfMissing();
     const { params } = getState();
     const currentMeasure: Measure = {
       ...new Measure(
@@ -245,20 +426,21 @@ export class MeasuresState {
         device.apparatusVersion,
         device.apparatusSensorType,
         device.apparatusTubeType,
-        this.device.uuid,
-        this.device.platform,
-        this.device.version,
-        this.device.model
+        this.deviceUUID,
+        this.devicePlatform,
+        this.deviceOsVersion,
+        this.deviceModel,
       ),
-      measurementEnvironment: params.planeMode ? MeasureEnvironment.Plane : undefined
+      measurementEnvironment: params.planeMode ? MeasureEnvironment.Plane : undefined,
     };
     patchState({
-      currentMeasure
+      currentMeasure,
     });
   }
 
   @Action(StartManualMeasure)
-  startManualMeasure({ getState, patchState }: StateContext<MeasuresStateModel>) {
+  async startManualMeasure({ getState, patchState }: StateContext<MeasuresStateModel>) {
+    await this.computeDeviceInfoIfMissing();
     const { currentPosition, params } = getState();
     let currentMeasure: Measure = {
       ...new Measure(
@@ -266,19 +448,19 @@ export class MeasuresState {
         undefined,
         undefined,
         undefined,
-        this.device.uuid,
-        this.device.platform,
-        this.device.version,
-        this.device.model,
-        true
+        this.deviceUUID,
+        this.devicePlatform,
+        this.deviceOsVersion,
+        this.deviceModel,
+        true,
       ),
       startTime: Date.now(),
-      measurementEnvironment: params.planeMode ? MeasureEnvironment.Plane : undefined
+      measurementEnvironment: params.planeMode ? MeasureEnvironment.Plane : undefined,
     };
     currentMeasure = Measure.updateStartPosition(currentMeasure, currentPosition);
     currentMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
     patchState({
-      currentMeasure
+      currentMeasure,
     });
   }
 
@@ -313,10 +495,10 @@ export class MeasuresState {
   private static stopAbstractMeasure(
     abstractMeasure: Measure | MeasureSeries,
     patch: Partial<MeasuresStateModel>,
-    { getState, patchState, dispatch }: StateContext<MeasuresStateModel>
+    { getState, patchState, dispatch }: StateContext<MeasuresStateModel>,
   ) {
     const { measures, params } = getState();
-    const measureIndex = measures.findIndex(historyMeasure => historyMeasure.id === abstractMeasure.id);
+    const measureIndex = measures.findIndex((historyMeasure) => historyMeasure.id === abstractMeasure.id);
     if (measureIndex > -1) {
       patch.measures = [...measures.slice(0, measureIndex), abstractMeasure, ...measures.slice(measureIndex + 1)];
     } else {
@@ -336,7 +518,7 @@ export class MeasuresState {
       measureSeriesParams: undefined,
       currentSeries: undefined,
       measureSeriesReport: undefined,
-      canEndCurrentScan: false
+      canEndCurrentScan: false,
     });
   }
 
@@ -346,15 +528,18 @@ export class MeasuresState {
       seriesDurationLimit: 24,
       measureHitsLimit: 50,
       measureDurationLimit: 5,
-      paramSelected: MeasureSeriesParamsSelected.measureDurationLimit
+      maxValueLimit: Infinity,
+      paramSelected: MeasureSeriesParamsSelected.measureDurationLimit,
+      backgroundMeasureStepCountBeforeSending: Infinity,
+      backgroundMeasureServerURL: '',
     };
     patchState({
       measureSeriesParams: {
         model,
         dirty: false,
         status: '',
-        errors: {}
-      }
+        errors: {},
+      },
     });
   }
 
@@ -367,8 +552,8 @@ export class MeasuresState {
         currentSeries: new MeasureSeries({
           ...measureSeriesParams.model,
           measureDurationLimit: measureSeriesParams.model.measureDurationLimit * 60 * 1000,
-          seriesDurationLimit: measureSeriesParams.model.seriesDurationLimit * 60 * 60 * 1000
-        })
+          seriesDurationLimit: measureSeriesParams.model.seriesDurationLimit * 60 * 60 * 1000,
+        }),
       });
     }
   }
@@ -376,7 +561,7 @@ export class MeasuresState {
   @Action(AddMeasureScanStep)
   addMeasureScanStep(
     { getState, patchState, dispatch }: StateContext<MeasuresStateModel>,
-    { step, device }: AddMeasureScanStep
+    { step, device }: AddMeasureScanStep,
   ) {
     const { currentMeasure, currentSeries, params } = getState();
     if (currentMeasure && currentMeasure.steps) {
@@ -388,12 +573,12 @@ export class MeasuresState {
         let newCurrentMeasure: Measure = {
           ...currentMeasure,
           endTime: step.ts,
-          steps: [...currentMeasure.steps, step]
+          steps: [...currentMeasure.steps, step],
         };
         if (newCurrentMeasure.startTime === undefined) {
           newCurrentMeasure.startTime = step.ts - device.hitsPeriod;
         }
-        newCurrentMeasure = this.updateMeasureHits(newCurrentMeasure, params.planeMode, { step, device });
+        newCurrentMeasure = this.updateMeasureHits(newCurrentMeasure, params.planeMode, { step, device }, getState());
         newCurrentMeasure = Measure.updateTemperature(newCurrentMeasure);
         const patch: Partial<MeasuresStateModel> = { currentMeasure: newCurrentMeasure };
         if (
@@ -407,15 +592,44 @@ export class MeasuresState {
           currentSeries &&
           MeasuresState.shouldStopMeasureSeriesCurrentScan(device, currentSeries, newCurrentMeasure, step.ts)
         ) {
-          return dispatch(new StartNextMeasureSeries(device));
+          if (this.measuresService.sendBackgroundMeasureToServer(device, currentSeries, newCurrentMeasure)) {
+            // Stop measure series and start a new one
+
+            return dispatch(new StopMeasureScan(device)).subscribe(() => {
+              this.store.dispatch(new StopMeasureSeries()).subscribe(() => {
+                this.store.dispatch(new StartBackgroundMeasure(device));
+              });
+            });
+          } else {
+            return dispatch(new StartNextMeasureSeries(device));
+          }
         }
       }
     }
     return of(null);
   }
 
-  private updateMeasureHits(measure: Measure, planeMode: boolean, { step, device }: AddMeasureScanStep): Measure {
+  private updateMeasureHits(
+    measure: Measure,
+    planeMode: boolean,
+    { step, device }: AddMeasureScanStep,
+    measureStateModel: MeasuresStateModel,
+  ): Measure {
     const newMeasure = { ...measure };
+    if (measureStateModel.params.fakeHitsMode) {
+      // If fake hits mode is active, make sure we are not in beta environment (ignore if not)
+      const splitted = environment.APP_NAME_VERSION.split(' ');
+      if (splitted.length >= 2) {
+        const envName = splitted[splitted.length - 1] + ' ' + splitted[splitted.length - 2];
+        if (
+          envName.toLocaleLowerCase().indexOf('beta') != -1 ||
+          envName.toLocaleLowerCase().indexOf('mockdevice') != -1
+        ) {
+          step.hitsNumber = 10 + (step.hitsNumber ? step.hitsNumber : 0);
+        }
+      }
+    }
+
     if (step.hitsNumber !== undefined) {
       newMeasure.hitsNumber = measure.hitsNumber ? measure.hitsNumber + step.hitsNumber : step.hitsNumber;
       const [value, calibrationFunction] = this.measuresService.computeRadiationValue(newMeasure, device, planeMode);
@@ -433,9 +647,18 @@ export class MeasuresState {
     device: AbstractDevice,
     measureSeries: MeasureSeries,
     measure: Measure,
-    currentTime: number
+    currentTime: number,
   ): boolean {
     switch (measureSeries.params.paramSelected) {
+      case MeasureSeriesParamsSelected.measureBackgroundLimit: {
+        // Two cases in which a background measure step should end :
+        const hasReachedDurationLimit = currentTime - measure.startTime > measureSeries.params.measureDurationLimit;
+        const _hasEnoughAccuracy =
+          measure.hitsAccuracy !== undefined && measure.hitsAccuracy > device.hitsAccuracyThreshold.medium;
+        const thresholdExceeded = measure.value > measureSeries.params.maxValueLimit;
+        //   TODO use hasEnoughAccuracy &&
+        return hasReachedDurationLimit || thresholdExceeded;
+      }
       case MeasureSeriesParamsSelected.measureDurationLimit:
         return (
           currentTime - measure.startTime > measureSeries.params.measureDurationLimit &&
@@ -461,12 +684,12 @@ export class MeasuresState {
           if (currentSeries) {
             patch.currentSeries = {
               ...currentSeries,
-              startTime: Date.now()
+              startTime: Date.now(),
             };
           }
           patch.currentMeasure = Measure.updateStartPosition(getState().currentMeasure!, currentPosition);
           patchState(patch);
-        })
+        }),
       );
     } else {
       return of(null);
@@ -478,7 +701,7 @@ export class MeasuresState {
     const { currentMeasure, currentSeries, currentPosition } = getState();
     if (currentMeasure) {
       const patch: Partial<MeasuresStateModel> = {
-        canEndCurrentScan: false
+        canEndCurrentScan: false,
       };
       const updatedMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
       if (currentSeries) {
@@ -497,11 +720,12 @@ export class MeasuresState {
   }
 
   @Action(StartNextMeasureSeries)
-  startNextMeasureSeries(
+  async startNextMeasureSeries(
     { getState, patchState, dispatch }: StateContext<MeasuresStateModel>,
-    { device }: StartNextMeasureSeries
+    { device }: StartNextMeasureSeries,
   ) {
     const { currentMeasure, currentSeries, currentPosition } = getState();
+    await this.computeDeviceInfoIfMissing();
     if (currentMeasure && currentSeries) {
       if (currentMeasure.endTime! - currentSeries.startTime > currentSeries.params.seriesDurationLimit) {
         return dispatch(new StopMeasureScan(device));
@@ -513,16 +737,16 @@ export class MeasuresState {
             currentMeasure.apparatusVersion,
             currentMeasure.apparatusSensorType,
             currentMeasure.apparatusTubeType,
-            this.device.uuid,
-            this.device.platform,
-            this.device.version,
-            this.device.model
+            this.deviceUUID,
+            this.devicePlatform,
+            this.deviceOsVersion,
+            this.deviceModel,
           ),
-          currentPosition
+          currentPosition,
         );
         patchState({
           currentMeasure: newMeasure,
-          currentSeries: MeasureSeries.addMeasureToSeries(currentSeries, updatedMeasure)
+          currentSeries: MeasureSeries.addMeasureToSeries(currentSeries, updatedMeasure),
         });
         return of(null);
       }
@@ -559,15 +783,15 @@ export class MeasuresState {
         storm: currentMeasure.storm,
         windowSeat: currentMeasure.windowSeat,
         flightNumber: currentMeasure.flightNumber,
-        seatNumber: currentMeasure.seatNumber
+        seatNumber: currentMeasure.seatNumber,
       };
       patchState({
         measureReport: {
           model,
           dirty: false,
           status: '',
-          errors: {}
-        }
+          errors: {},
+        },
       });
     }
   }
@@ -592,13 +816,13 @@ export class MeasuresState {
                 (
                   currentSeries.measures.reduce((acc, measure) => acc + measure.hitsNumber!, 0) /
                   currentSeries.measures.length
-                ).toFixed(1)
+                ).toFixed(1),
               )
             : undefined,
         valueAverage: Number(
           (
             currentSeries.measures.reduce((acc, measure) => acc + measure.value, 0) / currentSeries.measures.length
-          ).toFixed(3)
+          ).toFixed(3),
         ),
         measurementHeight: currentSeries.measures[0].measurementHeight,
         description: currentSeries.measures[0].description,
@@ -608,15 +832,15 @@ export class MeasuresState {
         storm: currentSeries.measures[0].storm,
         windowSeat: currentSeries.measures[0].windowSeat,
         flightNumber: currentSeries.measures[0].flightNumber,
-        seatNumber: currentSeries.measures[0].seatNumber
+        seatNumber: currentSeries.measures[0].seatNumber,
       };
       patchState({
         measureSeriesReport: {
           model,
           dirty: false,
           status: '',
-          errors: {}
-        }
+          errors: {},
+        },
       });
     }
   }
@@ -636,32 +860,29 @@ export class MeasuresState {
         windowSeat: measureReport.model.windowSeat,
         description: measureReport.model.description,
         tags: measureReport.model.tags,
-        enclosedObject: measureReport.model.enclosedObject
+        enclosedObject: measureReport.model.enclosedObject,
       };
       if (currentMeasure.manualReporting) {
         updatedCurrentMeasure = {
           ...updatedCurrentMeasure,
           temperature: measureReport.model.temperature,
           value: measureReport.model.value!,
-          hitsNumber: measureReport.model.hitsNumber
+          hitsNumber: measureReport.model.hitsNumber,
         };
         if (measureReport.model.duration !== undefined) {
           const durationDate = new Date(measureReport.model.duration);
-          let hours;
-          let minutes;
-          let seconds;
-          hours = durationDate.getHours();
-          minutes = durationDate.getMinutes();
-          seconds = durationDate.getSeconds();
+          const hours = durationDate.getHours();
+          const minutes = durationDate.getMinutes();
+          const seconds = durationDate.getSeconds();
           updatedCurrentMeasure = {
             ...updatedCurrentMeasure,
-            endTime: currentMeasure.startTime + (hours * 60 * 60 + minutes * 60 + seconds) * 1000
+            endTime: currentMeasure.startTime + (hours * 60 * 60 + minutes * 60 + seconds) * 1000,
           };
         }
       }
       patchState({
         measureReport: undefined,
-        currentMeasure: updatedCurrentMeasure
+        currentMeasure: updatedCurrentMeasure,
       });
     }
   }
@@ -674,7 +895,7 @@ export class MeasuresState {
         measureSeriesReport: undefined,
         currentSeries: {
           ...currentSeries,
-          measures: currentSeries.measures.map(measure => ({
+          measures: currentSeries.measures.map((measure) => ({
             ...measure,
             measurementHeight: measureSeriesReport.model.measurementHeight,
             measurementEnvironment: measureSeriesReport.model.measurementEnvironment,
@@ -688,9 +909,9 @@ export class MeasuresState {
               : undefined,
             seatNumber: measureSeriesReport.model.seatNumber
               ? measureSeriesReport.model.seatNumber.toUpperCase()
-              : undefined
-          }))
-        }
+              : undefined,
+          })),
+        },
       });
     }
   }
@@ -699,16 +920,27 @@ export class MeasuresState {
   publishMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, { measure }: PublishMeasure) {
     if (!measure.sent) {
       let { measures } = getState();
-      const index = measures.findIndex(stateMeasure => stateMeasure.id === measure.id);
+      const index = measures.findIndex((stateMeasure) => stateMeasure.id === measure.id);
       if (index !== -1) {
-        return this.measuresService.publishMeasure(measure).pipe(
-          tap(() => {
-            measures = getState().measures;
+        return this.measuresService.publishMeasure(measure).subscribe((m) => {
+          measures = getState().measures;
+          if ((m as AbstractMeasure)?.type == MeasureType.Measure) {
             patchState({
-              measures: [...measures.slice(0, index), { ...measure, sent: true }, ...measures.slice(index + 1)]
+              measures: [...measures.slice(0, index), { ...(m as Measure) }, ...measures.slice(index + 1)],
             });
-          })
-        );
+          } else {
+            patchState({
+              measures: [...measures.slice(0, index), { ...(m as MeasureSeries) }, ...measures.slice(index + 1)],
+            });
+          }
+          if (!(m as AbstractMeasure).sent) {
+            this.store.dispatch(new PublishMeasureError(m as AbstractMeasure));
+            return of(null);
+          } else {
+            this.store.dispatch(new PublishMeasureSuccess(m as AbstractMeasure));
+            return of(m);
+          }
+        });
       }
     }
     return of(null);
@@ -718,10 +950,10 @@ export class MeasuresState {
   deleteMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, { measure }: DeleteMeasure) {
     if (!measure.sent) {
       const { measures } = getState();
-      const index = measures.findIndex(stateMeasure => stateMeasure.id === measure.id);
+      const index = measures.findIndex((stateMeasure) => stateMeasure.id === measure.id);
       if (index !== -1) {
         patchState({
-          measures: [...measures.slice(0, index), ...measures.slice(index + 1)]
+          measures: [...measures.slice(0, index), ...measures.slice(index + 1)],
         });
       }
     }
@@ -730,7 +962,7 @@ export class MeasuresState {
   @Action(DeleteAllMeasures)
   deleteAllMeasures({ patchState }: StateContext<MeasuresStateModel>) {
     patchState({
-      measures: []
+      measures: [],
     });
   }
 
@@ -738,11 +970,11 @@ export class MeasuresState {
   showMeasure({ patchState }: StateContext<MeasuresStateModel>, { measure }: PublishMeasure) {
     if (measure.type === MeasureType.Measure) {
       patchState({
-        currentMeasure: { ...measure }
+        currentMeasure: { ...measure },
       });
     } else {
       patchState({
-        currentSeries: { ...measure }
+        currentSeries: { ...measure },
       });
     }
   }
@@ -753,7 +985,63 @@ export class MeasuresState {
     const index = recentTags.indexOf(tag);
     patchState({
       recentTags:
-        index === -1 ? [tag, ...recentTags] : [tag, ...recentTags.slice(0, index), ...recentTags.slice(index + 1)]
+        index === -1 ? [tag, ...recentTags] : [tag, ...recentTags.slice(0, index), ...recentTags.slice(index + 1)],
     });
+  }
+
+  async computeDeviceInfoIfMissing() {
+    if (this.deviceUUID == MeasuresState.MISSING_STRING) {
+      this.deviceUUID = (await Device.getId()).identifier;
+    }
+    if (this.devicePlatform == MeasuresState.MISSING_STRING) {
+      const deviceInfo = await Device.getInfo();
+      this.devicePlatform = deviceInfo.platform;
+      this.deviceModel = deviceInfo.model;
+      this.deviceOsVersion = deviceInfo.osVersion;
+    }
+  }
+
+  @Action(UpdateBackgroundMeasureThreshold)
+  updateBackgroundMeasureThreshold(
+    { getState, patchState }: StateContext<MeasuresStateModel>,
+    { value }: UpdateBackgroundMeasureThreshold,
+  ) {
+    const { params } = getState();
+    params.backgroundMeasureThreshold = value;
+    patchState({ params: params });
+    this.storageService.saveParams(params);
+  }
+
+  @Action(UpdateBackgroundMeasureStepDuration)
+  updateBackgroundMeasureStepDuration(
+    { getState, patchState }: StateContext<MeasuresStateModel>,
+    { value }: UpdateBackgroundMeasureThreshold,
+  ) {
+    const { params } = getState();
+    params.backgroundMeasureStepDurationMinutes = value;
+    patchState({ params: params });
+    this.storageService.saveParams(params);
+  }
+
+  @Action(UpdateBackgroundMeasureStepCount)
+  updateBackgroundMeasureStepCount(
+    { getState, patchState }: StateContext<MeasuresStateModel>,
+    { value }: UpdateBackgroundMeasureStepCount,
+  ) {
+    const { params } = getState();
+    params.backgroundMeasureStepCountBeforeSending = value;
+    patchState({ params: params });
+    this.storageService.saveParams(params);
+  }
+
+  @Action(UpdateBackgroundMeasureServerURL)
+  updateBackgroundMeasureServerURL(
+    { getState, patchState }: StateContext<MeasuresStateModel>,
+    { value }: UpdateBackgroundMeasureServerURL,
+  ) {
+    const { params } = getState();
+    params.backgroundMeasureServerURL = value;
+    patchState({ params: params });
+    this.storageService.saveParams(params);
   }
 }

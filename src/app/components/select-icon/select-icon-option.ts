@@ -2,6 +2,6 @@ export interface SelectIconOption {
   iconOn: string;
   iconOff: string;
   label: string;
-  value: any;
+  value: unknown;
   disabled?: boolean;
 }

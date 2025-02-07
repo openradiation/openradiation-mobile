@@ -6,7 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { TranslateModule } from '@ngx-translate/core';
-import { ComponentsModule } from '../../../components/components.module';
+import { ComponentsModule } from '@app/components/components.module';
 import { LegalNoticePage } from './legal-notice.page';
 
 const routes: Routes = [
@@ -20,4 +20,4 @@ const routes: Routes = [
   imports: [CommonModule, FormsModule, IonicModule, RouterModule.forChild(routes), ComponentsModule, TranslateModule],
   declarations: [LegalNoticePage]
 })
-export class LegalNoticePageModule {}
+export class LegalNoticePageModule { }

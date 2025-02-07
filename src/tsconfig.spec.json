@@ -3,7 +3,26 @@
   "compilerOptions": {
     "outDir": "../out-tsc/spec",
     "baseUrl": "./",
-    "module": "commonjs",
+    "paths": {
+      "@app/*": [
+        "./app/*"
+      ],
+      "@tests/*": [
+        "./tests/*"
+      ],
+      "@environments/*": [
+        "./environments/*"
+      ],
+      "@capacitor/*": [
+        "./tests/__mocks__/@capacitor/*"
+      ],
+      "@awesome-cordova-plugins/diagnostic": [
+        "./tests/__mocks__/@awesome-cordova-plugins/diagnostic.ts"
+      ],
+      "~*": [
+        "../node_modules/*"
+      ]
+    },
     "types": [
       "jasmine",
       "node"

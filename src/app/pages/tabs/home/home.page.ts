@@ -1,17 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { Location } from '@mauron85/cordova-plugin-background-geolocation';
 import { TranslateService } from '@ngx-translate/core';
-import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
+import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
-import { AutoUnsubscribePage } from '../../../components/auto-unsubscribe/auto-unsubscribe.page';
-import { AlertService } from '../../../services/alert.service';
-import { NavigationService } from '../../../services/navigation.service';
-import { AbstractDevice } from '../../../states/devices/abstract-device';
-import { DevicesState } from '../../../states/devices/devices.state';
-import { StartMeasure } from '../../../states/measures/measures.action';
-import { MeasuresState } from '../../../states/measures/measures.state';
+import { AutoUnsubscribePage } from '@app/components/auto-unsubscribe/auto-unsubscribe.page';
+import { AlertService } from '@app/services/alert.service';
+import { NavigationService } from '@app/services/navigation.service';
+import { AbstractDevice } from '@app/states/devices/abstract-device';
+import { DevicesState } from '@app/states/devices/devices.state';
+import { StartMeasure } from '@app/states/measures/measures.action';
+import { MeasuresState } from '@app/states/measures/measures.state';
+import { Location } from "@capacitor-community/background-geolocation";
+import { PositionService } from '@app/states/measures/position.service';
 
 @Component({
   selector: 'app-page-home',
@@ -19,14 +20,10 @@ import { MeasuresState } from '../../../states/measures/measures.state';
   styleUrls: ['home.page.scss']
 })
 export class HomePage extends AutoUnsubscribePage {
-  @Select(DevicesState.connectedDevice)
-  connectedDevice$: Observable<AbstractDevice | undefined>;
-  @Select(MeasuresState.positionAccuracy)
-  positionAccuracy$: Observable<number>;
-  @Select(MeasuresState.planeMode)
-  planeMode$: Observable<boolean>;
-  @Select(MeasuresState.currentPosition)
-  currentPosition$: Observable<Location>;
+  connectedDevice$: Observable<AbstractDevice | undefined> = inject(Store).select(DevicesState.connectedDevice);
+  positionAccuracy$: Observable<number> = inject(Store).select(MeasuresState.positionAccuracy);
+  planeMode$: Observable<boolean> = inject(Store).select(MeasuresState.planeMode);
+  currentPosition$: Observable<Location | undefined> = inject(Store).select(MeasuresState.currentPosition);
 
   canStartMeasure: Observable<boolean>;
 
@@ -38,7 +35,8 @@ export class HomePage extends AutoUnsubscribePage {
     private actions$: Actions,
     private alertService: AlertService,
     private translateService: TranslateService,
-    private navigationService: NavigationService
+    private navigationService: NavigationService,
+    private positionService: PositionService
   ) {
     super(router);
 
@@ -51,7 +49,7 @@ export class HomePage extends AutoUnsubscribePage {
       if (planeMode === false) {
         this.subscriptions.push(
           this.currentPosition$.subscribe(position => {
-            if (position && position.altitude > 6000) {
+            if (position?.altitude && position.altitude > 6000) {
               this.showElevatedAltitudeMessage();
             }
           })
@@ -90,11 +88,14 @@ export class HomePage extends AutoUnsubscribePage {
     this.navigationService.navigateForward(['tabs', 'settings', 'plane-mode'], { animated: true });
   }
 
-  startMeasure() {
-    this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
-      if (connectedDevice) {
-        this.store.dispatch(new StartMeasure(connectedDevice));
-      }
-    });
+  async startMeasure() {
+    const hasLocationEnabled = await this.positionService.requestAuthorization();
+    if (hasLocationEnabled) {
+      this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
+        if (connectedDevice) {
+          this.store.dispatch(new StartMeasure(connectedDevice));
+        }
+      });
+    }
   }
 }

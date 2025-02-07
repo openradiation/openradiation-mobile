@@ -1,7 +1,11 @@
-import { Location } from '@mauron85/cordova-plugin-background-geolocation';
+import { Location } from '@capacitor-community/background-geolocation';
 import * as uuid from 'uuid';
-import { environment } from '../../../environments/environment';
-import { ApparatusSensorType } from '../devices/abstract-device';
+import { environment } from '@environments/environment';
+import { ApparatusSensorType } from '@app/states/devices/abstract-device';
+import { MaskitoOptions } from '@maskito/core';
+import { Store } from '@ngxs/store';
+import { ElementState } from '@maskito/core/src/lib/types';
+import { FlightNumberValidation } from './measures.action';
 
 export abstract class AbstractMeasure {
   abstract readonly type: MeasureType;
@@ -14,7 +18,7 @@ export abstract class AbstractMeasure {
 
 export enum MeasureType {
   Measure = 'Measure',
-  MeasureSeries = 'MeasureSeries'
+  MeasureSeries = 'MeasureSeries',
 }
 
 export class Measure extends AbstractMeasure {
@@ -67,7 +71,7 @@ export class Measure extends AbstractMeasure {
     deviceVersion: string,
     deviceModel: string,
     manualReporting = false,
-    reportUuid = uuid.v4()
+    reportUuid = uuid.v4(),
   ) {
     super(reportUuid);
     this.apparatusId = apparatusId;
@@ -91,10 +95,10 @@ export class Measure extends AbstractMeasure {
     if (position) {
       return {
         ...measure,
-        latitude: position.latitude,
-        longitude: position.longitude,
-        accuracy: position.accuracy,
-        altitude: position.altitude
+        latitude: position?.latitude,
+        longitude: position?.longitude,
+        accuracy: position?.accuracy,
+        altitude: position?.altitude ?? undefined,
         // altitudeAccuracy: position.altitudeAccuracy
       };
     } else {
@@ -106,10 +110,10 @@ export class Measure extends AbstractMeasure {
     if (position) {
       return {
         ...measure,
-        endLatitude: position.latitude,
-        endLongitude: position.longitude,
-        endAccuracy: position.accuracy,
-        endAltitude: position.altitude
+        endLatitude: position?.latitude,
+        endLongitude: position?.longitude,
+        endAccuracy: position?.accuracy,
+        endAltitude: position?.altitude ?? undefined,
         // endAltitudeAccuracy: position.altitudeAccuracy
       };
     } else {
@@ -123,8 +127,8 @@ export class Measure extends AbstractMeasure {
         ...measure,
         temperature:
           measure.steps
-            .map(currentMeasureStep => currentMeasureStep.temperature!)
-            .reduce((acc, current) => acc + current) / measure.steps.length
+            .map((currentMeasureStep) => currentMeasureStep.temperature!)
+            .reduce((acc, current) => acc + current) / measure.steps.length,
       };
     }
     return { ...measure };
@@ -144,14 +148,14 @@ export enum PositionAccuracyThreshold {
   Good = 0,
   Poor = 50,
   Inaccurate = 500,
-  No = Infinity
+  No = Infinity,
 }
 
 export enum PositionAccuracy {
   Good = 'good',
   Poor = 'poor',
   Inaccurate = 'inaccurate',
-  No = 'no'
+  No = 'no',
 }
 
 export enum HitsAccuracy {
@@ -159,7 +163,7 @@ export enum HitsAccuracy {
   Bad = 'bad',
   Medium = 'medium',
   Good = 'good',
-  Accurate = 'accurate'
+  Accurate = 'accurate',
 }
 
 export enum MeasureEnvironment {
@@ -167,7 +171,7 @@ export enum MeasureEnvironment {
   City = 'city',
   OnTheRoad = 'ontheroad',
   Inside = 'inside',
-  Plane = 'plane'
+  Plane = 'plane',
 }
 
 export interface Params {
@@ -204,11 +208,15 @@ export interface MeasureSeriesParams {
   measureHitsLimit: number;
   measureDurationLimit: number;
   paramSelected: MeasureSeriesParamsSelected;
+  maxValueLimit: number;
+  backgroundMeasureStepCountBeforeSending: number;
+  backgroundMeasureServerURL: string;
 }
 
 export enum MeasureSeriesParamsSelected {
   measureHitsLimit,
-  measureDurationLimit
+  measureDurationLimit,
+  measureBackgroundLimit,
 }
 
 export interface MeasureSeriesReport {
@@ -231,16 +239,45 @@ export interface MeasureSeriesReport {
   seatNumber: string | undefined;
 }
 
+export interface SendableBackgroundMeasure {
+  value: number;
+  hits: number;
+  startTime: number;
+  endTime: number;
+  latitude: number;
+  longitude: number;
+  reportUuid: string;
+  userId: string;
+  userPwd: string;
+}
+
+export class FlightNumberMask implements MaskitoOptions {
+  constructor(protected store: Store) {}
+  mask = /^\w{1,7}$/;
+  postprocessors = [
+    (elementState: ElementState) => {
+      const flightCompanyLetters = elementState.value
+        .replace(/[^a-zA-Z]/g, '')
+        .toUpperCase()
+        .slice(0, 3);
+      const flightNumber = elementState.value.replace(/[^0-9]/g, '').slice(0, 4);
+      const newValue = flightCompanyLetters + flightNumber;
+      this.store.dispatch(new FlightNumberValidation(flightCompanyLetters.length >= 2 && flightNumber.length >= 1));
+      return {
+        value: newValue,
+        selection: elementState.selection,
+      };
+    },
+  ];
+}
+
 export class MeasureSeries extends AbstractMeasure {
   readonly type = MeasureType.MeasureSeries;
   measures: Measure[] = [];
 
   constructor(
     public params: MeasureSeriesParams,
-    public seriesUuid = `series_${uuid
-      .v4()
-      .replace(/-/g, '')
-      .slice(-18)}`
+    public seriesUuid = `series_${uuid.v4().replace(/-/g, '').slice(-18)}`,
   ) {
     super(seriesUuid);
   }
@@ -251,7 +288,7 @@ export class MeasureSeries extends AbstractMeasure {
     return {
       ...measureSeries,
       endTime: measure.endTime,
-      measures: [...measureSeries.measures, measure]
+      measures: [...measureSeries.measures, measure],
     };
   }
 }

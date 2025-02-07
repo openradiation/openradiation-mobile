@@ -1,32 +1,35 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { StatusBar } from '@capacitor/status-bar';
 import { Platform } from '@ionic/angular';
 
+import { SplashScreen } from '@capacitor/splash-screen';
 import { AppComponent } from './app.component';
+import { getTestImports, getTestProviders } from '@tests/TestUtils';
 
 describe('AppComponent', () => {
-  let statusBarSpy: any;
-  let splashScreenSpy: any;
-  let platformReadySpy: any;
-  let platformSpy: any;
+  let platformReadySpy: jasmine.Spy<any>;
+  let mockPlatform: MockPlatform;
 
   beforeEach(async () => {
-    statusBarSpy = jasmine.createSpyObj('StatusBar', ['styleDefault']);
-    splashScreenSpy = jasmine.createSpyObj('SplashScreen', ['hide']);
-    platformReadySpy = Promise.resolve();
-    platformSpy = jasmine.createSpyObj('Platform', { ready: platformReadySpy });
+    platformReadySpy = jasmine.createSpy().and.returnValue(Promise.resolve());
+
+    const mockBackButton = new MockBackButton();
+    mockBackButton.subscribeWithPriority = jasmine.createSpy('subscribeWithPriority', (_priority: unknown, _fn: unknown) => {
+      // Spy
+    });
+    mockPlatform = new MockPlatform();
+    mockPlatform.ready = platformReadySpy;
+    mockPlatform.backButton = mockBackButton;
 
     TestBed.configureTestingModule({
       declarations: [AppComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      imports: getTestImports(),
       providers: [
-        { provide: StatusBar, useValue: statusBarSpy },
-        { provide: SplashScreen, useValue: splashScreenSpy },
-        { provide: Platform, useValue: platformSpy }
-      ]
+        ...getTestProviders(),
+        { provide: Platform, useValue: mockPlatform }
+      ],
     }).compileComponents();
   });
 
@@ -37,10 +40,30 @@ describe('AppComponent', () => {
   });
 
   it('should initialize the app', async () => {
-    TestBed.createComponent(AppComponent);
-    expect(platformSpy.ready).toHaveBeenCalled();
+    spyOn(StatusBar, 'setOverlaysWebView');
+    spyOn(StatusBar, 'setStyle');
+    spyOn(SplashScreen, 'hide');
+
+    // Wait for app to be launched
+    await TestBed.createComponent(AppComponent).isStable()
     await platformReadySpy;
-    expect(statusBarSpy.styleDefault).toHaveBeenCalled();
-    expect(splashScreenSpy.hide).toHaveBeenCalled();
+    await sleep(1000);
+
+    // Make sure expected capacitor plugin have been called
+    expect(StatusBar.setOverlaysWebView).toHaveBeenCalledTimes(1);
+    expect(StatusBar.setStyle).toHaveBeenCalledTimes(1);
+    expect(SplashScreen.hide).toHaveBeenCalledTimes(1);
   });
 });
+class MockPlatform {
+  ready: jasmine.Spy<any>;
+  backButton: unknown;
+}
+
+class MockBackButton {
+  subscribeWithPriority: jasmine.Spy<any>;
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}

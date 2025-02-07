@@ -4,7 +4,7 @@
       <div class="spinner-container" *ngIf="isLoading">
         <ion-spinner></ion-spinner>
       </div>
-      <iframe [src]="iframeURL" (load)="mapLoaded()"></iframe>
+      <iframe *ngIf="iframeURL" [src]="iframeURL" (load)="mapLoaded()"></iframe>
     </ng-container>
     <ng-template #noConnectionAvailable>
       <app-category-label>

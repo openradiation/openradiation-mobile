@@ -18,11 +18,3 @@ export class SetLanguage {
   static readonly type = '[User] Set language';
   constructor(public language?: string) {}
 }
-
-export class EnableNotifications {
-  static readonly type = '[User] Enable notifications';
-}
-
-export class DisableNotifications {
-  static readonly type = '[User] Disable notifications';
-}

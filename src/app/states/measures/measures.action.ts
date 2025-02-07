@@ -1,6 +1,6 @@
-import { Location } from '@mauron85/cordova-plugin-background-geolocation';
-import { AbstractDevice } from '../devices/abstract-device';
-import { Measure, MeasureSeries, Params, Step } from './measure';
+import { Location } from '@capacitor-community/background-geolocation';
+import { AbstractDevice } from '@app/states/devices/abstract-device';
+import { AbstractMeasure, Measure, MeasureSeries, Params, Step } from '@app/states/measures/measure';
 
 export class InitMeasures {
   static readonly type = '[Measure] Init';
@@ -8,8 +8,18 @@ export class InitMeasures {
     public measures: (Measure | MeasureSeries)[],
     public params: Params,
     public recentTags: string[],
-    public currentSeries?: MeasureSeries
+    public currentSeries?: MeasureSeries,
   ) {}
+}
+
+export class StartBackgroundMeasure {
+  static readonly type = '[Measures] Starts a background measure';
+  constructor(public device: AbstractDevice) {}
+}
+
+export class StopBackgroundMeasure {
+  static readonly type = '[Measures] Stops a background measure';
+  constructor(public device: AbstractDevice) {}
 }
 
 export class EnableExpertMode {
@@ -18,6 +28,14 @@ export class EnableExpertMode {
 
 export class DisableExpertMode {
   static readonly type = '[Measure] Disable expert mode';
+}
+
+export class EnableFakeHitsMode {
+  static readonly type = '[Measures] Enable fake hits mode';
+}
+
+export class DisableFakeHitsMode {
+  static readonly type = '[Measure] Disable fake hits mode';
 }
 
 export class EnableAutoPublish {
@@ -68,7 +86,10 @@ export class StopMeasureSeriesParams {
 
 export class AddMeasureScanStep {
   static readonly type = '[Measures] Add measure scan step';
-  constructor(public step: Step, public device: AbstractDevice) {}
+  constructor(
+    public step: Step,
+    public device: AbstractDevice,
+  ) {}
 }
 
 export class StartMeasureScan {
@@ -111,6 +132,21 @@ export class PublishMeasure {
   constructor(public measure: Measure | MeasureSeries) {}
 }
 
+export class PublishMeasureError {
+  static readonly type = '[Measures] Publish measure error';
+  constructor(public measure: AbstractMeasure) {}
+}
+
+export class PublishMeasureSuccess {
+  static readonly type = '[Measures] Publish measure success';
+  constructor(public measure: AbstractMeasure) {}
+}
+
+export class PublishMeasureProgress {
+  static readonly type = '[Measures] Publish measure progress';
+  constructor(public measure: AbstractMeasure) {}
+}
+
 export class DeleteMeasure {
   static readonly type = '[Measures] Delete measure';
   constructor(public measure: Measure | MeasureSeries) {}
@@ -128,4 +164,26 @@ export class ShowMeasure {
 export class AddRecentTag {
   static readonly type = '[Measures] Add recent tag';
   constructor(public tag: string) {}
+}
+export class FlightNumberValidation {
+  static readonly type = '[Measures] Flight Number validation';
+  constructor(public isValid: boolean) {}
+}
+
+export class UpdateBackgroundMeasureThreshold {
+  static readonly type = '[Measures] Update Background Measure Threshold Parameter';
+  constructor(public value: number) {}
+}
+
+export class UpdateBackgroundMeasureServerURL {
+  static readonly type = '[Measures] Update Background Measure URL Parameter';
+  constructor(public value: string) {}
+}
+export class UpdateBackgroundMeasureStepDuration {
+  static readonly type = '[Measures] Update Background Measure Step Duration Parameter';
+  constructor(public value: number) {}
+}
+export class UpdateBackgroundMeasureStepCount {
+  static readonly type = '[Measures] Update Background Measure StepCount Parameter';
+  constructor(public value: number) {}
 }
