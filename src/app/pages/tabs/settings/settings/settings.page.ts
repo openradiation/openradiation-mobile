@@ -87,13 +87,13 @@ export class SettingsPage {
     this.store.dispatch(new SetLanguage(language));
   }
 
-  updateBackgroundMeasureThreshold(event: unknown) {
+  updateBackgroundMeasureThreshold(event: Event) {
     // @ts-expect-error untyped access
     const value = event.detail.value;
     this.store.dispatch(new UpdateBackgroundMeasureThreshold(value));
   }
 
-  updateBackgroundMeasureStepCountBeforeSending(event: unknown) {
+  updateBackgroundMeasureStepCountBeforeSending(event: Event) {
     // @ts-expect-error untyped access
     const value = event.detail.value;
     this.store.dispatch(new UpdateBackgroundMeasureStepCount(value));

@@ -23,6 +23,7 @@ import { MeasuresService } from '@app/states/measures/measures.service';
 import { MeasuresState } from '@app/states/measures/measures.state';
 import { Share } from '@capacitor/share';
 import { Directory, Encoding, Filesystem } from '@capacitor/filesystem';
+import { marker as _ } from '@biesbjerg/ngx-translate-extract-marker';
 
 @Component({
   selector: 'app-history',
@@ -36,6 +37,11 @@ export class HistoryPage extends AutoUnsubscribePage {
   publishMeasureCountCurrent: number;
   publishMeasureCountTotal: number;
   dtOptions = { bPaginate: false, bFilter: false, bInfo: false };
+  detailedSeries?: MeasureSeries;
+  measureSeriesMessageMapping = {
+    '=1': _('HISTORY.MEASURE_SERIES.SINGULAR') as string,
+    other: _('HISTORY.MEASURE_SERIES.PLURAL') as string,
+  };
 
   url = '/tabs/history';
 
@@ -260,6 +266,31 @@ export class HistoryPage extends AutoUnsubscribePage {
       csvContent += csvRow + '\n';
     });
     return csvContent;
+  }
+
+  getRoundedMeasure(measure: Measure | MeasureSeries) {
+    const digitsAfterComa = 3;
+    let measureAVG = 0;
+    if (measure.type == MeasureType.MeasureSeries) {
+      const measureSum = measure.measures.reduce((sum, m) => sum + (m.value ?? 0), 0);
+      measureAVG = measureSum / measure.measures.length;
+    } else {
+      measureAVG = measure.value;
+    }
+    return Math.round((measureAVG + Number.EPSILON) * Math.pow(10, digitsAfterComa)) / Math.pow(10, digitsAfterComa);
+  }
+
+  canToggleSeries(measure: Measure | MeasureSeries) {
+    return measure.type == MeasureType.MeasureSeries;
+  }
+
+  toggleSeriesDetail(event: Event, measure: MeasureSeries) {
+    event.stopPropagation();
+    if (measure.id == this.detailedSeries?.id) {
+      this.detailedSeries = undefined;
+    } else {
+      this.detailedSeries = measure;
+    }
   }
 
   getCSVColumns() {
