@@ -1,64 +1,83 @@
 <ng-container *ngIf="measures$ | async as measures">
-  <app-header 
-    [deleteButton]="measures.length > 0" (delete)="deleteAll()"
-    [exportButton]="true" (export)="exportCsv()">
-      {{'HISTORY.TITLE' | translate}}
+  <app-header [deleteButton]="measures.length > 0" (delete)="deleteAll()" [exportButton]="true" (export)="exportCsv()">
+    {{'HISTORY.TITLE' | translate}}
   </app-header>
 
   <ion-content>
     <div class="empty-list" *ngIf="measures.length <= 0" [innerHTML]="'HISTORY.NO_MEASURE' | translate"></div>
-    <table datatable [dtOptions]="dtOptions" class="row-border hover">
-        <thead class="thead-light">
-          <tr>
-            <th></th>
-            <th>Date</th>
-            <th>Mesure ({{ 'MEASURES.DOSE_RATE_UNIT' | translate }})</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-      <tr *ngFor="let measure of measures">
-        <!-- Expansion button -->
-        <td>
-          <ion-button class="inner-button" *ngIf="canToggleSeries(measure)"
-          (click)="toggleSeriesDetail($event, measure)" fill="clear">
-            <ion-icon [name]="detailedSeries?.id === measure.id ? 'caret-down-outline' : 'caret-forward-outline'" mode="md"
-              size="large">
+    <table id="historyTable" datatable [dtOptions]="dtOptions" class="row-border hover display compact historyTable">
+      <thead class="thead-light">
+        <tr>
+          <th class="very-small-column"></th>
+          <th class="small-column">Mode</th>
+          <th class="normalColumn">{{ 'GENERAL.DATE' | translate }}</th>
+          <th class="small-column">
+            {{ 'MEASURES.MEASURE' | translate }} ({{ 'MEASURES.DOSE_RATE_UNIT' | translate }})
+          </th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let measure of measures"
+          [ngClass]="{expanded: detailedSeries?.id === measure.id}"
+          (click)="showDetail(measure)"
+        >
+          <!-- Expansion button -->
+          <td class="very-small-column" (click)="toggleSeriesDetail($event, measure)">
+            <span style="display: none">{{ measure.type }}</span>
+            <ion-icon
+              [name]="detailedSeries?.id === measure.id ? 'chevron-down-outline' : 'chevron-forward-outline'"
+              *ngIf="canToggleSeries(measure)"
+              size="small"
+            >
             </ion-icon>
-        </ion-button>
-      </td>
-        <td class="date">{{ measure.startTime | date: "dd/MM/yy HH:mm" }}</td>
-        <!-- Measure value-->
-        <td>
-          <span 
-          *ngIf="detailedSeries?.id !== measure.id; else valueColumnWhenSeriesIsExpanded">
-          {{ getRoundedMeasure(measure)}}
-        </span>
-        <ng-template #valueColumnWhenSeriesIsExpanded>
-          {{
-          measure.measures.length
-          | i18nPlural: measureSeriesMessageMapping
-          | translate: { count: measure.measures.length }
-          }}
-        </ng-template>
-        </td>
-        <!-- Actions (publication and deletion) -->
-        <td>
-          <span *ngIf="measure.sent; else measureNotSent">
-            {{ 'HISTORY.SENT' | translate }}
-          </span>
-          <ng-template #measureNotSent>
-            <ion-button 
-            *ngIf="canPublish(measure)"
-            class="inner-button" fill="clear" size="default" [disabled]="!canPublish" (click)="publish(measure)">
-              <img src="assets/img/icon-publish.png" alt="publish"/>
-            </ion-button>
-            <ion-button class="inner-button" fill="clear" size="default" (click)="delete(measure)">
-              <img src="assets/img/icon-delete.png" alt="delete" />
-            </ion-button>
-          </ng-template>
-        </td>
-      </tr>
+          </td>
+          <td class="very-small-column">
+            <span style="display: none">{{ measure.measurementEnvironment === 'plane' ? 'airplane' : 'other'}}</span>
+            <ion-icon
+              [name]="measure.measurementEnvironment === 'plane' ? 'airplane-outline' : 'golf-outline'"
+              [ariaLabel]="measure.measurementEnvironment === 'plane' ? 'plane': 'ground'"
+              size="small"
+            ></ion-icon>
+          </td>
+          <td class="date normalColumn">
+            <span *ngIf="detailedSeries?.id !== measure.id; else dateColumnWhenSeriesIsExpanded">
+              {{ measure.startTime | date: "dd/MM/yy HH:mm" }}
+            </span>
+            <ng-template #dateColumnWhenSeriesIsExpanded>
+              {{ measure.startTime | date: "dd/MM/yy" }}
+              <p *ngFor="let subMeasure of detailedSeries?.measures">{{ subMeasure.startTime | date: "HH:mm" }}</p>
+            </ng-template>
+          </td>
+          <!-- Measure value-->
+          <td class="small-column">
+            <span *ngIf="detailedSeries?.id !== measure.id; else valueColumnWhenSeriesIsExpanded">
+              {{ getRoundedMeasure(measure)}}
+            </span>
+            <ng-template #valueColumnWhenSeriesIsExpanded>
+              {{ measure.measures.length | i18nPlural: measureSeriesMessageMapping | translate: { count:
+              measure.measures.length } }}
+              <p *ngFor="let subMeasure of detailedSeries?.measures">{{ getRoundedMeasure(subMeasure)}}</p>
+            </ng-template>
+          </td>
+          <!-- Actions (publication and deletion) -->
+          <td>
+            <span style="display: none">{{ measure.sent ? 'sent' : 'not sent'}}</span>
+            <span *ngIf="measure.sent; else measureNotSent"> {{ 'HISTORY.SENT' | translate }} </span>
+            <ng-template #measureNotSent>
+              <ion-icon
+                *ngIf="canPublish(measure)"
+                name="send-outline"
+                size="small"
+                aria-label="publish"
+                (click)="publish(measure)"
+              ></ion-icon>
+              <ion-icon name="trash-outline" size="small" aria-label="delete" (click)="delete(measure)"></ion-icon>
+            </ng-template>
+          </td>
+        </tr>
+      </tbody>
     </table>
   </ion-content>
 </ng-container>

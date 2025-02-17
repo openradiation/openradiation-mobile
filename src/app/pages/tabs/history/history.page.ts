@@ -36,7 +36,7 @@ export class HistoryPage extends AutoUnsubscribePage {
   loading?: HTMLIonLoadingElement;
   publishMeasureCountCurrent: number;
   publishMeasureCountTotal: number;
-  dtOptions = { bPaginate: false, bFilter: false, bInfo: false };
+  dtOptions = { bPaginate: false, bFilter: false, bInfo: false, order: [[2, 'desc']] };
   detailedSeries?: MeasureSeries;
   measureSeriesMessageMapping = {
     '=1': _('HISTORY.MEASURE_SERIES.SINGULAR') as string,
@@ -270,14 +270,13 @@ export class HistoryPage extends AutoUnsubscribePage {
 
   getRoundedMeasure(measure: Measure | MeasureSeries) {
     const digitsAfterComa = 3;
-    let measureAVG = 0;
+    let measureValue = 0;
     if (measure.type == MeasureType.MeasureSeries) {
-      const measureSum = measure.measures.reduce((sum, m) => sum + (m.value ?? 0), 0);
-      measureAVG = measureSum / measure.measures.length;
+      measureValue = Math.max(...measure.measures.map((m) => m.value));
     } else {
-      measureAVG = measure.value;
+      measureValue = measure.value;
     }
-    return Math.round((measureAVG + Number.EPSILON) * Math.pow(10, digitsAfterComa)) / Math.pow(10, digitsAfterComa);
+    return Math.round((measureValue + Number.EPSILON) * Math.pow(10, digitsAfterComa)) / Math.pow(10, digitsAfterComa);
   }
 
   canToggleSeries(measure: Measure | MeasureSeries) {
@@ -285,11 +284,13 @@ export class HistoryPage extends AutoUnsubscribePage {
   }
 
   toggleSeriesDetail(event: Event, measure: MeasureSeries) {
-    event.stopPropagation();
-    if (measure.id == this.detailedSeries?.id) {
-      this.detailedSeries = undefined;
-    } else {
-      this.detailedSeries = measure;
+    if (measure.type == MeasureType.MeasureSeries) {
+      event.stopPropagation();
+      if (measure.id == this.detailedSeries?.id) {
+        this.detailedSeries = undefined;
+      } else {
+        this.detailedSeries = measure;
+      }
     }
   }
 

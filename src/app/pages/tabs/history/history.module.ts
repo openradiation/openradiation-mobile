@@ -7,7 +7,6 @@ import { IonicModule } from '@ionic/angular';
 
 import { TranslateModule } from '@ngx-translate/core';
 import { ComponentsModule } from '@app/components/components.module';
-import { HistoryItemComponent } from './history-item/history-item.component';
 import { HistoryPage } from './history.page';
 
 import { DataTablesModule } from 'angular-datatables';
@@ -29,6 +28,6 @@ const routes: Routes = [
     TranslateModule,
     DataTablesModule,
   ],
-  declarations: [HistoryPage, HistoryItemComponent],
+  declarations: [HistoryPage],
 })
 export class HistoryPageModule {}
