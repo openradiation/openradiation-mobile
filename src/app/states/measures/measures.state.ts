@@ -948,14 +948,12 @@ export class MeasuresState {
 
   @Action(DeleteMeasure)
   deleteMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, { measure }: DeleteMeasure) {
-    if (!measure.sent) {
-      const { measures } = getState();
-      const index = measures.findIndex((stateMeasure) => stateMeasure.id === measure.id);
-      if (index !== -1) {
-        patchState({
-          measures: [...measures.slice(0, index), ...measures.slice(index + 1)],
-        });
-      }
+    const { measures } = getState();
+    const index = measures.findIndex((stateMeasure) => stateMeasure.id === measure.id);
+    if (index !== -1) {
+      patchState({
+        measures: [...measures.slice(0, index), ...measures.slice(index + 1)],
+      });
     }
   }
 

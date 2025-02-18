@@ -64,14 +64,14 @@
           <!-- Actions (publication and deletion) -->
           <td class="actions">
             <span style="display: none">{{ measure.sent ? 'sent' : 'not sent'}}</span>
+            <ion-icon
+              name="trash-outline"
+              size="small"
+              aria-label="delete"
+              (click)="delete($event, measure)"
+            ></ion-icon>
             <span *ngIf="measure.sent; else measureNotSent" class="success">
-              <ion-icon
-                name="checkmark-done-circle-outline"
-                size="small"
-                aria-label="published"
-                color="success"
-              ></ion-icon>
-              <span> {{ 'HISTORY.SENT' | translate }}</span>
+              <ion-icon name="checkbox-outline" size="small" aria-label="published" color="success"></ion-icon>
             </span>
             <ng-template #measureNotSent>
               <ion-icon
@@ -80,12 +80,6 @@
                 size="small"
                 aria-label="publish"
                 (click)="publish($event, measure)"
-              ></ion-icon>
-              <ion-icon
-                name="trash-outline"
-                size="small"
-                aria-label="delete"
-                (click)="delete($event, measure)"
               ></ion-icon>
             </ng-template>
           </td>
