@@ -14,7 +14,7 @@
           <th class="small-column">
             {{ 'MEASURES.MEASURE' | translate }} ({{ 'MEASURES.DOSE_RATE_UNIT' | translate }})
           </th>
-          <th>Actions</th>
+          <th>{{ 'HISTORY.PUBLICATION' | translate }}</th>
         </tr>
       </thead>
       <tbody>
@@ -62,18 +62,31 @@
             </ng-template>
           </td>
           <!-- Actions (publication and deletion) -->
-          <td>
+          <td class="actions">
             <span style="display: none">{{ measure.sent ? 'sent' : 'not sent'}}</span>
-            <span *ngIf="measure.sent; else measureNotSent"> {{ 'HISTORY.SENT' | translate }} </span>
+            <span *ngIf="measure.sent; else measureNotSent" class="success">
+              <ion-icon
+                name="checkmark-done-circle-outline"
+                size="small"
+                aria-label="published"
+                color="success"
+              ></ion-icon>
+              <span> {{ 'HISTORY.SENT' | translate }}</span>
+            </span>
             <ng-template #measureNotSent>
               <ion-icon
                 *ngIf="canPublish(measure)"
                 name="send-outline"
                 size="small"
                 aria-label="publish"
-                (click)="publish(measure)"
+                (click)="publish($event, measure)"
               ></ion-icon>
-              <ion-icon name="trash-outline" size="small" aria-label="delete" (click)="delete(measure)"></ion-icon>
+              <ion-icon
+                name="trash-outline"
+                size="small"
+                aria-label="delete"
+                (click)="delete($event, measure)"
+              ></ion-icon>
             </ng-template>
           </td>
         </tr>

@@ -55,6 +55,9 @@ ion-content {
         padding: 0px;
         margin: 0px;
         z-index: 99;
+        th {
+          text-align: center;
+        }
       }
     }
     tr {
@@ -68,14 +71,22 @@ ion-content {
         text-align: center;
         padding-top: 10px;
         padding-bottom: 10px;
-        .inner-button {
-          font-weight: 10;
-          z-index: 10;
+
+        &.actions {
+          display: flex;
+          justify-content: space-evenly;
         }
       }
 
       &.expanded {
         vertical-align: top;
+      }
+
+      .success {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        justify-content: space-evenly;
       }
     }
   }

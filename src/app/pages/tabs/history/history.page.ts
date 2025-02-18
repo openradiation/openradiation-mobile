@@ -114,7 +114,8 @@ export class HistoryPage extends AutoUnsubscribePage {
     this.store.dispatch(new ShowMeasure(measure));
   }
 
-  publish(measure: Measure | MeasureSeries) {
+  publish(event: Event, measure: Measure | MeasureSeries) {
+    event.stopPropagation();
     if (this.canPublish(measure)) {
       this.alertService.show({
         header: this.translateService.instant('HISTORY.TITLE'),
@@ -172,7 +173,8 @@ export class HistoryPage extends AutoUnsubscribePage {
     return measures.some((measure) => measure.type === MeasureType.MeasureSeries);
   }
 
-  delete(measure: Measure | MeasureSeries) {
+  delete(event: Event, measure: Measure | MeasureSeries) {
+    event.stopPropagation();
     this.alertService.show({
       header: this.translateService.instant('HISTORY.TITLE'),
       message:
