@@ -97,13 +97,15 @@
     "SENDING": "Sending measures..."
   },
   "HOME": {
-    "CONNECTED_SENSOR": "Connected sensor",
+    "CONNECTED_SENSOR": "Connected to ",
+    "CONNECT_SENSOR": "Connect",
+    "CHANGE_SENSOR": "Change",
     "ELEVATED_ALTITUDE": "High altitude detected",
     "ELEVATED_ALTITUDE_MESSAGE": "Tip: if you are on board a plane, please select the measurement mode on board a plane.",
     "MEASURE_MODE": "Measurement mode",
     "NO_SENSORS": "No sensor",
     "SWITCH_PLANE_MODE": "Switch to plane mode",
-    "TITLE": "measure radioactivity"
+    "TITLE": "Measure radioactivity"
   },
   "LANGUAGE": {
     "ENGLISH": "English",

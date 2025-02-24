@@ -97,13 +97,15 @@
     "SENDING": "Publication des mesures en cours..."
   },
   "HOME": {
-    "CONNECTED_SENSOR": "Capteur connecté",
+    "CONNECTED_SENSOR": "Connecté à ",
+    "CONNECT_SENSOR": "Connecter",
+    "CHANGE_SENSOR": "Changer",
     "ELEVATED_ALTITUDE": "Altitude importante détectée",
     "ELEVATED_ALTITUDE_MESSAGE": "Conseil : si vous êtes en avion, merci de sélectionner le mode de mesure à bord d’avion .",
     "MEASURE_MODE": "Mode de mesure",
     "NO_SENSORS": "Pas de capteur",
     "SWITCH_PLANE_MODE": "Activer le mode avion",
-    "TITLE": "mesurer la radioactivité"
+    "TITLE": "Mesurer la radioactivité"
   },
   "LANGUAGE": {
     "ENGLISH": "English",

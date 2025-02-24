@@ -40,3 +40,47 @@ ion-content {
     }
   }
 }
+
+.sensor-container {
+  width: 90vw;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  .sensor-status {
+    color: white;
+    background-color: #d34f00;
+    border-radius: 5px;
+    font-size: 20px;
+    padding: 2px 15px;
+    font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+    text-align: center;
+  }
+  &.sensorConnected {
+    .sensor-status {
+      background-color: #14c921;
+    }
+  }
+}
+
+.sensor-text {
+  color: white;
+  font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+  font-size: 25px;
+  padding-left: 10px;
+}
+
+.sensor-button {
+  padding-top: 7px;
+  padding-bottom: 7px;
+}
+
+.sensor-actions {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  ion-button {
+    min-width: min(30vw, 250px);
+  }
+}

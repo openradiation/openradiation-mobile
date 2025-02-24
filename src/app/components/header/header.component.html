@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="logo">
+  <div class="logo" [ngClass]="{ home: homeMode }">
     <img src="assets/img/logo.png" />
   </div>
   <div class="other-content">
@@ -20,7 +20,7 @@
           <ion-icon slot="icon-only" name="share"></ion-icon>
         </ion-button>
       </div>
-      <div  *ngIf="exportButton">
+      <div *ngIf="exportButton">
         <ion-button fill="clear" (click)="export.emit()">
           <ion-icon slot="icon-only" name="download"></ion-icon>
         </ion-button>

@@ -17,3 +17,35 @@
     background-color: #989aa2;
   }
 }
+
+.home-mode-container {
+  width: 90vw;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  .gps-status {
+    color: white;
+    background-color: #d34f00;
+    border-radius: 5px;
+    font-size: 20px;
+    padding: 2px 15px;
+    font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+    text-align: center;
+  }
+  &.hasGps {
+    .gps-status {
+      background-color: #14c921;
+    }
+  }
+  .gps-text {
+    color: white;
+    font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+    font-size: 25px;
+    padding-left: 10px;
+  }
+
+  .gps-accuracy {
+    font-size: 12px;
+  }
+}

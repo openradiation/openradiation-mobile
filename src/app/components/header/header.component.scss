@@ -1,6 +1,5 @@
 @import '../../../theme/variables.scss';
 
-
 .keyboard-open :host {
   .container {
     .logo {
@@ -26,9 +25,17 @@
     height: 55px;
     padding-bottom: 10px;
     opacity: 1;
-    transition: height ease-in 100ms, opacity ease-in 100ms, padding-bottom ease-in 100ms;
+    transition:
+      height ease-in 100ms,
+      opacity ease-in 100ms,
+      padding-bottom ease-in 100ms;
     flex: none;
 
+    &.home {
+      padding-top: 20px;
+      height: 15vh;
+      max-height: 250px;
+    }
     img {
       height: 100%;
       width: 100%;

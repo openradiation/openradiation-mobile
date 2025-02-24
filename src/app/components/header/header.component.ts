@@ -14,6 +14,8 @@ export class HeaderComponent {
   exportButton = false;
   @Input()
   deleteButton = false;
+  @Input()
+  homeMode = false;
   @Output()
   back = new EventEmitter();
   @Output()

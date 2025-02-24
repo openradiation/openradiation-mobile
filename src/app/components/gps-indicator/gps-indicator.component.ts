@@ -4,7 +4,7 @@ import { PositionAccuracy, PositionAccuracyThreshold } from '@app/states/measure
 @Component({
   selector: 'app-gps-indicator',
   templateUrl: './gps-indicator.component.html',
-  styleUrls: ['./gps-indicator.component.scss']
+  styleUrls: ['./gps-indicator.component.scss'],
 })
 export class GpsIndicatorComponent implements OnChanges {
   @Input()
@@ -12,6 +12,9 @@ export class GpsIndicatorComponent implements OnChanges {
 
   @Input()
   compact = false;
+
+  @Input()
+  homeMode = false;
 
   positionAccuracy: PositionAccuracy;
   positionAccuracyEnum = PositionAccuracy;
