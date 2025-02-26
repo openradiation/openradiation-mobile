@@ -1,11 +1,16 @@
 <ion-content>
   <ion-list>
-    <ion-item detail (click)="startMeasureSeries()" [ngClass]="{ active: currentUrl === '/measure/series' }" >
+    <ion-item detail (click)="startMeasureSeries()" [ngClass]="{ active: currentUrl === '/measure/series' }">
       <ion-label>
         {{ 'MEASURE_SERIES.TITLE' | translate }}
       </ion-label>
     </ion-item>
-    <ion-item detail (click)="startBackgroundMeasure()" [ngClass]="{ active: currentUrl === '/measure/background' }">
+    <ion-item
+      *ngIf="false"
+      detail
+      (click)="startBackgroundMeasure()"
+      [ngClass]="{ active: currentUrl === '/measure/background' }"
+    >
       <ion-label>
         <span [ngSwitch]="isBackgoundMeasureInProgress$ | async">
           <span *ngSwitchCase="true">{{ 'MEASURE_BACKGROUND.STOP' | translate }}</span>

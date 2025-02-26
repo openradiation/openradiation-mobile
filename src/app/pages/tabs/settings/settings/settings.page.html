@@ -2,19 +2,13 @@
 
 <ion-content>
   <ion-list>
-    <app-category-label>
-      {{'SENSORS.TITLE' | translate}}
-    </app-category-label>
+    <app-category-label> {{'SENSORS.TITLE' | translate}} </app-category-label>
     <ion-item button detail (click)="goToDevices()">
-      <ion-label>
-        {{'SENSORS.LIST' | translate}}
-      </ion-label>
+      <ion-label> {{'SENSORS.LIST' | translate}} </ion-label>
     </ion-item>
   </ion-list>
   <ion-list class="user-account">
-    <app-category-label>
-      {{'LOG_IN.USER_ACCOUNT' | translate}}
-    </app-category-label>
+    <app-category-label> {{'LOG_IN.USER_ACCOUNT' | translate}} </app-category-label>
     <ng-container *ngIf="login$ | async as login; else notLoggedIn">
       <ion-item>
         <ion-label> {{'LOG_IN.LOGGED_AS' | translate}}<br />{{login}} </ion-label>
@@ -25,89 +19,100 @@
     </ng-container>
     <ng-template #notLoggedIn>
       <ion-item>
-        <ion-label>
-          {{'LOG_IN.NOT_LOGGED' | translate}}
-        </ion-label>
+        <ion-label> {{'LOG_IN.NOT_LOGGED' | translate}} </ion-label>
         <ion-button fill="clear" class="flat-button-alt" (click)="goToLogIn()">
           {{'LOG_IN.TITLE' | translate}}
         </ion-button>
       </ion-item>
     </ng-template>
     <ion-item class="language">
-      <ion-label>
-        {{'LANGUAGE.TITLE' | translate}}
-      </ion-label>
-      <ion-select [ngModel]="language$ | async" (ngModelChange)="setLanguage($event)"
-        [okText]="'GENERAL.OK' | translate" [cancelText]="'GENERAL.CANCEL' | translate">
+      <ion-label> {{'LANGUAGE.TITLE' | translate}} </ion-label>
+      <ion-select
+        [ngModel]="language$ | async"
+        (ngModelChange)="setLanguage($event)"
+        [okText]="'GENERAL.OK' | translate"
+        [cancelText]="'GENERAL.CANCEL' | translate"
+      >
         <ion-select-option value="en">{{'LANGUAGE.ENGLISH' | translate}}</ion-select-option>
         <ion-select-option value="fr">{{'LANGUAGE.FRENCH' | translate}}</ion-select-option>
       </ion-select>
     </ion-item>
   </ion-list>
   <ion-list>
-    <app-category-label>
-      {{'MEASURES.TITLE' | translate}}
-    </app-category-label>
+    <app-category-label> {{'MEASURES.TITLE' | translate}} </app-category-label>
     <ion-item button detail (click)="goToPlaneMode()">
-      <ion-label>
-        {{'HOME.MEASURE_MODE' | translate}}
-      </ion-label>
+      <ion-label> {{'HOME.MEASURE_MODE' | translate}} </ion-label>
     </ion-item>
     <ion-item button detail (click)="goToMeasuresParam()">
-      <ion-label>
-        {{'MEASURES.AUTO_PUBLISH' | translate}}
-      </ion-label>
+      <ion-label> {{'MEASURES.AUTO_PUBLISH' | translate}} </ion-label>
     </ion-item>
     <ion-item class="no-padding">
-      <ion-label>
-        {{'MEASURES.EXPERT_MODE' | translate}}
-      </ion-label>
+      <ion-label> {{'MEASURES.EXPERT_MODE' | translate}} </ion-label>
       <ion-toggle [ngModel]="expertMode$ | async" (ngModelChange)="toggleExpertMode($event)"></ion-toggle>
     </ion-item>
     <ion-item class="no-padding" *ngIf="allowFakeHitsMode">
-      <ion-label>
-        {{'MEASURES.FAKE_HITS_MODE' | translate}}
-      </ion-label>
+      <ion-label> {{'MEASURES.FAKE_HITS_MODE' | translate}} </ion-label>
       <ion-toggle [ngModel]="fakeHitsMode$ | async" (ngModelChange)="toggleFakeHitsMode($event)"></ion-toggle>
     </ion-item>
   </ion-list>
-  <ion-list  *ngIf="expertMode$ | async">
-    <app-category-label>
-      {{'MEASURE_BACKGROUND.TITLE' | translate}}
-    </app-category-label>
+  <ion-list *ngIf="false && (expertMode$ | async)">
+    <app-category-label> {{'MEASURE_BACKGROUND.TITLE' | translate}} </app-category-label>
 
     <ion-item class="no-padding">
-      <ion-input [label]="'MEASURE_BACKGROUND.SETTINGS_THRESHOLD' | translate" 
-        [value]="(measureParams$ | async)?.backgroundMeasureThreshold" 
-      (ionChange)="updateBackgroundMeasureThreshold($event)"
-       required type="number" class="input" placeholder="0"
-       labelPlacement="stacked"
-       inputmode="decimal" >
+      <ion-input
+        [label]="'MEASURE_BACKGROUND.SETTINGS_THRESHOLD' | translate"
+        [value]="(measureParams$ | async)?.backgroundMeasureThreshold"
+        (ionChange)="updateBackgroundMeasureThreshold($event)"
+        required
+        type="number"
+        class="input"
+        placeholder="0"
+        labelPlacement="stacked"
+        inputmode="decimal"
+      >
       </ion-input>
     </ion-item>
     <ion-item class="no-padding">
-      <ion-input [label]="'MEASURE_BACKGROUND.SETTINGS_MINUTES' | translate" 
-        [value]="(measureParams$ | async)?.backgroundMeasureStepDurationMinutes" 
-         (ionChange)="updateBackgroundMeasureStepDurationMinutes($event)"
-        required type="number" class="input" placeholder="0" labelPlacement="stacked" inputmode="numeric">
+      <ion-input
+        [label]="'MEASURE_BACKGROUND.SETTINGS_MINUTES' | translate"
+        [value]="(measureParams$ | async)?.backgroundMeasureStepDurationMinutes"
+        (ionChange)="updateBackgroundMeasureStepDurationMinutes($event)"
+        required
+        type="number"
+        class="input"
+        placeholder="0"
+        labelPlacement="stacked"
+        inputmode="numeric"
+      >
       </ion-input>
     </ion-item>
     <ion-item class="no-padding">
-      <ion-input [label]="'MEASURE_BACKGROUND.SETTINGS_STEP_COUNTER' | translate" 
-         [value]="(measureParams$ | async)?.backgroundMeasureStepCountBeforeSending" 
-      (ionChange)="updateBackgroundMeasureStepCountBeforeSending($event)"
-        required type="number" class="input" placeholder="0" labelPlacement="stacked" inputmode="decimal">
+      <ion-input
+        [label]="'MEASURE_BACKGROUND.SETTINGS_STEP_COUNTER' | translate"
+        [value]="(measureParams$ | async)?.backgroundMeasureStepCountBeforeSending"
+        (ionChange)="updateBackgroundMeasureStepCountBeforeSending($event)"
+        required
+        type="number"
+        class="input"
+        placeholder="0"
+        labelPlacement="stacked"
+        inputmode="decimal"
+      >
       </ion-input>
     </ion-item>
     <ion-item class="no-padding">
-      <ion-input [label]="'MEASURE_BACKGROUND.SETTINGS_URL' | translate" 
-         [value]="(measureParams$ | async)?.backgroundMeasureServerURL" 
-      (ionChange)="updateBackgroundMeasureServerURL($event)"
-        required type="url" class="input" placeholder="0" labelPlacement="stacked" inputmode="url">
+      <ion-input
+        [label]="'MEASURE_BACKGROUND.SETTINGS_URL' | translate"
+        [value]="(measureParams$ | async)?.backgroundMeasureServerURL"
+        (ionChange)="updateBackgroundMeasureServerURL($event)"
+        required
+        type="url"
+        class="input"
+        placeholder="0"
+        labelPlacement="stacked"
+        inputmode="url"
+      >
       </ion-input>
     </ion-item>
-
-
   </ion-list>
-
 </ion-content>
