@@ -13,6 +13,9 @@ export class RoundButtonComponent {
   srcOff: string;
 
   @Input()
+  subText: string;
+
+  @Input()
   disabled: boolean;
 
   @Output()

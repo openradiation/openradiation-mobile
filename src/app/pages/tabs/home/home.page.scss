@@ -24,7 +24,7 @@ ion-content {
 
     .subtitle {
       color: $third-color;
-      font-size: 20px;
+      font-size: 18px;
       font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
       font-weight: 200;
       margin: 10px;
@@ -51,7 +51,7 @@ ion-content {
     color: white;
     background-color: #d34f00;
     border-radius: 5px;
-    font-size: 20px;
+    font-size: 18px;
     padding: 2px 15px;
     font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
     text-align: center;
@@ -66,7 +66,7 @@ ion-content {
 .sensor-text {
   color: white;
   font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
-  font-size: 20px;
+  font-size: 18px;
   padding-left: 10px;
 }
 
@@ -83,4 +83,9 @@ ion-content {
   ion-button {
     min-width: min(30vw, 250px);
   }
+}
+
+.launch-mesure {
+  color: white;
+  font-size: 18px;
 }

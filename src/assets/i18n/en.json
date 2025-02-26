@@ -106,8 +106,9 @@
     "NO_SENSORS": "No sensor",
     "SWITCH_PLANE_MODE": "Switch to plane mode",
     "TITLE": "Measure radioactivity",
-    "MEASURE_MODE_EXPLANATIONS_PLANE": "If your measures are taken <b>from a plane</b>, please modify your measure mode accordingly. <i><u>More information</u></i>",
-    "MEASURE_MODE_EXPLANATIONS_GROUND":"If your measures are taken <b>from the ground</b>, please modify your measure mode accordingly. <i><u>More information</u></i>",
+    "MEASURE_MODE_EXPLANATIONS_PLANE": "If your measures are taken <b>from the ground</b>, please modify your measure mode accordingly. <i><u>More information</u></i>",
+    "MEASURE_MODE_EXPLANATIONS_GROUND":"If your measures are taken <b>from a plane</b>, please modify your measure mode accordingly. <i><u>More information</u></i>",
+    "LAUNCH_MESURE": "Launch measure"
 
   },
   "LANGUAGE": {

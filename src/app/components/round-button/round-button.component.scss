@@ -17,6 +17,8 @@
 
   img {
     width: 100%;
+    height: auto;
+    max-width: 50vw;
   }
 }
 
@@ -28,5 +30,13 @@
   align-items: center;
   justify-content: center;
   font-size: 28px;
+  font-family: 'ARIALROUNDED', Arial, Helvetica, sans-serif;
+}
+
+.subtext {
+  color: white;
+  font-size: 20px;
+  width: 100%;
+  text-align: center;
   font-family: 'ARIALROUNDED', Arial, Helvetica, sans-serif;
 }

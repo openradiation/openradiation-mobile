@@ -34,12 +34,12 @@
 
       <app-measure-mode></app-measure-mode>
 
-      <span *ngIf="(canStartMeasure | async)" class="launch-mesure">Lancer la mesure</span>
       <app-round-button
         class="main"
         [disabled]="(canStartMeasure | async) === false"
         [srcOn]="'assets/img/button-start-measure-on.png'"
         [srcOff]="'assets/img/button-start-measure-off.png'"
+        [subText]="'HOME.LAUNCH_MESURE' | translate"
         (click)="startMeasure()"
       >
       </app-round-button>
