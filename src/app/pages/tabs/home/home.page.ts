@@ -11,13 +11,13 @@ import { AbstractDevice } from '@app/states/devices/abstract-device';
 import { DevicesState } from '@app/states/devices/devices.state';
 import { StartMeasure } from '@app/states/measures/measures.action';
 import { MeasuresState } from '@app/states/measures/measures.state';
-import { Location } from "@capacitor-community/background-geolocation";
+import { Location } from '@capacitor-community/background-geolocation';
 import { PositionService } from '@app/states/measures/position.service';
 
 @Component({
   selector: 'app-page-home',
   templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss']
+  styleUrls: ['home.page.scss'],
 })
 export class HomePage extends AutoUnsubscribePage {
   connectedDevice$: Observable<AbstractDevice | undefined> = inject(Store).select(DevicesState.connectedDevice);
@@ -36,30 +36,30 @@ export class HomePage extends AutoUnsubscribePage {
     private alertService: AlertService,
     private translateService: TranslateService,
     private navigationService: NavigationService,
-    private positionService: PositionService
+    private positionService: PositionService,
   ) {
     super(router);
 
-    this.canStartMeasure = this.connectedDevice$.pipe(map(connectedDevice => connectedDevice !== undefined));
+    this.canStartMeasure = this.connectedDevice$.pipe(map((connectedDevice) => connectedDevice !== undefined));
   }
 
   pageEnter() {
     super.pageEnter();
-    this.planeMode$.pipe(take(1)).subscribe(planeMode => {
+    this.planeMode$.pipe(take(1)).subscribe((planeMode) => {
       if (planeMode === false) {
         this.subscriptions.push(
-          this.currentPosition$.subscribe(position => {
+          this.currentPosition$.subscribe((position) => {
             if (position?.altitude && position.altitude > 6000) {
               this.showElevatedAltitudeMessage();
             }
-          })
+          }),
         );
       }
     });
     this.subscriptions.push(
       this.actions$
         .pipe(ofActionSuccessful(StartMeasure))
-        .subscribe(() => this.navigationService.navigateRoot(['measure', 'scan']))
+        .subscribe(() => this.navigationService.navigateRoot(['measure', 'scan'])),
     );
   }
 
@@ -74,13 +74,13 @@ export class HomePage extends AutoUnsubscribePage {
       backdropDismiss: false,
       buttons: [
         {
-          text: this.translateService.instant('GENERAL.CANCEL')
+          text: this.translateService.instant('GENERAL.CANCEL'),
         },
         {
           text: this.translateService.instant('HOME.SWITCH_PLANE_MODE'),
-          handler: () => this.goToPlaneMode()
-        }
-      ]
+          handler: () => this.goToPlaneMode(),
+        },
+      ],
     });
   }
 
@@ -91,7 +91,7 @@ export class HomePage extends AutoUnsubscribePage {
   async startMeasure() {
     const hasLocationEnabled = await this.positionService.requestAuthorization();
     if (hasLocationEnabled) {
-      this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
+      this.connectedDevice$.pipe(take(1)).subscribe((connectedDevice) => {
         if (connectedDevice) {
           this.store.dispatch(new StartMeasure(connectedDevice));
         }

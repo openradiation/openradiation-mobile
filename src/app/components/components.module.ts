@@ -20,44 +20,47 @@ import { RoundButtonComponent } from './round-button/round-button.component';
 import { SelectIconComponent } from './select-icon/select-icon.component';
 import { SeriesGraphComponent } from './series-graph/series-graph.component';
 import { TagListComponent } from './tag-list/tag-list.component';
+import { MeasureModeComponent } from './measure-mode/measure-mode.component';
 
 PlotlyModule.plotlyjs = PlotlyJS;
 
 @NgModule({
-    imports: [CommonModule, FormsModule, IonicModule, TranslateModule, PlotlyModule],
-    declarations: [
-        HeaderComponent,
-        CategoryLabelComponent,
-        AccordionComponent,
-        RoundButtonComponent,
-        GpsIndicatorComponent,
-        DurationPipe,
-        HitNumberPerMinPipe,
-        HitNumberPipe,
-        DosePipe,
-        SelectIconComponent,
-        TagListComponent,
-        PhotoComponent,
-        SanitizeHtmlPipe,
-        SeriesGraphComponent,
-        DoubleButtonComponent
-    ],
-    exports: [
-        HeaderComponent,
-        CategoryLabelComponent,
-        AccordionComponent,
-        RoundButtonComponent,
-        GpsIndicatorComponent,
-        DurationPipe,
-        HitNumberPerMinPipe,
-        HitNumberPipe,
-        DosePipe,
-        SelectIconComponent,
-        TagListComponent,
-        PhotoComponent,
-        SanitizeHtmlPipe,
-        SeriesGraphComponent,
-        DoubleButtonComponent
-    ]
+  imports: [CommonModule, FormsModule, IonicModule, TranslateModule, PlotlyModule],
+  declarations: [
+    HeaderComponent,
+    CategoryLabelComponent,
+    AccordionComponent,
+    RoundButtonComponent,
+    GpsIndicatorComponent,
+    DurationPipe,
+    HitNumberPerMinPipe,
+    HitNumberPipe,
+    DosePipe,
+    SelectIconComponent,
+    TagListComponent,
+    PhotoComponent,
+    SanitizeHtmlPipe,
+    SeriesGraphComponent,
+    DoubleButtonComponent,
+    MeasureModeComponent,
+  ],
+  exports: [
+    HeaderComponent,
+    CategoryLabelComponent,
+    AccordionComponent,
+    RoundButtonComponent,
+    GpsIndicatorComponent,
+    DurationPipe,
+    HitNumberPerMinPipe,
+    HitNumberPipe,
+    DosePipe,
+    SelectIconComponent,
+    TagListComponent,
+    PhotoComponent,
+    SanitizeHtmlPipe,
+    SeriesGraphComponent,
+    DoubleButtonComponent,
+    MeasureModeComponent,
+  ],
 })
 export class ComponentsModule {}

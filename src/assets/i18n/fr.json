@@ -105,7 +105,10 @@
     "MEASURE_MODE": "Mode de mesure",
     "NO_SENSORS": "Pas de capteur",
     "SWITCH_PLANE_MODE": "Activer le mode avion",
-    "TITLE": "Mesurer la radioactivité"
+    "TITLE": "Mesurer la radioactivité",
+    "MEASURE_MODE_EXPLANATIONS_PLANE": "Si vos mesures sont prises <b>à bord d'un avion</b>, veuillez modifier le mode de mesure. <i><u>Plus d'infos</u></i>",
+    "MEASURE_MODE_EXPLANATIONS_GROUND": "Si vos mesures sont prises <b>au niveau du sol</b>, veuillez modifier le mode de mesure. <i><u>Plus d'infos</u></i>"
+
   },
   "LANGUAGE": {
     "ENGLISH": "English",

@@ -32,30 +32,12 @@
         </ng-template>
       </div>
 
-      <ng-container *ngIf="planeMode$ | async; else groundLevel">
-        <div class="button-component">
-          <app-double-button
-            [headerMessage]="'HOME.MEASURE_MODE' | translate"
-            [mainMessage]="'GENERAL.ON_PLANE' | translate"
-            [modeSimple]="false"
-            (click)="goToPlaneMode()"
-          ></app-double-button>
-        </div>
-      </ng-container>
-      <ng-template #groundLevel>
-        <div class="button-component">
-          <app-double-button
-            [headerMessage]="'HOME.MEASURE_MODE' | translate"
-            [mainMessage]="'GENERAL.ON_GROUND' | translate"
-            [modeSimple]="false"
-            (click)="goToPlaneMode()"
-          ></app-double-button>
-        </div>
-      </ng-template>
+      <app-measure-mode></app-measure-mode>
+
       <span *ngIf="(canStartMeasure | async)" class="launch-mesure">Lancer la mesure</span>
       <app-round-button
         class="main"
-        [disabled]="!(canStartMeasure | async)"
+        [disabled]="(canStartMeasure | async) === false"
         [srcOn]="'assets/img/button-start-measure-on.png'"
         [srcOff]="'assets/img/button-start-measure-off.png'"
         (click)="startMeasure()"

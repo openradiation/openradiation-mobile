@@ -95,6 +95,7 @@
     "@biesbjerg/ngx-translate-extract-marker": "^1.0.0",
     "@capacitor/cli": "6.1.1",
     "@compodoc/compodoc": "^1.1.25",
+    "@ionic/angular-toolkit": "^12.1.1",
     "@types/jasmine": "~5.1.2",
     "@types/jquery": "^3.5.32",
     "@types/node": "~22.0.2",
