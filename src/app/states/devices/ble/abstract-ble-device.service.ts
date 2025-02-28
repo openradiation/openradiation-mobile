@@ -7,16 +7,13 @@ import { AbstractBLEDevice, RawBLEDevice } from './abstract-ble-device';
 import { BleClient } from '@capacitor-community/bluetooth-le';
 import { Capacitor } from '@capacitor/core';
 
-
 export abstract class AbstractBLEDeviceService<T extends AbstractBLEDevice> extends AbstractDeviceService<T> {
   protected abstract service: string;
   protected abstract receiveCharacteristic: string;
 
-  protected constructor(
-    protected store: Store,
-  ) {
+  protected constructor(protected store: Store) {
     super(store);
-    if (Capacitor.getPlatform() != "web") {
+    if (Capacitor.getPlatform() != 'web') {
       BleClient.initialize();
     }
   }
@@ -25,23 +22,24 @@ export abstract class AbstractBLEDeviceService<T extends AbstractBLEDevice> exte
 
   connectDevice(device: T): Observable<unknown> {
     const connection = new Observable((observer) => {
-      BleClient.connect(device.sensorUUID,
+      BleClient.connect(
+        device.sensorUUID,
         // On disconnect, provoque error to trigger RxJS catchError callback
         (deviceId) => {
-          observer.error(new Error('Device disconnected : ' + deviceId))
-        }
-      ).then(() => {
-        this.logAndStore("Connected to device " + JSON.stringify(device))
-        observer.next()
-      })
-        .catch(e => {
-          this.logAndStore("Error while connected to device " + JSON.stringify(device), e);
+          observer.error(new Error('Device disconnected : ' + deviceId));
+        },
+      )
+        .then(() => {
+          this.logAndStore('Connected to device ' + JSON.stringify(device));
+          observer.next(device);
+        })
+        .catch((e) => {
+          this.logAndStore('Error while connected to device ' + JSON.stringify(device), e);
           observer.error(e);
-        }
-        )
+        });
     }).pipe(
       concatMap(() => this.saveDeviceParams(device)),
-      shareReplay()
+      shareReplay(),
     );
     connection.pipe(catchError(() => this.store.dispatch(new DeviceConnectionLost()))).subscribe();
     return connection.pipe(take(1));
@@ -52,14 +50,11 @@ export abstract class AbstractBLEDeviceService<T extends AbstractBLEDevice> exte
   }
 
   protected startReceiveData(device: T): Observable<unknown> {
-    return new Observable(observer => {
-      BleClient.startNotifications(
-        device.sensorUUID, this.service, this.receiveCharacteristic,
-        (value) => {
-          observer.next(value);
-        }
-      ).catch(e => observer.error(e));
-    })
+    return new Observable((observer) => {
+      BleClient.startNotifications(device.sensorUUID, this.service, this.receiveCharacteristic, (value) => {
+        observer.next(value);
+      }).catch((e) => observer.error(e));
+    });
   }
 
   protected stopReceiveData(device: T) {
@@ -67,13 +62,10 @@ export abstract class AbstractBLEDeviceService<T extends AbstractBLEDevice> exte
   }
 
   protected startNotificationsRx(device: T, characteristicId: string): Observable<DataView> {
-    return new Observable<DataView>(observer => {
-      BleClient.startNotifications(device.sensorUUID, this.service, characteristicId,
-        (value: DataView) => {
-          observer.next(value)
-        }
-      ).catch(e => observer.error(e));
+    return new Observable<DataView>((observer) => {
+      BleClient.startNotifications(device.sensorUUID, this.service, characteristicId, (value: DataView) => {
+        observer.next(value);
+      }).catch((e) => observer.error(e));
     });
   }
-
 }
