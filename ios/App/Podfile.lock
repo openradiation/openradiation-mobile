@@ -1,41 +1,44 @@
 PODS:
-  - Capacitor (6.1.1):
+  - Capacitor (7.0.1):
     - CapacitorCordova
-  - CapacitorApp (6.0.0):
+  - CapacitorApp (7.0.0):
     - Capacitor
-  - CapacitorCamera (6.0.1):
+  - CapacitorCamera (7.0.0):
     - Capacitor
   - CapacitorCommunityBackgroundGeolocation (0.0.1):
     - Capacitor
-  - CapacitorCommunityBluetoothLe (6.0.1):
+  - CapacitorCommunityBluetoothLe (7.0.0):
     - Capacitor
-  - CapacitorCommunitySafeArea (6.0.0-alpha.7):
+  - CapacitorCommunitySafeArea (7.0.0-alpha.1):
     - Capacitor
-  - CapacitorCordova (6.1.1)
-  - CapacitorDevice (6.0.0):
+  - CapacitorCordova (7.0.1)
+  - CapacitorDevice (7.0.0):
     - Capacitor
-  - CapacitorHaptics (6.0.0):
+  - CapacitorFilesystem (7.0.0):
     - Capacitor
-  - CapacitorKeyboard (6.0.1):
+  - CapacitorHaptics (7.0.0):
     - Capacitor
-  - CapacitorLocalNotifications (6.0.0):
+  - CapacitorKeyboard (7.0.0):
     - Capacitor
-  - CapacitorNetwork (6.0.1):
+  - CapacitorLocalNotifications (7.0.0):
     - Capacitor
-  - CapacitorPreferences (6.0.1):
+  - CapacitorNetwork (7.0.0):
     - Capacitor
-  - CapacitorPushNotifications (6.0.1):
+  - CapacitorPreferences (7.0.0):
     - Capacitor
-  - CapacitorScreenOrientation (6.0.1):
+  - CapacitorPushNotifications (7.0.0):
     - Capacitor
-  - CapacitorShare (6.0.1):
+  - CapacitorScreenOrientation (7.0.0):
     - Capacitor
-  - CapacitorSplashScreen (6.0.1):
+  - CapacitorShare (7.0.0):
     - Capacitor
-  - CapacitorStatusBar (6.0.0):
+  - CapacitorSplashScreen (7.0.0):
     - Capacitor
-  - CordovaPlugins (6.1.1):
+  - CapacitorStatusBar (7.0.0):
+    - Capacitor
+  - CordovaPlugins (7.0.1):
     - CapacitorCordova
+  - CordovaPluginsResources (0.0.105)
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
@@ -46,6 +49,7 @@ DEPENDENCIES:
   - "CapacitorCommunitySafeArea (from `../../node_modules/@capacitor-community/safe-area`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorDevice (from `../../node_modules/@capacitor/device`)"
+  - "CapacitorFilesystem (from `../../node_modules/@capacitor/filesystem`)"
   - "CapacitorHaptics (from `../../node_modules/@capacitor/haptics`)"
   - "CapacitorKeyboard (from `../../node_modules/@capacitor/keyboard`)"
   - "CapacitorLocalNotifications (from `../../node_modules/@capacitor/local-notifications`)"
@@ -57,6 +61,7 @@ DEPENDENCIES:
   - "CapacitorSplashScreen (from `../../node_modules/@capacitor/splash-screen`)"
   - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
   - CordovaPlugins (from `../capacitor-cordova-ios-plugins`)
+  - CordovaPluginsResources (from `../capacitor-cordova-ios-plugins`)
 
 EXTERNAL SOURCES:
   Capacitor:
@@ -75,6 +80,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/ios"
   CapacitorDevice:
     :path: "../../node_modules/@capacitor/device"
+  CapacitorFilesystem:
+    :path: "../../node_modules/@capacitor/filesystem"
   CapacitorHaptics:
     :path: "../../node_modules/@capacitor/haptics"
   CapacitorKeyboard:
@@ -97,28 +104,32 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/status-bar"
   CordovaPlugins:
     :path: "../capacitor-cordova-ios-plugins"
+  CordovaPluginsResources:
+    :path: "../capacitor-cordova-ios-plugins"
 
 SPEC CHECKSUMS:
-  Capacitor: 8941aba4364ba9d1b22188569001f2ce45cc2b00
-  CapacitorApp: 9d53aec7101f7b030a950c5bdc4df8612576b279
-  CapacitorCamera: 3b77b3e8311b98220de65e63445c0e4d0b30ce3a
-  CapacitorCommunityBackgroundGeolocation: 6f26f4290377dbd1d6dec21e62cb66f008f61ec7
-  CapacitorCommunityBluetoothLe: 694d91cd954a2b3149db8967faa7af433700eb6b
-  CapacitorCommunitySafeArea: 9dfcb1a05f4c6ecc2a92e5231b646986dc30f672
-  CapacitorCordova: 8f2cc8d8d3619c566e9418fe8772064a94266106
-  CapacitorDevice: f8fd88f9edd1261c55a109f32015b09bbbfdc4a0
-  CapacitorHaptics: 9ebc9363f0e9b8eb4295088a0b474530acf1859b
-  CapacitorKeyboard: 5f32a712adf41e07a61caafb82cf29fb6d8ba123
-  CapacitorLocalNotifications: 4ab68f0be5f697a579558fadd307d823a9ec1c26
-  CapacitorNetwork: 5c94acfdddc22043f2ffaff224ce9b4aa5a179f0
-  CapacitorPreferences: 72909b165bc7807103778ddbb86d5d8ce06abf71
-  CapacitorPushNotifications: 293fabe42c7229756078e81f2d3a60394ba4e5d8
-  CapacitorScreenOrientation: 3d4965dcbda5d901b6a48350a5d270ad7d404e05
-  CapacitorShare: 02222f2457ff003e642370a9c1ecd101baaa27c8
-  CapacitorSplashScreen: 61645214e8f955ff2b80f16a6a3648960fe4c89f
-  CapacitorStatusBar: 2e4369f99166125435641b1908d05f561eaba6f6
-  CordovaPlugins: d764ec2abf7e9f5ff45c4f1e9c6604f86c4b5782
+  Capacitor: de199cba6c8b20995428ad0b7cb0bc6ca625ffd4
+  CapacitorApp: 9cb31064a6c6bb2b1438583733a7bf45557fc1da
+  CapacitorCamera: 20a37684b81c69c0c33fb5a7216919f135371a6f
+  CapacitorCommunityBackgroundGeolocation: 834a8f8eca8ebada8debffe1236e5674b831cead
+  CapacitorCommunityBluetoothLe: f911fcbecc25033bca1cfcc5782c46c11ebf62ec
+  CapacitorCommunitySafeArea: 3f049619072ab5d0da2529bcb05b358ff6c13dc1
+  CapacitorCordova: 63d476958d5022d76f197031e8b7ea3519988c64
+  CapacitorDevice: 069faf433b3a99c3d5f0e500fbe634f60a8c6a84
+  CapacitorFilesystem: 59a2b7b56a897c6a3de4d04c5718e1d80de9d2f5
+  CapacitorHaptics: 7be406a91e4eb87287f321c6c68e1709d6837b3a
+  CapacitorKeyboard: 4db71e694e7afb5d7c0be09b05495c19f7d6c914
+  CapacitorLocalNotifications: c9577978cd598af5e2b5615548b8222b3b10d7e2
+  CapacitorNetwork: 30c2e78a0ed32530656cb426c8ee6c2caec10dbf
+  CapacitorPreferences: 8e4bef1f937fc991a19d7ea99330c36a62edd24b
+  CapacitorPushNotifications: 2e0132cd2f1a5d696bcbfc3725c2b6ffcb9275d4
+  CapacitorScreenOrientation: 45e36e1121cdba1634eb12077c5e99391055116f
+  CapacitorShare: d94c53d7656f1ce8f6712ae8d19ab0c18a69259f
+  CapacitorSplashScreen: 7e7a0a1113833032f196b3af6fa437baccacf5bc
+  CapacitorStatusBar: a8c4c83ed2e973bdafb979e80e4b00d027832cb7
+  CordovaPlugins: 6c17bb2a61b93c703ca194d1794fb7c25d22b6dc
+  CordovaPluginsResources: 0c211f770ed91763a179ebcd9b9346e120b70662
 
-PODFILE CHECKSUM: 7b1dc1d4aa35042967ef94c3eee673ddff04d42a
+PODFILE CHECKSUM: f08b38bcd9ff2bb945b115214c9d68711223d01b
 
 COCOAPODS: 1.14.2
