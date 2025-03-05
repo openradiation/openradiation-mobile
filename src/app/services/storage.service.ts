@@ -22,9 +22,8 @@ import { Storage } from '@ionic/storage';
 import CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 import { AlertService } from './alert.service';
 
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class StorageService {
   private userKey = 'user';
@@ -33,25 +32,38 @@ export class StorageService {
   private measuresKey = 'measures.measures';
   private recentTagsKey = 'measures.recentTags';
   private currentSeriesKey = 'measures.currentSeries';
-  private legacyDatabase: Storage
+  private legacyDatabase: Storage;
 
   constructor(
     private actions$: Actions,
     private store: Store,
     private userService: UserService,
     private platform: Platform,
-    private alertService: AlertService
-  ) { 
-  }
-
+    private alertService: AlertService,
+  ) {}
 
   async migrateLegacyDatabase() {
-    if (!localStorage.getItem("legacy-database-migrated")) {
+    if (!localStorage.getItem('legacy-database-migrated')) {
+      const d = new Date();
+      const dateString =
+        d.getFullYear() +
+        '-' +
+        d.getMonth() +
+        '-' +
+        d.getDay() +
+        ' ' +
+        d.getHours() +
+        ':' +
+        d.getMinutes() +
+        ':' +
+        d.getSeconds();
+      let newLogWithDate = dateString + ' ' + 'Try to migrate legacy data...';
+
       // Load legacy Database
       try {
         this.legacyDatabase = new Storage({
           name: 'ord-db',
-          driverOrder: [CordovaSQLiteDriver._driver]
+          driverOrder: [CordovaSQLiteDriver._driver],
         });
         await this.legacyDatabase.defineDriver(CordovaSQLiteDriver);
         await this.legacyDatabase.create();
@@ -64,29 +76,35 @@ export class StorageService {
             await Preferences.set({ key: legacyKey, value: legacyValue });
           }
         }
-        console.info("Legacy database correctly migrated ( " + entriesCount + " entries found)")
+        const successMessage = 'Legacy database correctly migrated ( ' + entriesCount + ' entries found)';
+        console.info(successMessage);
+        newLogWithDate += successMessage;
       } catch (error) {
-        console.warn("Error while migrating legacy database. Legacy data will be loss", error)
+        console.warn('Error while migrating legacy database. Legacy data will be loss', error);
+        newLogWithDate += 'ERROR ' + JSON.stringify(error);
       }
-      localStorage.setItem("legacy-database-migrated", "true");    
+      localStorage.setItem('legacy-database-migrated', 'true');
+
+      const existingLog = localStorage.getItem('logs');
+      localStorage.setItem('logs', newLogWithDate + '\n' + existingLog);
     }
   }
 
   async init() {
     await this.migrateLegacyDatabase();
-    
-    forkJoin(
-      [this.getKnownDevices().pipe(
-        concatMap(knownDevices => {
+
+    forkJoin([
+      this.getKnownDevices().pipe(
+        concatMap((knownDevices) => {
           return knownDevices ? this.store.dispatch(new InitDevices(knownDevices)) : of(null);
-        })
+        }),
       ),
       this.getUser().pipe(
-        concatMap(user => {
+        concatMap((user) => {
           return user ? this.store.dispatch(new InitUser(user)) : of(null);
-        })
-      )]
-    )
+        }),
+      ),
+    ])
       .pipe(
         concatMap(() => this.store.dispatch(new SetLanguage())),
         concatMap(() =>
@@ -95,31 +113,29 @@ export class StorageService {
               return measures && params && recentTags
                 ? this.store.dispatch(new InitMeasures(measures, params, recentTags, currentSeries || undefined))
                 : of(null);
-            })
-          )
-        )
+            }),
+          ),
+        ),
       )
       .subscribe(() => {
-        this.store.select(({ user }: { user: UserStateModel }) => user).subscribe(user => this.saveUser(user));
+        this.store.select(({ user }: { user: UserStateModel }) => user).subscribe((user) => this.saveUser(user));
         this.store
           .select(({ devices }: { devices: DevicesStateModel }) => devices.knownDevices)
-          .subscribe(knownDevices => this.saveKnownDevices(knownDevices));
+          .subscribe((knownDevices) => this.saveKnownDevices(knownDevices));
         this.store
           .select(({ measures }: { measures: MeasuresStateModel }) => measures.measures)
-          .subscribe(measures => this.saveMeasures(measures));
+          .subscribe((measures) => this.saveMeasures(measures));
         this.store
           .select(({ measures }: { measures: MeasuresStateModel }) => measures.params)
-          .subscribe(params => this.saveParams(params));
+          .subscribe((params) => this.saveParams(params));
         this.store
           .select(({ measures }: { measures: MeasuresStateModel }) => measures.recentTags)
-          .subscribe(recentTags => this.saveRecentTags(recentTags));
+          .subscribe((recentTags) => this.saveRecentTags(recentTags));
         this.store
           .select(({ measures }: { measures: MeasuresStateModel }) => measures.currentSeries)
-          .subscribe(currentSeries => this.saveCurrentSeries(currentSeries));
+          .subscribe((currentSeries) => this.saveCurrentSeries(currentSeries));
         this.platform.ready().then(async () => {
-          if (Capacitor.getPlatform() != "web"
-            || environment.isTestEnvironment
-          ) {
+          if (Capacitor.getPlatform() != 'web' || environment.isTestEnvironment) {
             StatusBar.setOverlaysWebView({ overlay: true });
             StatusBar.setStyle({ style: Style.Light });
             SplashScreen.hide();
@@ -156,19 +172,19 @@ export class StorageService {
   /* eslint-disable  @typescript-eslint/no-explicit-any */
   private getFromDB(key: string): any {
     return from(
-        Preferences.get({ key: key }).then(rawValue => {
-          if (rawValue && rawValue.value) {
-            return this.parseFromDB(rawValue.value ?? "");
+      Preferences.get({ key: key }).then((rawValue) => {
+        if (rawValue && rawValue.value) {
+          return this.parseFromDB(rawValue.value ?? '');
+        } else {
+          const retrieveLocalStorageData = localStorage.getItem(key);
+          if (retrieveLocalStorageData) {
+            return this.parseFromDB(retrieveLocalStorageData);
           } else {
-            const retrieveLocalStorageData = localStorage.getItem(key);
-            if (retrieveLocalStorageData) {
-              return this.parseFromDB(retrieveLocalStorageData);
-            } else {
-              return null;
-            }
+            return null;
           }
-        })
-      );
+        }
+      }),
+    );
   }
 
   saveUser(user: UserStateModel) {
@@ -192,7 +208,7 @@ export class StorageService {
   }
 
   saveCurrentSeries(currentSeries?: MeasureSeries) {
-    Preferences.set({ key: this.currentSeriesKey, value: currentSeries ? this.formatToDB(currentSeries) : "" });
+    Preferences.set({ key: this.currentSeriesKey, value: currentSeries ? this.formatToDB(currentSeries) : '' });
   }
 
   private parseFromDB(jsonString: string): any {
