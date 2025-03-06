@@ -255,16 +255,6 @@
     "STOP": "Vous pourrez arrêter les mesures à tout moment.",
     "TITLE": "Série de mesures"
   },
-  "MEASURE_BACKGROUND": {
-    "TITLE": "Mesure en tâche de fond",
-    "STOP": "Arrêter la mesure en cours",
-    "CONFIRM_MESSAGE": "Êtes-vous certain de vouloir arrêter la mesure en tâche de fond en cours ?",
-    "INDICATOR": "Mesure en cours...",
-    "SETTINGS_URL": "URL du serveur",
-    "SETTINGS_THRESHOLD": "Seuil (toute valeur au dessus provoque un envoi instantané)",
-    "SETTINGS_MINUTES": "Durée d'une mesure (en minutes)",
-    "SETTINGS_STEP_COUNTER": "Nombre de mesures avant envoi"
-  },
   "NOTIFICATIONS": {
     "ALERT": {
       "MESSAGE": "Si vous voulez accepter les notifications, vous devez les activer manuellement dans les paramètres.",

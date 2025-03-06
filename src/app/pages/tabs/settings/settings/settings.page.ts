@@ -7,12 +7,8 @@ import {
   DisableFakeHitsMode,
   EnableExpertMode,
   EnableFakeHitsMode,
-  UpdateBackgroundMeasureServerURL,
-  UpdateBackgroundMeasureStepCount,
-  UpdateBackgroundMeasureStepDuration,
-  UpdateBackgroundMeasureThreshold,
 } from '@app/states/measures/measures.action';
-import { MeasuresState, MeasuresStateParams } from '@app/states/measures/measures.state';
+import { MeasuresState } from '@app/states/measures/measures.state';
 import { LogOut, SetLanguage } from '@app/states/user/user.action';
 import { UserState } from '@app/states/user/user.state';
 import { environment } from '@environments/environment';
@@ -32,8 +28,6 @@ export class SettingsPage {
   language$: Observable<string | undefined> = inject(Store).select(UserState.language);
 
   notifications$: Observable<boolean | undefined> = inject(Store).select(UserState.notifications);
-
-  measureParams$: Observable<MeasuresStateParams> = inject(Store).select(MeasuresState.params);
 
   constructor(
     private navigationService: NavigationService,
@@ -85,29 +79,5 @@ export class SettingsPage {
 
   setLanguage(language: string) {
     this.store.dispatch(new SetLanguage(language));
-  }
-
-  updateBackgroundMeasureThreshold(event: Event) {
-    // @ts-expect-error untyped access
-    const value = event.detail.value;
-    this.store.dispatch(new UpdateBackgroundMeasureThreshold(value));
-  }
-
-  updateBackgroundMeasureStepCountBeforeSending(event: Event) {
-    // @ts-expect-error untyped access
-    const value = event.detail.value;
-    this.store.dispatch(new UpdateBackgroundMeasureStepCount(value));
-  }
-
-  updateBackgroundMeasureServerURL(event: unknown) {
-    // @ts-expect-error untyped access
-    const value = event.detail.value;
-    this.store.dispatch(new UpdateBackgroundMeasureServerURL(value));
-  }
-
-  updateBackgroundMeasureStepDurationMinutes(event: unknown) {
-    // @ts-expect-error untyped access
-    const value = event.detail.value;
-    this.store.dispatch(new UpdateBackgroundMeasureStepDuration(value));
   }
 }

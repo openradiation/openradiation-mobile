@@ -2,55 +2,48 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { forkJoin, Observable, of, concatMap, timer, map } from 'rxjs';
-import { catchError, shareReplay, take, takeUntil, tap } from 'rxjs/operators';
+import { catchError, shareReplay, take, takeUntil } from 'rxjs/operators';
 import { environment } from '@environments/environment';
 import { AbstractDevice, ApparatusSensorType } from '@app/states/devices/abstract-device';
 import { DeviceConnectionLost } from '@app/states/devices/devices.action';
 import { DevicesService } from '@app/states/devices/devices.service';
 import { UserStateModel } from '@app/states/user/user.state';
-import {
-  Measure,
-  MeasureEnvironment,
-  MeasureSeries,
-  MeasureSeriesParamsSelected,
-  MeasureType,
-  PositionAccuracyThreshold,
-  SendableBackgroundMeasure,
-  Step,
-} from '@app/states/measures/measure';
+import { Measure, MeasureEnvironment, MeasureSeries, MeasureType, PositionAccuracyThreshold, Step } from '@app/states/measures/measure';
 import { MeasureApi } from '@app/states/measures/measure-api';
-import {
-  AddMeasureScanStep,
-  CancelMeasure,
-  PublishMeasureProgress,
-  StopMeasureScan,
-} from '@app/states/measures/measures.action';
+import { AddMeasureScanStep, CancelMeasure, PublishMeasureProgress, StopMeasureScan } from '@app/states/measures/measures.action';
 import { MeasuresStateModel } from '@app/states/measures/measures.state';
-import { ErrorResponse, ErrorResponseCode } from './error-response';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class MeasuresService {
   constructor(
     private store: Store,
     private actions$: Actions,
     private httpClient: HttpClient,
-    private devicesService: DevicesService,
-  ) {}
+    private devicesService: DevicesService
+  ) { }
 
   startMeasureScan(device: AbstractDevice): Observable<unknown> {
-    const stopSignal = this.actions$.pipe(ofActionSuccessful(StopMeasureScan, CancelMeasure), take(1));
-    this.actions$.pipe(ofActionSuccessful(DeviceConnectionLost), take(1)).subscribe(() => {
-      const canEndCurrentScan = this.store.selectSnapshot(
-        ({ measures }: { measures: MeasuresStateModel }) => measures.canEndCurrentScan,
-      );
-      if (canEndCurrentScan) {
-        this.store.dispatch(new StopMeasureScan(device));
-      } else {
-        this.store.dispatch(new CancelMeasure());
-      }
-    });
+    const stopSignal = this.actions$.pipe(
+      ofActionSuccessful(StopMeasureScan, CancelMeasure),
+      take(1)
+    );
+    this.actions$
+      .pipe(
+        ofActionSuccessful(DeviceConnectionLost),
+        take(1)
+      )
+      .subscribe(() => {
+        const canEndCurrentScan = this.store.selectSnapshot(
+          ({ measures }: { measures: MeasuresStateModel }) => measures.canEndCurrentScan
+        );
+        if (canEndCurrentScan) {
+          this.store.dispatch(new StopMeasureScan(device));
+        } else {
+          this.store.dispatch(new CancelMeasure());
+        }
+      });
     return this.detectHits(device, stopSignal).pipe(take(1));
   }
 
@@ -58,8 +51,11 @@ export class MeasuresService {
     const detectHits = this.devicesService
       .service(device)
       .startMeasureScan(device, stopSignal)
-      .pipe(takeUntil(stopSignal), shareReplay());
-    detectHits.subscribe((step) => this.store.dispatch(new AddMeasureScanStep(step, device)).subscribe());
+      .pipe(
+        takeUntil(stopSignal),
+        shareReplay()
+      );
+    detectHits.subscribe(step => this.store.dispatch(new AddMeasureScanStep(step, device)).subscribe());
     return detectHits;
   }
 
@@ -78,13 +74,13 @@ export class MeasuresService {
           catchError(() => {
             measure.sent = false;
             return of(measure);
-          }),
+          })
         );
       }
       case MeasureType.MeasureSeries: {
         let postDelay = 0;
         return forkJoin(
-          measure.measures.map((subMeasure) => {
+          measure.measures.map(subMeasure => {
             if (!subMeasure.sent) {
               // delay of 50ms between each call to avoid overflowing the server
               return timer(postDelay++ * 100).pipe(
@@ -97,10 +93,7 @@ export class MeasuresService {
                     }),
                     catchError((httpError: HttpErrorResponse) => {
                       // Duplicate UUID error : measure was already sent on server (by a previous version)
-                      if (
-                        httpError.status == 400 &&
-                        ('' + httpError.error?.error?.message).indexOf('duplicate key') > -1
-                      ) {
+                      if (httpError.status == 400 && (""+httpError.error?.error?.message).indexOf("duplicate key") > -1) {
                         // Marking it as sent
                         subMeasure.sent = true;
                       } else {
@@ -108,21 +101,21 @@ export class MeasuresService {
                       }
                       this.store.dispatch(new PublishMeasureProgress(subMeasure));
                       return of(subMeasure);
-                    }),
-                  ),
-                ),
+                    })
+                  )
+                )
               );
             } else {
               this.store.dispatch(new PublishMeasureProgress(subMeasure));
-              return of(subMeasure);
+              return of(subMeasure)
             }
-          }),
-        ).pipe(
-          map(() => {
-            measure.sent = measure.measures.filter((s) => !s.sent).length === 0;
-            return measure;
-          }),
-        );
+          })
+          ).pipe(
+            map(() => {
+              measure.sent = measure.measures.filter(s => !s.sent).length === 0;
+              return measure
+            })
+          )
       }
     }
   }
@@ -131,7 +124,7 @@ export class MeasuresService {
     if (this.canPublishMeasure(measure)) {
       // In case of an imprecise plane mesure : modify location & accuracy before sending if required
       this.handlePoorAccuracyInPlaneMode(measure);
-
+      
       const payload: MeasureApi = {
         apiKey: environment.API_KEY,
         data: {
@@ -174,8 +167,8 @@ export class MeasuresService {
           seatNumber: measure.seatNumber,
           storm: measure.storm,
           windowSeat: measure.windowSeat,
-          calibrationFunction: measure.calibrationFunction,
-        },
+          calibrationFunction: measure.calibrationFunction
+        }
       };
       return this.httpClient.post(environment.API_URI, payload);
     } else {
@@ -204,20 +197,17 @@ export class MeasuresService {
   }
 
   private hasSufficientAccuracyToBePublished(measure: Measure) {
-    const hasSufficientAccuracyToBePublished =
+    const hasSufficientAccuracyToBePublished = (
       measure.accuracy !== undefined &&
       measure.accuracy !== null &&
       measure.accuracy < PositionAccuracyThreshold.No &&
       measure.endAccuracy !== undefined &&
       measure.endAccuracy !== null &&
-      measure.endAccuracy < PositionAccuracyThreshold.No;
+      measure.endAccuracy < PositionAccuracyThreshold.No
+    );
     if (!hasSufficientAccuracyToBePublished) {
-      // Only allow publication with poor accuracy in plane mode with flight number set
-      return (
-        measure.measurementEnvironment == MeasureEnvironment.Plane &&
-        measure.flightNumber != undefined &&
-        measure.flightNumber.length > 2
-      );
+      // Only allow publication with poor accuracy in plane mode with fligh number set
+      return measure.measurementEnvironment == MeasureEnvironment.Plane && measure.flightNumber != undefined && measure.flightNumber.length > 2
     } else {
       return true;
     }
@@ -225,101 +215,15 @@ export class MeasuresService {
 
   handlePoorAccuracyInPlaneMode(measure: Measure) {
     if (measure.measurementEnvironment == MeasureEnvironment.Plane) {
-      measure.accuracy = Math.min(measure.accuracy ? measure.accuracy : Infinity, 40000);
-      measure.altitudeAccuracy = Math.min(measure.altitudeAccuracy ? measure.altitudeAccuracy : Infinity, 15000);
+      measure.accuracy = Math.min(measure.accuracy ? measure.accuracy : Infinity, 40000)
+      measure.altitudeAccuracy = Math.min(measure.altitudeAccuracy ? measure.altitudeAccuracy: Infinity, 15000)
       if (measure.accuracy > PositionAccuracyThreshold.Poor) {
-        measure.latitude = 0;
-        measure.longitude = 0;
+        measure.latitude = 0
+        measure.longitude = 0
       }
       if (measure.altitudeAccuracy > PositionAccuracyThreshold.Poor) {
-        measure.altitude = 10000;
+        measure.altitude = 10000
       }
     }
-  }
-
-  sendBackgroundMeasureToServer(
-    device: AbstractDevice,
-    currentSeries: MeasureSeries,
-    newCurrentMeasure: Measure,
-  ): boolean {
-    // Only consider background measures
-    if (currentSeries.params.paramSelected == MeasureSeriesParamsSelected.measureBackgroundLimit) {
-      const thresholdExceeded = newCurrentMeasure.value > currentSeries.params.maxValueLimit;
-      // If threshold is exceeded
-      if (thresholdExceeded) {
-        // Send to server right away
-        console.error('thresholdExceeded => send to server right away');
-        const jsonToSend = this.convertToSendableBackgroundMeasure(currentSeries, newCurrentMeasure, true);
-        this.doSendToServer(jsonToSend, currentSeries.params.backgroundMeasureServerURL);
-        return true;
-      } else {
-        // If we have made enough measures
-
-        if (currentSeries.measures.length + 1 >= currentSeries.params.backgroundMeasureStepCountBeforeSending) {
-          // Send an average to the server
-          console.error(currentSeries.measures.length + 1 + ' measures => send average to server');
-          const jsonToSend = this.convertToSendableBackgroundMeasure(currentSeries, newCurrentMeasure, false);
-          this.doSendToServer(jsonToSend, currentSeries.params.backgroundMeasureServerURL);
-          return true;
-        }
-      }
-      // In any other cases, do not send to server yet
-    }
-    console.debug(
-      '[BackgroundMeasure] Not sending to server yet (' +
-        (currentSeries.measures.length + 1) +
-        ' measures, waiting for ' +
-        currentSeries.params.backgroundMeasureStepCountBeforeSending +
-        ' or threshold ' +
-        currentSeries.params.maxValueLimit +
-        ')',
-    );
-    return false;
-  }
-
-  private convertToSendableBackgroundMeasure(
-    currentSeries: MeasureSeries,
-    newCurrentMeasure: Measure,
-    thresholdExceeded: boolean,
-  ): SendableBackgroundMeasure {
-    const userId = this.store.selectSnapshot(({ user }: { user: UserStateModel }) => user.login);
-    const userPwd = this.store.selectSnapshot(({ user }: { user: UserStateModel }) => user.password);
-    const converted: SendableBackgroundMeasure = {
-      latitude: newCurrentMeasure.latitude ?? 0,
-      longitude: newCurrentMeasure.longitude ?? 0,
-      reportUuid: currentSeries.seriesUuid,
-      startTime: currentSeries.startTime,
-      endTime: newCurrentMeasure.endTime
-        ? newCurrentMeasure.endTime
-        : newCurrentMeasure.startTime + currentSeries.params.measureDurationLimit,
-      value: newCurrentMeasure.hitsNumber ?? 0,
-      hits: newCurrentMeasure.hitsNumber ?? 0,
-      userId: userId ?? '',
-      userPwd: userPwd ?? '',
-    };
-
-    if (!thresholdExceeded) {
-      // Send an average of all measures
-      const allMeasures = [newCurrentMeasure, ...currentSeries.measures];
-      const hitSum = allMeasures.reduce((sum, m) => sum + (m.hitsNumber ?? 0), 0);
-      const valueSum = allMeasures.reduce((sum, m) => sum + (m.value ?? 0), 0);
-      converted.hits = hitSum / allMeasures.length;
-      converted.value = valueSum / allMeasures.length;
-    }
-    return converted;
-  }
-
-  private doSendToServer(backgroundMeasure: SendableBackgroundMeasure, url: string) {
-    console.error('[BackgroundMeasure] Sending following JSON to ' + url, backgroundMeasure);
-    return this.httpClient
-      .post(url, backgroundMeasure)
-      .pipe(
-        tap(() => console.error('DID SEND')),
-        catchError((error) => {
-          console.error('FAIL', error);
-          return of(null);
-        }),
-      )
-      .subscribe();
   }
 }

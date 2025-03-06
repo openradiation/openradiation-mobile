@@ -256,16 +256,6 @@
     "STOP": "You can stop the measurements at any time.",
     "TITLE": "Measurement series"
   },
-  "MEASURE_BACKGROUND": {
-    "TITLE": "Start background measure",
-    "STOP": "Stop Background measure",
-    "CONFIRM_MESSAGE": "Are you sure you want to stop the current background measure ?",
-    "INDICATOR": "Measure in progress...",
-    "SETTINGS_URL": "Server URL",
-    "SETTINGS_THRESHOLD": "Threshold (any value above will be sent immediately)",
-    "SETTINGS_MINUTES": "Measure duration (minutes)",
-    "SETTINGS_STEP_COUNTER": "Measure count before sending"
-  },
   "NOTIFICATIONS": {
     "ALERT": {
       "MESSAGE": "If you want to allow notifications, you need to manually accept them in settings.",

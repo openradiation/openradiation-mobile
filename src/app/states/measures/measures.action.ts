@@ -12,16 +12,6 @@ export class InitMeasures {
   ) {}
 }
 
-export class StartBackgroundMeasure {
-  static readonly type = '[Measures] Starts a background measure';
-  constructor(public device: AbstractDevice) {}
-}
-
-export class StopBackgroundMeasure {
-  static readonly type = '[Measures] Stops a background measure';
-  constructor(public device: AbstractDevice) {}
-}
-
 export class EnableExpertMode {
   static readonly type = '[Measures] Enable expert mode';
 }
@@ -168,22 +158,4 @@ export class AddRecentTag {
 export class FlightNumberValidation {
   static readonly type = '[Measures] Flight Number validation';
   constructor(public isValid: boolean) {}
-}
-
-export class UpdateBackgroundMeasureThreshold {
-  static readonly type = '[Measures] Update Background Measure Threshold Parameter';
-  constructor(public value: number) {}
-}
-
-export class UpdateBackgroundMeasureServerURL {
-  static readonly type = '[Measures] Update Background Measure URL Parameter';
-  constructor(public value: string) {}
-}
-export class UpdateBackgroundMeasureStepDuration {
-  static readonly type = '[Measures] Update Background Measure Step Duration Parameter';
-  constructor(public value: number) {}
-}
-export class UpdateBackgroundMeasureStepCount {
-  static readonly type = '[Measures] Update Background Measure StepCount Parameter';
-  constructor(public value: number) {}
 }
