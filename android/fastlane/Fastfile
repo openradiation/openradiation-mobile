@@ -11,7 +11,7 @@
 #
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
-versionName = "3.0.0"
+versionName = "3.1.0"
 
 default_platform(:android)
 platform :android do

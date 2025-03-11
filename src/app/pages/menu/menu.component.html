@@ -10,6 +10,11 @@
         {{ 'MEASURE_MANUAL.TITLE' | translate }}
       </ion-label>
     </ion-item>
+    <ion-item detail (click)="goToFeedback()" [ngClass]="{ active: currentUrl === '/feedback' }">
+      <ion-label>
+        {{ 'FEEDBACK.TITLE' | translate }}
+      </ion-label>
+    </ion-item>
     <ion-item detail (click)="goToAbout()" [ngClass]="{ active: currentUrl === '/tabs/other/about' }">
       <ion-label>
         {{ 'ABOUT.TITLE' | translate }}

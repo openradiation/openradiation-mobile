@@ -302,5 +302,14 @@
   },
   "SETTINGS": {
     "TITLE": "Settings"
+  },
+  "FEEDBACK" : {
+    "EXPLANATIONS": "You can share your feedbacks to the OpenRadiation team by using this form. Don't forget to give your email adress if you want us to reply.",  
+    "TITLE": "Give us feedback",
+    "FROM": "Contact mail (optional)",
+    "MESSAGE": "Message", 
+    "SUCCESS": "Your feedback was sent, thank you !",
+    "FAILURE": "Error while sending your feedback",
+    "SEND": "Send"
   }
 }

@@ -55,6 +55,15 @@ const routes: Routes = [
           }
         ]
       },
+       {
+        path: 'feedback',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('./feedback/feedback.module').then(m => m.FeedbackPageModule)
+          }
+        ]
+      },
       {
         path: 'map',
         children: [

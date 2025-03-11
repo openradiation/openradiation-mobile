@@ -301,5 +301,14 @@
   },
   "SETTINGS": {
     "TITLE": "Paramètres"
+  }, 
+  "FEEDBACK" : {
+    "EXPLANATIONS": "Vous pouvez faire part de vos retours ou remarque à l'équipe OpenRadiation via ce formulaire. N'oubliez pas de nous laisser votre mail si vous souhaitez être recontactés",
+    "TITLE": "Nous contacter",
+    "FROM": "Mail de contact (optionnel)",
+    "MESSAGE": "Message", 
+    "SUCCESS": "Merci ! Votre retour a bien été envoyé",
+    "FAILURE": "Erreur de l'envoi de votre retour",
+    "SEND": "Envoyer"
   }
 }
