@@ -18,3 +18,16 @@ export class SetLanguage {
   static readonly type = '[User] Set language';
   constructor(public language?: string) {}
 }
+
+export class PostFeedback {
+  static readonly type = '[User] Post feedback';
+  constructor(public message?: string, public from?: string) {}
+}
+
+export class PostFeedbackSuccess {
+  static readonly type = '[User] Post feedback success';
+}
+export class PostFeedbackError {
+  static readonly type = '[User] Post feedback failure';
+  constructor(public error?: Error) {}
+}

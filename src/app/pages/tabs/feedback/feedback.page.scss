@@ -1,0 +1,33 @@
+@import '../../../../theme/variables.scss';
+
+.feedback-container {
+  padding: 20px;
+  font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
+  width: 90vw;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+  .explanations {
+    color: white;
+    text-align: justify;
+    font-size: 15px;
+    width: 90vw;
+    p {
+      text-align: center;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+  }
+  ion-textarea,
+  ion-input {
+    width: 90vw;
+    background-color: $forth-color;
+    border-radius: 10px;
+    padding: 10px;
+    color: $second-color;
+    margin-bottom: 20px;
+  }
+}

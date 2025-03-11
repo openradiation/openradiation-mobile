@@ -54,6 +54,11 @@ export class MenuComponent {
     this.navigationService.navigateForward(['tabs', 'other', 'about']);
   }
 
+  goToFeedback() {
+    this.closeMenu();
+    this.navigationService.navigateForward(['tabs', 'feedback']);
+  }
+
   goToLegalNotice() {
     this.closeMenu();
     this.navigationService.navigateForward(['tabs', 'other', 'legal-notice']);
