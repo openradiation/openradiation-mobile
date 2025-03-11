@@ -1,0 +1,30 @@
+<ng-container>
+  <app-header>{{'FEEDBACK.TITLE' | translate}}</app-header>
+
+  <ion-content>
+    <div class="feedback-container">
+      <p class="explanations">{{ 'FEEDBACK.EXPLANATIONS' | translate }}</p>
+
+      <ion-textarea
+        rows="5"
+        counter
+        maxlength="800"
+        labelPlacement="stacked"
+        autofocus
+        [label]="'FEEDBACK.MESSAGE' | translate"
+        [(ngModel)]="feedbackMessage"
+      >
+      </ion-textarea>
+      <ion-input
+        [label]="'FEEDBACK.FROM' | translate"
+        class="values"
+        type="email"
+        labelPlacement="stacked"
+        [(ngModel)]="feedbackFrom"
+      ></ion-input>
+      <ion-button (click)="postFeedback()" [disabled]="feedbackMessage.length < 10 || feedbackFrom.length > 0 &&!isValidEmail(feedbackFrom)"> 
+        {{'FEEDBACK.SEND' | translate}}
+      </ion-button>
+    </div>
+  </ion-content>
+</ng-container>
