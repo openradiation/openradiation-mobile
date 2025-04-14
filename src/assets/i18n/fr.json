@@ -175,6 +175,9 @@
     },
     "EXPERT": "Expert",
     "EXPERT_MODE": "Mode expert",
+    "EXPERT_MODE_EXPLANATIONS": "Le mode expert permet d'accéder à des informations plus détaillées sur les séries de mesure",
+    "EXPERT_MODE_EXPLANATIONS_SHOW": "Plus d'infos",
+    "EXPERT_MODE_EXPLANATIONS_HIDE": "Masquer",
     "FAKE_HITS_MODE": "Simuler les hits (uniquement en beta)",
     "FIABILITY": "Fiabilité",
     "FLIGHT": {

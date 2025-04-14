@@ -14,3 +14,21 @@ ion-list {
     }
   }
 }
+
+.explanations {
+    background-color: #0055c1;
+    color: white;
+    font-size: 15px;
+    width: 90vw;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.expert-mode-explanations {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}

@@ -20,6 +20,7 @@ import { environment } from '@environments/environment';
 })
 export class SettingsPage {
   allowFakeHitsMode = false;
+  showExpertModeExplanations = false;
   expertMode$: Observable<boolean> = inject(Store).select(MeasuresState.expertMode);
   fakeHitsMode$: Observable<boolean> = inject(Store).select(MeasuresState.fakeHitsMode);
 
@@ -47,6 +48,10 @@ export class SettingsPage {
     } else {
       this.store.dispatch(new DisableExpertMode());
     }
+  }
+  toggleExpertModeExplanations(event: Event) {
+    event.stopPropagation();
+    this.showExpertModeExplanations = !this.showExpertModeExplanations;
   }
 
   toggleFakeHitsMode(enable: boolean) {
