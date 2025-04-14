@@ -5,7 +5,7 @@
 
   <ion-content>
     <div class="empty-list" *ngIf="measures.length <= 0" [innerHTML]="'HISTORY.NO_MEASURE' | translate"></div>
-    <table id="historyTable" datatable [dtOptions]="dtOptions" class="row-border hover display compact historyTable">
+    <table id="historyTable" *ngIf="measures.length > 0" datatable [dtOptions]="dtOptions" class="row-border hover display compact historyTable">
       <thead class="thead-light">
         <tr>
           <th class="very-small-column"></th>

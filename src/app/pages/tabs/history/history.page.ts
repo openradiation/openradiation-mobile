@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
@@ -36,7 +36,18 @@ export class HistoryPage extends AutoUnsubscribePage {
   loading?: HTMLIonLoadingElement;
   publishMeasureCountCurrent: number;
   publishMeasureCountTotal: number;
-  dtOptions = { bPaginate: false, bFilter: false, bInfo: false, order: [[2, 'desc']] };
+  dtOptions = {
+    bPaginate: false,
+    bFilter: false,
+    bInfo: false,
+    order: [[2, 'desc']],
+    columnDefs: [
+      {
+        targets: '_all',
+        orderSequence: ['asc', 'desc'],
+      },
+    ],
+  };
   detailedSeries?: MeasureSeries;
   measureSeriesMessageMapping = {
     '=1': _('HISTORY.MEASURE_SERIES.SINGULAR') as string,
@@ -55,6 +66,7 @@ export class HistoryPage extends AutoUnsubscribePage {
     private navigationService: NavigationService,
     private loadingCtrl: LoadingController,
     private measureService: MeasuresService,
+    private cdr: ChangeDetectorRef,
   ) {
     super(router);
   }
@@ -98,8 +110,10 @@ export class HistoryPage extends AutoUnsubscribePage {
         );
       }),
       this.actions$.pipe(ofActionDispatched(PublishMeasureSuccess)).subscribe(() => {
-        this.loading?.dismiss();
-        this.loading = undefined;
+        const context = this;
+        setTimeout(() => {
+          context.reloadMeasures(context);
+        }, 500);
       }),
       this.actions$.pipe(ofActionDispatched(PublishMeasureProgress)).subscribe(() => {
         this.publishMeasureCountCurrent = Math.min(this.publishMeasureCountTotal, this.publishMeasureCountCurrent + 1);
@@ -108,6 +122,13 @@ export class HistoryPage extends AutoUnsubscribePage {
         }
       }),
     );
+  }
+
+  reloadMeasures(context: HistoryPage) {
+    this.measures$ = context.store.select(MeasuresState.measures);
+    context.cdr.detectChanges();
+    context.loading?.dismiss();
+    context.loading = undefined;
   }
 
   showDetail(measure: Measure) {
