@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { NavigationService } from '@app/services/navigation.service';
@@ -12,6 +12,7 @@ import { MeasuresState } from '@app/states/measures/measures.state';
 import { LogOut, SetLanguage } from '@app/states/user/user.action';
 import { UserState } from '@app/states/user/user.state';
 import { environment } from '@environments/environment';
+import { IonContent } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-settings',
@@ -21,6 +22,8 @@ import { environment } from '@environments/environment';
 export class SettingsPage {
   allowFakeHitsMode = false;
   showExpertModeExplanations = false;
+  @ViewChild('content') content!: IonContent;
+
   expertMode$: Observable<boolean> = inject(Store).select(MeasuresState.expertMode);
   fakeHitsMode$: Observable<boolean> = inject(Store).select(MeasuresState.fakeHitsMode);
 
@@ -51,7 +54,9 @@ export class SettingsPage {
   }
   toggleExpertModeExplanations(event: Event) {
     event.stopPropagation();
-    this.showExpertModeExplanations = !this.showExpertModeExplanations;
+    event.preventDefault();
+    this.showExpertModeExplanations = !this.showExpertModeExplanations; // goes to the bottom instead of instantly
+    this.content.scrollToBottom(500);
   }
 
   toggleFakeHitsMode(enable: boolean) {

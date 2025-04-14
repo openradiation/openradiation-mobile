@@ -1,6 +1,6 @@
 <app-header>{{'SETTINGS.TITLE' | translate}}</app-header>
 
-<ion-content>
+<ion-content #content>
   <ion-list>
     <app-category-label> {{'SENSORS.TITLE' | translate}} </app-category-label>
     <ion-item button detail (click)="goToDevices()">
