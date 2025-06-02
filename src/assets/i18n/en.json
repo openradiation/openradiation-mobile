@@ -196,7 +196,7 @@
     "PLANE_MODE_NOTICE": {
       "PART1": "Cosmic radiation is more important at high altitude, during flights, because they are less attenuated by the atmospheric layer.",
       "PART2": "Activation of the on board a plane measurement mode makes it possible to take into account a specific calibration of the sensors for these radiations. On the other hand, if you take measurements at ground level, even in the mountains, choose the ground level measurement mode.",
-      "PART3": "<a onclick=\"window.open('https://www.openradiation.org/en/cosmic-radiation', '_system')\">Learn more</a>"
+      "PART3": "<a onclick=\"window.open('https://www.openradiation.org/index.php/en/radioactivity', '_system')\">Learn more</a>"
     },
     "REPORT_LATITUDE": "Latitude",
     "REPORT_LONGITUDE": "Longitude",
