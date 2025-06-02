@@ -9,7 +9,7 @@
       "TITLE": "How can you take measurements?"
     },
     "OPENRADIATION_PROJECT": {
-      "NOTICE": "OpenRadiation is a collaborative project with the following partners: IFFO-RME - training network in major educational risks -, IRSN - public expert in research and expertise on nuclear and radiological risks -, Planète Sciences – association contributing to the scientific and technical culture of young people - and Sorbonne Université and the fablab PMClab in particular.<br/>Find out more at:  <a onclick=\"window.open('https://www.openradiation.org/en/about-us', '_system')\">www.openradiation.org/en/about-us</a>.",
+      "NOTICE": "OpenRadiation is a collaborative project with the following partners: IFFO-RME - training network in major educational risks -, ASNR - french Authority for Nuclear Safety and Radiation Protection -, Planète Sciences – association contributing to the scientific and technical culture of young people - and Sorbonne Université and the fablab PMClab in particular.<br/>Find out more at:  <a onclick=\"window.open('https://www.openradiation.org/en/about-us', '_system')\">www.openradiation.org/en/about-us</a>.",
       "TITLE": "The OpenRadiation project"
     },
     "TITLE": "About"
@@ -118,7 +118,7 @@
   },
   "LEGAL_NOTICE": {
     "EDITOR": {
-      "NOTICE": "The OpenRadiation application was mainly developed by IRSN, Sorbonne Université, Agoralogie and ITLink. Do not hesitate to pass on any comments you may wish to make on this application. The application code is published as an <a onclick=\"window.open('https://www.openradiation.org/en/developers', '_system')\">open source code</a>.<br>Check out comprehensive legal texts and contact information at <a onclick=\"window.open('https://www.openradiation.org/en/legal-notice', '_system')\">www.openradiation.org/en/legal-notice</a>.<br><br>Current version : {{APP_NAME_VERSION}}.",
+      "NOTICE": "The OpenRadiation application was mainly developed by IRSN, Sorbonne Université, Agoralogie ITLink, Code Lutin and ASNR. Do not hesitate to pass on any comments you may wish to make on this application. The application code is published as an <a onclick=\"window.open('https://www.openradiation.org/en/developers', '_system')\">open source code</a>.<br>Check out comprehensive legal texts and contact information at <a onclick=\"window.open('https://www.openradiation.org/en/legal-notice', '_system')\">www.openradiation.org/en/legal-notice</a>.<br><br>Current version : {{APP_NAME_VERSION}}.",
       "TITLE": "Publisher"
     },
     "MEASURES_PRECAUTIONS": {

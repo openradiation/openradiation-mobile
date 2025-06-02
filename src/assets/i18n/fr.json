@@ -9,7 +9,7 @@
       "TITLE": "Comment prendre des mesures ?"
     },
     "OPENRADIATION_PROJECT": {
-      "NOTICE": "Openradiation est un projet collaboratif dont les partenaires sont l’IFFO-RME - réseau de formateurs Risques Majeurs éducation -, l’IRSN - expert public en matière de recherche et d’expertise sur les risques nucléaires et radiologiques -, Planète Sciences – association acteur de la culture scientifique et technique vers les jeunes -, et Sorbonne Université avec en particulier le fablab PMClab.<br/>En savoir plus sur <a onclick=\"window.open('https://www.openradiation.org/qui-sommes-nous', '_system')\">www.openradiation.org/qui-sommes-nous</a>.",
+      "NOTICE": "Openradiation est un projet collaboratif dont les partenaires sont l’IFFO-RME - réseau de formateurs Risques Majeurs éducation -, ASNR - autorité de sûreté nucléaire et de radioprotection -, Planète Sciences – association acteur de la culture scientifique et technique vers les jeunes -, et Sorbonne Université avec en particulier le fablab PMClab.<br/>En savoir plus sur <a onclick=\"window.open('https://www.openradiation.org/qui-sommes-nous', '_system')\">www.openradiation.org/qui-sommes-nous</a>.",
       "TITLE": "Le projet OpenRadiation"
     },
     "TITLE": "À propos"
@@ -117,7 +117,7 @@
   },
   "LEGAL_NOTICE": {
     "EDITOR": {
-      "NOTICE": "L’application OpenRadiation a été développée successivement par l’IRSN, Sorbonne Université, Agoralogie et ITLink. N’hésitez pas à nous faire parvenir vos commentaires sur cette application. Le code source de l’application est publié en <a onclick=\"window.open('https://www.openradiation.org/developpeurs', '_system')\">opensource</a>.<br>Retrouvez l’ensemble des mentions légales et les informations de contact sur <a onclick=\"window.open('https://www.openradiation.org/mentions-legales', '_system')\">www.openradiation.org/mentions-legales</a>.<br><br>Version actuelle : {{APP_NAME_VERSION}}.",
+      "NOTICE": "L’application OpenRadiation a été développée successivement par l’IRSN, Sorbonne Université, Agoralogie, ITLink, Code Lutin, l'ASNR. N’hésitez pas à nous faire parvenir vos commentaires sur cette application. Le code source de l’application est publié en <a onclick=\"window.open('https://www.openradiation.org/developpeurs', '_system')\">opensource</a>.<br>Retrouvez l’ensemble des mentions légales et les informations de contact sur <a onclick=\"window.open('https://www.openradiation.org/mentions-legales', '_system')\">www.openradiation.org/mentions-legales</a>.<br><br>Version actuelle : {{APP_NAME_VERSION}}.",
       "TITLE": "Éditeur"
     },
     "MEASURES_PRECAUTIONS": {
