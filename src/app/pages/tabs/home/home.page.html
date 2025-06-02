@@ -7,7 +7,6 @@
       <div class="sensor-container" [ngClass]="{ sensorConnected: (connectedDevice$ | async) }">
         <div class="sensor-status">
           <ion-icon
-            size="large"
             [name]="(connectedDevice$ | async) ?  'checkmark-outline' : 'close-outline' "
           ></ion-icon>
         </div>

@@ -7,7 +7,7 @@
     [class]="{ selected: (planeMode$ | async) === true }"
   >
     <div class="arrow">
-      <ion-icon size="large" name="arrow-forward-outline"></ion-icon>
+      <ion-icon name="arrow-forward-outline"></ion-icon>
     </div>
     <div class="text">{{ 'GENERAL.ON_PLANE' | translate }}</div>
   </button>
@@ -18,7 +18,7 @@
     [class]="{ selected: (planeMode$ | async) === false }"
   >
     <div class="arrow">
-      <ion-icon size="large" name="arrow-forward-outline"></ion-icon>
+      <ion-icon name="arrow-forward-outline"></ion-icon>
     </div>
     <div class="text">{{ 'GENERAL.ON_GROUND' | translate }}</div>
   </button>

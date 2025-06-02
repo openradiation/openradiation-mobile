@@ -29,9 +29,13 @@
     background-color: #d34f00;
     border-radius: 5px;
     font-size: 18px;
-    padding: 2px 15px;
+    padding: 2px 8px;
     font-family: 'INTERSTATE', Arial, Helvetica, sans-serif;
     text-align: center;
+    ion-icon {
+      padding-top: 5px;
+      font-size: 26px;
+    }
   }
   &.hasGps {
     .gps-status {
