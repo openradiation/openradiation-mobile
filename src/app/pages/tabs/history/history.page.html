@@ -41,7 +41,7 @@
               size="small"
             ></ion-icon>
           </td>
-          <td class="date normalColumn">
+          <td class="date normalColumn"  [attr.data-order]="measure.startTime | date: 'yyyyMMddHHmmss'">
             <span *ngIf="detailedSeries?.id !== measure.id; else dateColumnWhenSeriesIsExpanded">
               {{ measure.startTime | date: "dd/MM/yy HH:mm" }}
             </span>
