@@ -21,7 +21,7 @@ platform :android do
     previous_build_number = google_play_track_version_codes(
       package_name: "org.openradiation",
       json_key: File.expand_path("../openradiation-fastlane-playstore.json"),
-      track: "beta"
+      track: "internal"
     )[0]
     versionCode = previous_build_number + 1
     gradle(
