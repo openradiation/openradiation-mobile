@@ -176,7 +176,7 @@
     },
     "EXPERT": "Expert",
     "EXPERT_MODE": "Expert mode",
-    "EXPERT_MODE_EXPLANATIONS": "Expert mode allows to access more detailed measure information",
+    "EXPERT_MODE_EXPLANATIONS": "Expert mode allows for a more precise analysis of the measurements and helps identify abnormal sensor behavior.",
     "EXPERT_MODE_EXPLANATIONS_SHOW": "More info",
     "EXPERT_MODE_EXPLANATIONS_HIDE": "Hide",
     "FAKE_HITS_MODE": "Fake hits (testing only)",
