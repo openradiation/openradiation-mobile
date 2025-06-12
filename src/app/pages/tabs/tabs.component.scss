@@ -1,5 +1,8 @@
 @import '../../../theme/variables.scss';
 
+ion-tab-bar {
+  padding-bottom: 0px !important;
+}
 
 ion-tabs {
   --ion-tab-bar-color: #{transparentize($second-color, 0.6)};
