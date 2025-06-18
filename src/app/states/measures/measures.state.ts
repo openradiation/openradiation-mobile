@@ -802,16 +802,6 @@ export class MeasuresState {
       const index = measures.findIndex((stateMeasure) => stateMeasure.id === measure.id);
       if (index !== -1) {
         return this.measuresService.publishMeasure(measure).subscribe((m) => {
-          measures = getState().measures;
-          if ((m as AbstractMeasure)?.type == MeasureType.Measure) {
-            patchState({
-              measures: [...measures.slice(0, index), { ...(m as Measure) }, ...measures.slice(index + 1)],
-            });
-          } else {
-            patchState({
-              measures: [...measures.slice(0, index), { ...(m as MeasureSeries) }, ...measures.slice(index + 1)],
-            });
-          }
           if (!(m as AbstractMeasure).sent) {
             this.store.dispatch(new PublishMeasureError(m as AbstractMeasure));
             return of(null);
