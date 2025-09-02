@@ -37,7 +37,8 @@ export enum DeviceType {
   PocketGeiger = 'Pocket Geiger Type 6',
   Rium = 'RiumGm',
   Rium2USB = 'RiumGM BLE -u',
-  Rium2BLE = 'RiumGM BLE -b'
+  Rium2BLE = 'RiumGM BLE -b',
+  BertinRadConnect = 'Bertin RadConnect',
 }
 
 // The key set the threshold and the value is the calibration function

@@ -8,6 +8,7 @@ import { DeviceAtomTagService } from './ble/device-atom-tag.service';
 import { DeviceOGKitService } from './ble/device-og-kit.service';
 import { DeviceOGKit2Service } from './ble/device-og-kit-2.service';
 import { DeviceRium2BLEService } from './ble/device-rium-2-ble.service';
+import { DeviceBertinRadConnectBLEService } from './ble/device-bertin-rad-connect-ble.service';
 import { DeviceSafeCastService } from './ble/device-safe-cast.service';
 import { DeviceMockService } from './device-mock.service';
 import { DeviceConnectionLost } from './devices.action';
@@ -16,7 +17,7 @@ import { DeviceRium2USBService } from './usb/device-rium-2-usb.service';
 import { DeviceRiumService } from './usb/device-rium.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DevicesService {
   private services: { [K in DeviceType]: AbstractDeviceService<AbstractDevice> };
@@ -32,10 +33,11 @@ export class DevicesService {
     private deviceAtomTagService: DeviceAtomTagService,
     private deviceSafeCastService: DeviceSafeCastService,
     private deviceRium2BLEService: DeviceRium2BLEService,
+    private deviceBertinRadConnectBLEService: DeviceBertinRadConnectBLEService,
     // USB devices
     private devicePocketGeigerService: DevicePocketGeigerService,
     private deviceRiumService: DeviceRiumService,
-    private deviceRium2USBService: DeviceRium2USBService
+    private deviceRium2USBService: DeviceRium2USBService,
   ) {
     this.services = {
       [DeviceType.Mock]: this.deviceMockService,
@@ -45,10 +47,11 @@ export class DevicesService {
       [DeviceType.AtomTag]: this.deviceAtomTagService,
       [DeviceType.SafeCast]: this.deviceSafeCastService,
       [DeviceType.Rium2BLE]: this.deviceRium2BLEService,
+      [DeviceType.BertinRadConnect]: this.deviceBertinRadConnectBLEService,
       // USB devices
       [DeviceType.PocketGeiger]: this.devicePocketGeigerService,
       [DeviceType.Rium]: this.deviceRiumService,
-      [DeviceType.Rium2USB]: this.deviceRium2USBService
+      [DeviceType.Rium2USB]: this.deviceRium2USBService,
     };
     this.actions$.pipe(ofActionSuccessful(DeviceConnectionLost)).subscribe(({ communicationTimeout }) =>
       this.toastController
@@ -57,15 +60,17 @@ export class DevicesService {
             ? this.translateService.instant('SENSORS.CONNECTION_TIMEOUT')
             : this.translateService.instant('SENSORS.CONNECTION_LOST'),
           duration: communicationTimeout ? undefined : 3000,
-          buttons: [{
-            text: this.translateService.instant('GENERAL.OK'),
-            role: 'cancel',
-            handler: () => {
-              // canceled, nothing to do
-            }
-          }]
+          buttons: [
+            {
+              text: this.translateService.instant('GENERAL.OK'),
+              role: 'cancel',
+              handler: () => {
+                // canceled, nothing to do
+              },
+            },
+          ],
         })
-        .then(toast => toast.present())
+        .then((toast) => toast.present()),
     );
   }
 

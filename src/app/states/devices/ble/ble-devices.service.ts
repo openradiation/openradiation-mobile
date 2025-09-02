@@ -21,7 +21,7 @@ import { Platform } from '@ionic/angular';
 
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BLEDevicesService {
   private devices = [
@@ -29,7 +29,8 @@ export class BLEDevicesService {
     DeviceType.OGKit2,
     DeviceType.AtomTag,
     DeviceType.SafeCast,
-    DeviceType.Rium2BLE
+    DeviceType.Rium2BLE,
+    DeviceType.BertinRadConnect,
   ];
 
   private currentAlert?: HTMLIonAlertElement;
@@ -44,7 +45,7 @@ export class BLEDevicesService {
     private alertService: AlertService,
     private translateService: TranslateService,
     private devicesService: DevicesService,
-    private positionService: PositionService
+    private positionService: PositionService,
   ) {
     this.actions$.pipe(ofActionDispatched(StartDiscoverBLEDevices)).subscribe(() => {
       if (this.currentAlert) {
@@ -52,20 +53,20 @@ export class BLEDevicesService {
         this.currentAlert = undefined;
       }
     });
-
   }
 
   startDiscoverDevices(): Observable<unknown> {
     return from(
-      this.enableLocationAndBluetooth().then(bluetoothEnabled => {
-        if (!bluetoothEnabled) {
-          throw new Error("Missing bluetooth or location permissions")
-        }
-      })
-        .catch(error => {
+      this.enableLocationAndBluetooth()
+        .then((bluetoothEnabled) => {
+          if (!bluetoothEnabled) {
+            throw new Error('Missing bluetooth or location permissions');
+          }
+        })
+        .catch((error) => {
           console.error(error);
           this.onBLEError(true);
-        })
+        }),
     ).pipe(tap(() => this.discoverDevices()));
   }
 
@@ -75,11 +76,11 @@ export class BLEDevicesService {
       try {
         await BleClient.initialize();
       } catch (error) {
-        console.error("Error while initializing BleClient, probably missing permissions", error);
+        console.error('Error while initializing BleClient, probably missing permissions', error);
         this.onBLEError(true);
         return false;
       }
-      const isBluetoothEnabled = await BleClient.isEnabled()
+      const isBluetoothEnabled = await BleClient.isEnabled();
 
       if (!isBluetoothEnabled && Capacitor.getPlatform() == 'android') {
         await BleClient.requestEnable();
@@ -101,27 +102,27 @@ export class BLEDevicesService {
       }
     });
     const time = timer(this.scanPeriod, this.scanPeriod).pipe(
-      takeUntil(this.actions$.pipe(ofActionSuccessful(StopDiscoverDevices, BLEConnectionLost)))
+      takeUntil(this.actions$.pipe(ofActionSuccessful(StopDiscoverDevices, BLEConnectionLost))),
     );
     merge(
       this.scan(this.scanDuration).pipe(
         scan<RawBLEDevice, RawBLEDevice[]>(
           (devices: RawBLEDevice[], newDevice: RawBLEDevice) => [...devices, newDevice],
-          []
+          [],
         ),
-        throttleTime(100)
+        throttleTime(100),
       ),
       time.pipe(
         switchMap(() => this.scan(this.scanDuration)),
         buffer(time),
-        skip(1)
-      )
+        skip(1),
+      ),
     )
       .pipe(
         map((rawDevices: RawBLEDevice[]) => {
           const res: RawBLEDevice[] = [];
-          rawDevices.forEach(rawDevice => {
-            if (!res.find(rawDevice2 => rawDevice2.id === rawDevice.id)) {
+          rawDevices.forEach((rawDevice) => {
+            if (!res.find((rawDevice2) => rawDevice2.id === rawDevice.id)) {
               res.push(rawDevice);
             }
           });
@@ -131,17 +132,17 @@ export class BLEDevicesService {
           rawDevices
             .sort((a, b) => b.rssi - a.rssi)
             .map<AbstractDevice | null>(
-              rawDevice =>
+              (rawDevice) =>
                 (rawDevice.name &&
                   this.devices
-                    .map(deviceType => this.devicesService.buildDevice(deviceType, rawDevice))
+                    .map((deviceType) => this.devicesService.buildDevice(deviceType, rawDevice))
                     .filter((device: AbstractDevice | null): device is AbstractBLEDevice => device !== null)[0]) ||
-                null
+                null,
             )
-            .filter((device): device is AbstractDevice => device !== null)
-        )
+            .filter((device): device is AbstractDevice => device !== null),
+        ),
       )
-      .subscribe(devices => this.store.dispatch(new BLEDevicesDiscovered(devices)));
+      .subscribe((devices) => this.store.dispatch(new BLEDevicesDiscovered(devices)));
   }
 
   private onBLEError(missingPermissions: boolean) {
@@ -168,13 +169,13 @@ export class BLEDevicesService {
                   Diagnostic.switchToBluetoothSettings();
                 }
                 return false;
-              }
-            }
-          ]
+              },
+            },
+          ],
         },
-        false
+        false,
       )
-      .then(alert => {
+      .then((alert) => {
         this.currentAlert?.dismiss();
         this.currentAlert = alert;
       });
@@ -182,32 +183,33 @@ export class BLEDevicesService {
       this.listeningPlatformResume = true;
       this.platform.resume.subscribe(() => {
         if (this.currentAlert) {
-          this.currentAlert.dismiss(); this.currentAlert = undefined;
+          this.currentAlert.dismiss();
+          this.currentAlert = undefined;
           this.startDiscoverDevices();
         }
       });
     }
   }
 
-
   private scan(_scanDuration: number): Observable<unknown> {
     // FIXME : parameter "scanDuration" cannot be passed to new capacitor BLE API
-    return new Observable(observer => {
-      BleClient.requestLEScan({
-        scanMode: ScanMode.SCAN_MODE_BALANCED
-      },
+    return new Observable((observer) => {
+      BleClient.requestLEScan(
+        {
+          scanMode: ScanMode.SCAN_MODE_BALANCED,
+        },
         (scanResult) => {
-          const device = scanResult.device
+          const device = scanResult.device;
 
           const newDevice: RawBLEDevice = {
             id: device.deviceId,
             advertising: scanResult.rawAdvertisement ? scanResult.rawAdvertisement.buffer : new ArrayBuffer(0),
-            name: device.name ? device.name : "",
-            rssi: scanResult.rssi ? scanResult.rssi : 0
-          }
-          observer.next(newDevice)
-        }
-      ).catch(e => {
+            name: device.name ? device.name : '',
+            rssi: scanResult.rssi ? scanResult.rssi : 0,
+          };
+          observer.next(newDevice);
+        },
+      ).catch((e) => {
         observer.error(e);
       });
     });
