@@ -8,6 +8,7 @@ import { AbstractBLEDeviceService } from './abstract-ble-device.service';
 import { BleClient } from '@capacitor-community/bluetooth-le';
 import { DeviceBertinRadConnectBLE } from './device-bertin-rad-connect-ble';
 import { DeviceConnectionLost } from '../devices.action';
+import { DeviceType } from '../abstract-device';
 
 @Injectable({
   providedIn: 'root',
@@ -42,10 +43,13 @@ export class DeviceBertinRadConnectBLEService extends AbstractBLEDeviceService<D
       from(BleClient.read(device.sensorUUID, this.service, this.sensorIdentificationCharacteristic)),
     ]).pipe(
       map(([idDataView]: [DataView]) => {
-        const apparatusId = this.arrayBufferToHex(idDataView.buffer);
-        console.error('BERTIN GOT DEVICE INFO', apparatusId);
+        const toHex = this.arrayBufferToHex(idDataView.buffer);
+        const family = parseInt(toHex.slice(1, 2), 8);
+        const variant = parseInt(toHex.slice(2, 3), 8);
+        const increment = parseInt(toHex.slice(2, 7), 32);
+        const firmwareVersion = family + '.' + variant + '.' + increment;
         return {
-          apparatusId,
+          apparatusVersion: `${DeviceType.BertinRadConnect} v${firmwareVersion}`,
         };
       }),
     );
@@ -56,7 +60,6 @@ export class DeviceBertinRadConnectBLEService extends AbstractBLEDeviceService<D
   }
 
   startMeasureScan(device: DeviceBertinRadConnectBLE, stopSignal: Observable<unknown>): Observable<Step> {
-    console.error('BERTIN START MESURE');
     stopSignal.subscribe(() => {
       this.stopReceiveData(device);
     });
