@@ -76,10 +76,14 @@ export class DeviceBertinRadConnectBLEService extends AbstractBLEDeviceService<D
   }
 
   protected decodeDataPackage([hitsBuffer]: [DataView]): Step {
-    const hitsNumber = this.getNumberFromBuffer(hitsBuffer.buffer, 2);
+    const hitsNumber = hitsBuffer.getUint32(10, true);
+    const temperature = hitsBuffer.getFloat32(34, true);
+    const batteryPercent = hitsBuffer.getUint8(38); // TODO BERTIN
+    console.error('battery : ' + batteryPercent);
     const receiveData = {
       ts: Date.now(),
       hitsNumber,
+      temperature,
     };
     this.logAndStore('Received from RadConnectBLE : ' + JSON.stringify(receiveData));
     return receiveData;
