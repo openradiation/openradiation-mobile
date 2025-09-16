@@ -1,4 +1,9 @@
 <div class="container">
+  <div class="batteryLevel" *ngIf="batteryLevel" >
+    <div [ngClass]="{ 'low-battery': batteryLevel < 45 && batteryLevel >= 15, 'very-low-battery': batteryLevel < 15}">
+      <ion-icon name="battery-full" mode="ios"></ion-icon>{{ batteryLevel | number : '1.0-0'}}%
+    </div>
+  </div>
   <div class="logo" [ngClass]="{ home: homeMode }">
     <img src="assets/img/logo.png" />
   </div>

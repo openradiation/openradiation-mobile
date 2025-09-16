@@ -18,6 +18,32 @@
   align-items: center;
   position: relative;
 
+  .batteryLevel {
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: white;
+    padding-top: 20px;
+    height: 100%;
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .low-battery {
+      background-color: $forth-color; 
+      background-color: #ff7f00;
+      padding: 2px 8px;
+      border-radius: 5px;
+    }
+    .very-low-battery {
+      background-color: $forth-color; 
+      background-color: #e70000;
+      padding: 2px 8px;
+      border-radius: 5px;
+    }
+  }
+
   .logo {
     display: flex;
     align-items: center;

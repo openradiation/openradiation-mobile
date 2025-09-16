@@ -7,21 +7,20 @@ import { RawBLEDevice } from './abstract-ble-device';
 import { AbstractBLEDeviceService } from './abstract-ble-device.service';
 import { BleClient } from '@capacitor-community/bluetooth-le';
 import { DeviceBertinRadConnectBLE } from './device-bertin-rad-connect-ble';
-import { DeviceConnectionLost } from '../devices.action';
+import { DeviceConnectionLost, UpdateDeviceInfo } from '../devices.action';
 import { DeviceType } from '../abstract-device';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DeviceBertinRadConnectBLEService extends AbstractBLEDeviceService<DeviceBertinRadConnectBLE> {
-  // TODO Bertin adapt calibration functions
   protected calibrationFunctions = {
     planeMode: {
-      0: 'cps / 5.56667',
-      4.33: 'cps * 0.42',
+      0: '(0.00000003751 * (cps * 60 - 4) ^ 2 + 0.00965 * (cps * 60 - 4)) * 0.85',
+      1.5: 'cps * 1.14',
     },
     groundLevel: {
-      0: 'cps / 5.56667',
+      0: '(0.00000003751 * (cps * 60 - 4) ^ 2 + 0.00965 * (cps * 60 - 4)) * 0.85',
     },
   };
 
@@ -47,7 +46,7 @@ export class DeviceBertinRadConnectBLEService extends AbstractBLEDeviceService<D
         const family = parseInt(toHex.slice(1, 2), 8);
         const variant = parseInt(toHex.slice(2, 3), 8);
         const increment = parseInt(toHex.slice(2, 7), 32);
-        const firmwareVersion = family + '.' + variant + '.' + increment;
+        const firmwareVersion = family + '.' + variant + '.' + increment.toString().slice(0, 4);
         return {
           apparatusVersion: `${DeviceType.BertinRadConnect} v${firmwareVersion}`,
         };
@@ -65,7 +64,10 @@ export class DeviceBertinRadConnectBLEService extends AbstractBLEDeviceService<D
     });
     return zip(this.startReceiveData(device)).pipe(
       map((dataViews: [DataView]) => {
-        return this.decodeDataPackage(dataViews);
+        const decodedDataPackage = this.decodeDataPackage(dataViews);
+        device.batteryLevel = decodedDataPackage.voltage;
+        this.store.dispatch(new UpdateDeviceInfo(device));
+        return decodedDataPackage;
       }),
       catchError((err) => {
         this.disconnectDevice(device).subscribe();
@@ -78,21 +80,16 @@ export class DeviceBertinRadConnectBLEService extends AbstractBLEDeviceService<D
   protected decodeDataPackage([hitsBuffer]: [DataView]): Step {
     const hitsNumber = hitsBuffer.getUint32(10, true);
     const temperature = hitsBuffer.getFloat32(34, true);
-    const batteryPercent = hitsBuffer.getUint8(38); // TODO BERTIN
-    console.error('battery : ' + batteryPercent);
+    const voltage = hitsBuffer.getUint8(38);
     const receiveData = {
       ts: Date.now(),
-      hitsNumber,
-      temperature,
+      hitsNumber: hitsNumber,
+      temperature: temperature,
+      voltage: voltage,
     };
     this.logAndStore('Received from RadConnectBLE : ' + JSON.stringify(receiveData));
     return receiveData;
   }
-
-  private getNumberFromBuffer(buffer: ArrayBuffer, size: number): number {
-    return parseInt(this.arrayBufferToHex(buffer).slice(0, size), 16);
-  }
-
   buildDevice(rawBLEDevice: RawBLEDevice): DeviceBertinRadConnectBLE | null {
     if (rawBLEDevice.name.includes('RadConnect_GP')) {
       return new DeviceBertinRadConnectBLE(rawBLEDevice);
@@ -100,3 +97,4 @@ export class DeviceBertinRadConnectBLEService extends AbstractBLEDeviceService<D
     return null;
   }
 }
+

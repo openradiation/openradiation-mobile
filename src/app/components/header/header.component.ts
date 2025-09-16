@@ -16,6 +16,8 @@ export class HeaderComponent {
   deleteButton = false;
   @Input()
   homeMode = false;
+  @Input()
+  batteryLevel = 0;
   @Output()
   back = new EventEmitter();
   @Output()
