@@ -127,7 +127,7 @@
               <ng-container
                 *ngIf="currentMeasure.startTime || (currentSeries$ | async)?.measures.length > 1; else measureInit"
               >
-                {{'MEASURES.ONGOING' | translate}}               
+                {{'MEASURES.ONGOING' | translate}}           
               </ng-container>
               <ng-template #measureInit>
                 {{'MEASURES.INIT' | translate}}
@@ -138,6 +138,9 @@
             <img src="assets/img/bg-radiation.png" />
             <img src="assets/img/bg-radiation.png" />
           </div>
+        </div>
+        <div class="can-disconnect" *ngIf="canDisconnect(planeMode$ | async, currentMeasure.startTime || (currentSeries$ | async)?.measures.length > 1, connectedDevice)">
+          {{'MEASURES.CAN_DISCONNECT' | translate}}
         </div>
         <ng-container *ngIf="planeMode$ | async; else planeModeFalse">
           <div class="message">
