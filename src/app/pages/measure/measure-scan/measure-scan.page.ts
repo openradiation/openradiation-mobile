@@ -8,14 +8,14 @@ import { take } from 'rxjs/operators';
 import { AutoUnsubscribePage } from '@app/components/auto-unsubscribe/auto-unsubscribe.page';
 import { AlertService } from '@app/services/alert.service';
 import { NavigationService } from '@app/services/navigation.service';
-import { AbstractDevice } from '@app/states/devices/abstract-device';
+import { AbstractDevice, DeviceType } from '@app/states/devices/abstract-device';
 import { DevicesState } from '@app/states/devices/devices.state';
 import {
   HitsAccuracy,
   Measure,
   MeasureSeries,
   MeasureSeriesParamsSelected,
-  PositionAccuracyThreshold
+  PositionAccuracyThreshold,
 } from '@app/states/measures/measure';
 import { CancelMeasure, StartMeasureScan, StopMeasureScan } from '@app/states/measures/measures.action';
 import { MeasuresState } from '@app/states/measures/measures.state';
@@ -24,7 +24,7 @@ import { Platform } from '@ionic/angular';
 @Component({
   selector: 'app-measure-scan',
   templateUrl: './measure-scan.page.html',
-  styleUrls: ['./measure-scan.page.scss']
+  styleUrls: ['./measure-scan.page.scss'],
 })
 export class MeasureScanPage extends AutoUnsubscribePage {
   currentMeasure$: Observable<Measure | undefined> = inject(Store).select(MeasuresState.currentMeasure);
@@ -78,27 +78,27 @@ export class MeasureScanPage extends AutoUnsubscribePage {
     private actions$: Actions,
     private alertService: AlertService,
     private translateService: TranslateService,
-    private platform: Platform
+    private platform: Platform,
   ) {
     super(router);
   }
 
   pageEnter() {
     super.pageEnter();
-    this.currentSeries$.pipe(take(1)).subscribe(currentSeries => {
+    this.currentSeries$.pipe(take(1)).subscribe((currentSeries) => {
       this.isMeasureSeries = currentSeries !== undefined;
     });
-    this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
+    this.connectedDevice$.pipe(take(1)).subscribe((connectedDevice) => {
       if (connectedDevice) {
         this.subscriptions.push(this.platform.backButton.subscribeWithPriority(9999, () => this.cancelMeasure()));
         this.subscriptions.push(
-          this.currentMeasure$.subscribe(measure => this.updateHitsAccuracy(connectedDevice, measure)),
+          this.currentMeasure$.subscribe((measure) => this.updateHitsAccuracy(connectedDevice, measure)),
           this.actions$.pipe(ofActionSuccessful(StopMeasureScan)).subscribe(() => {
             this.navigationService.navigateRoot(['measure', this.isMeasureSeries ? 'report-series' : 'report']);
           }),
           this.actions$
             .pipe(ofActionSuccessful(CancelMeasure))
-            .subscribe(() => this.navigationService.navigateRoot(['tabs', 'home']))
+            .subscribe(() => this.navigationService.navigateRoot(['tabs', 'home'])),
         );
         this.store.dispatch(new StartMeasureScan(connectedDevice)).subscribe();
       }
@@ -123,7 +123,7 @@ export class MeasureScanPage extends AutoUnsubscribePage {
   }
 
   stopScan() {
-    this.connectedDevice$.pipe(take(1)).subscribe(connectedDevice => {
+    this.connectedDevice$.pipe(take(1)).subscribe((connectedDevice) => {
       if (connectedDevice) {
         this.store.dispatch(new StopMeasureScan(connectedDevice)).subscribe();
       }
@@ -133,7 +133,7 @@ export class MeasureScanPage extends AutoUnsubscribePage {
   cancelMeasure() {
     let cancelMessage = this.translateService.instant('MEASURES.CANCEL_CONFIRMATION');
     if (this.isMeasureSeries) {
-      cancelMessage = this.translateService.instant('MEASURE_SERIES.REPORT.CANCEL_CONFIRMATION')
+      cancelMessage = this.translateService.instant('MEASURE_SERIES.REPORT.CANCEL_CONFIRMATION');
     }
     this.alertService.show({
       header: this.translateService.instant('GENERAL.CANCEL'),
@@ -141,13 +141,17 @@ export class MeasureScanPage extends AutoUnsubscribePage {
       backdropDismiss: false,
       buttons: [
         {
-          text: this.translateService.instant('GENERAL.NO')
+          text: this.translateService.instant('GENERAL.NO'),
         },
         {
           text: this.translateService.instant('GENERAL.YES'),
-          handler: () => this.store.dispatch(new CancelMeasure())
-        }
-      ]
+          handler: () => this.store.dispatch(new CancelMeasure()),
+        },
+      ],
     });
+  }
+
+  canDisconnect(planeMode: boolean | null, ongoing: boolean, device: AbstractDevice) {
+    return this.isMeasureSeries && planeMode && ongoing && device.deviceType === DeviceType.BertinRadConnect;
   }
 }

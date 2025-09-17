@@ -198,6 +198,14 @@
     }
   }
 
+
+  .can-disconnect {
+    background: $second-color;
+    color: white;
+    width: 100%;
+    padding: 10px;
+  }
+  
   .radiation {
     background: $second-color;
     color: white;
@@ -210,6 +218,7 @@
     padding: 10px;
     position: relative;
     margin-top: 26px;
+
 
     .start {
       z-index: 1;
