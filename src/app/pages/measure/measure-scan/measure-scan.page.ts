@@ -20,6 +20,7 @@ import {
 import { CancelMeasure, StartMeasureScan, StopMeasureScan } from '@app/states/measures/measures.action';
 import { MeasuresState } from '@app/states/measures/measures.state';
 import { Platform } from '@ionic/angular';
+import { DevicesService } from '@app/states/devices/devices.service';
 
 @Component({
   selector: 'app-measure-scan',
@@ -78,6 +79,7 @@ export class MeasureScanPage extends AutoUnsubscribePage {
     private actions$: Actions,
     private alertService: AlertService,
     private translateService: TranslateService,
+    private devicesService: DevicesService,
     private platform: Platform,
   ) {
     super(router);
@@ -151,7 +153,16 @@ export class MeasureScanPage extends AutoUnsubscribePage {
     });
   }
 
-  canDisconnect(planeMode: boolean | null, ongoing: boolean, device: AbstractDevice) {
-    return this.isMeasureSeries && planeMode && ongoing && device.deviceType === DeviceType.BertinRadConnect;
+  canActivateDisconnectedMeasureMode(planeMode: boolean | null, ongoing: boolean, device: AbstractDevice) {
+    return (
+      this.isMeasureSeries &&
+      planeMode &&
+      ongoing &&
+      this.devicesService.service(device).canActivateDisconnectedMeasureMode()
+    );
+  }
+
+  activateDisconnectedMeasureMode(device: AbstractDevice) {
+    this.devicesService.service(device).activateDisconnectedMeasureMode(device);
   }
 }

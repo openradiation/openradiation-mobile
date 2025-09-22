@@ -16,12 +16,15 @@ import { RedirectAfterLogin } from '../tabs/settings/log-in/log-in.page';
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.scss']
+  styleUrls: ['./menu.component.scss'],
 })
 export class MenuComponent {
   login$: Observable<string | undefined> = inject(Store).select(UserState.login);
 
   connectedDevice$: Observable<AbstractDevice | undefined> = inject(Store).select(DevicesState.connectedDevice);
+  deviceInDisconnectedMeasureMode$: Observable<AbstractDevice | undefined> = inject(Store).select(
+    DevicesState.deviceInDisconnectedMeasureMode,
+  );
 
   currentUrl: string;
 
@@ -32,9 +35,9 @@ export class MenuComponent {
     private store: Store,
     private actions$: Actions,
     private alertService: AlertService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
   ) {
-    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
       this.currentUrl = event.url;
     });
     this.actions$
@@ -83,7 +86,7 @@ export class MenuComponent {
 
   startManualMeasure() {
     this.closeMenu();
-    this.login$.pipe(take(1)).subscribe(login => {
+    this.login$.pipe(take(1)).subscribe((login) => {
       if (login !== undefined) {
         this.store.dispatch(new StartManualMeasure()).subscribe();
       } else {
@@ -105,17 +108,17 @@ export class MenuComponent {
       backdropDismiss: false,
       buttons: [
         {
-          text: this.translateService.instant('GENERAL.CANCEL')
+          text: this.translateService.instant('GENERAL.CANCEL'),
         },
         {
           text: this.translateService.instant('LOG_IN.TITLE'),
           handler: () =>
             this.navigationService.navigateForward(['tabs', 'settings', 'log-in'], {
               animated: true,
-              queryParams: { redirectAfterLogin: redirectAfterLogin }
-            })
-        }
-      ]
+              queryParams: { redirectAfterLogin: redirectAfterLogin },
+            }),
+        },
+      ],
     });
   }
 
@@ -126,13 +129,13 @@ export class MenuComponent {
       backdropDismiss: false,
       buttons: [
         {
-          text: this.translateService.instant('GENERAL.CANCEL')
+          text: this.translateService.instant('GENERAL.CANCEL'),
         },
         {
           text: this.translateService.instant('SENSORS.ALERT_TITLE'),
-          handler: () => this.navigationService.navigateForward(['tabs', 'settings', 'devices'], { animated: true })
-        }
-      ]
+          handler: () => this.navigationService.navigateForward(['tabs', 'settings', 'devices'], { animated: true }),
+        },
+      ],
     });
   }
 }

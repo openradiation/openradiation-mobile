@@ -108,7 +108,10 @@
     "TITLE": "Mesurer la radioactivité",
     "MEASURE_MODE_EXPLANATIONS_PLANE": "Si vos mesures sont prises <b>au niveau du sol</b>, veuillez modifier le mode de mesure. <i><u>Plus d'infos</u></i>",
     "MEASURE_MODE_EXPLANATIONS_GROUND": "Si vos mesures sont prises <b>à bord d'un avion</b>, veuillez modifier le mode de mesure. <i><u>Plus d'infos</u></i>",
-    "LAUNCH_MESURE": "Lancer la mesure"
+    "LAUNCH_MESURE": "Lancer la mesure",
+    "SENSOR_IN_DISCONNECTED_MEASURE_MODE": "Measure déconnecté en cours sur",
+    "RECONNECT_SENSOR": "Se reconnecter",
+    "FORGET_SENSOR": "Annuler la mesure déconnectée en cours"
   },
   "LANGUAGE": {
     "ENGLISH": "English",
@@ -192,7 +195,7 @@
     "MEASURE_START": "Début de la mesure",
     "MESSAGE_ALTITUDE": "Conseil : altitude importante détectée, si la mesure a été faite en avion, vous auriez dû sélectionner le mode de mesure à bord d’avion",
     "ONGOING": "Mesure en cours",
-    "CAN_DISCONNECT": "Vous pouvez maintenant passer le capteur en mode déconnecté (position I)",
+    "DISCONNECT_MODE": "Passer en mode déconnecté",
     "PLANE_MODE_NOTICE": {
       "PART1": "Les rayonnements cosmiques sont plus importants en haute altitude, lors des vols en avion, car ils sont moins atténués par la couche atmosphérique.",
       "PART2": "L’activation du mode de mesure à bord d'avion permet de prendre en compte un étalonnage spécifique des capteurs pour le rayonnement cosmiques. Au contraire, si vous faites des mesures au sol (même à la montagne), choisissez le mode de mesure au niveau du sol.",

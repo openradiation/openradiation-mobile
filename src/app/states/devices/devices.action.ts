@@ -38,6 +38,14 @@ export class DisconnectDevice {
   static readonly type = '[Devices] Disconnect device';
 }
 
+export class ActivateDisconnectedMeasureMode {
+  static readonly type = '[Devices] Disconnected Measure Mode activated';
+}
+
+export class DeactivateDisconnectedMeasureMode {
+  static readonly type = '[Devices] Disconnected Measure Mode deactivated';
+}
+
 export class DeviceConnectionLost {
   static readonly type = '[Devices] Device connection lost';
   constructor(public communicationTimeout?: boolean) {}
