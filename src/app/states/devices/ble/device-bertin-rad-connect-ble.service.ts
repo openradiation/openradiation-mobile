@@ -7,8 +7,8 @@ import { RawBLEDevice } from './abstract-ble-device';
 import { AbstractBLEDeviceService } from './abstract-ble-device.service';
 import { BleClient } from '@capacitor-community/bluetooth-le';
 import { DeviceBertinRadConnectBLE } from './device-bertin-rad-connect-ble';
-import { DeviceConnectionLost, UpdateDeviceInfo } from '../devices.action';
-import { DeviceType } from '../abstract-device';
+import { ActivateDisconnectedMeasureMode, DeviceConnectionLost, UpdateDeviceInfo } from '../devices.action';
+import { AbstractDevice, DeviceType } from '../abstract-device';
 
 @Injectable({
   providedIn: 'root',
@@ -30,8 +30,6 @@ export class DeviceBertinRadConnectBLEService extends AbstractBLEDeviceService<D
   private sendCharacteristic = '82ba1887-0815-61a5-be42-6192013fd390';
   // TODO Bertin : use this to synchronize data after connection loss
   private retrieveInMemoryMeasuresCharacteristic = 'c6f9e64f-08da-4ab7-974e-229f6cc41d74';
-  private bluetoothAcknowledgmentCharacteristic =
-    'UUID : 5a5921ac5f6d4e64a121d06914753876 76387514-69D0-21A1-644E-6D5FAC21595A';
 
   constructor(protected store: Store) {
     super(store);
@@ -95,6 +93,24 @@ export class DeviceBertinRadConnectBLEService extends AbstractBLEDeviceService<D
       return new DeviceBertinRadConnectBLE(rawBLEDevice);
     }
     return null;
+  }
+
+  public canActivateDisconnectedMeasureMode(): boolean {
+    return true;
+  }
+
+  public async activateDisconnectedMeasureMode(device: AbstractDevice) {
+    const dataView = new DataView(new ArrayBuffer(3));
+    dataView.setUint8(1, 0x01);
+    dataView.setUint8(2, 0x01);
+    try {
+      const result = await BleClient.write(device.sensorUUID, this.service, this.sendCharacteristic, dataView);
+      this.store.dispatch(new ActivateDisconnectedMeasureMode());
+      return result;
+    } catch (error) {
+      this.logAndStore('Error while activating disconnect mode with bertin radconnect ', error);
+      return Promise.reject(error);
+    }
   }
 }
 

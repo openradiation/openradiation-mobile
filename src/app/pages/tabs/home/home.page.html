@@ -3,45 +3,62 @@
 
   <ion-content>
     <div class="content">
-      <app-gps-indicator homeMode="true" [accuracy]="positionAccuracy$ | async"></app-gps-indicator>
-      <div class="sensor-container" [ngClass]="{ sensorConnected: (connectedDevice$ | async) }">
-        <div class="sensor-status">
-          <ion-icon
-            [name]="(connectedDevice$ | async) ?  'checkmark-outline' : 'close-outline' "
-          ></ion-icon>
+      <ng-container *ngIf="deviceInDisconnectedMeasureMode$ | async as deviceInDisconnectedMeasureMode; else noDeviceInDisconectedMeasureMode">
+        <div class="sensor-actions">
+          <span class="sensor-text">
+            {{ 'HOME.SENSOR_IN_DISCONNECTED_MEASURE_MODE' | translate }} <br/>
+            {{ deviceInDisconnectedMeasureMode.apparatusVersion}}</span
+          >
+        </div>
+        <ion-button (click)="goToDevices()">
+          <span class="sensor-button"> {{'HOME.RECONNECT_SENSOR' | translate}} </span></ion-button
+        >
+        <ion-button (click)="forgetSensor()">
+          <span class="sensor-button"> {{'HOME.FORGET_SENSOR' | translate}} </span></ion-button
+        >
+      </ng-container>
+      <ng-template #noDeviceInDisconectedMeasureMode>
+        <app-gps-indicator homeMode="true" [accuracy]="positionAccuracy$ | async"></app-gps-indicator>
+        <div class="sensor-container" [ngClass]="{ sensorConnected: (connectedDevice$ | async) }">
+          <div class="sensor-status">
+            <ion-icon
+              [name]="(connectedDevice$ | async) ?  'checkmark-outline' : 'close-outline' "
+            ></ion-icon>
+          </div>
+
+        
+            <ng-container *ngIf="connectedDevice$ | async as connectedDevice; else noConnectedDevice">
+              <div class="sensor-actions">
+                <span class="sensor-text">
+                  {{ 'HOME.CONNECTED_SENSOR' | translate }} {{ connectedDevice.apparatusVersion}}</span
+                >
+                <ion-button (click)="goToDevices()">
+                  <span class="sensor-button"> {{'HOME.CHANGE_SENSOR' | translate}} </span></ion-button
+                >
+              </div>
+            </ng-container>
+            <ng-template #noConnectedDevice>
+              <div class="sensor-actions">
+                <span class="sensor-text"> {{ 'HOME.NO_SENSORS' | translate }}</span>
+                <ion-button (click)="goToDevices()">
+                  <span class="sensor-button">{{'HOME.CONNECT_SENSOR' | translate}} </span></ion-button
+                >
+              </div>
+            </ng-template>
         </div>
 
-        <ng-container *ngIf="connectedDevice$ | async as connectedDevice; else noConnectedDevice">
-          <div class="sensor-actions">
-            <span class="sensor-text">
-              {{ 'HOME.CONNECTED_SENSOR' | translate }} {{ connectedDevice.apparatusVersion}}</span
-            >
-            <ion-button (click)="goToDevices()">
-              <span class="sensor-button"> {{'HOME.CHANGE_SENSOR' | translate}} </span></ion-button
-            >
-          </div>
-        </ng-container>
-        <ng-template #noConnectedDevice>
-          <div class="sensor-actions">
-            <span class="sensor-text"> {{ 'HOME.NO_SENSORS' | translate }}</span>
-            <ion-button (click)="goToDevices()">
-              <span class="sensor-button">{{'HOME.CONNECT_SENSOR' | translate}} </span></ion-button
-            >
-          </div>
-        </ng-template>
-      </div>
+        <app-measure-mode></app-measure-mode>
 
-      <app-measure-mode></app-measure-mode>
-
-      <app-round-button
-        class="main"
-        [disabled]="(canStartMeasure | async) === false"
-        [srcOn]="'assets/img/button-start-measure-on.png'"
-        [srcOff]="'assets/img/button-start-measure-off.png'"
-        [subText]="'HOME.LAUNCH_MESURE' | translate"
-        (click)="startMeasure()"
-      >
-      </app-round-button>
+        <app-round-button
+          class="main"
+          [disabled]="(canStartMeasure | async) === false"
+          [srcOn]="'assets/img/button-start-measure-on.png'"
+          [srcOff]="'assets/img/button-start-measure-off.png'"
+          [subText]="'HOME.LAUNCH_MESURE' | translate"
+          (click)="startMeasure()"
+        >
+        </app-round-button>
+    </ng-template>
     </div>
   </ion-content>
 </ng-container>

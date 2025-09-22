@@ -13,6 +13,7 @@ import { StartMeasure } from '@app/states/measures/measures.action';
 import { MeasuresState } from '@app/states/measures/measures.state';
 import { Location } from '@capacitor-community/background-geolocation';
 import { PositionService } from '@app/states/measures/position.service';
+import { DeactivateDisconnectedMeasureMode } from '@app/states/devices/devices.action';
 
 @Component({
   selector: 'app-page-home',
@@ -21,6 +22,9 @@ import { PositionService } from '@app/states/measures/position.service';
 })
 export class HomePage extends AutoUnsubscribePage {
   connectedDevice$: Observable<AbstractDevice | undefined> = inject(Store).select(DevicesState.connectedDevice);
+  deviceInDisconnectedMeasureMode$: Observable<AbstractDevice | undefined> = inject(Store).select(
+    DevicesState.deviceInDisconnectedMeasureMode,
+  );
   positionAccuracy$: Observable<number> = inject(Store).select(MeasuresState.positionAccuracy);
   planeMode$: Observable<boolean> = inject(Store).select(MeasuresState.planeMode);
   currentPosition$: Observable<Location | undefined> = inject(Store).select(MeasuresState.currentPosition);
@@ -97,5 +101,9 @@ export class HomePage extends AutoUnsubscribePage {
         }
       });
     }
+  }
+
+  forgetSensor() {
+    this.store.dispatch(new DeactivateDisconnectedMeasureMode());
   }
 }

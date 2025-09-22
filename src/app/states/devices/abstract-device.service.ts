@@ -12,7 +12,7 @@ export abstract class AbstractDeviceService<T extends AbstractDevice> {
     groundLevel: CalibrationFunctions;
   };
 
-  protected constructor(protected store: Store) { }
+  protected constructor(protected store: Store) {}
 
   abstract buildDevice(rawDevice?: RawDevice): T | null;
 
@@ -36,19 +36,19 @@ export abstract class AbstractDeviceService<T extends AbstractDevice> {
   protected convertHitsNumberPerSec(hitsNumberPerSec: number, planeMode: boolean): [number, string] {
     const calibrationFunction = this.getCalibrationFunction(
       hitsNumberPerSec,
-      planeMode ? this.calibrationFunctions.planeMode : this.calibrationFunctions.groundLevel
+      planeMode ? this.calibrationFunctions.planeMode : this.calibrationFunctions.groundLevel,
     );
     if (calibrationFunction) {
       // See https://esbuild.github.io/content-types/#direct-eval
-      const indirectEval = eval
+      const indirectEval = eval;
       return [
         indirectEval(
           calibrationFunction
             .replace(/cps/g, '' + hitsNumberPerSec)
             .replace(/\^/g, '**')
-            .replace(/max/g, 'Math.max')
+            .replace(/max/g, 'Math.max'),
         ),
-        calibrationFunction
+        calibrationFunction,
       ];
     } else {
       return [0, ''];
@@ -56,9 +56,7 @@ export abstract class AbstractDeviceService<T extends AbstractDevice> {
   }
 
   protected getCalibrationFunction(hitsNumberPerSec: number, calibrationFunctions: CalibrationFunctions): string {
-    const thresholds = Object.keys(calibrationFunctions)
-      .sort()
-      .reverse();
+    const thresholds = Object.keys(calibrationFunctions).sort().reverse();
     let determinedCalibrationFunctions = 0;
     for (const threshold of thresholds) {
       const parsedThreshold = Number(threshold);
@@ -78,24 +76,45 @@ export abstract class AbstractDeviceService<T extends AbstractDevice> {
 
   protected arrayBufferToHex(buffer: ArrayBuffer): string {
     return Array.from(new Uint8Array(buffer))
-      .map(n => n.toString(16).padStart(2, '0'))
+      .map((n) => n.toString(16).padStart(2, '0'))
       .join('');
   }
 
   protected logAndStore(newLog: string, error?: Error) {
     if (localStorage) {
       const existingLogFromStorage = localStorage.getItem('logs');
-      const existingLog = existingLogFromStorage ?
-        existingLogFromStorage.substring(0, AbstractDeviceService.MAX_LOGS_LENGTH) : ""
-      const d = new Date()
-      const dateString = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDay() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
-      const newLogWithDateAndError = dateString + " " + newLog + (error ? JSON.stringify(error) : "")
-      localStorage.setItem('logs', newLogWithDateAndError + "\n" + existingLog)
+      const existingLog = existingLogFromStorage
+        ? existingLogFromStorage.substring(0, AbstractDeviceService.MAX_LOGS_LENGTH)
+        : '';
+      const d = new Date();
+      const dateString =
+        d.getFullYear() +
+        '-' +
+        d.getMonth() +
+        '-' +
+        d.getDay() +
+        ' ' +
+        d.getHours() +
+        ':' +
+        d.getMinutes() +
+        ':' +
+        d.getSeconds();
+      const newLogWithDateAndError = dateString + ' ' + newLog + (error ? JSON.stringify(error) : '');
+      localStorage.setItem('logs', newLogWithDateAndError + '\n' + existingLog);
     }
     if (error) {
-      console.error(newLog, error)
+      console.error(newLog, error);
     } else {
-      console.debug(newLog)
+      console.debug(newLog);
     }
+  }
+
+  public async activateDisconnectedMeasureMode(device: AbstractDevice) {
+    // Do nothing
+    console.error('BERTIN DISCONNECT ABSTRACT IMPLEM');
+  }
+
+  public canActivateDisconnectedMeasureMode() {
+    return false;
   }
 }

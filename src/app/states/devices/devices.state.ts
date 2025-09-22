@@ -10,9 +10,11 @@ import { BLEDevicesService } from './ble/ble-devices.service';
 import { DeviceMock } from './device-mock';
 import { DeviceParams } from './device-params';
 import {
+  ActivateDisconnectedMeasureMode,
   BLEConnectionLost,
   BLEDevicesDiscovered,
   ConnectDevice,
+  DeactivateDisconnectedMeasureMode,
   DeviceConnectionLost,
   DisconnectDevice,
   EditDeviceParams,
@@ -23,7 +25,7 @@ import {
   StopDiscoverDevices,
   UpdateDevice,
   UpdateDeviceInfo,
-  USBDevicesDiscovered
+  USBDevicesDiscovered,
 } from './devices.action';
 import { DevicesService } from './devices.service';
 import { AbstractUSBDevice } from './usb/abstract-usb-device';
@@ -35,6 +37,7 @@ export interface DevicesStateModel {
   availableUSBDevices: AbstractUSBDevice[];
   knownDevices: AbstractDevice[];
   connectedDevice?: AbstractDevice;
+  deviceInDisconnectedMeasureMode?: AbstractDevice;
   editedDevice?: AbstractDevice;
   editedDeviceForm?: Form<DeviceParams>;
 }
@@ -45,26 +48,25 @@ export interface DevicesStateModel {
     isScanning: false,
     availableBLEDevices: [],
     availableUSBDevices: [],
-    knownDevices: []
-  }
+    knownDevices: [],
+  },
 })
 @Injectable()
 export class DevicesState {
-
   constructor(
     private devicesService: DevicesService,
     private bleDevicesService: BLEDevicesService,
-    private usbDevicesService: USBDevicesService
-  ) { }
+    private usbDevicesService: USBDevicesService,
+  ) {}
 
   @Selector()
   static availableDevices({
     availableBLEDevices,
     availableUSBDevices,
-    connectedDevice
+    connectedDevice,
   }: DevicesStateModel): AbstractDevice[] {
     return [...availableBLEDevices, ...availableUSBDevices].filter(
-      availableDevice => connectedDevice === undefined || connectedDevice.sensorUUID !== availableDevice.sensorUUID
+      (availableDevice) => connectedDevice === undefined || connectedDevice.sensorUUID !== availableDevice.sensorUUID,
     );
   }
 
@@ -73,12 +75,12 @@ export class DevicesState {
     knownDevices,
     availableBLEDevices,
     availableUSBDevices,
-    connectedDevice
+    connectedDevice,
   }: DevicesStateModel): AbstractDevice[] {
-    return knownDevices.filter(knownDevice => {
+    return knownDevices.filter((knownDevice) => {
       return (
         [...availableBLEDevices, ...availableUSBDevices].every(
-          availableDevice => availableDevice.sensorUUID !== knownDevice.sensorUUID
+          (availableDevice) => availableDevice.sensorUUID !== knownDevice.sensorUUID,
         ) &&
         (connectedDevice === undefined || connectedDevice.sensorUUID !== knownDevice.sensorUUID)
       );
@@ -88,6 +90,13 @@ export class DevicesState {
   @Selector()
   static connectedDevice({ connectedDevice }: DevicesStateModel): AbstractDevice | undefined {
     return connectedDevice;
+  }
+
+  @Selector()
+  static deviceInDisconnectedMeasureMode({
+    deviceInDisconnectedMeasureMode,
+  }: DevicesStateModel): AbstractDevice | undefined {
+    return deviceInDisconnectedMeasureMode;
   }
 
   @Selector()
@@ -107,15 +116,16 @@ export class DevicesState {
 
   @Action(StartDiscoverBLEDevices, { cancelUncompleted: true })
   startDiscoverBLEDevices({ patchState, dispatch }: StateContext<DevicesStateModel>) {
-    return (environment.mockDevice
-      ? dispatch(new BLEDevicesDiscovered([new DeviceMock()]))
-      : this.bleDevicesService.startDiscoverDevices()
+    return (
+      environment.mockDevice
+        ? dispatch(new BLEDevicesDiscovered([new DeviceMock()]))
+        : this.bleDevicesService.startDiscoverDevices()
     ).pipe(
       tap(() =>
         patchState({
-          isScanning: true
-        })
-      )
+          isScanning: true,
+        }),
+      ),
     );
   }
 
@@ -124,12 +134,12 @@ export class DevicesState {
     return environment.mockDevice
       ? of(null)
       : this.usbDevicesService.startDiscoverDevices().pipe(
-        tap(() =>
-          patchState({
-            isScanning: true
-          })
-        )
-      );
+          tap(() =>
+            patchState({
+              isScanning: true,
+            }),
+          ),
+        );
   }
 
   @Action(StopDiscoverDevices)
@@ -137,7 +147,7 @@ export class DevicesState {
     patchState({
       isScanning: false,
       availableBLEDevices: [],
-      availableUSBDevices: []
+      availableUSBDevices: [],
     });
   }
 
@@ -145,7 +155,7 @@ export class DevicesState {
   bleConnectionLost({ patchState }: StateContext<DevicesStateModel>) {
     patchState({
       isScanning: false,
-      availableBLEDevices: []
+      availableBLEDevices: [],
     });
   }
 
@@ -154,11 +164,11 @@ export class DevicesState {
     const { knownDevices } = getState();
     patchState({
       availableBLEDevices: [
-        ...devices.map(device => ({
-          ...(knownDevices.find(knownDevice => knownDevice.sensorUUID === device.sensorUUID) || device),
-          batteryLevel: device.batteryLevel
-        }))
-      ]
+        ...devices.map((device) => ({
+          ...(knownDevices.find((knownDevice) => knownDevice.sensorUUID === device.sensorUUID) || device),
+          batteryLevel: device.batteryLevel,
+        })),
+      ],
     });
   }
 
@@ -167,14 +177,14 @@ export class DevicesState {
     const { knownDevices } = getState();
     patchState({
       availableUSBDevices: [
-        ...devices.map(device => ({
-          ...(knownDevices.find(
+        ...devices.map((device) => ({
+          ...((knownDevices.find(
             (knownDevice: AbstractUSBDevice) =>
-              knownDevice.pid !== undefined && knownDevice.sensorUUID === device.sensorUUID
-          ) as AbstractUSBDevice || device),
-          batteryLevel: device.batteryLevel
-        }))
-      ]
+              knownDevice.pid !== undefined && knownDevice.sensorUUID === device.sensorUUID,
+          ) as AbstractUSBDevice) || device),
+          batteryLevel: device.batteryLevel,
+        })),
+      ],
     });
   }
 
@@ -188,19 +198,19 @@ export class DevicesState {
           .pipe(
             tap(() => {
               const { knownDevices } = getState();
-              if (knownDevices.find(knownDevice => knownDevice.sensorUUID === device.sensorUUID)) {
+              if (knownDevices.find((knownDevice) => knownDevice.sensorUUID === device.sensorUUID)) {
                 patchState({
-                  connectedDevice: device
+                  connectedDevice: device,
                 });
               } else {
                 patchState({
                   connectedDevice: device,
-                  knownDevices: [...knownDevices, device]
+                  knownDevices: [...knownDevices, device],
                 });
               }
-            })
+            }),
           );
-      })
+      }),
     );
   }
 
@@ -208,13 +218,10 @@ export class DevicesState {
   deviceConnectionLost({ getState, patchState }: StateContext<DevicesStateModel>) {
     const { connectedDevice } = getState();
     patchState({
-      connectedDevice: undefined
+      connectedDevice: undefined,
     });
     if (connectedDevice) {
-      this.devicesService
-        .service(connectedDevice)
-        .disconnectDevice(connectedDevice)
-        .subscribe();
+      this.devicesService.service(connectedDevice).disconnectDevice(connectedDevice).subscribe();
     }
   }
 
@@ -228,13 +235,29 @@ export class DevicesState {
         .pipe(
           tap(() => {
             patchState({
-              connectedDevice: undefined
+              connectedDevice: undefined,
             });
-          })
+          }),
         );
     } else {
       return of(null);
     }
+  }
+
+  @Action(ActivateDisconnectedMeasureMode)
+  activateDisconnectedMeasureMode(stateContext: StateContext<DevicesStateModel>) {
+    const { connectedDevice } = stateContext.getState();
+    stateContext.patchState({
+      deviceInDisconnectedMeasureMode: connectedDevice,
+    });
+    return this.disconnectDevice(stateContext);
+  }
+
+  @Action(DeactivateDisconnectedMeasureMode)
+  deactivateDisconnectedMeasureMode(stateContext: StateContext<DevicesStateModel>) {
+    stateContext.patchState({
+      deviceInDisconnectedMeasureMode: undefined,
+    });
   }
 
   @Action(UpdateDeviceInfo, { cancelUncompleted: true })
@@ -253,8 +276,8 @@ export class DevicesState {
         model: { ...action.device.params },
         dirty: false,
         status: '',
-        errors: {}
-      }
+        errors: {},
+      },
     });
   }
 
@@ -264,7 +287,7 @@ export class DevicesState {
     if (editedDevice && editedDeviceForm) {
       const updatedDevice = {
         ...editedDevice,
-        ...{ params: { ...editedDeviceForm.model } }
+        ...{ params: { ...editedDeviceForm.model } },
       };
       if (connectedDevice && connectedDevice.sensorUUID === editedDevice.sensorUUID) {
         return this.devicesService
@@ -286,7 +309,7 @@ export class DevicesState {
     if (connectedDevice && connectedDevice.sensorUUID === device.sensorUUID) {
       patch.connectedDevice = device;
     }
-    const deviceIndex = knownDevices.findIndex(knownDevice => knownDevice.sensorUUID === device.sensorUUID);
+    const deviceIndex = knownDevices.findIndex((knownDevice) => knownDevice.sensorUUID === device.sensorUUID);
     if (deviceIndex > -1) {
       patch.knownDevices = [...knownDevices.slice(0, deviceIndex), device, ...knownDevices.slice(deviceIndex + 1)];
     } else {

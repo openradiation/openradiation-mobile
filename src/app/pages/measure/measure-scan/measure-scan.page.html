@@ -139,9 +139,9 @@
             <img src="assets/img/bg-radiation.png" />
           </div>
         </div>
-        <div class="can-disconnect" *ngIf="canDisconnect(planeMode$ | async, currentMeasure.startTime || (currentSeries$ | async)?.measures.length > 1, connectedDevice)">
-          {{'MEASURES.CAN_DISCONNECT' | translate}}
-        </div>
+        <ion-button  (click)="activateDisconnectedMeasureMode(connectedDevice)" class="can-disconnect" *ngIf="canActivateDisconnectedMeasureMode(planeMode$ | async, currentMeasure.startTime || (currentSeries$ | async)?.measures.length > 1, connectedDevice)">
+          {{'MEASURES.DISCONNECT_MODE' | translate}}
+        </ion-button>
         <ng-container *ngIf="planeMode$ | async; else planeModeFalse">
           <div class="message">
             <div class="message-series">

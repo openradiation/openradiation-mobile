@@ -108,7 +108,10 @@
     "TITLE": "Measure radioactivity",
     "MEASURE_MODE_EXPLANATIONS_PLANE": "If your measures are taken <b>from the ground</b>, please modify your measure mode accordingly. <i><u>More information</u></i>",
     "MEASURE_MODE_EXPLANATIONS_GROUND":"If your measures are taken <b>from a plane</b>, please modify your measure mode accordingly. <i><u>More information</u></i>",
-    "LAUNCH_MESURE": "Launch measure"
+    "LAUNCH_MESURE": "Launch measure",
+    "SENSOR_IN_DISCONNECTED_MEASURE_MODE": "Disconnected measure running on ",
+    "RECONNECT_SENSOR": "Se reconnecter",
+    "FORGET_SENSOR": "Annuler la mesure déconnectée en cours"
 
   },
   "LANGUAGE": {
@@ -193,7 +196,7 @@
     "MEASURE_START": "Measurement start",
     "MESSAGE_ALTITUDE": "Tip: high altitude detected, if the measurement was made on board a plane, you should have selected the measurement mode on board a plane",
     "ONGOING": "Measurement in progress",
-    "CAN_DISCONNECT": "You can now put device in disconnected mode (position I)",
+    "DISCONNECT_MODE": "Activate disconnected mode",
     "PLANE_MODE_NOTICE": {
       "PART1": "Cosmic radiation is more important at high altitude, during flights, because they are less attenuated by the atmospheric layer.",
       "PART2": "Activation of the on board a plane measurement mode makes it possible to take into account a specific calibration of the sensors for these radiations. On the other hand, if you take measurements at ground level, even in the mountains, choose the ground level measurement mode.",
