@@ -111,7 +111,8 @@
     "LAUNCH_MESURE": "Lancer la mesure",
     "SENSOR_IN_DISCONNECTED_MEASURE_MODE": "Measure déconnecté en cours sur",
     "RECONNECT_SENSOR": "Se reconnecter",
-    "FORGET_SENSOR": "Annuler la mesure déconnectée en cours"
+    "FORGET_SENSOR": "Annuler la mesure déconnectée en cours",
+    "SENSOR_DISCONNECTED_MEASURE_SYNC": "Synchronization de la mesure déconnectée en cours, veuillez patienter..."
   },
   "LANGUAGE": {
     "ENGLISH": "English",

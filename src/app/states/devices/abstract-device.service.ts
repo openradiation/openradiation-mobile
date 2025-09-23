@@ -111,7 +111,10 @@ export abstract class AbstractDeviceService<T extends AbstractDevice> {
 
   public async activateDisconnectedMeasureMode(device: AbstractDevice) {
     // Do nothing
-    console.error('BERTIN DISCONNECT ABSTRACT IMPLEM');
+  }
+
+  public synchronizeDisconnectedMeasure(device: AbstractDevice) {
+    // Do nothing
   }
 
   public canActivateDisconnectedMeasureMode() {

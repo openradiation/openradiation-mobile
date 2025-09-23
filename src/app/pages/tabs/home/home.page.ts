@@ -13,7 +13,13 @@ import { StartMeasure } from '@app/states/measures/measures.action';
 import { MeasuresState } from '@app/states/measures/measures.state';
 import { Location } from '@capacitor-community/background-geolocation';
 import { PositionService } from '@app/states/measures/position.service';
-import { DeactivateDisconnectedMeasureMode } from '@app/states/devices/devices.action';
+import {
+  ConnectDevice,
+  DeactivateDisconnectedMeasureMode,
+  DisconnectedMeasureSynchronizationSuccess,
+  UpdateDeviceInfo,
+} from '@app/states/devices/devices.action';
+import { DevicesService } from '@app/states/devices/devices.service';
 
 @Component({
   selector: 'app-page-home',
@@ -30,7 +36,7 @@ export class HomePage extends AutoUnsubscribePage {
   currentPosition$: Observable<Location | undefined> = inject(Store).select(MeasuresState.currentPosition);
 
   canStartMeasure: Observable<boolean>;
-
+  synchronizingDisconnectedMeasure: boolean;
   url = '/tabs/home';
 
   constructor(
@@ -41,9 +47,9 @@ export class HomePage extends AutoUnsubscribePage {
     private translateService: TranslateService,
     private navigationService: NavigationService,
     private positionService: PositionService,
+    private devicesService: DevicesService,
   ) {
     super(router);
-
     this.canStartMeasure = this.connectedDevice$.pipe(map((connectedDevice) => connectedDevice !== undefined));
   }
 
@@ -64,6 +70,12 @@ export class HomePage extends AutoUnsubscribePage {
       this.actions$
         .pipe(ofActionSuccessful(StartMeasure))
         .subscribe(() => this.navigationService.navigateRoot(['measure', 'scan'])),
+    );
+    this.subscriptions.push(
+      this.actions$.pipe(ofActionSuccessful(DisconnectedMeasureSynchronizationSuccess)).subscribe(() => {
+        this.synchronizingDisconnectedMeasure = false;
+        this.store.dispatch(new DeactivateDisconnectedMeasureMode());
+      }),
     );
   }
 
@@ -105,5 +117,20 @@ export class HomePage extends AutoUnsubscribePage {
 
   forgetSensor() {
     this.store.dispatch(new DeactivateDisconnectedMeasureMode());
+  }
+
+  async reconnectSensor() {
+    const hasLocationEnabled = await this.positionService.requestAuthorization();
+    if (hasLocationEnabled) {
+      this.deviceInDisconnectedMeasureMode$.pipe(take(1)).subscribe((device) => {
+        if (device) {
+          this.store.dispatch(new ConnectDevice(device)).subscribe(() => {
+            this.store.dispatch(new UpdateDeviceInfo(device));
+            this.synchronizingDisconnectedMeasure = true;
+            this.devicesService.service(device).synchronizeDisconnectedMeasure(device);
+          });
+        }
+      });
+    }
   }
 }
