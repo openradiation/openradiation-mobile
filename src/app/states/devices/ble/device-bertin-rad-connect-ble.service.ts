@@ -7,7 +7,12 @@ import { RawBLEDevice } from './abstract-ble-device';
 import { AbstractBLEDeviceService } from './abstract-ble-device.service';
 import { BleClient } from '@capacitor-community/bluetooth-le';
 import { DeviceBertinRadConnectBLE } from './device-bertin-rad-connect-ble';
-import { ActivateDisconnectedMeasureMode, DeviceConnectionLost, UpdateDeviceInfo } from '../devices.action';
+import {
+  ActivateDisconnectedMeasureMode,
+  DeviceConnectionLost,
+  DisconnectedMeasureSynchronizationSuccess,
+  UpdateDeviceInfo,
+} from '../devices.action';
 import { AbstractDevice, DeviceType } from '../abstract-device';
 
 @Injectable({
@@ -111,6 +116,12 @@ export class DeviceBertinRadConnectBLEService extends AbstractBLEDeviceService<D
       this.logAndStore('Error while activating disconnect mode with bertin radconnect ', error);
       return Promise.reject(error);
     }
+  }
+
+  public async synchronizeDisconnectedMeasure(device: AbstractDevice) {
+    setTimeout(() => {
+      this.store.dispatch(new DisconnectedMeasureSynchronizationSuccess());
+    }, 2000);
   }
 }
 

@@ -110,8 +110,9 @@
     "MEASURE_MODE_EXPLANATIONS_GROUND":"If your measures are taken <b>from a plane</b>, please modify your measure mode accordingly. <i><u>More information</u></i>",
     "LAUNCH_MESURE": "Launch measure",
     "SENSOR_IN_DISCONNECTED_MEASURE_MODE": "Disconnected measure running on ",
-    "RECONNECT_SENSOR": "Se reconnecter",
-    "FORGET_SENSOR": "Annuler la mesure déconnectée en cours"
+    "RECONNECT_SENSOR": "Reconnect to sensor",
+    "FORGET_SENSOR": "Cancel measure",
+    "SENSOR_DISCONNECTED_MEASURE_SYNC": "Retrieving disconnected measure on sensor, please wait..."
 
   },
   "LANGUAGE": {
