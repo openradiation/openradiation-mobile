@@ -13,17 +13,27 @@
               {{ deviceInDisconnectedMeasureMode.apparatusVersion}}</span
             >
           </div>
-          <ion-button (click)="reconnectSensor()">
+          <br />
+          <br />
+          <ion-button *ngIf="!reconnecting" (click)="reconnectSensor()">
             <span class="sensor-button"> {{'HOME.RECONNECT_SENSOR' | translate}} </span></ion-button
           >
+          <span *ngIf="reconnecting" class="sensor-text">
+            {{ 'HOME.RECONNECTING' | translate}}
+          </span>
           <ion-button (click)="forgetSensor()">
             <span class="sensor-button"> {{'HOME.FORGET_SENSOR' | translate}} </span></ion-button
           >
         </ng-container>
         <ng-template #synchronizingDisconnectedMeasureMessage>
-          <span class="sensor-text">
+          <p class="sensor-text">
             {{ 'HOME.SENSOR_DISCONNECTED_MEASURE_SYNC' | translate}}
-          </span>
+          </p>
+          <br />
+          <br />
+          <p class="sensor-text" *ngIf="disconnectedMeasureRemainingBlocs">
+            {{ disconnectedMeasureRemainingBlocs }} {{ 'HOME.SENSOR_DISCONNECTED_MEASURE_REMAINING' | translate}}
+          </p>
         </ng-template>
       </ng-container>
       <ng-template #noDeviceInDisconnectedMeasureMode>
