@@ -17,7 +17,9 @@ import {
   ConnectDevice,
   DeactivateDisconnectedMeasureMode,
   DisconnectedMeasureSynchronizationSuccess,
+  DisconnectedMeasureSynchronizationProgress,
   UpdateDeviceInfo,
+  DeviceConnectionLost,
 } from '@app/states/devices/devices.action';
 import { DevicesService } from '@app/states/devices/devices.service';
 
@@ -37,6 +39,9 @@ export class HomePage extends AutoUnsubscribePage {
 
   canStartMeasure: Observable<boolean>;
   synchronizingDisconnectedMeasure: boolean;
+  reconnecting: boolean;
+  disconnectedMeasureRemainingBlocs: number;
+
   url = '/tabs/home';
 
   constructor(
@@ -75,6 +80,16 @@ export class HomePage extends AutoUnsubscribePage {
       this.actions$.pipe(ofActionSuccessful(DisconnectedMeasureSynchronizationSuccess)).subscribe(() => {
         this.synchronizingDisconnectedMeasure = false;
         this.store.dispatch(new DeactivateDisconnectedMeasureMode());
+      }),
+    );
+    this.subscriptions.push(
+      this.actions$.pipe(ofActionSuccessful(DisconnectedMeasureSynchronizationProgress)).subscribe((progress) => {
+        this.disconnectedMeasureRemainingBlocs = progress.remainingBlocs;
+      }),
+    );
+    this.subscriptions.push(
+      this.actions$.pipe(ofActionSuccessful(DeviceConnectionLost)).subscribe(() => {
+        this.reconnecting = false;
       }),
     );
   }
@@ -121,12 +136,14 @@ export class HomePage extends AutoUnsubscribePage {
 
   async reconnectSensor() {
     const hasLocationEnabled = await this.positionService.requestAuthorization();
+    this.reconnecting = true;
     if (hasLocationEnabled) {
       this.deviceInDisconnectedMeasureMode$.pipe(take(1)).subscribe((device) => {
         if (device) {
           this.store.dispatch(new ConnectDevice(device)).subscribe(() => {
             this.store.dispatch(new UpdateDeviceInfo(device));
             this.synchronizingDisconnectedMeasure = true;
+            this.reconnecting = false;
             this.devicesService.service(device).synchronizeDisconnectedMeasure(device);
           });
         }

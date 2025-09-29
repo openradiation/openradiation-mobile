@@ -46,6 +46,11 @@ export class DisconnectedMeasureSynchronizationSuccess {
   static readonly type = '[Devices] Disconnected Measure synchronization success';
 }
 
+export class DisconnectedMeasureSynchronizationProgress {
+  static readonly type = '[Devices]  Disconnected Measure synchronization progress';
+  constructor(public remainingBlocs: number) {}
+}
+
 export class DeactivateDisconnectedMeasureMode {
   static readonly type = '[Devices] Disconnected Measure Mode deactivated';
 }

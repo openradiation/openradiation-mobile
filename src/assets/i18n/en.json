@@ -111,8 +111,10 @@
     "LAUNCH_MESURE": "Launch measure",
     "SENSOR_IN_DISCONNECTED_MEASURE_MODE": "Disconnected measure running on ",
     "RECONNECT_SENSOR": "Reconnect to sensor",
+    "RECONNECTING": "Please make sure bluetooth mode is enabled on device. Reconnecting... ",
     "FORGET_SENSOR": "Cancel measure",
-    "SENSOR_DISCONNECTED_MEASURE_SYNC": "Retrieving disconnected measure on sensor, please wait..."
+    "SENSOR_DISCONNECTED_MEASURE_SYNC": "Retrieving disconnected measure on sensor, please wait...",
+    "SENSOR_DISCONNECTED_MEASURE_REMAINING" : "Measures remaining"
 
   },
   "LANGUAGE": {

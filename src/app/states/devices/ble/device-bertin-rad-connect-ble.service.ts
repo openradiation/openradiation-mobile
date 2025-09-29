@@ -10,6 +10,7 @@ import { DeviceBertinRadConnectBLE } from './device-bertin-rad-connect-ble';
 import {
   ActivateDisconnectedMeasureMode,
   DeviceConnectionLost,
+  DisconnectedMeasureSynchronizationProgress,
   DisconnectedMeasureSynchronizationSuccess,
   UpdateDeviceInfo,
 } from '../devices.action';
@@ -33,8 +34,12 @@ export class DeviceBertinRadConnectBLEService extends AbstractBLEDeviceService<D
   protected sensorIdentificationCharacteristic = '63209D5C-26E0-36B2-9047-675528A8CDFE';
   protected receiveCharacteristic = '2BB349C6-0278-949D-2841-F55C22842E2F';
   private sendCharacteristic = '82ba1887-0815-61a5-be42-6192013fd390';
-  // TODO Bertin : use this to synchronize data after connection loss
-  private retrieveInMemoryMeasuresCharacteristic = 'c6f9e64f-08da-4ab7-974e-229f6cc41d74';
+  private startDisconnectedMeasureCode = 0x01;
+  private stopDisconnectedMeasureCode = 0x00;
+  private getDisconnectedMeasureCode = 0x13;
+  private clearDisconnectedMeasureCode = 0x14;
+  private airMeasureCode = 0x01;
+  private retrieveInMemoryMeasuresCharacteristic = 'C6F9E64F-08DA-4AB7-974E-229F6CC41D74';
 
   constructor(protected store: Store) {
     super(store);
@@ -84,13 +89,31 @@ export class DeviceBertinRadConnectBLEService extends AbstractBLEDeviceService<D
     const hitsNumber = hitsBuffer.getUint32(10, true);
     const temperature = hitsBuffer.getFloat32(34, true);
     const voltage = hitsBuffer.getUint8(38);
+    const status = hitsBuffer.getUint8(1);
+    const recordingActive = (status & 0b00000001) !== 0;
+    const hasMeasureInMemory = (status & 0b00000010) !== 0;
+    const bleState = (status >> 2) & 0b11;
+    const hasError = (status & 0b10000000) !== 0;
     const receiveData = {
       ts: Date.now(),
       hitsNumber: hitsNumber,
       temperature: temperature,
       voltage: voltage,
     };
-    this.logAndStore('Received from RadConnectBLE : ' + JSON.stringify(receiveData));
+    this.logAndStore(
+      'Received from RadConnectBLE : ' +
+        JSON.stringify(receiveData) +
+        ' (full status : ' +
+        status +
+        '/recordingActive:' +
+        recordingActive +
+        '/hasMemory:' +
+        hasMeasureInMemory +
+        '/bleState:' +
+        bleState +
+        '/hasError:' +
+        hasError,
+    );
     return receiveData;
   }
   buildDevice(rawBLEDevice: RawBLEDevice): DeviceBertinRadConnectBLE | null {
@@ -106,8 +129,11 @@ export class DeviceBertinRadConnectBLEService extends AbstractBLEDeviceService<D
 
   public async activateDisconnectedMeasureMode(device: AbstractDevice) {
     const dataView = new DataView(new ArrayBuffer(3));
-    dataView.setUint8(1, 0x01);
-    dataView.setUint8(2, 0x01);
+    dataView.setUint8(1, this.clearDisconnectedMeasureCode);
+    dataView.setUint8(2, 0);
+    await BleClient.write(device.sensorUUID, this.service, this.sendCharacteristic, dataView);
+    dataView.setUint8(1, this.startDisconnectedMeasureCode);
+    dataView.setUint8(2, this.airMeasureCode);
     try {
       const result = await BleClient.write(device.sensorUUID, this.service, this.sendCharacteristic, dataView);
       this.store.dispatch(new ActivateDisconnectedMeasureMode());
@@ -119,9 +145,57 @@ export class DeviceBertinRadConnectBLEService extends AbstractBLEDeviceService<D
   }
 
   public async synchronizeDisconnectedMeasure(device: AbstractDevice) {
-    setTimeout(() => {
+    let timeoutHandle: any;
+    try {
+      // Step 1: get ready to receive disconnected measure
+      BleClient.startNotifications(
+        device.sensorUUID,
+        this.service,
+        this.retrieveInMemoryMeasuresCharacteristic,
+        (value) => {
+          if (timeoutHandle) {
+            clearTimeout(timeoutHandle);
+            timeoutHandle = null;
+          }
+          this.receiveNextDisconnectedMeasurePackage(device, value);
+        },
+      ).catch((e) => {
+        throw e;
+      });
+
+      // Step 2: send get disconnected measure signal
+      const dataView = new DataView(new ArrayBuffer(3));
+      dataView.setUint8(1, this.stopDisconnectedMeasureCode);
+      await BleClient.write(device.sensorUUID, this.service, this.sendCharacteristic, dataView);
+      dataView.setUint8(1, this.getDisconnectedMeasureCode);
+      await BleClient.write(device.sensorUUID, this.service, this.sendCharacteristic, dataView);
+
+      // Step 3: make sure that if no measure is received within 2 secondes, we stop synchronization
+      // It happens when sensor remains disconnected for a few seconds only
+      timeoutHandle = setTimeout(() => {
+        this.store.dispatch(new DisconnectedMeasureSynchronizationSuccess());
+      }, 2000);
+    } catch (error) {
+      this.logAndStore('Error while synchronizing disconnected measure ', error);
+      return Promise.reject(error);
+    }
+  }
+
+  async receiveNextDisconnectedMeasurePackage(device: AbstractDevice, dataView: DataView) {
+    const remainingBlocs = dataView.getUint8(0);
+    const measureBlocSize = dataView.getUint32(1, true);
+    if (remainingBlocs > 0) {
+      this.store.dispatch(new DisconnectedMeasureSynchronizationProgress(remainingBlocs));
+    } else {
+      // Clean measure in memory
+      const dataView = new DataView(new ArrayBuffer(3));
+      dataView.setUint8(1, this.clearDisconnectedMeasureCode);
+      await BleClient.write(device.sensorUUID, this.service, this.sendCharacteristic, dataView);
+
+      // Stop listing
+      BleClient.stopNotifications(device.sensorUUID, this.service, this.retrieveInMemoryMeasuresCharacteristic);
+      // Send success signal
       this.store.dispatch(new DisconnectedMeasureSynchronizationSuccess());
-    }, 2000);
+    }
   }
 }
-
