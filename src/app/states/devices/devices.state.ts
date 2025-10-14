@@ -93,10 +93,12 @@ export class DevicesState {
   }
 
   @Selector()
-  static deviceInDisconnectedMeasureMode({
-    deviceInDisconnectedMeasureMode,
-  }: DevicesStateModel): AbstractDevice | undefined {
-    return deviceInDisconnectedMeasureMode;
+  static deviceInDisconnectedMeasureMode({ knownDevices }: DevicesStateModel): AbstractDevice | undefined {
+    const devicesInMode = knownDevices.filter((dev) => dev.hasDisconnectedMeasureInProgress);
+    if (devicesInMode.length > 0) {
+      return devicesInMode[0];
+    }
+    return undefined;
   }
 
   @Selector()
@@ -247,16 +249,21 @@ export class DevicesState {
   @Action(ActivateDisconnectedMeasureMode)
   activateDisconnectedMeasureMode(stateContext: StateContext<DevicesStateModel>) {
     const { connectedDevice } = stateContext.getState();
-    stateContext.patchState({
-      deviceInDisconnectedMeasureMode: connectedDevice,
-    });
+    if (connectedDevice) {
+      connectedDevice.hasDisconnectedMeasureInProgress = true;
+      stateContext.dispatch(new UpdateDevice(connectedDevice));
+    }
     return this.disconnectDevice(stateContext);
   }
 
   @Action(DeactivateDisconnectedMeasureMode)
   deactivateDisconnectedMeasureMode(stateContext: StateContext<DevicesStateModel>) {
-    stateContext.patchState({
-      deviceInDisconnectedMeasureMode: undefined,
+    const { knownDevices } = stateContext.getState();
+    knownDevices.forEach((d) => {
+      if (d.hasDisconnectedMeasureInProgress) {
+        d.hasDisconnectedMeasureInProgress = false;
+        stateContext.dispatch(new UpdateDevice(d));
+      }
     });
   }
 

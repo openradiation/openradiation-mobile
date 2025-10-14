@@ -14,8 +14,9 @@ export abstract class AbstractDevice {
     bad: 4,
     medium: 15,
     good: 30,
-    accurate: 50
+    accurate: 50,
   };
+  hasDisconnectedMeasureInProgress?: boolean;
   abstract hitsPeriod: number;
 }
 
