@@ -184,6 +184,17 @@ export class DeviceBertinRadConnectBLEService extends AbstractBLEDeviceService<D
   async receiveNextDisconnectedMeasurePackage(device: AbstractDevice, dataView: DataView) {
     const remainingBlocs = dataView.getUint8(0);
     const measureBlocSize = dataView.getUint32(1, true);
+    const timestampSec = dataView.getUint32(5, true);
+    const timestamp = new Date(timestampSec * 1000);
+    let values = [];
+    const hits = dataView.getUint32(9, true);
+    for (let i = 0; i * 12 < measureBlocSize; i++) {
+      const timeStampSeconds = dataView.getUint32(5 + i * 12, true);
+      const measureDate = new Date(timestampSec * 1000);
+      const hitsInOneMinute = dataView.getUint32(9 + i * 12, true);
+      const mode = dataView.getUint32(13 + i * 12, true);
+      values.push(hitsInOneMinute);
+    }
     if (remainingBlocs > 0) {
       this.store.dispatch(new DisconnectedMeasureSynchronizationProgress(remainingBlocs));
     } else {
