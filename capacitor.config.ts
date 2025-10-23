@@ -1,5 +1,4 @@
 import type { CapacitorConfig } from '@capacitor/cli';
-import '@capacitor-community/safe-area';
 
 const config: CapacitorConfig = {
   appId: 'org.openradiation',

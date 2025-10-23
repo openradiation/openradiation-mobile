@@ -802,11 +802,15 @@ export class MeasuresState {
       const index = measures.findIndex((stateMeasure) => stateMeasure.id === measure.id);
       if (index !== -1) {
         return this.measuresService.publishMeasure(measure).subscribe((m) => {
-          if (!(m as AbstractMeasure).sent) {
-            this.store.dispatch(new PublishMeasureError(m as AbstractMeasure));
+          const measure = (m as AbstractMeasure).type == MeasureType.Measure ? m as Measure : m as MeasureSeries;
+          if (!measure.sent) {
+            this.store.dispatch(new PublishMeasureError(measure));
             return of(null);
           } else {
-            this.store.dispatch(new PublishMeasureSuccess(m as AbstractMeasure));
+            patchState({
+              measures: [...measures.slice(0, index), measure, ...measures.slice(index + 1)]
+            });
+            this.store.dispatch(new PublishMeasureSuccess(measure));
             return of(m);
           }
         });

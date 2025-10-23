@@ -71,8 +71,10 @@ export class MeasuresService {
             measure.sent = true;
             return measure;
           }),
-          catchError(() => {
-            measure.sent = false;
+          catchError((e) => {
+            // Duplicate UUID error : measure was already sent on server (by a previous version)
+            const alreadySent = ((e.status ?? 0) == 400 && (""+e.error?.error?.message).indexOf("duplicate key") > -1);
+            measure.sent = alreadySent;
             return of(measure);
           })
         );
