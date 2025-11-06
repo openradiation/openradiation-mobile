@@ -21,6 +21,7 @@ import { environment } from '@environments/environment';
 import { Storage } from '@ionic/storage';
 import CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 import { AlertService } from './alert.service';
+import { SafeArea } from 'capacitor-plugin-safe-area';
 
 @Injectable({
   providedIn: 'root',
@@ -138,6 +139,14 @@ export class StorageService {
           if (Capacitor.getPlatform() != 'web' || environment.isTestEnvironment) {
             StatusBar.setOverlaysWebView({ overlay: true });
             StatusBar.setStyle({ style: Style.Light });
+            SafeArea.getSafeAreaInsets().then(({ insets }) => {
+              for (const [key, value] of Object.entries(insets)) {
+                document.documentElement.style.setProperty(
+                  `--safe-area-inset-${key}`,
+                  `${value}px`,
+                );
+              }
+            });
             SplashScreen.hide();
             await ScreenOrientation.lock({ orientation: 'portrait' });
           }
