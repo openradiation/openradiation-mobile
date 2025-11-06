@@ -66,8 +66,8 @@
 }
 
 ion-app {
-  margin-top: var(--safe-area-inset-top);
-  margin-bottom: var(--safe-area-inset-bottom);
+  margin-top: var(--safe-area-inset-top, env(--safe-area-inset-top, 0px));
+  margin-bottom:  var(--safe-area-inset-bottom, env(--safe-area-inset-bottom, 0px));
 }
 
 * {
