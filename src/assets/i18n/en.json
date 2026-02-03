@@ -114,7 +114,7 @@
     "RECONNECTING": "Please make sure bluetooth mode is enabled on device. Reconnecting... ",
     "FORGET_SENSOR": "Cancel measure",
     "SENSOR_DISCONNECTED_MEASURE_SYNC": "Retrieving disconnected measure on sensor, please wait...",
-    "SENSOR_DISCONNECTED_MEASURE_REMAINING" : "Measures remaining"
+    "SENSOR_DISCONNECTED_MEASURE_REMAINING" : "remaining measures"
 
   },
   "LANGUAGE": {

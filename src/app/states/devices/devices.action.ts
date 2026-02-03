@@ -1,10 +1,11 @@
+import { Measure } from '../measures/measure';
 import { AbstractDevice } from './abstract-device';
 import { AbstractBLEDevice } from './ble/abstract-ble-device';
 import { AbstractUSBDevice } from './usb/abstract-usb-device';
 
 export class InitDevices {
   static readonly type = '[Devices] Init';
-  constructor(public knownDevices: AbstractDevice[]) {}
+  constructor(public knownDevices: AbstractDevice[]) { }
 }
 
 export class StartDiscoverBLEDevices {
@@ -21,17 +22,17 @@ export class StopDiscoverDevices {
 
 export class BLEDevicesDiscovered {
   static readonly type = '[Devices] BLE Devices discovered';
-  constructor(public devices: AbstractBLEDevice[]) {}
+  constructor(public devices: AbstractBLEDevice[]) { }
 }
 
 export class USBDevicesDiscovered {
   static readonly type = '[Devices] USB Devices discovered';
-  constructor(public devices: AbstractUSBDevice[]) {}
+  constructor(public devices: AbstractUSBDevice[]) { }
 }
 
 export class ConnectDevice {
   static readonly type = '[Devices] Connect device';
-  constructor(public device: AbstractDevice) {}
+  constructor(public device: AbstractDevice) { }
 }
 
 export class DisconnectDevice {
@@ -44,11 +45,12 @@ export class ActivateDisconnectedMeasureMode {
 
 export class DisconnectedMeasureSynchronizationSuccess {
   static readonly type = '[Devices] Disconnected Measure synchronization success';
+  constructor(public diconnectedMeasures: Measure[]) { }
 }
 
 export class DisconnectedMeasureSynchronizationProgress {
   static readonly type = '[Devices]  Disconnected Measure synchronization progress';
-  constructor(public remainingBlocs: number) {}
+  constructor(public remainingBlocs: number) { }
 }
 
 export class DeactivateDisconnectedMeasureMode {
@@ -57,17 +59,17 @@ export class DeactivateDisconnectedMeasureMode {
 
 export class DeviceConnectionLost {
   static readonly type = '[Devices] Device connection lost';
-  constructor(public communicationTimeout?: boolean) {}
+  constructor(public communicationTimeout?: boolean) { }
 }
 
 export class UpdateDeviceInfo {
   static readonly type = '[Devices] Update device info';
-  constructor(public device: AbstractDevice) {}
+  constructor(public device: AbstractDevice) { }
 }
 
 export class EditDeviceParams {
   static readonly type = '[Devices] Edit device params';
-  constructor(public device: AbstractDevice) {}
+  constructor(public device: AbstractDevice) { }
 }
 
 export class SaveDeviceParams {
@@ -76,7 +78,7 @@ export class SaveDeviceParams {
 
 export class UpdateDevice {
   static readonly type = '[Devices] Update device';
-  constructor(public device: AbstractDevice) {}
+  constructor(public device: AbstractDevice) { }
 }
 
 export class BLEConnectionLost {

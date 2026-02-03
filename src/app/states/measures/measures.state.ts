@@ -6,7 +6,7 @@ import { tap } from 'rxjs/operators';
 import { AlertService } from '@app/services/alert.service';
 import { NavigationService } from '@app/services/navigation.service';
 import { AbstractDevice, DeviceType } from '@app/states/devices/abstract-device';
-import { DeviceConnectionLost } from '@app/states/devices/devices.action';
+import { DeactivateDisconnectedMeasureMode, DeviceConnectionLost } from '@app/states/devices/devices.action';
 import { Form } from '@app/states/formModel';
 import { DateService } from '@app/states/measures/date.service';
 import {
@@ -36,6 +36,7 @@ import {
   EnableFakeHitsMode,
   EnablePLaneMode,
   InitMeasures,
+  MergeDisconnectedMeasuresIntoCurrentSeries,
   PositionChanged,
   PublishMeasure,
   PublishMeasureError,
@@ -59,6 +60,7 @@ import { MeasuresService } from '@app/states/measures/measures.service';
 import { Device } from '@capacitor/device';
 import { Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
+import { DevicesState } from '../devices/devices.state';
 
 /**
  * Max duration between 2 measure steps before the device connection is considered as lost
@@ -112,7 +114,7 @@ export class MeasuresState {
     private translateService: TranslateService,
     private navigationService: NavigationService,
     private store: Store,
-  ) {}
+  ) { }
 
   @Selector()
   static expertMode({ params }: MeasuresStateModel): boolean {
@@ -177,24 +179,30 @@ export class MeasuresState {
     const { params: defaultParams } = getState();
     const patch = { measures, params: { ...defaultParams, ...params }, recentTags };
     if (currentSeries && currentSeries.measures.length) {
-      this.alertService.show({
-        header: this.translateService.instant('MEASURE_SERIES.ABORTED_SERIES.TITLE'),
-        message: this.translateService.instant('MEASURE_SERIES.ABORTED_SERIES.MESSAGE'),
-        backdropDismiss: false,
-        buttons: [
-          {
-            text: this.translateService.instant('MEASURE_SERIES.ABORTED_SERIES.DELETE_SERIES'),
-            handler: () => patchState(patch),
-          },
-          {
-            text: this.translateService.instant('MEASURE_SERIES.ABORTED_SERIES.GO_TO_REPORT'),
-            handler: () => {
-              patchState({ ...patch, currentSeries });
-              this.navigationService.navigateRoot(['measure', 'report-series']);
+      // If a device is in disconnected mode, do not show alert
+      const deviceInDisconnectedMeasureMode = this.store.selectSnapshot(
+        DevicesState.deviceInDisconnectedMeasureMode
+      );
+      if (!deviceInDisconnectedMeasureMode && (JSON.parse(localStorage.getItem('disconnected_measure_series') ?? "").length <= 5)) {
+        this.alertService.show({
+          header: this.translateService.instant('MEASURE_SERIES.ABORTED_SERIES.TITLE'),
+          message: this.translateService.instant('MEASURE_SERIES.ABORTED_SERIES.MESSAGE'),
+          backdropDismiss: false,
+          buttons: [
+            {
+              text: this.translateService.instant('MEASURE_SERIES.ABORTED_SERIES.DELETE_SERIES'),
+              handler: () => patchState(patch),
             },
-          },
-        ],
-      });
+            {
+              text: this.translateService.instant('MEASURE_SERIES.ABORTED_SERIES.GO_TO_REPORT'),
+              handler: () => {
+                patchState({ ...patch, currentSeries });
+                this.navigationService.navigateRoot(['measure', 'report-series']);
+              },
+            },
+          ],
+        });
+      }
     } else {
       patchState(patch);
     }
@@ -576,7 +584,8 @@ export class MeasuresState {
   }
 
   @Action(StopMeasureScan)
-  stopMeasureScan({ getState, patchState }: StateContext<MeasuresStateModel>, { device }: StopMeasureScan) {
+  stopMeasureScan({ getState, patchState }: StateContext<MeasuresStateModel>,
+    { device, forceLastMeasureAddToMeasureSeries }: StopMeasureScan) {
     const { currentMeasure, currentSeries, currentPosition } = getState();
     if (currentMeasure) {
       const patch: Partial<MeasuresStateModel> = {
@@ -586,10 +595,15 @@ export class MeasuresState {
       if (currentSeries) {
         patch.currentMeasure = undefined;
         if (
+          forceLastMeasureAddToMeasureSeries
+          ||
           updatedMeasure.hitsAccuracy !== undefined &&
           updatedMeasure.hitsAccuracy >= device.hitsAccuracyThreshold.accurate
         ) {
           patch.currentSeries = MeasureSeries.addMeasureToSeries(currentSeries, updatedMeasure);
+          if (forceLastMeasureAddToMeasureSeries) {
+            localStorage.setItem('disconnected_measure_series', JSON.stringify(patch.currentSeries))
+          }
         }
       } else {
         patch.currentMeasure = updatedMeasure;
@@ -607,7 +621,7 @@ export class MeasuresState {
     await this.computeDeviceInfoIfMissing();
     if (currentMeasure && currentSeries) {
       if (currentMeasure.endTime! - currentSeries.startTime > currentSeries.params.seriesDurationLimit) {
-        return dispatch(new StopMeasureScan(device));
+        return dispatch(new StopMeasureScan(device, false));
       } else {
         const updatedMeasure = Measure.updateEndPosition(currentMeasure, currentPosition);
         const newMeasure = Measure.updateStartPosition(
@@ -632,6 +646,27 @@ export class MeasuresState {
     } else {
       return of(null);
     }
+  }
+
+  @Action(MergeDisconnectedMeasuresIntoCurrentSeries)
+  updateCurrentSeriesFromBackgroundMeasure({ getState, patchState }: StateContext<MeasuresStateModel>,
+    { diconnectedMeasures }: MergeDisconnectedMeasuresIntoCurrentSeries
+  ) {
+    const { currentSeries } = getState();
+    let updatedSeries = currentSeries;
+    if (!updatedSeries) {
+      updatedSeries = JSON.parse(localStorage.getItem('disconnected_measure_series') ?? '{}')
+    }
+    if (updatedSeries) {
+      for (let measure of diconnectedMeasures) {
+        updatedSeries = MeasureSeries.addMeasureToSeries(updatedSeries, measure)
+      }
+    }
+    patchState({
+      currentSeries: updatedSeries,
+    });
+    this.store.dispatch(new DeactivateDisconnectedMeasureMode());
+    return of(null);
   }
 
   @Action(StartMeasureReport)
@@ -692,11 +727,11 @@ export class MeasuresState {
         hitsNumberAverage:
           currentSeries.measures.length > 0 && currentSeries.measures[0].hitsNumber !== undefined
             ? Number(
-                (
-                  currentSeries.measures.reduce((acc, measure) => acc + measure.hitsNumber!, 0) /
-                  currentSeries.measures.length
-                ).toFixed(1),
-              )
+              (
+                currentSeries.measures.reduce((acc, measure) => acc + measure.hitsNumber!, 0) /
+                currentSeries.measures.length
+              ).toFixed(1),
+            )
             : undefined,
         valueAverage: Number(
           (
