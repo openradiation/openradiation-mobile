@@ -1,7 +1,7 @@
-import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { Action, Selector, State, StateContext, Store } from '@ngxs/store';
 import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
-import { concatMap, map, tap } from 'rxjs/operators';
+import { concatMap, map, switchMap, tap } from 'rxjs/operators';
 import { environment } from '@environments/environment';
 import { Form } from '@app/states/formModel';
 import { AbstractDevice } from './abstract-device';
@@ -17,6 +17,7 @@ import {
   DeactivateDisconnectedMeasureMode,
   DeviceConnectionLost,
   DisconnectDevice,
+  DisconnectedMeasureSynchronizationSuccess,
   EditDeviceParams,
   InitDevices,
   SaveDeviceParams,
@@ -30,6 +31,8 @@ import {
 import { DevicesService } from './devices.service';
 import { AbstractUSBDevice } from './usb/abstract-usb-device';
 import { USBDevicesService } from './usb/usb-devices.service';
+import { MeasuresState } from '../measures/measures.state';
+import { MergeDisconnectedMeasuresIntoCurrentSeries, StopMeasureScan } from '../measures/measures.action';
 
 export interface DevicesStateModel {
   isScanning: boolean;
@@ -57,7 +60,8 @@ export class DevicesState {
     private devicesService: DevicesService,
     private bleDevicesService: BLEDevicesService,
     private usbDevicesService: USBDevicesService,
-  ) {}
+    protected store: Store,
+  ) { }
 
   @Selector()
   static availableDevices({
@@ -94,9 +98,10 @@ export class DevicesState {
 
   @Selector()
   static deviceInDisconnectedMeasureMode({ knownDevices }: DevicesStateModel): AbstractDevice | undefined {
-    const devicesInMode = knownDevices.filter((dev) => dev.hasDisconnectedMeasureInProgress);
-    if (devicesInMode.length > 0) {
-      return devicesInMode[0];
+    const devicesInDisconnectedMode = knownDevices.filter((dev) => dev.hasDisconnectedMeasureInProgress);
+    if (devicesInDisconnectedMode.length > 0
+    ) {
+      return devicesInDisconnectedMode[0];
     }
     return undefined;
   }
@@ -136,12 +141,12 @@ export class DevicesState {
     return environment.mockDevice
       ? of(null)
       : this.usbDevicesService.startDiscoverDevices().pipe(
-          tap(() =>
-            patchState({
-              isScanning: true,
-            }),
-          ),
-        );
+        tap(() =>
+          patchState({
+            isScanning: true,
+          }),
+        ),
+      );
   }
 
   @Action(StopDiscoverDevices)
@@ -218,13 +223,10 @@ export class DevicesState {
 
   @Action(DeviceConnectionLost)
   deviceConnectionLost({ getState, patchState }: StateContext<DevicesStateModel>) {
-    const { connectedDevice } = getState();
-    patchState({
-      connectedDevice: undefined,
-    });
-    if (connectedDevice) {
-      this.devicesService.service(connectedDevice).disconnectDevice(connectedDevice).subscribe();
-    }
+    // Ignore this is disconnected measure are in progress
+    const { connectedDevice, knownDevices } = getState();
+    const devicesInDisconnectedMode = knownDevices.filter((dev) => dev.hasDisconnectedMeasureInProgress);
+    console.info("Connection lost with " + devicesInDisconnectedMode.length + " devices in disconnected state")
   }
 
   @Action(DisconnectDevice)
@@ -247,24 +249,63 @@ export class DevicesState {
   }
 
   @Action(ActivateDisconnectedMeasureMode)
-  activateDisconnectedMeasureMode(stateContext: StateContext<DevicesStateModel>) {
-    const { connectedDevice } = stateContext.getState();
-    if (connectedDevice) {
-      connectedDevice.hasDisconnectedMeasureInProgress = true;
-      stateContext.dispatch(new UpdateDevice(connectedDevice));
+  activateDisconnectedMeasureMode(deviceStateContext: StateContext<DevicesStateModel>) {
+    // Make sure we have both a connected device & a current series in progress
+    const { connectedDevice } = deviceStateContext.getState();
+    const currentSeries = this.store.selectSnapshot(
+      MeasuresState.currentSeries
+    );
+    if (!connectedDevice || !currentSeries) {
+      console.info("Can't activate DisconnectedMeasureMode :  "
+        + (connectedDevice ? " no connected device" : "")
+        + (currentSeries ? " no current Series" : "")
+      );
+      return of(null);
     }
-    return this.disconnectDevice(stateContext);
+
+    // Turn disconnected measure in progress mode on device and disconnect properly
+    connectedDevice.hasDisconnectedMeasureInProgress = true;
+    console.info("Activating disconnected measure mode Step 1 : update device " + connectedDevice.apparatusId + "...")
+    return deviceStateContext
+      .dispatch(new UpdateDevice(connectedDevice))
+      .pipe(
+        concatMap(() => {
+          console.info("Activating disconnected measure mode Step 2 : stopping current measure and save measure serie")
+          return deviceStateContext.dispatch(
+            new StopMeasureScan(connectedDevice, true)
+          )
+        }
+        ),
+        concatMap(() => {
+          console.info("Activating disconnected measure mode Step 3 : disconnect device")
+          return this.disconnectDevice(deviceStateContext)
+        }
+        )
+      );
+  }
+
+  @Action(DisconnectedMeasureSynchronizationSuccess)
+  disconnectedMeasureSynchronizationSuccess(stateContext: StateContext<DevicesStateModel>, { diconnectedMeasures }: DisconnectedMeasureSynchronizationSuccess) {
+    return stateContext.dispatch(new MergeDisconnectedMeasuresIntoCurrentSeries(diconnectedMeasures))
+      .pipe(
+        switchMap(() =>
+          stateContext.dispatch(new DeactivateDisconnectedMeasureMode())
+        )
+      )
   }
 
   @Action(DeactivateDisconnectedMeasureMode)
   deactivateDisconnectedMeasureMode(stateContext: StateContext<DevicesStateModel>) {
     const { knownDevices } = stateContext.getState();
-    knownDevices.forEach((d) => {
-      if (d.hasDisconnectedMeasureInProgress) {
-        d.hasDisconnectedMeasureInProgress = false;
-        stateContext.dispatch(new UpdateDevice(d));
-      }
-    });
+    const patch: Partial<DevicesStateModel> = {};
+    patch.knownDevices = knownDevices
+    for (let deviceToUpdate of knownDevices.filter(d => d.hasDisconnectedMeasureInProgress)) {
+      const deviceIndex = patch.knownDevices!.findIndex((knownDevice) => knownDevice.sensorUUID === deviceToUpdate.sensorUUID);
+      deviceToUpdate.hasDisconnectedMeasureInProgress = false
+      patch.knownDevices = [...patch.knownDevices!.slice(0, deviceIndex), deviceToUpdate, ...patch.knownDevices!.slice(deviceIndex + 1)];
+    }
+    localStorage.setItem('disconnected_measure_series', "")
+    return stateContext.patchState(patch);
   }
 
   @Action(UpdateDeviceInfo, { cancelUncompleted: true })
@@ -318,6 +359,7 @@ export class DevicesState {
     }
     const deviceIndex = knownDevices.findIndex((knownDevice) => knownDevice.sensorUUID === device.sensorUUID);
     if (deviceIndex > -1) {
+      device.hasDisconnectedMeasureInProgress = knownDevices[deviceIndex].hasDisconnectedMeasureInProgress
       patch.knownDevices = [...knownDevices.slice(0, deviceIndex), device, ...knownDevices.slice(deviceIndex + 1)];
     } else {
       patch.knownDevices = [...knownDevices, device];

@@ -77,9 +77,18 @@ export class HomePage extends AutoUnsubscribePage {
         .subscribe(() => this.navigationService.navigateRoot(['measure', 'scan'])),
     );
     this.subscriptions.push(
-      this.actions$.pipe(ofActionSuccessful(DisconnectedMeasureSynchronizationSuccess)).subscribe(() => {
-        this.synchronizingDisconnectedMeasure = false;
-        this.store.dispatch(new DeactivateDisconnectedMeasureMode());
+      this.actions$.pipe(ofActionSuccessful(DeactivateDisconnectedMeasureMode)).subscribe(() => {
+        // Synchronization is done, let's show the obtained measure series
+        const measureSeries = this.store.selectSnapshot(MeasuresState.currentSeries);
+        if (measureSeries) {
+          this.navigationService.navigateForward(
+            ['measure', 'report-series'],
+            {
+              animated: true,
+            },
+          );
+          this.synchronizingDisconnectedMeasure = false
+        }
       }),
     );
     this.subscriptions.push(

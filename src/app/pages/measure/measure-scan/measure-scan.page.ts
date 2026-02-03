@@ -95,12 +95,19 @@ export class MeasureScanPage extends AutoUnsubscribePage {
         this.subscriptions.push(this.platform.backButton.subscribeWithPriority(9999, () => this.cancelMeasure()));
         this.subscriptions.push(
           this.currentMeasure$.subscribe((measure) => this.updateHitsAccuracy(connectedDevice, measure)),
-          this.actions$.pipe(ofActionSuccessful(StopMeasureScan)).subscribe(() => {
-            this.navigationService.navigateRoot(['measure', this.isMeasureSeries ? 'report-series' : 'report']);
+          this.actions$.pipe(ofActionSuccessful(StopMeasureScan)).subscribe((action) => {
+            const deviceInDisconnectedMeasureMode = this.store.selectSnapshot(DevicesState.deviceInDisconnectedMeasureMode);
+            if (deviceInDisconnectedMeasureMode) {
+              this.navigationService.navigateRoot(['tabs', 'home'])
+            } else {
+              this.navigationService.navigateRoot(['measure', this.isMeasureSeries ? 'report-series' : 'report']);
+            }
           }),
           this.actions$
             .pipe(ofActionSuccessful(CancelMeasure))
-            .subscribe(() => this.navigationService.navigateRoot(['tabs', 'home'])),
+            .subscribe(() => {
+              this.navigationService.navigateRoot(['tabs', 'home'])
+            }),
         );
         this.store.dispatch(new StartMeasureScan(connectedDevice)).subscribe();
       }
@@ -127,7 +134,7 @@ export class MeasureScanPage extends AutoUnsubscribePage {
   stopScan() {
     this.connectedDevice$.pipe(take(1)).subscribe((connectedDevice) => {
       if (connectedDevice) {
-        this.store.dispatch(new StopMeasureScan(connectedDevice)).subscribe();
+        this.store.dispatch(new StopMeasureScan(connectedDevice, false)).subscribe();
       }
     });
   }

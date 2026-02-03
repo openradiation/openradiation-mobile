@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { forkJoin, Observable, of, zip, from } from 'rxjs';
 import { catchError, map, take, tap } from 'rxjs/operators';
-import { Step } from '@app/states/measures/measure';
+import { Measure, MeasureSeriesParamsSelected, Step } from '@app/states/measures/measure';
 import { RawBLEDevice } from './abstract-ble-device';
 import { AbstractBLEDeviceService } from './abstract-ble-device.service';
 import { BleClient } from '@capacitor-community/bluetooth-le';
@@ -15,6 +15,7 @@ import {
   UpdateDeviceInfo,
 } from '../devices.action';
 import { AbstractDevice, DeviceType } from '../abstract-device';
+import { MeasuresState } from '@app/states/measures/measures.state';
 
 @Injectable({
   providedIn: 'root',
@@ -102,17 +103,17 @@ export class DeviceBertinRadConnectBLEService extends AbstractBLEDeviceService<D
     };
     this.logAndStore(
       'Received from RadConnectBLE : ' +
-        JSON.stringify(receiveData) +
-        ' (full status : ' +
-        status +
-        '/recordingActive:' +
-        recordingActive +
-        '/hasMemory:' +
-        hasMeasureInMemory +
-        '/bleState:' +
-        bleState +
-        '/hasError:' +
-        hasError,
+      JSON.stringify(receiveData) +
+      ' (full status : ' +
+      status +
+      '/recordingActive:' +
+      recordingActive +
+      '/hasMemory:' +
+      hasMeasureInMemory +
+      '/bleState:' +
+      bleState +
+      '/hasError:' +
+      hasError,
     );
     return receiveData;
   }
@@ -147,6 +148,7 @@ export class DeviceBertinRadConnectBLEService extends AbstractBLEDeviceService<D
   public async synchronizeDisconnectedMeasure(device: AbstractDevice) {
     let timeoutHandle: any;
     try {
+      localStorage.setItem('disconnected_measure_hits', '[]');
       // Step 1: get ready to receive disconnected measure
       BleClient.startNotifications(
         device.sensorUUID,
@@ -173,7 +175,8 @@ export class DeviceBertinRadConnectBLEService extends AbstractBLEDeviceService<D
       // Step 3: make sure that if no measure is received within 2 secondes, we stop synchronization
       // It happens when sensor remains disconnected for a few seconds only
       timeoutHandle = setTimeout(() => {
-        this.store.dispatch(new DisconnectedMeasureSynchronizationSuccess());
+        const backgroundMeasures = this.convertBackgroundMeasureToMeasureSeries();
+        this.store.dispatch(new DisconnectedMeasureSynchronizationSuccess(backgroundMeasures));
       }, 2000);
     } catch (error) {
       this.logAndStore('Error while synchronizing disconnected measure ', error);
@@ -184,17 +187,13 @@ export class DeviceBertinRadConnectBLEService extends AbstractBLEDeviceService<D
   async receiveNextDisconnectedMeasurePackage(device: AbstractDevice, dataView: DataView) {
     const remainingBlocs = dataView.getUint8(0);
     const measureBlocSize = dataView.getUint32(1, true);
-    const timestampSec = dataView.getUint32(5, true);
-    const timestamp = new Date(timestampSec * 1000);
-    let values = [];
-    const hits = dataView.getUint32(9, true);
+
+    let values = JSON.parse(localStorage.getItem('disconnected_measure_hits') ?? '[]')
     for (let i = 0; i * 12 < measureBlocSize; i++) {
-      const timeStampSeconds = dataView.getUint32(5 + i * 12, true);
-      const measureDate = new Date(timestampSec * 1000);
       const hitsInOneMinute = dataView.getUint32(9 + i * 12, true);
-      const mode = dataView.getUint32(13 + i * 12, true);
-      values.push(hitsInOneMinute);
+      values.push({ hitsInOneMinute: hitsInOneMinute });
     }
+    localStorage.setItem('disconnected_measure_hits', JSON.stringify(values));
     if (remainingBlocs > 0) {
       this.store.dispatch(new DisconnectedMeasureSynchronizationProgress(remainingBlocs));
     } else {
@@ -205,8 +204,71 @@ export class DeviceBertinRadConnectBLEService extends AbstractBLEDeviceService<D
 
       // Stop listing
       BleClient.stopNotifications(device.sensorUUID, this.service, this.retrieveInMemoryMeasuresCharacteristic);
+
+      // Convert background measures to measures array
+      const backgroundMeasures = this.convertBackgroundMeasureToMeasureSeries();
+
       // Send success signal
-      this.store.dispatch(new DisconnectedMeasureSynchronizationSuccess());
+      this.store.dispatch(new DisconnectedMeasureSynchronizationSuccess(backgroundMeasures));
     }
+  }
+
+
+  convertBackgroundMeasureToMeasureSeries(): Measure[] {
+    let measureSeries = this.store.selectSnapshot(MeasuresState.currentSeries);
+    if (!measureSeries) {
+      measureSeries = JSON.parse(localStorage.getItem('disconnected_measure_series') ?? "{}")
+    }
+    let disconnectedMeasureHitsString = localStorage.getItem('disconnected_measure_hits') ?? "";
+    if (disconnectedMeasureHitsString.length < 4) {
+      disconnectedMeasureHitsString = `[{"hitsInOneMinute":23},{"hitsInOneMinute":39},{"hitsInOneMinute":30},{"hitsInOneMinute":39},{"hitsInOneMinute":30},{"hitsInOneMinute":35},{"hitsInOneMinute":37},{"hitsInOneMinute":26},{"hitsInOneMinute":23},{"hitsInOneMinute":29},{"hitsInOneMinute":33},{"hitsInOneMinute":26},{"hitsInOneMinute":37},{"hitsInOneMinute":32},{"hitsInOneMinute":38},{"hitsInOneMinute":30},{"hitsInOneMinute":38},{"hitsInOneMinute":20},{"hitsInOneMinute":28},{"hitsInOneMinute":40},{"hitsInOneMinute":50},{"hitsInOneMinute":38},{"hitsInOneMinute":42},{"hitsInOneMinute":39},{"hitsInOneMinute":24},{"hitsInOneMinute":34},{"hitsInOneMinute":30},{"hitsInOneMinute":31},{"hitsInOneMinute":34},{"hitsInOneMinute":29},{"hitsInOneMinute":40},{"hitsInOneMinute":40},{"hitsInOneMinute":33},{"hitsInOneMinute":32},{"hitsInOneMinute":30},{"hitsInOneMinute":37},{"hitsInOneMinute":38},{"hitsInOneMinute":41},{"hitsInOneMinute":32},{"hitsInOneMinute":38},{"hitsInOneMinute":36},{"hitsInOneMinute":34},{"hitsInOneMinute":32},{"hitsInOneMinute":24},{"hitsInOneMinute":35},{"hitsInOneMinute":35},{"hitsInOneMinute":40},{"hitsInOneMinute":40},{"hitsInOneMinute":33},{"hitsInOneMinute":34},{"hitsInOneMinute":27},{"hitsInOneMinute":30},{"hitsInOneMinute":31},{"hitsInOneMinute":27},{"hitsInOneMinute":37},{"hitsInOneMinute":42},{"hitsInOneMinute":32},{"hitsInOneMinute":28},{"hitsInOneMinute":38},{"hitsInOneMinute":41},{"hitsInOneMinute":29},{"hitsInOneMinute":31},{"hitsInOneMinute":34},{"hitsInOneMinute":37},{"hitsInOneMinute":25},{"hitsInOneMinute":31},{"hitsInOneMinute":36},{"hitsInOneMinute":32}]`
+    }
+    if ((disconnectedMeasureHitsString?.length ?? 0) < 4) {
+      throw new Error("Could not retrieve backgroud measure ")
+    }
+    const backgroundMeasuresPerMinutes = JSON.parse(disconnectedMeasureHitsString)
+    if (!measureSeries || measureSeries.measures.length == 0) {
+      throw new Error("Could not retrieve backgroud measure (empty measure series)")
+    }
+    let convertedMeasures: Measure[] = []
+    const referenceMeasure = measureSeries.measures[measureSeries.measures.length - 1]
+    const minMeasureDurationMinutes = measureSeries.params.paramSelected === MeasureSeriesParamsSelected.measureDurationLimit
+      ? (measureSeries.params.measureDurationLimit / 60_000) : Number.POSITIVE_INFINITY;
+    const minMeasureHitCount = measureSeries.params.paramSelected === MeasureSeriesParamsSelected.measureHitsLimit
+      ? measureSeries.params.measureHitsLimit : Number.POSITIVE_INFINITY;
+    var currentTimeStamp = referenceMeasure.endTime ?? referenceMeasure.startTime
+    let currentMeasureDurationInMinutes = 0;
+    let currentMeasureHitsCount = 0;
+    for (let backroundMeasure of backgroundMeasuresPerMinutes) {
+      currentMeasureDurationInMinutes++;
+      currentMeasureHitsCount += backroundMeasure.hitsInOneMinute
+      if (currentMeasureDurationInMinutes >= minMeasureDurationMinutes
+        || currentMeasureHitsCount >= minMeasureHitCount
+      ) {
+        const reconstructedMeasure: Measure = JSON.parse(JSON.stringify(referenceMeasure))
+        reconstructedMeasure.hitsNumber = currentMeasureHitsCount;
+        reconstructedMeasure.startTime = currentTimeStamp;
+        currentTimeStamp += 60_000 * currentMeasureDurationInMinutes
+        reconstructedMeasure.endTime = currentTimeStamp - 1000
+        const [value, calibrationFunction] = this.computeRadiationValue(reconstructedMeasure, true)
+        reconstructedMeasure.hitsAccuracy = reconstructedMeasure.hitsNumber;
+        reconstructedMeasure.value = value;
+        reconstructedMeasure.calibrationFunction = calibrationFunction;
+        convertedMeasures.push(reconstructedMeasure);
+        currentMeasureDurationInMinutes = 0
+        currentMeasureHitsCount = 0
+      }
+    }
+    // Append to last measure
+    if (convertedMeasures.length > 0 && currentMeasureDurationInMinutes > 0 && currentMeasureHitsCount > 0) {
+      const lastMeasure: Measure = JSON.parse(JSON.stringify(convertedMeasures[convertedMeasures.length - 1]))
+      lastMeasure.hitsNumber = lastMeasure.hitsNumber! + currentMeasureHitsCount;
+      lastMeasure.endTime = lastMeasure.endTime! + 60_000 * currentMeasureDurationInMinutes;
+      const [value] = this.computeRadiationValue(lastMeasure, true)
+      lastMeasure.hitsAccuracy = lastMeasure.hitsNumber;
+      lastMeasure.value = value;
+      convertedMeasures[convertedMeasures.length - 1] = lastMeasure
+    }
+    return convertedMeasures;
   }
 }

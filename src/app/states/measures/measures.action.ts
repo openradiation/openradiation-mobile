@@ -9,7 +9,7 @@ export class InitMeasures {
     public params: Params,
     public recentTags: string[],
     public currentSeries?: MeasureSeries,
-  ) {}
+  ) { }
 }
 
 export class EnableExpertMode {
@@ -46,12 +46,12 @@ export class DisablePlaneMode {
 
 export class PositionChanged {
   static readonly type = '[Measures] Position changed';
-  constructor(public position?: Location) {}
+  constructor(public position?: Location) { }
 }
 
 export class StartMeasure {
   static readonly type = '[Measures] Start measure';
-  constructor(public device: AbstractDevice) {}
+  constructor(public device: AbstractDevice) { }
 }
 
 export class StopMeasure {
@@ -79,22 +79,22 @@ export class AddMeasureScanStep {
   constructor(
     public step: Step,
     public device: AbstractDevice,
-  ) {}
+  ) { }
 }
 
 export class StartMeasureScan {
   static readonly type = '[Measures] Start measure radiation scan';
-  constructor(public device: AbstractDevice) {}
+  constructor(public device: AbstractDevice) { }
 }
 
 export class StopMeasureScan {
   static readonly type = '[Measures] Stop measure radiation scan';
-  constructor(public device: AbstractDevice) {}
+  constructor(public device: AbstractDevice, public forceLastMeasureAddToMeasureSeries: boolean) { }
 }
 
 export class StartNextMeasureSeries {
   static readonly type = '[Measures] Start next measure series';
-  constructor(public device: AbstractDevice) {}
+  constructor(public device: AbstractDevice) { }
 }
 
 export class StartMeasureReport {
@@ -119,27 +119,27 @@ export class StopMeasureSeriesReport {
 
 export class PublishMeasure {
   static readonly type = '[Measures] Publish measure';
-  constructor(public measure: Measure | MeasureSeries) {}
+  constructor(public measure: Measure | MeasureSeries) { }
 }
 
 export class PublishMeasureError {
   static readonly type = '[Measures] Publish measure error';
-  constructor(public measure: AbstractMeasure) {}
+  constructor(public measure: AbstractMeasure) { }
 }
 
 export class PublishMeasureSuccess {
   static readonly type = '[Measures] Publish measure success';
-  constructor(public measure: AbstractMeasure) {}
+  constructor(public measure: AbstractMeasure) { }
 }
 
 export class PublishMeasureProgress {
   static readonly type = '[Measures] Publish measure progress';
-  constructor(public measure: AbstractMeasure) {}
+  constructor(public measure: AbstractMeasure) { }
 }
 
 export class DeleteMeasure {
   static readonly type = '[Measures] Delete measure';
-  constructor(public measure: Measure | MeasureSeries) {}
+  constructor(public measure: Measure | MeasureSeries) { }
 }
 
 export class DeleteAllMeasures {
@@ -148,14 +148,19 @@ export class DeleteAllMeasures {
 
 export class ShowMeasure {
   static readonly type = '[Measures] Show measure detail';
-  constructor(public measure: Measure | MeasureSeries) {}
+  constructor(public measure: Measure | MeasureSeries) { }
 }
 
 export class AddRecentTag {
   static readonly type = '[Measures] Add recent tag';
-  constructor(public tag: string) {}
+  constructor(public tag: string) { }
 }
 export class FlightNumberValidation {
   static readonly type = '[Measures] Flight Number validation';
-  constructor(public isValid: boolean) {}
+  constructor(public isValid: boolean) { }
+}
+
+export class MergeDisconnectedMeasuresIntoCurrentSeries {
+  static readonly type = "[Measures] Merge Disconnected Measures Into Current Series";
+  constructor(public diconnectedMeasures: Measure[]) { }
 }
