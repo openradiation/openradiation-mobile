@@ -75,7 +75,7 @@
     "jquery": "^3.7.1",
     "localforage-cordovasqlitedriver": "^1.8.0",
     "ngx-mask": "^18.0.0",
-    "npm": "^10.8.2",
+    "npm": "^11.8.0",
     "plotly.js": "^2.34.0",
     "rxjs": "^7.4.3",
     "rxjs-compat": "^6.6.7",
