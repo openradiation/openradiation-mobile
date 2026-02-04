@@ -220,7 +220,7 @@ export class DeviceBertinRadConnectBLEService extends AbstractBLEDeviceService<D
       measureSeries = JSON.parse(localStorage.getItem('disconnected_measure_series') ?? "{}")
     }
     let disconnectedMeasureHitsString = localStorage.getItem('disconnected_measure_hits') ?? "";
-    if ((disconnectedMeasureHitsString?.length ?? 0) < 4) {
+    if ((disconnectedMeasureHitsString?.length ?? 0) < 1) {
       throw new Error("Could not retrieve backgroud measure ")
     }
     const backgroundMeasuresPerMinutes = JSON.parse(disconnectedMeasureHitsString)

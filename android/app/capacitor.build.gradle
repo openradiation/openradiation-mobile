@@ -11,6 +11,7 @@ apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
 dependencies {
     implementation project(':capacitor-community-background-geolocation')
     implementation project(':capacitor-community-bluetooth-le')
+    implementation project(':capacitor-community-safe-area')
     implementation project(':capacitor-app')
     implementation project(':capacitor-camera')
     implementation project(':capacitor-device')
@@ -25,7 +26,6 @@ dependencies {
     implementation project(':capacitor-share')
     implementation project(':capacitor-splash-screen')
     implementation project(':capacitor-status-bar')
-    implementation project(':capacitor-plugin-safe-area')
     implementation "androidx.legacy:legacy-support-v4:1.0.0"
     implementation "androidx.appcompat:appcompat:1.3.1"
 }
