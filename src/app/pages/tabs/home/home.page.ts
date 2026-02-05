@@ -16,10 +16,10 @@ import { PositionService } from '@app/states/measures/position.service';
 import {
   ConnectDevice,
   DeactivateDisconnectedMeasureMode,
-  DisconnectedMeasureSynchronizationSuccess,
   DisconnectedMeasureSynchronizationProgress,
   UpdateDeviceInfo,
   DeviceConnectionLost,
+  StartDiscoverBLEDevices,
 } from '@app/states/devices/devices.action';
 import { DevicesService } from '@app/states/devices/devices.service';
 
@@ -144,19 +144,21 @@ export class HomePage extends AutoUnsubscribePage {
   }
 
   async reconnectSensor() {
-    const hasLocationEnabled = await this.positionService.requestAuthorization();
-    this.reconnecting = true;
-    if (hasLocationEnabled) {
-      this.deviceInDisconnectedMeasureMode$.pipe(take(1)).subscribe((device) => {
-        if (device) {
-          this.store.dispatch(new ConnectDevice(device)).subscribe(() => {
-            this.store.dispatch(new UpdateDeviceInfo(device));
-            this.synchronizingDisconnectedMeasure = true;
-            this.reconnecting = false;
-            this.devicesService.service(device).synchronizeDisconnectedMeasure(device);
-          });
-        }
-      });
-    }
+    this.store.dispatch(new StartDiscoverBLEDevices()).pipe(take(1)).subscribe(async () => {
+      const hasLocationEnabled = await this.positionService.requestAuthorization();
+      this.reconnecting = true;
+      if (hasLocationEnabled) {
+        this.deviceInDisconnectedMeasureMode$.pipe(take(1)).subscribe((device) => {
+          if (device) {
+            this.store.dispatch(new ConnectDevice(device)).subscribe(() => {
+              this.store.dispatch(new UpdateDeviceInfo(device));
+              this.synchronizingDisconnectedMeasure = true;
+              this.reconnecting = false;
+              this.devicesService.service(device).synchronizeDisconnectedMeasure(device);
+            });
+          }
+        })
+      }
+    });
   }
 }
