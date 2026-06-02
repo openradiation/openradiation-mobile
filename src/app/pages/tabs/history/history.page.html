@@ -19,7 +19,7 @@
       </thead>
       <tbody>
         <tr
-          *ngFor="let measure of measures"
+          *ngFor="let measure of measures; trackBy: trackById"
           [ngClass]="{expanded: detailedSeries?.id === measure.id}"
           (click)="showDetail(measure)"
         >

@@ -126,6 +126,7 @@ export class HistoryPage extends AutoUnsubscribePage {
 
   reloadMeasures(context: HistoryPage) {
     this.measures$ = context.store.select(MeasuresState.measures);
+
     context.cdr.detectChanges();
     context.loading?.dismiss();
     context.loading = undefined;
@@ -176,6 +177,10 @@ export class HistoryPage extends AutoUnsubscribePage {
         ],
       });
     }
+  }
+
+  trackById(_: number, item: Measure | MeasureSeries) {
+    return item.id;
   }
 
   getLoaderMessage() {
