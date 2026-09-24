@@ -188,7 +188,7 @@ export class DeviceBertinRadConnectBLEService extends AbstractBLEDeviceService<D
     const remainingBlocs = dataView.getUint8(0);
     const measureBlocSize = dataView.getUint32(1, true);
 
-    let values = JSON.parse(localStorage.getItem('disconnected_measure_hits') ?? '[]')
+    const values = JSON.parse(localStorage.getItem('disconnected_measure_hits') ?? '[]')
     for (let i = 0; i * 12 < measureBlocSize; i++) {
       const hitsInOneMinute = dataView.getUint32(9 + i * 12, true);
       values.push({ hitsInOneMinute: hitsInOneMinute });
@@ -216,10 +216,11 @@ export class DeviceBertinRadConnectBLEService extends AbstractBLEDeviceService<D
 
   convertBackgroundMeasureToMeasureSeries(): Measure[] {
     let measureSeries = this.store.selectSnapshot(MeasuresState.currentSeries);
-    if (!measureSeries) {
-      measureSeries = JSON.parse(localStorage.getItem('disconnected_measure_series') ?? "{}")
+    const disconnectedMeasureSeriesString = localStorage.getItem('disconnected_measure_series');
+    if (!measureSeries && disconnectedMeasureSeriesString) {
+      measureSeries = JSON.parse(disconnectedMeasureSeriesString)
     }
-    let disconnectedMeasureHitsString = localStorage.getItem('disconnected_measure_hits') ?? "";
+    const disconnectedMeasureHitsString = localStorage.getItem('disconnected_measure_hits') ?? "";
     if ((disconnectedMeasureHitsString?.length ?? 0) < 1) {
       throw new Error("Could not retrieve backgroud measure ")
     }
@@ -227,16 +228,16 @@ export class DeviceBertinRadConnectBLEService extends AbstractBLEDeviceService<D
     if (!measureSeries || measureSeries.measures.length == 0) {
       throw new Error("Could not retrieve backgroud measure (empty measure series)")
     }
-    let convertedMeasures: Measure[] = []
+    const convertedMeasures: Measure[] = []
     const referenceMeasure = measureSeries.measures[measureSeries.measures.length - 1]
     const minMeasureDurationMinutes = measureSeries.params.paramSelected === MeasureSeriesParamsSelected.measureDurationLimit
       ? (measureSeries.params.measureDurationLimit / 60_000) : Number.POSITIVE_INFINITY;
     const minMeasureHitCount = measureSeries.params.paramSelected === MeasureSeriesParamsSelected.measureHitsLimit
       ? measureSeries.params.measureHitsLimit : Number.POSITIVE_INFINITY;
-    var currentTimeStamp = referenceMeasure.endTime ?? referenceMeasure.startTime
+    let currentTimeStamp = referenceMeasure.endTime ?? referenceMeasure.startTime
     let currentMeasureDurationInMinutes = 0;
     let currentMeasureHitsCount = 0;
-    for (let backroundMeasure of backgroundMeasuresPerMinutes) {
+    for (const backroundMeasure of backgroundMeasuresPerMinutes) {
       currentMeasureDurationInMinutes++;
       currentMeasureHitsCount += backroundMeasure.hitsInOneMinute
       if (currentMeasureDurationInMinutes >= minMeasureDurationMinutes

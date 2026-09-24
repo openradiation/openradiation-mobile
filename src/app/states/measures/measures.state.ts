@@ -183,7 +183,8 @@ export class MeasuresState {
       const deviceInDisconnectedMeasureMode = this.store.selectSnapshot(
         DevicesState.deviceInDisconnectedMeasureMode
       );
-      if (!deviceInDisconnectedMeasureMode && (JSON.parse(localStorage.getItem('disconnected_measure_series') ?? "").length <= 5)) {
+      const disconnectedMeasureSeriesString = localStorage.getItem('disconnected_measure_series');
+      if (!deviceInDisconnectedMeasureMode && ((disconnectedMeasureSeriesString?.length ?? 0) <= 5)) {
         this.alertService.show({
           header: this.translateService.instant('MEASURE_SERIES.ABORTED_SERIES.TITLE'),
           message: this.translateService.instant('MEASURE_SERIES.ABORTED_SERIES.MESSAGE'),
@@ -202,6 +203,8 @@ export class MeasuresState {
             },
           ],
         });
+      } else {
+        patchState(patch);
       }
     } else {
       patchState(patch);
@@ -658,7 +661,7 @@ export class MeasuresState {
       updatedSeries = JSON.parse(localStorage.getItem('disconnected_measure_series') ?? '{}')
     }
     if (updatedSeries) {
-      for (let measure of diconnectedMeasures) {
+      for (const measure of diconnectedMeasures) {
         updatedSeries = MeasureSeries.addMeasureToSeries(updatedSeries, measure)
       }
     }
@@ -833,7 +836,7 @@ export class MeasuresState {
   @Action(PublishMeasure)
   publishMeasure({ getState, patchState }: StateContext<MeasuresStateModel>, { measure }: PublishMeasure) {
     if (!measure.sent) {
-      let { measures } = getState();
+      const { measures } = getState();
       const index = measures.findIndex((stateMeasure) => stateMeasure.id === measure.id);
       if (index !== -1) {
         return this.measuresService.publishMeasure(measure).subscribe((m) => {

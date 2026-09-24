@@ -299,7 +299,7 @@ export class DevicesState {
     const { knownDevices } = stateContext.getState();
     const patch: Partial<DevicesStateModel> = {};
     patch.knownDevices = knownDevices
-    for (let deviceToUpdate of knownDevices.filter(d => d.hasDisconnectedMeasureInProgress)) {
+    for (const deviceToUpdate of knownDevices.filter(d => d.hasDisconnectedMeasureInProgress)) {
       const deviceIndex = patch.knownDevices!.findIndex((knownDevice) => knownDevice.sensorUUID === deviceToUpdate.sensorUUID);
       deviceToUpdate.hasDisconnectedMeasureInProgress = false
       patch.knownDevices = [...patch.knownDevices!.slice(0, deviceIndex), deviceToUpdate, ...patch.knownDevices!.slice(deviceIndex + 1)];
